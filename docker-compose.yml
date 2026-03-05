@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database - Stores all city data
+  postgres:
+    image: postgres:16
+    container_name: neodemos-postgres
+    environment:
+      POSTGRES_DB: neodemos
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - neodemos-network
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # NeoDemos Web Application
+  web:
+    build: .
+    container_name: neodemos-web
+    environment:
+      # City configuration - change to deploy different cities
+      NEODEMOS_CITY: ${NEODEMOS_CITY:-rotterdam}
+      
+      # Database configuration
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: neodemos
+      DB_USER: postgres
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      DB_POOL_SIZE: 10
+      DB_MAX_OVERFLOW: 20
+      
+      # API Keys
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      ORI_API_KEY: ${ORI_API_KEY:-}
+      
+      # Server configuration
+      HOST: 0.0.0.0
+      PORT: 8000
+      ENVIRONMENT: ${ENVIRONMENT:-production}
+      DEBUG: ${DEBUG:-false}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    
+    ports:
+      - "8000:8000"
+    
+    depends_on:
+      postgres:
+        condition: service_healthy
+    
+    volumes:
+      - ./data:/app/data
+      - ./output:/app/output
+      - ./logs:/app/logs
+    
+    networks:
+      - neodemos-network
+    
+    restart: unless-stopped
+    
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  # Optional: Nginx Reverse Proxy (for SSL/HTTPS and routing)
+  nginx:
+    image: nginx:alpine
+    container_name: neodemos-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs:ro
+    depends_on:
+      - web
+    networks:
+      - neodemos-network
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  postgres_data:
+
+networks:
+  neodemos-network:
+    driver: bridge

@@ -1,0 +1,58 @@
+═══════════════════════════════════════════════════════════════════════════════
+PHASE 2B: ACCURACY INCREASE STRATEGY
+From 24-38% improvement (74% baseline) → 70-80%+ absolute accuracy
+═══════════════════════════════════════════════════════════════════════════════
+
+YOUR CHALLENGE:
+"The research shows 24-38% improvement, but that still gives only 74% absolute
+accuracy. I want at least 60%, ideally much higher."
+
+OUR RESPONSE:
+Three-layer approach grounded in the research targeting 70-80%+ accuracy.
+
+═══════════════════════════════════════════════════════════════════════════════
+THE THREE LAYERS (Brief Summary)
+═══════════════════════════════════════════════════════════════════════════════
+
+LAYER 1: MULTI-SOURCE PROFILE (Approach 3 Enhanced)
+  Extract from: Programme + Notulen + Moties/Amendementen
+  Gain: +5-10%
+  Why: Profile grounded in actual behaviour beats promises alone
+
+LAYER 2: VALIDATION PASS (Benoit Ensemble Adapted)  
+  Process: Validate each classification against profile
+  Gain: +10-15%
+  Why: Catches misclassifications from initial LLM call
+
+LAYER 3: CONFIDENCE REPORTING (Quality Improvement)
+  Output: Confidence scores + alternative interpretations + ambiguity flags
+  Gain: +1-5% (enables review of uncertain cases)
+  Why: Know what you don't know, allow human review
+
+COMBINED EFFECT: 74% baseline → 70-80%+ (with possible 85%+ on reviewed subset)
+
+═══════════════════════════════════════════════════════════════════════════════
+DOCUMENTS CREATED FOR YOUR REVIEW
+═══════════════════════════════════════════════════════════════════════════════
+
+1. PHASE_2B_REVISED_PLAN.md (11 sections, complete execution plan)
+2. PHASE_2B_ACCURACY_BOOST_SUMMARY.md (conceptual explanation)
+3. This file: ACCURACY_INCREASE_STRATEGY.txt (quick reference)
+
+Code files written:
+  - services/party_profile_service.py (550+ lines, ready to run)
+  - services/stance_validation_service.py (400+ lines, ready to run)
+
+═══════════════════════════════════════════════════════════════════════════════
+READY FOR EXECUTION?
+═══════════════════════════════════════════════════════════════════════════════
+
+Confirm to proceed with:
+  ✓ Step 1: Fix notulen truncation (Day 1)
+  ✓ Step 2: Migrate to google.genai + pgvector (Day 1)
+  ✓ Step 3: Multi-source profile extraction (Day 2-3)
+  ✓ Step 4: Your profile review (Day 3, 30 mins)
+  ✓ Continue through Step 11 (completion by Day 7)
+
+OR discuss any changes/questions before we begin.
+

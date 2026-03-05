@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} | NeoDemos</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="logo">Neo<span>Demos</span></div>
+        <nav>
+            <a href="/">Overzicht</a>
+            <a href="/calendar">Kalender</a>
+            <a href="/settings">Instellingen</a>
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+        <section class="hero">
+            <h1>De toekomst van raadsinformatie.</h1>
+            <p>Efficiënt vergaderingen voorbereiden met de kracht van AI. Speciaal voor Rotterdamse raadsleden.</p>
+            <div style="margin-top: 2rem;">
+                <a href="/calendar" class="btn">Bekijk Kalender 2025</a>
+            </div>
+        </section>
+
+        <div class="meetings-table-container">
+            {% if meetings %}
+            <table class="meetings-table">
+                <thead>
+                    <tr>
+                        <th>Datum</th>
+                        <th>Vergadering</th>
+                        <th>Commissie</th>
+                        <th>Locatie</th>
+                        <th>ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for meeting in meetings %}
+                    <tr class="meeting-row" data-meeting-id="{{ meeting.id }}" style="{% if loop.index % 2 == 1 %}background-color: #ffffff;{% else %}background-color: #f5f7fa;{% endif %}">
+                        <td class="meeting-date" data-date="{{ meeting.start_date.split('T')[0] }}">{{ meeting.start_date.split('T')[0] }}</td>
+                        <td class="meeting-name">{{ meeting.name }}</td>
+                        <td class="meeting-committee">{{ meeting.committee or "Algemeen" }}</td>
+                        <td class="meeting-location">{{ meeting.location or "Rotterdam" }}</td>
+                        <td class="meeting-id">{{ meeting.id }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="card" style="text-align: center;">
+                <h3>Geen komende vergaderingen gevonden.</h3>
+                <p>Probeer het later opnieuw of controleer de data bron.</p>
+            </div>
+            {% endif %}
+        </div>
+        {% endblock %}
+    </main>
+    <script src="/static/js/app.js"></script>
+    <script>
+        function formatDateWithSmallCaps(dateStr) {
+            // Parse the date
+            const date = new Date(dateStr + 'T00:00:00');
+            
+            // Get day as 2-digit
+            const day = String(date.getDate()).padStart(2, '0');
+            
+            // Get month name in Dutch
+            const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+            const month = monthNames[date.getMonth()];
+            
+            // Get year as 2-digit
+            const year = String(date.getFullYear()).slice(-2);
+            
+            return `${day}-${month}-${year}`;
+        }
+
+        // Format dates and handle row clicks
+        document.addEventListener('DOMContentLoaded', function() {
+            // Format all date cells
+            document.querySelectorAll('td.meeting-date').forEach(cell => {
+                const dateStr = cell.getAttribute('data-date');
+                if (dateStr) {
+                    const formattedDate = formatDateWithSmallCaps(dateStr);
+                    cell.textContent = formattedDate;
+                }
+            });
+            
+            // Add click handlers to table rows
+            document.querySelectorAll('tr.meeting-row').forEach(row => {
+                const meetingId = row.getAttribute('data-meeting-id');
+                row.style.cursor = 'pointer';
+                
+                row.addEventListener('click', function(e) {
+                    // Don't navigate if user is selecting text
+                    if (window.getSelection().toString()) return;
+                    if (meetingId) {
+                        window.location.href = `/meeting/${meetingId}`;
+                    }
+                });
+                
+                row.addEventListener('mouseover', function() {
+                    if (this.style.backgroundColor === 'rgb(245, 247, 250)') {
+                        this.style.backgroundColor = '#e8ecf1';
+                    } else {
+                        this.style.backgroundColor = '#f0f2f5';
+                    }
+                });
+                
+                row.addEventListener('mouseout', function() {
+                    // Get the original background color
+                    const isOdd = this.parentNode.children[Array.from(this.parentNode.children).indexOf(this)] % 2 === 0;
+                    if (isOdd) {
+                        this.style.backgroundColor = '#ffffff';
+                    } else {
+                        this.style.backgroundColor = '#f5f7fa';
+                    }
+                });
+            });
+        });
+
+        // Fallback for when DOM is already loaded
+        if (document.readyState !== 'loading') {
+            document.querySelectorAll('td.meeting-date').forEach(cell => {
+                const dateStr = cell.getAttribute('data-date');
+                if (dateStr && cell.textContent.includes('-')) {
+                    const formattedDate = formatDateWithSmallCaps(dateStr);
+                    cell.textContent = formattedDate;
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

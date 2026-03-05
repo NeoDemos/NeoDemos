@@ -1,0 +1,177 @@
+{% extends "index.html" %}
+
+{% block content %}
+<section class="hero" style="padding: 1rem 0;">
+    <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">Kalender</h1>
+    <p style="font-size: 1rem;">Overzicht van alle geplande commissie- en raadsvergaderingen in Rotterdam.</p>
+</section>
+
+<div
+    style="padding: 1rem; background: white; border-radius: 12px; border: 1px solid var(--border-color); max-width: 100%; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <select id="select-month" class="calendar-select"
+                style="font-size: 1.2rem; font-weight: 700; color: var(--secondary-color); border: 1px solid transparent; background: transparent; cursor: pointer; padding: 0.2rem 0.5rem; border-radius: 4px;">
+                <option value="0">Januari</option>
+                <option value="1">Februari</option>
+                <option value="2">Maart</option>
+                <option value="3">April</option>
+                <option value="4">Mei</option>
+                <option value="5">Juni</option>
+                <option value="6">Juli</option>
+                <option value="7">Augustus</option>
+                <option value="8">September</option>
+                <option value="9">Oktober</option>
+                <option value="10">November</option>
+                <option value="11">December</option>
+            </select>
+            <select id="select-year" class="calendar-select"
+                onchange="window.location.href='/calendar?year=' + this.value"
+                style="font-size: 1.2rem; font-weight: 700; color: var(--secondary-color); border: 1px solid transparent; background: transparent; cursor: pointer; padding: 0.2rem 0.5rem; border-radius: 4px;">
+                {% for y in available_years %}
+                <option value="{{ y }}" {% if y==selected_year %}selected{% endif %}>{{ y }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <button id="btn-prev" class="btn-secondary btn"
+                style="margin-right: 0.5rem; padding: 0.3rem 0.8rem; font-size: 0.85rem;">←</button>
+            <button id="btn-next" class="btn-secondary btn"
+                style="padding: 0.3rem 0.8rem; font-size: 0.85rem;">→</button>
+        </div>
+    </div>
+
+    <div id="calendar-grid-container"
+        style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: var(--border-color); border: 1px solid var(--border-color); border-radius: 8px; min-height: 450px; overflow: hidden;">
+    </div>
+</div>
+
+<script>
+    // Data from server
+    const meetings = {{ meetings | tojson }};
+    // Default to current date if within 2024-2026, otherwise Jan 2025
+    const now = new Date();
+    let currentDate = (now.getFullYear() >= 2024 && now.getFullYear() <= 2026)
+        ? new Date(now.getFullYear(), now.getMonth(), 1)
+        : new Date(2025, 0, 1);
+
+    const selectMonth = document.getElementById('select-month');
+    const selectYear = document.getElementById('select-year');
+
+    function updateSelects() {
+        selectMonth.value = currentDate.getMonth();
+        selectYear.value = currentDate.getFullYear();
+    }
+
+    function renderCalendar() {
+        const gridContainer = document.getElementById('calendar-grid-container');
+
+        if (!gridContainer) return;
+
+        gridContainer.innerHTML = '';
+
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+
+        updateSelects();
+
+        const dayNames = ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'];
+
+        // Add day headers
+        dayNames.forEach(day => {
+            const dayHeader = document.createElement('div');
+            dayHeader.style.cssText = 'background: #f8f9fa; padding: 0.5rem; text-align: center; font-weight: 700; color: #666; font-size: 0.7rem; text-transform: uppercase; border-bottom: 2px solid var(--border-color);';
+            dayHeader.textContent = day;
+            gridContainer.appendChild(dayHeader);
+        });
+
+        const firstDay = new Date(year, month, 1).getDay(); // 0 (Sun) to 6 (Sat)
+        const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1; // Convert to Mon-Sun
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // Empty slots for previous month
+        for (let i = 0; i < adjustedFirstDay; i++) {
+            const emptyDiv = document.createElement('div');
+            emptyDiv.style.cssText = 'background: #fcfcfc; padding: 0.3rem; border: none; opacity: 0.4;';
+            gridContainer.appendChild(emptyDiv);
+        }
+
+        // Days of current month with meetings
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayDiv = document.createElement('div');
+            dayDiv.style.cssText = 'background: white; padding: 0.4rem; border: 1px solid var(--border-color); position: relative; overflow-y: auto; min-height: 80px; max-height: 120px; display: flex; flex-direction: column;';
+
+            // Highlight today
+            const isToday = now.getFullYear() === year && now.getMonth() === month && now.getDate() === day;
+            if (isToday) {
+                dayDiv.style.background = '#fffbeb';
+                dayDiv.style.borderColor = 'var(--accent-color)';
+            }
+
+            // Day number
+            const dayNumber = document.createElement('div');
+            dayNumber.style.cssText = 'font-weight: 700; font-size: 0.85rem; color: #333; margin-bottom: 0.3rem; border-bottom: 1px solid #f0f0f0; padding-bottom: 0.2rem;';
+            dayNumber.textContent = day;
+            dayDiv.appendChild(dayNumber);
+
+            // Find meetings for this day
+            const dayStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const filteredMeetings = Array.isArray(meetings)
+                ? meetings.filter(m => m.start_date && m.start_date.startsWith(dayStr))
+                : [];
+
+            // Add meeting links
+            filteredMeetings.forEach(m => {
+                const link = document.createElement('a');
+                link.href = `/meeting/${m.id}`;
+                link.textContent = m.name.substring(0, 30) + (m.name.length > 30 ? '...' : '');
+                link.title = m.name;
+                link.style.cssText = 'font-size: 0.65rem; padding: 2px 4px; border-radius: 3px; background: #fff3cd; color: #856404; margin-bottom: 2px; border: 1px solid #ffc107; cursor: pointer; text-decoration: none; line-height: 1.2; word-break: break-all; display: block;';
+                dayDiv.appendChild(link);
+            });
+
+            gridContainer.appendChild(dayDiv);
+        }
+
+        // Pad remaining days
+        const totalCells = adjustedFirstDay + daysInMonth;
+        const cellsToAdd = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+        for (let i = 0; i < cellsToAdd; i++) {
+            const emptyDiv = document.createElement('div');
+            emptyDiv.style.cssText = 'background: #fcfcfc; padding: 0.3rem; border: none; opacity: 0.4;';
+            gridContainer.appendChild(emptyDiv);
+        }
+    }
+
+    function changeMonth(delta) {
+        currentDate.setMonth(currentDate.getMonth() + delta);
+        renderCalendar();
+    }
+
+    document.getElementById('btn-prev').addEventListener('click', () => changeMonth(-1));
+    document.getElementById('btn-next').addEventListener('click', () => changeMonth(1));
+
+    selectMonth.addEventListener('change', (e) => {
+        currentDate.setMonth(parseInt(e.target.value));
+        renderCalendar();
+    });
+
+    selectYear.addEventListener('change', (e) => {
+        currentDate.setFullYear(parseInt(e.target.value));
+        renderCalendar();
+    });
+
+    renderCalendar();
+</script>
+
+<style>
+    .calendar-select:hover {
+        background-color: #f0f2f5 !important;
+    }
+
+    .calendar-select:focus {
+        outline: 2px solid var(--accent-color);
+        background-color: white !important;
+    }
+</style>
+{% endblock %}
