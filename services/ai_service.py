@@ -225,7 +225,7 @@ Voeg ook toe aan de JSON response:
         # Try to extract bullet points/sections
         lines = response_text.split('\n')
         current_section = None
-        
+            
         for line in lines:
             line = line.strip()
             if not line:
@@ -612,12 +612,26 @@ Exclusief de tekst van de bijdrage, geordend in logische paragrafen. Geen titels
 
     def generate_embedding(self, text: str) -> Optional[List[float]]:
         """
-        Generate a vector embedding for text using Gemini embedding API.
-        Returns a list of floats (3072 dimensions for gemini-embedding-001).
-        Returns None if embedding fails or LLM not available.
+        Generate a vector embedding for text.
+        Prefers LocalAIService (MLX 4096-dim) to match indexed data.
+        Falls back to Gemini (3072-dim) ONLY if local is unavailable.
         """
+        # --- PREFER LOCAL MODEL (4096-dim) ---
+        try:
+            from services.local_ai_service import LocalAIService
+            local_ai = LocalAIService()
+            if local_ai.is_available():
+                emb = local_ai.generate_embedding(text)
+                if emb is not None:
+                    print(f"DEBUG: Vector search using LOCAL embedding (dim={len(emb)})")
+                    return emb
+        except Exception as e:
+            logger.warning(f"Local embedding failed, falling back to Gemini: {e}")
+
         if not self.use_llm:
             return None
+        
+        print("DEBUG: Vector search falling back to GEMINI embedding (dim=3072)")
         
         try:
             response = self.client.models.embed_content(
@@ -895,8 +909,28 @@ DEBATE MAP & POSITIONS:
                 "sources": ordered_sources
             }
         except Exception as e:
-            print(f"Synthesis pipeline failed: {e}")
-            return {"answer": f"Er is een fout opgetreden: {e}", "sources": ordered_sources if 'ordered_sources' in locals() else []}
+            logger.error(f"Synthesis pipeline failed: {e}")
+            
+            # HEURISTIC FALLBACK: Assemble a basic dossier from available documents
+            fallback_answer = f"# 📅 Context & Vorige bespreking (Heuristische Samenvatting)\n"
+            fallback_answer += f"De AI-samenvatting is momenteel niet beschikbaar, maar hieronder volgt een overzicht van de gevonden documenten voor de vraag: '{query}'.\n\n"
+            
+            fallback_answer += "# 📌 Belangrijkste Documenten\n"
+            sources_list = ordered_sources if 'ordered_sources' in locals() else []
+            for i, src in enumerate(sources_list[:10], 1):
+                clean_name = re.sub(r'^\[[a-zA-Z0-9]+\]\s*', '', src.get('name', 'Onbekend'))
+                fallback_answer += f"{i}. **{clean_name}** ({src.get('start_date', 'Datum onbekend')})\n"
+            
+            fallback_answer += f"\n# 🚩 Wat vindt de fractie van dit onderwerp?\n"
+            fallback_answer += "Zie de brondocumenten voor de specifieke standpunten en bijdragen van raadsleden.\n\n"
+            
+            fallback_answer += "# 📄 Detailoverzicht van Bronnen\n"
+            fallback_answer += "Raadpleeg de gekoppelde documenten aan de rechterkant voor de volledige tekst en context.\n"
+            
+            return {
+                "answer": fallback_answer,
+                "sources": sources_list
+            }
 
     def verify_quotes(self, text: str, source_data: List[Any]) -> str:
         """

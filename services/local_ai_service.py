@@ -62,8 +62,8 @@ class LocalAIService:
         if MLX_AVAILABLE:
             if self.embed_model is None:
                 try:
-                    logger.info("Loading local high-precision embedding model (MLX): Qwen3-Embedding-8B-4bit-DWQ")
-                    model_path = os.path.expanduser("~/.lmstudio/models/mlx-community/Qwen3-Embedding-8B-4bit-DWQ")
+                    logger.info("Loading local high-precision embedding model (MLX): Qwen3-Embedding-8B-MLX")
+                    model_path = os.path.expanduser("~/.lmstudio/models/Qwen/Qwen3-Embedding-8B-MLX")
                     
                     if not os.path.exists(model_path):
                         raise FileNotFoundError(f"Model path not found: {model_path}")
@@ -77,8 +77,9 @@ class LocalAIService:
                 except Exception as e:
                     logger.error(f"❌ Failed to load local embedding model: {e}")
             else:
+                self.embed_model, self.embed_tokenizer = _GLOBAL_EMBED_CACHE
                 self.use_embed = True
-                logger.info("⚡ Using already loaded embedding model from cache.")
+                logger.info("⚡ Using already loaded embedding model and tokenizer from cache.")
         else:
             if not MLX_AVAILABLE:
                 logger.warning("mlx-lm not installed. Local inference unavailable.")
@@ -120,36 +121,51 @@ class LocalAIService:
 
     def generate_embedding(self, text: str) -> Optional[List[float]]:
         """
-        Generates a vector embedding using the local MLX Qwen3 model.
+        Generates a vector embedding using the local MLX model (Mistral 4096-dim or Qwen3-Embedding).
         """
-        if not self.use_embed:
+        if not self.use_embed and not self.use_local:
+            return None
+
+        # Use main model if specific embedding model is missing
+        target_model = self.embed_model if self.use_embed else self.model
+        target_tokenizer = self.embed_tokenizer if self.use_embed else self.tokenizer
+
+        if target_model is None or target_tokenizer is None:
             return None
 
         try:
             import mlx.core as mx
             
-            # The mlx_lm tokenizer is usually a TokenizerWrapper. 
-            # We use encode() to get the token IDs.
-            input_ids = mx.array(self.embed_tokenizer.encode(text))[None] # Add batch dim
+            # The mlx_lm tokenizer is usually a TokenizerWrapper.
+            input_ids = mx.array(target_tokenizer.encode(text))[None] # Add batch dim
             
-            # Forward pass
-            output = self.embed_model(input_ids)
-            
-            # For Qwen3-Embedding, we take the last hidden state and mean pool
-            # Qwen3 models in mlx_lm return hidden states or logits depending on the wrapper
-            if hasattr(self.embed_model, "model"):
-                 # Handle wrapper if present
-                 hidden_states = self.embed_model.model(input_ids)
+            # Use model metadata to find hidden states if it's a generator wrapper
+            # For Mistral/MLX, calling the model object often returns logits.
+            # We want the LAST HIDDEN STATE.
+            if hasattr(target_model, "model"):
+                 # Handle wrapper if present (common in mlx-lm)
+                 # We avoid full generation and just do one forward pass
+                 hidden_states = target_model.model(input_ids)
             else:
-                 hidden_states = output
+                 hidden_states = target_model(input_ids)
             
             # Mean pooling across the sequence dimension (axis 1)
-            embedding = mx.mean(hidden_states, axis=1)
-            
+            # Mistral hidden states are [Batch, Seq, Dim]
+            # We take the mean of the sequence to get a single vector.
+            if hasattr(hidden_states, "shape") and len(hidden_states.shape) == 3:
+                embedding = mx.mean(hidden_states, axis=1)
+            else:
+                # If it's already pooled or different shape
+                embedding = mx.mean(hidden_states, axis=0) if len(hidden_states.shape) == 2 else hidden_states
+
             # Normalize for cosine similarity
             norm = mx.linalg.norm(embedding, axis=-1, keepdims=True)
             normalized_embedding = (embedding / (norm + 1e-9)).tolist()[0]
             
+            # ENSURE 4096 DIMENSION (Log error if wrong)
+            if len(normalized_embedding) != 4096:
+                logger.warning(f"Vector dim mismatch: expected 4096, got {len(normalized_embedding)}")
+
             return normalized_embedding
         except Exception as e:
             logger.error(f"Local embedding error: {e}")
