@@ -38,14 +38,16 @@ VENV_PY      = "/Users/dennistak/Documents/Final Frontier/NeoDemos/.venv/bin/pyt
 BASE_DIR     = "/Users/dennistak/Documents/Final Frontier/NeoDemos"
 LOG_DIR      = os.path.join(BASE_DIR, "logs")
 CTRL_LOG     = os.path.join(LOG_DIR, "smart_controller.log")
+FULL_LOG     = os.path.join(LOG_DIR, "controller_full.log")
 
-MAX_WORKERS       = 20
+MAX_WORKERS       = 25
 TIER1_TPM         = 4_000_000   # Gemini 2.5 Flash Lite Tier 1
-TIER1_RPM         = 4_000       # Gemini 2.5 Flash Lite Tier 1 request limit
-SAFE_TPM_LIMIT    = int(TIER1_TPM * 0.75)   # 75% = 3M — conservative head-room
-SAFE_RPM_LIMIT    = int(TIER1_RPM * 0.80)   # 80% = 3,200 req/min
-STATUS_EVERY      = 1800        # 30-minute status reports
-PROBE_INTERVAL    = 5           # seconds between controller loop ticks
+TIER1_RPM         = 4_000       # Gemini 2.5 Flash Lite Tier 1 request limit (RPM)
+SAFE_TPM_LIMIT    = int(TIER1_TPM * 0.75)   # 75% = 3M
+SAFE_RPM_LIMIT    = int(TIER1_RPM * 0.80)   # 80% = 3,200
+CUTOFF_YEAR       = 2018
+STATUS_EVERY      = 1800
+PROBE_INTERVAL    = 5
 
 # Token estimation: (input chars / 4) + 2000 output buffer + 10% overhead
 def estimate_tokens(content_len: int) -> int:
@@ -98,6 +100,8 @@ def log(msg: str):
     print(line, flush=True)
     with open(CTRL_LOG, "a") as f:
         f.write(line + "\n")
+    with open(FULL_LOG, "a") as f:
+        f.write(line + "\n")
 
 # ── DB helpers ────────────────────────────────────────────────────────────────
 def db_stats():
@@ -128,20 +132,13 @@ def claim_doc_by_size(worker_id: int, max_content_len: int, prefer_small: bool =
         order_dir = "ASC" if prefer_small else "DESC"
         
         cur.execute(f"""
-            SELECT q.document_id, length(d.content) as clen
-            FROM chunking_queue q
-            JOIN documents d ON d.id = q.document_id
-            WHERE q.status = 'pending'
-              AND NOT EXISTS (
-                  SELECT 1 FROM chunking_metadata m
-                  JOIN documents md ON md.id = m.document_id
-                  WHERE m.document_id = q.document_id 
-                     OR (md.name = d.name AND d.name != '' AND d.name IS NOT NULL)
-              )
-              AND length(d.content) <= %s
-            ORDER BY length(d.content) {order_dir}, q.id ASC
+            SELECT document_id, content_length
+            FROM chunking_queue
+            WHERE status = 'pending'
+              AND content_length <= %s
+            ORDER BY content_length {order_dir}, id ASC
             LIMIT 1
-            FOR UPDATE OF q SKIP LOCKED
+            FOR UPDATE SKIP LOCKED
         """, (max_content_len,))
         row = cur.fetchone()
         if row is None:
@@ -222,48 +219,59 @@ def worker_thread(worker_id: int, stop_event: threading.Event):
         try:
             conn = psycopg2.connect(DB_URL)
             cur  = conn.cursor()
+            
+            # --- Check if already done (ID check) ---
+            cur.execute("SELECT 1 FROM chunking_metadata WHERE document_id = %s", (doc_id,))
+            if cur.fetchone():
+                cur.close(); conn.close()
+                mark_done(doc_id, 0)
+                continue
+
             cur.execute("SELECT name, content, meeting_id FROM documents WHERE id=%s", (doc_id,))
             row  = cur.fetchone()
-            cur.close(); conn.close()
             if not row:
+                cur.close(); conn.close()
                 mark_failed(doc_id, "Document not found")
                 continue
             name, content, meeting_id = row
             doc_name = name or doc_id
-            doc_type = classify_document(name or "", content or "")
+
+            # Python-level Title Deduplication Check
+            if doc_name and doc_name != doc_id:
+                cur.execute("SELECT 1 FROM chunking_metadata m JOIN documents d ON d.id = m.document_id WHERE d.name = %s LIMIT 1", (doc_name,))
+                if cur.fetchone():
+                    cur.close(); conn.close()
+                    mark_done(doc_id, 0)
+                    log(f"W{worker_id} ⏭ Skipped duplicate name: {doc_name[:50]}")
+                    time.sleep(1)
+                    continue
+
+            cur.close(); conn.close()
+            doc_type = classify_document(doc_name, content or "")
+            est_tok = estimate_tokens(len(content or ""))
+            # --- STRUCTURED PROGRESS LOG (The 12:00 version) ---
+            log(f"W{worker_id} → [{doc_id}] {doc_name[:55]} ({len(content or ''):,}c / ~{est_tok:,}tok | TPM:{current_tpm():,}/{SAFE_TPM_LIMIT:,} | RPM:{current_rpm()}/{SAFE_RPM_LIMIT})")
+
         except Exception as e:
             mark_failed(doc_id, str(e))
             continue
 
-        log(f"W{worker_id} → {doc_name[:50]} ({clen:,}c / ~{est_tok:,}tok | TPM:{current_tpm():,}/{SAFE_TPM_LIMIT:,} | RPM:{current_rpm()}/{SAFE_RPM_LIMIT})")
-
         try:
-            sections   = chunker._split_into_sections(content or "")
-            all_chunks = []
-            for s_idx, section in enumerate(sections):
-                if not section.strip() or len(section.strip()) < 50:
-                    continue
-                info = f" (Section {s_idx+1}/{len(sections)})" if len(sections) > 1 else ""
-                if len(sections) > 1:
-                    log(f"W{worker_id}   ..processing section {s_idx+1}/{len(sections)}...")
-                
-                chunks = chunker._call_gemini_chunker(doc_type, section, info)
-                if chunks:
-                    all_chunks.extend(chunks)
-                    if len(sections) > 1:
-                        log(f"W{worker_id}   ..section {s_idx+1}/{len(sections)} done ({len(chunks)} chunks)")
-                time.sleep(2)
-
-            if not all_chunks:
-                mark_failed(doc_id, "No chunks produced")
-                log(f"W{worker_id} ⚠ No chunks — failed.")
-                continue
-
             conn2 = psycopg2.connect(DB_URL)
             try:
-                stored = chunker._store_chunks(doc_id, name or "", doc_type, meeting_id, all_chunks, conn2)
-                mark_done(doc_id, est_tok)
-                log(f"W{worker_id} ✓ {stored} chunks stored.")
+                # 1-Tier: direct semantic chunking (original behavior)
+                chunks = chunker._call_gemini_chunker(doc_type, content or "", "")
+                if chunks:
+                    stored = chunker._store_chunks(doc_id, name or "", doc_type, meeting_id, chunks, conn2, None)
+                    if stored > 0:
+                        mark_done(doc_id, est_tok)
+                        log(f"W{worker_id} ✓ {stored} chunks stored.")
+                    else:
+                        mark_failed(doc_id, "No chunks stored")
+                        log(f"W{worker_id} ⚠ No chunks stored.")
+                else:
+                    mark_failed(doc_id, "No chunks produced")
+                    log(f"W{worker_id} ⚠ No chunks produced.")
             finally:
                 conn2.close()
 
@@ -314,77 +322,62 @@ def main():
     log(f"Queue: {pending:,} pending | {start_done} previously completed")
 
     stop_event = threading.Event()
-    threads    = []
-    active     = 0
-
-    # Stagger-up: add first 10 workers immediately, then wait for success before adding others.
-    for i in range(1, MAX_WORKERS + 1):
-        t = threading.Thread(target=worker_thread, args=(i, stop_event), daemon=True, name=f"W{i}")
+    threads = []
+    
+    # ── Main Loop ─────────────────────────────────────────────────────────────
+    # We start with 10 threads immediately for speed, then scale to MAX_WORKERS (20)
+    initial_count = 10
+    log(f"Spawning {initial_count} initial worker threads...")
+    for i in range(1, initial_count + 1):
+        t = threading.Thread(target=worker_thread, args=(i, stop_event), name=f"Worker-{i}")
+        t.daemon = True
         t.start()
         threads.append(t)
-        active += 1
-        log(f"Worker {i} launched (active: {active})")
-
-        # Launch W1-W10 immediately; gate W11+ behind success
-        if i < 10:
-            continue
-
-        if i < MAX_WORKERS:
-            log(f"Waiting for success before spawning worker {i+1}...")
-            found = wait_for_first_success()
-            _, new_done, _, _ = db_stats()
-            start_done = new_done
-            if found:
-                log(f"✅ Success detected ({new_done} docs done). Adding next worker in 15s...")
-            else:
-                log(f"⚠ Timeout — adding next worker anyway.")
-            time.sleep(15)  # brief cooldown between worker additions
+    
+    # Wait for at least one success before scaling further
+    wait_for_first_success()
+    
+    log(f"First success detected. Scaling to {MAX_WORKERS} threads...")
+    for i in range(initial_count + 1, MAX_WORKERS + 1):
+        t = threading.Thread(target=worker_thread, args=(i, stop_event), name=f"Worker-{i}")
+        t.daemon = True
+        t.start()
+        threads.append(t)
 
     log(f"All {MAX_WORKERS} workers running. Monitoring...")
 
     # Main monitoring loop: 30-min reports
     last_status = 0
-    while any(t.is_alive() for t in threads):
-        now = time.time()
-        if now - last_status >= STATUS_EVERY:
-            pa, done, chunks, q = db_stats()
-            tpm = current_tpm()
-            rpm = current_rpm()
-            total = sum(q.values())
-            pct   = round(q.get('done', 0) / max(total, 1) * 100, 1)
-            log(
-                f"STATUS | Phase A: {pa}/17511 | "
-                f"Chunked: {done} docs / {chunks} chunks | "
-                f"Queue: {pct}% ({q.get('done',0)}/{total}) | "
-                f"Failed: {q.get('failed',0)} | "
-                f"TPM: {tpm:,}/{SAFE_TPM_LIMIT:,} | "
-                f"RPM: {rpm}/{SAFE_RPM_LIMIT}"
-            )
-            last_status = now
-        time.sleep(PROBE_INTERVAL)
+    try:
+        while any(t.is_alive() for t in threads):
+            now = time.time()
+            if now - last_status >= STATUS_EVERY:
+                pa, done, chunks, q = db_stats()
+                tpm = current_tpm()
+                rpm = current_rpm()
+                total = sum(q.values())
+                pct   = round(q.get('done', 0) / max(total, 1) * 100, 1) if total > 0 else 0
+                log(
+                    f"STATUS | Phase A: {pa}/17511 | "
+                    f"Chunked: {done} docs / {chunks} chunks | "
+                    f"Queue: {pct}% ({q.get('done',0)}/{total}) | "
+                    f"Failed: {q.get('failed',0)} | "
+                    f"TPM: {tpm:,}/{SAFE_TPM_LIMIT:,} | "
+                    f"RPM: {rpm}/{SAFE_RPM_LIMIT}"
+                )
+                last_status = now
+            time.sleep(PROBE_INTERVAL)
+    except KeyboardInterrupt:
+        log("Shutdown requested...")
 
     stop_event.set()
     log("All workers finished. Running mop-up...")
 
-    # Mop-up: reset any failures and run a final gentle pass
-    n = reset_failed_to_pending()
-    if n > 0:
-        log(f"Mop-up: re-queued {n} failed docs. Launching 2 gentle workers...")
-        stop_event2 = threading.Event()
-        mop_threads = [threading.Thread(target=worker_thread, args=(i, stop_event2), daemon=True) for i in (1, 2)]
-        for t in mop_threads: t.start()
-        for t in mop_threads: t.join()
-        stop_event2.set()
-        log("Mop-up complete.")
-
+    # Mop-up: reset any failures and run a final gentle pass (not really used in non-stop loop)
+    # n = reset_failed_to_pending()
+    
     log("═" * 60)
-    log("Triggering Phase C: Agentic GraphRAG Build")
-    proc = subprocess.Popen(
-        [VENV_PY, "-u", "scripts/build_knowledge_graph.py"],
-        stdout=open(os.path.join(LOG_DIR, "knowledge_graph.log"), "a"),
-        stderr=subprocess.STDOUT, cwd=BASE_DIR
-    )
-    log(f"Phase C launched (PID {proc.pid}).")
+    log("Processing complete for this cycle.")
 
 if __name__ == "__main__":
     main()

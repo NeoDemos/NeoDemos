@@ -1,0 +1,24 @@
+# NeoDemos Video Pipeline Dependencies
+# Install: pip install -r pipeline/requirements.txt
+
+# Core
+requests>=2.31
+beautifulsoup4>=4.12
+lxml>=5.0
+
+# Media
+ffmpeg-python>=0.2.0
+
+# AI - Apple Silicon (MLX-Optimized Whisper, fallback transcription)
+mlx-whisper>=0.4
+
+# OCR - macOS Native Vision Framework
+pyobjc-core>=10.0
+pyobjc-framework-Vision>=10.0
+pyobjc-framework-Quartz>=10.0
+
+# VTT Parsing
+webvtt-py>=0.5
+
+# Utilities
+tqdm>=4.65

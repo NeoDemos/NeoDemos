@@ -1,17 +1,12 @@
-{% extends "index.html" %}
+{% extends "base.html" %}
 
 {% block content %}
-<section class="hero" style="padding: 1rem 0;">
-    <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">Kalender</h1>
-    <p style="font-size: 1rem;">Overzicht van alle geplande commissie- en raadsvergaderingen in Rotterdam.</p>
-</section>
-
 <div
     style="padding: 1rem; background: white; border-radius: 12px; border: 1px solid var(--border-color); max-width: 100%; margin: 0 auto;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
         <div style="display: flex; align-items: center; gap: 0.5rem;">
             <select id="select-month" class="calendar-select"
-                style="font-size: 1.2rem; font-weight: 700; color: var(--secondary-color); border: 1px solid transparent; background: transparent; cursor: pointer; padding: 0.2rem 0.5rem; border-radius: 4px;">
+                style="font-size: 1.1rem; font-weight: 700; color: var(--secondary-color); border: 1px solid transparent; background: transparent; cursor: pointer; padding: 0.2rem 0.5rem; border-radius: 4px;">
                 <option value="0">Januari</option>
                 <option value="1">Februari</option>
                 <option value="2">Maart</option>
@@ -27,11 +22,15 @@
             </select>
             <select id="select-year" class="calendar-select"
                 onchange="window.location.href='/calendar?year=' + this.value"
-                style="font-size: 1.2rem; font-weight: 700; color: var(--secondary-color); border: 1px solid transparent; background: transparent; cursor: pointer; padding: 0.2rem 0.5rem; border-radius: 4px;">
+                style="font-size: 1.1rem; font-weight: 700; color: var(--secondary-color); border: 1px solid transparent; background: transparent; cursor: pointer; padding: 0.2rem 0.5rem; border-radius: 4px;">
                 {% for y in available_years %}
                 <option value="{{ y }}" {% if y==selected_year %}selected{% endif %}>{{ y }}</option>
                 {% endfor %}
             </select>
+            <button id="btn-today" class="btn-secondary btn"
+                style="padding: 0.2rem 0.6rem; font-size: 0.8rem; font-weight: 600; border-radius: 4px; display: flex; align-items: center; gap: 4px; cursor: pointer; background: #eef2f7; color: var(--secondary-color); border: 1px solid #d0d7de;">
+                <span style="font-size: 1rem;">🏠</span> Vandaag
+            </button>
         </div>
         <div>
             <button id="btn-prev" class="btn-secondary btn"
@@ -46,14 +45,26 @@
     </div>
 </div>
 
+    <script type="application/json" id="meetings-data">{{ meetings | tojson | safe }}</script>
+
 <script>
     // Data from server
-    const meetings = {{ meetings | tojson }};
-    // Default to current date if within 2024-2026, otherwise Jan 2025
+    const meetings = JSON.parse(document.getElementById('meetings-data').textContent);
+    const selectedYear = Number('{{ selected_year | default(2025)}}');
+    const selectedMonthParam = '{{ selected_month }}';
+    
     const now = new Date();
-    let currentDate = (now.getFullYear() >= 2024 && now.getFullYear() <= 2026)
-        ? new Date(now.getFullYear(), now.getMonth(), 1)
-        : new Date(2025, 0, 1);
+    
+    // Initialize to selected year and month
+    let initialMonth;
+    if (selectedMonthParam && selectedMonthParam !== 'None') {
+        initialMonth = Number(selectedMonthParam);
+    } else {
+        // Fallback: Use current month if in selected year, else Jan (0)
+        initialMonth = (now.getFullYear() === selectedYear) ? now.getMonth() : 0;
+    }
+    
+    let currentDate = new Date(selectedYear, initialMonth, 1);
 
     const selectMonth = document.getElementById('select-month');
     const selectYear = document.getElementById('select-year');
@@ -65,68 +76,82 @@
 
     function renderCalendar() {
         const gridContainer = document.getElementById('calendar-grid-container');
-
         if (!gridContainer) return;
 
         gridContainer.innerHTML = '';
-
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth();
-
         updateSelects();
 
         const dayNames = ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'];
-
-        // Add day headers
-        dayNames.forEach(day => {
-            const dayHeader = document.createElement('div');
-            dayHeader.style.cssText = 'background: #f8f9fa; padding: 0.5rem; text-align: center; font-weight: 700; color: #666; font-size: 0.7rem; text-transform: uppercase; border-bottom: 2px solid var(--border-color);';
-            dayHeader.textContent = day;
-            gridContainer.appendChild(dayHeader);
-        });
-
         const firstDay = new Date(year, month, 1).getDay(); // 0 (Sun) to 6 (Sat)
         const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1; // Convert to Mon-Sun
         const daysInMonth = new Date(year, month + 1, 0).getDate();
 
+        // 1. Calculate which weekdays have meetings to adjust column widths
+        const dayOccupancy = new Array(7).fill(false);
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const hasMeeting = Array.isArray(meetings) && meetings.some(m => m.start_date && m.start_date.startsWith(dayStr));
+            if (hasMeeting) {
+                const dayOfWeek = (adjustedFirstDay + day - 1) % 7;
+                dayOccupancy[dayOfWeek] = true;
+            }
+        }
+
+        // Apply dynamic grid template
+        const gridTemplate = dayOccupancy.map(busy => busy ? '1.8fr' : '0.6fr').join(' ');
+        gridContainer.style.gridTemplateColumns = gridTemplate;
+        gridContainer.style.minHeight = 'calc(100vh - 280px)';
+
+        // Add day headers
+        dayNames.forEach((day, idx) => {
+            const dayHeader = document.createElement('div');
+            const isBusy = dayOccupancy[idx];
+            dayHeader.style.cssText = `background: #f8f9fa; padding: 0.4rem; text-align: center; font-weight: 700; color: ${isBusy ? '#333' : '#999'}; font-size: 0.65rem; text-transform: uppercase; border-bottom: 2px solid var(--border-color);`;
+            dayHeader.textContent = day;
+            gridContainer.appendChild(dayHeader);
+        });
+
         // Empty slots for previous month
         for (let i = 0; i < adjustedFirstDay; i++) {
             const emptyDiv = document.createElement('div');
-            emptyDiv.style.cssText = 'background: #fcfcfc; padding: 0.3rem; border: none; opacity: 0.4;';
+            emptyDiv.style.cssText = 'background: #f0f0f0; padding: 0.3rem; border: 1px solid #e5e5e5; opacity: 0.3;';
             gridContainer.appendChild(emptyDiv);
         }
 
-        // Days of current month with meetings
+        // Days of current month
         for (let day = 1; day <= daysInMonth; day++) {
             const dayDiv = document.createElement('div');
-            dayDiv.style.cssText = 'background: white; padding: 0.4rem; border: 1px solid var(--border-color); position: relative; overflow-y: auto; min-height: 80px; max-height: 120px; display: flex; flex-direction: column;';
+            const dayStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const filteredMeetings = Array.isArray(meetings) ? meetings.filter(m => m.start_date && m.start_date.startsWith(dayStr)) : [];
+            const hasMeetings = filteredMeetings.length > 0;
+
+            dayDiv.style.cssText = `background: ${hasMeetings ? 'white' : '#fafafa'}; padding: 0.5rem; border: 1px solid var(--border-color); position: relative; overflow-y: auto; display: flex; flex-direction: column; transition: all 0.2s;`;
+            if (!hasMeetings) {
+                dayDiv.style.color = '#ccc';
+            }
 
             // Highlight today
             const isToday = now.getFullYear() === year && now.getMonth() === month && now.getDate() === day;
             if (isToday) {
                 dayDiv.style.background = '#fffbeb';
-                dayDiv.style.borderColor = 'var(--accent-color)';
+                dayDiv.style.boxShadow = 'inset 0 0 0 2px var(--accent-color)';
             }
 
             // Day number
             const dayNumber = document.createElement('div');
-            dayNumber.style.cssText = 'font-weight: 700; font-size: 0.85rem; color: #333; margin-bottom: 0.3rem; border-bottom: 1px solid #f0f0f0; padding-bottom: 0.2rem;';
+            dayNumber.style.cssText = `font-weight: 700; font-size: 0.8rem; color: ${hasMeetings ? '#333' : '#bbb'}; margin-bottom: 0.4rem; border-bottom: 1px solid ${hasMeetings ? '#eee' : 'transparent'}; padding-bottom: 0.2rem;`;
             dayNumber.textContent = day;
             dayDiv.appendChild(dayNumber);
-
-            // Find meetings for this day
-            const dayStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            const filteredMeetings = Array.isArray(meetings)
-                ? meetings.filter(m => m.start_date && m.start_date.startsWith(dayStr))
-                : [];
 
             // Add meeting links
             filteredMeetings.forEach(m => {
                 const link = document.createElement('a');
                 link.href = `/meeting/${m.id}`;
-                link.textContent = m.name.substring(0, 30) + (m.name.length > 30 ? '...' : '');
+                link.textContent = m.name;
                 link.title = m.name;
-                link.style.cssText = 'font-size: 0.65rem; padding: 2px 4px; border-radius: 3px; background: #fff3cd; color: #856404; margin-bottom: 2px; border: 1px solid #ffc107; cursor: pointer; text-decoration: none; line-height: 1.2; word-break: break-all; display: block;';
+                link.style.cssText = 'font-size: 0.65rem; font-weight: 500; padding: 3px 5px; border-radius: 4px; background: #fff3cd; color: #856404; margin-bottom: 3px; border: 1px solid #ffeeba; cursor: pointer; text-decoration: none; line-height: 1.3; word-break: break-word; display: block; box-shadow: 0 1px 2px rgba(0,0,0,0.05);';
                 dayDiv.appendChild(link);
             });
 
@@ -138,27 +163,53 @@
         const cellsToAdd = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
         for (let i = 0; i < cellsToAdd; i++) {
             const emptyDiv = document.createElement('div');
-            emptyDiv.style.cssText = 'background: #fcfcfc; padding: 0.3rem; border: none; opacity: 0.4;';
+            emptyDiv.style.cssText = 'background: #f0f0f0; padding: 0.3rem; border: 1px solid #e5e5e5; opacity: 0.3;';
             gridContainer.appendChild(emptyDiv);
         }
     }
 
     function changeMonth(delta) {
         currentDate.setMonth(currentDate.getMonth() + delta);
-        renderCalendar();
+        
+        // If we crossed into a different year, reload to get new data
+        if (currentDate.getFullYear() !== selectedYear) {
+            window.location.href = `/calendar?year=${currentDate.getFullYear()}&month=${currentDate.getMonth()}`;
+        } else {
+            renderCalendar();
+        }
     }
 
     document.getElementById('btn-prev').addEventListener('click', () => changeMonth(-1));
     document.getElementById('btn-next').addEventListener('click', () => changeMonth(1));
 
+    document.getElementById('btn-today').addEventListener('click', () => {
+        const todayYear = now.getFullYear();
+        const todayMonth = now.getMonth();
+        
+        if (todayYear !== selectedYear) {
+            // Switch year via reload
+            window.location.href = `/calendar?year=${todayYear}&month=${todayMonth}`;
+        } else {
+            // Same year, just jump in JS
+            currentDate = new Date(todayYear, todayMonth, 1);
+            renderCalendar();
+        }
+    });
+
     selectMonth.addEventListener('change', (e) => {
-        currentDate.setMonth(parseInt(e.target.value));
-        renderCalendar();
+        const newMonth = parseInt(e.target.value);
+        currentDate.setMonth(newMonth);
+        // Month dropdown is always in the current year, but keep logic for safety
+        if (currentDate.getFullYear() !== selectedYear) {
+            window.location.href = `/calendar?year=${currentDate.getFullYear()}&month=${newMonth}`;
+        } else {
+            renderCalendar();
+        }
     });
 
     selectYear.addEventListener('change', (e) => {
-        currentDate.setFullYear(parseInt(e.target.value));
-        renderCalendar();
+        // When year changes via dropdown, reload page to fetch that year's data
+        window.location.href='/calendar?year=' + e.target.value;
     });
 
     renderCalendar();

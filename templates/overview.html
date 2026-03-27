@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+    <h1>De toekomst van raadsinformatie.</h1>
+    <p>Efficiënt vergaderingen voorbereiden met de kracht van AI. Speciaal voor Rotterdamse raadsleden.</p>
+</section>
+
+<div class="meetings-table-container">
+    {% if meetings %}
+    <table class="meetings-table">
+        <thead>
+            <tr>
+                <th>Datum</th>
+                <th>Vergadering</th>
+                <th>Commissie</th>
+                <th>Locatie</th>
+                <th>ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for meeting in meetings %}
+            <tr class="meeting-row" data-meeting-id="{{ meeting.id }}"
+                style="{% if loop.index % 2 == 1 %}background-color: #ffffff;{% else %}background-color: #f5f7fa;{% endif %}">
+                <td class="meeting-date"
+                    data-date="{{ meeting.start_date.split('T')[0] if meeting.start_date else '' }}">{{
+                    meeting.start_date.split('T')[0] if meeting.start_date else 'Onbekend' }}</td>
+                <td class="meeting-name">{{ meeting.name }}</td>
+                <td class="meeting-committee">{{ meeting.committee or "Algemeen" }}</td>
+                <td class="meeting-location">{{ meeting.location or "Rotterdam" }}</td>
+                <td class="meeting-id">{{ meeting.id }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="card" style="text-align: center;">
+        <h3>Geen komende vergaderingen gevonden.</h3>
+        <p>Probeer het later opnieuw of controleer de data bron.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    function formatDateWithSmallCaps(dateStr) {
+        if (!dateStr || dateStr === 'Onbekend') return 'Onbekend';
+        const date = new Date(dateStr + 'T00:00:00');
+        const day = String(date.getDate()).padStart(2, '0');
+        const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+        const month = monthNames[date.getMonth()];
+        const year = String(date.getFullYear()).slice(-2);
+        return `${day}-${month}-${year}`;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('td.meeting-date').forEach(cell => {
+            const dateStr = cell.getAttribute('data-date');
+            if (dateStr) {
+                cell.textContent = formatDateWithSmallCaps(dateStr);
+            }
+        });
+
+        document.querySelectorAll('tr.meeting-row').forEach(row => {
+            const meetingId = row.getAttribute('data-meeting-id');
+            row.style.cursor = 'pointer';
+
+            row.addEventListener('click', function (e) {
+                if (window.getSelection().toString()) return;
+                if (meetingId) {
+                    window.location.href = `/meeting/${meetingId}`;
+                }
+            });
+
+            row.addEventListener('mouseover', function () {
+                this.style.backgroundColor = '#f0f2f5';
+            });
+
+            row.addEventListener('mouseout', function () {
+                const index = Array.from(this.parentNode.children).indexOf(this);
+                this.style.backgroundColor = index % 2 === 0 ? '#ffffff' : '#f5f7fa';
+            });
+        });
+    });
+</script>
+{% endblock %}

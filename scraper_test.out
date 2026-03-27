@@ -1,0 +1,25 @@
+2026-03-15 08:28:14,137 [INFO] Fetching iBabs page: https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/a4158f5e-ca48-4e19-8c61-37f9be65283f
+2026-03-15 08:28:15,116 [INFO] Found webcast code in HTML: gemeenterotterdam_21181219_1
+2026-03-15 08:28:15,117 [INFO] Fetching metadata from: https://sdk.companywebcast.com/players/gemeenterotterdam_21181219_1/info
+2026-03-15 08:28:15,272 [INFO] ✅ Metadata fetch successful from: https://sdk.companywebcast.com/players/gemeenterotterdam_21181219_1/info
+2026-03-15 08:28:15,272 [INFO] 🎬 Legacy Royalcast pipeline detected. Constructing VODS3 HLS URL...
+2026-03-15 08:28:15,505 [INFO] AccessRules readTokens keys: ['ssl', 'non-ssl']
+2026-03-15 08:28:15,505 [INFO] ✅ Tokens successfully extracted from accessrules
+2026-03-15 08:28:15,505 [INFO] ✅ Signed HLS URL constructed for 14be287d-7d28-48a6-9746-3d85ed1483a0
+2026-03-15 08:28:15,655 [INFO] Checking for ConnectLive VTT transcript...
+2026-03-15 08:28:15,863 [INFO] Meeting: Vergadering Commissie Zorg, Onderwijs, Cultuur en Sport (2018-2022) 19-12-2018 | UUID: 14be287d-7d28-48a6-9746-3d85ed1483a0 | Duration: 04:30:53 | VTT: False
+2026-03-15 08:28:15,864 [INFO] Fetching events: https://sdk.companywebcast.comhttps://sdk.companywebcast.com/players/14be287d-7d28-48a6-9746-3d85ed1483a0/ondemand/637848187430000000@druten_msi/events/hls
+2026-03-15 08:28:15,866 [WARNING] Events API failed: HTTPSConnectionPool(host='sdk.companywebcast.comhttps', port=443): Max retries exceeded with url: /sdk.companywebcast.com/players/14be287d-7d28-48a6-9746-3d85ed1483a0/ondemand/637848187430000000@druten_msi/events/hls (Caused by NameResolutionError("HTTPSConnection(host='sdk.companywebcast.comhttps', port=443): Failed to resolve 'sdk.companywebcast.comhttps' ([Errno 8] nodename nor servname provided, or not known)"))
+2026-03-15 08:28:15,866 [INFO] No events from API; timestamps will be inferred from VTT or skipped
+
+============================================================
+Meeting: Vergadering Commissie Zorg, Onderwijs, Cultuur en Sport (2018-2022) 19-12-2018
+UUID:    14be287d-7d28-48a6-9746-3d85ed1483a0
+Duration: 04:30:53 (16253s)
+MP4:     https://sdk.companywebcast.com/players/14be287d-7d28-48a6-9746-3d85ed1483a0/download/webcast/7f047208-0000-0000-0000-000000000000
+MP3:     https://sdk.companywebcast.com/players/14be287d-7d28-48a6-9746-3d85ed1483a0/download/webcast/d144e433-0000-0000-0000-000000000000
+VTT:     Not available
+
+No agenda timestamps available from events API
+
+============================================================

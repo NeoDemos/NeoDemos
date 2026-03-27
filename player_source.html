@@ -1,0 +1,53 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css?v=YLGeXaapI0_5IgZopewRJcFXomhRMlYYjugPLSyNjTY" />
+    <link rel="stylesheet" href="/css/site.min.css?v=-u08IJL60AMvYbelYW4cXefIbwZyyRX_OM4SwOVlhB8" />
+    <link href="/lib/amp/azuremediaplayer-2.3.9.min.css?v=C3c7URR-1gTxqVXsp54PUtxd7lGkq0RPL2nyarp2-sI" rel="stylesheet" />
+    <link href="/css/player.min.css?v=tUO3dW2XlFMSwTl0AP4H1Kmzw-snSRwYh10xhxGhHaw" rel="stylesheet" />
+    <link href="/lib/amp-plugins/amp-chapters/amp-chapters.min.css?v=EZ6-SiGn47_8507t1mF81jMYpm31vQUKsBtYovb3sWM" rel="stylesheet" />
+    <title>iBabs Live + Connect Player</title>
+</head>
+<body>
+    <div class="player_container center">
+            <div id="eventInformation">
+                <h1 id="title"></h1>
+                <h2 id="date"></h2>
+                <div id="countdown" style="display: none;" class="center">
+                    <h2>Starts in:</h2>
+                    <span id="countdown_days" class="countdown_part">00</span>:
+                    <span id="countdown_hours" class="countdown_part">00</span>:
+                    <span id="countdown_minutes" class="countdown_part">00</span>:
+                    <span id="countdown_seconds" class="countdown_part">00</span>
+                </div>
+                <div id="countdown_wait" style="display: none;" class="text-center center">
+                    <h2>Waiting to start...</h2>
+                </div>
+                <div id="waiting" style="display: none;" class="text-center center">
+                    <h2>Almost ready to start...</h2>
+                </div>
+                <input type="button" value="Start" id="buttonStartVideo" class="center_button center" style="display: none;">
+            </div>
+            <video id="azuremediaplayer" class="hidden azuremediaplayer amp-flush-skin amp-big-play-centered" tabindex="0">
+                    <track kind="subtitles" src="/Player/File/875b2798-d2ab-4978-8693-4d4b6c6e1d4d/-subtitle.vtt?639091089094361315" srclang="nl" label="Nederlands">
+            </video>
+    </div>
+
+    <script src="/lib/jquery/dist/jquery.min.js?v=9_aliU8dGd2tb6OSsuzixeV4y_faTqgFtohetphbbj0"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js?v=fzFFyH01cBVPYzl16KT40wqjhgPtq6FFUB6ckN2-GGw"></script>
+    <script src="/js/site.min.js?v=w8dcvzcVTNvTaCPY5BArLFzvhqAsFuPqBHonLEGXrqc"></script>
+    <script src="/lib/amp/azuremediaplayer-2.3.9.min.js?v=uVnlT-QWZVN8-NOlb9K9ovExGmPlEHpiIk7RSxw9NGM"></script>
+       
+    <script src="/js/signalr/dist/browser/signalr.js?v=qlK-fV_kLlm5ysMrJeMy2DcArH7zgEiIPbtfsz4NFq0"></script>
+    
+    <script src="/lib/amp-plugins/amp-chapters/amp-chapters.min.js?v=3pwYGKcAk2yfbHUnr2cXg_HFyzwEsuq-mRglhu26yww"></script>
+    <script src="/lib/amp-plugins/amp-spriteTip/amp-spriteTip.min.js?v=k0gYlHXUAdg7BJymBaOcbAkr9RDu9qwf1ezKRuFXrGU"></script>
+    <script src="/lib/amp-plugins/amp-notice/amp-notice.min.js?v=5QRTaVn2029wOybuAcmQtjeG2r_2d0_twcbsYhIU8Tg"></script>
+    
+    <script src="/js/player.js?v=YFy8Z4lpaZnQP5OpgTF7u-xEG7VYy19s18CHqj2Jt0s"></script>
+</body>
+</html>

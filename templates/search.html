@@ -1,0 +1,494 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .citation-bubble {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--accent-color);
+        color: white;
+        font-size: 0.7rem;
+        font-weight: bold;
+        width: 1.2rem;
+        height: 1.2rem;
+        border-radius: 50%;
+        margin: 0 0.2rem;
+        cursor: pointer;
+        vertical-align: super;
+        text-decoration: none;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .citation-bubble:hover {
+        transform: scale(1.2);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        background: #0056b3;
+    }
+
+    #ai-answer-content h1,
+    #ai-answer-content h2,
+    #ai-answer-content h3 {
+        color: var(--secondary-color);
+        margin-top: 1.5rem;
+    }
+
+    #ai-answer-content p {
+        margin-bottom: 1rem;
+    }
+
+    /* Slider styles */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 24px;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+
+    input:checked+.slider {
+        background-color: #28a745;
+        /* Green color when active */
+    }
+
+    input:focus+.slider {
+        box-shadow: 0 0 1px #28a745;
+    }
+
+    input:checked+.slider:before {
+        transform: translateX(20px);
+    }
+</style>
+
+<div class="search-container" style="max-width: 800px; margin: 0 auto; padding: 2rem 0;">
+    <h1 style="font-size: 2.2rem; margin-bottom: 1.5rem; text-align: center;">Zoek in Raadsinformatie</h1>
+    <p style="color: #666; text-align: center; margin-bottom: 2rem;">Doorzoek alle agendapunten en documenten van de
+        afgelopen jaren.</p>
+
+    <!-- Search Box Wrapper -->
+    <div class="search-box-wrapper"
+        style="position: relative; margin-bottom: 1rem; background: white; border: 2px solid var(--accent-color); border-radius: 32px; padding: 0.4rem 0.4rem 0.4rem 1.5rem; box-shadow: 0 4px 24px rgba(0,0,0,0.06); display: flex; align-items: stretch; min-height: 64px; overflow: visible;">
+
+        <textarea id="search-input" placeholder="Zoek op thema, persoon of dossier..."
+            style="flex: 1; border: none; outline: none; font-size: 1.1rem; padding: 0.9rem 0; resize: none; min-height: 24px; max-height: 15rem; background: transparent; line-height: 1.5; overflow-y: hidden;"
+            rows="1"></textarea>
+
+        <button onclick="performSearch()"
+            style="background: var(--accent-color); color: white; border: none; padding: 0 2.2rem; height: 50px; border-radius: 25px; cursor: pointer; font-weight: 700; flex-shrink: 0; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); align-self: center; margin-left: 0.5rem;">Zoek</button>
+
+        <!-- @mention Suggestion Menu -->
+        <div id="mention-menu"
+            style="display: none; position: absolute; bottom: 100%; left: 0; width: 320px; background: white; border: 1px solid #eef2f6; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.12); z-index: 2000; margin-bottom: 12px; overflow: hidden;">
+            <div
+                style="padding: 1rem; background: #fcfdfe; border-bottom: 1px solid #f0f4f8; font-size: 0.75rem; font-weight: 700; color: #8898aa; letter-spacing: 0.05em;">
+                DIRECHTE KOPPELING</div>
+            <div id="mention-items">
+                <!-- Items injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toggle Below Search Box -->
+    <div style="margin-bottom: 3rem; display: flex; justify-content: center; align-items: center; gap: 1rem; background: #f8fafc; padding: 0.8rem; border-radius: 40px; width: fit-content; margin-left: auto; margin-right: auto; border: 1px solid #e2e8f0;">
+        <span style="font-size: 0.9rem; color: #64748b; font-weight: 600;">🔍 Standaard Zoeken</span>
+        <label class="switch">
+            <input type="checkbox" id="debate-mode">
+            <span class="slider round"></span>
+        </label>
+        <span style="font-size: 0.9rem; color: #4b5563; font-weight: 600;">⚔️ Debat Voorbereiding</span>
+    </div>
+
+    <div id="search-results">
+        <!-- Unified Loading State -->
+        <div id="search-loading-state" style="display: none; margin-bottom: 2rem; background: #f8f9fa; padding: 1.5rem; border-radius: 12px; border: 1px solid #eee;">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                <div class="spinner"></div>
+                <span id="search-loading-text" style="color: #666; font-style: italic;">Aan het zoeken...</span>
+            </div>
+            <ul id="ai-loading-steps" style="display: none; list-style-type: none; padding-left: 0; font-size: 0.85rem; color: #888;">
+                <!-- Agent steps appear here -->
+            </ul>
+        </div>
+
+        <!-- AI Deep Research Result -->
+        <div id="ai-deep-research" style="display: none; margin-bottom: 3rem;">
+            <div class="card"
+                style="border: 1px solid var(--accent-color); background: #fdfdfd; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
+                <div style="display: flex; align-items: center; margin-bottom: 1.5rem; justify-content: space-between;">
+                    <div style="display: flex; align-items: center;">
+                        <span id="ai-header-icon" style="font-size: 1.5rem; margin-right: 0.8rem;">🧠</span>
+                        <h2 id="ai-header-title" style="margin: 0; font-size: 1.4rem; color: var(--accent-color);">Deep
+                            Research Analyse</h2>
+                    </div>
+                    <button id="copy-word-btn" onclick="copyToWord()"
+                        style="display: none; background: white; color: var(--secondary-color); border: 1px solid #ddd; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; display: flex; align-items: center; gap: 0.5rem;">
+                        📄 Kopieer voor Word
+                    </button>
+                </div>
+
+                <div id="ai-answer-content" style="line-height: 1.8; font-size: 1.05rem; color: #2c3e50;">
+                    <!-- AI result markdown rendered here -->
+                </div>
+            </div>
+        </div>
+
+        <div id="document-results">
+            <!-- Keyword results appear here -->
+        </div>
+    </div>
+</div>
+
+<script>
+    async function performSearch() {
+        const query = document.getElementById('search-input').value;
+        if (!query || query.length < 3) return;
+
+        const isDebateMode = document.getElementById('debate-mode').checked;
+
+        const resultsDiv = document.getElementById('document-results');
+        const aiContainer = document.getElementById('ai-deep-research');
+        const aiContent = document.getElementById('ai-answer-content');
+        const loadingState = document.getElementById('search-loading-state');
+        const loadingText = document.getElementById('search-loading-text');
+        const loadingSteps = document.getElementById('ai-loading-steps');
+        const headerTitle = document.getElementById('ai-header-title');
+        const headerIcon = document.getElementById('ai-header-icon');
+        const copyBtn = document.getElementById('copy-word-btn');
+
+        resultsDiv.innerHTML = '';
+        aiContainer.style.display = 'none';
+        aiContent.innerHTML = '';
+        copyBtn.style.display = 'none';
+
+        loadingState.style.display = 'block';
+        loadingSteps.innerHTML = '';
+        loadingSteps.style.display = 'none';
+
+        if (isDebateMode) {
+            headerTitle.innerText = "Agentic Debatdossier Constructie";
+            headerIcon.innerText = "⚔️";
+            loadingText.innerText = "Deep Research Agent Loop Gestart. Context analyseren...";
+            loadingSteps.style.display = 'block';
+
+            let step = 0;
+            const steps = [
+                "Stap 1: Initiële historische bronnen ophalen...",
+                "Stap 2: Gapanalyse uitvoeren op ontbrekende details...",
+                "Stap 3: Secundaire gerichte zoekopdracht lanceren in vector database...",
+                "Stap 4: Diepgaande dossieranalyse schrijven (mutaties & standpunten)..."
+            ];
+            const interval = setInterval(() => {
+                if (step < steps.length) {
+                    loadingSteps.innerHTML += `<li style="margin-bottom: 0.4rem;">✅ ${steps[step]}</li>`;
+                    step++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 3500);
+
+            window._debateInterval = interval;
+        } else {
+            loadingText.innerText = "Documenten en agendapunten doorzoeken...";
+            loadingSteps.style.display = 'none';
+        }
+
+        try {
+            const savedParty = localStorage.getItem('neodemos_party') || 'GroenLinks-PvdA';
+            const url = `/api/search?q=${encodeURIComponent(query)}${isDebateMode ? '&mode=debate&deep=true' : ''}&party=${encodeURIComponent(savedParty)}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (window._debateInterval) clearInterval(window._debateInterval);
+            loadingState.style.display = 'none';
+
+            const usedSourceIndices = new Set();
+
+            if (data.ai_answer) {
+                aiContainer.style.display = 'block';
+                marked.setOptions({ gfm: true, breaks: true });
+
+                let answerHtml = data.ai_answer;
+                let renderedHtml = marked.parse(answerHtml);
+
+                // Citation replacement logic - handles [1, 2] AND isolated numbers like "item 3."
+                // Pattern 1: [1, 2] or [#1] or [26bb000120]
+                renderedHtml = renderedHtml.replace(/\[(#?[a-zA-Z0-9]+(?:,\s*#?[a-zA-Z0-9]+)*)\]/g, (match, content) => {
+                    const citations = content.split(/,\s*/);
+                    return citations.map(cit => {
+                        const nStr = cit.replace('#', '').trim();
+                        // Try parsing as simple integer first (standard index)
+                        let n = parseInt(nStr, 10);
+                        
+                        // If it's a valid index mapped to sources
+                        if (!isNaN(n) && n > 0 && data.sources && n <= data.sources.length) {
+                            usedSourceIndices.add(n);
+                            const source = data.sources[n - 1];
+                            return `<a href="${source.url || '#'}" target="_blank" class="citation-bubble" title="${source.name || ''}">${n}</a>`;
+                        }
+                        
+                        // Fallback: Check if it's a document ID that matches one of our sources' original IDs
+                        if (data.sources) {
+                            const sourceIdx = data.sources.findIndex(s => s.id === nStr);
+                            if (sourceIdx !== -1) {
+                                const nVal = sourceIdx + 1;
+                                usedSourceIndices.add(nVal);
+                                const source = data.sources[sourceIdx];
+                                return `<a href="${source.url || '#'}" target="_blank" class="citation-bubble" title="${source.name || ''}">${nVal}</a>`;
+                            }
+                        }
+                        
+                        return cit;
+                    }).join('');
+                });
+
+                // Pattern 2: Fallback for isolated numbers (e.g. "tekst 3.")
+                // IMPROVED: Added negative lookahead (?!\.\d) to avoid matching version numbers (like 2.0)
+                renderedHtml = renderedHtml.replace(/(?:^|\s)(\d+)(?!\.\d)([\.\s,;]|$)/g, (match, nStr, tail) => {
+                    const n = parseInt(nStr, 10);
+                    if (!isNaN(n) && n > 0 && data.sources && n <= data.sources.length) {
+                        usedSourceIndices.add(n);
+                        const source = data.sources[n - 1];
+                        const leadingSpace = match.startsWith(' ') ? ' ' : '';
+                        return `${leadingSpace}<a href="${source.url || '#'}" target="_blank" class="citation-bubble" title="${source.name || ''}">${n}</a>${tail}`;
+                    }
+                    return match;
+                });
+
+                aiContent.innerHTML = renderedHtml;
+                copyBtn.style.display = 'flex';
+            }
+
+            if (data.results.length === 0 && !data.ai_answer) {
+                resultsDiv.innerHTML = '<div class="card" style="text-align: center; padding: 2rem;"><p>Geen resultaten gevonden voor "' + query + '".</p></div>';
+                return;
+            }
+
+            let html = '<h3 style="margin-bottom: 1.5rem; color: #666; font-size: 0.9rem; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">Gevonden Documenten</h3>';
+
+            if (usedSourceIndices.size > 0 && data.sources) {
+                html += '<div class="cited-sources-container" style="background: #f9f9fa; border-left: 4px solid var(--accent-color); padding: 1.5rem; border-radius: 0 8px 8px 0; margin-bottom: 2rem;">';
+                html += '<h4 style="margin-top: 0; margin-bottom: 1rem; color: var(--secondary-color); font-size: 1.05rem;">Bronnen:</h4>';
+                html += '<ul style="list-style-type: none; padding-left: 0; font-size: 0.95rem; margin-bottom: 0;">';
+
+                const sortedIndices = Array.from(usedSourceIndices).sort((a, b) => a - b);
+                sortedIndices.forEach(n => {
+                    const source = data.sources[n - 1];
+                    const url = source.url || '#';
+                    const name = source.name || `Document ${source.id}`;
+                    html += `<li style="margin-bottom: 0.8rem; display: flex; align-items: flex-start;">
+                                    <span class="citation-bubble" style="margin-top: 0.1rem; margin-right: 1rem; flex-shrink: 0; cursor: default; transform: none; box-shadow: none;">${n}</span>
+                                    <a href="${url}" target="_blank" style="color: var(--secondary-color); text-decoration: none; display: inline-block; font-weight: 500; line-height: 1.4;">${name}</a>
+                                </li>`;
+                });
+                html += '</ul></div>';
+            }
+
+            if (data.results.length > 0) {
+                html += '<h4 style="margin-bottom: 1rem; color: #888; font-size: 0.85rem; text-transform: uppercase;">Overige Resultaten:</h4>';
+                data.results.forEach(result => {
+                    html += `
+                    <div class="card search-result-item" style="margin-bottom: 1rem; padding: 1.2rem; cursor: pointer; transition: transform 0.2s;" onclick="location.href='/meeting/${result.meeting_id}'">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                            <h4 style="margin: 0; color: var(--secondary-color); font-size: 1.1rem;">${result.name}</h4>
+                            <span style="font-size: 0.75rem; background: #f0f2f5; padding: 0.2rem 0.5rem; border-radius: 4px; color: #666;">${result.meeting_date}</span>
+                        </div>
+                        <p style="margin: 0.5rem 0; font-size: 0.85rem; color: #444; line-height: 1.5;">${result.snippet || 'Geen samenvatting beschikbaar'}</p>
+                        <div style="margin-top: 0.8rem; font-size: 0.75rem; color: var(--accent-color); font-weight: 600;">
+                            🏛️ ${result.committee || 'Algemeen'}
+                        </div>
+                    </div>`;
+                });
+            }
+
+            resultsDiv.innerHTML = html;
+        } catch (error) {
+            if (window._debateInterval) clearInterval(window._debateInterval);
+            const loadingState = document.getElementById('search-loading-state');
+            if (loadingState) loadingState.style.display = 'none';
+            console.error("Search error:", error);
+            resultsDiv.innerHTML = '<p style="color: #d32f2f;">❌ Er is een fout opgetreden bij het zoeken.</p>';
+        }
+    }
+
+    async function copyToWord() {
+        const content = document.getElementById('ai-answer-content');
+        const btn = document.getElementById('copy-word-btn');
+
+        // Create a style block to ensure Word/GDocs preserve formatting
+        const styles = `
+            <style>
+                body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; }
+                h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 5px; }
+                table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+                th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+                th { background-color: #f8f9fa; font-weight: bold; }
+                tr:nth-child(even) { background-color: #f2f2f2; }
+                .citation-bubble { display: none; } /* Don't copy UI bubbles to Word */
+            </style>
+        `;
+
+        const htmlContent = styles + content.innerHTML;
+
+        try {
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const data = [new ClipboardItem({ 'text/html': blob })];
+            await navigator.clipboard.write(data);
+
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '✅ Gekopieerd!';
+            btn.style.borderColor = '#38a169';
+            btn.style.color = '#38a169';
+
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.borderColor = '#ddd';
+                btn.style.color = 'var(--secondary-color)';
+            }, 2000);
+        } catch (err) {
+            console.error('Failed to copy: ', err);
+            alert('Fout bij kopiëren. Probeer de tekst handmatig te selecteren.');
+        }
+    }
+
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', function () {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        const mentionMenu = document.getElementById('mention-menu');
+        const mentionItems = document.getElementById('mention-items');
+        const categories = [
+            // PARTIJEN
+            { name: 'Leefbaar Rotterdam', icon: '🐾', type: 'Partij' },
+            { name: 'VVD', icon: '💙', type: 'Partij' },
+            { name: 'D66', icon: '💚', type: 'Partij' },
+            { name: 'GroenLinks-PvdA', icon: '❤️', type: 'Partij' },
+            { name: 'DENK', icon: '🛡️', type: 'Partij' },
+            { name: 'Volt', icon: '⚡', type: 'Partij' },
+            { name: 'Partij voor de Dieren', icon: '🌿', type: 'Partij' },
+            { name: 'SP', icon: '🚩', type: 'Partij' },
+            { name: 'CDA', icon: '🍊', type: 'Partij' },
+            { name: 'ChristenUnie', icon: '✝️', type: 'Partij' },
+            { name: '50PLUS', icon: '👵', type: 'Partij' },
+
+            // COMMISSIES (Gevonden in DB)
+            { name: 'Commissie Bestuur, Organisatie, Financiën en Veiligheid', icon: '💰', type: 'Commissie' },
+            { name: 'Commissie Bouwen, Wonen en Buitenruimte', icon: '🏗️', type: 'Commissie' },
+            { name: 'Commissie Mobiliteit, Haven, Economie en Klimaat', icon: '🛳️', type: 'Commissie' },
+            { name: 'Commissie Werk, Inkomen, Onderwijs, Samenleven', icon: '🤝', type: 'Commissie' },
+            { name: 'Commissie Zorg, Welzijn, Cultuur en Sport', icon: '🏥', type: 'Commissie' },
+            { name: 'Gemeenteraad', icon: '🏛️', type: 'Commissie' }
+        ];
+
+        searchInput.addEventListener('input', function (e) {
+            const text = this.value;
+            const cursorPosition = this.selectionStart;
+            const lastAt = text.lastIndexOf('@', cursorPosition - 1);
+
+            if (lastAt !== -1 && !text.substring(lastAt, cursorPosition).includes(' ')) {
+                const query = text.substring(lastAt + 1, cursorPosition).toLowerCase();
+                showMentionMenu(query);
+            } else {
+                hideMentionMenu();
+            }
+        });
+
+        function showMentionMenu(query = '') {
+            mentionItems.innerHTML = '';
+            const filtered = categories.filter(cat =>
+                cat.name.toLowerCase().includes(query) ||
+                cat.type.toLowerCase().includes(query)
+            );
+
+            if (filtered.length === 0) {
+                hideMentionMenu();
+                return;
+            }
+
+            filtered.forEach((cat, index) => {
+                const item = document.createElement('div');
+                item.style.padding = '0.8rem 1.2rem';
+                item.style.cursor = 'pointer';
+                item.style.display = 'flex';
+                item.style.alignItems = 'center';
+                item.style.gap = '0.8rem';
+                item.style.transition = 'background 0.2s';
+                item.style.fontSize = '0.9rem';
+                item.style.borderLeft = index === 0 ? '4px solid var(--accent-color)' : '4px solid transparent';
+
+                item.innerHTML = `
+                    <span style="font-size: 1.1rem;">${cat.icon}</span> 
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-weight: 600; color: #333;">${cat.name}</span>
+                        <span style="font-size: 0.7rem; color: #888; text-transform: uppercase;">${cat.type}</span>
+                    </div>`;
+
+                item.onmouseover = () => item.style.background = '#f7fafc';
+                item.onmouseout = () => item.style.background = 'transparent';
+
+                item.onclick = () => {
+                    const text = searchInput.value;
+                    const cursorPosition = searchInput.selectionStart;
+                    const lastAt = text.lastIndexOf('@', cursorPosition - 1);
+                    const newText = text.substring(0, lastAt) + '@' + cat.name + ' ' + text.substring(cursorPosition);
+                    searchInput.value = newText;
+                    hideMentionMenu();
+                    searchInput.focus();
+                    searchInput.dispatchEvent(new Event('input'));
+                };
+                mentionItems.appendChild(item);
+            });
+            mentionMenu.style.display = 'block';
+        }
+
+        function hideMentionMenu() {
+            mentionMenu.style.display = 'none';
+        }
+
+        document.addEventListener('click', function (e) {
+            if (mentionMenu && !mentionMenu.contains(e.target) && e.target !== searchInput) {
+                hideMentionMenu();
+            }
+        });
+
+        searchInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                performSearch();
+            }
+        });
+    }
+</script>
+{% endblock %}

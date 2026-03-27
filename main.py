@@ -15,20 +15,37 @@ from contextlib import asynccontextmanager
 # Load environment variables from .env file
 load_dotenv()
 
+# ROBUST MANUAL KEY FALLBACK
+if not os.getenv("GEMINI_API_KEY"):
+    try:
+        with open(".env", "r") as f:
+            for line in f:
+                if "GEMINI_API_KEY" in line:
+                    os.environ["GEMINI_API_KEY"] = line.split("=")[1].strip()
+                    print("DEBUG: Manually loaded GEMINI_API_KEY from .env")
+    except:
+        pass
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 from services.open_raad import OpenRaadService
 from services.storage import StorageService
-from services.ai_service import AIService
+from services.ai_service import AIService, GEMINI_AVAILABLE
 from services.refresh_service import RefreshService
 from services.party_position_profile_service import PartyPositionProfileService
 from services.policy_lens_evaluation_service import PolicyLensEvaluationService
 
 raad_service = OpenRaadService()
 storage = StorageService()
-ai_service = AIService()
+# Initialize services
+try:
+    ai_service = AIService()
+    print(f"DEBUG: AIService init complete. GEMINI_AVAILABLE={GEMINI_AVAILABLE}, use_llm={ai_service.use_llm}, has_key={bool(ai_service.api_key)}")
+except Exception as e:
+    print(f"DEBUG: AIService init FAILED: {e}")
+    ai_service = None
 refresh_service = RefreshService(storage, raad_service, ai_service)
 
 # Initialize party profile and lens evaluation services
@@ -95,26 +112,154 @@ def tojson_filter(obj):
 templates.env.filters['tojson'] = tojson_filter
 
 @app.get("/")
-async def read_root(request: Request):
+async def search_page(request: Request):
+    return templates.TemplateResponse("search.html", {"request": request, "title": "Zoeken"})
+
+@app.get("/overview")
+async def overview_page(request: Request):
     meetings = storage.get_meetings(limit=500)
-    return templates.TemplateResponse("index.html", {
+    return templates.TemplateResponse("overview.html", {
         "request": request, 
-        "title": "Welcome to NeoDemos",
+        "title": "Overzicht",
         "meetings": meetings
     })
 
+@app.get("/api/search")
+async def api_search(q: str, deep: bool = False, mode: str = None, party: str = "GroenLinks-PvdA"):
+    """
+    Search for agenda items and documents.
+    If deep=True, also performs AI Deep Research.
+    """
+    if not q or len(q) < 3:
+        return {"results": [], "ai_answer": None}
+    
+    # 1. Traditional Keyword Search
+    from psycopg2.extras import RealDictCursor
+    def get_keyword_results():
+        with storage._get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                try:
+                    # Optimized search using CTE and deferred headline generation
+                    score_threshold=0.15  # Extremely relaxed recall for long queries
+                    search_query = """
+                    WITH matches AS (
+                        -- 1. Trigram match on agenda item name (Highest priority/rank)
+                        SELECT ai.id as agenda_item_id, 1.0 as rank, NULL::int as chunk_id
+                        FROM agenda_items ai
+                        WHERE ai.name ILIKE %s
+                        
+                        UNION ALL
+                        
+                        -- 2. FTS match on document chunks
+                        SELECT d.agenda_item_id, ts_rank_cd(dc.text_search, websearch_to_tsquery('dutch', %s), 32) as rank, dc.id as chunk_id
+                        FROM document_chunks dc
+                        JOIN documents d ON dc.document_id = d.id
+                        WHERE dc.text_search @@ websearch_to_tsquery('dutch', %s)
+                    ),
+                    ranked_items AS (
+                        -- Pick the best match (highest rank) for each unique agenda item
+                        SELECT DISTINCT ON (agenda_item_id) 
+                            agenda_item_id, 
+                            rank, 
+                            chunk_id
+                        FROM matches
+                        ORDER BY agenda_item_id, rank DESC
+                    ),
+                    top_items AS (
+                        -- Take the top 50 results overall
+                        SELECT * FROM ranked_items
+                        ORDER BY rank DESC
+                        LIMIT 50
+                    )
+                    SELECT 
+                        t.agenda_item_id,
+                        ai.meeting_id,
+                        ai.name,
+                        m.start_date as meeting_date,
+                        m.committee,
+                        CASE 
+                            WHEN t.chunk_id IS NOT NULL THEN 
+                                ts_headline('dutch', dc.content, websearch_to_tsquery('dutch', %s), 
+                                            'StartSel=<b>, StopSel=</b>, MaxWords=35, MinWords=15, ShortWord=3, HighlightAll=FALSE, MaxFragments=1, FragmentDelimiter=" ... "')
+                            ELSE (
+                                SELECT LEFT(content, 200) 
+                                FROM documents 
+                                WHERE agenda_item_id = t.agenda_item_id 
+                                LIMIT 1
+                            )
+                        END as snippet,
+                        t.rank
+                    FROM top_items t
+                    JOIN agenda_items ai ON t.agenda_item_id = ai.id
+                    JOIN meetings m ON ai.meeting_id = m.id
+                    LEFT JOIN document_chunks dc ON t.chunk_id = dc.id
+                    ORDER BY t.rank DESC, m.start_date DESC;
+                    """
+                    # Fallback to a broader search if literal pattern fails
+                    search_pattern = f"%{q.split()[0]}%" # Match at least the first word
+                    cur.execute(search_query, (search_pattern, q, q, q))
+                    results = cur.fetchall()
+                    
+                    # If still empty, try even broader
+                    if not results and len(q.split()) > 1:
+                        broad_q = " & ".join(q.split()[:3]) # First 3 words ANDed
+                        cur.execute(search_query, (f"%{q.split()[0]}%", broad_q, broad_q, broad_q))
+                        results = cur.fetchall()
+                    
+                    return results
+                except Exception as e:
+                    logger.error(f"Keyword search failed for query '{q}': {e}")
+                    return []
+
+    # Determine if we need to run AI research
+    run_ai = deep or mode == 'debate'
+    
+    if run_ai:
+        # Run both in parallel if AI is requested
+        if mode == 'debate':
+            ai_task = ai_service.perform_agentic_debate_prep(q, storage, party=party)
+        else:
+            ai_task = ai_service.perform_deep_search(q, storage)
+            
+        loop = asyncio.get_running_loop()
+        keyword_rows = await loop.run_in_executor(None, get_keyword_results)
+        ai_result = await ai_task
+    else:
+        # Standard fast search
+        loop = asyncio.get_running_loop()
+        keyword_rows = await loop.run_in_executor(None, get_keyword_results)
+        ai_result = {"answer": None, "sources": []}
+            
+    results = []
+    for r in keyword_rows:
+        results.append({
+            "agenda_item_id": r['agenda_item_id'],
+            "meeting_id": r['meeting_id'],
+            "name": r['name'],
+            "meeting_date": str(r['meeting_date']).split('T')[0].split(' ')[0] if r['meeting_date'] else 'Onbekend',
+            "committee": r['committee'],
+            "snippet": r['snippet'] + "..." if r['snippet'] else ""
+        })
+        
+    return {
+        "results": results, 
+        "ai_answer": ai_result.get("answer"),
+        "sources": ai_result.get("sources", [])
+    }
+
 @app.get("/calendar")
-async def read_calendar(request: Request, year: int = None):
+async def read_calendar(request: Request, year: int = None, month: int = None):
     available_years = storage.get_meeting_years()
     # Default to most recent year if no year specified
     if year is None and available_years:
         year = available_years[0]
-    meetings = storage.get_meetings(limit=500, year=year)
+    meetings = storage.get_meetings(limit=2000, year=year)
     return templates.TemplateResponse("calendar.html", {
         "request": request,
         "title": "Raadskalender",
         "meetings": meetings,
         "selected_year": year,
+        "selected_month": month,
         "available_years": available_years
     })
 
@@ -147,8 +292,14 @@ async def read_meeting(request: Request, meeting_id: str):
         meeting_name = meeting.get("name", "")
         committee = meeting.get("committee", "")
         combined_name = f"{meeting_name} {committee}"
-        for item in meeting["agenda"]:
-            item["is_substantive"] = storage.is_substantive_item(item, combined_name)
+        
+        def mark_substantive(items):
+            for item in items:
+                item["is_substantive"] = storage.is_substantive_item(item, combined_name)
+                if item.get("sub_items"):
+                    mark_substantive(item["sub_items"])
+        
+        mark_substantive(meeting["agenda"])
     
     return templates.TemplateResponse("meeting.html", {
         "request": request, 
@@ -176,29 +327,13 @@ async def api_analyse_agenda_item(agenda_item_id: str):
     Perform a general AI analysis of the agenda item.
     """
     logger.info(f"GENERAL AI ANALYSIS ENDPOINT CALLED for agenda item {agenda_item_id}")
-    # Fetch agenda item name, meeting info, and all documents
-    from psycopg2.extras import RealDictCursor
-    with storage._get_connection() as conn:
-        with conn.cursor(cursor_factory=RealDictCursor) as cur:
-            # Get agenda item and meeting
-            cur.execute(
-                "SELECT name, meeting_id FROM agenda_items WHERE id = %s",
-                (agenda_item_id,)
-            )
-            item_row = cur.fetchone()
-            if not item_row:
-                return {
-                    "error": f"Agendapunt {agenda_item_id} niet gevonden",
-                }
-            
-            item_name = item_row['name']
-            
-            # Get all documents for this agenda item - NO TRUNCATION
-            cur.execute(
-                "SELECT name, content FROM documents WHERE agenda_item_id = %s AND content IS NOT NULL ORDER BY id",
-                (agenda_item_id,)
-            )
-            doc_rows = cur.fetchall()
+    # Fetch agenda item and recursively collect documents from its sub-items
+    item_data = storage.get_agenda_item_with_sub_documents(agenda_item_id)
+    if not item_data:
+        return {"error": f"Agendapunt {agenda_item_id} niet gevonden"}
+    
+    item_name = item_data['name']
+    doc_rows = item_data['documents']
 
     if not doc_rows:
         return {
@@ -303,13 +438,17 @@ async def api_analyse_party_lens(agenda_item_id: str, party: str = "GroenLinks-P
             "alignment_score": None
         }
 
-    documents = [
-        {
-            "name": row['name'],
-            "content": row['content']
-        }
-        for row in doc_rows
-    ]
+    seen_doc_ids = set()
+    documents = []
+    for row in doc_rows:
+        unique_key = (row.get('name'), row.get('url'))
+        if unique_key not in seen_doc_ids:
+            documents.append({
+                "name": row['name'],
+                "content": row['content'],
+                "url": row.get('url', '#')
+            })
+            seen_doc_ids.add(unique_key)
     
     # Use party lens service for through-party-lens analysis
     lens_service = _get_party_lens_service(party)
@@ -330,10 +469,11 @@ async def api_analyse_party_lens(agenda_item_id: str, party: str = "GroenLinks-P
             "meeting_name": meeting_name,
             "party": party,
             "alignment_score": analysis.get('afstemming_score', 0.5),
-            "interpretation": analysis.get('afstemming_interpretatie', 'Geen interpretatie beschikbaar'),
             "analysis": analysis.get('gedetailleerde_analyse', ''),
-            "strong_points": analysis.get('sterke_punten', []),
-            "critical_points": analysis.get('kritische_punten', []),
+            "positieve_punten": analysis.get('positieve_punten', []),
+            "kritische_punten": analysis.get('kritische_punten', []),
+            "vraag_suggesties": analysis.get('vraag_suggesties', []),
+            "tegenvoorstel_suggesties": analysis.get('tegenvoorstel_suggesties', []),
             "recommendations": result.get('aanbevelingen', []),
             "source": "party_lens_analysis"
         }
@@ -344,45 +484,26 @@ async def api_analyse_unified(agenda_item_id: str, party: str = "GroenLinks-PvdA
     Perform both general AI analysis and party-specific lens analysis concurrently.
     """
     logger.info(f"UNIFIED ANALYSIS ENDPOINT CALLED for agenda item {agenda_item_id}, party {party}")
-    from psycopg2.extras import RealDictCursor
-    with storage._get_connection() as conn:
-        with conn.cursor(cursor_factory=RealDictCursor) as cur:
-            # Get agenda item and meeting
-            cur.execute(
-                "SELECT name, meeting_id FROM agenda_items WHERE id = %s",
-                (agenda_item_id,)
-            )
-            item_row = cur.fetchone()
-            if not item_row:
-                return {"error": f"Agendapunt {agenda_item_id} niet gevonden"}
-            
-            item_name = item_row['name']
-            meeting_id = item_row['meeting_id']
-            
-            # Get meeting name
-            cur.execute("SELECT name FROM meetings WHERE id = %s", (meeting_id,))
-            meeting_row = cur.fetchone()
-            meeting_name = meeting_row['name'] if meeting_row else "Onbekende vergadering"
-            
-            # Get all documents for this agenda item
-            cur.execute(
-                "SELECT name, content FROM documents WHERE agenda_item_id = %s AND content IS NOT NULL ORDER BY id",
-                (agenda_item_id,)
-            )
-            doc_rows = cur.fetchall()
+    # Fetch agenda item and recursively collect documents from its sub-items
+    item_data = storage.get_agenda_item_with_sub_documents(agenda_item_id)
+    if not item_data:
+        return {"error": f"Agendapunt {agenda_item_id} niet gevonden"}
+    
+    item_name = item_data['name']
+    meeting_name = item_data['meeting_name']
+    doc_rows = item_data['documents']
 
-    if not doc_rows:
-        return {
-            "error": f"Geen documenten beschikbaar voor agendapunt: {item_name}"
-        }
-
-    documents = [
-        {
-            "name": row['name'],
-            "content": row['content']
-        }
-        for row in doc_rows
-    ]
+    seen_doc_ids = set()
+    documents = []
+    for row in doc_rows:
+        unique_key = (row.get('name'), row.get('url'))
+        if unique_key not in seen_doc_ids:
+            documents.append({
+                "name": row['name'],
+                "content": row['content'],
+                "url": row.get('url', '#')
+            })
+            seen_doc_ids.add(unique_key)
     
     # Text for party lens
     agenda_text = f"{meeting_name} - {item_name}\n\n"
@@ -391,37 +512,39 @@ async def api_analyse_unified(agenda_item_id: str, party: str = "GroenLinks-PvdA
         
     lens_service = _get_party_lens_service(party)
     
-    # Run both concurrently
-    # ai_service.analyze_agenda_item is async, lens_service.evaluate_agenda_item is synchronous
-    loop = asyncio.get_running_loop()
-    general_task = ai_service.analyze_agenda_item(item_name, documents)
-    party_task = loop.run_in_executor(None, lens_service.evaluate_agenda_item, agenda_text)
-    
+    # Run Agentic Analysis following the PvdA Standard Format
     try:
-        general_result, party_result = await asyncio.gather(general_task, party_task)
+        result = await ai_service.perform_agentic_meeting_analysis(item_name, documents, party=party)
+        return result
     except Exception as e:
-        logger.error(f"Error during unified analysis: {e}")
+        logger.error(f"Error during unified agentic analysis: {e}")
         return {"error": f"Analyse mislukt: {str(e)}"}
-        
-    # Combine results
-    combined_result = dict(general_result)
+
+@app.get("/api/analyse/speech/{agenda_item_id}")
+async def api_analyse_speech(agenda_item_id: str, party: str = "GroenLinks-PvdA"):
+    """
+    Generate a draft speech (bijdrage) for a councillor based on the agenda item analysis.
+    """
+    logger.info(f"SPEECH GENERATION ENDPOINT CALLED for agenda item {agenda_item_id}, party {party}")
+    from psycopg2.extras import RealDictCursor
+    with storage._get_connection() as conn:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("SELECT name, meeting_id FROM agenda_items WHERE id = %s", (agenda_item_id,))
+            item_row = cur.fetchone()
+            if not item_row: return {"error": "Agendapunt niet gevonden"}
+            item_name = item_row['name']
+            
+            cur.execute("SELECT name, content FROM documents WHERE agenda_item_id = %s AND content IS NOT NULL", (agenda_item_id,))
+            doc_rows = cur.fetchall()
+
+    if not doc_rows: return {"error": "Geen documenten beschikbaar"}
     
-    if party_result and party_result.get('analyse'):
-        analysis = party_result['analyse']
-        combined_result['party_lens'] = {
-            "party": party,
-            "alignment_score": analysis.get('afstemming_score', 0.5),
-            "interpretation": analysis.get('afstemming_interpretatie', 'Geen interpretatie beschikbaar'),
-            "analysis": analysis.get('gedetailleerde_analyse', ''),
-            "strong_points": analysis.get('sterke_punten', []),
-            "critical_points": analysis.get('kritische_punten', []),
-            "recommendations": party_result.get('aanbevelingen', []),
-            "party_vision": analysis.get('partij_visie', 'Algemeen beleid')
-        }
-    else:
-        combined_result['party_lens'] = None
-        
-    return combined_result
+    documents = [{"name": r['name'], "content": r['content']} for r in doc_rows]
+    lens_service = _get_party_lens_service(party)
+    
+    # We use the existing analysis but request a speech format
+    speech = await ai_service.generate_speech_draft(item_name, documents, lens_service.party_vision)
+    return {"speech": speech}
 
 if __name__ == "__main__":
     import uvicorn

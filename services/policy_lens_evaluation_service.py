@@ -427,8 +427,10 @@ class PolicyLensEvaluationService:
                     'gedetailleerde_analyse': alignment.get('analyse', ''),
                     'afstemming_score': alignment.get('score', 0.5),
                     'afstemming_interpretatie': alignment.get('interpretatie', 'Geen interpretatie beschikbaar'),
-                    'sterke_punten': alignment.get('sterke_punten', []),
-                    'kritische_punten': alignment.get('kritische_punten', [])
+                    'positieve_punten': alignment.get('positieve_punten', []),
+                    'kritische_punten': alignment.get('kritische_punten', []),
+                    'vraag_suggesties': alignment.get('vraag_suggesties', []),
+                    'tegenvoorstel_suggesties': alignment.get('tegenvoorstel_suggesties', [])
                 }
                 
                 # Use recommendations from LLM result (which now prioritizes LLM-generated ones)

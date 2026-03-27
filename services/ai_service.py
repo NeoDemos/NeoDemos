@@ -11,10 +11,28 @@ try:
 except ImportError:
     GEMINI_AVAILABLE = False
 
+import logging
+logger = logging.getLogger(__name__)
+
 class AIService:
     def __init__(self, api_key: Optional[str] = None):
         self.api_key = api_key or os.getenv("GEMINI_API_KEY")
         
+        # FAIL-SAFE: Manually read .env if key is missing from environment
+        if not self.api_key:
+            try:
+                # Use project absolute path to ensure recovery
+                abs_env = "/Users/dennistak/Documents/Final Frontier/NeoDemos/.env"
+                if os.path.exists(abs_env):
+                    with open(abs_env, "r") as f:
+                        for line in f:
+                            if "GEMINI_API_KEY" in line and "=" in line:
+                                self.api_key = line.split("=")[1].strip().strip("'").strip('"')
+                                os.environ["GEMINI_API_KEY"] = self.api_key
+                                break
+            except:
+                pass
+
         # Initialize Gemini API if available and key is set
         if GEMINI_AVAILABLE and self.api_key:
             self.client = genai.Client(api_key=self.api_key)
@@ -114,6 +132,12 @@ class AIService:
             else:
                 # If no JSON found, create structured response from text
                 analysis_json = self._parse_gemini_response(response_text)
+            
+            # Verify quotes in summary and context
+            if "summary" in analysis_json:
+                analysis_json["summary"] = self.verify_quotes(analysis_json["summary"], documents)
+            if "historical_context" in analysis_json and analysis_json["historical_context"]:
+                analysis_json["historical_context"] = self.verify_quotes(analysis_json["historical_context"], documents + (relevant_chunks if 'relevant_chunks' in locals() else []))
             
             return analysis_json
             
@@ -546,6 +570,46 @@ Voeg ook toe aan de JSON response:
         documents = [{"name": "Document", "content": content}]
         return await self.analyze_agenda_item("Item", documents, party_vision)
     
+    async def generate_speech_draft(self, item_name: str, documents: List[Dict[str, str]], party_vision: str) -> str:
+        """
+        Generate a compelling speech draft (bijdrage) for a councillor.
+        Focuses on rhetorical strength, logical flow, and party-alignment.
+        """
+        docs_text = self._prepare_documents_for_analysis(documents)
+        
+        prompt = f"""Je bent een strategisch adviseur voor een Rotterdamse fractie.
+Schrijf een krachtige 'bijdrage' (speech) voor een raadslid over het volgende agendapunt:
+
+AGENDAPUNT: {item_name}
+
+BRONDOCUMENTEN:
+{docs_text}
+
+PARTIJVISIE:
+{party_vision}
+
+RICHTLIJNEN VOOR DE BIJDRAGE:
+1. Begin met een sterke opening die de gedeelde waarden van de partij raakt.
+2. Benoem de kern van het voorstel bondig.
+3. Onderbouw de positie (voor/tegen/nuance) met minimaal 3 sterke argumenten uit de documenten.
+4. Stel 1-2 scherpe, retorische vragen aan het college/de wethouder.
+5. Eindig met een duidelijke conclusie of oproep tot actie.
+6. Houd de toon professioneel, Rotterdams (direct), en politiek scherp.
+7. Gebruik 'wij' als fractie.
+
+GEWENSTE OUTPUT:
+Exclusief de tekst van de bijdrage, geordend in logische paragrafen. Geen titels of metadata.
+"""
+        try:
+            response = self.client.models.generate_content(
+                model=self.model_name,
+                contents=prompt
+            )
+            return response.text
+        except Exception as e:
+            logger.error(f"Speech generation failed: {e}")
+            return "Fout bij het genereren van de bijdrage."
+
     def generate_embedding(self, text: str) -> Optional[List[float]]:
         """
         Generate a vector embedding for text using Gemini embedding API.
@@ -567,3 +631,422 @@ Voeg ook toe aan de JSON response:
         except Exception as e:
             print(f"Embedding error: {e}")
             return None
+
+    async def generate_parallel_queries(self, original_query: str) -> Dict[str, str]:
+        """
+        Uses a small model to rewrite the original query into 3 specialized dimensions.
+        """
+        prompt = f"""Rewrite the following municipal query into 3 specific search queries for different dimensions.
+Original query: {original_query}
+
+Return ONLY a JSON object with these keys:
+- financial: Focus on budgets, millions, cost overruns, and funding.
+- debate: Focus on opinions of specific parties, council member quotes, and controversies.
+- fact: Focus on technical details, location specifics, regulations, and policy definitions.
+
+Output format: {{"financial": "...", "debate": "...", "fact": "..."}}
+"""
+        try:
+            response = self.client.models.generate_content(
+                model=self.model_name, # Fast and cheap for rewriting
+                contents=prompt
+            )
+            # Find JSON in response
+            json_match = re.search(r'\{[\s\S]*\}', response.text)
+            if json_match:
+                return json.loads(json_match.group())
+            return {
+                "financial": f"{original_query} begroting",
+                "debate": f"{original_query} debat",
+                "fact": f"{original_query} beleid"
+            }
+        except Exception as e:
+            print(f"Multi-query rewriting failed: {e}")
+            return {
+                "financial": f"{original_query} begroting",
+                "debate": f"{original_query} debat",
+                "fact": f"{original_query} beleid"
+            }
+
+    async def perform_deep_search(self, query: str, storage: Any) -> Dict[str, Any]:
+        """
+        Standard Deep Research search.
+        """
+        if not self.use_llm:
+            return {"answer": "AI Search is momenteel niet beschikbaar.", "sources": []}
+
+        enhanced_query = f"{query} standpunten politieke partijen college debat financiën"
+        query_embedding = self.generate_embedding(enhanced_query)
+        
+        from services.rag_service import RAGService
+        rag = RAGService()
+        
+        parallel_queries = await self.generate_parallel_queries(query)
+        chunks = await rag.retrieve_parallel_context(
+            query_text=query,
+            query_embedding=query_embedding,
+            distribution={"financial": 50, "debate": 80, "fact": 50, "vision": 20},
+            overrides=parallel_queries
+        )
+        
+        if not chunks:
+            return {"answer": "Geen relevante informatie gevonden in de notulen.", "sources": []}
+            
+        return await self._run_analytical_pipeline(query, chunks, storage, rag)
+
+    async def _run_analytical_pipeline(self, query: str, context_source: Any, storage: Any, rag: Any, party: str = "GroenLinks-PvdA") -> Dict[str, Any]:
+        """
+        Unified 3-stage synthesis pipeline with 10-section PvdA Pivot.
+        'context_source' can be a List[RetrievedChunk] (from search) or List[Dict] (from meeting item).
+        """
+        
+        # --- STAGE 0: Context Preparation ---
+        if not context_source:
+            return {"answer": "Geen informatie beschikbaar om te analyseren.", "sources": []}
+            
+        is_direct_docs = isinstance(context_source, list) and len(context_source) > 0 and isinstance(context_source[0], dict)
+        
+        if is_direct_docs:
+            # For meeting items, we already have the documents with content
+            context_text = ""
+            for i, doc in enumerate(context_source, 1):
+                context_text += f"=== Document {i}: {doc.get('name', 'Onbekend')} ===\n{doc.get('content', '')}\n\n"
+            verification_content = context_source
+            ordered_sources = []
+            for i, doc in enumerate(context_source, 1):
+                # Strip leading IDs like [26bb000120] from title to prevent AI confusion
+                clean_name = re.sub(r'^\[[a-zA-Z0-9]+\]\s*', '', doc.get('name', 'Onbekend'))
+                ordered_sources.append({
+                    "id": i, 
+                    "name": clean_name,
+                    "url": doc.get('url', '#')
+                })
+            chunks = []
+        else:
+            chunks = context_source
+            
+            # --- STAGE 0.5: Agentic Golden Source Discovery (Only for search) ---
+            raw_text_sample = ""
+            for c in chunks[:40]:
+                raw_text_sample += str(getattr(c, 'title', '')) + "\n" + str(getattr(c, 'content', ''))[:500] + "\n\n"
+                
+            golden_prompt = f"""You are a legal municipal clerk.
+Review the text below and identify if there are any EXPLICIT mentions of formal 'Golden Sources' that we need to find.
+Specifically look for explicit references to:
+- "Raadsvoorstel [Name/Subject]"
+- "Motie [Name/Subject]"
+- "Amendement [Name/Subject]"
+- "Schriftelijke Vragen [Subject]"
+
+If you find them, list their exact names/titles, one per line (e.g., 'Amendement Feyenoord City').
+If none are explicitly referenced, output exactly 'NONE'.
+
+QUERY: {query}
+CONTEXT SAMPLE:
+{raw_text_sample[:12000]}
+
+OUTPUT (Only names, separated by newlines, or NONE):"""
+            try:
+                golden_response = self.client.models.generate_content(model=self.model_name, contents=golden_prompt)
+                golden_sources_text = golden_response.text.strip()
+                if golden_sources_text and "NONE" not in golden_sources_text.upper():
+                    print(f"Agent identified Golden Sources to parallel fetch:\n{golden_sources_text}")
+                    targeted_golden_chunks = await rag.retrieve_parallel_context(
+                        query_text=golden_sources_text.replace('\n', ' '),
+                        query_embedding=self.generate_embedding(golden_sources_text),
+                        distribution={"fact": 20, "debate": 10, "financial": 0, "vision": 0}
+                    )
+                    seen_ids = {c.chunk_id for c in chunks}
+                    for gc in targeted_golden_chunks:
+                        if gc.chunk_id not in seen_ids:
+                            chunks.append(gc)
+                            seen_ids.add(gc.chunk_id)
+            except Exception as e:
+                print(f"Golden Source Discovery failed: {e}")
+
+            # 3. Fetch metadata for sources (Only for search chunks)
+            doc_ids = list(set([str(c.document_id) for c in chunks]))
+            docs_metadata = storage.get_documents_metadata(doc_ids)
+            metadata_dict = {str(d['id']): d for d in docs_metadata}
+            
+            # Inject start_date and url into chunks for sorting and formatting
+            for c in chunks:
+                doc_meta = metadata_dict.get(str(c.document_id))
+                if doc_meta:
+                    c.start_date = doc_meta.get('start_date')
+                    c.url = doc_meta.get('url')
+            
+            # Final hierarchical expansion for search
+            context_text, ordered_sources, verification_content = rag.expand_to_hierarchical_context(chunks, storage)
+            
+            # Chronological sorting for search-based chunks
+            chunks.sort(key=lambda x: getattr(x, 'start_date', '1970-01-01') or '1970-01-01')
+            
+        # STAGE 1: Information Extraction
+        extraction_prompt = f"""You are an objective data extractor analyzing municipal documents.
+Analyze the provided CONTEXT CHUNKS to extract:
+1. A Chronological Timeline of events/budgets.
+2. Core Conditions and Tensions (e.g., exact requirements, financial vs. commercial issues, reasons for failure).
+3. Important verbatim quotes, strictly formatted with speaker names, parties, and dates.
+CRITICAL: Check the source descriptions. Strongly distinguish between "Raadsleden" (Council members) and "Insprekers"/"Burgerbrieven" (Citizens). DO NOT treat citizen quotes as political viewpoints of the council.
+
+VRAAG: {query}
+HISTORISCHE CONTEXT:
+{context_text}
+
+OUTPUT (Be concise and factual):
+**BELANGRIJK**: Gebruik [n] citaties na elke bewering.
+"""
+        
+        # STAGE 2: Debate Mapping
+        debate_prompt = f"""You are a political analyst mapping municipal debates.
+Analyze the provided CONTEXT CHUNKS to map the debate dynamics regarding the question.
+Identify:
+1. Who was IN FAVOR (Voorstanders) and their core arguments.
+2. Who was AGAINST (Tegenstanders/Kritisch) and their core arguments.
+3. Relevant ideological positions from [VISION] chunks.
+CRITICAL: Only map the positions of actual political parties and council members ("Raadsleden", "College", "Wethouder"). 
+- If a quote is from a citizen ("Inspreker", "Ingekomen brief", "Burger"), label it clearly as [BURGERPERSPECTIEF] and do NOT list it as a political council stance.
+- ATTRIBUTION RULE: Never attribute a statement from a [POLITIEK PROGRAMMA / PARTIJVISIE] or [FEITELIJKE CONTEXT] segment to a specific individual person unless they are explicitly named inside that specific text as the speaker. Manifestos represent the party, not necessarily a quote from a specific debate.
+ALWAYS use the format: Naam (Partij), Datum.
+
+VRAAG: {query}
+HISTORISCHE CONTEXT:
+{context_text}
+
+OUTPUT (Map the debate):
+**BELANGRIJK**: Gebruik [n] citaties na elke bewering.
+"""
+        
+        logger.info(f"--- STAGE 1: Extraction | Context Length: {len(context_text)} ---")
+        try:
+            ext_response = self.client.models.generate_content(model=self.model_name, contents=extraction_prompt)
+            extracted_facts = ext_response.text
+            
+            deb_response = self.client.models.generate_content(model=self.model_name, contents=debate_prompt)
+            debate_map = deb_response.text
+            logger.info(f"--- STAGE 2: Debate Map done. Extracted Facts Length: {len(extracted_facts)} ---")
+            
+            # STAGE 3: Professional Dossier Synthesis (PvdA Pivot)
+            synthesis_prompt = f"""Je bent een strategisch adviseur die een formeel 'Debat-voorbereidingsdossier' schrijft.
+Gebruik de 'Extracted Facts' en 'Debate Map' om een gestructureerd rapport te maken in de officiële PvdA-standaardindeling.
+
+### DE 10 VERPLICHTE SECTIES (Gebruik exact deze headers):
+
+1. # 📅 Context & Vorige bespreking
+Schrijf een feitelijke inleiding over de voorgeschiedenis van dit dossier.
+
+2. # 📌 Argumenten & Hoofdpunten
+Lijst van de belangrijkste inhoudelijke punten en argumenten uit de stukken.
+
+3. # 🚩 Wat vindt {party} van dit onderwerp?
+Analyseer hoe dit onderwerp aansluit bij de waarden en standpunten van {party}. 
+**EIS**: Inclusief letterlijke citaten (verbatim) van raadsleden, commissieleden of eerdere voorstellen van {party} over dit specifieke onderwerp indien deze in de bronnen voorkomen.
+
+4. # 📄 Wat houdt het voorstel precies in?
+Feitelijke, technische samenvatting van het voorliggende besluit of rapport.
+
+5. # 🚀 Vervolg
+Wat zijn de procedurele volgende stappen? Wordt het besproken als debat, hamerstuk, of ter kennisname?
+
+6. # 📈 Sterke punten
+Positieve elementen en kansen die worden genoemd of passen bij {party}.
+
+7. # 📉 Kritische punten
+Diepere duik in kritieke details, risico's, technische mitsen en maren of elementen waar {party} kritisch op is.
+
+8. # ❓ Vragen voor de Wethouder / Commissie
+Lijst met scherpe, concrete vragen die gesteld moeten worden tijdens het debat.
+
+9. # 🎤 Bijdrage / Spreektekst
+Voorzitter,
+Schrijf een tekstueel concept voor de inbreng in de raad/commissie over dit onderwerp. Begin direct na 'Voorzitter,'.
+
+10. # 💰 Bijlage: Financieel Overzicht & Tijdlijn
+PLAATS HIER DE TABEL. Gebruik kolommen: | Datum | Gebeurtenis | Bedrag | Bron |
+
+### STRIKTE REGELS VOOR OUTPUT:
+- **CITATIES**: Gebruik voor ELKE bewering PRECIES [n] (bijvoorbeeld [1, 3]) om naar de bron te verwijzen. Nooit een getal zonder haken!
+- **GEEN INTERNE TAGS**: Gebruik NOOIT termen als [VISION], [FACT], [DEBATE], [CONTEXT] of andere interne metadata-labels in je antwoord. 
+- **GEEN INSTRUCTIES**: Laat geen instructietekst tussen haakjes (zoals [Wat is de voorgeschiedenis...]) staan. Schrijf enkel de inhoud.
+- **ATTRIBUTIE**: Noem altijd Naam (Partij), Datum bij quotes.
+- **OBJECTIVITEIT**: Schrijf professioneel en zakelijk, maar met een scherp politiek oog voor {party}.
+- **DIRECT STARTEN**: Begin direct met sectie 1. Geen inleidende zinnen.
+
+VRAAG: {query}
+
+EXTRACTED FACTS & TIMELINE:
+{extracted_facts}
+
+DEBATE MAP & POSITIONS:
+{debate_map}
+"""
+            
+            logger.info(f"--- STAGE 3: Synthesis | Prompt Length: {len(synthesis_prompt)} ---")
+            final_response = self.client.models.generate_content(model=self.model_name, contents=synthesis_prompt)
+            answer = final_response.text
+            
+            # 5. Verify quotes using the expanded context text
+            # If direct docs, verification_content is the list of dicts
+            verified_answer = self.verify_quotes(answer, verification_content)
+            
+            return {
+                "answer": verified_answer,
+                "sources": ordered_sources
+            }
+        except Exception as e:
+            print(f"Synthesis pipeline failed: {e}")
+            return {"answer": f"Er is een fout opgetreden: {e}", "sources": ordered_sources if 'ordered_sources' in locals() else []}
+
+    def verify_quotes(self, text: str, source_data: List[Any]) -> str:
+        """
+        Extracts quotes from text and verifies them against source content.
+        source_data can be a list of dicts (with 'content') or RetrievedChunk objects.
+        """
+        if not text:
+            return text
+            
+        # Extract all quotes
+        quotes = re.findall(r'"([^"]{10,})"', text)
+        if not quotes:
+            return text
+            
+        # Consolidate all source text
+        if isinstance(source_data, str):
+            full_source_text = source_data.lower()
+        else:
+            source_texts = []
+            for item in source_data:
+                if hasattr(item, 'content'):
+                    source_texts.append(item.content.lower())
+                elif isinstance(item, dict) and 'content' in item:
+                    source_texts.append(item['content'].lower())
+            full_source_text = " ".join(source_texts)
+        
+        verified_text = text
+        for quote in quotes:
+            # Clean quote for robust matching (ignore whitespace, tiny OCR differences)
+            clean_quote = re.sub(r'\s+', ' ', quote.strip()).lower()
+            
+            # Simple direct match first
+            found = False
+            if clean_quote in full_source_text:
+                found = True
+            else:
+                # Try fuzzy/normalized match (ignore punctuation)
+                norm_quote = re.sub(r'[^\w\s]', '', clean_quote)
+                norm_source = re.sub(r'[^\w\s]', '', full_source_text)
+                if norm_quote in norm_source:
+                    found = True
+            
+            if not found:
+                # If not found, strip the quotes to indicate it's a summary/paraphrase
+                # and remove the confusing [Geparafraseerd] tag as requested.
+                verified_text = verified_text.replace(f'"{quote}"', quote)
+            else:
+                # If found, keep the quotes as intended.
+                pass
+                
+        return verified_text
+
+    async def perform_agentic_debate_prep(self, query: str, storage: Any, party: str = "GroenLinks-PvdA") -> Dict[str, Any]:
+        """
+        Phase 11: Agentic Debate Preparation Loop
+        A multi-pass workflow that performs a gap analysis and structured synthesis.
+        """
+        if not self.client:
+            return {"answer": "AI is niet geconfigureerd.", "sources": []}
+            
+        print(f"--- STARTING AGENTIC DEBATE PREP FOR: {query} ---")
+        
+        # --- PASS 1: Base Retrieval ---
+        from services.rag_service import RAGService
+        rag = RAGService()
+        
+        base_query = f"{query} politiek debat standpunten financiële dekking besluit"
+        query_embedding = self.generate_embedding(base_query)
+        
+        print("Agent Step 1: Retrieving baseline context (Parallel Streams + Rewriting)")
+        parallel_queries = await self.generate_parallel_queries(base_query)
+        base_chunks = await rag.retrieve_parallel_context(
+            query_text=base_query,
+            query_embedding=query_embedding,
+            distribution={"financial": 30, "debate": 45, "fact": 30, "vision": 15},
+            overrides=parallel_queries
+        )
+        
+        if not base_chunks:
+            return {"answer": "Geen startinformatie gevonden voor dit debat.", "sources": []}
+            
+        # Temporarily enrich with metadata
+        doc_ids = list(set([str(c.document_id) for c in base_chunks]))
+        docs_metadata = {str(d['id']): d for d in storage.get_documents_metadata(doc_ids)}
+        for c in base_chunks:
+            c.start_date = docs_metadata.get(str(c.document_id), {}).get('start_date') or '1970-01-01'
+            c.url = docs_metadata.get(str(c.document_id), {}).get('url') or '#'
+            
+        base_chunks.sort(key=lambda x: x.start_date)
+        base_context, _, _ = rag.expand_to_hierarchical_context(base_chunks, storage)
+        
+        # --- PASS 2: Gap Analysis (LLM Call 1) ---
+        gap_prompt = f"""Je bereidt een gemeenteraadsdebat in Rotterdam voor over: "{query}".
+Hier is de initiële gevonden context:
+{base_context[:15000]}... [ingekort]
+
+TAAK: Welke CRUCIALE informatie ontbreekt er nog om dit debat goed te voeren? Denk aan:
+- Specifieke tegenstemmers in een eerdere fase.
+- Het excuus van het college voor een budgetoverschrijding.
+- De exacte alternatieve dekking die is voorgesteld.
+
+Schrijf als antwoord ENKEL EN ALLEEN één zoekopdracht (max 15 woorden) die we in de archieven moeten opzoeken om deze blinde vlek aan te vullen. Geef GEEN uitleg, alleen de zoektermen."""
+        
+        print("Agent Step 2: Running Gap Analysis...")
+        try:
+            gap_response = self.client.models.generate_content(
+                model=self.model_name,
+                contents=gap_prompt
+            )
+            targeted_search_query = gap_response.text.strip().replace('"', '')
+            print(f"Agent identified missing info. New search query: '{targeted_search_query}'")
+        except Exception as e:
+            print(f"Gap analysis failed: {e}")
+            targeted_search_query = f"{query} kritiek oppositie tekort"
+
+        # --- PASS 3: Targeted Retrieval ---
+        print("Agent Step 3: Executing targeted search (Parallel Streams)")
+        targeted_embedding = self.generate_embedding(targeted_search_query)
+        targeted_chunks = await rag.retrieve_parallel_context(
+            query_text=targeted_search_query,
+            query_embedding=targeted_embedding,
+            distribution={"financial": 15, "debate": 25, "fact": 15, "vision": 5}
+        )
+        
+        # Merge chunks uniquely based on chunk_id
+        seen_chunks = {c.chunk_id for c in base_chunks}
+        for tc in targeted_chunks:
+            if tc.chunk_id not in seen_chunks:
+                base_chunks.append(tc)
+                seen_chunks.add(tc.chunk_id)
+
+        logger.info(f"Agent Step 4: Final synthesis with {len(base_chunks)} total chunks")
+        
+        # Call the unified synthesis pipeline
+        return await self._run_analytical_pipeline(query, base_chunks, storage, rag, party=party)
+
+    async def perform_agentic_meeting_analysis(self, item_name: str, documents: List[Dict[str, str]], party: str = "GroenLinks-PvdA") -> Dict[str, Any]:
+        """
+        New agentic pipeline specifically for individual meeting agenda items.
+        Bypasses RAG retrieval since documents are already provided.
+        """
+        if not self.client:
+            return {"answer": "AI is niet geconfigureerd.", "sources": []}
+            
+        logger.info(f"--- STARTING AGENTIC MEETING ANALYSIS FOR: {item_name} ---")
+        
+        from services.rag_service import RAGService
+        rag = RAGService()
+        
+        # We treat the documents as the fixed context source
+        # Stage 3 will generate the 10-section report
+        return await self._run_analytical_pipeline(item_name, documents, None, rag, party=party)
+

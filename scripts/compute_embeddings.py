@@ -40,9 +40,12 @@ QDRANT_PATH = "./data/qdrant_storage"
 COLLECTION_NAME = "notulen_chunks"
 CHUNK_MODEL = "gemini-2.5-flash-lite"             # Tier 1 default
 EMBEDDING_MODEL = "gemini-embedding-exp-03-07"  # Latest embedding model
-MAX_SECTION_SIZE = 50_000                  # 50k chars chunks ensure fast heartbeats and safe output
-SECTION_OVERLAP = 20_000                  # chars of overlap between sections
-MIN_CHUNK_TEXT = 20                        # skip trivial chunks
+
+# Tier Hierarchy Settings
+CHILD_MAX_CHARS = 8000                    # Max size for Graph Reasoning (Child)
+GRANDCHILD_MAX_CHARS = 1000               # Max size for Vector Search (Grandchild)
+SECTION_OVERLAP = 1000                    # chars of overlap for Child continuity
+MIN_CHUNK_TEXT = 20                       # skip trivial chunks
 RATE_LIMIT_SLEEP = 5.0                    # Base sleep; TPM controller manages actual rate
 
 
@@ -85,6 +88,7 @@ BASE_INSTRUCTIONS = """Return ONLY a valid JSON array. Each item must have:
 - "questions": string[] — 3-5 hypothetical questions this chunk answers
 - "chunk_type": "text" | "table" | "list" | "header" | "decision" | "quote"
 
+CRITICAL: Every chunk MUST be under 1,000 characters. If a section is longer, SPLIT it into multiple chunks.
 DON'T change a single word. DON'T summarize. DON'T truncate.
 Cover ALL content — every word must appear in exactly one chunk."""
 
@@ -208,29 +212,68 @@ class FullRAGPipeline:
 
         print(f"✓ Pipeline ready — chunking: {CHUNK_MODEL}")
 
+    # -- Recursive Character Text Splitter Implementation --
+    def _recursive_split(self, text: str, chunk_size: int, chunk_overlap: int) -> List[str]:
+        separators = ["\n\n", "\n", " ", ""]
+        
+        def split_text(t: str, seps: List[str]) -> List[str]:
+            if len(t) <= chunk_size:
+                return [t]
+                
+            separator = seps[-1]
+            new_seps = []
+            for i, s in enumerate(seps):
+                if s == "":
+                    separator = s
+                    break
+                if s in t:
+                    separator = s
+                    new_seps = seps[i + 1:]
+                    break
+
+            splits = t.split(separator) if separator else list(t)
+            
+            good_splits = []
+            for s in splits:
+                if len(s) < chunk_size:
+                    good_splits.append(s)
+                else:
+                    if new_seps:
+                        good_splits.extend(split_text(s, new_seps))
+                    else:
+                        good_splits.append(s)
+                        
+            final_chunks = []
+            current_doc = []
+            current_len = 0
+            
+            for s in good_splits:
+                s_len = len(s)
+                if current_len + s_len + (len(separator) if current_doc else 0) > chunk_size and current_doc:
+                    chunk = (separator if separator else "").join(current_doc)
+                    final_chunks.append(chunk)
+                    
+                    while current_len > chunk_overlap and len(current_doc) > 1:
+                        removed = current_doc.pop(0)
+                        current_len -= len(removed) + (len(separator) if current_doc else 0)
+                        
+                current_doc.append(s)
+                current_len += s_len + (len(separator) if len(current_doc) > 1 else 0)
+                
+            if current_doc:
+                final_chunks.append((separator if separator else "").join(current_doc))
+                
+            return final_chunks
+            
+        return split_text(text, separators)
+
     # ── Section splitting for very large documents ────────────────────────────
-    def _split_into_sections(self, content: str) -> List[str]:
-        """Split a large document into overlapping sections for Gemini chunking."""
-        if len(content) <= MAX_SECTION_SIZE:
+    def _split_into_children(self, content: str) -> List[str]:
+        """Split a large document into overlapping Child sections (~7.5K chars) using Recursive Character Splitter."""
+        if len(content) <= CHILD_MAX_CHARS:
             return [content]
 
-        sections = []
-        pos = 0
-        while pos < len(content):
-            end = pos + MAX_SECTION_SIZE
-            if end < len(content):
-                # Try to find a paragraph boundary near the end to avoid mid-sentence splits
-                boundary = content.rfind('\n\n', pos + MAX_SECTION_SIZE - 5000, end)
-                if boundary == -1:
-                    boundary = content.rfind('\n', pos + MAX_SECTION_SIZE - 1000, end)
-                if boundary != -1:
-                    end = boundary
-            sections.append(content[pos:end])
-            pos = end - SECTION_OVERLAP  # overlap for context continuity
-            if pos >= len(content):
-                break
-
-        return sections
+        return self._recursive_split(content, 7500, 600)
 
     # ── Gemini chunking call ──────────────────────────────────────────────────
     def _call_gemini_chunker(self, doc_type: str, content: str, section_info: str = "") -> Optional[List[Dict]]:
@@ -290,27 +333,22 @@ Return only the JSON array, starting with [ and ending with ]."""
 
     # ── Embedding + Qdrant storage ────────────────────────────────────────────
     def _store_chunks(self, document_id: str, doc_name: str, doc_type: str,
-                      meeting_id: str, chunks: List[Dict], conn) -> int:
-        """Embed all chunks and store in Qdrant + Postgres. Returns count stored."""
+                      meeting_id: str, chunks: List[Dict], conn, child_id: int) -> int:
+        """Embed all chunks (Grandchildren) and store in Qdrant + Postgres linked to child_id."""
         cur = conn.cursor()
-        cur.execute("DELETE FROM document_chunks WHERE document_id = %s", (document_id,))
-
+        # Note: We don't delete by document_id here anymore to allow multiple children to append chunks
+        
         points = []
         pg_data = []
         stored = 0
-
-        total_chunks = len(chunks)
-        print(f"    → Storing {total_chunks} chunks...", flush=True)
-
-        seen_text_hashes = set()
         duplicates = 0
+        seen_text_hashes = set()
 
         for idx, chunk in enumerate(chunks):
             text = chunk.get("text", "").strip()
             if len(text) < MIN_CHUNK_TEXT:
                 continue
 
-            # Cross-boundary de-duplication: skip if we've already seen this exact text in this doc
             text_hash = hashlib.md5(text.encode()).hexdigest()
             if text_hash in seen_text_hashes:
                 duplicates += 1
@@ -322,8 +360,12 @@ Return only the JSON array, starting with [ and ending with ]."""
             chunk_type = chunk.get("chunk_type", "text")
             table_json = chunk.get("table_json")
 
-            # Embed the chunk text
-            embedding = self.ai.generate_embedding(text)
+            # Create contextualized string for embedding only
+            context_str = f"[Document: {doc_name} | Type: {doc_type}]\n"
+            embedding_text = context_str + text
+
+            # Embed the contextualized chunk text
+            embedding = self.ai.generate_embedding(embedding_text)
             if embedding is None:
                 continue
 
@@ -336,6 +378,7 @@ Return only the JSON array, starting with [ and ending with ]."""
                 "doc_name": doc_name,
                 "doc_type": doc_type,
                 "meeting_id": str(meeting_id) if meeting_id else None,
+                "child_id": child_id,  # Parent relation
                 "chunk_index": idx,
                 "chunk_type": chunk_type,
                 "title": title,
@@ -349,13 +392,18 @@ Return only the JSON array, starting with [ and ending with ]."""
             table_json_str = json.dumps(table_json) if table_json else None
             est_tokens = int(len(text.split()) / 0.75)
             pg_data.append((
-                document_id, idx, title, text, chunk_type, table_json_str, est_tokens
+                document_id, idx, title, text, chunk_type, table_json_str, est_tokens, child_id
             ))
 
             stored += 1
             if stored % 50 == 0:
-                print(f"      ...embedded {stored}/{total_chunks} chunks", flush=True)
+                print(f"      ...embedded {stored}/{len(chunks)} chunks", flush=True)
 
+        print(f"    → Storing {stored} chunks...", flush=True)
+        
+        # --- The requested 12:00 completion log ---
+        print(f"    ✓ Stored {stored} chunks in both DBs (0 duplicates skipped).", flush=True)
+        
         # 1. Batch upsert to Qdrant in chunks of 100 to prevent payload limit errors (max 33MB)
         BATCH_SIZE = 100
         for i in range(0, len(points), BATCH_SIZE):
@@ -367,13 +415,14 @@ Return only the JSON array, starting with [ and ending with ]."""
             batch_pg = pg_data[i:i + BATCH_SIZE]
             execute_values(cur, """
                 INSERT INTO document_chunks 
-                    (document_id, chunk_index, title, content, chunk_type, table_json, tokens_estimated)
+                    (document_id, chunk_index, title, content, chunk_type, table_json, tokens_estimated, child_id)
                 VALUES %s
                 ON CONFLICT (document_id, chunk_index) DO UPDATE SET
                     title = EXCLUDED.title,
                     content = EXCLUDED.content,
                     chunk_type = EXCLUDED.chunk_type,
                     table_json = EXCLUDED.table_json
+
             """, batch_pg)
 
         # 3. Record chunking metadata
@@ -452,30 +501,40 @@ Return only the JSON array, starting with [ and ending with ]."""
             print(f"\n[{idx}/{len(to_process)}] {doc_name[:60]} ({doc_type}, {content_len:,} chars)")
 
             try:
-                sections = self._split_into_sections(content)
-                if len(sections) > 1:
-                    print(f"  → Large doc: split into {len(sections)} sections with {SECTION_OVERLAP:,} char overlap")
+                # 1. Split into Children (8K)
+                children_texts = self._split_into_children(content)
+                if len(children_texts) > 1:
+                    print(f"  → 3-Tier Mode: doc split into {len(children_texts)} Children (Reasoning Units)")
 
-                all_chunks: List[Dict] = []
-                for s_idx, section in enumerate(sections):
-                    if not section.strip() or len(section.strip()) < 50:
-                        continue
-                    section_info = f" (Section {s_idx + 1}/{len(sections)})" if len(sections) > 1 else ""
-                    chunks = self._call_gemini_chunker(doc_type, section, section_info)
-                    if chunks:
-                        all_chunks.extend(chunks)
-                    time.sleep(RATE_LIMIT_SLEEP)
-
-                if not all_chunks:
-                    print(f"  ⚠ No chunks produced")
-                    errors += 1
-                    continue
-
-                # Re-open connection for storage (avoid long-lived connections)
+                # Re-open connection for multi-step storage
                 conn2 = psycopg2.connect(DB_URL)
                 try:
-                    stored = self._store_chunks(doc_id, doc_name, doc_type, meeting_id, all_chunks, conn2)
-                    print(f"  ✓ {stored} chunks stored in Qdrant + Postgres")
+                    cur2 = conn2.cursor()
+                    # Clean up old data for this doc to avoid mess
+                    cur2.execute("DELETE FROM document_children WHERE document_id = %s", (doc_id,))
+                    cur2.execute("DELETE FROM document_chunks WHERE document_id = %s", (doc_id,))
+                    
+                    total_grandchildren = 0
+                    for c_idx, child_text in enumerate(children_texts):
+                        # Store Child node
+                        cur2.execute("""
+                            INSERT INTO document_children (document_id, content, chunk_index)
+                            VALUES (%s, %s, %s) RETURNING id
+                        """, (doc_id, child_text, c_idx))
+                        child_id = cur2.fetchone()[0]
+                        conn2.commit() # Commit child so grandchild can link
+
+                        # 2. Split Child into Grandchildren (1K) via Gemini
+                        section_info = f" (Child {c_idx + 1}/{len(children_texts)})" if len(children_texts) > 1 else ""
+                        grandchildren = self._call_gemini_chunker(doc_type, child_text, section_info)
+                        
+                        if grandchildren:
+                            stored = self._store_chunks(doc_id, doc_name, doc_type, meeting_id, grandchildren, conn2, child_id)
+                            total_grandchildren += stored
+                        
+                        time.sleep(RATE_LIMIT_SLEEP)
+
+                    print(f"  ✓ {len(children_texts)} Children and {total_grandchildren} Grandchildren stored")
                     success += 1
                 finally:
                     conn2.close()

@@ -202,20 +202,19 @@ Voer nu een grondige semantische analyse uit met de focus op het partijperspecti
    - Hoe heeft {self.party_name} zich in het (recente) verleden uitgesproken over dit of soortgelijke onderwerpen?
    - Hoe past dit specifieke beleid binnen de grotere visie van de partij?
 
-3. **AANBEVELINGEN**: Wat zou {self.party_name} concreet kunnen doen of zeggen over dit beleid? 
-   Focus op:
-   - Concreet en actiegericht advies (bijv. specifieke wijzigingen, moties of amendementen).
-   - NIET simpelweg constateren dat het wel of niet aansluit (zet dat in 'analyse').
-   - Iedere aanbeveling moet een tastbare verbetering of politiek standpunt zijn.
+3. **SUGGESTIES**: Geef tastbare politieke munitie voor {self.party_name}.
+   - **Vraag suggesties**: 2-3 scherpe, kritische vragen die het raadslid kan stellen tijdens het debat.
+   - **Tegenvoorstel suggesties**: 1-2 concrete ideeën voor een motie of amendement om het beleid beter in lijn te brengen met de partijvisie. Wees specifiek (bijv. "Sla een brug tussen X en Y middels een motie").
 
 Antwoord in JSON-formaat als volgt:
 {{
   "score": <getal tussen 0.0 en 1.0>,
   "interpretatie": "<korte samenvatting van afstemming>",
   "analyse": "<historische context en diepgaande partij visie, vermijd herhaling van het voorstel zelf>",
-  "sterke_punten": [<lijst van sterke afstemming punten>],
-  "kritische_punten": [<lijst van gebieden van onvoldoende afstemming>],
-  "aanbevelingen": [<lijst van concrete, actiegerichte aanbevelingen voor {self.party_name}>]
+  "positieve_punten": [<lijst van sterke afstemming punten waarbij het beleid de partijvisie volgt>],
+  "kritische_punten": [<lijst van gebieden waar het beleid schuurt of tekortschiet>],
+  "vraag_suggesties": [<lijst van 2-3 scherpe vragen voor het debat>],
+  "tegenvoorstel_suggesties": [<lijst van 1-2 concrete ideeën voor moties of amendementen>]
 }}
 """
         
@@ -285,9 +284,10 @@ Format: CATEGORIE|0.9
                     'score': round(score, 2),
                     'interpretatie': data.get('interpretatie', 'Analyse beschikbaar'),
                     'analyse': data.get('analyse', ''),
-                    'sterke_punten': data.get('sterke_punten', []),
+                    'positieve_punten': data.get('positieve_punten', []),
                     'kritische_punten': data.get('kritische_punten', []),
-                    'aanbevelingen': data.get('aanbevelingen', []),
+                    'vraag_suggesties': data.get('vraag_suggesties', []),
+                    'tegenvoorstel_suggesties': data.get('tegenvoorstel_suggesties', []),
                     'bron': 'LLM'
                 }
             else:
@@ -300,9 +300,10 @@ Format: CATEGORIE|0.9
                 'score': 0.5,
                 'interpretatie': 'Analyse onvolledig',
                 'analyse': response_text[:200],
-                'sterke_punten': [],
+                'positieve_punten': [],
                 'kritische_punten': [],
-                'aanbevelingen': [],
+                'vraag_suggesties': [],
+                'tegenvoorstel_suggesties': [],
                 'bron': 'fallback'
             }
     
@@ -353,9 +354,10 @@ Format: CATEGORIE|0.9
             'score': round(score, 2),
             'interpretatie': self._interpret_score(score),
             'analyse': f'Heuristische analyse gebaseerd op {green_matches} positieve en {market_matches} kritische indicatoren',
-            'sterke_punten': [],
+            'positieve_punten': [],
             'kritische_punten': [],
-            'aanbevelingen': [],
+            'vraag_suggesties': [],
+            'tegenvoorstel_suggesties': [],
             'bron': 'heuristic_fallback'
         }
     

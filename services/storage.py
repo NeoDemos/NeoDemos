@@ -32,6 +32,14 @@ class StorageService:
         except Exception as e:
             raise RuntimeError(f"Failed to connect to PostgreSQL: {e}")
     
+    def _clean_name(self, name: Optional[str]) -> Optional[str]:
+        """Remove legacy artifacts like 'zzz ' from names."""
+        if not name:
+            return name
+        if name.startswith('zzz '):
+            return name[4:]
+        return name
+
     @contextmanager
     def _get_connection(self):
         """Context manager for database connections"""
@@ -65,6 +73,8 @@ class StorageService:
                 meetings = []
                 for row in cur.fetchall():
                     meeting = dict(row)
+                    meeting['name'] = self._clean_name(meeting.get('name'))
+                    meeting['committee'] = self._clean_name(meeting.get('committee'))
                     if meeting.get('start_date') and hasattr(meeting['start_date'], 'isoformat'):
                         meeting['start_date'] = meeting['start_date'].isoformat()
                     meetings.append(meeting)
@@ -95,57 +105,170 @@ class StorageService:
                     return None
                 
                 meeting = dict(meeting_row)
+                meeting['name'] = self._clean_name(meeting.get('name'))
+                meeting['committee'] = self._clean_name(meeting.get('committee'))
                 
                 # Convert datetime to string for Jinja2
                 if meeting.get('start_date') and hasattr(meeting['start_date'], 'isoformat'):
                     meeting['start_date'] = meeting['start_date'].isoformat()
                 
-                # Get agenda items
-                cur.execute('SELECT * FROM agenda_items WHERE meeting_id = %s', (meeting_id,))
+                # Get agenda items - STRICT ORDERING IS CRITICAL FOR GROUPING
+                cur.execute('SELECT * FROM agenda_items WHERE meeting_id = %s ORDER BY id ASC', (meeting_id,))
                 agenda_rows = cur.fetchall()
                 meeting['agenda'] = []
                 
                 for agenda_row in agenda_rows:
                     item = dict(agenda_row)
                     
-                    # Get documents for this agenda item
+                    # Get documents for this agenda item via junction table
                     cur.execute(
-                        'SELECT * FROM documents WHERE agenda_item_id = %s',
+                        '''
+                        SELECT d.* 
+                        FROM documents d
+                        JOIN document_assignments da ON d.id = da.document_id
+                        WHERE da.agenda_item_id = %s
+                        ''',
                         (item['id'],)
                     )
                     item['documents'] = [dict(doc) for doc in cur.fetchall()]
                     meeting['agenda'].append(item)
                 
-                # Post-process agenda items to merge 'Betrekken bij' items into their parent items
-                parent_items = []
-                child_items = []
-                for item in meeting['agenda']:
-                    if item.get('name', '').strip().lower().startswith('betrekken bij'):
-                        child_items.append(item)
+                # Step 1: Initialize all items and identify Leads
+                all_items = []
+                leads = []
+                sub_candidates = []
+                
+                for i, item in enumerate(meeting['agenda']):
+                    item_num = item.get('number')
+                    item['sub_items'] = []
+                    item['_idx'] = i # Store original position for distance calculation
+                    
+                    is_lead = False
+                    if item_num:
+                        s_num = str(item_num).strip()
+                        if s_num and s_num.lower() not in ('none', 'null', ''):
+                            is_lead = True
+                    
+                    if is_lead:
+                        leads.append(item)
                     else:
-                        parent_items.append(item)
+                        sub_candidates.append(item)
+                    all_items.append(item)
+
+                # Step 2: "Best Fit" grouping logic
+                def get_significant_keywords(s):
+                    dutch_stop_words = {'de', 'van', 'het', 'een', 'en', 'in', 'is', 'dat', 'op', 'met', 'voor', 'bij', 'daarbij', 'om', 'te', 'die', 'als', 'wat', 'ter', 'door', 'tot', 'aan'}
+                    return {w.strip('.,()') for w in s.lower().split() if len(w) > 3 and w.strip('.,()') not in dutch_stop_words}
+
+                final_agenda = []
+                assigned_ids = set()
                 
-                # Try to attach children to parents
-                for child in child_items:
-                    c_name_lower = child.get('name', '').strip().lower()
-                    target = c_name_lower.replace('betrekken bij', '', 1).strip()
+                # First pass: Semantic matching (Keyword overlap with distance penalty)
+                for candidate in sub_candidates:
+                    c_id = candidate['id']
+                    c_words = get_significant_keywords(candidate.get('name', ''))
                     
-                    merged = False
-                    if target:
-                        for parent in parent_items:
-                            p_name_lower = parent.get('name', '').lower()
-                            # Check if target is a significant substring of parent, or vice versa
-                            if target in p_name_lower or p_name_lower in target:
-                                parent['documents'].extend(child.get('documents', []))
-                                merged = True
-                                break
+                    if not c_words:
+                        continue
+                        
+                    best_parent = None
+                    max_score = 0
                     
-                    if not merged:
-                        parent_items.append(child)
+                    for lead in leads:
+                        l_words = get_significant_keywords(lead.get('name', ''))
+                        overlap = len(c_words.intersection(l_words))
+                        distance = abs(lead['_idx'] - candidate['_idx'])
+                        
+                        # Distance-aware scoring
+                        # If it's a weak match (only 1 word), reject it if it's too far (> 3 items away)
+                        score = overlap
+                        if overlap == 1 and distance > 3:
+                            score = 0
+                        
+                        if score > max_score:
+                            max_score = score
+                            best_parent = lead
+                        elif score == max_score and score > 0:
+                            # Tie-breaker: pick the closest parent
+                            current_best_distance = abs(best_parent['_idx'] - candidate['_idx'])
+                            if distance < current_best_distance:
+                                best_parent = lead
+                    
+                    if best_parent and max_score >= 1:
+                        best_parent['sub_items'].append(candidate)
+                        assigned_ids.add(c_id)
+
+                # Second pass: Positional fallback
+                current_lead = None
+                for item in all_items:
+                    if item in leads:
+                        current_lead = item
+                        final_agenda.append(item)
+                    else:
+                        if item['id'] in assigned_ids:
+                            continue # Already nested semantically
+                        
+                        if current_lead:
+                            current_lead['sub_items'].append(item)
+                        else:
+                            final_agenda.append(item)
                 
-                meeting['agenda'] = parent_items
-                
+                meeting['agenda'] = final_agenda
                 return meeting
+
+    def get_agenda_item_with_sub_documents(self, agenda_item_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Fetch an agenda item and all documents for it AND its sub-items.
+        Returns a dict with 'name', 'meeting_name', and 'documents' (List of {name, content}).
+        """
+        with self._get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                # 1. Get the item and its meeting_id
+                cur.execute("SELECT name, meeting_id FROM agenda_items WHERE id = %s", (agenda_item_id,))
+                item_row = cur.fetchone()
+                if not item_row:
+                    return None
+                
+                meeting_id = item_row['meeting_id']
+                
+                # 2. Use existing logic to get the full meeting with correctly grouped items
+                # (This ensures the lead/sub relationship is identical to what the user sees in the UI)
+                meeting = self.get_meeting_details(meeting_id)
+                if not meeting:
+                    return None
+                
+                # 3. Find our item in the agenda (could be a lead or a sub)
+                target_item = None
+                all_docs = []
+                
+                # Search top-level items
+                for item in meeting['agenda']:
+                    if str(item['id']) == str(agenda_item_id):
+                        target_item = item
+                        break
+                    # Search sub-items
+                    for sub in item.get('sub_items', []):
+                        if str(sub['id']) == str(agenda_item_id):
+                            target_item = sub
+                            break
+                    if target_item:
+                        break
+                
+                if not target_item:
+                    return None
+                    
+                # 4. Collect documents from the item itself
+                all_docs.extend(target_item.get('documents', []))
+                
+                # 5. IF it's a lead item, also collect documents from all its nested sub-items
+                for sub in target_item.get('sub_items', []):
+                    all_docs.extend(sub.get('documents', []))
+                    
+                return {
+                    "name": target_item['name'],
+                    "meeting_name": meeting['name'],
+                    "documents": all_docs
+                }
     
     def is_substantive_item(self, item: dict, meeting_name: str = '') -> bool:
         """
@@ -255,8 +378,8 @@ class StorageService:
                         summary_json = summary_json.replace('\x00', '')
                     
                     cur.execute("""
-                        INSERT INTO documents (id, agenda_item_id, meeting_id, name, url, content, summary_json)
-                        VALUES (%s, %s, %s, %s, %s, %s, %s)
+                        INSERT INTO documents (id, name, meeting_id, content, summary_json, url)
+                        VALUES (%s, %s, %s, %s, %s, %s)
                         ON CONFLICT (id) DO UPDATE SET
                             name = EXCLUDED.name,
                             url = EXCLUDED.url,
@@ -264,13 +387,24 @@ class StorageService:
                             summary_json = EXCLUDED.summary_json
                     """, (
                         document_data['id'],
-                        document_data['agenda_item_id'],
-                        document_data['meeting_id'],
                         document_data.get('name'),
-                        document_data.get('url'),
+                        document_data.get('meeting_id'), # Keep for legacy but assignments is primary
                         content,
-                        summary_json
+                        summary_json,
+                        document_data.get('url')
                     ))
+                    
+                    # Ensure assignment exists
+                    if document_data.get('meeting_id') or document_data.get('agenda_item_id'):
+                        cur.execute("""
+                            INSERT INTO document_assignments (document_id, meeting_id, agenda_item_id)
+                            VALUES (%s, %s, %s)
+                            ON CONFLICT (document_id, meeting_id, agenda_item_id) DO NOTHING
+                        """, (
+                            document_data['id'],
+                            document_data.get('meeting_id'),
+                            document_data.get('agenda_item_id')
+                        ))
                     return True
         except Exception as e:
             print(f"Error inserting document: {e}")
@@ -362,3 +496,44 @@ class StorageService:
                     'documents_missing_content': missing_content,
                     'status': 'PASS' if orphaned_docs == 0 else 'FAIL'
                 }
+
+    def get_documents_metadata(self, doc_ids: List[str]) -> List[Dict[str, Any]]:
+        """Retrieve names and URLs for a list of document IDs"""
+        if not doc_ids:
+            return []
+        try:
+            with self._get_connection() as conn:
+                with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                    cur.execute(
+                        """
+                        SELECT d.id, d.name, d.url, m.start_date 
+                        FROM documents d
+                        JOIN document_assignments da ON d.id = da.document_id
+                        LEFT JOIN meetings m ON da.meeting_id = m.id
+                        WHERE d.id = ANY(%s)
+                        """,
+                        (doc_ids,)
+                    )
+                    
+                    results = []
+                    for row in cur.fetchall():
+                        doc = dict(row)
+                        if doc.get('start_date') and hasattr(doc['start_date'], 'isoformat'):
+                            doc['start_date'] = doc['start_date'].isoformat()
+                        results.append(doc)
+                    return results
+        except Exception as e:
+            print(f"Error retrieving document metadata: {e}")
+            return []
+
+    def get_document_full_content(self, doc_id: str) -> Optional[str]:
+        """Fetch the raw text content of a document by its ID."""
+        try:
+            with self._get_connection() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("SELECT content FROM documents WHERE id = %s", (doc_id,))
+                    row = cur.fetchone()
+                    return row[0] if row else None
+        except Exception as e:
+            print(f"Error fetching document content: {e}")
+            return None

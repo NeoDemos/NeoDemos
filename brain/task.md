@@ -9,6 +9,10 @@
 - [x] Update Committee names in `settings.html` to match actual Rotterdam data.
 - [x] Hide 'Gemeenteraad' from selection but keep it implicitly active.
 
+## Phase 18: Restore Frontend Dependencies
+- [x] Add `marked.js` to `base.html`.
+- [x] Verify standard search rendering.
+
 ## Phase 3: Historical Data Ingestion (The Big Search)
 - [x] Research `rotterdam.raadsinformatie.nl` API/HTML structure for scraping.
 - [/] Develop a scraper that can go back past 2018 (target: 1993+). (70k+ documents ingested so far)
@@ -18,8 +22,10 @@
 - [/] P0: Fix 15k char truncation — use preserve_notulen_text() in all ingestion scripts.
 - [/] P0: Re-ingest 17,511 truncated documents with full content (17,344/17,511 corrected).
 - [/] P1: Phase B1 — Run embedding pipeline (71,027 docs).
-  - [x] Swarm scaling (20 workers active).
-  - [/] Phase B1: Swarm Processing (In Progress: 11,227/71,027 done).
+  - [x] Swarm scaling restored (20 workers active).
+  - [x] Perform bulk duplicate cleanup in database (13,809 docs marked done).
+  - [x] Scale swarm to 25 workers.
+  - [/] Phase B1: Swarm Processing (In Progress: 21,461/71,027 done).
   - [x] JSON repair logic implementation.
   - [x] Optimized Large-Doc Splitting (50k chars with 20k overlap).
   - [x] Implemented Section Heartbeat Logging (Visibility for long docs).

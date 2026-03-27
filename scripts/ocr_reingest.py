@@ -48,18 +48,33 @@ def get_candidates():
     """Fetch all documents needing OCR re-ingestion."""
     conn = psycopg2.connect(DB_URL)
     cur = conn.cursor()
-    cur.execute("""
+    # Step 1: Find documents that failed with "No chunks produced"
+    cur.execute("SELECT document_id FROM chunking_queue WHERE error_message ILIKE 'No chunks produced%%'")
+    failed_ids = [r[0] for r in cur.fetchall()]
+    
+    # Step 2: Get meeting IDs for 2018+ to avoid nested subqueries
+    log("Fetching 2018+ meeting IDs...")
+    cur.execute("SELECT id FROM meetings WHERE start_date >= '2018-01-01'")
+    meeting_ids = [r[0] for r in cur.fetchall()]
+    log(f"Found {len(meeting_ids)} meetings.")
+    
+    # Step 3: Main query using pre-fetched IDs for better performance
+    log("Scanning for OCR candidates (All Small/Empty/Failed/Truncated)...")
+    query = """
         SELECT id, name, url, COALESCE(length(content), 0) as clen
         FROM documents
         WHERE url IS NOT NULL AND url != ''
+          AND meeting_id = ANY(%s)
           AND (
             content IS NULL 
             OR content = '' 
             OR length(content) < %s 
             OR length(content) = 15000
+            OR id = ANY(%s)
           )
         ORDER BY COALESCE(length(content), 0) ASC
-    """, (MIN_USEFUL_CHARS,))
+    """
+    cur.execute(query, (meeting_ids, MIN_USEFUL_CHARS, failed_ids))
     rows = cur.fetchall()
     cur.close()
     conn.close()
@@ -171,12 +186,28 @@ def reset_chunking_queue(doc_ids: list):
 
 async def process_document(client: httpx.AsyncClient, doc_id: str, name: str, url: str, current_len: int):
     """Download PDF, extract text (pypdf then OCR), and update if improved."""
-    try:
-        response = await client.get(url, follow_redirects=True, timeout=60)
-        response.raise_for_status()
-        pdf_bytes = response.content
-    except Exception as e:
-        return "error", f"Download failed: {e}"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "Accept": "application/pdf,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+    }
+    
+    pdf_bytes = None
+    for attempt in range(1, 4):
+        try:
+            response = await client.get(url, headers=headers, follow_redirects=True, timeout=60)
+            response.raise_for_status()
+            pdf_bytes = response.content
+            break
+        except Exception as e:
+            if attempt < 3:
+                wait = attempt * 2
+                log(f"  Download attempt {attempt} failed ({e}) - retrying in {wait}s...")
+                await asyncio.sleep(wait)
+            else:
+                return "error", f"Download failed after 3 attempts: {e}"
+
+    if not pdf_bytes:
+        return "error", "Download failed: Empty content"
 
     # Step 1: Try pypdf extraction
     text = extract_text_pypdf(pdf_bytes)

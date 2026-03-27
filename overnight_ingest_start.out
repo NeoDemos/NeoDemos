@@ -1,0 +1,51 @@
+2026-03-16 07:22:44,684 [INFO] 🚀 Starting overnight ingestion for years: [2019, 2020, 2021, 2022, 2023, 2024, 2025]
+2026-03-16 07:22:44,684 [INFO] 
+============================================================
+2026-03-16 07:22:44,684 [INFO] 📅 COMMENCING YEAR: 2019
+2026-03-16 07:22:44,684 [INFO] ============================================================
+2026-03-16 07:22:44,685 [INFO] Resetting 6071424 from in_progress to pending
+2026-03-16 07:22:44,685 [INFO] ⚙️ Running sequential ingestion for 2019...
+2026-03-16 07:22:44,685 [INFO] 
+🚀 Processing [1]: zzz Commissie Bouwen, Wonen en Buitenruimte (2018-2022) (2019-01-16 09:30:00)
+2026-03-16 07:22:44,685 [INFO] Numeric ID 6071424 detected. Resolving GUID via ORI API...
+2026-03-16 07:22:44,900 [INFO] ✅ Resolved GUID: f9fe110e-4189-41a6-bbd0-83736320b618 | New URL: https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/f9fe110e-4189-41a6-bbd0-83736320b618
+2026-03-16 07:22:44,901 [INFO] 🔗 URL: https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/f9fe110e-4189-41a6-bbd0-83736320b618
+2026-03-16 07:22:44,922 [INFO] Memory Status: Free: 0.06GB | Active: 2.42GB
+2026-03-16 07:22:44,922 [INFO] ============================================================
+2026-03-16 07:22:44,922 [INFO] Pipeline Start: https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/f9fe110e-4189-41a6-bbd0-83736320b618
+2026-03-16 07:22:44,922 [INFO] Mode: Full (VTT + OCR)
+2026-03-16 07:22:44,922 [INFO] ============================================================
+2026-03-16 07:22:44,923 [INFO] 
+📡 Phase 1: Fetching metadata & transcript...
+2026-03-16 07:22:44,923 [INFO] Extracting webcast code from iBabs: https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/f9fe110e-4189-41a6-bbd0-83736320b618
+2026-03-16 07:22:44,923 [INFO] Fetching iBabs page: https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/f9fe110e-4189-41a6-bbd0-83736320b618
+2026-03-16 07:22:45,639 [INFO] Found webcast code in HTML: gemeenterotterdam_21190116_2
+2026-03-16 07:22:45,640 [INFO] Using webcast code: gemeenterotterdam_21190116_2
+2026-03-16 07:22:45,640 [INFO] Fetching metadata from: https://sdk.companywebcast.com/players/gemeenterotterdam_21190116_2/info
+2026-03-16 07:22:45,790 [INFO] ✅ Metadata fetch successful from: https://sdk.companywebcast.com/players/gemeenterotterdam_21190116_2/info
+2026-03-16 07:22:45,790 [INFO] 🎬 Legacy Royalcast pipeline detected. Constructing VODS3 HLS URL...
+2026-03-16 07:22:45,947 [INFO] AccessRules readTokens keys: ['ssl', 'non-ssl']
+2026-03-16 07:22:45,948 [INFO] ✅ Tokens successfully extracted from accessrules
+2026-03-16 07:22:45,948 [INFO] ✅ Signed HLS URL constructed for 551d1cda-f7c6-4e74-a076-f45dacfad081
+2026-03-16 07:22:46,103 [INFO] Checking for ConnectLive VTT transcript...
+2026-03-16 07:22:46,315 [INFO] Meeting: Vergadering Commissie Bouwen, Wonen en Buitenruimte (2018-2022) 16-01-2019 | UUID: 551d1cda-f7c6-4e74-a076-f45dacfad081 | Duration: 03:35:36 | VTT: False
+2026-03-16 07:22:46,315 [WARNING] ⚠️  No VTT available — will need Whisper transcription
+2026-03-16 07:22:46,315 [INFO] Fetching events: https://sdk.companywebcast.comhttps://sdk.companywebcast.com/players/551d1cda-f7c6-4e74-a076-f45dacfad081/ondemand/637848356100000000@druten_msi/events/hls
+2026-03-16 07:22:46,320 [WARNING] Events API failed: HTTPSConnectionPool(host='sdk.companywebcast.comhttps', port=443): Max retries exceeded with url: /sdk.companywebcast.com/players/551d1cda-f7c6-4e74-a076-f45dacfad081/ondemand/637848356100000000@druten_msi/events/hls (Caused by NameResolutionError("HTTPSConnection(host='sdk.companywebcast.comhttps', port=443): Failed to resolve 'sdk.companywebcast.comhttps' ([Errno 8] nodename nor servname provided, or not known)"))
+2026-03-16 07:22:46,320 [INFO] No events from API; timestamps will be inferred from VTT or skipped
+2026-03-16 07:22:46,320 [INFO] ℹ️  No agenda timestamps from events API
+2026-03-16 07:22:46,320 [INFO] 🎙️  Phase 1.1: Scraping speakers from iBabs...
+2026-03-16 07:22:46,321 [INFO] Scraping speakers from iBabs: https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/f9fe110e-4189-41a6-bbd0-83736320b618
+2026-03-16 07:22:47,021 [INFO] Extracted 0 speaker segments from iBabs
+2026-03-16 07:22:47,021 [WARNING] ⚠️  No speakers found on iBabs page
+2026-03-16 07:22:47,021 [INFO] 
+🎬 Phase 2: Downloading video & extracting frames...
+2026-03-16 07:22:47,022 [INFO] MediaProcessor temp dir: /var/folders/qb/d5t203td6gq_6vmfpszqnv5w0000gn/T/neodemos_pipeline_zqzwb0s5
+2026-03-16 07:22:47,058 [INFO] Downloading video: https://sdk.companywebcast.com/players/551d1cda-f7c6-4e74-a076-f45dacfad081/download/webcast/889406fa-0000-0000-0000-000000000000
+2026-03-16 07:22:47,146 [WARNING] ⚠️  Video download failed: 403 Client Error: Forbidden for url: https://sdk.companywebcast.com/players/551d1cda-f7c6-4e74-a076-f45dacfad081/download/webcast/889406fa-0000-0000-0000-000000000000. Skipping OCR Phase.
+2026-03-16 07:22:47,146 [WARNING] ⚠️  Skipping OCR Phase (no video available)
+2026-03-16 07:22:47,146 [INFO] 
+🎤 Running mlx-whisper transcription (fallback)...
+2026-03-16 07:22:47,146 [INFO] Downloading MP3: https://sdk.companywebcast.com/players/551d1cda-f7c6-4e74-a076-f45dacfad081/download/webcast/73de9c13-0000-0000-0000-000000000000
+2026-03-16 07:22:47,237 [WARNING] ⚠️  Direct MP3 download failed: 403 Client Error: Forbidden for url: https://sdk.companywebcast.com/players/551d1cda-f7c6-4e74-a076-f45dacfad081/download/webcast/73de9c13-0000-0000-0000-000000000000. Trying HLS...
+2026-03-16 07:22:47,238 [INFO] Downloading audio from HLS stream: https://sdk.companywebcast.com/vods3/_definst_/mp4:amazons3/clientdataprivate-eu-bv/gemeenterotterdam/webcasts/21190116_2/mp4/bb_nl.mp4/playlist.m3u8?Signature=TF~9O1K-tXGUMbi3WriXIDIGamY0ipgZfmhpo-xfrq-uOJdDg~450ta8gevTMGr1YLdRZf~lqJKiX9aVDDw-0ZDiGcbNoT2AAyOCl~CWZKfAKab3DV30My6BTySv8u~gQE2Op6oLZm8kcLy7F5hQpjIo7Sqjk4mBuCWy4rgKkuO3XaaXt~YCplZZqW5tBkhdik8Is4G2oJi48zkN4A6xt4q~zZzDqG4OXyd2-HtyaZoShX7wVISl3hLL5mvM5tGljEhrtu8C5qWPd9NLZDOk8EMTF7YudFIn03qw-BIiD5b2PbRazVF-o3zYDMpNYoxh0YyjtIeQrW8G2BegbZNRcg__&Policy=eyJTdGF0ZW1lbnQiOiBbeyJSZXNvdXJjZSI6Imh0dHBzOi8vc2RrLmNvbXBhbnl3ZWJjYXN0LmNvbS9wbGF5ZXJzLzU1MWQxY2RhLWY3YzYtNGU3NC1hMDc2LWY0NWRhY2ZhZDA4MS8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzkwOTI1NzY2fSwiSXBBZGRyZXNzIjp7IkFXUzpTb3VyY2VJcCI6IjAuMC4wLjAvMCJ9fX1dfQ__&Key-Pair-Id=APKAIWM6LAZJX3UVVARQ

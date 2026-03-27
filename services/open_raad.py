@@ -1,17 +1,54 @@
 import httpx
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from datetime import datetime
 
 class OpenRaadService:
     BASE_URL = "https://api.openraadsinformatie.nl/v1/elastic"
-    INDEX = "ori_rotterdam_20250629013104"
+    
+    def __init__(self):
+        self._index = None
+        self._last_index_check = None
 
-    async def get_meetings(self, start_date: str = "2025-01-01", end_date: str = "2025-12-31") -> List[Dict[str, Any]]:
+    async def ensure_index(self):
+        """Fetch the latest Rotterdam index if not already cached/stale."""
+        now = datetime.now()
+        if self._index and self._last_index_check and (now - self._last_index_check).days < 1:
+            return self._index
+
+        try:
+            async with httpx.AsyncClient() as client:
+                resp = await client.get(f"{self.BASE_URL}/_cat/indices?format=json")
+                resp.raise_for_status()
+                indices = resp.json()
+                
+                # Filter for Rotterdam-related indices
+                rotterdam_indices = [
+                    idx["index"] for idx in indices 
+                    if "rotterdam" in idx["index"].lower() and idx["index"].startswith("ori_")
+                ]
+                
+                if not rotterdam_indices:
+                    # Fallback to a known good index if discovery fails
+                    self._index = "ori_rotterdam_20250629013104"
+                else:
+                    # Use the lexicographically latest index (usually the most recent)
+                    self._index = sorted(rotterdam_indices)[-1]
+                
+                self._last_index_check = now
+                print(f"Using OpenRaad index: {self._index}")
+                return self._index
+        except Exception as e:
+            print(f"Error discovering index: {e}")
+            self._index = "ori_rotterdam_20250629013104"
+            return self._index
+
+    async def get_meetings(self, start_date: str = "2026-01-01", end_date: str = "2026-12-31") -> List[Dict[str, Any]]:
+        index = await self.ensure_index()
         query = {
             "query": {
                 "bool": {
                     "must": [
-                        { "term": { "_index": self.INDEX } },
+                        { "term": { "_index": index } },
                         { "term": { "@type": "Meeting" } },
                         { "range": { "start_date": { "gte": f"{start_date}T00:00:00Z", "lte": f"{end_date}T23:59:59Z" } } }
                     ]
@@ -44,12 +81,13 @@ class OpenRaadService:
 
     async def get_meeting_details(self, meeting_id: str) -> Dict[str, Any]:
         """Fetch agenda items and documents for a specific meeting."""
+        index = await self.ensure_index()
         # Query for the meeting itself
         query = {
             "query": {
                 "bool": {
                     "must": [
-                        { "term": { "_index": self.INDEX } },
+                        { "term": { "_index": index } },
                         { "term": { "_id": meeting_id } }
                     ]
                 }
@@ -61,7 +99,7 @@ class OpenRaadService:
             "query": {
                 "bool": {
                     "must": [
-                        { "term": { "_index": self.INDEX } },
+                        { "term": { "_index": index } },
                         { "term": { "@type": "AgendaItem" } },
                         { "term": { "parent": meeting_id } }
                     ]
@@ -112,7 +150,7 @@ class OpenRaadService:
                             "query": {
                                 "bool": {
                                     "must": [
-                                        { "term": { "_index": self.INDEX } },
+                                        { "term": { "_index": index } },
                                         { "terms": { "_id": attachment_ids } }
                                     ]
                                 }
@@ -147,11 +185,12 @@ class OpenRaadService:
         Search for documents by type (e.g., 'notulen' for meeting minutes)
         Returns a list of documents matching the criteria
         """
+        index = await self.ensure_index()
         query = {
             "query": {
                 "bool": {
                     "must": [
-                        { "term": { "_index": self.INDEX } },
+                        { "term": { "_index": index } },
                         { "match": { "document_type": doc_type } },
                         { "range": { "date": { "gte": f"{start_date}T00:00:00Z", "lte": f"{end_date}T23:59:59Z" } } }
                     ]
@@ -181,3 +220,39 @@ class OpenRaadService:
         except Exception as e:
             print(f"Error in get_documents_by_type: {e}")
             return []
+    async def get_document_by_identifier(self, identifier: str) -> Optional[Dict[str, Any]]:
+        """Search for a specific document by its municipal identifier (e.g. BB-number)"""
+        index = await self.ensure_index()
+        query = {
+            "query": {
+                "bool": {
+                    "must": [
+                        { "term": { "_index": index } },
+                        { "match": { "identifier": identifier } }
+                    ]
+                }
+            },
+            "size": 1
+        }
+        
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.post(f"{self.BASE_URL}/_search", json=query)
+                response.raise_for_status()
+                data = response.json()
+                
+                hits = data.get("hits", {}).get("hits", [])
+                if not hits:
+                    return None
+                
+                source = hits[0].get("_source", {})
+                return {
+                    "id": hits[0].get("_id"),
+                    "name": source.get("name") or source.get("title"),
+                    "url": source.get("original_url") or source.get("url"),
+                    "document_type": source.get("document_type"),
+                    "date": source.get("date")
+                }
+        except Exception as e:
+            print(f"Error in get_document_by_identifier for {identifier}: {e}")
+            return None

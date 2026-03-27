@@ -1,0 +1,2468 @@
+{
+  "meetings": {
+    "797c646d-05a0-4bb0-a0dc-7d5a416d59f6": {
+      "name": "Subcommissie bestemmingsplannen Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-01-14 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/797c646d-05a0-4bb0-a0dc-7d5a416d59f6",
+      "status": "completed",
+      "attempts": 1,
+      "last_error": null
+    },
+    "6123997": {
+      "name": "Subcommissie bestemmingsplannen Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-01-14 18:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/82f315e7-f3a1-4803-bfa3-8614010bad00",
+      "status": "completed",
+      "attempts": 1,
+      "last_error": null
+    },
+    "3ca2bb2b-69c0-4682-81c6-3f7afb2e2dd0": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-01-15 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/3ca2bb2b-69c0-4682-81c6-3f7afb2e2dd0",
+      "status": "completed",
+      "attempts": 1,
+      "last_error": null
+    },
+    "41d3fcfe-d6dc-435b-9ea8-91ed87e3403c": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-01-15 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/41d3fcfe-d6dc-435b-9ea8-91ed87e3403c",
+      "status": "completed",
+      "attempts": 1,
+      "last_error": null
+    },
+    "6124018": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-01-15 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/789ff166-5571-40f4-9dc5-2071a318c0f5",
+      "status": "completed",
+      "attempts": 1,
+      "last_error": null
+    },
+    "6124042": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-01-15 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/e42f2818-4193-450e-a652-f90eb9af7444",
+      "status": "completed",
+      "attempts": 1,
+      "last_error": null
+    },
+    "6124110": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-01-15 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/213da352-fc23-4cfe-b532-e1cd51dda075",
+      "status": "completed",
+      "attempts": 1,
+      "last_error": "Completed via Whisper fallback"
+    },
+    "6124085": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-01-15 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/ceacd532-7fb5-4b55-bf47-61f30df91e14",
+      "status": "in_progress",
+      "attempts": 2,
+      "last_error": "Interrupted by crash (recovered)"
+    },
+    "a88ca194-a1c0-4959-93ee-859efb2e7528": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-01-16 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/a88ca194-a1c0-4959-93ee-859efb2e7528",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124121": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-01-16 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124121",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "34dba01c-ac33-4607-bf3e-9f947a9f0b3f": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-01-20 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/34dba01c-ac33-4607-bf3e-9f947a9f0b3f",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "4e8986bb-f7d4-4ba0-a04f-85cea4a2d383": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-01-21 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/4e8986bb-f7d4-4ba0-a04f-85cea4a2d383",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124159": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-01-21 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124159",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "ba72428c-e278-4421-b2eb-7b898f9232e2": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-01-22 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/ba72428c-e278-4421-b2eb-7b898f9232e2",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "8b513c02-4400-44d4-b674-efcf361153e8": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-01-22 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/8b513c02-4400-44d4-b674-efcf361153e8",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7164e8a2-2ab0-4434-b1f6-a4976a93e340": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-01-22 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7164e8a2-2ab0-4434-b1f6-a4976a93e340",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "453f9e2b-759c-46ae-85fe-a843af968fc5": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-01-22 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/453f9e2b-759c-46ae-85fe-a843af968fc5",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124163": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-01-22 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124163",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124171": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-01-22 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124171",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124198": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-01-22 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124198",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124205": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-01-22 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124205",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "1d814fb2-9505-4260-9f15-2ee99c821aa0": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-01-23 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/1d814fb2-9505-4260-9f15-2ee99c821aa0",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124217": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-01-23 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124217",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "f3f580ba-70a1-436d-b962-35ed1f827d1b": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-02-12 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/f3f580ba-70a1-436d-b962-35ed1f827d1b",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "d2d8952a-ca3e-4af6-b834-f81a27c5baca": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-02-12 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/d2d8952a-ca3e-4af6-b834-f81a27c5baca",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "65de0eb2-5f3d-4b2c-814b-913562ead954": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-02-12 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/65de0eb2-5f3d-4b2c-814b-913562ead954",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124236": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-02-12 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124236",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124228": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-02-12 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124228",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124241": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-02-12 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124241",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124255": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-02-12 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124255",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "512ce9c6-39bb-4223-9373-1ab03af85703": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-02-13 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/512ce9c6-39bb-4223-9373-1ab03af85703",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124264": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-02-13 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124264",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124266": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-02-13 19:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124266",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "32241d37-f786-4aa6-aae7-dde5ae369c12": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-02-19 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/32241d37-f786-4aa6-aae7-dde5ae369c12",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "c484355c-c86f-4951-a0a3-fec090012174": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-03-05 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/c484355c-c86f-4951-a0a3-fec090012174",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "733a015c-529f-417d-8ee4-54defdf8c101": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-03-05 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/733a015c-529f-417d-8ee4-54defdf8c101",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124363": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-03-05 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124363",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124340": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-03-05 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124340",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124404": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-03-05 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124404",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124406": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-03-05 15:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124406",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124427": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-03-05 18:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124427",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124452": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-03-06 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124452",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124471": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-03-11 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124471",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124472": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-03-11 19:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124472",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "25925f38-58e7-4d73-8239-e0db053e551b": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-03-12 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/25925f38-58e7-4d73-8239-e0db053e551b",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "8ebeb0b0-76e5-4f06-92e3-885770729b02": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-03-12 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/8ebeb0b0-76e5-4f06-92e3-885770729b02",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124481": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-03-12 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124481",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124502": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-03-12 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124502",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124508": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-03-12 16:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124508",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124509": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-03-12 18:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124509",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124523": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-03-13 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124523",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124526": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-03-13 15:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124526",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "1d8233c0-f9a7-4650-b6ea-7322afcf5f2f": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-03-19 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/1d8233c0-f9a7-4650-b6ea-7322afcf5f2f",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "276258fd-737d-4e15-a07a-0dd0182efa45": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-03-26 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/276258fd-737d-4e15-a07a-0dd0182efa45",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "90f5ac7e-fe8c-4231-b818-f1779dedf0ea": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-03-26 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/90f5ac7e-fe8c-4231-b818-f1779dedf0ea",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6c316f34-7ff0-4fcb-b121-93b81c20b4e9": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-03-26 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6c316f34-7ff0-4fcb-b121-93b81c20b4e9",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124594": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-03-26 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124594",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124548": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-03-26 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124548",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124586": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-03-26 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124586",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124587": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-03-26 15:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124587",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124604": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-03-26 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124604",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124656": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-03-27 08:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124656",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124672": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-03-28 08:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124672",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124673": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-03-31 19:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124673",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "5a2cf5f9-918a-40a9-aedf-bb382efc0407": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-04-02 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/5a2cf5f9-918a-40a9-aedf-bb382efc0407",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "035e7b8c-8d5a-4088-bd8c-d309e3f11edd": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-04-02 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/035e7b8c-8d5a-4088-bd8c-d309e3f11edd",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "b105c92a-8a92-4fe2-9f62-0eb757d1aa4e": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-04-02 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/b105c92a-8a92-4fe2-9f62-0eb757d1aa4e",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124679": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-04-02 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124679",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124684": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-04-02 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124684",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124709": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-04-02 11:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124709",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124696": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-04-02 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124696",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124710": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-04-02 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124710",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "f16416e9-4e9e-4688-bb9a-7c239c04bc0d": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-04-03 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/f16416e9-4e9e-4688-bb9a-7c239c04bc0d",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124722": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-04-03 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124722",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "d8d95812-92ed-465d-833f-aab1f4ea2d1f": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-04-08 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/d8d95812-92ed-465d-833f-aab1f4ea2d1f",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124743": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-04-08 18:45:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124743",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "c8c11588-93ec-44fa-8217-470e01f36b92": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-04-09 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/c8c11588-93ec-44fa-8217-470e01f36b92",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "1d922aa9-e2bd-4113-9734-a2895314cda7": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-04-15 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/1d922aa9-e2bd-4113-9734-a2895314cda7",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124782": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-04-15 17:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124782",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "5505d555-be38-4847-ba18-0e9fed3f0830": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-04-16 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/5505d555-be38-4847-ba18-0e9fed3f0830",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "93ad248b-89a6-4967-b475-eb7219c09b26": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-04-16 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/93ad248b-89a6-4967-b475-eb7219c09b26",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "ffa8cd1a-2140-4ec0-960b-6ec0b106c4be": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-04-16 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/ffa8cd1a-2140-4ec0-960b-6ec0b106c4be",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124809": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-04-16 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124809",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124835": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-04-16 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124835",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124872": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-04-16 13:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124872",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124875": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-04-16 16:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124875",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124877": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-04-16 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124877",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "cdc0828a-7599-4b06-9543-cf5c63367823": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-04-17 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/cdc0828a-7599-4b06-9543-cf5c63367823",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124897": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-04-17 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124897",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "95b7f6b4-775a-4255-8510-2f63154add16": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-04-22 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/95b7f6b4-775a-4255-8510-2f63154add16",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124922": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-04-22 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124922",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "516ee371-70d3-47c1-b21a-9d9fd344913a": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-04-23 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/516ee371-70d3-47c1-b21a-9d9fd344913a",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "5f581c35-667e-4946-969e-0b945613ec0f": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-04-23 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/5f581c35-667e-4946-969e-0b945613ec0f",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "cd3f0125-0177-42f3-9065-4ef0708437d7": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-04-23 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/cd3f0125-0177-42f3-9065-4ef0708437d7",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "15ba2e32-f6d4-4063-b349-218e24afd343": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-04-23 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/15ba2e32-f6d4-4063-b349-218e24afd343",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124935": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-04-23 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124935",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124923": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-04-23 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124923",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124945": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-04-23 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124945",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124973": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-04-23 19:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124973",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7b6a76d9-827b-48bf-b404-d4313e005144": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-04-24 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7b6a76d9-827b-48bf-b404-d4313e005144",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6124989": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-04-24 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6124989",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125001": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-05-13 17:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125001",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125017": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-05-13 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125017",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125002": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-05-13 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125002",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "f31e0e35-54f6-4082-b324-75b3904b1355": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-05-14 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/f31e0e35-54f6-4082-b324-75b3904b1355",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "c69afc72-1de5-4f48-9435-eb5dace97c28": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-05-14 16:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/c69afc72-1de5-4f48-9435-eb5dace97c28",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "3af563a4-0101-4c0b-b324-ffc23056ee06": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-05-19 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/3af563a4-0101-4c0b-b324-ffc23056ee06",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125063": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-05-19 09:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125063",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125068": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-05-19 10:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125068",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125071": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-05-19 13:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125071",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125074": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-05-19 15:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125074",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "9e3df138-8392-4df7-8918-f59551cbb072": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-05-20 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/9e3df138-8392-4df7-8918-f59551cbb072",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125077": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-05-20 18:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125077",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "c2569ec2-f18c-4974-bbeb-d192401c5df4": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-05-21 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/c2569ec2-f18c-4974-bbeb-d192401c5df4",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "c667a0a7-fa1e-42c8-b9ab-2793061839da": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-05-21 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/c667a0a7-fa1e-42c8-b9ab-2793061839da",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "05f90415-daa3-4c8d-9add-e262ec7a97c2": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-05-21 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/05f90415-daa3-4c8d-9add-e262ec7a97c2",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125085": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-05-21 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125085",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125105": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-05-21 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125105",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125147": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-05-21 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125147",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125181": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-05-21 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125181",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "27b79c43-5c78-43f9-a1b9-a004b301ce9a": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-05-22 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/27b79c43-5c78-43f9-a1b9-a004b301ce9a",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125204": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-05-22 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125204",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "4c7a8b49-f1a1-492d-b92b-c98d79f1f254": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-05-26 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/4c7a8b49-f1a1-492d-b92b-c98d79f1f254",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125234": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-05-26 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125234",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "b409930c-3ec2-447d-856e-6e4c803251b0": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-05-27 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/b409930c-3ec2-447d-856e-6e4c803251b0",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125237": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-05-27 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125237",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "aa99348e-88b9-4db1-81e1-9f1e779f1807": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-05-28 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/aa99348e-88b9-4db1-81e1-9f1e779f1807",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "8dabe3b3-d7f5-41c1-862b-de14f1646a0a": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-05-28 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/8dabe3b3-d7f5-41c1-862b-de14f1646a0a",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6fc69dc0-874c-40ba-8732-2aaa8d190869": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-05-28 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6fc69dc0-874c-40ba-8732-2aaa8d190869",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125242": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-05-28 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125242",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125253": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-05-28 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125253",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125270": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-05-28 13:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125270",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125272": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-05-28 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125272",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125289": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-05-28 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125289",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "f79bedb7-5e47-48a7-ac1b-fb39d758b0b2": {
+      "name": "Subcommissie BOOR (2022\u20132026)",
+      "date": "2025-06-02 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/f79bedb7-5e47-48a7-ac1b-fb39d758b0b2",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125293": {
+      "name": "Subcommissie BOOR (2022\u20132026)",
+      "date": "2025-06-02 18:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125293",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "ac31e5b2-c125-4afe-b863-fbd1f9520a4e": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-06-03 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/ac31e5b2-c125-4afe-b863-fbd1f9520a4e",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125303": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-06-03 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125303",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "d7e91eeb-e5a0-4835-a3d1-639d2abd46bf": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-06-04 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/d7e91eeb-e5a0-4835-a3d1-639d2abd46bf",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125333": {
+      "name": "Subcommissie bestemmingsplannen Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-06-10 18:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125333",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125334": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-06-10 19:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125334",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "bc2a348f-725d-4b39-9078-70fdb38fc93e": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-06-11 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/bc2a348f-725d-4b39-9078-70fdb38fc93e",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "5af1a241-544d-46ab-bf8f-60dc36e51dab": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-06-11 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/5af1a241-544d-46ab-bf8f-60dc36e51dab",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "72867699-495f-4962-bbb1-5918013019cb": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-06-11 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/72867699-495f-4962-bbb1-5918013019cb",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "e46f6f77-c5ec-441c-ac69-001ca45a574f": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-06-11 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/e46f6f77-c5ec-441c-ac69-001ca45a574f",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "f29659aa-4118-433e-af01-6d0f9a1c92f7": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-06-16 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/f29659aa-4118-433e-af01-6d0f9a1c92f7",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125491": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-06-16 17:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125491",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "33e6e12d-ee41-414d-8ea5-3b207a9bd37a": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-06-17 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/33e6e12d-ee41-414d-8ea5-3b207a9bd37a",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125492": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-06-17 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125492",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6b61128f-c0bb-4b5a-be6c-028a0ecb382d": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-06-18 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6b61128f-c0bb-4b5a-be6c-028a0ecb382d",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "68ef59ca-8a6f-4bec-bdca-c31391263b74": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-06-18 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/68ef59ca-8a6f-4bec-bdca-c31391263b74",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6f08a299-732f-4e3d-941e-6ff1bd18e7cf": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-06-18 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6f08a299-732f-4e3d-941e-6ff1bd18e7cf",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "693a882d-40be-4883-995c-bedb788ad919": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-06-18 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/693a882d-40be-4883-995c-bedb788ad919",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "76063a07-3e29-4e98-a832-d82c624f6f73": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-06-18 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/76063a07-3e29-4e98-a832-d82c624f6f73",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6125588": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-06-24 18:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6125588",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "59afa04d-4e6d-4c2a-8b8a-48f80503e929": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-06-25 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/59afa04d-4e6d-4c2a-8b8a-48f80503e929",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "0304e7be-4a56-4c8e-af80-8522a8727848": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-06-25 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/0304e7be-4a56-4c8e-af80-8522a8727848",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "3264ec2b-2576-4720-a8c2-9701817d95e0": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-06-25 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/3264ec2b-2576-4720-a8c2-9701817d95e0",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7193864": {
+      "name": "Subcommissie bestemmingsplannen Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-07-01 18:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7193864",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7323ee12-03c2-4a3b-8302-b68235b79fbd": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-07-02 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7323ee12-03c2-4a3b-8302-b68235b79fbd",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "f4551dc4-e294-4134-91fc-67458adb0f77": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-07-02 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/f4551dc4-e294-4134-91fc-67458adb0f77",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "62e44f2f-5e27-44c6-97a4-58516048f4c2": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-07-02 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/62e44f2f-5e27-44c6-97a4-58516048f4c2",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "dce6b1c1-6dbf-45d0-a9cc-c114efd2cd74": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-07-02 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/dce6b1c1-6dbf-45d0-a9cc-c114efd2cd74",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7193865": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-07-02 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7193865",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7193866": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-07-02 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7193866",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7193981": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-07-02 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7193981",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7193868": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-07-02 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7193868",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "392d392e-1d87-49ad-b61f-0780988f27f2": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-07-03 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/392d392e-1d87-49ad-b61f-0780988f27f2",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7193936": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-07-03 13:15:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7193936",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7193966": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-07-04 10:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7193966",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7194005": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-07-08 19:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7194005",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "01c0e1e0-7a87-4f0e-abc5-a6f61beb3c84": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-07-09 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/01c0e1e0-7a87-4f0e-abc5-a6f61beb3c84",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6e94ec20-a98b-45be-8c4f-1f6f5eee32d9": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-07-09 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6e94ec20-a98b-45be-8c4f-1f6f5eee32d9",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "102107ae-5953-43a9-95f8-bcfc4aa0a662": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-07-09 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/102107ae-5953-43a9-95f8-bcfc4aa0a662",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "48ddee7f-d2ba-4d6b-9af6-aad6b35aa677": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-07-09 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/48ddee7f-d2ba-4d6b-9af6-aad6b35aa677",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7194006": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-07-09 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7194006",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7194010": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-07-09 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7194010",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7194007": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-07-09 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7194007",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7194008": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-07-09 18:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7194008",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "dd1c4707-105e-450c-b217-e212f8b62478": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-07-10 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/dd1c4707-105e-450c-b217-e212f8b62478",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7194011": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-07-10 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7194011",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "5355a4d4-ad75-4e8d-a58d-75b2323f26bc": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-07-16 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/5355a4d4-ad75-4e8d-a58d-75b2323f26bc",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7194088": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-07-25 17:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7194088",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "0715fd40-b957-4790-8089-b9f85d81f905": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-09-02 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/0715fd40-b957-4790-8089-b9f85d81f905",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7219025": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-09-02 18:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7219025",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "3c30bd6d-b28b-43d4-89f9-7c76bc6cec84": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-09-03 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/3c30bd6d-b28b-43d4-89f9-7c76bc6cec84",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "fd0f9a5a-30f3-4f0d-99f7-1c83764238bf": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-09-03 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/fd0f9a5a-30f3-4f0d-99f7-1c83764238bf",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6bfb430a-c6fa-4b14-b968-1eb23cabde12": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-09-03 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6bfb430a-c6fa-4b14-b968-1eb23cabde12",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7208e1bd-db29-4a24-a061-9d2b9167fb54": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-09-03 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7208e1bd-db29-4a24-a061-9d2b9167fb54",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7219028": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-09-03 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7219028",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7219026": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-09-03 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7219026",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7219029": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-09-03 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7219029",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7219027": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-09-03 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7219027",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7e658358-3d21-4cce-aacf-7f66cbfde93a": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-09-04 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7e658358-3d21-4cce-aacf-7f66cbfde93a",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7270787": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-09-04 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7270787",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7270785": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-09-04 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7270785",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7270789": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-09-09 17:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7270789",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "ba5a877a-c00a-4ec0-9dd0-472396ba4f0e": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-09-10 08:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/ba5a877a-c00a-4ec0-9dd0-472396ba4f0e",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7270839": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-09-13 09:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7270839",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7270841": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-09-15 16:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7270841",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "68df2765-a74f-49c6-b021-31e5fb4b3d73": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-09-16 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/68df2765-a74f-49c6-b021-31e5fb4b3d73",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7270845": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-09-16 19:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7270845",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7270860": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-09-16 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7270860",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "42d4ab02-1ff8-439e-a0bc-07a498740cad": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-09-17 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/42d4ab02-1ff8-439e-a0bc-07a498740cad",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "f974f220-d782-4be8-8bb0-b76891929288": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-09-17 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/f974f220-d782-4be8-8bb0-b76891929288",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "9d4cee4f-9248-482f-abde-ed9c8589c049": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-09-17 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/9d4cee4f-9248-482f-abde-ed9c8589c049",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "0d41b6d4-33e1-469f-b6a0-90ff179ec180": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-09-17 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/0d41b6d4-33e1-469f-b6a0-90ff179ec180",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7270871": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-09-17 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7270871",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7270866": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-09-17 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7270866",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7270867": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-09-17 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7270867",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7270869": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-09-17 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7270869",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7e317729-ecad-470a-a0f3-bcdb95fb9783": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-09-18 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7e317729-ecad-470a-a0f3-bcdb95fb9783",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7270876": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-09-18 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7270876",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7270868": {
+      "name": "Subcommissie bestemmingsplannen Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-09-23 18:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7270868",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "ac09badb-dd62-4326-9ddb-bb0dfdded71b": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-09-24 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/ac09badb-dd62-4326-9ddb-bb0dfdded71b",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "96459223-c40d-4458-a1b9-3669d670894a": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-09-24 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/96459223-c40d-4458-a1b9-3669d670894a",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "17185bed-32ae-4f02-abe9-7b515cac7077": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-09-24 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/17185bed-32ae-4f02-abe9-7b515cac7077",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "2c97aea5-3e60-4139-b7b1-4e2f5a327622": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-09-24 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/2c97aea5-3e60-4139-b7b1-4e2f5a327622",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7271011": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-09-24 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7271011",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7271010": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-09-24 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7271010",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7271012": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-09-24 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7271012",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7271021": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-09-24 18:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7271021",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "252fcb0b-790f-413b-b035-14ef288cf455": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-09-25 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/252fcb0b-790f-413b-b035-14ef288cf455",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7271050": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-09-25 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7271050",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "f2361d1a-02e8-42d4-b8ed-22917b617ec6": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-09-30 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/f2361d1a-02e8-42d4-b8ed-22917b617ec6",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7271058": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-09-30 19:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7271058",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "f1549c82-1e60-4625-990b-781991f2616a": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-10-01 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/f1549c82-1e60-4625-990b-781991f2616a",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "5a517892-46b0-4391-a257-9b1ba708fb10": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-10-01 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/5a517892-46b0-4391-a257-9b1ba708fb10",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "4d044aa9-b681-422a-9f73-0a5e81ebb898": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-10-01 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/4d044aa9-b681-422a-9f73-0a5e81ebb898",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "f553cc51-d0d3-4611-9421-5c83771f8ab9": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-10-07 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/f553cc51-d0d3-4611-9421-5c83771f8ab9",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7318306": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-10-07 19:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7318306",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7318307": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-10-07 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7318307",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "ba8b9c5d-25f9-4858-902e-28b3f10edbb3": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-10-08 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/ba8b9c5d-25f9-4858-902e-28b3f10edbb3",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "0904b911-a286-4b2f-87a8-ec7611b3e39c": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-10-08 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/0904b911-a286-4b2f-87a8-ec7611b3e39c",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "dca9cfbf-b2c9-49db-8b5f-8fc6a8cb0634": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-10-08 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/dca9cfbf-b2c9-49db-8b5f-8fc6a8cb0634",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "a7d14d46-f3d0-4471-b74a-2824eaae5f77": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-10-08 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/a7d14d46-f3d0-4471-b74a-2824eaae5f77",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7318308": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-10-08 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7318308",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7318311": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-10-08 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7318311",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7318314": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-10-08 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7318314",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7318310": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-10-08 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7318310",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "467d3bac-b92a-4f46-aef1-94d4b2fedd13": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-10-09 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/467d3bac-b92a-4f46-aef1-94d4b2fedd13",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7318312": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-10-09 13:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7318312",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7318460": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-10-09 18:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7318460",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "4585edff-c181-4f81-866a-e21d1dd826b9": {
+      "name": "Subcommissie bestemmingsplannen Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-10-14 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/4585edff-c181-4f81-866a-e21d1dd826b9",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7318462": {
+      "name": "Subcommissie bestemmingsplannen Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-10-14 18:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7318462",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "e6bcf1b5-8c23-4a98-b605-c1a794de58f9": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-10-15 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/e6bcf1b5-8c23-4a98-b605-c1a794de58f9",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "b90dfdbf-e77f-4c44-887d-fa5138b133ec": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-10-15 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/b90dfdbf-e77f-4c44-887d-fa5138b133ec",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "68a612f7-620d-4c03-ac59-98a987214a32": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-10-15 10:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/68a612f7-620d-4c03-ac59-98a987214a32",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7341401": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-10-27 16:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7341401",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "09e094a3-7b25-45ba-9281-d9b551ae3595": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-10-29 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/09e094a3-7b25-45ba-9281-d9b551ae3595",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "06a6dd42-59e6-477b-a81d-b77bb2773db1": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-10-30 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/06a6dd42-59e6-477b-a81d-b77bb2773db1",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "14d2c090-d602-49ab-90d4-52dff8a3b3dd": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-11-04 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/14d2c090-d602-49ab-90d4-52dff8a3b3dd",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7380643": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-11-04 19:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7380643",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "e5572408-c4c4-4046-b0dc-8b60fb1cbe83": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-11-05 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/e5572408-c4c4-4046-b0dc-8b60fb1cbe83",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "2cba37f2-221d-4adf-890f-f0beca18de0f": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-11-05 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/2cba37f2-221d-4adf-890f-f0beca18de0f",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "e281383a-919b-4335-851f-1b1eff5ee803": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-11-05 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/e281383a-919b-4335-851f-1b1eff5ee803",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "866fca2d-d7fa-4cb1-8482-1b2e30b49981": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-11-05 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/866fca2d-d7fa-4cb1-8482-1b2e30b49981",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7383935": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-11-05 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7383935",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7383932": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-11-05 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7383932",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7383933": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-11-05 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7383933",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7383938": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-11-05 19:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7383938",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "db03e446-fdf4-4995-afd1-3236717c352b": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-11-06 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/db03e446-fdf4-4995-afd1-3236717c352b",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7393621": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-11-06 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7393621",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7388820": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-11-06 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7388820",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "c035d5a7-85b5-4739-8253-20330a52ca61": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-11-12 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/c035d5a7-85b5-4739-8253-20330a52ca61",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "a5e3da64-449d-476b-969d-4f675fbd7c58": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-11-12 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/a5e3da64-449d-476b-969d-4f675fbd7c58",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "24817a43-4907-491e-9afc-2453506da81e": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-11-18 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/24817a43-4907-491e-9afc-2453506da81e",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7423177": {
+      "name": "Subcommissie bestemmingsplannen Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-11-18 18:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7423177",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7423178": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-11-18 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7423178",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "cca5c23f-6db7-4b67-8a53-0ec765adabb0": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-11-19 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/cca5c23f-6db7-4b67-8a53-0ec765adabb0",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "e9102bdf-b5b5-4d25-ba29-0bea41c27a3f": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-11-19 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/e9102bdf-b5b5-4d25-ba29-0bea41c27a3f",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "1efea00e-b5f2-4483-9bd9-9c90fe5af905": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-11-19 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/1efea00e-b5f2-4483-9bd9-9c90fe5af905",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "d19fe543-e04f-4ac6-9645-7d4d1c8390ef": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-11-19 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/d19fe543-e04f-4ac6-9645-7d4d1c8390ef",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7426040": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-11-19 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7426040",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7426041": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-11-19 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7426041",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7426042": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-11-19 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7426042",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7426043": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-11-19 19:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7426043",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "9e8fa6b2-5c6a-4c20-8015-56434dd24bd3": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-11-20 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/9e8fa6b2-5c6a-4c20-8015-56434dd24bd3",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7430301": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-11-20 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7430301",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7439017": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-11-21 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7439017",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "8e330f92-1189-482a-a269-7bf81c4bba29": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-11-26 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/8e330f92-1189-482a-a269-7bf81c4bba29",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "e7c5cd78-0582-4861-8af3-ead10b7a0d11": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-11-26 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/e7c5cd78-0582-4861-8af3-ead10b7a0d11",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "c8a6e279-ef80-4857-ae4a-f85c40421eb8": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-11-26 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/c8a6e279-ef80-4857-ae4a-f85c40421eb8",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7448037": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-11-26 09:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7448037",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7448041": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-11-26 10:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7448041",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7448038": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-11-26 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7448038",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7448040": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-11-26 18:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7448040",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7448047": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-11-26 19:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7448047",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7453525": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-11-27 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7453525",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "29a19889-719f-4545-9b87-38c3c660cf4b": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-12-02 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/29a19889-719f-4545-9b87-38c3c660cf4b",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "ead549b2-8910-420f-82bd-acec1c147e8b": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-12-02 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/ead549b2-8910-420f-82bd-acec1c147e8b",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7467734": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-12-02 15:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7467734",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7467735": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-12-02 17:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7467735",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7467733": {
+      "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+      "date": "2025-12-02 19:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7467733",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6fd07b94-e5cb-44a3-923f-6e10d5806c92": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-12-03 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6fd07b94-e5cb-44a3-923f-6e10d5806c92",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "293bd900-e69b-47dd-9b92-f7a21d6a2dea": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-12-03 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/293bd900-e69b-47dd-9b92-f7a21d6a2dea",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7488107": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-12-09 16:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7488107",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7488108": {
+      "name": "Subcommissie bestemmingsplannen Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-12-09 18:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7488108",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "c621b223-d6cd-4b82-944e-25ef1dda004f": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-12-10 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/c621b223-d6cd-4b82-944e-25ef1dda004f",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "2c19c1ca-1cc3-404f-8f28-c8ba4b9e7882": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-12-10 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/2c19c1ca-1cc3-404f-8f28-c8ba4b9e7882",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "d4325edd-74ce-4a42-b14f-b788a5cbad6f": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-12-10 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/d4325edd-74ce-4a42-b14f-b788a5cbad6f",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "6ae82df8-4327-4870-b7fa-7b13cc250017": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-12-10 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/6ae82df8-4327-4870-b7fa-7b13cc250017",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7491842": {
+      "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+      "date": "2025-12-10 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7491842",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7491843": {
+      "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+      "date": "2025-12-10 09:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7491843",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7491844": {
+      "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+      "date": "2025-12-10 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7491844",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7491845": {
+      "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+      "date": "2025-12-10 18:30:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7491845",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "e7ea23cc-9273-41e6-b24e-abf6a3b1d1a5": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-12-11 00:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/e7ea23cc-9273-41e6-b24e-abf6a3b1d1a5",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    },
+    "7498140": {
+      "name": "Commissie Bestuur, Organisatie, Financi\u00ebn en Veiligheid (2022 - 2026)",
+      "date": "2025-12-11 14:00:00",
+      "url": "https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/7498140",
+      "status": "pending",
+      "attempts": 0,
+      "last_error": null
+    }
+  }
+}
