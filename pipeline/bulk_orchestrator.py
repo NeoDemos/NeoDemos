@@ -35,11 +35,11 @@ logging.basicConfig(
 )
 logger = logging.getLogger("bulk_orchestrator")
 
-STATE_FILE = Path("pipeline_state.json")
+STATE_FILE = Path("data/pipeline_state/pipeline_state.json")
 DB_URL = "postgresql://postgres:postgres@localhost:5432/neodemos"
 
 class BulkOrchestrator:
-    def __init__(self, state_file: str = "pipeline_state.json", reset_state: bool = False):
+    def __init__(self, state_file: str = "data/pipeline_state/pipeline_state.json", reset_state: bool = False):
         self.state_file = Path(state_file)
         self.state = self._load_state(reset_state)
 
@@ -261,7 +261,7 @@ if __name__ == "__main__":
     for y in years_to_process:
         logger.info(f"\n{'='*60}\n=== Starting processing for year {y} ===\n{'='*60}")
         # Default 2026 to 'pipeline_state.json', other years to 'pipeline_state_YYYY.json'
-        state_file = args.state_file or (f"pipeline_state_{y}.json" if y != 2026 else "pipeline_state.json")
+        state_file = args.state_file or (f"data/pipeline_state/pipeline_state_{y}.json" if y != 2026 else "data/pipeline_state/pipeline_state.json")
     
         orchestrator = BulkOrchestrator(state_file=state_file, reset_state=args.reset)
         

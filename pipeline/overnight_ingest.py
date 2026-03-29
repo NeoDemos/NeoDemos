@@ -25,7 +25,7 @@ def run_overnight():
         logger.info(f"📅 COMMENCING YEAR: {year}")
         logger.info(f"{'='*60}")
         
-        state_file = f"pipeline_state_{year}.json"
+        state_file = f"data/pipeline_state/pipeline_state_{year}.json"
         
         try:
             orchestrator = BulkOrchestrator(state_file=state_file, reset_state=False)

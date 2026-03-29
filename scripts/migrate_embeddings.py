@@ -26,7 +26,7 @@ except ImportError:
 DB_URL = "postgresql://postgres:postgres@localhost:5432/neodemos"
 QDRANT_PATH = "./data/qdrant_storage"
 COLLECTION_NAME = "notulen_chunks"
-CHECKPOINT_FILE = "migration_checkpoint.json"
+CHECKPOINT_FILE = "data/pipeline_state/migration_checkpoint.json"
 
 def get_system_ram_used():
     try:
