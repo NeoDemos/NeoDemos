@@ -13,10 +13,16 @@ data/
 logs/
 output/
 snapshots/
+downloads/
+storage/
+qdrant
 *.log
-nohup.out
+*.out
 .DS_Store
 .qdrant-initialized
+.qdrant-initialized\ 2
+*.wav
+*.mp4
 
 # Docker
 docker-desktop
