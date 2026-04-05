@@ -360,14 +360,9 @@ docker compose up -d --no-build    # Uses cached image
 # Git: roll back code
 git log --oneline -5               # Find last good commit
 git checkout <commit-hash> -- main.py services/
-
-# Database backup/restore
-pg_dump -U postgres neodemos > backup_$(date +%Y%m%d).sql
-psql -U postgres neodemos < backup_YYYYMMDD.sql
-
-# Qdrant snapshot (already in scripts/daily_backup.sh)
-curl -X POST http://localhost:6333/collections/notulen_chunks/snapshots
 ```
+
+For database and Qdrant backup/restore procedures, see `/backup`.
 
 ## What NOT to Deploy to Production
 

@@ -5,13 +5,22 @@ Checks for new meetings and downloads documents automatically
 
 import asyncio
 import logging
+import os
+import subprocess
+import tempfile
 from datetime import datetime, timedelta
 from typing import Optional
+
+import httpx
+
 from services.storage import StorageService
 from services.open_raad import OpenRaadService
 from services.ibabs_service import IBabsService
 from services.ai_service import AIService
 from services.email_service import EmailService
+
+OCR_TOOL = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "scripts", "ocr_pdf")
+MIN_CONTENT_CHARS = 500  # below this, attempt OCR before storing
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +75,7 @@ class RefreshService:
                             if agenda_item.get('documents'):
                                 for doc in agenda_item['documents']:
                                     if not self.storage.document_exists(doc['id']):
-                                        self.storage.insert_document(doc)
+                                        await self._insert_doc_with_content(doc)
                                         documents_downloaded += 1
                                         # Only analyze if substantive
                                         if self.storage.is_substantive_item(agenda_item):
@@ -100,7 +109,7 @@ class RefreshService:
                                 if item.get('documents'):
                                     for doc in item['documents']:
                                         if not self.storage.document_exists(doc['id']):
-                                            self.storage.insert_document(doc)
+                                            await self._insert_doc_with_content(doc)
                                             documents_downloaded += 1
                                             logger.info(f"Watchdog found new document: {doc['name']} for meeting {meeting['id']}")
                 except Exception as e:
@@ -132,6 +141,70 @@ class RefreshService:
                 timestamp=datetime.now()
             )
     
+    async def _fetch_doc_content(self, url: str, name: str = "") -> str:
+        """
+        Fetch document content from a URL via OCR.
+        Returns empty string if URL is missing, OCR fails, or content is too thin.
+        Never stores a stub — callers should skip insert if result is empty.
+        """
+        if not url:
+            return ""
+        try:
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+                "Referer": "https://rotterdam.raadsinformatie.nl/",
+            }
+            async with httpx.AsyncClient(headers=headers, verify=False, timeout=60) as client:
+                resp = await client.get(url, follow_redirects=True, timeout=60)
+                if resp.status_code != 200:
+                    return ""
+                content_type = resp.headers.get("content-type", "")
+                # Only OCR PDFs — HTML pages are not useful
+                if "pdf" not in content_type and not url.lower().endswith(".pdf"):
+                    return ""
+                with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp:
+                    tmp.write(resp.content)
+                    tmp_path = tmp.name
+            if not os.path.exists(OCR_TOOL):
+                return ""
+            result = subprocess.run(
+                [OCR_TOOL, tmp_path], capture_output=True, text=True, timeout=120
+            )
+            if result.returncode == 0 and result.stdout:
+                text = result.stdout
+                if "--- OCR RESULT START ---" in text:
+                    text = text.split("--- OCR RESULT START ---")[1].split("--- OCR RESULT END ---")[0]
+                text = text.replace("\x00", "").strip()
+                if len(text) >= MIN_CONTENT_CHARS:
+                    return text
+        except Exception as e:
+            logger.debug(f"OCR fetch failed for {name or url[:60]}: {e}")
+        finally:
+            if "tmp_path" in locals() and os.path.exists(tmp_path):
+                os.remove(tmp_path)
+        return ""
+
+    IBABS_DOC_URL = "https://rotterdamraad.bestuurlijkeinformatie.nl/Document/View/"
+
+    async def _insert_doc_with_content(self, doc: dict) -> bool:
+        """
+        Insert a document, fetching content via OCR if not already present.
+        Uses content-length comparison on conflict — never downgrades existing content.
+        Returns True if inserted/updated.
+        """
+        import re
+        # For UUID iBabs docs without a URL, construct it from the portal pattern
+        if not doc.get("url") and doc.get("id") and re.match(
+            r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', doc["id"]
+        ):
+            doc = {**doc, "url": self.IBABS_DOC_URL + doc["id"]}
+
+        if not doc.get("content") and doc.get("url"):
+            content = await self._fetch_doc_content(doc["url"], doc.get("name", ""))
+            if content:
+                doc = {**doc, "content": content}
+        return self.storage.insert_document(doc)
+
     async def _fetch_new_meetings(self, start_date: datetime, end_date: datetime) -> list:
         """
         Fetch meetings from OpenRaadsinformatie API

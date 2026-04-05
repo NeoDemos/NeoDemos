@@ -382,9 +382,13 @@ class StorageService:
                         VALUES (%s, %s, %s, %s, %s, %s)
                         ON CONFLICT (id) DO UPDATE SET
                             name = EXCLUDED.name,
-                            url = EXCLUDED.url,
-                            content = EXCLUDED.content,
-                            summary_json = EXCLUDED.summary_json
+                            url = COALESCE(EXCLUDED.url, documents.url),
+                            content = CASE
+                                WHEN LENGTH(EXCLUDED.content) > LENGTH(COALESCE(documents.content, ''))
+                                THEN EXCLUDED.content
+                                ELSE COALESCE(documents.content, EXCLUDED.content)
+                            END,
+                            summary_json = COALESCE(EXCLUDED.summary_json, documents.summary_json)
                     """, (
                         document_data['id'],
                         document_data.get('name'),
