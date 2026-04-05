@@ -12,3 +12,4 @@ psycopg2-binary
 psycopg[binary]
 pgvector
 APScheduler
+mcp[cli]>=1.0.0

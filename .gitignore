@@ -26,3 +26,13 @@ qdrant
 
 # Docker
 docker-desktop
+
+# Runtime state
+*.pid
+.healer_pid
+.web_pid
+.~lock.*
+tmp_*.txt
+
+# Binary/office files
+*.xlsx

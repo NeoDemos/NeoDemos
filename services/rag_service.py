@@ -20,6 +20,7 @@ class RetrievedChunk:
     questions: Optional[List[str]] = None
     child_id: Optional[int] = None
     stream_type: Optional[str] = None  # e.g., 'financial', 'debate', 'fact'
+    start_date: Optional[str] = None   # ISO date from Qdrant payload (e.g. "2022-03-15T00:00:00")
 
 from services.local_ai_service import LocalAIService
 
@@ -51,38 +52,43 @@ class RAGService:
                     import os
                     print("Loading Reranker (CrossEncoder) for the first time...")
                     os.environ['TOKENIZERS_PARALLELISM'] = 'false'
-                    _reranker = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2', device='cpu')
+                    _reranker = CrossEncoder('cross-encoder/ms-marco-multilingual-MiniLM-L-12-v2', device='cpu')
                 except Exception as e:
                     print(f"Failed to initialize Reranker: {e}")
 
     async def retrieve_parallel_context(
-        self, 
-        query_text: str, 
+        self,
+        query_text: str,
         query_embedding: Optional[List[float]] = None,
         distribution: Dict[str, int] = {"financial": 3, "debate": 3, "fact": 2, "vision": 2},
-        overrides: Optional[Dict[str, str]] = None
+        overrides: Optional[Dict[str, str]] = None,
+        date_from: Optional[str] = None,
+        date_to: Optional[str] = None,
+        fast_mode: bool = False,
     ) -> List[RetrievedChunk]:
         """
         Executes parallel searches for different dimensions of the query.
         Accepts optional 'overrides' dict with keys 'financial', 'debate', 'fact' for LLM-rewritten queries.
+        date_from/date_to (ISO strings) are forwarded to all stream searches.
+        fast_mode=True skips CrossEncoder reranking in each stream (saves 3-8s per stream).
         """
         tasks = []
-        
+
         # Vision Stream (Ideology) - High priority to capture vision chunks before deduplication
         vision_query = overrides.get("vision") if overrides else f"{query_text} standpunt visie ideaal ideologie programma"
-        tasks.append(self._async_retrieve(vision_query or f"{query_text} visie", query_embedding, distribution.get("vision", 2), "vision"))
+        tasks.append(self._async_retrieve(vision_query or f"{query_text} visie", query_embedding, distribution.get("vision", 2), "vision", date_from, date_to, fast_mode))
 
         # Financial Stream
         financial_query = overrides.get("financial") if overrides else f"{query_text} begroting budget kosten cijfers"
-        tasks.append(self._async_retrieve(financial_query or f"{query_text} begroting", query_embedding, distribution.get("financial", 3), "financial"))
-        
+        tasks.append(self._async_retrieve(financial_query or f"{query_text} begroting", query_embedding, distribution.get("financial", 3), "financial", date_from, date_to, fast_mode))
+
         # Debate Stream
         debate_query = overrides.get("debate") if overrides else f"{query_text} debat standpunten raadsleden uitspraken"
-        tasks.append(self._async_retrieve(debate_query or f"{query_text} debat", query_embedding, distribution.get("debate", 3), "debate"))
-        
+        tasks.append(self._async_retrieve(debate_query or f"{query_text} debat", query_embedding, distribution.get("debate", 3), "debate", date_from, date_to, fast_mode))
+
         # Fact Stream
         fact_query = overrides.get("fact") if overrides else f"{query_text} beleid regels technische details definities"
-        tasks.append(self._async_retrieve(fact_query or f"{query_text} beleid", query_embedding, distribution.get("fact", 2), "fact"))
+        tasks.append(self._async_retrieve(fact_query or f"{query_text} beleid", query_embedding, distribution.get("fact", 2), "fact", date_from, date_to, fast_mode))
         
         # Gather all results
         results_lists = await asyncio.gather(*tasks)
@@ -98,9 +104,16 @@ class RAGService:
         
         return all_chunks
 
-    async def _async_retrieve(self, query: str, embedding: Optional[List[float]], k: int, stream_type: str) -> List[RetrievedChunk]:
+    async def _async_retrieve(
+        self, query: str, embedding: Optional[List[float]], k: int, stream_type: str,
+        date_from: Optional[str] = None, date_to: Optional[str] = None,
+        fast_mode: bool = False,
+    ) -> List[RetrievedChunk]:
         """Helper to run synchronous retrieval in a thread."""
-        chunks = await asyncio.to_thread(self.retrieve_relevant_context, query, embedding, k)
+        chunks = await asyncio.to_thread(
+            self.retrieve_relevant_context, query, embedding, k, True,
+            date_from, date_to, fast_mode,
+        )
         for c in chunks:
             c.stream_type = stream_type
         return chunks
@@ -125,47 +138,64 @@ class RAGService:
         return [chunk_map[chunk_id] for chunk_id, _ in fused]
 
     def retrieve_relevant_context(
-        self, 
-        query_text: str, 
+        self,
+        query_text: str,
         query_embedding: Optional[List[float]] = None,
         top_k: int = 10,
-        fallback_to_keywords: bool = True
+        fallback_to_keywords: bool = True,
+        date_from: Optional[str] = None,
+        date_to: Optional[str] = None,
+        fast_mode: bool = False,
     ) -> List[RetrievedChunk]:
         """
         Retrieve relevant notulen passages for an agenda item using True Hybrid Search.
+
+        Args:
+            date_from: Optional ISO date string (e.g. "2022-01-01") to filter results by meeting date.
+            date_to:   Optional ISO date string (e.g. "2022-12-31") to filter results by meeting date.
+            fast_mode: If True, skips the CrossEncoder reranker (saves 3-8s on CPU). Use for
+                       interactive/MCP queries; leave False for deep analysis via FastAPI.
         """
         vector_results = []
         keyword_results = []
-        
+
         # 1. Fetch from Vector Search
         if query_embedding is None and self.local_ai.is_available():
             # Generate embedding locally if not provided
             query_embedding = self.local_ai.generate_embedding(query_text)
 
         if query_embedding is not None:
-            vector_results = self._retrieve_by_vector_similarity(query_embedding, top_k=top_k * 3)
-            
+            vector_results = self._retrieve_by_vector_similarity(
+                query_embedding, top_k=top_k * 3, date_from=date_from, date_to=date_to
+            )
+
         # 2. Fetch from BM25 Search
         if fallback_to_keywords:
             vision_sigs = ['visie', 'standpunt', 'programma', 'ideologie', 'leefbaar', 'pvda', 'vvd', 'd66', 'glpvda', 'volt', 'cda', 'denk', 'sp', 'christenunie', 'bij1']
             is_vision = any(sig in query_text.lower() for sig in vision_sigs)
-            
+
             chunk_type = "vision" if is_vision else None
             # Search specific chunk types first or default chunks
-            keyword_results = self._retrieve_chunks_by_keywords(query_text, top_k * 3, chunk_type)
-            
+            keyword_results = self._retrieve_chunks_by_keywords(
+                query_text, top_k * 3, chunk_type, date_from=date_from, date_to=date_to
+            )
+
             # If strict websearch returns too few results, try broader queries
             if len(keyword_results) < top_k:
                 # Try plain search (AND logic but softer than websearch)
-                keyword_results.extend(self._retrieve_chunks_by_keywords(query_text, top_k * 2, chunk_type, mode='plain'))
-                
+                keyword_results.extend(self._retrieve_chunks_by_keywords(
+                    query_text, top_k * 2, chunk_type, mode='plain', date_from=date_from, date_to=date_to
+                ))
+
                 # Try OR-logic for key terms (highest recall)
                 # Filter out small common words and join with |
                 terms = [t for t in query_text.replace('?', '').split() if len(t) > 3]
                 if terms:
                     or_query = " | ".join(terms)
-                    keyword_results.extend(self._retrieve_chunks_by_keywords(or_query, top_k * 2, chunk_type, mode='or'))
-            
+                    keyword_results.extend(self._retrieve_chunks_by_keywords(
+                        or_query, top_k * 2, chunk_type, mode='or', date_from=date_from, date_to=date_to
+                    ))
+
             # Deduplicate by chunk_id
             seen_ids = set()
             unique_results = []
@@ -174,7 +204,7 @@ class RAGService:
                     unique_results.append(c)
                     seen_ids.add(c.chunk_id)
             keyword_results = unique_results
-            
+
             # Fall back to huge document search if chunks fail
             if not keyword_results:
                 keyword_results = self._retrieve_by_keywords(query_text, top_k * 3)
@@ -186,30 +216,40 @@ class RAGService:
             fused_chunks = vector_results
         else:
             fused_chunks = keyword_results
-            
-        fused_chunks = fused_chunks[:top_k * 2]
-            
-        # 4. Rerank using Cross-Encoder
-        if _reranker is not None:
+
+        # Increase candidate pool for Reranker to maximize precision
+        fused_chunks = fused_chunks[:top_k * 5]
+
+        # 4. Rerank using Cross-Encoder (skipped in fast_mode to save 3-8s on CPU)
+        if _reranker is not None and not fast_mode:
             try:
                 pairs = [[query_text, chunk.content] for chunk in fused_chunks]
                 if pairs:
                     scores = _reranker.predict(pairs)
                     for chunk, score in zip(fused_chunks, scores):
                         chunk.similarity_score = float(score)
+
+                    # Sort by reranker score
                     fused_chunks.sort(key=lambda x: x.similarity_score, reverse=True)
+
+                    # Filter out definitely irrelevant results (multilingual reranker log-odds)
+                    fused_chunks = [c for c in fused_chunks if c.similarity_score > -2.0]
             except Exception as e:
                 print(f"Reranking failed: {e}")
-            
+
         return fused_chunks[:top_k]
     
     def _retrieve_by_vector_similarity(
-        self, 
-        query_embedding: List[float], 
-        top_k: int = 10
+        self,
+        query_embedding: List[float],
+        top_k: int = 10,
+        date_from: Optional[str] = None,
+        date_to: Optional[str] = None,
     ) -> List[RetrievedChunk]:
         """
         Search document_chunks table using Qdrant vector similarity.
+        Optional date_from/date_to (ISO strings) filter on the start_date payload field.
+        Points without a start_date are excluded when a date filter is active.
         """
         if query_embedding is None:
             return []
@@ -218,12 +258,33 @@ class RAGService:
             return []
 
         try:
-            # Search in Qdrant collection
+            from datetime import datetime
+            from qdrant_client.models import Filter, FieldCondition, DatetimeRange, SearchParams, QuantizationSearchParams
+
+            query_filter = None
+            if date_from or date_to:
+                query_filter = Filter(must=[FieldCondition(
+                    key="start_date",
+                    range=DatetimeRange(
+                        gte=datetime.fromisoformat(date_from) if date_from else None,
+                        lte=datetime.fromisoformat(date_to) if date_to else None,
+                    )
+                )])
+
+            # Search in Qdrant collection with precision-tuned HNSW + quantization rescoring
             results_qdrant = _qdrant_client.query_points(
-                collection_name="notulen_chunks", # TARGET THE EXISTING COLLECTION
+                collection_name="notulen_chunks",
                 query=query_embedding,
                 limit=top_k,
-                score_threshold=0.15
+                score_threshold=0.15,
+                query_filter=query_filter,
+                search_params=SearchParams(
+                    hnsw_ef=256,
+                    quantization=QuantizationSearchParams(
+                        rescore=True,
+                        oversampling=2.0,
+                    ),
+                ),
             )
             
             # Convert Qdrant results to RetrievedChunk objects
@@ -245,7 +306,8 @@ class RAGService:
                     content=content,
                     similarity_score=float(scored_point.score) if scored_point.score else 0.5,
                     questions=payload.get("questions", []),
-                    child_id=payload.get("child_id")
+                    child_id=payload.get("child_id"),
+                    start_date=str(payload.get("start_date", "")) or None,
                 ))
             
             return results
@@ -333,42 +395,64 @@ class RAGService:
             print(f"Keyword search failed: {e}")
             return []
 
-    def _retrieve_chunks_by_keywords(self, query_text: str, top_k: int = 5, chunk_type: Optional[str] = None, mode: str = 'web') -> List[RetrievedChunk]:
+    def _retrieve_chunks_by_keywords(
+        self, query_text: str, top_k: int = 5, chunk_type: Optional[str] = None,
+        mode: str = 'web', date_from: Optional[str] = None, date_to: Optional[str] = None,
+    ) -> List[RetrievedChunk]:
         """
         Search document_chunks table directly using BM25.
         Modes: 'web' (AND), 'plain' (AND, soft), 'or' (OR logic).
+        Optional date_from/date_to (ISO strings) filter via JOIN to meetings.start_date.
         """
         try:
             conn = psycopg2.connect(self.db_connection_string)
             cursor = conn.cursor()
-            
-            type_filter = "AND chunk_type = %s" if chunk_type else ""
-            params = [query_text]
-            if chunk_type:
-                params.append(chunk_type)
-            params.append(top_k)
-            
+
             if mode == 'or':
                 method = "to_tsquery"
             elif mode == 'plain':
                 method = "plainto_tsquery"
             else:
                 method = "websearch_to_tsquery"
-            
+
+            # Build optional filters
+            type_filter = "AND dc.chunk_type = %s" if chunk_type else ""
+            date_join = ""
+            date_filter = ""
+            if date_from or date_to:
+                date_join = "JOIN documents doc ON dc.document_id = doc.id JOIN meetings m ON doc.meeting_id = m.id"
+                date_parts = []
+                if date_from:
+                    date_parts.append("m.start_date >= %s")
+                if date_to:
+                    date_parts.append("m.start_date <= %s")
+                date_filter = "AND " + " AND ".join(date_parts)
+
+            params = [query_text, query_text]
+            if chunk_type:
+                params.append(chunk_type)
+            if date_from:
+                params.append(date_from)
+            if date_to:
+                params.append(date_to)
+            params.append(top_k)
+
             cursor.execute(f"""
-                SELECT id, document_id, title, content, 
-                       ts_rank(text_search, {method}('dutch', %s)) as similarity_score, 
-                       child_id, chunk_type
-                FROM document_chunks
-                WHERE text_search @@ {method}('dutch', %s)
+                SELECT dc.id, dc.document_id, dc.title, dc.content,
+                       ts_rank(dc.text_search, {method}('dutch', %s)) as similarity_score,
+                       dc.child_id, dc.chunk_type
+                FROM document_chunks dc
+                {date_join}
+                WHERE dc.text_search @@ {method}('dutch', %s)
                 {type_filter}
+                {date_filter}
                 ORDER BY similarity_score DESC
                 LIMIT %s
-            """, [query_text, query_text] + ([chunk_type] if chunk_type else []) + [top_k])
+            """, params)
             rows = cursor.fetchall()
             cursor.close()
             conn.close()
-            
+
             results = []
             for cid, doc_id, title, content, score, child_id, c_type in rows:
                 results.append(RetrievedChunk(
@@ -425,6 +509,27 @@ class RAGService:
         except Exception as e:
             print(f"Failed to fetch parent context: {e}")
             return None
+
+    def synthesize_timeline(self, chunks: List[RetrievedChunk]) -> List[Dict]:
+        """
+        Group retrieved chunks by year and return a chronologically sorted list of event buckets.
+        Used by the MCP tijdlijn_besluitvorming tool so Claude can reason over the timeline.
+
+        Returns:
+            List of dicts: [{"periode": "2022", "gebeurtenissen": [{"titel", "snippet", ...}]}]
+        """
+        from collections import defaultdict
+        buckets: Dict[str, list] = defaultdict(list)
+        for chunk in chunks:
+            year = (chunk.start_date or "0000-00-00")[:4]
+            buckets[year].append({
+                "titel": chunk.title,
+                "snippet": chunk.content[:300],
+                "document_id": chunk.document_id,
+                "chunk_id": str(chunk.chunk_id),
+                "stream_type": chunk.stream_type,
+            })
+        return [{"periode": y, "gebeurtenissen": e} for y, e in sorted(buckets.items())]
 
     def format_retrieved_context(self, chunks: List[RetrievedChunk], storage_service: Any = None) -> tuple[str, List[Dict], str]:
         """

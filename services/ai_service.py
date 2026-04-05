@@ -87,7 +87,7 @@ class AIService:
         
         return analysis
 
-    async def _analyze_with_gemini(self, item_name: str, documents: List[Dict[str, str]], party_vision: Optional[str] = None) -> Dict[str, Any]:
+    async def _analyze_with_gemini(self, item_name: str, documents: List[Dict[str, str]], party_vision: Optional[str] = None, date_from: Optional[str] = None, date_to: Optional[str] = None) -> Dict[str, Any]:
         """
         Use Gemini Flash 3 for intelligent deep analysis of agenda items.
         Provides nuanced understanding of proposals, conflicts, and implications.
@@ -105,7 +105,10 @@ class AIService:
             rag = RAGService()
             relevant_chunks = rag.retrieve_relevant_context(
                 query_text=f"{item_name} {docs_sample_text}",
-                top_k=10
+                top_k=10,
+                fast_mode=True,
+                date_from=date_from,
+                date_to=date_to,
             )
             historical_context = rag.format_retrieved_context(relevant_chunks) if relevant_chunks else ""
         except Exception as e:
@@ -646,6 +649,63 @@ Exclusief de tekst van de bijdrage, geordend in logische paragrafen. Geen titels
             print(f"Embedding error: {e}")
             return None
 
+    async def extract_temporal_filters(self, query: str) -> Dict[str, Optional[str]]:
+        """
+        Detects temporal language in a query and returns structured date filters.
+        Returns {"query": cleaned_query, "date_from": ..., "date_to": ...}.
+        Falls back to no-op (original query, no dates) on any failure.
+        """
+        from datetime import date
+        today = date.today().isoformat()
+
+        # Fast path: skip LLM call if no temporal-looking words are present
+        temporal_signals = [
+            "vorig", "afgelopen", "sinds", "recent", "eerder", "laatste",
+            "dit jaar", "vorige maand", "begin 20", "eind 20", "na 20",
+            "voor 20", "in 20", "from 20", "since 20", "last year",
+            "this year", "recent", "ago",
+        ]
+        has_temporal = any(s in query.lower() for s in temporal_signals)
+        if not has_temporal:
+            return {"query": query, "date_from": None, "date_to": None}
+
+        if not self.use_llm:
+            return {"query": query, "date_from": None, "date_to": None}
+
+        prompt = f"""Vandaag is {today}. Analyseer deze zoekvraag en extraheer temporele filters.
+
+Vraag: "{query}"
+
+Als de vraag een tijdsperiode impliceert, geef dan:
+- query: de vraag ZONDER temporele termen (behoud de inhoudelijke zoektermen)
+- date_from: startdatum in ISO formaat (YYYY-MM-DD) of null
+- date_to: einddatum in ISO formaat (YYYY-MM-DD) of null
+
+Voorbeelden:
+- "parkeerbeleid vorig jaar" → {{"query": "parkeerbeleid", "date_from": "2025-01-01", "date_to": "2025-12-31"}}
+- "wat is er recent besloten over woningbouw" → {{"query": "besloten woningbouw", "date_from": "2026-01-01", "date_to": null}}
+- "klimaatbeleid" → {{"query": "klimaatbeleid", "date_from": null, "date_to": null}}
+
+Antwoord ALLEEN met een JSON object, geen uitleg."""
+
+        try:
+            response = self.client.models.generate_content(
+                model=self.model_name,
+                contents=prompt,
+            )
+            json_match = re.search(r'\{[\s\S]*?\}', response.text)
+            if json_match:
+                result = json.loads(json_match.group())
+                return {
+                    "query": result.get("query") or query,
+                    "date_from": result.get("date_from"),
+                    "date_to": result.get("date_to"),
+                }
+        except Exception as e:
+            logger.debug(f"Temporal extraction failed (non-critical): {e}")
+
+        return {"query": query, "date_from": None, "date_to": None}
+
     async def generate_parallel_queries(self, original_query: str) -> Dict[str, str]:
         """
         Uses a small model to rewrite the original query into 3 specialized dimensions.
@@ -682,7 +742,7 @@ Output format: {{"financial": "...", "debate": "...", "fact": "..."}}
                 "fact": f"{original_query} beleid"
             }
 
-    async def perform_deep_search(self, query: str, storage: Any) -> Dict[str, Any]:
+    async def perform_deep_search(self, query: str, storage: Any, date_from: Optional[str] = None, date_to: Optional[str] = None) -> Dict[str, Any]:
         """
         Standard Deep Research search.
         """
@@ -700,7 +760,10 @@ Output format: {{"financial": "...", "debate": "...", "fact": "..."}}
             query_text=query,
             query_embedding=query_embedding,
             distribution={"financial": 50, "debate": 80, "fact": 50, "vision": 20},
-            overrides=parallel_queries
+            overrides=parallel_queries,
+            date_from=date_from,
+            date_to=date_to,
+            fast_mode=True,
         )
         
         if not chunks:
@@ -768,7 +831,8 @@ OUTPUT (Only names, separated by newlines, or NONE):"""
                     targeted_golden_chunks = await rag.retrieve_parallel_context(
                         query_text=golden_sources_text.replace('\n', ' '),
                         query_embedding=self.generate_embedding(golden_sources_text),
-                        distribution={"fact": 20, "debate": 10, "financial": 0, "vision": 0}
+                        distribution={"fact": 20, "debate": 10, "financial": 0, "vision": 0},
+                        fast_mode=True,
                     )
                     seen_ids = {c.chunk_id for c in chunks}
                     for gc in targeted_golden_chunks:
@@ -813,16 +877,17 @@ OUTPUT (Be concise and factual):
 """
         
         # STAGE 2: Debate Mapping
-        debate_prompt = f"""You are a political analyst mapping municipal debates.
-Analyze the provided CONTEXT CHUNKS to map the debate dynamics regarding the question.
+        debate_prompt = f"""You are a political analyst mapping municipal debates in Rotterdam.
+Analyze the provided CONTEXT CHUNKS to map the debate dynamics.
 Identify:
 1. Who was IN FAVOR (Voorstanders) and their core arguments.
 2. Who was AGAINST (Tegenstanders/Kritisch) and their core arguments.
 3. Relevant ideological positions from [VISION] chunks.
-CRITICAL: Only map the positions of actual political parties and council members ("Raadsleden", "College", "Wethouder"). 
-- If a quote is from a citizen ("Inspreker", "Ingekomen brief", "Burger"), label it clearly as [BURGERPERSPECTIEF] and do NOT list it as a political council stance.
-- ATTRIBUTION RULE: Never attribute a statement from a [POLITIEK PROGRAMMA / PARTIJVISIE] or [FEITELIJKE CONTEXT] segment to a specific individual person unless they are explicitly named inside that specific text as the speaker. Manifestos represent the party, not necessarily a quote from a specific debate.
-ALWAYS use the format: Naam (Partij), Datum.
+4. **BRON-ATTRIBUTIE**: Voor elk punt, noteer specifiek in welke Commissie (bijv. ZWCS, BWB, MO) of Raadsvergadering dit is besproken.
+
+CRITICAL: Only map the positions of actual political parties and council members. 
+- If a quote is from a citizen ("Inspreker"), label it [BURGERPERSPECTIEF].
+- ALWAYS use the format: Naam (Partij), Commissie/Raad, Datum.
 
 VRAAG: {query}
 HISTORISCHE CONTEXT:
@@ -832,14 +897,17 @@ OUTPUT (Map the debate):
 **BELANGRIJK**: Gebruik [n] citaties na elke bewering.
 """
         
-        logger.info(f"--- STAGE 1: Extraction | Context Length: {len(context_text)} ---")
+        logger.info(f"--- STAGE 1+2: Parallel Extraction & Debate Map | Context Length: {len(context_text)} ---")
         try:
-            ext_response = self.client.models.generate_content(model=self.model_name, contents=extraction_prompt)
+            import asyncio as _asyncio
+            _loop = _asyncio.get_running_loop()
+            ext_response, deb_response = await _asyncio.gather(
+                _loop.run_in_executor(None, lambda: self.client.models.generate_content(model=self.model_name, contents=extraction_prompt)),
+                _loop.run_in_executor(None, lambda: self.client.models.generate_content(model=self.model_name, contents=debate_prompt)),
+            )
             extracted_facts = ext_response.text
-            
-            deb_response = self.client.models.generate_content(model=self.model_name, contents=debate_prompt)
             debate_map = deb_response.text
-            logger.info(f"--- STAGE 2: Debate Map done. Extracted Facts Length: {len(extracted_facts)} ---")
+            logger.info(f"--- STAGE 2: Parallel extraction done. Facts length: {len(extracted_facts)} ---")
             
             # STAGE 3: Professional Dossier Synthesis (PvdA Pivot)
             synthesis_prompt = f"""Je bent een strategisch adviseur die een formeel 'Debat-voorbereidingsdossier' schrijft.
@@ -883,8 +951,8 @@ PLAATS HIER DE TABEL. Gebruik kolommen: | Datum | Gebeurtenis | Bedrag | Bron |
 - **CITATIES**: Gebruik voor ELKE bewering PRECIES [n] (bijvoorbeeld [1, 3]) om naar de bron te verwijzen. Nooit een getal zonder haken!
 - **GEEN INTERNE TAGS**: Gebruik NOOIT termen als [VISION], [FACT], [DEBATE], [CONTEXT] of andere interne metadata-labels in je antwoord. 
 - **GEEN INSTRUCTIES**: Laat geen instructietekst tussen haakjes (zoals [Wat is de voorgeschiedenis...]) staan. Schrijf enkel de inhoud.
-- **ATTRIBUTIE**: Noem altijd Naam (Partij), Datum bij quotes.
-- **OBJECTIVITEIT**: Schrijf professioneel en zakelijk, maar met een scherp politiek oog voor {party}.
+- **BRON-ATTRIBUTIE**: Noem ALTIJD de Commissie (bijv. ZWCS, BWB) of de Raadsvergadering bij elke datum of quote. Gebruik formaat: Naam (Partij), Commissie, Datum.
+- **FINANCIEEL**: Wees extreem specifiek over bedragen. Als er "10 miljoen" staat, neem dit letterlijk over in sectie 10.
 - **DIRECT STARTEN**: Begin direct met sectie 1. Geen inleidende zinnen.
 
 VRAAG: {query}
@@ -983,7 +1051,7 @@ DEBATE MAP & POSITIONS:
                 
         return verified_text
 
-    async def perform_agentic_debate_prep(self, query: str, storage: Any, party: str = "GroenLinks-PvdA") -> Dict[str, Any]:
+    async def perform_agentic_debate_prep(self, query: str, storage: Any, party: str = "GroenLinks-PvdA", date_from: Optional[str] = None, date_to: Optional[str] = None) -> Dict[str, Any]:
         """
         Phase 11: Agentic Debate Preparation Loop
         A multi-pass workflow that performs a gap analysis and structured synthesis.
@@ -1006,7 +1074,10 @@ DEBATE MAP & POSITIONS:
             query_text=base_query,
             query_embedding=query_embedding,
             distribution={"financial": 30, "debate": 45, "fact": 30, "vision": 15},
-            overrides=parallel_queries
+            overrides=parallel_queries,
+            date_from=date_from,
+            date_to=date_to,
+            fast_mode=True,
         )
         
         if not base_chunks:
@@ -1052,7 +1123,10 @@ Schrijf als antwoord ENKEL EN ALLEEN één zoekopdracht (max 15 woorden) die we 
         targeted_chunks = await rag.retrieve_parallel_context(
             query_text=targeted_search_query,
             query_embedding=targeted_embedding,
-            distribution={"financial": 15, "debate": 25, "fact": 15, "vision": 5}
+            distribution={"financial": 15, "debate": 25, "fact": 15, "vision": 5},
+            date_from=date_from,
+            date_to=date_to,
+            fast_mode=True,
         )
         
         # Merge chunks uniquely based on chunk_id
@@ -1083,4 +1157,176 @@ Schrijf als antwoord ENKEL EN ALLEEN één zoekopdracht (max 15 woorden) die we 
         # We treat the documents as the fixed context source
         # Stage 3 will generate the 10-section report
         return await self._run_analytical_pipeline(item_name, documents, None, rag, party=party)
+
+    async def _stream_synthesis_chunks(self, prompt: str):
+        """
+        Runs Gemini generate_content_stream in a thread and yields text chunks
+        asynchronously via an asyncio.Queue so the event loop stays responsive.
+        """
+        import asyncio
+        loop = asyncio.get_running_loop()
+        queue: asyncio.Queue = asyncio.Queue()
+
+        def _producer():
+            try:
+                for chunk in self.client.models.generate_content_stream(
+                    model=self.model_name, contents=prompt
+                ):
+                    if chunk.text:
+                        loop.call_soon_threadsafe(queue.put_nowait, chunk.text)
+            finally:
+                loop.call_soon_threadsafe(queue.put_nowait, None)
+
+        loop.run_in_executor(None, _producer)
+        while True:
+            text = await queue.get()
+            if text is None:
+                break
+            yield text
+
+    async def stream_agentic_meeting_analysis(
+        self, item_name: str, documents: List[Dict[str, str]], party: str = "GroenLinks-PvdA"
+    ):
+        """
+        Streaming version of perform_agentic_meeting_analysis for SSE delivery.
+        Yields dicts with keys: type ("status"|"chunk"|"done"|"error"), plus payload.
+        Stages 1+2 run in parallel via asyncio.gather; stage 3 streams token-by-token.
+        """
+        import asyncio
+
+        if not self.client:
+            yield {"type": "error", "message": "AI is niet geconfigureerd."}
+            return
+
+        if not documents:
+            yield {"type": "error", "message": f"Geen documenten beschikbaar voor: {item_name}"}
+            return
+
+        yield {"type": "status", "message": "Documenten voorbereiden..."}
+
+        # Stage 0: context preparation (no LLM)
+        context_text = ""
+        for i, doc in enumerate(documents, 1):
+            context_text += f"=== Document {i}: {doc.get('name', 'Onbekend')} ===\n{doc.get('content', '')}\n\n"
+
+        ordered_sources = []
+        for i, doc in enumerate(documents, 1):
+            clean_name = re.sub(r'^\[[a-zA-Z0-9]+\]\s*', '', doc.get('name', 'Onbekend'))
+            ordered_sources.append({"id": i, "name": clean_name, "url": doc.get('url', '#')})
+
+        extraction_prompt = f"""You are an objective data extractor analyzing municipal documents.
+Analyze the provided CONTEXT CHUNKS to extract:
+1. A Chronological Timeline of events/budgets.
+2. Core Conditions and Tensions (e.g., exact requirements, financial vs. commercial issues, reasons for failure).
+3. Important verbatim quotes, strictly formatted with speaker names, parties, and dates.
+CRITICAL: Check the source descriptions. Strongly distinguish between "Raadsleden" (Council members) and "Insprekers"/"Burgerbrieven" (Citizens). DO NOT treat citizen quotes as political viewpoints of the council.
+
+VRAAG: {item_name}
+HISTORISCHE CONTEXT:
+{context_text}
+
+OUTPUT (Be concise and factual):
+**BELANGRIJK**: Gebruik [n] citaties na elke bewering.
+"""
+
+        debate_prompt = f"""You are a political analyst mapping municipal debates in Rotterdam.
+Analyze the provided CONTEXT CHUNKS to map the debate dynamics.
+Identify:
+1. Who was IN FAVOR (Voorstanders) and their core arguments.
+2. Who was AGAINST (Tegenstanders/Kritisch) and their core arguments.
+3. Relevant ideological positions from [VISION] chunks.
+4. **BRON-ATTRIBUTIE**: Voor elk punt, noteer specifiek in welke Commissie (bijv. ZWCS, BWB, MO) of Raadsvergadering dit is besproken.
+
+CRITICAL: Only map the positions of actual political parties and council members.
+- If a quote is from a citizen ("Inspreker"), label it [BURGERPERSPECTIEF].
+- ALWAYS use the format: Naam (Partij), Commissie/Raad, Datum.
+
+VRAAG: {item_name}
+HISTORISCHE CONTEXT:
+{context_text}
+
+OUTPUT (Map the debate):
+**BELANGRIJK**: Gebruik [n] citaties na elke bewering.
+"""
+
+        # Stages 1+2: parallel (independent, both need context_text only)
+        yield {"type": "status", "message": "Feiten extraheren & debat kaart (1+2/3)..."}
+        loop = asyncio.get_running_loop()
+        try:
+            ext_response, deb_response = await asyncio.gather(
+                loop.run_in_executor(None, lambda: self.client.models.generate_content(model=self.model_name, contents=extraction_prompt)),
+                loop.run_in_executor(None, lambda: self.client.models.generate_content(model=self.model_name, contents=debate_prompt)),
+            )
+            extracted_facts = ext_response.text
+            debate_map = deb_response.text
+        except Exception as e:
+            logger.error(f"Streaming stages 1+2 failed: {e}")
+            yield {"type": "error", "message": f"Analyse mislukt: {str(e)}"}
+            return
+
+        synthesis_prompt = f"""Je bent een strategisch adviseur die een formeel 'Debat-voorbereidingsdossier' schrijft.
+Gebruik de 'Extracted Facts' en 'Debate Map' om een gestructureerd rapport te maken in de officiële PvdA-standaardindeling.
+
+### DE 10 VERPLICHTE SECTIES (Gebruik exact deze headers):
+
+1. # 📅 Context & Vorige bespreking
+Schrijf een feitelijke inleiding over de voorgeschiedenis van dit dossier.
+
+2. # 📌 Argumenten & Hoofdpunten
+Lijst van de belangrijkste inhoudelijke punten en argumenten uit de stukken.
+
+3. # 🚩 Wat vindt {party} van dit onderwerp?
+Analyseer hoe dit onderwerp aansluit bij de waarden en standpunten van {party}.
+**EIS**: Inclusief letterlijke citaten (verbatim) van raadsleden, commissieleden of eerdere voorstellen van {party} over dit specifieke onderwerp indien deze in de bronnen voorkomen.
+
+4. # 📄 Wat houdt het voorstel precies in?
+Feitelijke, technische samenvatting van het voorliggende besluit of rapport.
+
+5. # 🚀 Vervolg
+Wat zijn de procedurele volgende stappen? Wordt het besproken als debat, hamerstuk, of ter kennisname?
+
+6. # 📈 Sterke punten
+Positieve elementen en kansen die worden genoemd of passen bij {party}.
+
+7. # 📉 Kritische punten
+Diepere duik in kritieke details, risico's, technische mitsen en maren of elementen waar {party} kritisch op is.
+
+8. # ❓ Vragen voor de Wethouder / Commissie
+Lijst met scherpe, concrete vragen die gesteld moeten worden tijdens het debat.
+
+9. # 🎤 Bijdrage / Spreektekst
+Voorzitter,
+Schrijf een tekstueel concept voor de inbreng in de raad/commissie over dit onderwerp. Begin direct na 'Voorzitter,'.
+
+10. # 💰 Bijlage: Financieel Overzicht & Tijdlijn
+PLAATS HIER DE TABEL. Gebruik kolommen: | Datum | Gebeurtenis | Bedrag | Bron |
+
+### STRIKTE REGELS VOOR OUTPUT:
+- **CITATIES**: Gebruik voor ELKE bewering PRECIES [n] (bijvoorbeeld [1, 3]) om naar de bron te verwijzen. Nooit een getal zonder haken!
+- **GEEN INTERNE TAGS**: Gebruik NOOIT termen als [VISION], [FACT], [DEBATE], [CONTEXT] of andere interne metadata-labels in je antwoord.
+- **GEEN INSTRUCTIES**: Laat geen instructietekst tussen haakjes (zoals [Wat is de voorgeschiedenis...]) staan. Schrijf enkel de inhoud.
+- **BRON-ATTRIBUTIE**: Noem ALTIJD de Commissie (bijv. ZWCS, BWB) of de Raadsvergadering bij elke datum of quote. Gebruik formaat: Naam (Partij), Commissie, Datum.
+- **FINANCIEEL**: Wees extreem specifiek over bedragen. Als er "10 miljoen" staat, neem dit letterlijk over in sectie 10.
+- **DIRECT STARTEN**: Begin direct met sectie 1. Geen inleidende zinnen.
+
+VRAAG: {item_name}
+
+EXTRACTED FACTS & TIMELINE:
+{extracted_facts}
+
+DEBATE MAP & POSITIONS:
+{debate_map}
+"""
+
+        # Stage 3: streaming synthesis
+        yield {"type": "status", "message": "Rapport schrijven (3/3)..."}
+        try:
+            async for text_chunk in self._stream_synthesis_chunks(synthesis_prompt):
+                yield {"type": "chunk", "text": text_chunk}
+        except Exception as e:
+            logger.error(f"Streaming stage 3 failed: {e}")
+            yield {"type": "error", "message": f"Synthese mislukt: {str(e)}"}
+            return
+
+        yield {"type": "done", "sources": ordered_sources}
 

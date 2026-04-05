@@ -185,98 +185,116 @@
         return localStorage.getItem('neodemos_party') || 'GroenLinks-PvdA';
     }
 
-    async function analyseAgendaItem(agendaItemId) {
+    function renderFinalAnalysis(answerHtml, sources) {
+        const aiContent = document.getElementById('ai-content');
+        const copyBtn = document.getElementById('copy-word-btn');
+
+        marked.setOptions({ gfm: true, breaks: true });
+        let renderedHtml = marked.parse(answerHtml);
+        const usedSourceIndices = new Set();
+
+        // Pattern 1: [1, 2] or [#1] or [26bb000120]
+        renderedHtml = renderedHtml.replace(/\[(#?[a-zA-Z0-9]+(?:,\s*#?[a-zA-Z0-9]+)*)\]/g, (match, content) => {
+            const citations = content.split(/,\s*/);
+            return citations.map(cit => {
+                const nStr = cit.replace('#', '').trim();
+                let n = parseInt(nStr, 10);
+                if (!isNaN(n) && n > 0 && sources && n <= sources.length) {
+                    usedSourceIndices.add(n);
+                    const source = sources[n - 1];
+                    return `<a href="${source.url || '#'}" target="_blank" class="citation-bubble" title="${source.name || ''}">${n}</a>`;
+                }
+                if (sources) {
+                    const sourceIdx = sources.findIndex(s => s.id === nStr);
+                    if (sourceIdx !== -1) {
+                        const nVal = sourceIdx + 1;
+                        usedSourceIndices.add(nVal);
+                        const source = sources[sourceIdx];
+                        return `<a href="${source.url || '#'}" target="_blank" class="citation-bubble" title="${source.name || ''}">${nVal}</a>`;
+                    }
+                }
+                return cit;
+            }).join('');
+        });
+
+        // Pattern 2: isolated numbers at sentence ends (e.g. "tekst 3.")
+        renderedHtml = renderedHtml.replace(/(?:^|\s)(\d+)(?!\.\d)([\.\s,;]|$)/g, (match, nStr, tail) => {
+            const n = parseInt(nStr, 10);
+            if (!isNaN(n) && n > 0 && sources && n <= sources.length) {
+                usedSourceIndices.add(n);
+                const source = sources[n - 1];
+                const leadingSpace = match.startsWith(' ') ? ' ' : '';
+                return `${leadingSpace}<a href="${source.url || '#'}" target="_blank" class="citation-bubble" title="${source.name || ''}">${n}</a>${tail}`;
+            }
+            return match;
+        });
+
+        if (usedSourceIndices.size > 0 && sources) {
+            renderedHtml += '<div class="cited-sources-container" style="background: #f9f9fa; border-left: 4px solid var(--accent-color); padding: 1rem; border-radius: 0 8px 8px 0; margin-top: 2rem;">';
+            renderedHtml += '<h4 style="margin-top: 0; margin-bottom: 0.8rem; color: var(--secondary-color); font-size: 0.9rem;">Bronnen:</h4>';
+            renderedHtml += '<ul style="list-style-type: none; padding-left: 0; font-size: 0.8rem; margin-bottom: 0;">';
+            Array.from(usedSourceIndices).sort((a, b) => a - b).forEach(n => {
+                const source = sources[n - 1];
+                const url = source.url || '#';
+                const name = source.name || `Document ${source.id}`;
+                renderedHtml += `<li style="margin-bottom: 0.5rem; display: flex; align-items: flex-start;">
+                    <span class="citation-bubble" style="margin-top: 0.1rem; margin-right: 0.6rem; flex-shrink: 0; cursor: default; transform: none; box-shadow: none;">${n}</span>
+                    <a href="${url}" target="_blank" style="color: var(--secondary-color); text-decoration: none; display: inline-block; font-weight: 500; line-height: 1.3;">${name}</a>
+                </li>`;
+            });
+            renderedHtml += '</ul></div>';
+        }
+
+        aiContent.innerHTML = renderedHtml;
+        copyBtn.style.display = 'block';
+        originalAnalysisHtml = aiContent.innerHTML;
+    }
+
+    function analyseAgendaItem(agendaItemId) {
         currentAnalyzedItemId = agendaItemId;
         const aiContent = document.getElementById('ai-content');
         const copyBtn = document.getElementById('copy-word-btn');
         const party = getConfiguredParty();
-        
-        aiContent.innerHTML = `<div style="text-align: center; padding: 1.5rem;"><p style="margin: 0; font-size: 0.85rem;">⏳ Analyseert agendapunt & evalueert partijlens (${party})...</p></div>`;
+
+        aiContent.innerHTML = `<div style="text-align: center; padding: 1.5rem;"><p id="stream-status" style="margin: 0; font-size: 0.85rem;">⏳ Verbinding maken...</p></div>`;
         copyBtn.style.display = 'none';
 
-        try {
-            const response = await fetch(`/api/analyse/unified/${agendaItemId}?party=${encodeURIComponent(party)}`);
-            const data = await response.json();
+        let accumulatedText = '';
 
-            if (data.error) throw new Error(data.error);
+        const evtSource = new EventSource(`/api/analyse/unified/${agendaItemId}?party=${encodeURIComponent(party)}`);
 
-            // Use marked to render the agentic output
-            marked.setOptions({ gfm: true, breaks: true });
-            
-            let answerHtml = data.answer;
-            let renderedHtml = marked.parse(answerHtml);
+        evtSource.onmessage = (e) => {
+            const event = JSON.parse(e.data);
 
-            const usedSourceIndices = new Set();
-            
-            // Citation replacement logic - handles [1, 2] AND isolated numbers like "item 3."
-            // Pattern 1: [1, 2] or [#1] or [26bb000120]
-            renderedHtml = renderedHtml.replace(/\[(#?[a-zA-Z0-9]+(?:,\s*#?[a-zA-Z0-9]+)*)\]/g, (match, content) => {
-                const citations = content.split(/,\s*/);
-                return citations.map(cit => {
-                    const nStr = cit.replace('#', '').trim();
-                    // Try parsing as simple integer first (standard index)
-                    let n = parseInt(nStr, 10);
-                    
-                    // If it's a valid index mapped to sources
-                    if (!isNaN(n) && n > 0 && data.sources && n <= data.sources.length) {
-                        usedSourceIndices.add(n);
-                        const source = data.sources[n - 1];
-                        return `<a href="${source.url || '#'}" target="_blank" class="citation-bubble" title="${source.name || ''}">${n}</a>`;
-                    }
-                    
-                    // Fallback: Check if it's a document ID that matches one of our sources' original IDs
-                    if (data.sources) {
-                        const sourceIdx = data.sources.findIndex(s => s.id === nStr);
-                        if (sourceIdx !== -1) {
-                            const nVal = sourceIdx + 1;
-                            usedSourceIndices.add(nVal);
-                            const source = data.sources[sourceIdx];
-                            return `<a href="${source.url || '#'}" target="_blank" class="citation-bubble" title="${source.name || ''}">${nVal}</a>`;
-                        }
-                    }
-                    
-                    return cit;
-                }).join('');
-            });
+            if (event.type === 'status') {
+                const el = document.getElementById('stream-status');
+                if (el) el.textContent = `⏳ ${event.message}`;
 
-            // Pattern 2: Isolated numbers followed by punctuation or space at ends of sentences (e.g. "tekst 3.")
-            // IMPROVED: Added negative lookahead (?!\.\d) to avoid matching version numbers (like 2.0)
-            renderedHtml = renderedHtml.replace(/(?:^|\s)(\d+)(?!\.\d)([\.\s,;]|$)/g, (match, nStr, tail) => {
-                const n = parseInt(nStr, 10);
-                if (!isNaN(n) && n > 0 && data.sources && n <= data.sources.length) {
-                    usedSourceIndices.add(n);
-                    const source = data.sources[n - 1];
-                    const leadingSpace = match.startsWith(' ') ? ' ' : '';
-                    return `${leadingSpace}<a href="${source.url || '#'}" target="_blank" class="citation-bubble" title="${source.name || ''}">${n}</a>${tail}`;
-                }
-                return match;
-            });
+            } else if (event.type === 'chunk') {
+                accumulatedText += event.text;
+                // Progressive markdown render while streaming
+                marked.setOptions({ gfm: true, breaks: true });
+                aiContent.innerHTML = `<div style="opacity: 0.85;">${marked.parse(accumulatedText)}</div>`;
 
-            // Append sources list if any were used
-            if (usedSourceIndices.size > 0 && data.sources) {
-                renderedHtml += '<div class="cited-sources-container" style="background: #f9f9fa; border-left: 4px solid var(--accent-color); padding: 1rem; border-radius: 0 8px 8px 0; margin-top: 2rem;">';
-                renderedHtml += '<h4 style="margin-top: 0; margin-bottom: 0.8rem; color: var(--secondary-color); font-size: 0.9rem;">Bronnen:</h4>';
-                renderedHtml += '<ul style="list-style-type: none; padding-left: 0; font-size: 0.8rem; margin-bottom: 0;">';
+            } else if (event.type === 'done') {
+                evtSource.close();
+                renderFinalAnalysis(accumulatedText, event.sources || []);
 
-                const sortedIndices = Array.from(usedSourceIndices).sort((a, b) => a - b);
-                sortedIndices.forEach(n => {
-                    const source = data.sources[n - 1];
-                    const url = source.url || '#';
-                    const name = source.name || `Document ${source.id}`;
-                    renderedHtml += `<li style="margin-bottom: 0.5rem; display: flex; align-items: flex-start;">
-                                    <span class="citation-bubble" style="margin-top: 0.1rem; margin-right: 0.6rem; flex-shrink: 0; cursor: default; transform: none; box-shadow: none;">${n}</span>
-                                    <a href="${url}" target="_blank" style="color: var(--secondary-color); text-decoration: none; display: inline-block; font-weight: 500; line-height: 1.3;">${name}</a>
-                                </li>`;
-                });
-                renderedHtml += '</ul></div>';
+            } else if (event.type === 'error') {
+                evtSource.close();
+                aiContent.innerHTML = `<p style="color: #d32f2f; font-size: 0.8rem;">❌ Fout: ${event.message}</p>`;
             }
+        };
 
-            aiContent.innerHTML = renderedHtml;
-            copyBtn.style.display = 'block';
-            originalAnalysisHtml = aiContent.innerHTML;
-        } catch (error) {
-            aiContent.innerHTML = `<p style="color: #d32f2f; font-size: 0.8rem;">❌ Fout: ${error.message}</p>`;
-        }
+        evtSource.onerror = () => {
+            evtSource.close();
+            if (!accumulatedText) {
+                aiContent.innerHTML = `<p style="color: #d32f2f; font-size: 0.8rem;">❌ Verbindingsfout. Probeer het opnieuw.</p>`;
+            } else {
+                // Stream ended unexpectedly but we have content — render what we have
+                renderFinalAnalysis(accumulatedText, []);
+            }
+        };
     }
 
     async function copyToWord() {

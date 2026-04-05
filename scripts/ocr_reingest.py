@@ -28,14 +28,14 @@ import httpx
 import psycopg2
 from pypdf import PdfReader
 
-DB_URL = "postgresql://postgres:postgres@localhost:5432/neodemos"
+DB_URL = os.getenv("DB_URL") or "postgresql://postgres:postgres@localhost:5432/neodemos"
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OCR_TOOL = os.path.join(BASE_DIR, "scripts", "ocr_pdf")
 LOG_DIR = os.path.join(BASE_DIR, "logs")
 
 # Thresholds
 MIN_USEFUL_CHARS = 500          # Below this, we consider the text insufficient
-IMPROVEMENT_THRESHOLD = 100     # OCR must produce at least this many MORE chars than current
+IMPROVEMENT_THRESHOLD = 200     # OCR must produce at least this many MORE chars than current
 
 
 def log(msg: str):
@@ -44,37 +44,39 @@ def log(msg: str):
     print(line, flush=True)
 
 
-def get_candidates():
-    """Fetch all documents needing OCR re-ingestion."""
+def get_candidates(scope: str = "all"):
+    """Fetch documents needing OCR re-ingestion.
+
+    scope: 'all'  — all documents with <500 chars (default, broadened from ZWCS-only)
+           'zwcs' — original ZWCS 2021-2024 scope only
+    """
     conn = psycopg2.connect(DB_URL)
     cur = conn.cursor()
-    # Step 1: Find documents that failed with "No chunks produced"
-    cur.execute("SELECT document_id FROM chunking_queue WHERE error_message ILIKE 'No chunks produced%%'")
-    failed_ids = [r[0] for r in cur.fetchall()]
-    
-    # Step 2: Get meeting IDs for 2018+ to avoid nested subqueries
-    log("Fetching 2018+ meeting IDs...")
-    cur.execute("SELECT id FROM meetings WHERE start_date >= '2018-01-01'")
-    meeting_ids = [r[0] for r in cur.fetchall()]
-    log(f"Found {len(meeting_ids)} meetings.")
-    
-    # Step 3: Main query using pre-fetched IDs for better performance
-    log("Scanning for OCR candidates (All Small/Empty/Failed/Truncated)...")
-    query = """
-        SELECT id, name, url, COALESCE(length(content), 0) as clen
-        FROM documents
-        WHERE url IS NOT NULL AND url != ''
-          AND meeting_id = ANY(%s)
-          AND (
-            content IS NULL 
-            OR content = '' 
-            OR length(content) < %s 
-            OR length(content) = 15000
-            OR id = ANY(%s)
-          )
-        ORDER BY COALESCE(length(content), 0) ASC
-    """
-    cur.execute(query, (meeting_ids, MIN_USEFUL_CHARS, failed_ids))
+
+    if scope == "zwcs":
+        log("Scanning for ZWCS OCR candidates (2021-2024) [legacy scope]...")
+        query = """
+            SELECT d.id, d.name, d.url, COALESCE(length(d.content), 0) as clen
+            FROM documents d
+            JOIN meetings m ON d.meeting_id = m.id
+            WHERE d.url IS NOT NULL AND d.url != ''
+              AND m.name ILIKE '%%Commissie Zorg, Welzijn, Cultuur en Sport%%'
+              AND m.start_date >= '2021-01-01'
+              AND (d.content IS NULL OR length(d.content) < %s)
+            ORDER BY clen ASC
+        """
+        cur.execute(query, (MIN_USEFUL_CHARS,))
+    else:
+        log("Scanning ALL documents for OCR candidates (content < 500 chars)...")
+        query = """
+            SELECT d.id, d.name, d.url, COALESCE(length(d.content), 0) as clen
+            FROM documents d
+            WHERE d.url IS NOT NULL AND d.url != ''
+              AND (d.content IS NULL OR length(d.content) < %s)
+            ORDER BY clen ASC
+        """
+        cur.execute(query, (MIN_USEFUL_CHARS,))
+
     rows = cur.fetchall()
     cur.close()
     conn.close()
@@ -228,11 +230,11 @@ async def process_document(client: httpx.AsyncClient, doc_id: str, name: str, ur
     return "success", f"{current_len} → {len(text)} chars"
 
 
-async def main():
+async def main(scope: str = "all"):
     os.makedirs(LOG_DIR, exist_ok=True)
 
     log("═" * 60)
-    log("Phase B2: OCR Re-ingestion of Scanned Documents")
+    log("OCR Re-ingestion of Scanned/Low-content Documents")
     log("═" * 60)
 
     # Check OCR tool
@@ -242,7 +244,7 @@ async def main():
         log(f"⚠ OCR tool NOT found at {OCR_TOOL} — will rely on pypdf only")
 
     # Get candidates
-    candidates = get_candidates()
+    candidates = get_candidates(scope=scope)
     total = len(candidates)
     log(f"Found {total} documents needing OCR re-ingestion")
 
@@ -305,4 +307,9 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--scope", choices=["all", "zwcs"], default="all",
+                        help="'all' = all docs <500 chars (default), 'zwcs' = original ZWCS-only scope")
+    args = parser.parse_args()
+    asyncio.run(main(scope=args.scope))

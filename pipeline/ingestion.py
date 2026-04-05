@@ -17,25 +17,60 @@ logger = logging.getLogger(__name__)
 
 class SmartIngestor:
     """
-    Handles tiered semantic chunking and RAG ingestion for all documents.
-    Implements a 3-tier strategy:
-    - Atomic (< 1,000 chars): No chunking.
-    - Linear (1,000 - 8,000 chars): 1 Child -> Semantic Grandchildren.
-    - Hierarchical (> 8,000 chars): Semantic Children -> Semantic Grandchildren.
+    Handles tiered chunking and RAG ingestion for all documents.
+
+    Chunking strategy v2 — optimised for Qwen3-8B (4096D, 8K token context).
+    Benchmarks show 512-1024 tokens per chunk is optimal for high-dim embeddings.
+    Target: ~2,000-2,500 chars (~500-625 Dutch tokens) with 10-15 % overlap.
+
+    Tiers:
+    - Atomic   (< 1,000 chars): stored as single chunk, no split.
+    - Compact  (1,000 – 2,500 chars): stored as single chunk (~500-625 tok).
+    - Recursive (2,500 – 50,000 chars): heuristic recursive split with overlap. Free.
+    - Structural (> 50,000 chars): 1 Gemini call for section boundaries,
+      then recursive split within each section. ~$0.01/doc.
     """
 
-    def __init__(self, db_url: str = "postgresql://postgres:postgres@localhost:5432/neodemos"):
+    # ── Dutch document structure patterns ────────────────────────────────
+    SECTION_PATTERNS = re.compile(
+        r'(?:'
+        r'^\s*\d+\.\s+\S'            # "1. Onderwerp"
+        r'|^\s*[A-Z][A-Z\s]{3,}$'    # "FINANCIËLE CONSEQUENTIES"
+        r'|^\s*Artikel\s+\d+'         # "Artikel 3"
+        r'|^\s*Agendapunt\s+\d+'      # "Agendapunt 5"
+        r'|^\s*Besluit\s*:'           # "Besluit:"
+        r'|^\s*Overwegingen?\s*:'     # "Overwegingen:"
+        r'|^\s*Bijlage\s+\d+'        # "Bijlage 1"
+        r')',
+        re.MULTILINE
+    )
+
+    def __init__(self, db_url: str = "postgresql://postgres:postgres@localhost:5432/neodemos",
+                 chunk_only: bool = False):
+        """
+        Args:
+            db_url: Postgres connection string
+            chunk_only: If True, only write chunks to Postgres (skip Qdrant embedding).
+                        Use this when migrate_embeddings.py handles embedding separately.
+        """
         load_dotenv()
         self.db_url = db_url
+        self.chunk_only = chunk_only
         self.ai = AIService()
-        self.local_ai = LocalAIService()  # Initialize local MLX model
-        self.qdrant = QdrantClient(path="./data/qdrant_storage")
-        self.collection_name = "notulen_chunks_local"  # NEW COLLECTION FOR LOCAL EMBEDDINGS
-        self.embedding_model = "Qwen3-Embedding-8B-MLX"
+        self.local_ai = LocalAIService(skip_llm=True) if not chunk_only else None
+        self.qdrant = None
+        if not chunk_only:
+            self.qdrant = QdrantClient(url="http://localhost:6333")
+        self.collection_name = "notulen_chunks"
         self.chunk_model = "gemini-2.5-flash-lite"
-        self.atomic_threshold = 1000
-        self.child_max_chars = 16000
-        self.grandchild_max_chars = 1000
+
+        # ── Chunk size parameters (v2) ───────────────────────────────────
+        self.atomic_threshold = 1000       # below this: single chunk, no split
+        self.compact_threshold = 2500      # below this: single chunk (~500-625 tok)
+        self.structural_threshold = 50000  # above this: use Gemini for section detection
+        self.target_chunk_chars = 2000     # target grandchild size (~500 Dutch tokens)
+        self.max_chunk_chars = 2500        # hard ceiling per chunk
+        self.overlap_chars = 250           # ~10-12 % overlap between adjacent chunks
         self.heuristic = False
 
     def ingest_document(self, doc_id: str, doc_name: str, content: str, meeting_id: str = None, metadata: Dict = None, category: str = "municipal_doc"):
@@ -63,57 +98,70 @@ class SmartIngestor:
             self._ensure_document_record(conn, doc_id, doc_name, meeting_id, content, agenda_item_id=agenda_item_id, category=category)
 
             doc_size = len(content)
-            
-            # --- 3-TIER STRATEGY ---
+
+            # --- 4-TIER STRATEGY (v2) ---
             if doc_size < self.atomic_threshold:
-                # 1. ATOMIC TIER: No chunking
-                logger.info(f"  Atomic Tier: {doc_size} chars. Skipping split.")
-                self._process_tier_block(conn, doc_id, doc_name, meeting_id, content, metadata, is_atomic=True)
-            elif doc_size <= self.child_max_chars:
-                # 2. LINEAR TIER: 1 Child -> Semantic split for matches
-                logger.info(f"  Linear Tier: {doc_size} chars. 1 Child -> Grandchildren.")
-                self._process_tier_block(conn, doc_id, doc_name, meeting_id, content, metadata, is_atomic=False)
+                # ATOMIC: single chunk, no split
+                logger.info(f"  Atomic: {doc_size} chars → 1 chunk.")
+                self._store_single_chunk(conn, doc_id, doc_name, meeting_id, content, metadata, chunk_type="full_text")
+
+            elif doc_size <= self.compact_threshold:
+                # COMPACT: fits in one embedding (~500-625 tokens), no split
+                logger.info(f"  Compact: {doc_size} chars → 1 chunk.")
+                self._store_single_chunk(conn, doc_id, doc_name, meeting_id, content, metadata, chunk_type="quote")
+
+            elif doc_size <= self.structural_threshold:
+                # RECURSIVE: heuristic split with overlap, no LLM
+                chunks = self._recursive_chunk(content, doc_name)
+                logger.info(f"  Recursive: {doc_size} chars → {len(chunks)} chunks.")
+                self._store_child_and_chunks(conn, doc_id, doc_name, meeting_id, content, metadata, chunks)
+
             else:
-                # 3. HIERARCHICAL TIER: Split into Children -> Semantic split for matches
-                logger.info(f"  Hierarchical Tier: {doc_size} chars. Multi-child split.")
-                child_sections = self._split_text(content, self.child_max_chars)
-                for idx, section_content in enumerate(child_sections):
-                    self._process_tier_block(conn, doc_id, doc_name, meeting_id, section_content, metadata, idx_offset=idx)
-            
+                # STRUCTURAL: Gemini identifies sections, then recursive split within each
+                logger.info(f"  Structural: {doc_size} chars. Using Gemini for section detection...")
+                sections = self._detect_sections_via_gemini(content, doc_name)
+                if not sections:
+                    # Fallback: treat as recursive
+                    sections = [{"title": doc_name, "text": content}]
+                all_chunks = []
+                for sec in sections:
+                    sec_chunks = self._recursive_chunk(sec["text"], sec.get("title", doc_name))
+                    all_chunks.extend(sec_chunks)
+                logger.info(f"  Structural: {len(sections)} sections → {len(all_chunks)} chunks.")
+                self._store_child_and_chunks(conn, doc_id, doc_name, meeting_id, content, metadata, all_chunks)
+
             logger.info(f"Successfully ingested document: {doc_id}")
         finally:
             conn.close()
 
-    def _process_tier_block(self, conn, doc_id, doc_name, meeting_id, content, metadata, is_atomic=False, idx_offset=0):
-        """Helper to process a block into Child and Grandchild tiers."""
+    # ── Storage helpers ─────────────────────────────────────────────────
+
+    def _store_single_chunk(self, conn, doc_id, doc_name, meeting_id, content, metadata, chunk_type="full_text"):
+        """Store a small document as one child + one chunk (atomic/compact tier)."""
         cur = conn.cursor()
-        
         meta_json = json.dumps(metadata or {})
         cur.execute("""
             INSERT INTO document_children (document_id, chunk_index, content, metadata)
-            VALUES (%s, %s, %s, %s) RETURNING id
-        """, (doc_id, idx_offset, content, meta_json))
+            VALUES (%s, 0, %s, %s) RETURNING id
+        """, (doc_id, content, meta_json))
         child_id = cur.fetchone()[0]
         conn.commit()
+        chunks = [{"title": doc_name, "text": content, "questions": [], "chunk_type": chunk_type}]
+        self._store_grandchildren(conn, doc_id, doc_name, str(meeting_id), chunks, child_id)
+        cur.close()
 
-        if is_atomic:
-            # Store itself as a single grandchild
-            grandchildren = [{
-                "title": doc_name,
-                "text": content,
-                "questions": [],
-                "chunk_type": "full_text"
-            }]
-        elif self.heuristic and len(content) < 2000:
-            # Use heuristic for small blocks to save costs
-            grandchildren = self._heuristic_chunking(content, doc_name)
-        else:
-            # Use Local LLM (or Gemini) for large blocks or when explicitly requested
-            grandchildren = self._semantic_chunking_via_gemini(content, doc_name)
-
-        if grandchildren:
-            self._store_grandchildren(conn, doc_id, doc_name, str(meeting_id), grandchildren, child_id)
-        
+    def _store_child_and_chunks(self, conn, doc_id, doc_name, meeting_id, full_content, metadata, chunks):
+        """Store one child (full content) and its chunked grandchildren."""
+        cur = conn.cursor()
+        meta_json = json.dumps(metadata or {})
+        cur.execute("""
+            INSERT INTO document_children (document_id, chunk_index, content, metadata)
+            VALUES (%s, 0, %s, %s) RETURNING id
+        """, (doc_id, full_content, meta_json))
+        child_id = cur.fetchone()[0]
+        conn.commit()
+        if chunks:
+            self._store_grandchildren(conn, doc_id, doc_name, str(meeting_id), chunks, child_id)
         cur.close()
 
     def ingest_transcript(self, transcript_data: Dict[str, Any], heuristic: bool = False, category: str = "committee_transcript"):
@@ -205,7 +253,7 @@ class SmartIngestor:
                 name = EXCLUDED.name,
                 content = EXCLUDED.content,
                 category = EXCLUDED.category
-        """, (doc_id, doc_name, meeting_id, content[:1000], category))
+        """, (doc_id, doc_name, meeting_id, content, category))
         
         # Handle assignment
         if meeting_id or agenda_item_id:
@@ -218,110 +266,197 @@ class SmartIngestor:
         conn.commit()
         cur.close()
 
-    def _split_text(self, text: str, max_chars: int) -> List[str]:
-        """Speaker-aware split into sections."""
-        if len(text) <= max_chars: return [text]
-        sections = []
-        start = 0
-        while start < len(text):
-            end = start + max_chars
-            if end >= len(text):
-                sections.append(text[start:])
-                break
-                
-            # 1. Try to split at a new speaker tag
-            last_break = text.rfind("\n[", start, end)
-            
-            # 2. Fallback to double newline if no speaker tag found
-            if last_break == -1 or last_break <= start:
-                last_break = text.rfind("\n\n", start, end)
-                
-            # 3. Fallback to single newline
-            if last_break == -1 or last_break <= start:
-                last_break = text.rfind("\n", start, end)
-                
-            # 4. Hard cut
-            if last_break == -1 or last_break <= start:
-                last_break = end
-                
-            sections.append(text[start:last_break].strip())
-            start = last_break
-        return sections
+    # ── Recursive chunker (v2) ─────────────────────────────────────────
 
-    def _heuristic_chunking(self, content: str, title: str) -> List[Dict]:
-        """Split text into ~1K chunks without API calls."""
-        paragraphs = content.split("\n\n")
+    def _find_best_break(self, text: str, start: int, end: int) -> int:
+        """Find the best split point in text[start:end], respecting natural boundaries."""
+        # Priority 1: Dutch section header (only after we've passed target size)
+        for m in self.SECTION_PATTERNS.finditer(text, start + self.target_chunk_chars, end):
+            return m.start()
+
+        # Priority 2: Speaker tag boundary (transcripts)
+        pos = text.rfind("\n[", start, end)
+        if pos > start:
+            return pos
+
+        # Priority 3: Double newline (paragraph)
+        pos = text.rfind("\n\n", start, end)
+        if pos > start:
+            return pos + 1  # include the first newline in the previous chunk
+
+        # Priority 4: Single newline
+        pos = text.rfind("\n", start, end)
+        if pos > start:
+            return pos + 1
+
+        # Priority 5: Sentence boundary
+        pos = text.rfind(". ", start, end)
+        if pos > start:
+            return pos + 2
+
+        # Last resort: hard cut
+        return end
+
+    def _recursive_chunk(self, content: str, title: str) -> List[Dict]:
+        """
+        Recursive split into ~2,000-2,500 char chunks with 10-15 % overlap.
+        Respects Dutch section headers, speaker tags, paragraphs, sentences.
+        No LLM calls — entirely heuristic.
+        """
+        content = content.strip()
+        if len(content) <= self.max_chunk_chars:
+            return [{"title": title, "text": content, "questions": [], "chunk_type": "quote"}]
+
         chunks = []
-        current_chunk_text = ""
-        for para in paragraphs:
-            if len(current_chunk_text) + len(para) < self.grandchild_max_chars:
-                current_chunk_text += (para + "\n\n")
+        start = 0
+        prev_tail = ""  # overlap text from previous chunk
+
+        while start < len(content):
+            # Skip leading whitespace
+            while start < len(content) and content[start] in (' ', '\t'):
+                start += 1
+
+            remaining = len(content) - start
+            if remaining <= 0:
+                break
+
+            # If remainder fits in one chunk (with overlap), take it all
+            if remaining <= self.max_chunk_chars:
+                chunk_text = (prev_tail + content[start:]).strip()
+                if len(chunk_text) >= 20:
+                    chunks.append({"title": title, "text": chunk_text, "questions": [], "chunk_type": "quote"})
+                break
+
+            # Find best break point within [start, start + max_chunk_chars]
+            search_end = min(start + self.max_chunk_chars, len(content))
+            split_at = self._find_best_break(content, start, search_end)
+
+            raw_text = content[start:split_at].strip()
+            chunk_text = (prev_tail + raw_text).strip()
+            if len(chunk_text) >= 20:
+                chunks.append({"title": title, "text": chunk_text, "questions": [], "chunk_type": "quote"})
+
+            # Compute overlap from the raw (non-overlapped) text
+            if len(raw_text) > self.overlap_chars * 2:
+                # Find a clean overlap start (sentence or paragraph boundary)
+                search_from = max(0, len(raw_text) - self.overlap_chars - 80)
+                ol = raw_text.rfind(". ", search_from)
+                if ol == -1 or ol < search_from:
+                    ol = raw_text.rfind("\n", search_from)
+                if ol == -1 or ol < search_from:
+                    ol = len(raw_text) - self.overlap_chars
+                prev_tail = raw_text[ol:].strip() + "\n"
             else:
-                if current_chunk_text:
-                    chunks.append({"title": title, "text": current_chunk_text.strip(), "questions": [], "chunk_type": "quote"})
-                if len(para) > self.grandchild_max_chars:
-                    sentences = re.split(r'(?<=[.!?])\s+', para)
-                    sub_text = ""
-                    for sent in sentences:
-                        if len(sub_text) + len(sent) < self.grandchild_max_chars:
-                            sub_text += (sent + " ")
-                        else:
-                            if sub_text:
-                                chunks.append({"title": title, "text": sub_text.strip(), "questions": [], "chunk_type": "quote"})
-                            sub_text = sent + " "
-                    current_chunk_text = sub_text
-                else:
-                    current_chunk_text = para + "\n\n"
-        if current_chunk_text:
-            chunks.append({"title": title, "text": current_chunk_text.strip(), "questions": [], "chunk_type": "quote"})
+                prev_tail = ""
+
+            start = split_at
+
         return self._inject_speaker_prefixes(chunks)
 
-    def _semantic_chunking_via_gemini(self, content: str, title: str) -> List[Dict]:
-        """Calls Local LLM (if available) or Gemini to split the child section into semantic 1K chunks."""
-        prompt = f"""You are chunking a Dutch municipal document for a RAG system.
-Each chunk must be a meaningful semantic unit (e.g., one complete point or statement).
+    # ── Structural section detection (Gemini, for 50K+ docs only) ────
 
-CRITICAL RULES:
-1. Every chunk MUST be under 1,000 characters.
-2. DON'T change a single word. DON'T summarize.
-3. If this is a transcript (contains [Speaker] tags), YOU MUST REPEAT the prefix at the beginning of EVERY resulting chunk.
-4. Cover ALL content — every word must appear in exactly one chunk.
+    def _detect_sections_via_gemini(self, content: str, title: str) -> List[Dict]:
+        """
+        Uses one Gemini call to identify logical section boundaries in a large document.
+        Returns a list of {"title": str, "text": str} sections.
+        Does NOT ask Gemini to chunk — only to identify where sections start.
+        """
+        # Send first + last 3K chars as context, plus sampled section headers
+        preview = content[:3000] + "\n\n[...]\n\n" + content[-3000:]
+        # Also extract any lines that look like headers
+        header_lines = []
+        for line in content.split("\n"):
+            stripped = line.strip()
+            if stripped and (
+                self.SECTION_PATTERNS.match(stripped)
+                or (stripped.isupper() and 4 < len(stripped) < 80)
+                or re.match(r'^\d+\.\d*\s+\S', stripped)
+            ):
+                header_lines.append(stripped)
+        header_sample = "\n".join(header_lines[:50])
 
-Return ONLY a valid JSON array. Each item must have:
-- "title": string (brief topic of this chunk)
-- "text": string (the EXACT, UNMODIFIED text)
-- "questions": string[] (3-5 hypothetical questions this chunk answers)
-- "chunk_type": "quote"
+        prompt = f"""You are analyzing a large Dutch municipal document to identify its logical section structure.
 
-DOCUMENT TO CHUNK (Topic: {title}):
+DOCUMENT TITLE: {title}
+DOCUMENT LENGTH: {len(content)} characters
 
-{content}
+DETECTED HEADERS (sample):
+{header_sample}
+
+DOCUMENT PREVIEW (first and last 3000 chars):
+{preview}
+
+Return a JSON array of section boundaries. Each item:
+- "title": brief section title
+- "start_text": the EXACT first 60 characters of that section (so I can find it with str.find())
+
+Rules:
+- Identify 5-30 major sections (not every paragraph)
+- Sections should be roughly equal in size when possible
+- NEVER change or paraphrase the start_text — copy it exactly from the document
 
 Return ONLY the JSON array."""
 
         try:
-            # TRY LOCAL MLX MODEL FIRST
-            if self.local_ai.is_available():
-                logger.info("Using Local MLX LLM (Qwen) for semantic chunking...")
-                response_text = self.local_ai.generate_content(prompt)
-            else:
-                logger.info("Using Gemini API for semantic chunking...")
-                response = self.ai.client.models.generate_content(model=self.chunk_model, contents=prompt)
-                response_text = response.text or ""
-
-            if not response_text:
-                raise ValueError("No response from LLM")
-
+            response = self.ai.client.models.generate_content(model=self.chunk_model, contents=prompt)
+            response_text = response.text or ""
             j_start = response_text.find('[')
             j_end = response_text.rfind(']') + 1
-            if j_start == -1 or j_end == 0: return []
+            if j_start == -1 or j_end == 0:
+                return []
             from json_repair import repair_json
             repaired = repair_json(response_text[j_start:j_end])
-            chunks = json.loads(repaired)
-            return self._inject_speaker_prefixes(chunks)
+            boundaries = json.loads(repaired)
+
+            # Build sections from boundaries by finding start_text in content
+            sections = []
+            positions = []
+            for b in boundaries:
+                start_text = b.get("start_text", "")
+                pos = content.find(start_text)
+                if pos >= 0:
+                    positions.append({"title": b.get("title", "Section"), "pos": pos})
+
+            if not positions:
+                return []
+
+            # Sort by position and extract text between boundaries
+            positions.sort(key=lambda x: x["pos"])
+            for i, p in enumerate(positions):
+                start = p["pos"]
+                end = positions[i + 1]["pos"] if i + 1 < len(positions) else len(content)
+                text = content[start:end].strip()
+                if text:
+                    sections.append({"title": p["title"], "text": text})
+
+            # Capture any text before the first detected section
+            if positions[0]["pos"] > 100:
+                preamble = content[:positions[0]["pos"]].strip()
+                if preamble:
+                    sections.insert(0, {"title": f"Inleiding — {title}", "text": preamble})
+
+            return sections
+
         except Exception as e:
-            logger.error(f"LLM chunking error: {e}. Falling back to heuristic chunking.")
-            return self._heuristic_chunking(content, title)
+            logger.error(f"Gemini section detection failed: {e}. Falling back to header-based split.")
+            return self._fallback_section_split(content, title)
+
+    def _fallback_section_split(self, content: str, title: str) -> List[Dict]:
+        """Split large docs by detected headers when Gemini is unavailable."""
+        split_points = [0]
+        for m in self.SECTION_PATTERNS.finditer(content):
+            if m.start() > split_points[-1] + 2000:  # min section size
+                split_points.append(m.start())
+        split_points.append(len(content))
+
+        sections = []
+        for i in range(len(split_points) - 1):
+            text = content[split_points[i]:split_points[i + 1]].strip()
+            if text:
+                # Use first line as title
+                first_line = text.split("\n")[0].strip()[:80]
+                sections.append({"title": first_line or title, "text": text})
+        return sections if sections else [{"title": title, "text": content}]
 
     def _inject_speaker_prefixes(self, chunks: List[Dict]) -> List[Dict]:
         """Ensures every chunk starts with a [Speaker]: tag if present in the block."""
@@ -338,7 +473,7 @@ Return ONLY the JSON array."""
         return processed
 
     def _store_grandchildren(self, conn, doc_id: str, doc_name: str, meeting_id: str, chunks: List[Dict], child_id: int):
-        """Embeds and stores grandchildren in Qdrant and Postgres."""
+        """Stores grandchildren chunks in Postgres (and optionally embeds + upserts to Qdrant)."""
         cur = conn.cursor()
         points = []
         pg_data = []
@@ -346,32 +481,29 @@ Return ONLY the JSON array."""
             text = chunk.get("text", "").strip()
             if len(text) < 20: continue
             title = chunk.get("title", "Untitled")
-            questions = chunk.get("questions", [])
-            context_str = f"[Document: {doc_name} | Section: {title}]\n"
-            embedding_text = context_str + text
-            
-            # --- LOCAL EMBEDDING SWITCH ---
-            if self.local_ai.is_available():
-                embedding = self.local_ai.generate_embedding(embedding_text)
-            else:
-                embedding = self.ai.generate_embedding(embedding_text)
-            
-            if embedding is None: continue
-            hash_str = hashlib.md5(f"{doc_id}_{child_id}_{idx}".encode()).hexdigest()
-            point_id = int(hash_str[:15], 16)
-            payload = {
-                "document_id": doc_id, "doc_name": doc_name, "doc_type": "municipal_doc",
-                "meeting_id": meeting_id, "child_id": child_id, "chunk_index": idx,
-                "chunk_type": "quote", "title": title, "content": text, "questions": questions
-            }
-            points.append(PointStruct(id=point_id, vector=embedding, payload=payload))
-            pg_data.append((doc_id, idx, title, text, "quote", None, int(len(text)/4), child_id))
+            chunk_type = chunk.get("chunk_type", "quote")
+            pg_data.append((doc_id, idx, title, text, chunk_type, None, int(len(text)/4), child_id))
 
-        if points:
+            # Only embed if not in chunk_only mode
+            if not self.chunk_only and self.local_ai and self.local_ai.is_available():
+                context_str = f"[Document: {doc_name} | Section: {title}]\n"
+                embedding = self.local_ai.generate_embedding(context_str + text)
+                if embedding is not None:
+                    hash_str = hashlib.md5(f"{doc_id}_{child_id}_{idx}".encode()).hexdigest()
+                    point_id = int(hash_str[:15], 16)
+                    payload = {
+                        "document_id": doc_id, "doc_name": doc_name, "doc_type": "municipal_doc",
+                        "meeting_id": meeting_id, "child_id": child_id, "chunk_index": idx,
+                        "chunk_type": chunk_type, "title": title, "content": text,
+                        "questions": chunk.get("questions", [])
+                    }
+                    points.append(PointStruct(id=point_id, vector=embedding, payload=payload))
+
+        if points and self.qdrant:
             self.qdrant.upsert(collection_name=self.collection_name, points=points)
         if pg_data:
             execute_values(cur, """
-                INSERT INTO document_chunks 
+                INSERT INTO document_chunks
                     (document_id, chunk_index, title, content, chunk_type, table_json, tokens_estimated, child_id)
                 VALUES %s
                 ON CONFLICT (document_id, chunk_index) DO UPDATE SET
@@ -379,4 +511,4 @@ Return ONLY the JSON array."""
             """, pg_data)
         conn.commit()
         cur.close()
-        logger.info(f"    ✓ Stored {len(pg_data)} Grandchild chunks")
+        logger.info(f"    ✓ Stored {len(pg_data)} Grandchild chunks{' (chunk_only, no embedding)' if self.chunk_only else ''}")

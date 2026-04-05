@@ -1,0 +1,10 @@
+storage:
+  storage_path: ./data/qdrant_storage
+  optimizer_config:
+    deleted_threshold: 0.2
+    vacuum_min_vector_number: 1000
+    indexing_threshold: 10000
+    flush_interval_sec: 5
+service:
+  http_port: 6333
+  grpc_port: 6334

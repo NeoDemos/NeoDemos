@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request
+from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import os
@@ -125,14 +126,27 @@ async def overview_page(request: Request):
     })
 
 @app.get("/api/search")
-async def api_search(q: str, deep: bool = False, mode: str = None, party: str = "GroenLinks-PvdA"):
+async def api_search(q: str, deep: bool = False, mode: str = None, party: str = "GroenLinks-PvdA", date_from: str = None, date_to: str = None):
     """
     Search for agenda items and documents.
     If deep=True, also performs AI Deep Research.
     """
     if not q or len(q) < 3:
         return {"results": [], "ai_answer": None}
-    
+
+    # Temporal extraction: detect date references in natural language
+    # Only runs if no explicit date filters were provided by the frontend
+    if not date_from and not date_to:
+        try:
+            temporal = await ai_service.extract_temporal_filters(q)
+            if temporal.get("date_from") or temporal.get("date_to"):
+                q = temporal["query"]
+                date_from = temporal.get("date_from")
+                date_to = temporal.get("date_to")
+                logger.info(f"Temporal extraction: query='{q}' date_from={date_from} date_to={date_to}")
+        except Exception:
+            pass  # Non-critical — proceed with original query
+
     # 1. Traditional Keyword Search
     from psycopg2.extras import RealDictCursor
     def get_keyword_results():
@@ -217,9 +231,9 @@ async def api_search(q: str, deep: bool = False, mode: str = None, party: str = 
     if run_ai:
         # Run both in parallel if AI is requested
         if mode == 'debate':
-            ai_task = ai_service.perform_agentic_debate_prep(q, storage, party=party)
+            ai_task = ai_service.perform_agentic_debate_prep(q, storage, party=party, date_from=date_from, date_to=date_to)
         else:
-            ai_task = ai_service.perform_deep_search(q, storage)
+            ai_task = ai_service.perform_deep_search(q, storage, date_from=date_from, date_to=date_to)
             
         loop = asyncio.get_running_loop()
         keyword_rows = await loop.run_in_executor(None, get_keyword_results)
@@ -481,16 +495,17 @@ async def api_analyse_party_lens(agenda_item_id: str, party: str = "GroenLinks-P
 @app.get("/api/analyse/unified/{agenda_item_id}")
 async def api_analyse_unified(agenda_item_id: str, party: str = "GroenLinks-PvdA"):
     """
-    Perform both general AI analysis and party-specific lens analysis concurrently.
+    Streams the agentic meeting analysis as Server-Sent Events (SSE).
+    Events: {type: "status"|"chunk"|"done"|"error", ...}
     """
     logger.info(f"UNIFIED ANALYSIS ENDPOINT CALLED for agenda item {agenda_item_id}, party {party}")
-    # Fetch agenda item and recursively collect documents from its sub-items
     item_data = storage.get_agenda_item_with_sub_documents(agenda_item_id)
     if not item_data:
-        return {"error": f"Agendapunt {agenda_item_id} niet gevonden"}
-    
+        async def _not_found():
+            yield f"data: {json.dumps({'type': 'error', 'message': f'Agendapunt {agenda_item_id} niet gevonden'})}\n\n"
+        return StreamingResponse(_not_found(), media_type="text/event-stream")
+
     item_name = item_data['name']
-    meeting_name = item_data['meeting_name']
     doc_rows = item_data['documents']
 
     seen_doc_ids = set()
@@ -504,21 +519,20 @@ async def api_analyse_unified(agenda_item_id: str, party: str = "GroenLinks-PvdA
                 "url": row.get('url', '#')
             })
             seen_doc_ids.add(unique_key)
-    
-    # Text for party lens
-    agenda_text = f"{meeting_name} - {item_name}\n\n"
-    for doc in documents:
-        agenda_text += f"Document: {doc['name']}\n{doc['content']}\n\n"
-        
-    lens_service = _get_party_lens_service(party)
-    
-    # Run Agentic Analysis following the PvdA Standard Format
-    try:
-        result = await ai_service.perform_agentic_meeting_analysis(item_name, documents, party=party)
-        return result
-    except Exception as e:
-        logger.error(f"Error during unified agentic analysis: {e}")
-        return {"error": f"Analyse mislukt: {str(e)}"}
+
+    async def event_stream():
+        try:
+            async for event in ai_service.stream_agentic_meeting_analysis(item_name, documents, party=party):
+                yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
+        except Exception as e:
+            logger.error(f"Streaming unified analysis error: {e}")
+            yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
+
+    return StreamingResponse(
+        event_stream(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
 
 @app.get("/api/analyse/speech/{agenda_item_id}")
 async def api_analyse_speech(agenda_item_id: str, party: str = "GroenLinks-PvdA"):
