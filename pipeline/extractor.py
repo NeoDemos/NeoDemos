@@ -10,6 +10,7 @@ Usage:
 """
 
 import re
+import json
 import logging
 import gc
 from pathlib import Path
@@ -252,11 +253,77 @@ class WhisperTranscriber:
     Only used when WebVTT is unavailable or garbled.
     """
 
-    def __init__(self, model_name: str = "mlx-community/whisper-large-v3-mlx"):
+    def __init__(self, model_name: str = "mlx-community/whisper-large-v3-turbo",
+                 use_vad: bool = True):
         self.model_name = model_name
         self._model_loaded = False
         self._temp_dir = Path("/tmp/neodemos_whisper")
         self._temp_dir.mkdir(parents=True, exist_ok=True)
+        self.use_vad = use_vad
+
+        # Load initial_prompt from Rotterdam political dictionary
+        self.initial_prompt = self._load_initial_prompt()
+
+    def _load_initial_prompt(self) -> str:
+        """Load the Whisper initial_prompt from the political dictionary."""
+        dict_path = Path(__file__).parent.parent / "data" / "lexicons" / "rotterdam_political_dictionary.json"
+        try:
+            with open(dict_path, "r", encoding="utf-8") as f:
+                dictionary = json.load(f)
+            return dictionary.get("whisper_initial_prompt", "")
+        except Exception as e:
+            logger.warning(f"Could not load political dictionary for Whisper prompt: {e}")
+            return ""
+
+    def _preprocess_vad(self, audio_path: str) -> str:
+        """Use Silero VAD to strip silence, reducing hallucinations on long recordings.
+
+        Returns path to VAD-processed audio, or original path if VAD unavailable.
+        """
+        try:
+            import torch
+            import torchaudio
+        except ImportError:
+            logger.debug("torch/torchaudio not available, skipping VAD preprocessing")
+            return audio_path
+
+        try:
+            model, utils = torch.hub.load(
+                repo_or_dir='snakers4/silero-vad',
+                model='silero_vad',
+                trust_repo=True
+            )
+            (get_speech_timestamps, _, read_audio, _, _) = utils
+
+            wav = read_audio(audio_path, sampling_rate=16000)
+            speech_timestamps = get_speech_timestamps(wav, model, sampling_rate=16000)
+
+            if not speech_timestamps:
+                logger.warning("VAD found no speech in audio")
+                return audio_path
+
+            # Concatenate speech segments with small padding
+            segments = []
+            for ts in speech_timestamps:
+                start = max(0, ts['start'] - 1600)  # 100ms padding
+                end = min(len(wav), ts['end'] + 1600)
+                segments.append(wav[start:end])
+
+            if segments:
+                speech_only = torch.cat(segments)
+                vad_path = self._temp_dir / "vad_processed.wav"
+                torchaudio.save(str(vad_path), speech_only.unsqueeze(0), 16000)
+                silence_removed = len(wav) - len(speech_only)
+                logger.info(
+                    f"VAD: removed {silence_removed / 16000:.1f}s silence "
+                    f"({len(speech_timestamps)} speech segments)"
+                )
+                return str(vad_path)
+
+        except Exception as e:
+            logger.warning(f"VAD preprocessing failed, using original audio: {e}")
+
+        return audio_path
 
     def transcribe(self, audio_path: str, language: str = "nl") -> List[TranscriptSegment]:
         """
@@ -280,6 +347,10 @@ class WhisperTranscriber:
             logger.warning(f"Could not determine audio duration, proceeding without chunking: {e}")
             duration = 0
 
+        # Optional VAD preprocessing to strip silence (reduces hallucinations)
+        if self.use_vad and duration > 300:
+            audio_path = self._preprocess_vad(audio_path)
+
         # If longer than 15 minutes, chunk it
         if duration > 900:
             logger.info(f"Audio is {duration/60:.1f}m long. Using chunked transcription to save RAM.")
@@ -287,12 +358,18 @@ class WhisperTranscriber:
 
         logger.info(f"Transcribing with mlx-whisper: {audio_path}")
         gc.collect()
-        
-        result = mlx_whisper.transcribe(
-            audio_path,
+
+        transcribe_kwargs = dict(
             path_or_hf_repo=self.model_name,
             language=language,
             word_timestamps=True,
+        )
+        if self.initial_prompt:
+            transcribe_kwargs["initial_prompt"] = self.initial_prompt
+
+        result = mlx_whisper.transcribe(
+            audio_path,
+            **transcribe_kwargs,
         )
 
         segments = []
@@ -338,11 +415,17 @@ class WhisperTranscriber:
                 continue
                 
             gc.collect()
-            result = mlx_whisper.transcribe(
-                str(chunk_file),
+            transcribe_kwargs = dict(
                 path_or_hf_repo=self.model_name,
                 language=language,
                 word_timestamps=True,
+            )
+            if self.initial_prompt:
+                transcribe_kwargs["initial_prompt"] = self.initial_prompt
+
+            result = mlx_whisper.transcribe(
+                str(chunk_file),
+                **transcribe_kwargs,
             )
             
             for seg in result.get("segments", []):

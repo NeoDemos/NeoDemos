@@ -1,0 +1,375 @@
+{
+  "meeting_id": "93ad248b-89a6-4967-b475-eb7219c09b26",
+  "audit_timestamp": "2026-04-07T21:47:56.935531",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "judge_backend": "gemini",
+    "anthropic_model": "claude-haiku-4-5-20251001",
+    "gemini_model": "gemini-2.5-flash-lite"
+  },
+  "meeting_info": {
+    "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+    "start_date": "2025-04-16 00:00:00",
+    "committee": "MHEK",
+    "quality_score": 0.968,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 79,
+    "document_count": 6
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 578,
+      "correct_count": 578,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8946,
+      "party_attribution_rate": 0.3919,
+      "total_segments": 370,
+      "attributed_segments": 331,
+      "unattributed_segments": 39
+    },
+    "speaker_diversity": {
+      "unique_speakers": 13,
+      "unique_parties": 9,
+      "top_speaker": "Plaatsvervangende commissievoorzitter",
+      "top_speaker_segment_count": 123,
+      "monologue_rate": 0.3324,
+      "speakers": {
+        "Plaatsvervangende commissievoorzitter": 123,
+        "J.M. (Amy) de Bruijn Burgercommissielid": 40,
+        "C.M. (Chantal) Zeegers": 39,
+        "M.S. (Marike) Abrahamse": 34,
+        "P.F. (Pelle) Meurink Burgercommissielid": 24,
+        "B.T.A. (Bernhard) van Meeteren Burgercommissielid CDA": 12,
+        "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie": 12,
+        "M.Y. (Mina) Morkoç": 11,
+        "Z.P. (Pinar) Coşkun Burgercommissielid": 10,
+        "S.M. (Sebastiaan) Bonte": 9
+      },
+      "parties": {
+        "PvdA": 40,
+        "VVD": 34,
+        "D66": 24,
+        "GroenLinks": 11,
+        "Partij voor de Dieren": 10,
+        "Leefbaar Rotterdam": 9,
+        "SP": 7,
+        "50PLUS": 5,
+        "Volt": 5
+      }
+    },
+    "segment_quality": {
+      "total_segments": 370,
+      "nonempty_segments": 370,
+      "total_words": 25610,
+      "total_chars": 144274,
+      "avg_words_per_segment": 69.2,
+      "avg_chars_per_segment": 389.9,
+      "short_segment_rate": 0.1351,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 17,
+      "items_with_content": 5,
+      "coverage_rate": 0.2941,
+      "items": [
+        {
+          "title": "Procedurevergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 62
+        },
+        {
+          "title": "Besluitenlijst openbare procedurevergadering van 26 maart 2025",
+          "segment_count": 0
+        },
+        {
+          "title": "Ingekomen stukken",
+          "segment_count": 0
+        },
+        {
+          "title": "Algemeen",
+          "segment_count": 0
+        },
+        {
+          "title": "Haven",
+          "segment_count": 0
+        },
+        {
+          "title": "Economie",
+          "segment_count": 0
+        },
+        {
+          "title": "Mobiliteit",
+          "segment_count": 0
+        },
+        {
+          "title": "Lijst van openstaande toezeggingen, schriftelijke vragen en moties",
+          "segment_count": 0
+        },
+        {
+          "title": "Commissieplanning en lange termijn agenda raad",
+          "segment_count": 0
+        },
+        {
+          "title": "Regeling van werkzaamheden",
+          "segment_count": 0
+        },
+        {
+          "title": "Sluiting",
+          "segment_count": 0
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 1
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 6
+        },
+        {
+          "title": "Adviezenlijst openbare overlegvergadering van 26 maart en 2 april 2025",
+          "segment_count": 2
+        },
+        {
+          "title": "Adviescommissies Metropoolregio Rotterdam Den Haag",
+          "segment_count": 1
+        },
+        {
+          "title": "Impactanalyse netcongestie",
+          "segment_count": 298
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+        "start_date": "2025-04-16 00:00:00",
+        "committee": "MHEK",
+        "review_status": "auto_approved",
+        "quality_score": 0.968,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+        "start_date": "2025-04-16 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 13,
+      "recognized_speakers": 13,
+      "unrecognized_speakers": 0,
+      "recognition_rate": 1.0,
+      "recognized": [
+        {
+          "name": "Plaatsvervangende commissievoorzitter",
+          "segment_count": 123,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "J.M. (Amy) de Bruijn Burgercommissielid",
+          "segment_count": 40,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.Y. (Mina) Morkoç",
+          "segment_count": 11,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "B.T.A. (Bernhard) van Meeteren Burgercommissielid CDA",
+          "segment_count": 12,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "T.S.J. (Theo) Coşkun",
+          "segment_count": 7,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "M.S. (Marike) Abrahamse",
+          "segment_count": 34,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie",
+          "segment_count": 12,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "P.F. (Pelle) Meurink Burgercommissielid",
+          "segment_count": 24,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Z.P. (Pinar) Coşkun Burgercommissielid",
+          "segment_count": 10,
+          "parties": [
+            "Partij voor de Dieren"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "S.M. (Sebastiaan) Bonte",
+          "segment_count": 9,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "P.J.H.D. (Ellen) Verkoelen",
+          "segment_count": 5,
+          "parties": [
+            "50PLUS"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D. (Donatella) Schalm-Civile Burgercommissielid",
+          "segment_count": 5,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "C.M. (Chantal) Zeegers",
+          "segment_count": 39,
+          "parties": [],
+          "recognized_as": "council_member"
+        }
+      ],
+      "unrecognized": []
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 79,
+      "empty_chunks": 0,
+      "buckets": {
+        "long (2000-5000)": 56,
+        "medium (200-2000)": 21,
+        "short (50-200)": 2
+      },
+      "min_chars": 79,
+      "max_chars": 2794,
+      "avg_chars": 2092.8,
+      "median_chars": 2369,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 79,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 6,
+      "documents_with_chunks": 6,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Adviescommissies Metropoolregio Rotterdam Den Haag",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Adviezenlijst openbare overlegvergadering van 26 maart en 2 april 2025",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Impactanalyse netcongestie",
+          "chunks": 67
+        },
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 8
+        },
+        {
+          "name": "Transcript: Overlegvergadering",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Vaststellen van de agenda",
+          "chunks": 1
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 79,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 79,
+      "distribution": {
+        "quote": {
+          "count": 75,
+          "rate": 0.9494
+        },
+        "full_text": {
+          "count": 4,
+          "rate": 0.0506
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8946,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.968
+    }
+  }
+}

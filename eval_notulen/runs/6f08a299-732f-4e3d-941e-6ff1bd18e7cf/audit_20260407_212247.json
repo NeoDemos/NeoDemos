@@ -1,0 +1,387 @@
+{
+  "meeting_id": "6f08a299-732f-4e3d-941e-6ff1bd18e7cf",
+  "audit_timestamp": "2026-04-07T21:22:47.870576",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+    "start_date": "2025-06-18 00:00:00",
+    "committee": "ZOCS",
+    "quality_score": 0.933,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 104,
+    "document_count": 6
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 704,
+      "correct_count": 704,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.7759,
+      "party_attribution_rate": 0.2989,
+      "total_segments": 348,
+      "attributed_segments": 270,
+      "unattributed_segments": 78
+    },
+    "speaker_diversity": {
+      "unique_speakers": 20,
+      "unique_parties": 9,
+      "top_speaker": "Plaatsvervangende commissievoorzitter",
+      "top_speaker_segment_count": 56,
+      "monologue_rate": 0.1609,
+      "speakers": {
+        "Plaatsvervangende commissievoorzitter": 56,
+        "T.S.J. (Theo) Coşkun Commissievoorzitter": 48,
+        "S. (Said) Kasmi": 30,
+        "D.J. (Diederik) van Dommelen": 22,
+        "Inspreker": 18,
+        "J.M. (Joan) Nunnely": 13,
+        "D. (Duygu) Yildirim": 13,
+        "A. (Astrid) Kockelkoren": 11,
+        "R.T.J. (Ruud) van der Velden": 10,
+        "J. (Judith) Bokhove": 8
+      },
+      "parties": {
+        "VVD": 25,
+        "GroenLinks": 19,
+        "PvdA": 18,
+        "D66": 14,
+        "Partij voor de Dieren": 10,
+        "BIJ1": 7,
+        "Volt": 5,
+        "Leefbaar Rotterdam": 4,
+        "DENK": 2
+      }
+    },
+    "segment_quality": {
+      "total_segments": 348,
+      "nonempty_segments": 348,
+      "total_words": 37001,
+      "total_chars": 204743,
+      "avg_words_per_segment": 106.3,
+      "avg_chars_per_segment": 588.3,
+      "short_segment_rate": 0.2586,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 8,
+      "items_with_content": 6,
+      "coverage_rate": 0.75,
+      "items": [
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 10
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 1
+        },
+        {
+          "title": "Insprekers vreemd ''evenementen Roel Langerakpark''",
+          "segment_count": 55
+        },
+        {
+          "title": "Collectiecentrum Rotterdam",
+          "segment_count": 213
+        },
+        {
+          "title": "Voortgang Volkstuinenbeleid",
+          "segment_count": 46
+        },
+        {
+          "title": "Voortgangsbrief Gezondheid (dit agendapunt is verplaatst naar 9 juli)",
+          "segment_count": 22
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 1
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+        "start_date": "2025-06-18 00:00:00",
+        "committee": "ZOCS",
+        "review_status": "auto_approved",
+        "quality_score": 0.933,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+        "start_date": "2025-06-18 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 20,
+      "recognized_speakers": 20,
+      "unrecognized_speakers": 0,
+      "recognition_rate": 1.0,
+      "recognized": [
+        {
+          "name": "Plaatsvervangende commissievoorzitter",
+          "segment_count": 56,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S.D. (Safa) Sodirijo Burgercommissielid",
+          "segment_count": 2,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "E.P.J. (Erik) Verweij",
+          "segment_count": 1,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.T.J. (Ruud) van der Velden",
+          "segment_count": 10,
+          "parties": [
+            "Partij voor de Dieren"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "Inspreker",
+          "segment_count": 18,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "D. (Donatella) Schalm-Civile Burgercommissielid",
+          "segment_count": 5,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "J.M. (Joan) Nunnely",
+          "segment_count": 13,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.S. (Marike) Abrahamse",
+          "segment_count": 2,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J. (Judith) Bokhove",
+          "segment_count": 8,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "D. (Duygu) Yildirim",
+          "segment_count": 13,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie",
+          "segment_count": 8,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "D.J. (Diederik) van Dommelen",
+          "segment_count": 22,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "G.F.E. (Geert) Koster",
+          "segment_count": 4,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S.J.J. (Sam) Mak Burgercommissielid CDA",
+          "segment_count": 6,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "P.C.Z. (Precious) Sadhoe Burgercommissielid",
+          "segment_count": 7,
+          "parties": [
+            "BIJ1"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.E. (Merel) Vogelaar",
+          "segment_count": 5,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Said) Kasmi",
+          "segment_count": 30,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "T.S.J. (Theo) Coşkun Commissievoorzitter",
+          "segment_count": 48,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "A. (Astrid) Kockelkoren",
+          "segment_count": 11,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "F. (Fatih) Elbay",
+          "segment_count": 1,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        }
+      ],
+      "unrecognized": []
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 104,
+      "empty_chunks": 0,
+      "buckets": {
+        "long (2000-5000)": 62,
+        "medium (200-2000)": 41,
+        "short (50-200)": 1
+      },
+      "min_chars": 122,
+      "max_chars": 2708,
+      "avg_chars": 1881.1,
+      "median_chars": 2253,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 104,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 6,
+      "documents_with_chunks": 6,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Collectiecentrum Rotterdam",
+          "chunks": 62
+        },
+        {
+          "name": "Transcript: Insprekers vreemd ''evenementen Roel Langerakpark''",
+          "chunks": 21
+        },
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: Vaststellen van de agenda",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Voortgang Volkstuinenbeleid",
+          "chunks": 13
+        },
+        {
+          "name": "Transcript: Voortgangsbrief Gezondheid (dit agendapunt is verplaatst naar 9 juli)",
+          "chunks": 4
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 104,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 104,
+      "distribution": {
+        "quote": {
+          "count": 104,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "PENDING — warnings present, manual review recommended",
+    "issues": [],
+    "warnings": [
+      "Low speaker attribution: 78% (target 80%)"
+    ],
+    "scores": {
+      "speaker_attribution_rate": 0.7759,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.933
+    }
+  }
+}

@@ -1,0 +1,440 @@
+{
+  "meeting_id": "ba8b9c5d-25f9-4858-902e-28b3f10edbb3",
+  "audit_timestamp": "2026-04-07T21:10:28.005574",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+    "start_date": "2025-10-08 00:00:00",
+    "committee": "MHEK",
+    "quality_score": 0.957,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 129,
+    "document_count": 12
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 847,
+      "correct_count": 847,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8568,
+      "party_attribution_rate": 0.389,
+      "total_segments": 419,
+      "attributed_segments": 359,
+      "unattributed_segments": 60
+    },
+    "speaker_diversity": {
+      "unique_speakers": 19,
+      "unique_parties": 9,
+      "top_speaker": "M.S. (Marike) Abrahamse Commissievoorzitter",
+      "top_speaker_segment_count": 136,
+      "monologue_rate": 0.3246,
+      "speakers": {
+        "M.S. (Marike) Abrahamse Commissievoorzitter": 136,
+        "R.A.C.J. (Robert) Simons": 25,
+        "M.Y. (Mina) Morkoç": 23,
+        "D.A. (Dieke) van Groningen": 22,
+        "R.P. (Ryan) Vos Burgercommissielid": 19,
+        "D. (Donatella) Schalm-Civile Burgercommissielid": 18,
+        "J.M. (Joan) Nunnely": 16,
+        "J.G. (Just) Hovens Greve Burgercommissielid": 15,
+        "M.H. (Marvin) Biljoen": 14,
+        "P.J.H.D. (Ellen) Verkoelen": 12
+      },
+      "parties": {
+        "GroenLinks": 37,
+        "VVD": 30,
+        "D66": 22,
+        "PvdA": 19,
+        "Volt": 18,
+        "SP": 15,
+        "50PLUS": 12,
+        "Leefbaar Rotterdam": 9,
+        "Forum voor Democratie": 1
+      }
+    },
+    "segment_quality": {
+      "total_segments": 419,
+      "nonempty_segments": 419,
+      "total_words": 44970,
+      "total_chars": 251558,
+      "avg_words_per_segment": 107.3,
+      "avg_chars_per_segment": 600.4,
+      "short_segment_rate": 0.1957,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 17,
+      "items_with_content": 12,
+      "coverage_rate": 0.7059,
+      "items": [
+        {
+          "title": "Procedurevergadering",
+          "segment_count": 1
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 0
+        },
+        {
+          "title": "Besluitenlijst openbare procedurevergadering van 17 september 2025",
+          "segment_count": 1
+        },
+        {
+          "title": "Commissieplanning en lange termijn agenda raad",
+          "segment_count": 28
+        },
+        {
+          "title": "Regeling van werkzaamheden",
+          "segment_count": 0
+        },
+        {
+          "title": "Ingekomen stukken",
+          "segment_count": 0
+        },
+        {
+          "title": "Algemeen",
+          "segment_count": 0
+        },
+        {
+          "title": "Haven",
+          "segment_count": 8
+        },
+        {
+          "title": "Duurzaam",
+          "segment_count": 5
+        },
+        {
+          "title": "Economie",
+          "segment_count": 2
+        },
+        {
+          "title": "Mobiliteit",
+          "segment_count": 23
+        },
+        {
+          "title": "Lijst van openstaande toezeggingen, schriftelijke vragen en moties",
+          "segment_count": 12
+        },
+        {
+          "title": "Sluiting",
+          "segment_count": 6
+        },
+        {
+          "title": "Adviescommissies Metropoolregio Rotterdam Den Haag",
+          "segment_count": 12
+        },
+        {
+          "title": "Zienswijze Mobiliteitsvisie MRDH en visie Economische Vestigingsklimaat MRDH",
+          "segment_count": 293
+        },
+        {
+          "title": "Horecabeleid onder de loep Aanvraag RvW van Groningen ea",
+          "segment_count": 0
+        },
+        {
+          "title": "Betrekken bij Horecabeleid onder de loep Aanvraag RvW van Groningen ea",
+          "segment_count": 28
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+        "start_date": "2025-10-08 00:00:00",
+        "committee": "MHEK",
+        "review_status": "auto_approved",
+        "quality_score": 0.957,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+        "start_date": "2025-10-08 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 19,
+      "recognized_speakers": 17,
+      "unrecognized_speakers": 2,
+      "recognition_rate": 0.8947,
+      "recognized": [
+        {
+          "name": "M.S. (Marike) Abrahamse Commissievoorzitter",
+          "segment_count": 136,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "D. (Donatella) Schalm-Civile Burgercommissielid",
+          "segment_count": 18,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.Y. (Mina) Morkoç",
+          "segment_count": 23,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "J.M. (Joan) Nunnely",
+          "segment_count": 16,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.H. (Marvin) Biljoen",
+          "segment_count": 14,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "P.F. (Pelle) Meurink Burgercommissielid",
+          "segment_count": 6,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "D.A. (Dieke) van Groningen",
+          "segment_count": 22,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S.J.C. (Simon) Becker",
+          "segment_count": 8,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.P. (Ryan) Vos Burgercommissielid",
+          "segment_count": 19,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "G.F.E. (Geert) Koster",
+          "segment_count": 9,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J.G. (Just) Hovens Greve Burgercommissielid",
+          "segment_count": 15,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "P.J.H.D. (Ellen) Verkoelen",
+          "segment_count": 12,
+          "parties": [
+            "50PLUS"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "B.T.A. (Bernhard) van Meeteren Burgercommissielid CDA",
+          "segment_count": 6,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie",
+          "segment_count": 6,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "R.A.C.J. (Robert) Simons",
+          "segment_count": 25,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "S. (Said) Kasmi",
+          "segment_count": 4,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "C.J. (Carola) Schouten Burgemeester",
+          "segment_count": 9,
+          "parties": [],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "P.J.P. (Pascal) Lansink-Bastemeijer",
+          "segment_count": 10,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "A.R. (Ardi) Oostdijk",
+          "segment_count": 1,
+          "parties": [
+            "Forum voor Democratie"
+          ],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 129,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 43,
+        "long (2000-5000)": 82,
+        "short (50-200)": 4
+      },
+      "min_chars": 102,
+      "max_chars": 2743,
+      "avg_chars": 1924.9,
+      "median_chars": 2256,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 129,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 12,
+      "documents_with_chunks": 12,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Adviescommissies Metropoolregio Rotterdam Den Haag",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Besluitenlijst openbare procedurevergadering van 17 september 2025",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Betrekken bij Horecabeleid onder de loep Aanvraag RvW van Groningen ea",
+          "chunks": 4
+        },
+        {
+          "name": "Transcript: Commissieplanning en lange termijn agenda raad",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: Duurzaam",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Economie",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Haven",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Lijst van openstaande toezeggingen, schriftelijke vragen en moties",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Mobiliteit",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: Procedurevergadering",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Zienswijze Mobiliteitsvisie MRDH en visie Economische Vestigingsklimaat MRDH",
+          "chunks": 108
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 129,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 129,
+      "distribution": {
+        "quote": {
+          "count": 126,
+          "rate": 0.9767
+        },
+        "full_text": {
+          "count": 3,
+          "rate": 0.0233
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8568,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.957
+    }
+  }
+}

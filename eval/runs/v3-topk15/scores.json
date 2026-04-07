@@ -1,0 +1,1346 @@
+[
+  {
+    "question_id": "ps-01",
+    "question_text": "Hoe stelde de PvdA zich op in de discussie over Feyenoord City, het stadion en de gebiedsontwikkeling?",
+    "category": "party_stance",
+    "answer": "De PvdA heeft in de discussie over Feyenoord City, het stadion en de gebiedsontwikkeling een initiatiefvoorstel ingediend met betrekking tot nationaliteit, van onbekend naar staatloos. Dit initiatiefvoorstel (19bb18463) was in afwachting van een collegereactie. [Bron 1]\n\nHet verkiezingsprogramma van GroenLinks-PvdA voor 2026-2030 stelt dat de stad een bestuur nodig heeft dat het voortouw neemt, Rotterdammers serieus neemt en problemen oplost. De partij heeft in het verleden laten zien dat ze dingen anders kan regelen, met voorbeelden als de Erasmusbrug, het vernieuwde Centraal Station, nieuwe parken en betaalbare woningen. [Bron 10]",
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 0.8,
+        "unique_documents": 12,
+        "total_chunks": 15,
+        "entropy": 3.457
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.933,
+        "keyword_only_pct": 0.067,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 14,
+        "keyword_only": 1,
+        "both": 0,
+        "total": 15
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 23.31,
+        "promotions_5plus": 32,
+        "demotions_5plus": 33,
+        "candidates_scored": 75
+      },
+      "rrf": {
+        "unique_from_fusion": 6,
+        "unique_pct": 0.4,
+        "vector_top_k_overlap": 8,
+        "keyword_top_k_overlap": 1
+      },
+      "timings": {
+        "embedding_ms": 466.5106249995006,
+        "vector_ms": 15.887457999269827,
+        "keyword_ms": 256.35858299938263,
+        "rrf_ms": 0.10795900016091764,
+        "reranker_ms": 798.5301669996261,
+        "total_ms": 1537.5994170008198
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 1,
+        "reasoning": "Het antwoord gaat vrijwel volledig langs de vraag heen. De vraag gaat specifiek over de PvdA's opstelling bij Feyenoord City en stadionplannen, maar het antwoord behandelt een initiatiefvoorstel over nationaliteit (volledig irrelevant) en algemene verkiezingsretoriek van GroenLinks-PvdA. Er wordt geen concrete informatie gegeven over de daadwerkelijke standpunten of acties van de PvdA betreffende Feyenoord City of het stadion."
+      },
+      "faithfulness": {
+        "score": 1,
+        "reasoning": "Het antwoord bevat twee hoofdbeweringen die niet goed ondersteund worden door de context. Ten eerste wordt beweerd dat de PvdA een initiatiefvoorstel indiende 'met betrekking tot nationaliteit, van onbekend naar staatloos' in de discussie over Feyenoord City. In de context staat wel een initiatiefvoorstel van de PvdA over nationaliteit genoemd, maar dit staat in een lijst van verschillende onderwerpen en er is geen duidelijke link met de Feyenoord City discussie. Ten tweede wordt het verkiezingsprogramma van GroenLinks-PvdA gebruikt om de opstelling te beschrijven, maar dit programma gaat over algemeen bestuur en bevat geen specifieke informatie over hun opstelling in de Feyenoord City discussie. Het antwoord geeft dus geen adequaat beeld van de PvdA-opstelling in deze specifieke kwestie op basis van de aangeleverde bronnen."
+      }
+    },
+    "hallucination_metrics": {},
+    "chunks_retrieved": 15,
+    "total_ms": 1537.5994170008198
+  },
+  {
+    "question_id": "ps-02",
+    "question_text": "De Asielopvang op de Silja, wat denkt Leefbaar Rotterdam daar van?",
+    "category": "party_stance",
+    "answer": "Leefbaar Rotterdam wil geen asielzoekerscentrum in Rotterdam omdat de partij vindt dat er al genoeg problemen zijn in de stad. Zij stellen de Rotterdammer centraal, niet de asielzoeker, en menen dat een groot deel van de bevolking geen asielzoekerscentrum in de achtertuin wil vanwege de gevolgen die zij daarvan zien. Leefbaar Rotterdam is voorstander van het opvangen van vluchtelingen in de regio van het land van herkomst.",
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 0.9333333333333333,
+        "unique_documents": 14,
+        "total_chunks": 15,
+        "entropy": 3.774
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.933,
+        "keyword_only_pct": 0.067,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 14,
+        "keyword_only": 1,
+        "both": 0,
+        "total": 15
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 23.25,
+        "promotions_5plus": 32,
+        "demotions_5plus": 30,
+        "candidates_scored": 75
+      },
+      "rrf": {
+        "unique_from_fusion": 7,
+        "unique_pct": 0.467,
+        "vector_top_k_overlap": 7,
+        "keyword_top_k_overlap": 1
+      },
+      "timings": {
+        "embedding_ms": 355.0870829985797,
+        "vector_ms": 14.14370800011966,
+        "keyword_ms": 685.486291999041,
+        "rrf_ms": 0.08616599916422274,
+        "reranker_ms": 798.0652919995919,
+        "total_ms": 1853.020500000639
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 3,
+        "reasoning": "Het antwoord geeft wel de algemene positie van Leefbaar Rotterdam over asielopvang weer, maar beantwoordt niet specifiek de vraag over de Silja. De vraag gaat over een concrete locatie (de Silja), maar het antwoord blijft bij algemene standpunten over asielzoekerscentra in Rotterdam. Hierdoor mist het de specifieke context van de vraag."
+      },
+      "faithfulness": {
+        "score": 4,
+        "reasoning": "Het antwoord is grotendeels gebaseerd op de context. De uitspraken over dat Leefbaar Rotterdam geen asielzoekerscentrum wil, dat zij de Rotterdammer centraal stellen en niet de asielzoeker, en dat een groot deel van Rotterdam geen asielzoekerscentrum in de achtertuin wil, zijn direct terug te vinden in bron 5 en 12. Ook de bewering over opvang in de regio van het land van herkomst staat in bron 12. Echter, het antwoord gaat niet specifiek in op de Silja zoals gevraagd, terwijl de context wel informatie bevat over andere partijen hun standpunten over de Silja. Het antwoord geeft een algemeen standpunt over asielopvang maar niet specifiek over de Silja-situatie."
+      }
+    },
+    "hallucination_metrics": {},
+    "chunks_retrieved": 15,
+    "total_ms": 1853.020500000639
+  },
+  {
+    "question_id": "ba-01",
+    "question_text": "Geef me een overzicht van de uitdagingen van het doelgroepenvervoer in Rotterdam",
+    "category": "broad_aggregation",
+    "answer": "Hier is een overzicht van de uitdagingen van het doelgroepenvervoer in Rotterdam, uitsluitend gebaseerd op de meegeleverde bronnen:\n\n**Uitdagingen met betrekking tot het doelgroepenvervoer in Rotterdam:**\n\n*   **Financiële aspecten en budgetten:**\n    *   Het totale budget voor \"Beter Benutten Vervolg\" is € 133 miljoen, met bijdragen van het Rijk (€ 73 miljoen), de MRDH (€ 22 miljoen) en overige wegbeheerders (€ 38 miljoen). 10% hiervan wordt ingezet voor Intelligente Transport Systemen (ITS). De bijdrage van de regio is gemaximeerd op € 5 miljoen exclusief BTW. (Bron 2)\n    *   In de begroting Verkeer en Vervoer wordt een kostenpost van € 6.656,1 miljoen genoemd. De Brede Doeluitkering (BDU) voor verkeer en vervoer is de belangrijkste dekking voor de kosten van de programma's Verkeer en Openbaar Vervoer, en deze lasten drukken niet op de begroting van de gemeente Rotterdam. (Bron 5)\n    *   Er is een verzoek om te onderzoeken of het woon-werkverkeer met het openbaar vervoer voor leraren buiten Rotterdam aantrekkelijker gemaakt kan worden. (Bron 1)\n    *   De consequenties voor de gemeente Rotterdam van de beëindiging van de inwonersbijdrage van de Haaglandgemeenten aan het mobiliteitsfonds per 2018 laten zich nog niet zien, maar het uitgangspunt zou moeten zijn dat de bestaande verhoudingen ten aanzien van de bestedingen uit de BDU in stand blijven. (Bron 5)\n    *   Er zijn extra investeringen nodig in maatregelen die zich binnen 15 jaar terugverdienen voor de verduurzaming van gemeentelijk vastgoed. (Bron 3)\n    *   De gemeente stelt stevige ambities voor lagere emissies bij de aanbesteding van het doelgroepenvervoer. (Bron 3)\n\n*   **Capaciteit en drukte:**\n    *   In het openbaar vervoer bestaat óók overmatige spitsdrukte, naast de drukte veroorzaakt door autoverkeer. (Bron 2)\n    *   Er is een doelstelling om 6.000 tot 10.000 spitsmijdingen te realiseren in de grootste knelpunten van de regio. De Rotterdamse regio streeft naar maximaal 14.000 spitsmijdingen, waa",
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 1.0,
+        "unique_documents": 15,
+        "total_chunks": 15,
+        "entropy": 3.907
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.733,
+        "keyword_only_pct": 0.267,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 11,
+        "keyword_only": 4,
+        "both": 0,
+        "total": 15
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 22.51,
+        "promotions_5plus": 30,
+        "demotions_5plus": 36,
+        "candidates_scored": 75
+      },
+      "rrf": {
+        "unique_from_fusion": 7,
+        "unique_pct": 0.467,
+        "vector_top_k_overlap": 4,
+        "keyword_top_k_overlap": 4
+      },
+      "timings": {
+        "embedding_ms": 288.1472910012235,
+        "vector_ms": 16.661375000694534,
+        "keyword_ms": 911.2618750004913,
+        "rrf_ms": 0.09191699973598588,
+        "reranker_ms": 11980.080749999615,
+        "total_ms": 13196.402707999368
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 2,
+        "reasoning": "Het antwoord bevat veel informatie over mobiliteit en vervoer in Rotterdam, maar beantwoordt de specifieke vraag over doelgroepenvervoer slechts zeer beperkt. Doelgroepenvervoer verwijst naar gespecialiseerd vervoer voor mensen met een beperking of ouderen, maar het antwoord behandelt voornamelijk algemeen openbaar vervoer, verkeer, klimaat en energie. Alleen de vermelding van 'stevige ambities voor lagere emissies bij aanbesteding van doelgroepenvervoer' raakt het eigenlijke onderwerp. De rest is grotendeels irrelevant voor de gestelde vraag."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Het antwoord is volledig gebaseerd op de meegeleverde context. Alle beweringen over uitdagingen van het doelgroepenvervoer in Rotterdam zijn direct terug te vinden in de bronnen, met correcte verwijzingen naar de specifieke bronnummers. Het antwoord structureert de informatie logisch in categorieën zoals financiële aspecten, capaciteit, bereikbaarheid, verduurzaming, vervoersaanbod, infrastructuur, klimaatverandering en afvalproblematiek. Er worden geen claims gemaakt die niet in de context staan, en het antwoord eindigt correct met de vermelding dat het gebaseerd is op 12 unieke bronnen."
+      },
+      "completeness": {
+        "score": 2,
+        "reasoning": "Het antwoord behandelt wel verschillende aspecten van vervoer en mobiliteit in Rotterdam, maar de vraag gaat specifiek over 'doelgroepenvervoer' - een gespecialiseerde vorm van vervoer voor mensen met een beperking of mobiliteitsuitdaging. De meeste bronnen gaan over algemeen openbaar vervoer, verkeer, en mobiliteitsbeleid. Alleen bron 3 vermeldt kort dat bij aanbesteding van doelgroepenvervoer ambities voor lagere emissies worden gesteld. Het antwoord mist dus de kernuitdagingen van het daadwerkelijke doelgroepenvervoer zoals toegankelijkheid voor mensen met beperkingen, kosten van aangepast vervoer, en specifieke uitdagingen voor deze doelgroep."
+      }
+    },
+    "hallucination_metrics": {},
+    "chunks_retrieved": 15,
+    "total_ms": 13196.402707999368
+  },
+  {
+    "question_id": "ba-02",
+    "question_text": "GRJR - gemeenschappelijke regeling voor jeugdzorg - geef me een overzicht van de belangrijkste uitdagingen en kansen",
+    "category": "acronym_abbreviation",
+    "answer": "Op basis van de verstrekte bronnen zijn dit de belangrijkste uitdagingen en kansen van de Gemeenschappelijke Regeling Jeugdhulp Rijnmond (GRJR):\n\n**Belangrijkste Uitdagingen:**\n\n*   **Complexe Netwerkomgeving en Samenwerking:** Jeugdzorg is een complexe netwerkomgeving waarin op veel niveaus wordt gewerkt. De wetgever benadrukt dat de primaire verantwoordelijkheid bij de gemeente ligt, maar er is een enorme verwevenheid. Het effectief sturen op de jeugdhulp is een grote opgave, omdat dit een samenspel is van vele partijen, waaronder gemeentelijke wijkteams, huisartsen, jeugdartsen, medisch specialisten, rechters, jeugdbeschermers, jeugdreclassering, zorgaanbieders, en het CJG. De samenwerking tussen deze partijen is cruciaal maar complex (Bron 2, 4, 10).\n*   **Financiële Druk en Houdbaarheid:** De financiële middelen voor jeugdhulp staan onder druk. De Landelijke Hervormingsagenda Jeugd is gericht op het financieel houdbaar maken van de jeugdzorg. De Hervormingsagenda bevat afspraken die leiden tot aanzienlijke financiële consequenties voor gemeenten, die deels worden gedekt door minder algemene uitkeringen van het Rijk. De autonome groei van de vraag naar jeugdhulp en de ontwikkeling op tarieven zijn externe factoren die de haalbaarheid van maatregelen beïnvloeden. Er wordt gesproken over een \"ravijnjaar 2026\" waarbij gemeenten structurele bezuinigingsmaatregelen moeten nemen om de meerjarenbegroting sluitend te krijgen. Daarnaast zijn er uitdagingen met het uitvoeren van taken die gemeenten van het Rijk krijgen, terwijl de financiële dekking achterloopt (Bron 2, 11).\n*   **Continuïteit en Transformatie van Residentiële Jeugdhulp:** De transformatie van residentiële jeugdhulp, inclusief gesloten voorzieningen (JH+) en driemilieuvoorzieningen, is een belangrijke ambitie maar ook een complex proces met veel betrokken partijen en grote bedrijfsmatige uitdagingen voor zorgaanbieders. Gemeenten zijn verantwoordelijk voor de continuïteit van deze hulp en de af- en ombouw",
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 1.0,
+        "unique_documents": 15,
+        "total_chunks": 15,
+        "entropy": 3.907
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.333,
+        "keyword_only_pct": 0.667,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 10,
+        "both": 0,
+        "total": 15
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 23.01,
+        "promotions_5plus": 35,
+        "demotions_5plus": 30,
+        "candidates_scored": 75
+      },
+      "rrf": {
+        "unique_from_fusion": 9,
+        "unique_pct": 0.6,
+        "vector_top_k_overlap": 1,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 457.1119579995866,
+        "vector_ms": 15.625582998836762,
+        "keyword_ms": 896.479166998688,
+        "rrf_ms": 0.09949999912350904,
+        "reranker_ms": 9823.164333000022,
+        "total_ms": 11192.645832999915
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 5,
+        "reasoning": "Het antwoord beantwoordt de vraag volledig en systematisch. Het geeft een uitgebreid overzicht van zowel de belangrijkste uitdagingen (8 hoofdpunten) als kansen (10 hoofdpunten) van de GRJR. Alle aspecten zijn relevant en direct gerelateerd aan de gemeenschappelijke regeling voor jeugdzorg. Het antwoord is goed gestructureerd met duidelijke kopjes en concrete details, zonder onnodige informatie. De bronverwijzingen ondersteunen de volledigheid van het antwoord."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Het antwoord is volledig gebaseerd op de verstrekte context. Alle genoemde uitdagingen en kansen zijn direct terug te vinden in de bronnen, met correcte verwijzingen naar specifieke bronnen. Het antwoord bevat geen informatie die niet in de context staat en geeft een uitgebreide, accurate samenvatting van de belangrijkste uitdagingen (zoals financiële druk, complexe samenwerking, jeugdbescherming onder druk) en kansen (zoals nabije en passende hulp, regionale samenwerking, transformatie) voor de GRJR op basis van de aangeleverde documenten."
+      }
+    },
+    "hallucination_metrics": {},
+    "chunks_retrieved": 15,
+    "total_ms": 11192.645832999915
+  },
+  {
+    "question_id": "te-01",
+    "question_text": "Wat waren de grootste financiële knelpunten in 2018?",
+    "category": "temporal",
+    "answer": "De grootste financiële knelpunten in 2018 waren:\n\n*   **Ontwikkeling Business intelligence:** Dit project had een omvang van € 540.000. (Bron 1)\n*   **Nieuwe DVO+ taken:** In het kader van de chemisch adviestaak (€ 513.k.) en het Tunnel responsteam (€ 699.k.) waren er nieuwe afspraken met de gemeente Rotterdam. (Bron 1)\n*   **Lagere kapitaallasten door vertraging gezamenlijke meldkamer:** De start van de gezamenlijke meldkamer halverwege 2018 zorgde voor lagere kapitaallasten, waarvan een groot deel niet werd doorbelast aan andere partijen. (Bron 1)\n*   **Verlaging opbrengsten Openbare meldsysteem (OMS):** De opbrengsten van het OMS daalden met € 400.k. naar € 800.k. door een verwachte afname in abonnees en het ontbreken van een wettelijke basis om de huidige dienstverlening en vergoeding in stand te houden. (Bron 1)\n*   **Onvermijdelijke ramingsbijstellingen:** Deze bedroegen € 60 miljoen en bevatten onder andere de geactualiseerde raming van de BUIG (€ 33,7 miljoen), de resultaatneming grondexploitaties (€ 9,6 miljoen) en diverse kasschuiven (€ 13,4 miljoen). (Bron 4, 8, 9, 13)\n*   **Gebrek aan financiering voor sociale huismeesters:** In Rotterdam-Oost was er een gebrek aan financiering voor sociale huismeesters in Ommoord en Prinsenland. (Bron 2, 5)\n*   **Noodzaak tot vergroting leefbaarheid:** Continuering van toezicht en handhaving op het Ambachtsplein, Poolsterplein en de Oosterflank was noodzakelijk. (Bron 2, 5)\n*   **Noodzaak tot voortzetting gevel-tot-gevel-aanpak riolering en verzakking:** Dit was nodig in het Lage Land en de Grasbuurt. (Bron 2, 5)\n*   **Financiële knelpunten door gebrek aan indexering:** De begrotingswijziging ivm indexering van lasten en baten leidde tot financiële knelpunten, met name door een stijging van de kosten van landelijke contracten (LTA), van het adolescentenstrafrecht en van kosten jeugdhulp. (Bron 6) Dit was een gevolg van het feit dat er vooralsnog geen indexatie had plaatsgevonden op de begroting. (Bron 6, 11)\n*   **Groei",
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 0.8666666666666667,
+        "unique_documents": 13,
+        "total_chunks": 15,
+        "entropy": 3.64
+      },
+      "temporal": {
+        "applicable": true,
+        "in_range_ratio": 0.0,
+        "in_range": 0,
+        "out_of_range": 0,
+        "unknown_date": 15,
+        "total": 15
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.333,
+        "keyword_only_pct": 0.667,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 10,
+        "both": 0,
+        "total": 15
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 29.92,
+        "promotions_5plus": 38,
+        "demotions_5plus": 33,
+        "candidates_scored": 75
+      },
+      "rrf": {
+        "unique_from_fusion": 12,
+        "unique_pct": 0.8,
+        "vector_top_k_overlap": 1,
+        "keyword_top_k_overlap": 2
+      },
+      "timings": {
+        "embedding_ms": 413.5517079994315,
+        "vector_ms": 407.07266699973843,
+        "keyword_ms": 102.15862499899231,
+        "rrf_ms": 0.04099999932805076,
+        "reranker_ms": 1698.0976250015374,
+        "total_ms": 2621.031791999485
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 4,
+        "reasoning": "Het antwoord beantwoordt de vraag grotendeels goed door een uitgebreide lijst van financiële knelpunten in 2018 te geven met concrete bedragen en bronverwijzingen. De informatie is relevant en specifiek. Er is echter enige afdwaling doordat sommige punten meer over beleidsmaatregelen gaan dan over echte financiële knelpunten (zoals sociale huismeesters en leefbaarheid). Ook worden sommige technische aspecten genoemd die minder direct de grootste knelpunten lijken te zijn."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Alle beweringen in het antwoord zijn direct terug te vinden in de meegeleverde context. Het antwoord geeft een uitgebreide opsomming van financiële knelpunten uit 2018 met correcte bedragen en details die allemaal letterlijk in de bronnen staan, zoals het Business intelligence project (€540k), DVO+ taken, OMS-opbrengsten, BUIG-raming (€33,7 mln), en diverse andere knelpunten. Er worden geen claims gemaakt die niet in de context voorkomen."
+      }
+    },
+    "hallucination_metrics": {},
+    "chunks_retrieved": 15,
+    "total_ms": 2621.031791999485
+  },
+  {
+    "question_id": "te-02",
+    "question_text": "Wat waren de grootste financiële knelpunten in 2019?",
+    "category": "temporal",
+    "answer": "[Geen LLM beschikbaar — Ruwe context weergegeven]\n\n[Bron 1 — Constatering: Omvang schuldenproblematiek (score: 0.174)]\nConstaterende dat:-inRotterdamzo’n60.000huishoudenseenrisicolopenopproblematischeschulden;\n\n---\n\n[Bron 2 — 2.1. Financiën 2019 stichting BOOR (score: 0.169)]\n2.1. Financiën 2019 stichting BOOR\n\nHet financiële beeld over 2019 is als volgt:\n\nOmschrijving\nBegroting\nt/m maart\nRealisatie\nt/m maart\nBegroting\n2019\nForecast\n2019\nBaten\nRijksbijdragen Ministerie van OCW 61.277 60.677 245.108 246.287\nOverige overheidsbijdragen 3.194 3.112 12.777 13.428\nOverige baten 3.295 2.744 13.181 13.518\nTotaal baten 67.767 66.533 271.066 273.233\n\nLasten\nPersonele lasten 55.774 56.846 223.097 226.297\nHuisvestingslasten 4.449 4.814 17.796 18.227\nAfschrijvingen 1.267 1.150 5.066 4.733\nOverige materiële lasten 5.892 4.320 23.567 23.612\nTotaal lasten 67.382 67.130 269.526 272.869\n\nResultaat gewone bedrijfsvoering 385 -597 1.540 364\n\nFinanciële baten en lasten -127 -124 -506 -505\n\nResultaat- bij ongewijzigd beleid 259 -721 1.034 -142\n\nBijsturingsmaatregelen       1.402\n\nResultaat na optimale bijsturing 259 -721 1.034 1.260\n\nAlgemeen\nDe forecast 2019 bij ongewijzigd beleid laat een lager resultaat zien dan de begroting van\ncirca € 1,1 miljoen. De belangrijkste oorzaak van deze lagere prognose is de stijging van de\npersonele lasten als gevolg van meer inhuur van leerkrachten en directie in de sector (s)bao\nen vo. Voor de resultaten per sector wordt verwezen naar paragraaf 2.2.\n\nDe bijsturingsmaatregelen hebben een financieel effect van € 1,4 miljoen, wat neerkomt op\n0,5% van de exploitatie. Het beste moment om bij te sturen, is nu, bij voorbereiding van een\nnieuw schooljaar. Directeuren zijn nog bezig met het opstellen van hun formatieplan voor\nvolgend schooljaar, waarbij de afspraak is dat zij kritisch kijken naar de formatie van het\naantal groepen en de meest efficiënte inzet van middelen. Concreet betekent dit bijvoorbeeld\ndat er keuzes worden gemaakt zoals het werken met mind",
+    "retrieval_metrics": {
+      "context_precision": 0.933,
+      "diversity": {
+        "document_diversity": 0.9333333333333333,
+        "unique_documents": 14,
+        "total_chunks": 15,
+        "entropy": 3.774
+      },
+      "temporal": {
+        "applicable": true,
+        "in_range_ratio": 0.0,
+        "in_range": 0,
+        "out_of_range": 0,
+        "unknown_date": 15,
+        "total": 15
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.4,
+        "keyword_only_pct": 0.6,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 6,
+        "keyword_only": 9,
+        "both": 0,
+        "total": 15
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 20.32,
+        "promotions_5plus": 25,
+        "demotions_5plus": 32,
+        "candidates_scored": 75
+      },
+      "rrf": {
+        "unique_from_fusion": 8,
+        "unique_pct": 0.533,
+        "vector_top_k_overlap": 3,
+        "keyword_top_k_overlap": 4
+      },
+      "timings": {
+        "embedding_ms": 288.914916000067,
+        "vector_ms": 268.4410839992779,
+        "keyword_ms": 133.3642499994312,
+        "rrf_ms": 0.04558399996312801,
+        "reranker_ms": 3914.1327919987816,
+        "total_ms": 4605.011583000305
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 1,
+        "reasoning": "Het antwoord raakt het onderwerp nauwelijks. De vraag gaat over de grootste financiële knelpunten in Rotterdam in 2019, maar het antwoord bevat alleen ruwe context over schuldenproblematiek (60.000 huishoudens) en gedetailleerde financiële cijfers van stichting BOOR (een onderwijsinstelling). Er wordt geen LLM-antwoord gegeven dat de vraag daadwerkelijk beantwoordt door de belangrijkste financiële knelpunten van de gemeente Rotterdam in 2019 te identificeren en uit te leggen."
+      },
+      "faithfulness": {
+        "score": 0,
+        "reasoning": "Er is geen antwoord gegeven door het RAG-systeem. In plaats daarvan wordt alleen de ruwe context weergegeven met de melding '[Geen LLM beschikbaar — Ruwe context weergegeven]'. Omdat er geen daadwerkelijk antwoord is om te beoordelen op faithfulness, kan geen score worden toegekend voor de mate waarin het antwoord gebaseerd is op de context."
+      }
+    },
+    "hallucination_metrics": {},
+    "chunks_retrieved": 15,
+    "total_ms": 4605.011583000305
+  },
+  {
+    "question_id": "te-03",
+    "question_text": "Wat waren de grootste financiële knelpunten in 2020?",
+    "category": "temporal",
+    "answer": "In 2020 waren de grootste financiële knelpunten voor Rotterdam onder andere:\n\n*   **Impact van de coronacrisis:** Dit leidde tot aanzienlijke financiële tegenvallers. In de eerste herziening van de begroting 2020 werden €23 miljoen aan bekende financiële tegenvallers verwerkt. Voor 2020 en 2021 werden opnieuw forse tegenvallers verwacht als gevolg van de coronacrisis, voornamelijk door een toename van het aantal bijstandsgerechtigden (€65 miljoen), diverse meerkosten en inkomstenderving, wat optelt tot €92 miljoen. [Bron 1, Bron 2, Bron 3]\n*   **Toenemende zorgkosten:** Nog los van de impact van de coronacrisis, vormden de toenemende zorgkosten een grote financiële opgave. [Bron 2, Bron 3]\n*   **Onzekerheden rondom het gemeentefonds en Warmtebedrijf:** Deze onzekerheden droegen bij aan de financiële druk. [Bron 2, Bron 3]\n*   **Hogere lasten dan baten:** Meerjarig was er sprake van hogere lasten dan baten (€90 miljoen, €8 miljoen, €39 miljoen, €22 miljoen), wat een beroep deed op de algemene reserve. [Bron 1, Bron 2, Bron 3]\n*   **Financiële klappen voor de Rotterdamse horeca:** Door de coronacrisis heeft de horeca flinke financiële klappen gekregen. [Bron 4]\n*   **Uitputting van het Investeringsfonds Rotterdam (IFR):** Het IFR raakte uitgeput, waarbij de hoofdsom gestaag daalde en de bespaarde rente nauwelijks genoeg was om de kapitaallasten te dekken. [Bron 7]\n*   **Hogere energiebelasting:** Er was een knelpunt van €900 door een forse verhoging van de energiebelasting, met name voor grote panden. [Bron 13]\n*   **Onvoldoende investeringsruimte:** Dit was een belangrijke aanleiding voor financiële overwegingen. [Bron 7]",
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 1.0,
+        "unique_documents": 15,
+        "total_chunks": 15,
+        "entropy": 3.907
+      },
+      "temporal": {
+        "applicable": true,
+        "in_range_ratio": 0.0,
+        "in_range": 0,
+        "out_of_range": 0,
+        "unknown_date": 15,
+        "total": 15
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.6,
+        "keyword_only_pct": 0.4,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 9,
+        "keyword_only": 6,
+        "both": 0,
+        "total": 15
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 21.81,
+        "promotions_5plus": 37,
+        "demotions_5plus": 27,
+        "candidates_scored": 75
+      },
+      "rrf": {
+        "unique_from_fusion": 6,
+        "unique_pct": 0.4,
+        "vector_top_k_overlap": 6,
+        "keyword_top_k_overlap": 3
+      },
+      "timings": {
+        "embedding_ms": 312.8805830001511,
+        "vector_ms": 338.9684579997265,
+        "keyword_ms": 119.22008300098241,
+        "rrf_ms": 0.04537499989964999,
+        "reranker_ms": 9413.216916998863,
+        "total_ms": 10184.452790999785
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 5,
+        "reasoning": "Het antwoord beantwoordt de vraag volledig en direct door de grootste financiële knelpunten van Rotterdam in 2020 systematisch op te sommen. Alle genoemde punten zijn relevant en specifiek voor 2020, met concrete bedragen waar mogelijk (€23 miljoen, €65 miljoen, €92 miljoen, etc.). De impact van corona wordt terecht als hoofdknelpunt gepresenteerd, aangevuld met andere belangrijke financiële uitdagingen zoals zorgkosten, gemeentefonds-onzekerheden en structurele tekorten. Het antwoord is goed gestructureerd en bevat geen onnodige informatie."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Het antwoord is volledig gebaseerd op de meegeleverde context. Alle genoemde financiële knelpunten zijn direct terug te vinden in de bronnen: de coronacrisis impact (€23 miljoen tegenvallers, €65 miljoen bijstandsgerechtigden, €92 miljoen totaal), toenemende zorgkosten, onzekerheden gemeentefonds en Warmtebedrijf, hogere lasten dan baten (€90/8/39/22 miljoen), horeca klappen, IFR uitputting, energiebelasting (€900 knelpunt), en onvoldoende investeringsruimte. Alle cijfers en beweringen komen letterlijk uit de context en zijn correct geciteerd met bronverwijzingen."
+      }
+    },
+    "hallucination_metrics": {},
+    "chunks_retrieved": 15,
+    "total_ms": 10184.452790999785
+  },
+  {
+    "question_id": "te-04",
+    "question_text": "Wat waren de grootste financiële knelpunten in 2021?",
+    "category": "temporal",
+    "answer": "In 2021 werden de volgende financiële knelpunten in Rotterdam ervaren:\n\n*   **De cultuursector:** Door de aanhoudende beperkingen en sluiting van culturele voorzieningen had de cultuursector nog het gehele jaar steun nodig om de infrastructuur in stand te houden. Veel podia, musea en evenementenorganisaties stonden op het punt van voortbestaan, en makers (beeldend kunstenaars, musici, acteurs, dansers, etc.) zaten in grote financiële problemen. [Bron 3]\n*   **Publiek transport (OV):** Er werd rekening gehouden met aanzienlijke tekorten in de OV-sector, die opliepen tot 1.169 miljoen euro in de periode 2021-2030, afhankelijk van het herstel van reizigersaantallen en rijkssteun. [Bron 2]\n*   **Diergaarde Blijdorp:** De dierentuin kampte met een oplopend liquiditeitstekort, dat in juni 2021 naar verwachting €7,2 miljoen zou bedragen. Dit werd veroorzaakt door onder andere uitgestelde investeringen en achterstallig onderhoud. [Bron 4]\n*   **Woningcorporaties en het middensegment op de woningmarkt:** Er was een zorg over de financiële liquiditeit van woningcorporaties, waardoor ze kwetsbaar werden voor initiatieven van projectontwikkelaars. Tegelijkertijd werd het middensegment op de woningmarkt als een knelpunt gezien, waarbij middeninkomens geen woning konden vinden. Dit werd deels veroorzaakt door investeringen in corporaties, waardoor er minder overbleef voor het middensegment. [Bron 1, Bron 9, Bron 15]\n*   **Jongeren met financiële problemen en schulden:** Er was een zorg over scholingsmogelijkheden voor jongeren met financiële problemen, waarbij alleen schuldhulpverlening niet voldoende perspectief zou bieden. [Bron 11]",
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 1.0,
+        "unique_documents": 15,
+        "total_chunks": 15,
+        "entropy": 3.907
+      },
+      "temporal": {
+        "applicable": true,
+        "in_range_ratio": 0.0,
+        "in_range": 0,
+        "out_of_range": 0,
+        "unknown_date": 15,
+        "total": 15
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.333,
+        "keyword_only_pct": 0.667,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 10,
+        "both": 0,
+        "total": 15
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 24.19,
+        "promotions_5plus": 30,
+        "demotions_5plus": 32,
+        "candidates_scored": 75
+      },
+      "rrf": {
+        "unique_from_fusion": 9,
+        "unique_pct": 0.6,
+        "vector_top_k_overlap": 2,
+        "keyword_top_k_overlap": 4
+      },
+      "timings": {
+        "embedding_ms": 863.6256250010774,
+        "vector_ms": 322.1527080004307,
+        "keyword_ms": 107.38620899974194,
+        "rrf_ms": 0.0446659996669041,
+        "reranker_ms": 1907.04445800111,
+        "total_ms": 3200.3758330010896
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 5,
+        "reasoning": "Het antwoord beantwoordt de vraag volledig en direct door concrete financiële knelpunten in Rotterdam voor 2021 op te sommen. Alle genoemde punten zijn relevant en specifiek voor dat jaar: cultuursector door COVID-19, OV-tekorten, liquiditeitsproblemen Diergaarde Blijdorp, woningmarktproblematiek en jeugdschulden. Het antwoord is goed gestructureerd met concrete cijfers waar beschikbaar en bronverwijzingen."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Alle beweringen in het antwoord zijn direct terug te vinden in de aangeleverde context. De cultuursector problemen staan in Bron 3, de OV-tekorten in Bron 2, Diergaarde Blijdorp liquiditeitsproblemen in Bron 4, woningcorporaties en middensegment knelpunten in Bronnen 1, 9 en 15, en de jongeren met schulden in Bron 11. Het antwoord bevat geen informatie die niet in de context voorkomt en alle cijfers en details kloppen exact met de bronnen."
+      }
+    },
+    "hallucination_metrics": {},
+    "chunks_retrieved": 15,
+    "total_ms": 3200.3758330010896
+  },
+  {
+    "question_id": "te-05",
+    "question_text": "Wat waren de grootste financiële knelpunten in 2022?",
+    "category": "temporal",
+    "answer": "In 2022 waren de grootste financiële knelpunten gerelateerd aan de volgende zaken:\n\n*   **Inflatie en energiekosten:** De hoge inflatie (in 2022 was dit +9,9%) en de stijgende energiekosten als gevolg van de situatie in Oekraïne en de daarmee gepaard gaande economische sancties, zorgden voor een toename in geldstress en armoede, wat ook het onderwijs raakte. Er was sprake van een aanzienlijk hogere tariefstelling voor nieuwe aanbestedingen, zoals schoonmaak. BOOR had alleen al voor 2022 een nadelig effect van €1,6 miljoen door de stijging van energielasten, waarvoor geen compensatie was.\n*   **Huisvesting:** De hoge kosten van onderhoud, het vervallen van de overgangsregeling voor groot onderhoud in 2023, de financiële impact van het vervallen van de vordering OCW door een wijziging in het betaalritme (in 2022), en de toegenomen wensen en eisen rondom bijvoorbeeld luchtkwaliteit (ventilatie-investeringen) en verduurzaming, zorgden voor zeer hoge noodzakelijke financiële uitgaven.\n*   **Personeelstekorten en arbeidsmarkttoeslagen:** Er waren grote personeelstekorten in het Rotterdamse onderwijs, zowel in het basis- als voortgezet onderwijs. Mogelijke financiële effecten hiervan waren niet in de begroting opgenomen. Personeel op scholen met een complexe leerlingpopulatie ontving een tijdelijke arbeidsmarkttoeslag die niet structureel geborgd was.\n\nDaarnaast werd de financiële situatie voor het funderend onderwijs als ontoereikend ervaren, waardoor de financiële kengetallen onder druk kwamen te staan. De NPO-gelden vertekenden dit beeld op korte termijn enigszins, maar deze gelden waren bestemd voor het wegwerken van leerachterstanden en het versterken van basisvaardigheden in de komende jaren.",
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 0.8666666666666667,
+        "unique_documents": 13,
+        "total_chunks": 15,
+        "entropy": 3.64
+      },
+      "temporal": {
+        "applicable": true,
+        "in_range_ratio": 0.0,
+        "in_range": 0,
+        "out_of_range": 0,
+        "unknown_date": 15,
+        "total": 15
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.467,
+        "keyword_only_pct": 0.533,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 7,
+        "keyword_only": 8,
+        "both": 0,
+        "total": 15
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 10.91,
+        "promotions_5plus": 26,
+        "demotions_5plus": 31,
+        "candidates_scored": 75
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 7,
+        "keyword_top_k_overlap": 8
+      },
+      "timings": {
+        "embedding_ms": 308.7867499998538,
+        "vector_ms": 371.92941600005724,
+        "keyword_ms": 128.55108300027496,
+        "rrf_ms": 0.04112499846087303,
+        "reranker_ms": 410183.5256659997,
+        "total_ms": 410993.5669589995
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 4,
+        "reasoning": "Het antwoord beantwoordt de vraag grotendeels goed door drie concrete financiële knelpunten te identificeren: inflatie/energiekosten, huisvesting en personeelstekorten. De informatie is relevant en ondersteund met specifieke cijfers (9,9% inflatie, €1,6 miljoen nadelig effect BOOR). Het laatste deel over NPO-gelden is minder direct relevant voor de vraag naar knelpunten in 2022, maar de kernvraag wordt wel adequaat beantwoord."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Het antwoord is volledig gebaseerd op de meegeleverde context. Alle genoemde financiële knelpunten voor 2022 zijn direct terug te vinden in bron 3 (Risico's en Onzekerheden): de inflatie van +9,9%, de stijgende energiekosten door de Oekraïne-situatie, het nadelige effect van €1,6 miljoen voor BOOR door energielasten, de hoge kosten van onderhoud en huisvesting, het vervallen van de overgangsregeling groot onderhoud (2023), de financiële impact van het vervallen van de vordering OCW (2022), de personeelstekorten, de tijdelijke arbeidsmarkttoeslagen, en de ontoereikendheid van de bekostiging voor het funderend onderwijs. Het antwoord bevat geen informatie die niet in de context staat."
+      }
+    },
+    "hallucination_metrics": {},
+    "chunks_retrieved": 15,
+    "total_ms": 410993.5669589995
+  },
+  {
+    "question_id": "te-06",
+    "question_text": "Wat waren de grootste financiële knelpunten in 2023?",
+    "category": "temporal",
+    "answer": "De grootste financiële knelpunten in 2023 waren:\n\n*   **Financiële haalbaarheid van flexwoningen**: Het innovatieve en tijdelijke karakter van flexwonen creëert onzekerheid over de restwaarde en eventuele vervolglocaties, wat het lastig maakt voor ontwikkelaars om een sluitende businesscase te maken. Subsidies worden aangevraagd om tekorten te dekken (Bron 2).\n*   **Stijgende bouwkosten en rente**: De sterke stijging van bouwkosten en rente in het afgelopen jaar heeft de kosten voor bouwers en ontwikkelaars verhoogd. Dit maakt particulieren en investeerders minder bereid of in staat om woningen te betalen, wat naar verwachting zal leiden tot een dip in de woningbouwproductie in 2024 (Bron 4).\n*   **Resultaat Grondexploitaties**: De ontwikkelingen op de woningmarkt, zoals stijgende hypotheekrente, hoge bouwkosten, terughoudendheid van investeerders en dalende woningprijzen, hebben geleid tot een negatief resultaat op de grondexploitaties van €25 miljoen in 2023. Dit resultaat is nog omgeven door onzekerheden en kan mogelijk nog oplopen (Bron 12).",
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 0.8666666666666667,
+        "unique_documents": 13,
+        "total_chunks": 15,
+        "entropy": 3.64
+      },
+      "temporal": {
+        "applicable": true,
+        "in_range_ratio": 0.0,
+        "in_range": 0,
+        "out_of_range": 0,
+        "unknown_date": 15,
+        "total": 15
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.533,
+        "keyword_only_pct": 0.467,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 8,
+        "keyword_only": 7,
+        "both": 0,
+        "total": 15
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 8,
+        "keyword_top_k_overlap": 7
+      },
+      "timings": {
+        "embedding_ms": 321.3939580000442,
+        "vector_ms": 772.6071249999222,
+        "keyword_ms": 2082.6264579991403,
+        "rrf_ms": 0.08270799844467547,
+        "reranker_ms": 139790.36674999952,
+        "total_ms": 142967.48241599926
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 5,
+        "reasoning": "Het antwoord beantwoordt de vraag volledig en direct door drie concrete financiële knelpunten uit 2023 te identificeren: problemen met flexwoningen, stijgende bouw- en rentekosten, en negatieve grondexploitatieresultaten van €25 miljoen. Alle punten zijn relevant, specifiek voor 2023, en worden ondersteund met bronverwijzingen. Er is geen onnodige informatie."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Alle beweringen in het antwoord zijn direct terug te vinden in de aangeleverde context. De financiële haalbaarheid van flexwoningen wordt expliciet genoemd in Bron 2, de stijgende bouwkosten en rente staan beschreven in Bron 4, en het negatieve resultaat van €25 miljoen op grondexploitaties wordt specifiek genoemd in Bron 12. Het antwoord baseert zich volledig op de beschikbare bronnen zonder externe informatie toe te voegen."
+      }
+    },
+    "hallucination_metrics": {},
+    "chunks_retrieved": 15,
+    "total_ms": 142967.48241599926
+  },
+  {
+    "question_id": "te-07",
+    "question_text": "Wat waren de grootste financiële knelpunten in 2024?",
+    "category": "temporal",
+    "answer": "In 2024 waren de grootste financiële knelpunten de volgende:\n\n*   **Onvoldoende middelen vanuit het Rijk:** Het Rijk voorziet de gemeenten vanaf 2026 van onvoldoende middelen om alle taken in de huidige omvang te waarborgen. Dit dwingt gemeenten tot het maken van aanpassingen in beleid en taken. (Bron 3, Bron 10, Bron 14)\n*   **Stijgende uitgaven en dalende inkomsten:** De uitgaven stijgen onvermijdelijk, terwijl de inkomsten dalen door een bijstelling van de uitkering uit het Gemeentefonds. (Bron 5)\n*   **Zorguitgaven:** De uitvoering van de Jeugdwet en Wmo leidt tot hogere zorguitgaven, met het risico dat deze buiten de budgettaire kaders treden. Het ambitieniveau voor de Bestuurlijke Opdracht Zorg wordt verhoogd, wat het risico op het niet (volledig) realiseren hiervan met zich meebrengt. (Bron 6)\n*   **Onzekerheden rondom OZB-opbrengsten:** De begrote en gerealiseerde OZB-opbrengsten kunnen afwijken door factoren zoals een dynamische stad, onzekere uitkomsten van bezwaarprocedures en de impact van de conjunctuur. (Bron 6)\n*   **Werkgeverspremies en pensioenen:** Nog niet gepubliceerde werkgeverspremies (met name pensioenpremies) en een nog af te sluiten cao vanaf april 2025 kunnen leiden tot financiële consequenties, met een risico op 2% hogere uitkomsten dan geraamd. (Bron 6)\n*   **Verhoogde kosten voor gemeenschappelijke regelingen (GR):** De indexatie voor 2025, gebaseerd op de macro-economische verkenning, is 6,84%. Er zijn echter verschillen ontstaan tussen de inflatiecijfers in MEV2023 en MEV2024, wat kan leiden tot een discrepantie tussen de toegekende index van de gemeentelijke bijdrage en de werkelijke kostenontwikkeling van de begroting van GR's. (Bron 2, Bron 3, Bron 10, Bron 14)\n*   **Noodzaak tot bezuinigen:** Vanwege knellende financiële kaders en de verwachte tekorten vanaf 2026, worden gemeenschappelijke regelingen gevraagd om bij te dragen aan de financiële opgave door te anticiperen op gemeentelijke bezuinigingen. (Bron 3, Bron 10, Bron 14)\n*  ",
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 0.8666666666666667,
+        "unique_documents": 13,
+        "total_chunks": 15,
+        "entropy": 3.64
+      },
+      "temporal": {
+        "applicable": true,
+        "in_range_ratio": 0.0,
+        "in_range": 0,
+        "out_of_range": 0,
+        "unknown_date": 15,
+        "total": 15
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.467,
+        "keyword_only_pct": 0.533,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 7,
+        "keyword_only": 8,
+        "both": 0,
+        "total": 15
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 24.11,
+        "promotions_5plus": 44,
+        "demotions_5plus": 21,
+        "candidates_scored": 75
+      },
+      "rrf": {
+        "unique_from_fusion": 10,
+        "unique_pct": 0.667,
+        "vector_top_k_overlap": 2,
+        "keyword_top_k_overlap": 3
+      },
+      "timings": {
+        "embedding_ms": 580.5726250000589,
+        "vector_ms": 751.342958999885,
+        "keyword_ms": 1681.2740839995968,
+        "rrf_ms": 0.0842080007714685,
+        "reranker_ms": 1010465.554458,
+        "total_ms": 1013480.0784170001
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 4,
+        "reasoning": "Het antwoord beantwoordt de vraag grotendeels goed door systematisch de belangrijkste financiële knelpunten van 2024 op te sommen met concrete details en bronverwijzingen. De meeste punten zijn zeer relevant (tekortschietende rijksmiddelen, stijgende zorguitgaven, OZB-onzekerheden, personeelskosten). Echter, enkele punten zoals de verkiezing van het Europees Parlement (€4,4 mln) zijn minder relevant als 'grootste' financiële knelpunt in vergelijking met de andere genoemde structurele problemen van tientallen miljoenen."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Het antwoord is volledig gebaseerd op de meegeleverde context. Alle genoemde financiële knelpunten zijn direct terug te vinden in de bronnen, met correcte verwijzingen naar de relevante bronnen. Het antwoord bevat geen informatie die niet in de context staat en geeft een accurate weergave van de financiële uitdagingen die in 2024 speelden volgens de aangeleverde documenten."
+      }
+    },
+    "hallucination_metrics": {},
+    "chunks_retrieved": 15,
+    "total_ms": 1013480.0784170001
+  },
+  {
+    "question_id": "te-08",
+    "question_text": "Wat waren de grootste financiële knelpunten in 2025?",
+    "category": "temporal",
+    "answer": "De grootste financiële knelpunten in 2025 waren:\n\n*   **PGB Jeugdhulp:** Een negatieve bijstelling van € 10.797 (Bron 1).\n*   **Regionale Jeugdhulp:** Een negatieve bijstelling van € 7.478 (Bron 1).\n*   **Ontvangsten eigen bijdrage Wmo:** Een neerwaartse bijstelling van € 18,00 miljoen (dit is voor 2026, maar de oorzaak ligt in de uitgestelde invoering van het wetsvoorstel Eerlijker eigen bijdrage) (Bron 1).\n\nHoewel de vraag specifiek naar 2025 vraagt, vermeldt Bron 1 ook financiële bijstellingen voor 2026 en daarna gerelateerd aan de eigen bijdrage Wmo.",
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 0.9333333333333333,
+        "unique_documents": 14,
+        "total_chunks": 15,
+        "entropy": 3.774
+      },
+      "temporal": {
+        "applicable": true,
+        "in_range_ratio": 0.0,
+        "in_range": 0,
+        "out_of_range": 0,
+        "unknown_date": 15,
+        "total": 15
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.333,
+        "keyword_only_pct": 0.667,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 10,
+        "both": 0,
+        "total": 15
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 25.33,
+        "promotions_5plus": 33,
+        "demotions_5plus": 38,
+        "candidates_scored": 75
+      },
+      "rrf": {
+        "unique_from_fusion": 8,
+        "unique_pct": 0.533,
+        "vector_top_k_overlap": 1,
+        "keyword_top_k_overlap": 6
+      },
+      "timings": {
+        "embedding_ms": 351.62683300040953,
+        "vector_ms": 1424.2224589997932,
+        "keyword_ms": 1104.3317079984263,
+        "rrf_ms": 0.4138330004934687,
+        "reranker_ms": 50901.318000000174,
+        "total_ms": 53782.040457999756
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 4,
+        "reasoning": "Het antwoord beantwoordt de vraag grotendeels correct door drie concrete financiële knelpunten voor 2025 te noemen met specifieke bedragen. De informatie is relevant en goed gestructureerd. Er is een kleine afdwaling door het noemen van 2026-cijfers, maar dit wordt wel toegelicht. Het antwoord zou nog beter zijn geweest als het meer context had gegeven over waarom dit de 'grootste' knelpunten zijn."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Alle beweringen in het antwoord zijn direct terug te vinden in Bron 1. De PGB Jeugdhulp bijstelling van -€10.797, Regionale Jeugdhulp bijstelling van -€7.478, en de neerwaartse bijstelling van €18,0 mln voor eigen bijdrage Wmo staan letterlijk vermeld in de context. Het antwoord beperkt zich tot wat expliciet in de bronnen staat en voegt geen externe informatie toe."
+      }
+    },
+    "hallucination_metrics": {},
+    "chunks_retrieved": 15,
+    "total_ms": 53782.040457999756
+  },
+  {
+    "question_id": "bv-01",
+    "question_text": "Wat zijn de belangrijkste aandachtspunten voor de gebiedsontwikkeling M4H? Geef me zowel positieve als negatieve punten",
+    "category": "balanced_view",
+    "answer": "Hieronder vind je de belangrijkste aandachtspunten voor de gebiedsontwikkeling M4H, zowel positieve als negatieve, uitsluitend gebaseerd op de aangeleverde bronnen.\n\n### Positieve punten\n\n*   **Organische en marktgerichte ontwikkeling:** De ontwikkelingsstrategie voor M4H wordt positief ontvangen door de VVD en Leefbaar Rotterdam. Zij vinden het verstandig om aan te sturen op een organische ontwikkeling die inspeelt op de markt en potentiële gebruikers. Dit wordt gezien als een strategie die goed aansluit bij het huidige financiële klimaat en de roep om minder regeltjes (Bron 5, Bron 11).\n*   **Economische ontwikkeling:** Een verlenging van het spoor in combinatie met een veilig en comfortabel eindstation wordt als potentieel positief voor de economische ontwikkeling van Hoek van Holland gezien (Bron 2).\n*   **Mobiliteitsinvesteringen:** Er is een investeringsvoorstel voor een mobiliteitsstrategie voor het Merwe-Vierhavengebied (M4H) (Bron 12).\n\n### Negatieve punten\n\n*   **Verkeerssituatie en ontsluiting:**\n    *   Er zijn diverse opmerkingen in het bestemmingsplan en de MER-beoordeling met betrekking tot de verkeerssituatie die niet geheel in lijn lijken te zijn (Bron 3, Bron 10).\n    *   De ontsluiting van het plangebied, inclusief de parkeervoorzieningen, wordt als gebrekkig geregeld beschouwd. Het plan voorziet niet in een goede afwikkeling van het verkeer, en onderzoeken maken onvoldoende duidelijk dat een goede verkeersafwikkeling mogelijk is met de herontwikkeling (Bron 9, Bron 15).\n    *   Er is een oproep om nog eens goed te kijken naar de oeververbindingen die voorzien zijn in het Merwe-Vierhavensgebied (Bron 5).\n*   **Overlast tijdens bouw:** Er is een verzoek om de overlast van de bouw in de komende jaren te beperken en het gebied tijdens de verbouwingen toegankelijk en prettig in te richten. Echter, de voorgestelde zienswijze hiervoor is ongegrond verklaard (Bron 7, Bron 13).\n*   **Invloed op wijkraadsgebied:** Hoewel M4H buiten het wijkraadsgebied van ",
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 0.7333333333333333,
+        "unique_documents": 11,
+        "total_chunks": 15,
+        "entropy": 3.273
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 1.0,
+        "keyword_only_pct": 0.0,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 15,
+        "keyword_only": 0,
+        "both": 0,
+        "total": 15
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 24.16,
+        "promotions_5plus": 27,
+        "demotions_5plus": 35,
+        "candidates_scored": 75
+      },
+      "rrf": {
+        "unique_from_fusion": 8,
+        "unique_pct": 0.533,
+        "vector_top_k_overlap": 7,
+        "keyword_top_k_overlap": 0
+      },
+      "timings": {
+        "embedding_ms": 502.61508299990965,
+        "vector_ms": 635.8682909994968,
+        "keyword_ms": 7903.7658750003175,
+        "rrf_ms": 0.0877090005815262,
+        "reranker_ms": 15236.926166999183,
+        "total_ms": 24279.39441699891
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 4,
+        "reasoning": "Het antwoord beantwoordt de vraag grotendeels goed door zowel positieve als negatieve aandachtspunten voor M4H-ontwikkeling te presenteren in een duidelijke structuur. De positieve punten (organische ontwikkeling, economische kansen, mobiliteitsinvesteringen) en negatieve punten (verkeersproblematiek, bouwoverlast, ontsluitingsproblemen) zijn relevant en goed onderbouwd met bronverwijzingen. Een klein minpunt is dat sommige punten wat specifiek zijn (zoals de spoorverlenging naar Hoek van Holland) en mogelijk niet de allerbelangrijkste hoofdthema's van M4H-ontwikkeling vertegenwoordigen, maar over het algemeen geeft het antwoord een evenwichtig en informatief overzicht."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Het antwoord is volledig gebaseerd op de aangeleverde context. Alle positieve punten (organische ontwikkeling, economische ontwikkeling, mobiliteitsinvesteringen) en negatieve punten (verkeerssituatie, overlast tijdens bouw, invloed op wijkraadsgebied, stellingname) zijn direct terug te vinden in de bronnen met correcte verwijzingen. Er worden geen claims gemaakt die niet in de context staan."
+      },
+      "completeness": {
+        "score": 4,
+        "reasoning": "Het antwoord dekt de meeste relevante aspecten uit de context goed. Het behandelt zowel positieve als negatieve punten zoals gevraagd, inclusief organische ontwikkeling, economische aspecten, verkeersproblematiek, overlast tijdens bouw, en invloed op omliggende gebieden. Verschillende partijen (VVD, Leefbaar Rotterdam, wijkraden) worden genoemd. Een minor aspect dat gemist wordt is de expliciete vermelding van de ontwikkelingsdruk in M4H en de prioritering van andere gebieden zoals stadionpark en Katendrecht. Ook de specifieke gebiedsambitiedocumenten voor Marconikwartier en Keilekwartier worden niet expliciet genoemd, hoewel dit minder cruciaal is voor het beantwoorden van de vraag."
+      }
+    },
+    "hallucination_metrics": {},
+    "chunks_retrieved": 15,
+    "total_ms": 24279.39441699891
+  },
+  {
+    "question_id": "se-01",
+    "question_text": "Waarom ging het Warmtebedrijf Rotterdam failliet?",
+    "category": "specific_event",
+    "answer": "De meegeleverde bronnen geven geen direct antwoord op de vraag waarom het Warmtebedrijf Rotterdam failliet ging. Bron 1 vermeldt wel dat er €73,5 miljoen kapitaal in het bedrijf is gestort en dat de gemeente garant staat voor €104 miljoen aan schulden, wat duidt op aanzienlijke financiële betrokkenheid. Ook wordt genoemd dat de Rekenkamer onderzoek deed naar de aansturing van het Warmtebedrijf door het college, wat kan wijzen op mogelijke problemen. De andere bronnen hebben betrekking op afvalproblematiek in Rotterdam, de stand van zaken van het Warmtebedrijf in 2019, een motie om de afhankelijkheid van AVR-warmte af te bouwen, en een beoordeling van een herstelplan, maar specificeren de oorzaak van een eventueel faillissement niet.",
+    "retrieval_metrics": {
+      "context_precision": 0.462,
+      "diversity": {
+        "document_diversity": 1.0,
+        "unique_documents": 13,
+        "total_chunks": 13,
+        "entropy": 3.7
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 1.0,
+        "keyword_only_pct": 0.0,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 13,
+        "keyword_only": 0,
+        "both": 0,
+        "total": 13
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 0.93,
+        "promotions_5plus": 4,
+        "demotions_5plus": 2,
+        "candidates_scored": 75
+      },
+      "rrf": {
+        "unique_from_fusion": 13,
+        "unique_pct": 1.0,
+        "vector_top_k_overlap": 0,
+        "keyword_top_k_overlap": 0
+      },
+      "timings": {
+        "embedding_ms": 289.7532080005476,
+        "vector_ms": 277.3012910001853,
+        "keyword_ms": 933.4587909997936,
+        "rrf_ms": 0.11762500071199611,
+        "reranker_ms": 360338.16116699926,
+        "total_ms": 361838.97295799945
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 4,
+        "reasoning": "Het antwoord erkent eerlijk dat de bronnen geen direct antwoord geven op de vraag waarom het Warmtebedrijf Rotterdam failliet ging. Wel worden relevante financiële indicatoren genoemd (€73,5 miljoen kapitaal, €104 miljoen garanties) en wordt verwezen naar Rekenkamer-onderzoek dat op problemen duidt. Het antwoord is transparant over de beperkingen van de beschikbare informatie en geeft een accurate samenvatting van wat wel bekend is uit de bronnen."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Het antwoord is volledig gebaseerd op de meegeleverde context. Het erkent eerlijk dat de bronnen geen direct antwoord geven op waarom het Warmtebedrijf failliet ging, en vermeldt alleen informatie die daadwerkelijk in de context staat: de kapitaalstorting van €73,5 miljoen, de garantstelling van €104 miljoen, het rekenkameronderzoek naar aansturing, en verwijzingen naar een herstelplan. Het antwoord voegt geen externe informatie toe en blijft binnen de grenzen van wat de bronnen bieden."
+      }
+    },
+    "hallucination_metrics": {},
+    "chunks_retrieved": 13,
+    "total_ms": 361838.97295799945
+  },
+  {
+    "question_id": "io-01",
+    "question_text": "Het nachtleven in Rotterdam laat te wensen over zeggen veel mensen, klopt dat?",
+    "category": "informal_opinion",
+    "answer": "Ja, dat klopt. Volgens bron 1 kan het Rotterdamse nachtleven wel een \"boost\" gebruiken, wat impliceert dat het momenteel te wensen overlaat.",
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 1.0,
+        "unique_documents": 15,
+        "total_chunks": 15,
+        "entropy": 3.907
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.533,
+        "keyword_only_pct": 0.467,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 8,
+        "keyword_only": 7,
+        "both": 0,
+        "total": 15
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 8,
+        "keyword_top_k_overlap": 7
+      },
+      "timings": {
+        "embedding_ms": 765.1872910009843,
+        "vector_ms": 709.1960419984389,
+        "keyword_ms": 8807.854208000208,
+        "rrf_ms": 0.08687499939696863,
+        "reranker_ms": 17148.819624999305,
+        "total_ms": 27431.324875000428
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 4,
+        "reasoning": "Het antwoord beantwoordt de vraag direct en bevestigt dat het nachtleven in Rotterdam inderdaad te wensen overlaat volgens de bronnen. Het is kort en to-the-point. Een kleine aftrek omdat het antwoord zeer beknopt is en mogelijk meer context of details had kunnen bevatten over waarom het nachtleven een boost kan gebruiken."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Het antwoord is volledig gebaseerd op de context. Bron 1 stelt letterlijk dat 'Het nachtleven in Rotterdam wel een boost kan gebruiken', wat direct ondersteunt dat het nachtleven te wensen overlaat. Het antwoord voegt geen informatie toe die niet in de bronnen staat en geeft een accurate interpretatie van wat er wordt gesteld."
+      }
+    },
+    "hallucination_metrics": {},
+    "chunks_retrieved": 15,
+    "total_ms": 27431.324875000428
+  },
+  {
+    "question_id": "mh-01",
+    "question_text": "Welke partijen stemden tegen het Warmtebedrijf voorstel, en wat was hun alternatief?",
+    "category": "multi_hop",
+    "answer": "Op basis van de verstrekte bronnen kunnen we de volgende partijen identificeren die tegen het voorstel van het Warmtebedrijf stemden en hun alternatieven:\n\n*   **PvdA:** De PvdA-fractie stemde tegen het geamendeerde voorstel [Bron 1]. De heer Van der Leij gaf aan dat de redenen hiervoor reeds besproken waren en dat de partij de mensen in Nuenen in het voorjaar van 2014 aan deze weken zou herinneren [Bron 1].\n*   **VVD:** De VVD-fractie wenste geacht te worden tegen onderdeel I en II van het besluit te hebben gestemd [Bron 8]. De heer Verheij gaf aan dat de partij tegen motie 2 zou stemmen om de redenen die door mevrouw Hoogwerf [Leefbaar Rotterdam] werden gegeven, namelijk dat deze motie extra kosten met zich mee zou brengen zonder baten, en dat er op een later moment beslist moest worden wanneer duidelijk was of een bid er kwam [Bron 7, Bron 4].\n*   **Piijs-Van Bruggen:** De fractie van Piijs-Van Bruggen stemde tegen de begroting [Bron 1]. De heer Van Bruggen vond het onverteerbaar dat een begroting werd aangeboden waarbij voor een flink aantal jaren de min ingegaan werd, terwijl dat niet nodig was, zoals blijkt uit hun amendement dat echter verworpen was [Bron 1].\n*   **Combinatie:** De Combinatie stemde tegen het voorstel [Bron 1]. Mevrouw Donkers gaf aan dat er te veel elementen in het voorstel zaten waarin zij zich niet konden vinden [Bron 1]. Hetzelfde gold voor haar fractie ten aanzien van de onderdelen I en II van een ander besluit [Bron 8].\n\nEr wordt gesuggereerd dat het alternatief van Piijs-Van Bruggen hun verworpen amendement was, dat erop gericht was om een begroting met een langdurig negatief saldo te vermijden [Bron 1]. Voor de VVD was het alternatief om een beslissing over motie 2 uit te stellen tot er meer duidelijkheid was over een bid [Bron 7].\n\nHet is belangrijk op te merken dat de bronnen hier met name over stemmen over voorstellen en begrotingen gaan, en niet expliciet over een \"Warmtebedrijf voorstel\" zoals geformuleerd in de vraag. Echter, Br",
+    "retrieval_metrics": {
+      "context_precision": 0.533,
+      "diversity": {
+        "document_diversity": 0.5333333333333333,
+        "unique_documents": 8,
+        "total_chunks": 15,
+        "entropy": 2.6
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 1.0,
+        "keyword_only_pct": 0.0,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 15,
+        "keyword_only": 0,
+        "both": 0,
+        "total": 15
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 1.01,
+        "promotions_5plus": 3,
+        "demotions_5plus": 4,
+        "candidates_scored": 75
+      },
+      "rrf": {
+        "unique_from_fusion": 15,
+        "unique_pct": 1.0,
+        "vector_top_k_overlap": 0,
+        "keyword_top_k_overlap": 0
+      },
+      "timings": {
+        "embedding_ms": 295.69549999905576,
+        "vector_ms": 558.4039589994063,
+        "keyword_ms": 8542.263125000318,
+        "rrf_ms": 0.12425000022631139,
+        "reranker_ms": 328360.97479199996,
+        "total_ms": 337758.2684999998
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 2,
+        "reasoning": "Het antwoord probeert de vraag te beantwoorden door partijen te noemen die tegen stemden, maar erkent zelf dat de bronnen niet expliciet over een 'Warmtebedrijf voorstel' gaan. De genoemde stemverklaringen lijken over verschillende voorstellen en begrotingen te gaan, niet specifiek over het Warmtebedrijf. De alternatieven die worden genoemd zijn vaag en niet duidelijk gerelateerd aan het Warmtebedrijf. Het antwoord is dus slechts gedeeltelijk relevant voor de gestelde vraag."
+      },
+      "faithfulness": {
+        "score": 2,
+        "reasoning": "Het antwoord bevat significante problemen met faithfulness. De bronnen gaan over verschillende voorstellen en begrotingen, maar niet specifiek over een 'Warmtebedrijf voorstel' zoals gevraagd. Het antwoord maakt een ongerechtvaardigde verbinding tussen algemene stemverklaringen in Bron 1 en het Warmtebedrijf, terwijl deze bron geen expliciete vermelding van het Warmtebedrijf bevat. De beschrijving van alternatieven is grotendeels gebaseerd op de context, maar de centrale claim dat deze partijen tegen 'het Warmtebedrijf voorstel' stemden is niet direct verificeerbaar uit de bronnen. Het antwoord erkent wel de onduidelijkheid aan het einde, maar trekt desondanks conclusies die niet volledig ondersteund worden door de context."
+      },
+      "completeness": {
+        "score": 4,
+        "reasoning": "Het antwoord identificeert correct alle vier partijen die tegen stemden (PvdA, VVD, Pijs-Van Bruggen, Combinatie) en geeft hun redenen weer. Voor alternatieven wordt het verworpen amendement van Pijs-Van Bruggen genoemd en de VVD's voorstel om besluitvorming uit te stellen. Het antwoord erkent terecht de beperking dat de bronnen niet expliciet over 'het Warmtebedrijf voorstel' gaan maar over gerelateerde voorstellen. Een klein minpunt is dat niet alle mogelijke alternatieven volledig uitgewerkt worden - sommige partijen gaven alleen aan tegen te zijn zonder duidelijk alternatief te formuleren."
+      }
+    },
+    "hallucination_metrics": {},
+    "chunks_retrieved": 15,
+    "total_ms": 337758.2684999998
+  },
+  {
+    "question_id": "mh-02",
+    "question_text": "Hoe verhoudt het budget voor cultuur zich tot het budget voor sport over de afgelopen 5 jaar?",
+    "category": "multi_hop",
+    "answer": "Het is lastig om een directe vergelijking te maken van het budget voor cultuur ten opzichte van sport over de afgelopen 5 jaar, omdat de beschikbare bronnen de financiële gegevens voor specifieke jaren en voor de afzonderlijke budgetten van cultuur en sport niet consistent en compleet presenteren. Wel kunnen we enkele trends en situaties schetsen op basis van de verstrekte informatie:\n\n**Algemene Budgetsamenhang:**\n*   **Bron 3** geeft aan dat de begrotingen voor sport en cultuur \"één\" zijn, hoewel er onderscheid tussen beide wordt gemaakt. Dit suggereert dat ze vaak gezamenlijk worden beheerd of gepresenteerd binnen een groter programma.\n*   **Bron 1** presenteert de 'Cultuur, sport en recreatie' als één programma met totalen voor baten en lasten. Het is niet mogelijk om hieruit de specifieke budgetten voor cultuur en sport af te leiden.\n*   **Bron 15** vermeldt dat sport en cultuur \"beide onderdeel van de bezuinigingsoperatie\" zijn.\n\n**Specifieke Jaartallen en Budgetsamenstellingen:**\n*   **Bron 2** en **Bron 6** bieden een gedetailleerd overzicht van de lasten en baten per product voor de jaren **2010** en **2009**.\n    *   In **2010 (Bron 2)** waren de lasten voor Sport €137.911, Sportvelden €64.413, Kunst €6.623, en Oudheidkunde/musea €8.177. De totale lasten voor deze onderdelen (die deels cultuur en deels sport/recreatie vertegenwoordigen) bedroegen ongeveer €217.124.\n    *   In **2009 (Bron 6)** waren de lasten voor Sport €677.077, Sportvelden €389.959, Kunst €27.863, en Oudheidkunde/musea €43.018. De totale lasten voor deze onderdelen bedroegen ongeveer €1.137.917.\n    *   Deze bedragen uit **Bron 2** en **Bron 6** laten zien dat de directe lasten voor sport en sportgerelateerde infrastructuur aanzienlijk hoger waren dan die voor kunst en musea in deze specifieke jaren.\n\n*   **Bron 1** biedt gegevens voor **2015 en 2016**.\n    *   De \"Totaal lasten\" voor het programma \"Cultuur, sport en recreatie\" waren in 2015 (Bijgestelde Begroting) €224.693 en in 2016 (R",
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 0.9333333333333333,
+        "unique_documents": 14,
+        "total_chunks": 15,
+        "entropy": 3.774
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 1.0,
+        "keyword_only_pct": 0.0,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 15,
+        "keyword_only": 0,
+        "both": 0,
+        "total": 15
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 23.6,
+        "promotions_5plus": 30,
+        "demotions_5plus": 37,
+        "candidates_scored": 75
+      },
+      "rrf": {
+        "unique_from_fusion": 10,
+        "unique_pct": 0.667,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 0
+      },
+      "timings": {
+        "embedding_ms": 368.03245800001605,
+        "vector_ms": 698.1310420014779,
+        "keyword_ms": 8603.146083998581,
+        "rrf_ms": 0.38500000118801836,
+        "reranker_ms": 12795.088374999978,
+        "total_ms": 22464.90433300096
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 4,
+        "reasoning": "Het antwoord beantwoordt de vraag grotendeels door eerlijk toe te geven dat een directe vergelijking over 5 jaar niet mogelijk is met de beschikbare bronnen, maar geeft wel relevante informatie over de verhouding tussen cultuur- en sportbudgetten uit verschillende jaren. De analyse is grondig en transparant over de beperkingen van de data. Kleine aftrek omdat het antwoord erg uitgebreid is en de kernboodschap (geen volledige vergelijking mogelijk) wat ondergesneeuwd raakt in de details."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Het antwoord is volledig gebaseerd op de meegeleverde context. Alle beweringen zijn direct terug te vinden in de bronnen, met correcte verwijzingen naar specifieke bronnummers. Het antwoord erkent eerlijk de beperkingen van de beschikbare data en concludeert dat een definitieve vergelijking niet mogelijk is op basis van de verstrekte documenten. Dit is correct gedrag voor een RAG-systeem - het baseert zich uitsluitend op de bronnen en geeft geen informatie die daar niet in staat."
+      },
+      "completeness": {
+        "score": 4,
+        "reasoning": "Het antwoord behandelt de meeste relevante aspecten uit de context: het toont de complexiteit van het vergelijken van cultuur- en sportbudgetten, analyseert specifieke jaartallen (2009, 2010, 2015, 2016), bespreekt budgetverschuivingen en bezuinigingen, en erkent de beperkingen van de beschikbare data. Het mist echter een duidelijkere synthese van de trend over de volledige 5-jaarsperiode en had meer kunnen focussen op de concrete verhoudingscijfers waar die wel beschikbaar zijn (zoals de 2009/2010 vergelijking)."
+      }
+    },
+    "hallucination_metrics": {},
+    "chunks_retrieved": 15,
+    "total_ms": 22464.90433300096
+  },
+  {
+    "question_id": "ab-01",
+    "question_text": "Is er ooit in de gemeenteraad gedebatteerd over een metro naar Hoek van Holland?",
+    "category": "absence",
+    "answer": "Ja, er is in de gemeenteraad van Rotterdam gedebatteerd over een metro naar Hoek van Holland. Dit blijkt uit de bronnen:\n\n*   **Bron 1** vermeldt: \"En ja, mooi dat de metro naar het strand van Hoek van Holland is gaan rijden.\" Dit impliceert dat er een besluitvorming en mogelijk een debat aan vooraf is gegaan.\n*   **Bron 7** refereert aan een \"algemeen gedragen wens van de raad voor een metroverbinding Kralingse-Zoom-Zuid(p|ein)-NS Station Schiedam Centrum, zoals uitgesproken op 7 juli 2016.\"\n*   **Bron 11** geeft aan dat \"Het doortrekken van de metro tot op het strand was de directe aanleiding om het perspectief nader te verkennen. Inmiddels rijdt de metro al tot station Hoek van Holland Haven en is de uitvoering van het project Metro aan Zee in volle gang.\"\n\nHoewel niet direct een debat over de metro zelf wordt beschreven, tonen deze bronnen wel aan dat de metroverbinding naar Hoek van Holland een onderwerp is geweest dat in de gemeenteraad is besproken en waarvoor besluiten zijn genomen.",
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 0.8,
+        "unique_documents": 12,
+        "total_chunks": 15,
+        "entropy": 3.457
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.533,
+        "keyword_only_pct": 0.467,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 8,
+        "keyword_only": 7,
+        "both": 0,
+        "total": 15
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 11.87,
+        "promotions_5plus": 29,
+        "demotions_5plus": 26,
+        "candidates_scored": 75
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 8,
+        "keyword_top_k_overlap": 7
+      },
+      "timings": {
+        "embedding_ms": 1280.2053750001505,
+        "vector_ms": 1514.5635419994505,
+        "keyword_ms": 784.3782910003938,
+        "rrf_ms": 0.14695800018671434,
+        "reranker_ms": 377739.6148339994,
+        "total_ms": 381319.07729200064
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 3,
+        "reasoning": "Het antwoord raakt het onderwerp maar beantwoordt de vraag niet volledig direct. De vraag is specifiek of er ooit gedebatteerd is over een metro naar Hoek van Holland, maar het antwoord toont vooral aan dat er besluiten zijn genomen en dat de metro er nu rijdt. De bronnen geven geen duidelijk bewijs van een daadwerkelijk debat - bron 1 is meer een constatering achteraf, bron 7 gaat over een andere metroverbinding, en bron 11 beschrijft de uitvoering. Het antwoord erkent zelf dat 'niet direct een debat wordt beschreven' maar concludeert toch bevestigend, wat de directheid van het antwoord ondermijnt."
+      },
+      "faithfulness": {
+        "score": 4,
+        "reasoning": "Het antwoord is grotendeels gebaseerd op de context. De drie aangehaalde citaten zijn correct overgenomen uit de bronnen. De conclusie dat er debat heeft plaatsgevonden is een redelijke gevolgtrekking uit de beschikbare informatie, vooral uit bron 7 die spreekt van een 'algemeen gedragen wens van de raad zoals uitgesproken op 7 juli 2016'. Echter, het antwoord stelt expliciet dat er 'gedebatteerd' is, terwijl de bronnen dit niet letterlijk bevestigen - ze tonen wel besluitvorming en raadsuitspraken. Dit is een kleine interpretatie die net iets verder gaat dan wat direct verificeerbaar is in de context."
+      },
+      "factual_correctness": {
+        "score": 1,
+        "reasoning": "Het antwoord beweert dat er wel degelijk in de gemeenteraad is gedebatteerd over een metro naar Hoek van Holland en gebruikt bronnen als bewijs. Het referentie-antwoord stelt echter duidelijk dat er geen bewijs is voor dergelijke besprekingen in de raadsnotulen. Het antwoord trekt conclusies die niet ondersteund worden door het referentie-antwoord en presenteert deze als feiten, wat een significante feitelijke fout vormt."
+      }
+    },
+    "hallucination_metrics": {},
+    "chunks_retrieved": 15,
+    "total_ms": 381319.07729200064
+  },
+  {
+    "question_id": "ab-02",
+    "question_text": "Heeft de gemeente Rotterdam ooit overwogen om de Erasmusbrug te sluiten voor autoverkeer?",
+    "category": "absence",
+    "answer": "Ja, de gemeente Rotterdam heeft overwogen om verkeersexperimenten op de Erasmusbrug stop te zetten, wat impliceert dat er mogelijk een tijdelijke sluiting voor autoverkeer onderdeel was van zo'n experiment. Bron 1 vermeldt expliciet dat het college wordt verzocht om \"de verkeersexperimenten Oude Westen, Erasmusbrugroute en Maastunnelcorridor stop te zetten en de oorspronkelijke verkeerssituatie te herstellen\". Dit duidt erop dat er een \"Erasmusbrugroute\" met bijbehorende experimenten bestond.",
+    "retrieval_metrics": {
+      "context_precision": 0.571,
+      "diversity": {
+        "document_diversity": 1.0,
+        "unique_documents": 14,
+        "total_chunks": 14,
+        "entropy": 3.807
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 1.0,
+        "keyword_only_pct": 0.0,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 14,
+        "keyword_only": 0,
+        "both": 0,
+        "total": 14
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 1.07,
+        "promotions_5plus": 5,
+        "demotions_5plus": 5,
+        "candidates_scored": 75
+      },
+      "rrf": {
+        "unique_from_fusion": 14,
+        "unique_pct": 1.0,
+        "vector_top_k_overlap": 0,
+        "keyword_top_k_overlap": 0
+      },
+      "timings": {
+        "embedding_ms": 280.235124999308,
+        "vector_ms": 659.4701659996645,
+        "keyword_ms": 8816.78033299977,
+        "rrf_ms": 0.08974999946076423,
+        "reranker_ms": 325281.2745829997,
+        "total_ms": 335039.1934999989
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 2,
+        "reasoning": "Het antwoord is slechts gedeeltelijk relevant. De vraag gaat specifiek over het sluiten van de Erasmusbrug voor autoverkeer, maar het antwoord spreekt alleen over het stoppen van 'verkeersexperimenten' op de 'Erasmusbrugroute'. Het is onduidelijk wat deze experimenten inhielden en of ze daadwerkelijk betrekking hadden op het sluiten van de brug voor auto's. Het antwoord maakt een aanname ('wat impliceert dat er mogelijk...') zonder concrete bevestiging dat de gemeente daadwerkelijk heeft overwogen de brug te sluiten voor autoverkeer."
+      },
+      "faithfulness": {
+        "score": 2,
+        "reasoning": "Het antwoord bevat significante interpretaties die niet direct in de context staan. Hoewel bron 1 inderdaad vermeldt dat verkeersexperimenten op de 'Erasmusbrugroute' moeten worden stopgezet, interpreteert het antwoord dit als een mogelijke 'tijdelijke sluiting voor autoverkeer' - wat niet expliciet wordt genoemd. De term 'Erasmusbrugroute' wordt ook geïnterpreteerd als zijnde gerelateerd aan de Erasmusbrug zelf, maar dit is niet duidelijk uit de context. Het antwoord voegt interpretaties toe die verder gaan dan wat letterlijk in de bronnen staat."
+      }
+    },
+    "hallucination_metrics": {},
+    "chunks_retrieved": 14,
+    "total_ms": 335039.1934999989
+  },
+  {
+    "question_id": "acr-01",
+    "question_text": "Wat is de rol van de MRDH in het Rotterdamse vervoersbeleid?",
+    "category": "acronym_abbreviation",
+    "answer": "De MRDH (Metropoolregio Rotterdam Den Haag) speelt een centrale rol in het Rotterdamse vervoersbeleid door middel van haar Vervoersautoriteit [Bron 3, 5, 9]. De MRDH is bevoegd voor zaken als subsidieverstrekking, concessieverlening en -beheer binnen het openbaar vervoer [Bron 3]. De regio, met de MRDH als leidende partij, stelt beleidskaders en subsidieregels op voor het openbaar vervoer [Bron 9]. In het kader van het strategische pijler \"Bereikbaarheid verbeteren\" bereidt de MRDH een schaalsprong voor van het openbaar vervoer naar een regionaal lightrailnetwerk [Bron 2]. De MRDH draagt ook financieel bij aan projecten die de bereikbaarheid verbeteren, zoals de aanschaf van nieuwe metrostellen voor de RET [Bron 2].\n\nSpecifiek voor het Rotterdamse vervoersbeleid is de MRDH betrokken bij het formuleren van adviezen aan de MRDH over de doorontwikkeling van het OV-netwerk, zoals blijkt uit de reacties op wijkraadadviezen [Bron 1]. De MRDH neemt wensen voor de lange termijn op in adviezen aan de MRDH [Bron 1]. De MRDH is verantwoordelijk voor de concessies van het regionale OV (bus, tram en metro) en monitort de uitvoering daarvan [Bron 12]. De MRDH-begroting bevat programma's voor 'Exploitatie verkeer en openbaar vervoer' en 'Infrastructuur verkeer en openbaar vervoer', die de bereikbaarheid in de regio moeten verbeteren [Bron 12]. De MRDH is ook betrokken bij de ontwikkeling van een regionale mobiliteitsvisie die de toekomst van mobiliteit in de regio bepaalt [Bron 10].",
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 0.9333333333333333,
+        "unique_documents": 14,
+        "total_chunks": 15,
+        "entropy": 3.774
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.533,
+        "keyword_only_pct": 0.467,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 8,
+        "keyword_only": 7,
+        "both": 0,
+        "total": 15
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 19.76,
+        "promotions_5plus": 34,
+        "demotions_5plus": 29,
+        "candidates_scored": 75
+      },
+      "rrf": {
+        "unique_from_fusion": 10,
+        "unique_pct": 0.667,
+        "vector_top_k_overlap": 3,
+        "keyword_top_k_overlap": 2
+      },
+      "timings": {
+        "embedding_ms": 312.0976669997617,
+        "vector_ms": 620.0805830012541,
+        "keyword_ms": 8626.652750001085,
+        "rrf_ms": 0.11300000005576294,
+        "reranker_ms": 287245.7641670008,
+        "total_ms": 296804.879583
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 5,
+        "reasoning": "Het antwoord beantwoordt de vraag volledig en direct. Het beschrijft helder de verschillende rollen van de MRDH in het Rotterdamse vervoersbeleid: als Vervoersautoriteit voor subsidies en concessies, bij beleidsontwikkeling (lightrail, mobiliteitsvisie), financiële bijdragen aan projecten, en monitoring van OV-uitvoering. Alle informatie is relevant en goed gestructureerd zonder onnodige afdwaling."
+      },
+      "faithfulness": {
+        "score": 4,
+        "reasoning": "Het antwoord is grotendeels gebaseerd op de context. De meeste beweringen over de rol van MRDH als Vervoersautoriteit, concessieverlening, subsidieverstrekking, en betrokkenheid bij OV-beleid zijn direct terug te vinden in de bronnen. Er is één minor punt: het antwoord stelt dat 'De MRDH neemt wensen voor de lange termijn op in adviezen aan de MRDH', wat een circulaire formulering is - het zou moeten zijn dat Rotterdam adviezen geeft aan de MRDH. Dit is echter een kleine formuleringsafwijking en de kern van de informatie klopt wel met de context."
+      }
+    },
+    "hallucination_metrics": {},
+    "chunks_retrieved": 15,
+    "total_ms": 296804.879583
+  }
+]

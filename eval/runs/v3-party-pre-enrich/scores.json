@@ -1,0 +1,298 @@
+[
+  {
+    "question_id": "ps-01",
+    "question_text": "Hoe stelde de PvdA zich op in de discussie over Feyenoord City, het stadion en de gebiedsontwikkeling?",
+    "category": "party_stance",
+    "answer": "Op basis van de meegeleverde bronnen kan ik geen specifieke standpunten, citaten of acties van de PvdA vinden met betrekking tot de discussie over Feyenoord City, het stadion en de gebiedsontwikkeling.\n\nDe bronnen bevatten wel enkele verwijzingen naar de PvdA, maar deze gaan niet over Feyenoord City:\n\n- In bron 5 wordt een \"Initiatiefvoorstel PvdA ea over van nationaliteit onbekend naar staatloos\" genoemd, maar dit betreft een ander onderwerp.\n- Er wordt ook een \"Initiatiefvoorstel PvdA 19bb18463\" genoemd, maar ook dit gaat niet over Feyenoord City.\n\nDe bronnen bevatten wel informatie over moties en besluitvorming rond Feyenoord City (zoals de \"motie-Bruijn e.a.\" en de \"motie Feyenoord City Onderwijzer\"), maar deze worden niet expliciet aan de PvdA toegeschreven.\n\nIk kan daarom geen uitspraken doen over het standpunt van de PvdA in de discussie over Feyenoord City op basis van de beschikbare bronnen.",
+    "route": {
+      "query_type": "party_stance",
+      "top_k": 25,
+      "parties": [
+        "PvdA"
+      ],
+      "date_from": null,
+      "date_to": null,
+      "sub_queries": [],
+      "confidence": 1.0,
+      "strategy": "party_filtered"
+    },
+    "retrieval_metrics": {
+      "context_precision": 0.8,
+      "diversity": {
+        "document_diversity": 0.68,
+        "unique_documents": 17,
+        "total_chunks": 25,
+        "entropy": 3.844
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.0,
+        "keyword_only_pct": 0.0,
+        "both_pct": 0.0,
+        "neither_pct": 1.0,
+        "vector_only": 0,
+        "keyword_only": 0,
+        "both": 0,
+        "total": 25
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 25,
+        "unique_pct": 1.0,
+        "vector_top_k_overlap": 0,
+        "keyword_top_k_overlap": 0
+      },
+      "timings": {
+        "embedding_ms": 563.4733340048115
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 4,
+        "reasoning": "Het antwoord beantwoordt de vraag grotendeels correct door eerlijk te stellen dat er geen specifieke informatie over de PvdA-standpunten rond Feyenoord City in de bronnen staat. Het toont transparantie door te vermelden wat er wel in de bronnen staat over de PvdA (andere onderwerpen) en over Feyenoord City (moties zonder PvdA-koppeling). De conclusie dat geen uitspraken mogelijk zijn is juist en direct. Kleine aftrek omdat het antwoord iets uitgebreider is dan strikt noodzakelijk."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Het antwoord is volledig gebaseerd op de meegeleverde context. Het erkent eerlijk dat er geen specifieke informatie over de PvdA-standpunten betreffende Feyenoord City in de bronnen staat. De verwijzingen naar PvdA-initiatiefvoorstellen die wel worden genoemd, worden correct geïdentificeerd als niet-gerelateerd aan Feyenoord City. Het antwoord bevat geen verzonnen informatie en toont juist de gewenste eerlijkheid door te stellen dat geen uitspraken kunnen worden gedaan op basis van de beschikbare bronnen."
+      }
+    },
+    "hallucination_metrics": {
+      "claim_verification": {
+        "claims": [
+          {
+            "claim": "Op basis van de meegeleverde bronnen kan ik geen specifieke standpunten, citaten of acties van de PvdA vinden met betrekking tot de discussie over Feyenoord City",
+            "verdict": "supported",
+            "evidence": "De bronnen bevatten geen specifieke standpunten van de PvdA over Feyenoord City. Alleen algemene verwijzingen naar PvdA-initiatiefvoorstellen over andere onderwerpen.",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "In bron 5 wordt een 'Initiatiefvoorstel PvdA ea over van nationaliteit onbekend naar staatloos' genoemd",
+            "verdict": "supported",
+            "evidence": "Bron 5: 'Initiatiefvoorstel PvdA ea over van nationaliteit onbekend naar staatloos'",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Dit initiatiefvoorstel betreft een ander onderwerp (niet Feyenoord City)",
+            "verdict": "supported",
+            "evidence": "Het initiatiefvoorstel gaat over nationaliteit/staatloosheid, niet over Feyenoord City",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Er wordt ook een 'Initiatiefvoorstel PvdA 19bb18463' genoemd",
+            "verdict": "supported",
+            "evidence": "Bron 5: 'Initiatiefvoorstel PvdA 19bb18463 Collegereactie ontvangen (20bb436)'",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Ook dit initiatiefvoorstel gaat niet over Feyenoord City",
+            "verdict": "supported",
+            "evidence": "Het initiatiefvoorstel wordt genoemd in context van andere onderwerpen, niet bij Feyenoord City-discussies",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "De bronnen bevatten wel informatie over moties en besluitvorming rond Feyenoord City (zoals de 'motie-Bruijn e.a.' en de 'motie Feyenoord City Onderwijzer')",
+            "verdict": "supported",
+            "evidence": "Bron 6: 'motie-Bruijn e.a. (17bb4116) 'Aanwijzing risicovol project''; Bron 8: 'motie Feyenoord City Onderwijzer (17bb4123)'",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Deze moties worden niet expliciet aan de PvdA toegeschreven",
+            "verdict": "supported",
+            "evidence": "De moties worden genoemd als 'motie-Bruijn e.a.' zonder vermelding van PvdA-betrokkenheid",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          }
+        ],
+        "total_claims": 7,
+        "supported": 7,
+        "unsupported": 0,
+        "contradicted": 0,
+        "hallucination_rate": 0.0,
+        "most_dangerous_claim": null,
+        "reasoning": "Het antwoord is accuraat en voorzichtig. Het systeem erkent correct dat er geen specifieke PvdA-standpunten over Feyenoord City in de bronnen staan en geeft alleen de verwijzingen naar PvdA-initiatieven over andere onderwerpen weer. Alle beweringen zijn direct verifieerbaar in de context. Er zijn geen hallucinaties of gevaarlijke speculaties."
+      },
+      "source_attribution": {
+        "score": 5,
+        "reasoning": "Het antwoord bevat correcte bronverwijzingen en toeschrijvingen. De twee vermeldingen van PvdA-initiatiefvoorstellen (bron 5) worden correct geciteerd maar terecht als niet-relevant voor Feyenoord City aangemerkt. Het systeem maakt duidelijk onderscheid tussen wat wel en niet in de bronnen staat, erkent de beperkingen van de beschikbare informatie, en trekt geen onterechte conclusies over PvdA-standpunten die niet in de bronnen te vinden zijn. Alle verwijzingen naar moties en andere partijen zijn accuraat."
+      },
+      "db_verification": {
+        "total_claims": 7,
+        "db_confirmed": 0,
+        "db_denied": 7,
+        "db_unknown": 0,
+        "db_confirmation_rate": 0.0,
+        "db_denial_rate": 1.0
+      }
+    },
+    "chunks_retrieved": 25,
+    "total_ms": 0
+  },
+  {
+    "question_id": "ps-02",
+    "question_text": "De Asielopvang op de Silja, wat denkt Leefbaar Rotterdam daar van?",
+    "category": "party_stance",
+    "answer": "Op basis van de meegeleverde bronnen kan ik het volgende zeggen over het standpunt van Leefbaar Rotterdam betreffende de asielopvang op de Silja:\n\n**Expliciet standpunt van Leefbaar Rotterdam over de Silja:**\nIn de bronnen wordt geen specifiek standpunt van Leefbaar Rotterdam over de asielopvang op de Silja genoemd.\n\n**Algemeen standpunt van Leefbaar Rotterdam over asielopvang:**\nWel wordt in de bronnen het algemene standpunt van Leefbaar Rotterdam over asielopvang duidelijk gemaakt. Volgens bron 2 en 7 stelt de heer Van Elck (Leefbaar Rotterdam):\n\n*\"Leefbaar Rotterdam wil geen asielzoekerscentrum in Rotterdam, omdat wij hier al genoeg problemen hebben. [...] Het grote deel van Rotterdam wil geen asielzoekerscentrum in de achtertuin, omdat zij de gevolgen daarvan zien, maar toch besluit de gemeenteraad een asielzoekerscentrum in de stad te plaatsen. Wij stellen de Rotterdammer centraal, niet de asielzoeker.\"*\n\nOok wordt vermeld dat *\"Leefbaar Rotterdam is voor het opvangen van oorlogsvluchtelingen\"* maar *\"is echter ook voorstander van het opvangen van vluchtelingen in de regio van het land van herkomst.\"*\n\n**Conclusie:**\nDe bronnen bevatten geen expliciete uitspraken van Leefbaar Rotterdam specifiek over de asielopvang op de Silja. Wel maken de bronnen duidelijk dat Leefbaar Rotterdam in het algemeen tegen asielopvang in Rotterdam is.",
+    "route": {
+      "query_type": "party_stance",
+      "top_k": 25,
+      "parties": [
+        "Leefbaar Rotterdam"
+      ],
+      "date_from": null,
+      "date_to": null,
+      "sub_queries": [],
+      "confidence": 1.0,
+      "strategy": "party_filtered"
+    },
+    "retrieval_metrics": {
+      "context_precision": 0.8,
+      "diversity": {
+        "document_diversity": 0.88,
+        "unique_documents": 22,
+        "total_chunks": 25,
+        "entropy": 4.404
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.0,
+        "keyword_only_pct": 0.0,
+        "both_pct": 0.0,
+        "neither_pct": 1.0,
+        "vector_only": 0,
+        "keyword_only": 0,
+        "both": 0,
+        "total": 25
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 25,
+        "unique_pct": 1.0,
+        "vector_top_k_overlap": 0,
+        "keyword_top_k_overlap": 0
+      },
+      "timings": {
+        "embedding_ms": 3936.884209004347
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 4,
+        "reasoning": "Het antwoord beantwoordt de vraag grotendeels correct door eerlijk toe te geven dat er geen specifiek standpunt van Leefbaar Rotterdam over de Silja wordt gevonden in de bronnen. Het vult dit goed aan met het algemene standpunt van de partij over asielopvang, wat relevant context biedt. De structuur is helder en de conclusie is eerlijk. Alleen een volledig direct antwoord over de Silja specifiek zou een 5 opleveren."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Het antwoord is volledig gebaseerd op de meegeleverde context. Het erkent eerlijk dat er geen specifiek standpunt van Leefbaar Rotterdam over de Silja wordt genoemd in de bronnen, en beperkt zich tot het algemene standpunt over asielopvang dat wel in de context staat (bronnen 2 en 7). Alle citaten zijn accuraat overgenomen en de conclusie is correct: geen expliciete uitspraken over de Silja, wel een algemeen standpunt tegen asielopvang in Rotterdam. Dit is voorbeeldig RAG-gedrag."
+      }
+    },
+    "hallucination_metrics": {
+      "claim_verification": {
+        "claims": [
+          {
+            "claim": "In de bronnen wordt geen specifiek standpunt van Leefbaar Rotterdam over de asielopvang op de Silja genoemd",
+            "verdict": "supported",
+            "evidence": "Na grondige analyse van alle bronnen is er inderdaad geen expliciete uitspraak van Leefbaar Rotterdam specifiek over de Silja te vinden",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Volgens bron 2 en 7 stelt de heer Van Elck (Leefbaar Rotterdam): 'Leefbaar Rotterdam wil geen asielzoekerscentrum in Rotterdam, omdat wij hier al genoeg problemen hebben'",
+            "verdict": "supported",
+            "evidence": "Bron 2 en 7: 'De heer VAN ELCK (lr). [...] Leefbaar Rotterdam wil geen asielzoekerscentrum in Rotterdam, omdat wij hier al genoeg problemen hebben.'",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Het grote deel van Rotterdam wil geen asielzoekerscentrum in de achtertuin, omdat zij de gevolgen daarvan zien",
+            "verdict": "supported",
+            "evidence": "Bron 2 en 7: 'Het grote deel van Rotterdam wil geen asielzoekerscentrum in de achtertuin, omdat zij de gevolgen daarvan zien'",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "De gemeenteraad besluit een asielzoekerscentrum in de stad te plaatsen",
+            "verdict": "supported",
+            "evidence": "Bron 2 en 7: 'maar toch besluit de gemeenteraad een asielzoekerscentrum in de stad te plaatsen'",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Wij stellen de Rotterdammer centraal, niet de asielzoeker",
+            "verdict": "supported",
+            "evidence": "Bron 2 en 7: 'Wij stellen de Rotterdammer centraal, niet de asielzoeker.'",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Leefbaar Rotterdam is voor het opvangen van oorlogsvluchtelingen",
+            "verdict": "supported",
+            "evidence": "Bron 7: 'De heer VAN ELCK (lr). Leefbaar Rotterdam is voor het opvangen van oorlogsvluchtelingen, ik heb nooit anders gezegd.'",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Leefbaar Rotterdam is voorstander van het opvangen van vluchtelingen in de regio van het land van herkomst",
+            "verdict": "supported",
+            "evidence": "Bron 7: 'Leefbaar Rotterdam is echter ook voorstander van het opvangen van vluchtelingen in de regio van het land van herkomst.'",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          }
+        ],
+        "total_claims": 7,
+        "supported": 7,
+        "unsupported": 0,
+        "contradicted": 0,
+        "hallucination_rate": 0.0,
+        "most_dangerous_claim": null,
+        "reasoning": "Alle beweringen in het antwoord zijn correct ondersteund door de context. Het systeem geeft eerlijk toe dat er geen specifiek standpunt van Leefbaar Rotterdam over de Silja te vinden is in de bronnen, en baseert zich alleen op algemene uitspraken over asielopvang die wel in de context staan. Geen hallucinaties gedetecteerd."
+      },
+      "source_attribution": {
+        "score": 5,
+        "reasoning": "Alle toeschrijvingen in het antwoord zijn correct en verifieerbaar in de aangeleverde bronnen. De uitspraken van de heer Van Elck (Leefbaar Rotterdam) worden accuraat geciteerd uit bronnen 2 en 7. Het antwoord maakt correct onderscheid tussen wat expliciet in de bronnen staat (algemeen standpunt over asielopvang) en wat niet wordt vermeld (specifiek standpunt over de Silja). Er worden geen standpunten verwisseld tussen partijen en de conclusie dat er geen expliciete uitspraken over de Silja zijn gevonden is juist op basis van de beschikbare context."
+      },
+      "db_verification": {
+        "total_claims": 7,
+        "db_confirmed": 0,
+        "db_denied": 7,
+        "db_unknown": 0,
+        "db_confirmation_rate": 0.0,
+        "db_denial_rate": 1.0
+      }
+    },
+    "chunks_retrieved": 25,
+    "total_ms": 0
+  }
+]

@@ -1,0 +1,301 @@
+{
+  "meeting_id": "c8a6e279-ef80-4857-ae4a-f85c40421eb8",
+  "audit_timestamp": "2026-04-07T21:22:44.612938",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+    "start_date": "2025-11-26 00:00:00",
+    "committee": "WIOS",
+    "quality_score": 0.931,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 64,
+    "document_count": 3
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 432,
+      "correct_count": 432,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.7696,
+      "party_attribution_rate": 0.3822,
+      "total_segments": 191,
+      "attributed_segments": 147,
+      "unattributed_segments": 44
+    },
+    "speaker_diversity": {
+      "unique_speakers": 12,
+      "unique_parties": 8,
+      "top_speaker": "J.M.D. (Joey) de Waard Commissievoorzitter",
+      "top_speaker_segment_count": 46,
+      "monologue_rate": 0.2408,
+      "speakers": {
+        "J.M.D. (Joey) de Waard Commissievoorzitter": 46,
+        "L.S. (Larissa) Vlieger": 26,
+        "T.B. (Tim)  Versnel": 21,
+        "J.M. (Joan) Nunnely": 10,
+        "D. (Duygu) Yildirim": 10,
+        "M. (Manuel) Crielaard": 10,
+        "E.M. (Ellen) Verouden Burgercommissielid CDA": 7,
+        "S. (Stephan) Leewis": 6,
+        "J. (Jordi) Vicario": 4,
+        "A.B. (Tom) Breedveld Burgercommissielid": 4
+      },
+      "parties": {
+        "GroenLinks": 32,
+        "D66": 10,
+        "PvdA": 10,
+        "Leefbaar Rotterdam": 10,
+        "VVD": 4,
+        "SP": 4,
+        "DENK": 2,
+        "BIJ1": 1
+      }
+    },
+    "segment_quality": {
+      "total_segments": 191,
+      "nonempty_segments": 191,
+      "total_words": 20903,
+      "total_chars": 117459,
+      "avg_words_per_segment": 109.4,
+      "avg_chars_per_segment": 615.0,
+      "short_segment_rate": 0.2932,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 4,
+      "items_with_content": 3,
+      "coverage_rate": 0.75,
+      "items": [
+        {
+          "title": "Initiatiefvoorstel Vlieger (GroenLinks) over een vangnet van vertrouwen",
+          "segment_count": 1
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 141
+        },
+        {
+          "title": "Participatiewet in balans en Wet van school naar duurzaam werk",
+          "segment_count": 49
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 0
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+        "start_date": "2025-11-26 00:00:00",
+        "committee": "WIOS",
+        "review_status": "auto_approved",
+        "quality_score": 0.931,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+        "start_date": "2025-11-26 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 12,
+      "recognized_speakers": 11,
+      "unrecognized_speakers": 1,
+      "recognition_rate": 0.9167,
+      "recognized": [
+        {
+          "name": "L.S. (Larissa) Vlieger",
+          "segment_count": 26,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J.M.D. (Joey) de Waard Commissievoorzitter",
+          "segment_count": 46,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.R. (Marchiano) van Campenhout",
+          "segment_count": 1,
+          "parties": [
+            "BIJ1"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J. (Jordi) Vicario",
+          "segment_count": 4,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "A.B. (Tom) Breedveld Burgercommissielid",
+          "segment_count": 4,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "E.M. (Ellen) Verouden Burgercommissielid CDA",
+          "segment_count": 7,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "J.M. (Joan) Nunnely",
+          "segment_count": 10,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D. (Duygu) Yildirim",
+          "segment_count": 10,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M. (Manuel) Crielaard",
+          "segment_count": 10,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S.D. (Safa) Sodirijo Burgercommissielid",
+          "segment_count": 2,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S. (Stephan) Leewis",
+          "segment_count": 6,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "T.B. (Tim)  Versnel",
+          "segment_count": 21,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 64,
+      "empty_chunks": 0,
+      "buckets": {
+        "long (2000-5000)": 42,
+        "medium (200-2000)": 21,
+        "short (50-200)": 1
+      },
+      "min_chars": 149,
+      "max_chars": 2691,
+      "avg_chars": 1947.1,
+      "median_chars": 2307,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 64,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 3,
+      "documents_with_chunks": 3,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Initiatiefvoorstel Vlieger (GroenLinks) over een vangnet van vertrouwen",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: Overlegvergadering",
+          "chunks": 44
+        },
+        {
+          "name": "Transcript: Participatiewet in balans en Wet van school naar duurzaam werk",
+          "chunks": 17
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 64,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 64,
+      "distribution": {
+        "quote": {
+          "count": 64,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "PENDING — warnings present, manual review recommended",
+    "issues": [],
+    "warnings": [
+      "Low speaker attribution: 77% (target 80%)"
+    ],
+    "scores": {
+      "speaker_attribution_rate": 0.7696,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.931
+    }
+  }
+}

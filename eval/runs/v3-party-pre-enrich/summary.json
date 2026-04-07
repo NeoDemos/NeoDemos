@@ -1,0 +1,71 @@
+{
+  "run_id": "v3-party-pre-enrich",
+  "total_questions": 2,
+  "overall": {
+    "count": 2,
+    "context_precision": {
+      "mean": 0.8,
+      "min": 0.8,
+      "max": 0.8
+    },
+    "answer_relevance": {
+      "mean": 4,
+      "min": 4,
+      "max": 4
+    },
+    "faithfulness": {
+      "mean": 5,
+      "min": 5,
+      "max": 5
+    },
+    "hallucination_rate": {
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "source_attribution": {
+      "mean": 5,
+      "min": 5,
+      "max": 5
+    }
+  },
+  "by_category": {
+    "party_stance": {
+      "count": 2,
+      "context_precision": {
+        "mean": 0.8,
+        "min": 0.8,
+        "max": 0.8
+      },
+      "answer_relevance": {
+        "mean": 4,
+        "min": 4,
+        "max": 4
+      },
+      "faithfulness": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      },
+      "hallucination_rate": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "source_attribution": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      }
+    }
+  },
+  "component_health": {
+    "avg_vector_only_pct": 0.0,
+    "avg_keyword_only_pct": 0.0,
+    "avg_both_pct": 0.0,
+    "avg_reranker_position_change": 0.0,
+    "avg_rrf_unique_pct": 1.0,
+    "avg_total_ms": 0.0,
+    "total_questions": 2
+  }
+}

@@ -1,0 +1,410 @@
+{
+  "meeting_id": "e910df4f-f7de-4e25-a8e0-4a72e9d8feac",
+  "audit_timestamp": "2026-04-07T21:10:33.902828",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Vergadering Commissie Majeure Projecten, Organisatie en Financien (2018-2022) 06-12-2018",
+    "start_date": "2018-12-06 00:00:00",
+    "committee": "",
+    "quality_score": 0.996,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 61,
+    "document_count": 10
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 221,
+      "correct_count": 221,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.9882,
+      "party_attribution_rate": 0.0,
+      "total_segments": 254,
+      "attributed_segments": 251,
+      "unattributed_segments": 3
+    },
+    "speaker_diversity": {
+      "unique_speakers": 17,
+      "unique_parties": 0,
+      "top_speaker": "Lansink-Bastemeijer, P.J.P. (voorzitter)",
+      "top_speaker_segment_count": 110,
+      "monologue_rate": 0.4331,
+      "speakers": {
+        "Lansink-Bastemeijer, P.J.P. (voorzitter)": 110,
+        "Visser, A.L.H. (wethouder)": 42,
+        "Verheij, J.W. (VVD)": 13,
+        "Eimers, H. (50PLUS)": 13,
+        "Rozema, J.G. (Partij voor de Dieren)": 12,
+        "Roest, L.L.P.R. (GroenLinks)": 12,
+        "Koster, G.F.E. (Leefbaar Rotterdam)": 10,
+        "Segers-Hoogendoorn, R.G.C. (CDA)": 8,
+        "Eikeren, K.J.P. van (PvdA)": 6,
+        "Leewis, S. (GroenLinks)": 6
+      },
+      "parties": {}
+    },
+    "segment_quality": {
+      "total_segments": 254,
+      "nonempty_segments": 254,
+      "total_words": 18836,
+      "total_chars": 103549,
+      "avg_words_per_segment": 74.2,
+      "avg_chars_per_segment": 407.7,
+      "short_segment_rate": 0.2047,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 23,
+      "items_with_content": 10,
+      "coverage_rate": 0.4348,
+      "items": [
+        {
+          "title": "1.01 Opening en mededelingen",
+          "segment_count": 0
+        },
+        {
+          "title": "1.02 Besluitenlijst openbare procedurevergadering van 22 november 2018",
+          "segment_count": 0
+        },
+        {
+          "title": "1.03 Ingekomen stukken",
+          "segment_count": 0
+        },
+        {
+          "title": "1.03.01 Algemeen",
+          "segment_count": 0
+        },
+        {
+          "title": "1.03.02 Projecten",
+          "segment_count": 0
+        },
+        {
+          "title": "1.03.03 NPRZ",
+          "segment_count": 0
+        },
+        {
+          "title": "1.03.04 Organisatie",
+          "segment_count": 0
+        },
+        {
+          "title": "1.03.05 Financien",
+          "segment_count": 10
+        },
+        {
+          "title": "1.04 Lijst van openstaande toezeggingen en schriftelijke vragen",
+          "segment_count": 21
+        },
+        {
+          "title": "1.05 Lijst van openstaande moties",
+          "segment_count": 1
+        },
+        {
+          "title": "1.06 Planning",
+          "segment_count": 0
+        },
+        {
+          "title": "1.07 Rondvraag en sluiting",
+          "segment_count": 0
+        },
+        {
+          "title": "2 Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "2.01 Opening en mededelingen",
+          "segment_count": 0
+        },
+        {
+          "title": "2.03 Vaststellen van de agenda",
+          "segment_count": 1
+        },
+        {
+          "title": "2.04 Adviezenlijst openbare overlegvergadering d.d. 22 november 2018",
+          "segment_count": 0
+        },
+        {
+          "title": "2.05 Openstaande toezeggingen, schriftelijke vragen en moties waarvan de termijn is overschreden",
+          "segment_count": 9
+        },
+        {
+          "title": "2.06 Voortgangsrapportages Hoekse Lijn",
+          "segment_count": 40
+        },
+        {
+          "title": "2.07 10-maandsrapportage",
+          "segment_count": 0
+        },
+        {
+          "title": "Daarbij betrekken:",
+          "segment_count": 111
+        },
+        {
+          "title": "2.08 Wijziging verordening financien Rotterdam 2013",
+          "segment_count": 16
+        },
+        {
+          "title": "2.09 Tijdelijke verlenging borgstelling Warmtebedrijf",
+          "segment_count": 39
+        },
+        {
+          "title": "2.12 Sluiting",
+          "segment_count": 6
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Vergadering Commissie Majeure Projecten, Organisatie en Financien (2018-2022) 06-12-2018",
+        "start_date": "2018-12-06 00:00:00",
+        "committee": null,
+        "review_status": "auto_approved",
+        "quality_score": 0.996,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Vergadering Commissie Majeure Projecten, Organisatie en Financien (2018-2022) 06-12-2018",
+        "start_date": "2018-12-06 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No committee found in staging meeting"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 17,
+      "recognized_speakers": 2,
+      "unrecognized_speakers": 15,
+      "recognition_rate": 0.1176,
+      "recognized": [
+        {
+          "name": "Lansink-Bastemeijer, P.J.P. (voorzitter)",
+          "segment_count": 110,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Visser, A.L.H. (wethouder)",
+          "segment_count": 42,
+          "parties": [],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "Rozema, J.G. (Partij voor de Dieren)",
+          "segment_count": 12,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Koster, G.F.E. (Leefbaar Rotterdam)",
+          "segment_count": 10,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Verheij, J.W. (VVD)",
+          "segment_count": 13,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Achbar, F. (DENK)",
+          "segment_count": 1,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Roest, L.L.P.R. (GroenLinks)",
+          "segment_count": 12,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Eikeren, K.J.P. van (PvdA)",
+          "segment_count": 6,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Segers-Hoogendoorn, R.G.C. (CDA)",
+          "segment_count": 8,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Leewis, S. (GroenLinks)",
+          "segment_count": 6,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Zeegers, C.M. (D66)",
+          "segment_count": 3,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Eimers, H. (50PLUS)",
+          "segment_count": 13,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Monrooij, C.E.E. (ChristenUnie-SGP)",
+          "segment_count": 4,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Elck, M.G.J van (Leefbaar Rotterdam)",
+          "segment_count": 2,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Linden, S. van der (ambtelijke ondersteuning)",
+          "segment_count": 2,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Tak, D.P.A. (PvdA)",
+          "segment_count": 6,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Windt, C. van der (ambtelijke ondersteuning)",
+          "segment_count": 1,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 61,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 25,
+        "long (2000-5000)": 35,
+        "short (50-200)": 1
+      },
+      "min_chars": 158,
+      "max_chars": 2744,
+      "avg_chars": 1879.8,
+      "median_chars": 2140,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 61,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 10,
+      "documents_with_chunks": 10,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: 1.03.05 Financien",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: 1.04 Lijst van openstaande toezeggingen en schriftelijke vragen",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: 1.05 Lijst van openstaande moties",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 2.03 Vaststellen van de agenda",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 2.05 Openstaande toezeggingen, schriftelijke vragen en moties waarvan de termijn is overschreden",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 2.06 Voortgangsrapportages Hoekse Lijn",
+          "chunks": 9
+        },
+        {
+          "name": "Transcript: 2.08 Wijziging verordening financien Rotterdam 2013",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: 2.09 Tijdelijke verlenging borgstelling Warmtebedrijf",
+          "chunks": 10
+        },
+        {
+          "name": "Transcript: 2.12 Sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Daarbij betrekken:",
+          "chunks": 31
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 61,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 61,
+      "distribution": {
+        "quote": {
+          "count": 60,
+          "rate": 0.9836
+        },
+        "full_text": {
+          "count": 1,
+          "rate": 0.0164
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.9882,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.996
+    }
+  }
+}

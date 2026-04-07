@@ -1,0 +1,400 @@
+{
+  "meeting_id": "e5572408-c4c4-4046-b0dc-8b60fb1cbe83",
+  "audit_timestamp": "2026-04-07T21:47:52.193302",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "judge_backend": "gemini",
+    "anthropic_model": "claude-haiku-4-5-20251001",
+    "gemini_model": "gemini-2.5-flash-lite"
+  },
+  "meeting_info": {
+    "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+    "start_date": "2025-11-05 00:00:00",
+    "committee": "MHEK",
+    "quality_score": 0.957,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 118,
+    "document_count": 7
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 846,
+      "correct_count": 846,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8557,
+      "party_attribution_rate": 0.3454,
+      "total_segments": 388,
+      "attributed_segments": 332,
+      "unattributed_segments": 56
+    },
+    "speaker_diversity": {
+      "unique_speakers": 17,
+      "unique_parties": 9,
+      "top_speaker": "Plaatsvervangend commissievoorzitter",
+      "top_speaker_segment_count": 128,
+      "monologue_rate": 0.3299,
+      "speakers": {
+        "Plaatsvervangend commissievoorzitter": 128,
+        "R.A.C.J. (Robert) Simons": 37,
+        "R.P. (Ryan) Vos Burgercommissielid": 21,
+        "D. (Donatella) Schalm-Civile Burgercommissielid": 21,
+        "M.Y. (Mina) Morkoç": 19,
+        "S.M. (Sebastiaan) Bonte": 15,
+        "P.J.P. (Pascal) Lansink-Bastemeijer": 14,
+        "M.S. (Marike) Abrahamse": 12,
+        "J.G. (Just) Hovens Greve Burgercommissielid": 11,
+        "H. (Jet) Valk Burgercommissielid": 9
+      },
+      "parties": {
+        "PvdA": 21,
+        "Volt": 21,
+        "GroenLinks": 19,
+        "VVD": 17,
+        "Leefbaar Rotterdam": 15,
+        "D66": 12,
+        "SP": 11,
+        "50PLUS": 9,
+        "DENK": 9
+      }
+    },
+    "segment_quality": {
+      "total_segments": 388,
+      "nonempty_segments": 388,
+      "total_words": 38673,
+      "total_chars": 215436,
+      "avg_words_per_segment": 99.7,
+      "avg_chars_per_segment": 555.2,
+      "short_segment_rate": 0.1495,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 16,
+      "items_with_content": 7,
+      "coverage_rate": 0.4375,
+      "items": [
+        {
+          "title": "Procedurevergadering",
+          "segment_count": 2
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 0
+        },
+        {
+          "title": "Besluitenlijst openbare procedurevergadering van 8 oktober 2025",
+          "segment_count": 0
+        },
+        {
+          "title": "Commissieplanning en lange termijn agenda raad",
+          "segment_count": 13
+        },
+        {
+          "title": "Regeling van werkzaamheden",
+          "segment_count": 3
+        },
+        {
+          "title": "Ingekomen stukken",
+          "segment_count": 0
+        },
+        {
+          "title": "Haven",
+          "segment_count": 0
+        },
+        {
+          "title": "Algemeen",
+          "segment_count": 0
+        },
+        {
+          "title": "Mobiliteit",
+          "segment_count": 15
+        },
+        {
+          "title": "Lijst van openstaande toezeggingen, schriftelijke vragen en moties",
+          "segment_count": 45
+        },
+        {
+          "title": "Sluiting",
+          "segment_count": 0
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 0
+        },
+        {
+          "title": "Adviezenlijst openbare overlegvergadering van 8 oktober 2025",
+          "segment_count": 0
+        },
+        {
+          "title": "Concept-begroting 2026 en tweede herziening 2025",
+          "segment_count": 110
+        },
+        {
+          "title": "Betrekken bij Concept-begroting 2026 en tweede herziening 2025",
+          "segment_count": 200
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+        "start_date": "2025-11-05 00:00:00",
+        "committee": "MHEK",
+        "review_status": "auto_approved",
+        "quality_score": 0.957,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+        "start_date": "2025-11-05 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 17,
+      "recognized_speakers": 16,
+      "unrecognized_speakers": 1,
+      "recognition_rate": 0.9412,
+      "recognized": [
+        {
+          "name": "Plaatsvervangend commissievoorzitter",
+          "segment_count": 128,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.Y. (Mina) Morkoç",
+          "segment_count": 19,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "R.P. (Ryan) Vos Burgercommissielid",
+          "segment_count": 21,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.S. (Marike) Abrahamse",
+          "segment_count": 12,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "H. (Jet) Valk Burgercommissielid",
+          "segment_count": 9,
+          "parties": [
+            "50PLUS"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "B.T.A. (Bernhard) van Meeteren Burgercommissielid CDA",
+          "segment_count": 8,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "E. (Elika) Rehim Zadeh",
+          "segment_count": 9,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J.G. (Just) Hovens Greve Burgercommissielid",
+          "segment_count": 11,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "D. (Donatella) Schalm-Civile Burgercommissielid",
+          "segment_count": 21,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S.J.C. (Simon) Becker",
+          "segment_count": 5,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S.M. (Sebastiaan) Bonte",
+          "segment_count": 15,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "J.M. (Joan) Nunnely",
+          "segment_count": 9,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.A.C.J. (Robert) Simons",
+          "segment_count": 37,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "I. (Ingrid) van Wifferen",
+          "segment_count": 3,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "C.M. (Chantal) Zeegers",
+          "segment_count": 6,
+          "parties": [],
+          "recognized_as": "council_member"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "P.J.P. (Pascal) Lansink-Bastemeijer",
+          "segment_count": 14,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 118,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 45,
+        "long (2000-5000)": 72,
+        "short (50-200)": 1
+      },
+      "min_chars": 101,
+      "max_chars": 2753,
+      "avg_chars": 1994.8,
+      "median_chars": 2168,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 118,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 7,
+      "documents_with_chunks": 7,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Betrekken bij Concept-begroting 2026 en tweede herziening 2025",
+          "chunks": 72
+        },
+        {
+          "name": "Transcript: Commissieplanning en lange termijn agenda raad",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Concept-begroting 2026 en tweede herziening 2025",
+          "chunks": 32
+        },
+        {
+          "name": "Transcript: Lijst van openstaande toezeggingen, schriftelijke vragen en moties",
+          "chunks": 6
+        },
+        {
+          "name": "Transcript: Mobiliteit",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: Procedurevergadering",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Regeling van werkzaamheden",
+          "chunks": 2
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 118,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 118,
+      "distribution": {
+        "quote": {
+          "count": 118,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8557,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.957
+    }
+  }
+}

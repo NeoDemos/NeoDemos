@@ -1,0 +1,676 @@
+[
+  {
+    "question_id": "mh-01",
+    "query_text": "Welke partijen stemden tegen het Warmtebedrijf voorstel, en wat was hun alternatief?",
+    "query_embedding_hash": "",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [
+      {
+        "chunk_id": 975472799387345709,
+        "content_preview": "De VOORZITTER. Andere\nstemverklaringen? Dan gaan wij stemmen.\nWie is tegen dit voorstel? Met de stemmen\nv an de Partij voor de Dieren en de leden\nVelter, Schol en Weerdmeester tegen is\nhet voorstel aa",
+        "score": 0.34866300225257874,
+        "metadata": {
+          "document_id": "3256584",
+          "title": "Stemming Voorstel Park 16hoven",
+          "chunk_index": null,
+          "start_date": "2016-03-17T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 835337791095684458,
+        "content_preview": "Hierna wordt motie 17 zonder hoofdelijke stemming verworpen, waarbij de fracties van de SP, de PvdA, GroenLinks, D66 en de Stadspartij zich ervoor hebben uitgesproken en de overige aanwezige fracties ",
+        "score": 0.2470567524433136,
+        "metadata": {
+          "document_id": "241376",
+          "title": "Verwerping Motie 17",
+          "chunk_index": null,
+          "start_date": "2003-07-03T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 85148711838613079,
+        "content_preview": "De heer VERHEIJ (vvd). Mijnheer de voorzitter. De tweede termijn nu al. Twee vragen. Eén aan wethouder Eerdmans. Hij noemt vijftig plastic bakken extra. Waarom geen honderd? En een vraag aan collega M",
+        "score": 0.23149436712265015,
+        "metadata": {
+          "document_id": "3256584",
+          "title": "Second term questions: Mr. Verheij on plastic bins and wind alternatives",
+          "chunk_index": null,
+          "start_date": "2016-03-17T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 99773,
+        "content_preview": "Dan gaan wij stemmen over de onderdelen 5.2 en verder uit uw agenda. De heer Biljoen.\nDe heer BILJOEN (gl). Voorzitter, even een punt van orde. Met het aannemen van deze moties zijn we\n€ 446.000,00 bo",
+        "score": 0.20174187421798706,
+        "metadata": {
+          "document_id": "6114567",
+          "title": "Stemming over begroting en Kadernota Lokale Lasten",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 639527027598466997,
+        "content_preview": "Hierna wordt motie 20 zonder hoofdelijke stemming verworpen, waarbij de fracties van de Stadspartij, de PvdA, de SP, GroenLinks en D66 zich ervoor hebben verklaard en de overige aanwezige fracties zic",
+        "score": 0.17317746579647064,
+        "metadata": {
+          "document_id": "241376",
+          "title": "Verwerping Motie 20",
+          "chunk_index": null,
+          "start_date": "2003-07-03T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 204086,
+        "content_preview": "De VOORZITTER. Wij gaan stemmen over\nde ingediende motie en het voorstel.\nStemverklaringen? Mevrouw Bokhove.\nMevrouw BOKHOVE (gl). Ik wiI nog een\nkeer lastig zijn. Bij mij is de motie nog niet\nraadsve",
+        "score": 0.16382674872875214,
+        "metadata": {
+          "document_id": "5048447",
+          "title": "Voting on Motion 'Parkeren gaat ons aan 't Hart' and Proposal",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 436232506269967135,
+        "content_preview": "Mevrouw Van de Ven: Mijnheer de voorzitter! De argumenten waarom de W70-fractie niet zal instemmen\r\nmet dit amendement, zijn dezelfde als ik bij het eerste amendement heb genoemd. In dit geval komt da",
+        "score": 0.15889480710029602,
+        "metadata": {
+          "document_id": "3416171",
+          "title": "Voting on Amendment 4 and explanation",
+          "chunk_index": null,
+          "start_date": "None",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 296928036039376895,
+        "content_preview": "Over het de\nfacto failliete Warmtebedrijf dienen wij een\nmotie in. In dit bedrijf hebben wij al € 28 miljoen\ngeïnvesteerd en veel van dit geld is al aan Shell\nen anderen betaald. Shell is er uitgestap",
+        "score": 0.1394292116165161,
+        "metadata": {
+          "document_id": "238765",
+          "title": "Motie inzake Warmtebedrijf NV",
+          "chunk_index": null,
+          "start_date": "2007-11-06T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1686485,
+        "content_preview": ". De motie is\nmet 41 stemmen voor en 2 tegen\naangenomen. Tegen stemden de leden\nVan Groningen en Verheij van de VVD.\nMotie 88, ‘Onderzoek lerarenvlucht uit\nRotterdam’. U kunt stemmen. De motie is\nmet ",
+        "score": 0.11114270240068436,
+        "metadata": {
+          "document_id": "6078351",
+          "title": "Approval of Events Policy Framework",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 503643,
+        "content_preview": "Beleidsveld Datum ontvangen BB nummer Raadslid Partij Titel Portefeuillehouder Stand van zaken Afdoeningsvoorstel\naanwezig\nVerwachte datum\nafdoening\nCommissieadvies Afgedaan\nBestuur 10-11-2023 23bb007",
+        "score": 0.09345933794975281,
+        "metadata": {
+          "document_id": "6115087",
+          "title": "Overzicht van Moties",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 295311,
+        "content_preview": "Dan breng ik het voorstel onder 8 zelf in\nstemming, het voorstel tot vaststelling van\nhet aantal wethouders, de tijdsbesteding\nvan de wethouders, alsmede het verlenen\nvan vrijstelling van het woonplaa",
+        "score": 0.0909150168299675,
+        "metadata": {
+          "document_id": "6068405",
+          "title": "Stemming over het hoofdvoorstel voor wethouders",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 2934,
+        "content_preview": "De VOORZITTER. Ik dank u zeer. De heer Van der Velden.\n\nDe heer VAN DER VELDEN (pvdd). Voorzitter, laat ik beginnen met het onderwerp privacy.\nIn juli 2020 werd vastgesteld, dat blijkt uit de boardlet",
+        "score": 0.0742538571357727,
+        "metadata": {
+          "document_id": "6094140",
+          "title": "Partij voor de Dieren (Van der Velden) over AVG, Privacy en Financiële Verantwoording",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 11572931122416214,
+        "content_preview": "De heer SÖRENSEN (Leefbaar Rotterdam). De\nheer Van Heemst maakt van het beleid van het\nvorige college een karikatuur. In het debat over\nde blunderput, dat wij nog met elkaar zullen\nvoeren, zal ik aant",
+        "score": 0.06634926050901413,
+        "metadata": {
+          "document_id": "238765",
+          "title": "Debat over de verantwoordelijkheid voor 'valse starts'",
+          "chunk_index": null,
+          "start_date": "2007-11-06T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 951868465722957964,
+        "content_preview": "De VOORZITTER. Ik stel nu motie 22 aan de\nordef.\nHierna wordt motie 22 zonder hoofdelijke\nstemming verworpen, waarbij de fracties van de\nStadspartij en de SP zich ervoor hebben\nverklaard en de overige",
+        "score": 0.05286617949604988,
+        "metadata": {
+          "document_id": "240928",
+          "title": "Discussion on Motie 22",
+          "chunk_index": null,
+          "start_date": "2003-10-23T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 571825205636243173,
+        "content_preview": "Hierna wordt motie 19 zonder hoofdelijke stemming verworpen, waarbij de fracties van de ChristenUnie-SGP, de SP, GroenLinks en de Stadspartij zich ervoor hebben uitgesproken en de overige aanwezige fr",
+        "score": 0.037838879972696304,
+        "metadata": {
+          "document_id": "241376",
+          "title": "Motie 19",
+          "chunk_index": null,
+          "start_date": "2003-07-03T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 154520166233510406,
+        "content_preview": "Hierna wordt motie 22 zonder hoofdelijke stemming verworpen, waarbij de fracties van de Stadspartij en de SP zich ervoor hebben verklaard en de overige aanwezige fracties zich ertegen hebben uitgespro",
+        "score": 0.034746862947940826,
+        "metadata": {
+          "document_id": "241376",
+          "title": "Motie 22",
+          "chunk_index": null,
+          "start_date": "2003-07-03T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 295310,
+        "content_preview": "Anderen wellicht op dit\npunt? Dan vraag ik u heel even geduld\ntotdat de amendementen rondgegaan zijn.\nDan kunnen wij daarover stemmen en\naansluitend stemmen over het voorstel\nonder agendapunt 8.\nMag i",
+        "score": 0.03196829929947853,
+        "metadata": {
+          "document_id": "6068405",
+          "title": "Procedure en stemmen over motie Partij voor de Dieren en amendementen",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1738059,
+        "content_preview": ". De motie is met\n27 stemmen tegen en 3 voor verworpen.\nVoor stemden de fracties van SP en Partij\nvoor de Dieren.\nDan gaan wij naar de amendementen en\nnaar ons oordeel brengen wij ze in deze\nvolgorde ",
+        "score": 0.03016596846282482,
+        "metadata": {
+          "document_id": "6068343",
+          "title": "Opening en mededelingen",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 177561893583195182,
+        "content_preview": "Ten tijde van het herstelplan zijn veel raadsleden kritischer ten aanzien van het Warmtebedrijf. Zo is er bijvoorbeeld\nteleurstelling\tnaar\taanleiding\tvan\tde\tverslechterde\tfinanciële\tsituatie\ten\tover\td",
+        "score": 0.021036505699157715,
+        "metadata": {
+          "document_id": "6086331",
+          "title": "Council's Critical Stance and Support for Continuing Warmtebedrijf",
+          "chunk_index": null,
+          "start_date": "2020-10-01T10:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 766022,
+        "content_preview": "De heer BONTE (gl). Mijnheer de\nvoorzitter. Als wij over een uur dit voorstel\nhabben aangenomen, dan is het geen\ninspanningsverplichting meer, maar dan is\nhet een resultaatsverplichting. Het is een\nra",
+        "score": 0.017521066591143608,
+        "metadata": {
+          "document_id": "5100275",
+          "title": "Discussie over amendementen G, H, I, J, K en L",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 27478443051288503,
+        "content_preview": "Constaterende dat: . de gemeenteraad in het najaar een richtinggevend besluit zal nemen over de toekomst van het Warmtebedrĳf Rotterdam,",
+        "score": -0.007976958528161049,
+        "metadata": {
+          "document_id": "6084241",
+          "title": "Constaterende dat",
+          "chunk_index": null,
+          "start_date": "2020-06-18T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 920003,
+        "content_preview": "XVI. Het voorstel tot vaststelling van de\nkredietactualisatie gebiedsontwikkeling Hart\nvan Zuid.\n(Raadsstuk 2013-2985).\nDe VOORZITTER . Het woord is aan de heer\nSchneider.\nDe heer SCHNEIDER (lr). Mijn",
+        "score": -0.01929314434528351,
+        "metadata": {
+          "document_id": "2375972",
+          "title": "Vaststelling kredietactualisatie gebiedsontwikkeling Hart van Zuid",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 301601146086159982,
+        "content_preview": "Rotterdam, 26 mei 2020. 20bb006111\nAan:\nde gemeenteraad\nOnderwerp:\nOpenbaarmaking presentatie met betrekking tot het Warmtebedrijf.\nGevraagd besluit:\nSamenvattend stellen wij u voor:\nTen aanzien van p",
+        "score": -0.028883643448352814,
+        "metadata": {
+          "document_id": "6084050",
+          "title": "Samenvatting / onderwerp",
+          "chunk_index": null,
+          "start_date": "2020-06-18T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 408626813945979964,
+        "content_preview": "6.  Planning\n- 2 juli 2020 vindt een vergadering plaats over het Warmtebedrijf, deels\nopenbaar en deels besloten\n- 7 juli 2020 zijn er digitaal twee technische sessie. Eén over de\naanwending van de ve",
+        "score": -0.05381817743182182,
+        "metadata": {
+          "document_id": "6084997",
+          "title": "6. Planning",
+          "chunk_index": null,
+          "start_date": "2020-07-09T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 561898190630789148,
+        "content_preview": "7. Warmtebedrijf\nTer bespreking\n- Raadsvoorstel (volgt 3 december 2019)\n- Annotatie commissiegriffier\n\nDaarbij betrekken:\n- Wethoudersbrief van 27 november 2019 tussenbericht inzake moties\n(19bb24088)",
+        "score": -0.058213211596012115,
+        "metadata": {
+          "document_id": "6080334",
+          "title": "Agendapunt 7: Warmtebedrijf",
+          "chunk_index": null,
+          "start_date": "2019-12-03T19:30:00",
+          "party": null
+        }
+      }
+    ],
+    "timings": {
+      "total_ms": 247821.64637499955
+    },
+    "config_snapshot": {
+      "top_k": 15,
+      "date_from": null,
+      "date_to": null,
+      "strategy": "sub_query",
+      "sub_queries": [
+        "Welke partijen stemden tegen het Warmtebedrijf voorstel in de gemeenteraad?",
+        "Wat waren de alternatieve voorstellen of amendementen die tegen het Warmtebedrijf voorstel werden ingediend?",
+        "Wat waren de redenen van de tegenstemmende partijen voor hun afwijzing van het Warmtebedrijf voorstel?"
+      ],
+      "reranker_threshold": -2.0,
+      "route": {
+        "query_type": "multi_hop",
+        "top_k": 15,
+        "parties": [],
+        "date_from": null,
+        "date_to": null,
+        "sub_queries": [],
+        "confidence": 0.8,
+        "strategy": "sub_query"
+      }
+    }
+  },
+  {
+    "question_id": "mh-02",
+    "query_text": "Hoe verhoudt het budget voor cultuur zich tot het budget voor sport over de afgelopen 5 jaar?",
+    "query_embedding_hash": "",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [
+      {
+        "chunk_id": 479723808452540504,
+        "content_preview": "Ontwerpbesluit:\nDe Raad van de gemeente Rotterdam,\ngelezen het voorstel van burgemeester en wethouders van 30 mei 2017\n(raadsvoorstel nr \"Dit vult griffie later in\");\nbesluit:\neen investeringskrediet ",
+        "score": 0.26671725511550903,
+        "metadata": {
+          "document_id": "5380685",
+          "title": "Het besluit / dictum",
+          "chunk_index": null,
+          "start_date": "2017-06-22T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 347363329713255184,
+        "content_preview": "Bron: Gemeente Rotterdam\nHoewel het budget voor het Cultuurplan 2017-2020 per saldo gegroeid is ten\nopzichte van de voorgaande periode, past hier een kanttekening. Een deel van\nhet benodigde bedrag is",
+        "score": 0.25166332721710205,
+        "metadata": {
+          "document_id": "6076698",
+          "title": "Cultuurplan 2017-2020 budget and funding",
+          "chunk_index": null,
+          "start_date": "2019-06-19T09:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 296570,
+        "content_preview": "Bestemmingsvoorstellen – Type 1\nProgramma Onderwerp Samengevat voorstel\nBedrag in € *\n1.000\n Algemene Middelen Krediet-\nrisicoreserve\nActiviteit Verstrekking lening- en garanties is een nulproduct\nwaa",
+        "score": 0.23629575967788696,
+        "metadata": {
+          "document_id": "6083276",
+          "title": "Tabel Bestemmingsvoorstellen – Type 1",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 289185,
+        "content_preview": "Bestemmingsvoorstellen – Type 1\nProgramma Onderwerp Samengevat voorstel\nBedrag in € *\n1.000\nCF Algemene\nMiddelen\nKrediet-\nrisicoreserve\nActiviteit Verstrekking lening- en garanties is een nulproduct\nw",
+        "score": 0.18846723437309265,
+        "metadata": {
+          "document_id": "6082669",
+          "title": "Bestemmingsvoorstellen – Type 1",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 323481,
+        "content_preview": "Bestemmingsvoorstellen – Type 1\nProgramma Onderwerp Samengevat voorstel\nBedrag in € *\n1.000\n Algemene Middelen Krediet-\nrisicoreserve\nActiviteit Verstrekking lening- en garanties is een nulproduct\nwaa",
+        "score": 0.1540752798318863,
+        "metadata": {
+          "document_id": "6083874",
+          "title": "Gedetailleerd overzicht Bestemmingsvoorstellen – Type 1",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1346959,
+        "content_preview": " hersteld. Het groeiend tekort aan betaalbare \nstarterswoningen wordt weggewerkt. \nA: Onze jongeren\n1.  Laagdrempelige zorg: De Centra voor Jeugd en Gezin in Rotterdam  moeten versterkt worden. Te wei",
+        "score": 0.1112481951713562,
+        "metadata": {
+          "document_id": "vision_SP_2026",
+          "title": "Visie SP deel 151",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 290104,
+        "content_preview": "Bestemmingsvoorstellen – Type 1\nProgramma Onderwerp Samengevat voorstel\nBedrag in € *\n1.000\n Algemene Middelen Krediet-\nrisicoreserve\nActiviteit Verstrekking lening- en garanties is een nulproduct\nwaa",
+        "score": 0.1097237765789032,
+        "metadata": {
+          "document_id": "6083270",
+          "title": "Tabel Bestemmingsvoorstellen – Type 1",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1007420168086244281,
+        "content_preview": "Dit geldt ook - de heer Cremers heeft erover\ngesproken - voor het plan inzake de\npersoneelsomvang. Wat dat betreft wordt bij\ndiensten bekeken wat hun kerntaak is en of zij\nniet uit het lood zijn gelop",
+        "score": 0.07234742492437363,
+        "metadata": {
+          "document_id": "240928",
+          "title": "Personeelsomvang en sportsubsidies",
+          "chunk_index": null,
+          "start_date": "2003-10-23T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 942793,
+        "content_preview": "De heer ENGBERTS (pvda). Mijnheer de\nvoorzitter. Vandaag ronden wij met de\n‘Cultuurnota’ de verdeling van de vierjarige\nsubsidies af. Welke instellingen wel,\nhoeveel, welke niet? Voor je het weet,\nver",
+        "score": 0.05799940973520279,
+        "metadata": {
+          "document_id": "4859721",
+          "title": "Motie 6: Ruimte voor vernieuwing - indiening en steun",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1129423,
+        "content_preview": "Bestemmingsvoorstellen\nRaadsprogramma Onderwerp  Toelichting Bedrag (€ * 1.000)\nArmoede,\nschuldhulpverlening,\nintegratie en\nsamenleving\nBijzondere bijstand,\nschuldhulpverlening\nDecember circulaire - B",
+        "score": 0.05776209756731987,
+        "metadata": {
+          "document_id": "6109804",
+          "title": "Detailoverzicht Bestemmingsvoorstellen per Raadsprogramma",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1130048872995477425,
+        "content_preview": "Amendement B, amendement extra geld voor\nCultuurplan 2005-2008\n\"De gemeenteraad van Rotterdam bijeen in\nvergadering op 9 en 11 november 2004 ter\nbespreking van de begroting 2005,\nbesluit:\nde begroting",
+        "score": 0.021719645708799362,
+        "metadata": {
+          "document_id": "239879",
+          "title": "Amendement B, amendement extra geld voor Cultuurplan 2005-2008",
+          "chunk_index": null,
+          "start_date": "2005-03-17T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 501253226048480636,
+        "content_preview": "Cultuur 14-6-2022 22bb004196 Engberts, G.J. PvdA Duidelijkheid cultuurplanperiode voor Rotterdam 5-9-2022: uitstelbericht 22bb005615 3-11-2022",
+        "score": -0.0007343305042013526,
+        "metadata": {
+          "document_id": "6102074",
+          "title": "Cultuur: Duidelijkheid cultuurplanperiode voor Rotterdam",
+          "chunk_index": null,
+          "start_date": "2022-10-05T14:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 249840234433591716,
+        "content_preview": "Amendement A, amendement opera en\ncultuurplan\n\"De gemeenteraad van Rotterdam, in\nvergadering bijeen op 9 en 11 november 2004\nter bespreking van de begroting 2005;\nbesluit:\nde programmabegroting 2005 a",
+        "score": -0.014850886538624763,
+        "metadata": {
+          "document_id": "239879",
+          "title": "Amendement A, amendement opera en cultuurplan",
+          "chunk_index": null,
+          "start_date": "2005-03-17T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 175994220048972319,
+        "content_preview": "Motie 24\n\"De gemeenteraad van Rotterdam, in\nvergadering bijeen op 9 en 11 november 2004\nter bespreking van de gemeentebegroting voor\nhet jaar 2005,\nconstaterende:\n- dat bij de behandeling van de\nsubsi",
+        "score": -0.015059029683470726,
+        "metadata": {
+          "document_id": "239879",
+          "title": "Motion 24: Laurens Church Subsidy",
+          "chunk_index": null,
+          "start_date": "2005-03-17T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1135776505484875169,
+        "content_preview": "- uit de jaarrekening echter blijkt dat Rotterdam vorig jaar toch 692.000 euro aan de LW uitgaf;",
+        "score": -0.021130457520484924,
+        "metadata": {
+          "document_id": "6084107",
+          "title": "Constatering: Jaarrekening uitgaven",
+          "chunk_index": null,
+          "start_date": "2020-06-18T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 71046220636652084,
+        "content_preview": "#ffilwPLaNBN  R©TTEREDAM\nMotie: Cultuur door dik én dun voor iedereen\n\" Mb ggq65\nDe gemeenteraad van Rotterdam in raadsvergadering biJ-een op 24 november 2O16 ter bespreking van het\nCultuurplan 20i7-2",
+        "score": -0.04014130309224129,
+        "metadata": {
+          "document_id": "4624323",
+          "title": "Motie: Cultuur door dik én dun voor iedereen - Introductie",
+          "chunk_index": null,
+          "start_date": "2016-11-24T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1345777,
+        "content_preview": " beschikbaar is door de inzet van \nsociale teams en juiste samenwerkingsverbanden. \nDe gemeente pleit in VNG-verband voor een hoger \nbudget voor de jeugd-ggz.\n• Sociale cohesie tussen bewoners en verb",
+        "score": -0.047844208776950836,
+        "metadata": {
+          "document_id": "vision_Partij_voor_de_Dieren_2026",
+          "title": "Visie Partij voor de Dieren deel 175",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 818324422351024520,
+        "content_preview": "Financiële toelichting\n\nfestival\nEind 2009 is er nog een toezegging binnengekomen voor Paradie van de gemeente Rotterdam (dienst Kunst en cultuur)\nad. € 20.000. Dit kon niet meer bijtijds worden verwe",
+        "score": -0.05083974450826645,
+        "metadata": {
+          "document_id": "231205",
+          "title": "Programma 5: Sociaal - Product Kunst en cultuur - Financiële toelichting: festival",
+          "chunk_index": null,
+          "start_date": "2010-09-30T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 845652316970901799,
+        "content_preview": "Rotterdam\nBegroting\n2011\noktober 2010",
+        "score": -0.05813289433717728,
+        "metadata": {
+          "document_id": "6469511",
+          "title": "Rotterdam Begroting 2011",
+          "chunk_index": null,
+          "start_date": "2010-10-27T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1346812,
+        "content_preview": "niet aan de zijlijn staan, thuiszitten en lijdzaam toezien dat mijn \nstad mijn stad niet meer is. Ik wil samen voor verandering zorgen en voluit leven. \nWij gaan Rotterdam betaalbaar maken!\nDe SP wil ",
+        "score": -0.05821051821112633,
+        "metadata": {
+          "document_id": "vision_SP_2026",
+          "title": "Visie SP deel 4",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 845494172388561545,
+        "content_preview": "De gemeenteraad van Rotterdam, in vergadering bijeen op 9 en 11 november 2004 ter bespreking van de gemeentebegroting voor het jaar 2005,\nconstaterende:\n- dat bij de behandeling van de subsidieaanvraa",
+        "score": -0.06999686360359192,
+        "metadata": {
+          "document_id": "239879",
+          "title": "Motie 24",
+          "chunk_index": null,
+          "start_date": "2005-03-17T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 514986910642414534,
+        "content_preview": "Financiële toelichting\nID-banen\n\nOverschie krijgt van de gemeente Rotterdam voor 200 9 (afgerond) € 257.000 voor ID-banen SenR. Dit is p as in maart\n2010 bekend geworden en kon daarom niet meer in de ",
+        "score": -0.07042679190635681,
+        "metadata": {
+          "document_id": "231205",
+          "title": "Programma 5: Sociaal - Product Sportvoorzieningen, sportvelden en -terreinen - Financiële toelichting: ID-banen",
+          "chunk_index": null,
+          "start_date": "2010-09-30T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1055631795258315144,
+        "content_preview": "Nummer: 20bb7150\nOnderwerp: Brief Rekenkamer Rotterdam over rapport Waarde van publiek\nDatum: 11 juni 2020\nAfzender: Rekenkamer Rotterdam\nBesluit: Te betrekken bij bespreking raadsvoorstel cultuurplan",
+        "score": -0.07146327942609787,
+        "metadata": {
+          "document_id": "6084828",
+          "title": "Besluit 20bb7150: Rapport Waarde van publiek",
+          "chunk_index": null,
+          "start_date": "2020-07-08T09:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 946962580899006731,
+        "content_preview": "Constaterende dat:\nÓ      het college uitspreekt dat de culturele sector ernaar moet streven een afspiegelingvan de\nRotterdamse samenleving te bereiken;\n®      het RRKC in  haar advies uitspreekt dat ",
+        "score": -0.07508953660726547,
+        "metadata": {
+          "document_id": "4624323",
+          "title": "Motie: Cultuur door dik én dun voor iedereen - Constateringen",
+          "chunk_index": null,
+          "start_date": "2016-11-24T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 756992776950444115,
+        "content_preview": "De heer Molenaar presenteert een motie van de fractie van Leefbaar Rotterdam die beoogt geen nieuwe algemene middelen toe te voegen aan het cultuurplanbudget.",
+        "score": -0.07540430873632431,
+        "metadata": {
+          "document_id": "4078089",
+          "title": "Motie Leefbaar Rotterdam over cultuurplanbudget",
+          "chunk_index": null,
+          "start_date": "2009-11-18T00:00:00",
+          "party": null
+        }
+      }
+    ],
+    "timings": {
+      "total_ms": 270119.6698749991
+    },
+    "config_snapshot": {
+      "top_k": 15,
+      "date_from": null,
+      "date_to": null,
+      "strategy": "sub_query",
+      "sub_queries": [
+        "Wat was het jaarlijkse budget voor cultuur in Rotterdam over de jaren 2019-2023?",
+        "Wat was het jaarlijkse budget voor sport in Rotterdam over de jaren 2019-2023?",
+        "Welke begrotingsbeslissingen hebben het cultuurbudget in Rotterdam beïnvloed in de afgelopen 5 jaar?"
+      ],
+      "reranker_threshold": -2.0,
+      "route": {
+        "query_type": "multi_hop",
+        "top_k": 15,
+        "parties": [],
+        "date_from": null,
+        "date_to": null,
+        "sub_queries": [],
+        "confidence": 0.8,
+        "strategy": "sub_query"
+      }
+    }
+  }
+]

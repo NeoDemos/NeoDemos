@@ -17,11 +17,12 @@ Treats GroenLinks-PvdA as ONE unified party.
 """
 
 import json
-import psycopg2
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 from datetime import datetime
 import re
+
+from services.db_pool import get_connection
 
 @dataclass
 class GLPvdAPosition:
@@ -40,12 +41,8 @@ class GLPvdAPosition:
 
 class GLPvdANotulenExtractionService:
     """Extract actual GL-PvdA positions from meeting minutes"""
-    
+
     def __init__(self):
-        self.conn = psycopg2.connect(
-            "postgresql://postgres:postgres@localhost:5432/neodemos"
-        )
-        self.cursor = self.conn.cursor()
         # Pattern to find GL-PvdA references (unified party)
         self.party_pattern = r"(groenlinks|pvda|partij van de arbeid)"
     
@@ -73,7 +70,7 @@ class GLPvdANotulenExtractionService:
         }
         
         try:
-            with self.conn as conn:
+            with get_connection() as conn:
                 with conn.cursor() as cur:
                     # Get Rotterdam Gemeenteraad notulen
                     print("[1/5] Loading Rotterdam Gemeenteraad notulen...")
@@ -87,30 +84,30 @@ class GLPvdANotulenExtractionService:
                         AND d.content IS NOT NULL
                         ORDER BY m.start_date DESC
                     """)
-                    
+
                     notulen_docs = cur.fetchall()
                     print(f"  ✓ {len(notulen_docs)} notulen loaded")
-                    
+
                     # Analyze each notule for GL-PvdA positions
                     print("\n[2/5] Extracting GL-PvdA statements...")
                     statements = self._extract_statements(notulen_docs)
                     print(f"  ✓ {len(statements)} statements extracted")
-                    
+
                     print("\n[3/5] Extracting GL-PvdA voting behavior...")
                     votes = self._extract_voting_behavior(notulen_docs)
                     print(f"  ✓ {len(votes)} voting positions extracted")
-                    
+
                     print("\n[4/5] Extracting GL-PvdA proposals/amendments...")
                     proposals = self._extract_proposals_amendments(notulen_docs)
                     print(f"  ✓ {len(proposals)} proposals/amendments extracted")
-                    
+
                     # Combine all positions
                     all_positions = statements + votes + proposals
                     results['posities'] = all_positions
-                    
+
                     print(f"\n[5/5] Compiling summary...")
                     results['samenvatting'] = self._generate_summary(all_positions)
-            
+
             return results
         
         except Exception as e:

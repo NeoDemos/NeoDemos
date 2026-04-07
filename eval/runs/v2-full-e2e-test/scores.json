@@ -1,0 +1,66 @@
+[
+  {
+    "question_id": "se-01",
+    "question_text": "Waarom ging het Warmtebedrijf Rotterdam failliet?",
+    "category": "specific_event",
+    "answer": "Het Warmtebedrijf Rotterdam ging om verschillende redenen failliet. Uit de bronnen blijkt dat de volgende factoren hebben bijgedragen aan het faillissement:\n\n*   **Financiële investeringen en verliezen:** Er was al € 28 miljoen geïnvesteerd in het bedrijf, waarvan veel geld reeds aan Shell en anderen was betaald. Het Havenbedrijf Rotterdam heeft zijn aandelen van € 9 miljoen naar € 0,- afgewaardeerd. [Bron 1]\n*   **Uitstap Shell en waardevermindering aandelen:** Shell is uit het bedrijf gestapt en het Havenbedrijf Rotterdam heeft de waarde van zijn aandelen drastisch verminderd. [Bron 1]\n*   **Afhankelijkheid van subsidies en kredieten:** Er stond nog geld op de bank, er zou nog geld van Shell worden teruggekregen en het ministerie van Economische Zaken had subsidie toegezegd. Dit waren redenen om surseance van betaling aan te vragen en een overbruggingskrediet van € 18 miljoen niet opnieuw te verstrekken. [Bron 1]\n*   **Complexe situatie en aandeelhoudersverantwoordelijkheid:** De situatie was buitengewoon complex. De aandeelhouders waren bang dat zij het bedrijf failliet zouden laten gaan. Het Warmtebedrijf had allerlei verplichtingen aangegaan, wat mogelijk als onbekwaamheid kon worden gezien, omdat er gehandeld werd in de wetenschap van het bijna failliete bedrijf. [Bron 2]\n*   **Onderhandelingen en contracten met partners:** Er was sprake van afspraken en contracten met partners zoals E.ON, Eneco en Nuon. [Bron 2] [Bron 4] De discussie over het Warmtebedrijf vermeldt specifiek dat het misging doordat met Shell verkeerde contracten waren gesloten. [Bron 4]\n*   **Gemeentelijke regie en verantwoordelijkheid:** De gemeente kreeg de leiding over een \"time out\" en de daaropvolgende doorstart, en vormde een gemeentelijk team dat de uitvoering hiervan verzorgde. [Bron 2] Er werd afgesproken dat de gemeente alle contracten en verplichtingen op zich zou nemen. [Bron 2]\n*   **Slechte deal met Uniper:** GroenLinks vond dat de gemeente een slechte deal had gesloten met het ",
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 1.0,
+        "unique_documents": 10,
+        "total_chunks": 10,
+        "entropy": 3.322
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.3,
+        "keyword_only_pct": 0.7,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 3,
+        "keyword_only": 7,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 14.92,
+        "promotions_5plus": 24,
+        "demotions_5plus": 21,
+        "candidates_scored": 50
+      },
+      "rrf": {
+        "unique_from_fusion": 4,
+        "unique_pct": 0.4,
+        "vector_top_k_overlap": 2,
+        "keyword_top_k_overlap": 4
+      },
+      "timings": {
+        "embedding_ms": 497.9865420000351,
+        "vector_ms": 453.22424999994837,
+        "keyword_ms": 568788.3687499998,
+        "rrf_ms": 0.4605410013027722,
+        "reranker_ms": 2854.886249999254,
+        "total_ms": 572595.2289999996
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 4,
+        "reasoning": "Het antwoord beantwoordt de vraag grotendeels goed door verschillende concrete oorzaken van het faillissement te noemen, zoals financiële verliezen, de uitstap van Shell, slechte contracten, en het verlieslijdende karakter van het bedrijf. De informatie is relevant en goed gestructureerd. Er is echter enige verwarring omdat het antwoord suggereert dat het bedrijf daadwerkelijk failliet ging, terwijl uit de bronnen blijkt dat er juist maatregelen werden genomen om faillissement te voorkomen (surseance, doorstart). Dit maakt het antwoord iets minder precies."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Het antwoord is volledig gebaseerd op de meegeleverde context. Alle beweringen over de redenen voor het faillissement van het Warmtebedrijf Rotterdam zijn direct terug te vinden in de bronnen, inclusief de financiële verliezen, uitstap van Shell, complexe aandeelhoudersstructuur, contractproblemen, gemeentelijke betrokkenheid, en de slechte deal met Uniper. Het antwoord gebruikt consequent bronverwijzingen en voegt geen externe informatie toe die niet in de context staat."
+      }
+    },
+    "chunks_retrieved": 10,
+    "total_ms": 572595.2289999996
+  }
+]

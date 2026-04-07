@@ -1,0 +1,326 @@
+{
+  "meeting_id": "14d2c090-d602-49ab-90d4-52dff8a3b3dd",
+  "audit_timestamp": "2026-04-07T21:22:45.470272",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+    "start_date": "2025-11-04 00:00:00",
+    "committee": "COR",
+    "quality_score": 0.945,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 52,
+    "document_count": 11
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 329,
+      "correct_count": 329,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8161,
+      "party_attribution_rate": 0.1614,
+      "total_segments": 223,
+      "attributed_segments": 182,
+      "unattributed_segments": 41
+    },
+    "speaker_diversity": {
+      "unique_speakers": 10,
+      "unique_parties": 2,
+      "top_speaker": "M.H. (Marvin) Biljoen Commissievoorzitter",
+      "top_speaker_segment_count": 63,
+      "monologue_rate": 0.2825,
+      "speakers": {
+        "M.H. (Marvin) Biljoen Commissievoorzitter": 63,
+        "C.M. (Chantal) Zeegers": 24,
+        "B.J. (Bart-Joost) van Rij": 23,
+        "T.S.J. (Theo) Coşkun": 21,
+        "T. (Thomas) Roskam": 15,
+        "Adviseur": 9,
+        "M. (Martine) Koedijk Accountant": 7,
+        "M.D. (Marcel) van Gilst Financial Audit": 7,
+        "S.J. (Sjoerd) Keulen Directeur Rekenkamer Rotterdam": 7,
+        "M. (Marjo) Lamers Concerncontroller": 6
+      },
+      "parties": {
+        "SP": 21,
+        "Leefbaar Rotterdam": 15
+      }
+    },
+    "segment_quality": {
+      "total_segments": 223,
+      "nonempty_segments": 223,
+      "total_words": 17551,
+      "total_chars": 96642,
+      "avg_words_per_segment": 78.7,
+      "avg_chars_per_segment": 433.4,
+      "short_segment_rate": 0.3094,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 11,
+      "items_with_content": 11,
+      "coverage_rate": 1.0,
+      "items": [
+        {
+          "title": "Vaststelling agenda",
+          "segment_count": 1
+        },
+        {
+          "title": "Vaststelling verslag",
+          "segment_count": 4
+        },
+        {
+          "title": "Planning",
+          "segment_count": 14
+        },
+        {
+          "title": "Lijst van openstaande toezeggingen",
+          "segment_count": 7
+        },
+        {
+          "title": "Terugkoppeling van rapporteurs",
+          "segment_count": 3
+        },
+        {
+          "title": "Nieuwe opzet P&C-cyclus",
+          "segment_count": 13
+        },
+        {
+          "title": "Jaarrekeningcontrole 2025",
+          "segment_count": 36
+        },
+        {
+          "title": "Aanbevelingen COR en accountant",
+          "segment_count": 19
+        },
+        {
+          "title": "Proces brief bouwclaims",
+          "segment_count": 77
+        },
+        {
+          "title": "Periodiek overleg Rekenkamer Rotterdam",
+          "segment_count": 20
+        },
+        {
+          "title": "Verordening onderzoek doelmatigheid en doeltreffendheid 213a Gemw",
+          "segment_count": 29
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+        "start_date": "2025-11-04 00:00:00",
+        "committee": "COR",
+        "review_status": "auto_approved",
+        "quality_score": 0.945,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+        "start_date": "2025-11-04 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 10,
+      "recognized_speakers": 6,
+      "unrecognized_speakers": 4,
+      "recognition_rate": 0.6,
+      "recognized": [
+        {
+          "name": "M.H. (Marvin) Biljoen Commissievoorzitter",
+          "segment_count": 63,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "T.S.J. (Theo) Coşkun",
+          "segment_count": 21,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "T. (Thomas) Roskam",
+          "segment_count": 15,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "C.M. (Chantal) Zeegers",
+          "segment_count": 24,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "S.J. (Sjoerd) Keulen Directeur Rekenkamer Rotterdam",
+          "segment_count": 7,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Adviseur",
+          "segment_count": 9,
+          "parties": [],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "M. (Martine) Koedijk Accountant",
+          "segment_count": 7,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "B.J. (Bart-Joost) van Rij",
+          "segment_count": 23,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "M.D. (Marcel) van Gilst Financial Audit",
+          "segment_count": 7,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "M. (Marjo) Lamers Concerncontroller",
+          "segment_count": 6,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 52,
+      "empty_chunks": 0,
+      "buckets": {
+        "long (2000-5000)": 28,
+        "medium (200-2000)": 24
+      },
+      "min_chars": 305,
+      "max_chars": 2707,
+      "avg_chars": 1886.0,
+      "median_chars": 2169,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 52,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 11,
+      "documents_with_chunks": 11,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Aanbevelingen COR en accountant",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: Jaarrekeningcontrole 2025",
+          "chunks": 8
+        },
+        {
+          "name": "Transcript: Lijst van openstaande toezeggingen",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Nieuwe opzet P&C-cyclus",
+          "chunks": 6
+        },
+        {
+          "name": "Transcript: Periodiek overleg Rekenkamer Rotterdam",
+          "chunks": 5
+        },
+        {
+          "name": "Transcript: Planning",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Proces brief bouwclaims",
+          "chunks": 14
+        },
+        {
+          "name": "Transcript: Terugkoppeling van rapporteurs",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Vaststelling agenda",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Vaststelling verslag",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Verordening onderzoek doelmatigheid en doeltreffendheid 213a Gemw",
+          "chunks": 9
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 52,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 52,
+      "distribution": {
+        "quote": {
+          "count": 52,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8161,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.945
+    }
+  }
+}

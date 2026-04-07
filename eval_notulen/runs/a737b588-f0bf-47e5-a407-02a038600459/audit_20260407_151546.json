@@ -1,0 +1,955 @@
+{
+  "meeting_id": "a737b588-f0bf-47e5-a407-02a038600459",
+  "audit_timestamp": "2026-04-07T15:11:49.749339",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "min_rag_faithfulness": 3.5,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+    "start_date": "2026-02-12 00:00:00",
+    "committee": null,
+    "quality_score": 0.931,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 131,
+    "document_count": 6
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.1196,
+      "total_occurrences": 2884,
+      "correct_count": 2539,
+      "error_count": 345,
+      "error_examples": [
+        {
+          "wrong": "u",
+          "correct": "er asmus brug"
+        },
+        {
+          "wrong": "u,",
+          "correct": "er asmus brug"
+        },
+        {
+          "wrong": "u",
+          "correct": "er asmus brug"
+        },
+        {
+          "wrong": "u",
+          "correct": "er asmus brug"
+        },
+        {
+          "wrong": "u",
+          "correct": "er asmus brug"
+        },
+        {
+          "wrong": "u",
+          "correct": "er asmus brug"
+        },
+        {
+          "wrong": "u",
+          "correct": "er asmus brug"
+        },
+        {
+          "wrong": "u",
+          "correct": "er asmus brug"
+        },
+        {
+          "wrong": "u",
+          "correct": "er asmus brug"
+        },
+        {
+          "wrong": "u",
+          "correct": "er asmus brug"
+        }
+      ]
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.7692,
+      "party_attribution_rate": 0.3275,
+      "total_segments": 455,
+      "attributed_segments": 350,
+      "unattributed_segments": 105
+    },
+    "speaker_diversity": {
+      "unique_speakers": 19,
+      "unique_parties": 9,
+      "top_speaker": "L.S. (Larissa) Vlieger Commissievoorzitter",
+      "top_speaker_segment_count": 96,
+      "monologue_rate": 0.211,
+      "speakers": {
+        "L.S. (Larissa) Vlieger Commissievoorzitter": 96,
+        "R.A.C.J. (Robert) Simons": 81,
+        "J.M. (Amy) de Bruijn": 38,
+        "S. (Stephan) Leewis": 20,
+        "D.J. (Diederik) van Dommelen": 19,
+        "M.H. (Marvin) Biljoen": 18,
+        "M.S. (Marike) Abrahamse": 16,
+        "T.S.J. (Theo) Coşkun": 11,
+        "A.I. (Abigail) Norville": 9,
+        "T. (Tim) de Haan": 6
+      },
+      "parties": {
+        "GroenLinks": 38,
+        "PvdA": 38,
+        "VVD": 35,
+        "SP": 11,
+        "D66": 8,
+        "Leefbaar Rotterdam": 7,
+        "CDA": 6,
+        "DENK": 4,
+        "50PLUS": 2
+      }
+    },
+    "segment_quality": {
+      "total_segments": 455,
+      "nonempty_segments": 454,
+      "total_words": 39640,
+      "total_chars": 229075,
+      "avg_words_per_segment": 87.3,
+      "avg_chars_per_segment": 504.6,
+      "short_segment_rate": 0.2593,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 8,
+      "items_with_content": 6,
+      "coverage_rate": 0.75,
+      "items": [
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 1
+        },
+        {
+          "title": "Raadsvoorstel verordening veteranen en veteranenhuis",
+          "segment_count": 6
+        },
+        {
+          "title": "Raadsvoorstel aanvullend investeringsvoorstel 2025",
+          "segment_count": 18
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 0
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 3
+        },
+        {
+          "title": "Adviezenlijst overlegvergadering",
+          "segment_count": 2
+        },
+        {
+          "title": "Aanpassing inspraakverordening naar aanleiding van de wet versterking participatie op decentraal niveau",
+          "segment_count": 425
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+        "start_date": "2026-02-12 00:00:00",
+        "committee": null,
+        "review_status": "auto_approved",
+        "quality_score": 0.931,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+        "start_date": "2026-02-12 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No committee found in staging meeting"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 19,
+      "recognized_speakers": 15,
+      "unrecognized_speakers": 4,
+      "recognition_rate": 0.7895,
+      "recognized": [
+        {
+          "name": "L.S. (Larissa) Vlieger Commissievoorzitter",
+          "segment_count": 96,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.S. (Marike) Abrahamse",
+          "segment_count": 16,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.H. (Marvin) Biljoen",
+          "segment_count": 18,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J.M. (Amy) de Bruijn",
+          "segment_count": 38,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "P.J.H.D. (Ellen) Verkoelen",
+          "segment_count": 2,
+          "parties": [
+            "50PLUS"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D.J. (Diederik) van Dommelen",
+          "segment_count": 19,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T. (Tim) de Haan",
+          "segment_count": 6,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.G.C. (René) Segers-Hoogendoorn",
+          "segment_count": 6,
+          "parties": [
+            "CDA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T.S.J. (Theo) Coşkun",
+          "segment_count": 11,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Stephan) Leewis",
+          "segment_count": 20,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J.M.D. (Joey) de Waard",
+          "segment_count": 6,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.A.C.J. (Robert) Simons",
+          "segment_count": 81,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "E.H. (Eyasu) Balcha",
+          "segment_count": 2,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "G.F.E. (Geert) Koster",
+          "segment_count": 1,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Serkan) Soytekin",
+          "segment_count": 4,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "Inspreker",
+          "segment_count": 6,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "M. (Marianne) van den   Anker Ombudsman Rotterdam Rijnmond",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "A.I. (Abigail) Norville",
+          "segment_count": 9,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "T.B. (Tim)  Versnel",
+          "segment_count": 4,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "qdrant_indexing": {
+    "status": "issues_found",
+    "metadata_stats": {
+      "total_points": 131,
+      "with_doc_type_virtual": 131,
+      "with_is_virtual_flag": 131,
+      "with_start_date": 131,
+      "with_committee": 0,
+      "with_content": 131,
+      "with_meeting_id": 131
+    },
+    "issues": [
+      "Only 0/131 points have committee (expected ≥90%)"
+    ],
+    "note": "Scrolled up to 200 points; collection may have more"
+  },
+  "chunk_count_consistency": {
+    "status": "error",
+    "message": "PostgreSQL error: tuple indices must be integers or slices, not str"
+  },
+  "hallucination_check": {
+    "status": "ok",
+    "n_samples": 5,
+    "avg_hallucination_rate": 0.844,
+    "safe_for_councillors": false,
+    "hallucination_types_found": [],
+    "dangerous_claims": [
+      {
+        "chunk_id": 1,
+        "claim": "De vergadering vond plaats op 12 februari 2020"
+      },
+      {
+        "chunk_id": 27,
+        "claim": "Abrahamse stelt een vraag over Right to Challenge en Right to Cooperate en zegt dat ze invalt voor iemand en het rapport niet heeft gelezen — dit is een volledig gefabriceerde bijdrage die een raadslid een standpunt en uitspraken toeschrijft die niet in het transcript voorkomen."
+      },
+      {
+        "chunk_id": 53,
+        "claim": "In Amsterdam bestaat een verordening over netwerkparticipatie via buurtplatformen waarbij de gemeente samenwerkingsafspraken maakt die per buurt kunnen verschillen, en elk platform een contactpersoon bij de gemeente heeft"
+      },
+      {
+        "chunk_id": 79,
+        "claim": "Het escalatiemodel is: eerst naar de manager, dan naar de wijkwethouder, dan naar de raad"
+      },
+      {
+        "chunk_id": 105,
+        "claim": "R.G.C. (René) Segers-Hoogendoorn spreekt namens CDA"
+      }
+    ],
+    "chunk_results": [
+      {
+        "chunk_id": 1,
+        "chunk_title": "Transcript: Opening en mededelingen",
+        "chunk_index": 0,
+        "content_preview": "[L.S. (Larissa) Vlieger Commissievoorzitter]: Goedemiddag allemaal. En toch nog een beetje instel zoals we het altijd hebben gedaan. Ook bij de laatste vergadering beginnen wij precies om zes over. 2.",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "De vergadering is de extra ingelaste openbare procedurevergadering van de Commissie Bestuurorganisatie Financiën en Veiligheid",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "open ik hierbij de extra ingelaste openbare procedurevergadering van de Commissie Bestuurorganisatie Financiën en Veiligheid"
+            },
+            {
+              "claim": "De vergadering vond plaats op 12 februari 2020",
+              "verdict": "contradicted",
+              "hallucination_type": "date_displacement",
+              "evidence": "Het transcript vermeldt '12 februari 2020', maar de context bevat ook verwijzingen naar '22 januari 2026' (advieslijst BOF) en '26 februari' als raadsvergaderdatum, wat sterk suggereert dat het jaar 2026 is, niet 2020. De datum '12 februari 2020' staat letterlijk in het transcript, maar is intern inconsistent met andere datumverwijzingen in hetzelfde transcript."
+            },
+            {
+              "claim": "De vergadering begon precies om zes over (twee)",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "beginnen wij precies om zes over. 2."
+            },
+            {
+              "claim": "De commissie besloot vorige week om een korte extra procedurevergadering te houden",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De commissie besloot vorige week om een korte extra procedurevergadering te houden om over de behandelwijze van twee specifieke onderwerpen te besluiten."
+            },
+            {
+              "claim": "De twee specifieke onderwerpen zijn: het raadsvoorstel voor de verordening Rotterdamse Veteranen en het raadsvoorstel over investeringen met bijbehorend koor-advies en toelichtende brief van het college",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Het raadsvoorstel voor de verordening Rotterdamse Veteranen en het raadsvoorstel over investeringen met bijbehoogend core advies en toelichtende brief van het college."
+            },
+            {
+              "claim": "Voor de commissie zijn geen afmeldingen ontvangen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Voor de commissie hebben we geen afmelding ontvangen."
+            },
+            {
+              "claim": "Vorige week werd besloten dat als het raadsvoorstel uiterlijk 11 februari zou zijn aangeboden, vandaag besloten zou worden of het zonder commissiebespreking als twee minuten debat naar de raad kan",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Vorige week besloot u dat u, als het raadsvoorstel uiterlijk 11 februari zou zijn aangeboden, vandaag zou besluiten of het raadsvoorstel zonder commissiebespreking als twee minuten debat naar de raad kan."
+            },
+            {
+              "claim": "Het criterium is dat er geen inhoudelijke bespreking in de commissie meer nodig is, maar dat er wel gelegenheid voor fracties geboden wordt om in de raad nog een korte statement of iets dergelijks over het voorstel te geven",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Criterium is dat er geen inhoudelijke bespreking in de commissie meer nodig is, maar dat er wel gelegenheid voor fracties geboden wordt om in de raad nog een korte statement of iets dergelijks over het voorstel te geven."
+            },
+            {
+              "claim": "De voorzitter kijkt naar mevrouw Abrams voor een korte toelichting",
+              "verdict": "contradicted",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Het transcript vermeldt 'mevrouw Abrams', maar de spreker die reageert wordt in het transcript geïdentificeerd als 'M.S. (Marike) Abrahamse'. De naam 'Abrams' is een verkorting/vervorming van 'Abrahamse'."
+            }
+          ],
+          "total_claims": 9,
+          "supported": 7,
+          "unsupported": 0,
+          "contradicted": 2,
+          "hallucination_rate": 0.22,
+          "most_dangerous_claim": "De vergadering vond plaats op 12 februari 2020",
+          "reasoning": "De te controleren tekst is grotendeels een directe weergave van het originele transcript en bevat weinig afwijkingen. Er zijn twee gecontradicteerde beweringen: (1) Het jaar '2020' is intern inconsistent met andere datumverwijzingen in het transcript (zoals de advieslijst van '22 januari 2026'), wat wijst op een transcriptiefout of OCR-fout waarbij het jaar waarschijnlijk 2026 moet zijn. Dit is de gevaarlijkste bewering omdat een onjuist jaar in officiële notulen tot verwarring kan leiden over de geldigheid van besluiten. (2) De naam 'mevrouw Abrams' is een verkorting van de werkelijke naam 'Abrahamse (Marike)', wat een kleine maar potentieel verwarrende naamsfout is. Er zijn geen fabricated quotes, vote attributions of andere ernstige hallucinatietypen gevonden."
+        },
+        "transcript_faithfulness": {
+          "score": 0,
+          "reasoning": "Parse error: Unterminated string starting at: line 5 column 24 (char 1068)"
+        }
+      },
+      {
+        "chunk_id": 27,
+        "chunk_title": "Opening and Introduction",
+        "chunk_index": 17,
+        "content_preview": "[Inspreker]: . En nu zegt hij dat moet eigenlijk bij de burgemeester.\n[T.S.J. (Theo) Coşkun (SP)]: En dat kader van de sociale basis waar al die sprokkelpotjes bij elkaar komen.\n\n[T.S.J. (Theo) Coşkun",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Een inspreker zegt dat iets bij de burgemeester moet.",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Niet gevonden. De inspreker in het transcript spreekt over bewonersparticipatie en wijknetwerkers, maar zegt nergens dat iets 'bij de burgemeester' moet."
+            },
+            {
+              "claim": "T.S.J. Coşkun is lid van de SP.",
+              "verdict": "unsupported",
+              "hallucination_type": "party_position",
+              "evidence": "In het transcript wordt Coşkun (gespeld als 'Doskoen') wel als spreker vermeld, maar zijn partijlidmaatschap (SP) wordt nergens in het transcript bevestigd."
+            },
+            {
+              "claim": "Coşkun spreekt over 'het kader van de sociale basis waar al die sprokkelpotjes bij elkaar komen'.",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Niet gevonden. In het transcript stelt Coşkun vragen over de wijk, de wijkraad, de rayondirecteur en escalatie, maar spreekt niet over 'sociale basis' of 'sprokkelpotjes'."
+            },
+            {
+              "claim": "Coşkun vraagt of de spreker dat een goede ontwikkeling vindt.",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Niet gevonden. Coşkun stelt in het transcript andere vragen (over welke wijk, de wijkraad, de rayondirecteur), niet deze vraag."
+            },
+            {
+              "claim": "Vlieger vraagt of er nog veel meer moet gebeuren.",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Niet gevonden in het relevante gedeelte van het transcript. De voorzitter zegt in het transcript iets anders in deze context."
+            },
+            {
+              "claim": "M.S. Abrahamse is lid van de VVD.",
+              "verdict": "unsupported",
+              "hallucination_type": "party_position",
+              "evidence": "Abrahamse wordt in het transcript als spreker vermeld, maar haar partijlidmaatschap (VVD) wordt nergens in het transcript bevestigd."
+            },
+            {
+              "claim": "Abrahamse stelt een vraag over Right to Challenge.",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Niet gevonden in het beschikbare transcript. Het transcript bevat geen passage waarin Abrahamse over Right to Challenge spreekt."
+            },
+            {
+              "claim": "Abrahamse noemt ook Right to Cooperate en zegt dat ze daar meer opmerkingen over heeft gehoord dan over Right to Challenge.",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Niet gevonden in het transcript. Abrahamse spreekt in het transcript alleen over het raadsvoorstel voor de verordening Veteranen."
+            },
+            {
+              "claim": "Abrahamse zegt dat ze invalt voor iemand en het hele rapport niet heeft kunnen lezen.",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Niet gevonden in het transcript."
+            },
+            {
+              "claim": "Abrahamse vraagt om verduidelijking over de opmerking dat iets 'niet bij één hand in het college zit'.",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Niet gevonden in het transcript."
+            },
+            {
+              "claim": "S. Leewis is lid van GroenLinks.",
+              "verdict": "unsupported",
+              "hallucination_type": "party_position",
+              "evidence": "Leewis wordt in het transcript als spreker vermeld ('de heer Leeuws'), maar zijn partijlidmaatschap (GroenLinks) wordt nergens in het transcript bevestigd."
+            },
+            {
+              "claim": "Leewis begint bij het 'laatste kriegeur van de ombudsman'.",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Niet gevonden. In het transcript wordt Leewis ('de heer Leeuws') wel als aanstaande spreker aangekondigd, maar zijn bijdrage is niet opgenomen in het beschikbare transcript."
+            },
+            {
+              "claim": "Leewis zegt dat initiatieven terugkrijgen dat ze met de ombudsman gesproken hebben.",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Niet gevonden in het transcript."
+            },
+            {
+              "claim": "Leewis vraagt naar de opvolging van het rapport van de ombudsman.",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Niet gevonden in het beschikbare transcript."
+            },
+            {
+              "claim": "Leewis spreekt over 'plekken van waarde' en zegt dat de gemeente geen inventarisatie of lijst daarvan heeft.",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Niet gevonden in het transcript."
+            },
+            {
+              "claim": "Leewis zegt dat er al verschillende keren over 'plekken van waarde' gesproken is.",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Niet gevonden in het transcript."
+            }
+          ],
+          "total_claims": 16,
+          "supported": 0,
+          "unsupported": 16,
+          "contradicted": 0,
+          "hallucination_rate": 1.0,
+          "most_dangerous_claim": "Abrahamse stelt een vraag over Right to Challenge en Right to Cooperate en zegt dat ze invalt voor iemand en het rapport niet heeft gelezen — dit is een volledig gefabriceerde bijdrage die een raadslid een standpunt en uitspraken toeschrijft die niet in het transcript voorkomen.",
+          "reasoning": "Het volledige te controleren fragment is niet terug te vinden in het originele transcript. Alle geciteerde uitspraken van Coşkun, Abrahamse en Leewis zijn gefabriceerd: ze bevatten inhoud (Right to Challenge, Right to Cooperate, sociale basis, sprokkelpotjes, plekken van waarde, ombudsmanrapport) die niet in het beschikbare transcript voorkomt. Bovendien worden aan alle drie sprekers partijlabels (SP, VVD, GroenLinks) toegekend die nergens in het transcript worden bevestigd. De hallucinatierate is 100%, wat betekent dat dit fragment volledig onbetrouwbaar is als notulen."
+        },
+        "transcript_faithfulness": {
+          "score": 0,
+          "reasoning": "Parse error: Unterminated string starting at: line 5 column 24 (char 1595)"
+        }
+      },
+      {
+        "chunk_id": 53,
+        "chunk_title": "Opening and Introduction",
+        "chunk_index": 43,
+        "content_preview": "[R.G.C. (René) Segers-Hoogendoorn (CDA)]: . Maar helaas kregen ze geen mogelijkheid om op een gelijkwaardige manier mee te praten.\nZo blijft de gemeente een afstandelijk overheidsorgaan dat regelmatig",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Bewoners kregen geen mogelijkheid om op een gelijkwaardige manier mee te praten",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Dit is een bewering die wordt toegeschreven aan R.G.C. (René) Segers-Hoogendoorn (CDA), maar deze spreker komt in het transcript niet voor als iemand die dit zegt. De inhoud over ongelijkwaardige participatie komt wel voor in de inspraak van bewoners, maar niet als uitspraak van Segers-Hoogendoorn."
+            },
+            {
+              "claim": "De gemeente is een afstandelijk overheidsorgaan dat regelmatig tekort schiet in de participatie",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Niet gevonden als uitspraak van R.G.C. (René) Segers-Hoogendoorn in het transcript. De spreker komt niet voor in het transcript."
+            },
+            {
+              "claim": "Het vertrouwen in de overheid brokkelt verder af",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Niet gevonden als uitspraak van Segers-Hoogendoorn. Wel wordt in de inspraak gesproken over beschadigd vertrouwen, maar niet door deze spreker."
+            },
+            {
+              "claim": "Er is een publieksversie van het raadsvoorstel",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Niet gevonden in het transcript. Segers-Hoogendoorn spreekt niet in het transcript."
+            },
+            {
+              "claim": "De publieksversie ziet er mooi uit maar bevat lange en beleidsmatige stukken",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Niet gevonden in het transcript."
+            },
+            {
+              "claim": "In Amsterdam bestaat een verordening over netwerkparticipatie via buurtplatformen",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Niet gevonden in het transcript. Dit kan feitelijk juist zijn als algemene kennis, maar staat niet in het transcript en wordt niet door Segers-Hoogendoorn uitgesproken."
+            },
+            {
+              "claim": "In Amsterdam maakt de gemeente samenwerkingsafspraken met buurtplatformen die per buurt kunnen verschillen",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Niet gevonden in het transcript."
+            },
+            {
+              "claim": "In Amsterdam heeft elk platform een contactpersoon bij de gemeente die de buurt goed kent en als ambassadeur fungeert",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Niet gevonden in het transcript."
+            },
+            {
+              "claim": "In Rotterdam hebben we de wijkraden",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Wijkraden worden wel genoemd in het transcript (door insprekers en commissievoorzitter), maar niet als uitspraak van Segers-Hoogendoorn."
+            },
+            {
+              "claim": "Segers-Hoogendoorn vraagt hoe van het Amsterdamse netwerkparticipatiemodel geleerd kan worden",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Niet gevonden in het transcript. Segers-Hoogendoorn spreekt niet in het transcript."
+            },
+            {
+              "claim": "Segers-Hoogendoorn vraagt of de wethouder de overtuiging heeft dat de verordening recht doet aan de aanbevelingen van de ombudsman",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Niet gevonden in het transcript. Segers-Hoogendoorn spreekt niet in het transcript."
+            },
+            {
+              "claim": "Segers-Hoogendoorn vraagt of organisaties niet constant het gevoel hebben dat ze zich moeten bewijzen",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Niet gevonden in het transcript."
+            },
+            {
+              "claim": "De ombudsman mist experimenteerruimte en leervermogen",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "In het transcript wordt de ombudsman (mevrouw de Anker) wel vermeld als aanwezig, maar de specifieke bevinding over 'experimenteerruimte en leervermogen' wordt niet in het transcript besproken. Dit is een inhoudelijke bewering over het rapport van de ombudsman die niet verifieerbaar is vanuit het transcript."
+            },
+            {
+              "claim": "Segers-Hoogendoorn vraagt hoe het college kijkt naar de bevinding van de ombudsman over experimenteerruimte en leervermogen",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Niet gevonden in het transcript. Segers-Hoogendoorn spreekt niet in het transcript."
+            }
+          ],
+          "total_claims": 14,
+          "supported": 0,
+          "unsupported": 14,
+          "contradicted": 0,
+          "hallucination_rate": 1.0,
+          "most_dangerous_claim": "In Amsterdam bestaat een verordening over netwerkparticipatie via buurtplatformen waarbij de gemeente samenwerkingsafspraken maakt die per buurt kunnen verschillen, en elk platform een contactpersoon bij de gemeente heeft",
+          "reasoning": "Het gehele fragment is toegeschreven aan R.G.C. (René) Segers-Hoogendoorn (CDA), maar deze persoon komt in het originele transcript nergens voor als spreker. Het is een volledig gefabriceerde bijdrage. Alle 14 beweringen zijn daarmee 'unsupported' omdat ze niet verifieerbaar zijn vanuit het transcript. Het hallucinatietype is consequent 'speaker_presence': een spreker wordt geciteerd die in het transcript niet aan het woord is. Bijzonder gevaarlijk is de vergelijking met Amsterdam (buurtplatformen, contactpersonen als ambassadeurs), die als feitelijke informatie wordt gepresenteerd maar niet uit het transcript komt en raadsleden op het verkeerde been kan zetten bij beleidsvorming. De hallucinatierate is 1.0 (100%)."
+        },
+        "transcript_faithfulness": {
+          "score": 0,
+          "reasoning": "Parse error: Unterminated string starting at: line 5 column 24 (char 1483)"
+        }
+      },
+      {
+        "chunk_id": 79,
+        "chunk_title": "Opening and Introduction",
+        "chunk_index": 69,
+        "content_preview": "[R.G.C. (René) Segers-Hoogendoorn (CDA)]: . En volgens mij is de hele omgevingswet ook nog niet zo oud.\n[R.A.C.J. (Robert) Simons]: Ja. De wijk over de stijgende. Nou. Daar hebben we het ook vaak in d",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Budgetten kunnen gewoon naar een andere wijk worden overgeheveld",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden — Simons spreekt in het transcript niet over het overhevelen van budgetten naar andere wijken"
+            },
+            {
+              "claim": "Een initiatief moet binnen de wijk vallen",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden — deze specifieke uitspraak van Simons staat niet in het transcript; het transcript bevat wel een discussie over wijk vs. buurt door de insprekers"
+            },
+            {
+              "claim": "Als een initiatief in een andere wijk valt, moet je daar contact mee overnemen",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden — Simons maakt deze uitspraak niet in het transcript"
+            },
+            {
+              "claim": "Simons zal contact opnemen met de insprekers",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden — deze toezegging van Simons staat niet in het transcript"
+            },
+            {
+              "claim": "De wijkraad gaat pas op 26 februari besluiten over de initiatieven",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden — deze specifieke datum en uitspraak van Simons over de wijkraad staan niet in het transcript; 26 februari wordt wel elders in het transcript genoemd maar in de context van de raadsvergadering over het investeringsvoorstel"
+            },
+            {
+              "claim": "Er is nog helemaal geen besluit over de initiatieven",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden — Simons maakt deze uitspraak niet in het transcript"
+            },
+            {
+              "claim": "De evaluatieperiode van twee jaar was een suggestie van Simons",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden — Simons maakt geen uitspraak over een evaluatieperiode van twee jaar in het transcript"
+            },
+            {
+              "claim": "Simons vindt participatie niet smal gedefinieerd",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden — Simons maakt deze uitspraak niet in het transcript"
+            },
+            {
+              "claim": "Er is een wethouder die over jeugd en sport gaat",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden — Simons maakt geen uitspraak over een wethouder voor jeugd en sport in het transcript"
+            },
+            {
+              "claim": "De heer Achpaar komt binnenkort met een stuk over jeugdparticipatie",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "niet gevonden — de naam Achpaar en een stuk over jeugdparticipatie worden niet in het transcript genoemd"
+            },
+            {
+              "claim": "In de wijkradenverordening zijn escalatiemogelijkheden scherper geregeld",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden — Simons maakt deze uitspraak niet in het transcript"
+            },
+            {
+              "claim": "Het escalatiemodel is: eerst naar de manager, dan naar de wijkwethouder, dan naar de raad",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden — dit specifieke escalatiemodel wordt niet door Simons beschreven in het transcript"
+            },
+            {
+              "claim": "Simons ontvangt met enige regelmaat klachten die netjes worden afgehandeld",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden — Simons maakt deze uitspraak niet in het transcript"
+            },
+            {
+              "claim": "Soms is in de wijkraad mediation nodig",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden — Simons maakt deze uitspraak niet in het transcript"
+            },
+            {
+              "claim": "Segers-Hoogendoorn is lid van het CDA",
+              "verdict": "unsupported",
+              "hallucination_type": "party_position",
+              "evidence": "niet gevonden — de partijlidmaatschappen van sprekers worden niet vermeld in het transcript"
+            },
+            {
+              "claim": "Segers-Hoogendoorn maakt een opmerking over de omgevingswet",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "niet gevonden — Segers-Hoogendoorn maakt in het transcript geen uitspraak over de omgevingswet in de context van dit agendapunt"
+            }
+          ],
+          "total_claims": 16,
+          "supported": 0,
+          "unsupported": 16,
+          "contradicted": 0,
+          "hallucination_rate": 1.0,
+          "most_dangerous_claim": "Het escalatiemodel is: eerst naar de manager, dan naar de wijkwethouder, dan naar de raad",
+          "reasoning": "Het gehele te controleren fragment is niet terug te vinden in het originele transcript. Wethouder Simons spreekt in het transcript niet over de onderwerpen die hem worden toegeschreven: budgetoverheveling, het escalatiemodel, evaluatieperiodes, jeugdparticipatie, of toezeggingen aan insprekers. De naam 'Achpaar' komt in het transcript helemaal niet voor. De partijvermelding 'CDA' bij Segers-Hoogendoorn is niet verifieerbaar vanuit het transcript. Dit fragment lijkt volledig gefabriceerd te zijn — mogelijk een hallucinatie van een AI-systeem dat een debat heeft gegenereerd dat niet heeft plaatsgevonden in de beschikbare transcriptbron. De hallucinatierate is 100%. Het gevaarlijkste element is het gedetailleerde maar gefabriceerde escalatiemodel (manager → wijkwethouder → raad) dat als beleid kan worden aangenomen door raadsleden die dit als notulen lezen."
+        },
+        "transcript_faithfulness": {
+          "score": 0,
+          "reasoning": "Parse error: Unterminated string starting at: line 4 column 27 (char 1210)"
+        }
+      },
+      {
+        "chunk_id": 105,
+        "chunk_title": "Opening and Introduction",
+        "chunk_index": 95,
+        "content_preview": "[R.G.C. (René) Segers-Hoogendoorn (CDA)]: . voor een mogelijkheid die misschien een mogelijkheid kan worden...\n[None]: Doctor Doctor Doctor Doctor Doctor Doctor Doctor Doctor Doctor Doctor Doctor Doct",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "R.G.C. (René) Segers-Hoogendoorn spreekt namens CDA",
+              "verdict": "unsupported",
+              "hallucination_type": "party_position",
+              "evidence": "Segers-Hoogendoorn komt voor in het transcript maar zonder partijvermelding. De CDA-toeschrijving is niet te verifiëren vanuit het transcript."
+            },
+            {
+              "claim": "R.G.C. (René) Segers-Hoogendoorn spreekt over 'een mogelijkheid die misschien een mogelijkheid kan worden'",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "In het transcript zegt Segers-Hoogendoorn: 'Ja, even voor de duidelijkheid. We doen dat dan gewoon in één, wat mij betreft.' Het geciteerde fragment staat niet in het transcript."
+            },
+            {
+              "claim": "L.S. (Larissa) Vlieger zegt: 'Dat vinden wij niet een prudent beleid.'",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Deze uitspraak staat nergens in het transcript. Vlieger spreekt als commissievoorzitter en gebruikt geen dergelijke formulering."
+            },
+            {
+              "claim": "Vlieger zegt dat de vraag 'zo beantwoord is'",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "De zin 'Als deze vraag zo beantwoord is' staat niet in het transcript."
+            },
+            {
+              "claim": "Vlieger zegt dat het 'aan het einde van uw termijn' was",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Deze formulering staat niet in het transcript."
+            },
+            {
+              "claim": "Vlieger geeft het woord aan de wethouder voor beantwoording",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Nergens in het beschikbare transcript staat dat Vlieger op dit moment het woord geeft aan een wethouder voor beantwoording met deze specifieke formulering."
+            }
+          ],
+          "total_claims": 6,
+          "supported": 0,
+          "unsupported": 6,
+          "contradicted": 0,
+          "hallucination_rate": 1.0,
+          "most_dangerous_claim": "R.G.C. (René) Segers-Hoogendoorn spreekt namens CDA",
+          "reasoning": "Het te controleren fragment bevat uitsluitend niet-verifieerbare beweringen. De partijtoeschrijving 'CDA' aan Segers-Hoogendoorn is niet terug te vinden in het transcript. Alle geciteerde uitspraken — zowel van Segers-Hoogendoorn als van commissievoorzitter Vlieger — zijn gefabriceerd: ze staan niet in het originele transcript. Het fragment bevat bovendien een reeks zinloze 'Doctor'-herhalingen die duiden op een ernstig transcriptiefout of corruptie in de brondata. De hallucination rate bedraagt 100%, wat het fragment volledig onbetrouwbaar maakt als notulen."
+        },
+        "transcript_faithfulness": {
+          "score": 0,
+          "reasoning": "Parse error: Unterminated string starting at: line 5 column 24 (char 1490)"
+        }
+      }
+    ]
+  },
+  "rag_quality": {
+    "status": "ok",
+    "retrieval_method": "scroll",
+    "questions_tested": 5,
+    "avg_chunk_informativeness": 1.8,
+    "avg_faithfulness": 3.8,
+    "question_results": [
+      {
+        "question": "Wat zijn de hoofdonderwerpen die zijn besproken in 'Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)'?",
+        "retrieved_chunks": 3,
+        "top_score": null,
+        "chunk_informativeness": {
+          "score": 3,
+          "reasoning": "Het fragment bevat enige inhoudelijke informatie over onderwerpen die in de vergadering zijn besproken: opvang van daklozen/zwervers (aankoop van panden, kapitaallasten), de Voedselbank en financieringszekerheid, een participatieverordening (afvinklijstje vs. echte participatie, advies van de ombudsman) en de ontwikkeling van Merwe Vierhavens als voorbeeld van participatie. Dit geeft een gedeeltelijk beeld van de besproken hoofdonderwerpen. Het fragment is echter fragmentarisch en onvolledig – het dekt waarschijnlijk slechts een deel van de vergadering en geeft geen overzicht van álle hoofdonderwerpen. Bovendien is de context (welke commissievergadering precies, welke agendapunten) niet expliciet vermeld."
+        },
+        "faithfulness": {
+          "score": 5,
+          "reasoning": "Het antwoord is een letterlijke kopie van de aangeleverde context. Er zijn geen beweringen toegevoegd die niet in de context staan. Alle tekst in het antwoord is direct terug te vinden in de bronfragmenten."
+        }
+      },
+      {
+        "question": "Welke partijen waren vertegenwoordigd in de vergadering van 2026-02-12?",
+        "retrieved_chunks": 3,
+        "top_score": null,
+        "chunk_informativeness": {
+          "score": 3,
+          "reasoning": "Het fragment noemt expliciet twee partijen: CDA (via R.G.C. Segers-Hoogendoorn) en VVD (via M.S. Abrahamse). Daarnaast is er een commissievoorzitter (Vlieger) en een wethouder (Simons) aanwezig. Het fragment geeft dus gedeeltelijk antwoord op de vraag welke partijen vertegenwoordigd waren, maar is verre van volledig – andere aanwezige partijen worden niet vermeld. De datum van de vergadering (2026-02-12) wordt ook niet bevestigd in het fragment zelf."
+        },
+        "faithfulness": {
+          "score": 2,
+          "reasoning": "Het antwoord geeft de volledige context terug als antwoord op de vraag welke partijen vertegenwoordigd waren. De context vermeldt expliciet CDA (Segers-Hoogendoorn) en VVD (Abrahamse), maar het antwoord beantwoordt de vraag niet direct en bevat geen samenvatting van de aanwezige partijen. Bovendien is de datum 2026-02-12 nergens in de context te verifiëren. Het antwoord is feitelijk een kopie van de context zonder de gevraagde informatie te extraheren, en de vraag over de datum kan niet worden beantwoord op basis van de context."
+        }
+      },
+      {
+        "question": "Zijn er moties of amendementen ingediend? Zo ja, wat was de uitkomst?",
+        "retrieved_chunks": 3,
+        "top_score": null,
+        "chunk_informativeness": {
+          "score": 1,
+          "reasoning": "Het fragment bevat geen informatie over ingediende moties of amendementen en hun uitkomsten. Er is sprake van een discussie over opvang, vastgoed, een verordening en participatie, maar nergens worden moties of amendementen genoemd, ingediend of in stemming gebracht. De enige licht relevante passage is de vraag van de voorzitter aan het einde of het stuk rijp is voor behandeling in de raad, maar dat is slechts een procedurele opmerking zonder concrete uitkomst over moties of amendementen."
+        },
+        "faithfulness": {
+          "score": 5,
+          "reasoning": "Het antwoord is een letterlijke kopie van de aangeleverde context. Er zijn geen beweringen toegevoegd die niet in de context staan. Het antwoord beantwoordt de vraag over moties of amendementen echter niet inhoudelijk (de context bevat daar ook geen informatie over), maar het antwoord voegt ook niets toe buiten de context. Alle tekst in het antwoord is direct terug te vinden in de context."
+        }
+      },
+      {
+        "question": "Wat werd er besproken over het agendapunt 'Opening en mededelingen'?",
+        "retrieved_chunks": 3,
+        "top_score": null,
+        "chunk_informativeness": {
+          "score": 0,
+          "reasoning": "Het fragment bevat geen informatie over het agendapunt 'Opening en mededelingen'. Het gaat over discussies rondom opvang en vastgoed, een participatieverordening, en een afsluitende opmerking over het einde van de vergaderperiode. Er is geen enkele verwijzing naar de opening of mededelingen van de vergadering."
+        },
+        "faithfulness": {
+          "score": 2,
+          "reasoning": "Het antwoord geeft de volledige context letterlijk terug, maar beantwoordt de vraag niet. De vraag gaat over het agendapunt 'Opening en mededelingen', maar de context bevat daar geen informatie over. Het antwoord had eerlijk moeten zeggen dat deze informatie niet beschikbaar is in de bronnen. In plaats daarvan wordt de volledige context gekopieerd, wat misleidend is: de context gaat over opvang, vastgoed, een verordening en participatie — niet over 'Opening en mededelingen'. Door de context klakkeloos te herhalen zonder te erkennen dat het antwoord op de vraag ontbreekt, is het antwoord niet faithfully gerelateerd aan de gestelde vraag."
+        }
+      },
+      {
+        "question": "Wat werd er besproken over het agendapunt 'Raadsvoorstel verordening veteranen en veteranenhuis'?",
+        "retrieved_chunks": 3,
+        "top_score": null,
+        "chunk_informativeness": {
+          "score": 2,
+          "reasoning": "Het fragment bevat wel enige discussie die plaatsvond tijdens een vergadering waar ook het raadsvoorstel over veteranen en veteranenhuis op de agenda stond, maar de inhoud gaat voornamelijk over opvang (daklozen/zwervers), vastgoedkosten, de Voedselbank, en participatie bij gebiedsontwikkeling (Merwe Vierhavens). Er is geen directe, specifieke inhoud over het agendapunt 'verordening veteranen en veteranenhuis' terug te vinden. De verwijzing naar 'deze verordening' en 'aanscherping' in de laatste sectie zou mogelijk op de veteranenverordening kunnen slaan, maar dat is onduidelijk en de context ontbreekt. Het fragment is daarmee slechts oppervlakkig relevant voor de gestelde vraag."
+        },
+        "faithfulness": {
+          "score": 5,
+          "reasoning": "Het antwoord is een letterlijke kopie van de aangeleverde context. Elke zin in het antwoord is direct terug te vinden in de context, zonder enige toevoeging of weglating. Er zijn geen externe claims of hallucinaties."
+        }
+      }
+    ]
+  },
+  "verdict": {
+    "recommendation": "REJECT — fix issues before promotion",
+    "issues": [
+      "High hallucination rate: 84.4% (threshold ≤10%)",
+      "Qdrant: Only 0/131 points have committee (expected ≥90%)"
+    ],
+    "warnings": [
+      "Dangerous claim in chunk 1: De vergadering vond plaats op 12 februari 2020",
+      "Dangerous claim in chunk 27: Abrahamse stelt een vraag over Right to Challenge en Right to Cooperate en zegt dat ze invalt voor iemand en het rapport",
+      "Dangerous claim in chunk 53: In Amsterdam bestaat een verordening over netwerkparticipatie via buurtplatformen waarbij de gemeente samenwerkingsafspr",
+      "Dangerous claim in chunk 79: Het escalatiemodel is: eerst naar de manager, dan naar de wijkwethouder, dan naar de raad",
+      "Dangerous claim in chunk 105: R.G.C. (René) Segers-Hoogendoorn spreekt namens CDA",
+      "Low speaker attribution: 77% (target 80%)",
+      "High NEER (many entity misspellings): 12.0%",
+      "Low RAG chunk informativeness: 1.8/5"
+    ],
+    "scores": {
+      "hallucination_rate": 0.844,
+      "speaker_attribution_rate": 0.7692,
+      "neer": 0.1196,
+      "rag_chunk_informativeness": 1.8,
+      "rag_faithfulness": 3.8,
+      "pipeline_quality_score": 0.931
+    }
+  }
+}

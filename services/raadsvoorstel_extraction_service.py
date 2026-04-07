@@ -9,10 +9,11 @@ Maintains Dutch language throughout.
 """
 
 import json
-import psycopg2
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 from datetime import datetime
+
+from services.db_pool import get_connection
 
 @dataclass
 class Raadsvoorstel:
@@ -32,34 +33,33 @@ class Raadsvoorstel:
 
 class RaadsvoorstelExtractor:
     """Extract proposals from city council database"""
-    
+
     def __init__(self):
-        self.conn = psycopg2.connect(
-            "postgresql://postgres:postgres@localhost:5432/neodemos"
-        )
-        self.cursor = self.conn.cursor()
-    
+        pass  # DB connections are now obtained from the shared pool per-call
+
     def extract_all_raadsvoorstel(self) -> List[Raadsvoorstel]:
         """Extract all raadsvoorstel from database"""
-        
+
         print(f"\n{'='*70}")
         print("EXTRACTEN VAN RAADSVOORSTEL UIT GEMEENTERAAD")
         print(f"{'='*70}\n")
-        
+
         # Find all documents that are raadsvoorstel
         print("[1/3] Searching for raadsvoorstel...")
-        self.cursor.execute("""
-            SELECT d.id, d.name, d.content, m.id as meeting_id, m.start_date
-            FROM documents d
-            INNER JOIN meetings m ON d.meeting_id = m.id
-            WHERE m.name = 'Gemeenteraad'
-            AND (d.name ILIKE '%raadsvoorstel%' 
-                 OR d.name ILIKE '%initiatiefvoorstel%'
-                 OR d.content ILIKE '%raadsvoorstel%')
-            ORDER BY m.start_date DESC
-        """)
-        
-        docs = self.cursor.fetchall()
+        with get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    SELECT d.id, d.name, d.content, m.id as meeting_id, m.start_date
+                    FROM documents d
+                    INNER JOIN meetings m ON d.meeting_id = m.id
+                    WHERE m.name = 'Gemeenteraad'
+                    AND (d.name ILIKE '%raadsvoorstel%'
+                         OR d.name ILIKE '%initiatiefvoorstel%'
+                         OR d.content ILIKE '%raadsvoorstel%')
+                    ORDER BY m.start_date DESC
+                """)
+
+                docs = cur.fetchall()
         print(f"  ✓ Found {len(docs)} documents mentioning raadsvoorstel")
         
         raadsvoorstel_list = []

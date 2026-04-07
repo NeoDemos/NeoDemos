@@ -45,8 +45,8 @@ echo "  Saved: neodemos_pg_${DATE}.sql.gz ($SIZE)"
 echo ""
 echo "=== [3/3] Upload to Google Drive ==="
 if rclone listremotes | grep -q "gdrive:"; then
-    rclone copy "$BACKUP_DIR/neodemos_pg_${DATE}.sql.gz" gdrive:neodemos-backups/ --progress
-    echo "  Uploaded to gdrive:neodemos-backups/"
+    rclone copy "$BACKUP_DIR/neodemos_pg_${DATE}.sql.gz" gdrive:02_Database_Vault/ --progress
+    echo "  Uploaded pg dump to gdrive:02_Database_Vault/"
 else
     echo "  SKIPPED: gdrive remote not configured."
 fi

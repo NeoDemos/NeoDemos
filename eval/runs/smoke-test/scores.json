@@ -1,0 +1,53 @@
+[
+  {
+    "question_id": "se-01",
+    "question_text": "Waarom ging het Warmtebedrijf Rotterdam failliet?",
+    "category": "specific_event",
+    "answer": "",
+    "retrieval_metrics": {
+      "context_precision": 0.6,
+      "diversity": {
+        "document_diversity": 1.0,
+        "unique_documents": 10,
+        "total_chunks": 10,
+        "entropy": 3.322
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 90.03304096404463,
+        "vector_ms": 561.1871250439435,
+        "keyword_ms": 8622.370917000808,
+        "rrf_ms": 0.10195799404755235,
+        "reranker_ms": 0.000625033862888813,
+        "total_ms": 9273.795167042408
+      }
+    },
+    "generation_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 9273.795167042408
+  }
+]

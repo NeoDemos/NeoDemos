@@ -1,0 +1,9 @@
+{
+  "top_k": 10,
+  "fast_mode": false,
+  "score_threshold": 0.15,
+  "reranker_threshold": -2.0,
+  "anthropic_model": "claude-sonnet-4-20250514",
+  "skip_generation": true,
+  "category_filter": "specific_event"
+}

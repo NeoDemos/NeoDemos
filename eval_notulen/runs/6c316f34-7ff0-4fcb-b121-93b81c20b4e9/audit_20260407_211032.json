@@ -1,0 +1,442 @@
+{
+  "meeting_id": "6c316f34-7ff0-4fcb-b121-93b81c20b4e9",
+  "audit_timestamp": "2026-04-07T21:10:32.103170",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+    "start_date": "2025-03-26 00:00:00",
+    "committee": "BWB",
+    "quality_score": 0.958,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 145,
+    "document_count": 11
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 1149,
+      "correct_count": 1149,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8595,
+      "party_attribution_rate": 0.5153,
+      "total_segments": 491,
+      "attributed_segments": 422,
+      "unattributed_segments": 69
+    },
+    "speaker_diversity": {
+      "unique_speakers": 20,
+      "unique_parties": 11,
+      "top_speaker": "Plaatsvervangende commissievoorzitter",
+      "top_speaker_segment_count": 78,
+      "monologue_rate": 0.1589,
+      "speakers": {
+        "Plaatsvervangende commissievoorzitter": 78,
+        "P.J.H.D. (Ellen) Verkoelen": 74,
+        "C.M. (Chantal) Zeegers College": 46,
+        "D.J. (Diederik) van Dommelen VVD": 39,
+        "M. (Marcel) Verhoef Leefbaar Rotterdam": 28,
+        "A. (Astrid) Kockelkoren GroenLinks": 27,
+        "T. (Tim) de Haan D66": 24,
+        "G.G. (Gerben) van Dijk ChristenUnie Burgercommissielid ChristenUnie": 22,
+        "J.G. (Jaap) Rozema  Burgercommissielid": 19,
+        "S. (Said) Kasmi College": 15
+      },
+      "parties": {
+        "Commissievoorzitter": 84,
+        "VVD": 44,
+        "GroenLinks": 31,
+        "Leefbaar Rotterdam": 30,
+        "D66": 24,
+        "Partij voor de Dieren": 19,
+        "SP": 8,
+        "DENK": 8,
+        "PvdA": 3,
+        "CDA": 1,
+        "Volt": 1
+      }
+    },
+    "segment_quality": {
+      "total_segments": 491,
+      "nonempty_segments": 491,
+      "total_words": 48602,
+      "total_chars": 271777,
+      "avg_words_per_segment": 99.0,
+      "avg_chars_per_segment": 553.5,
+      "short_segment_rate": 0.2138,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 16,
+      "items_with_content": 11,
+      "coverage_rate": 0.6875,
+      "items": [
+        {
+          "title": "Subcommissie bestemmingsplannen",
+          "segment_count": 15
+        },
+        {
+          "title": "Sluiting hoorzitting",
+          "segment_count": 6
+        },
+        {
+          "title": "Procedurevergadering",
+          "segment_count": 65
+        },
+        {
+          "title": "Regelingen van Werkzaamheden",
+          "segment_count": 2
+        },
+        {
+          "title": "Initiatiefnotities/voorstellen",
+          "segment_count": 0
+        },
+        {
+          "title": "Verkenningen",
+          "segment_count": 4
+        },
+        {
+          "title": "Ingekomen stukken",
+          "segment_count": 0
+        },
+        {
+          "title": "Algemeen",
+          "segment_count": 0
+        },
+        {
+          "title": "Bouwen en Wonen",
+          "segment_count": 16
+        },
+        {
+          "title": "Buitenruimte",
+          "segment_count": 0
+        },
+        {
+          "title": "Projecten/Vastgoed",
+          "segment_count": 17
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Initiatiefvoorstel D66 over Post-65 voor ná 65",
+          "segment_count": 79
+        },
+        {
+          "title": "Projectambitiedocument ‘light’ IKC Nieuw Kralingen",
+          "segment_count": 38
+        },
+        {
+          "title": "Gebiedsambitiedocument: Schiehaven-Noord",
+          "segment_count": 195
+        },
+        {
+          "title": "Beantwoording schriftelijke vragen Elfilali over Betaalbare studentenhuisvesting in gevaar, hoe kan dit (alweer) gebeuren (25bb001090)",
+          "segment_count": 54
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-03-26 00:00:00",
+        "committee": "BWB",
+        "review_status": "auto_approved",
+        "quality_score": 0.958,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-03-26 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 20,
+      "recognized_speakers": 18,
+      "unrecognized_speakers": 2,
+      "recognition_rate": 0.9,
+      "recognized": [
+        {
+          "name": "D.J. (Diederik) van Dommelen VVD",
+          "segment_count": 39,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M. (Marcel) Verhoef Leefbaar Rotterdam",
+          "segment_count": 28,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J.G. (Jaap) Rozema  Burgercommissielid",
+          "segment_count": 19,
+          "parties": [
+            "Partij voor de Dieren"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "E. (Emin) Başoğlu  Burgercommissielid",
+          "segment_count": 8,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "G.G. (Gerben) van Dijk ChristenUnie Burgercommissielid ChristenUnie",
+          "segment_count": 22,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "A. (Astrid) Kockelkoren GroenLinks",
+          "segment_count": 27,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "M.E. (Merel) Vogelaar PvdA",
+          "segment_count": 3,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T. (Tim) de Haan D66",
+          "segment_count": 24,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.Y. (Mina) Morkoç GroenLinks",
+          "segment_count": 4,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "R.N. (Rashied) Dahoe DENK",
+          "segment_count": 8,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Said) Kasmi College",
+          "segment_count": 15,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "Plaatsvervangende commissievoorzitter",
+          "segment_count": 78,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Inspreker Inspreker",
+          "segment_count": 8,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "R.G.C. (René) Segers-Hoogendoorn CDA",
+          "segment_count": 1,
+          "parties": [
+            "CDA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "C.M. (Chantal) Zeegers College",
+          "segment_count": 46,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "V.A. (Vanessa) Bruin Leefbaar Rotterdam",
+          "segment_count": 2,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T. (Tim) Kind Volt",
+          "segment_count": 1,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "E.P.J. (Erik) Verweij VVD",
+          "segment_count": 5,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "T. (Tim) de Haan",
+          "segment_count": 10,
+          "parties": [
+            "Commissievoorzitter"
+          ],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "P.J.H.D. (Ellen) Verkoelen",
+          "segment_count": 74,
+          "parties": [
+            "Commissievoorzitter"
+          ],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 145,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 57,
+        "long (2000-5000)": 87,
+        "short (50-200)": 1
+      },
+      "min_chars": 112,
+      "max_chars": 2712,
+      "avg_chars": 2002.7,
+      "median_chars": 2205,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 145,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 11,
+      "documents_with_chunks": 11,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Beantwoording schriftelijke vragen Elfilali over Betaalbare studentenhuisvesting in gevaar, hoe kan dit (alweer) gebeuren (25bb001090)",
+          "chunks": 19
+        },
+        {
+          "name": "Transcript: Bouwen en Wonen",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: Gebiedsambitiedocument: Schiehaven-Noord",
+          "chunks": 63
+        },
+        {
+          "name": "Transcript: Initiatiefvoorstel D66 over Post-65 voor ná 65",
+          "chunks": 21
+        },
+        {
+          "name": "Transcript: Procedurevergadering",
+          "chunks": 17
+        },
+        {
+          "name": "Transcript: Projectambitiedocument ‘light’ IKC Nieuw Kralingen",
+          "chunks": 12
+        },
+        {
+          "name": "Transcript: Projecten/Vastgoed",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: Regelingen van Werkzaamheden",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Sluiting hoorzitting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Subcommissie bestemmingsplannen",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Verkenningen",
+          "chunks": 2
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 145,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 145,
+      "distribution": {
+        "quote": {
+          "count": 145,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8595,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.958
+    }
+  }
+}

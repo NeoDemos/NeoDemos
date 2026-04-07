@@ -1,0 +1,321 @@
+{
+  "meeting_id": "f3f580ba-70a1-436d-b962-35ed1f827d1b",
+  "audit_timestamp": "2026-04-07T21:22:50.487001",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+    "start_date": "2025-02-12 00:00:00",
+    "committee": "ZOCS",
+    "quality_score": 0.888,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 71,
+    "document_count": 2
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 574,
+      "correct_count": 574,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.7919,
+      "party_attribution_rate": 0.5235,
+      "total_segments": 298,
+      "attributed_segments": 236,
+      "unattributed_segments": 62
+    },
+    "speaker_diversity": {
+      "unique_speakers": 15,
+      "unique_parties": 12,
+      "top_speaker": "F. (Faouzi) Achbar College",
+      "top_speaker_segment_count": 68,
+      "monologue_rate": 0.2282,
+      "speakers": {
+        "F. (Faouzi) Achbar College": 68,
+        "T.S.J. (Theo) Coşkun": 53,
+        "M.E. (Merel) Vogelaar PvdA": 24,
+        "A. (Astrid) Kockelkoren GroenLinks": 17,
+        "S. (Sabrina) van de Peppel Partij voor de Dieren": 16,
+        "T. (Tim) Kind Volt": 13,
+        "F. (Fatih) Elbay D66": 10,
+        "N. (Naoufal) Akhatab DENK": 8,
+        "S.J.J. (Sam) Mak  CDA Burgercommissielid CDA": 8,
+        "T.J. (Tjalling) Vonk ChristenUnie": 5
+      },
+      "parties": {
+        "Commissievoorzitter": 53,
+        "PvdA": 24,
+        "GroenLinks": 17,
+        "Partij voor de Dieren": 16,
+        "Volt": 13,
+        "D66": 10,
+        "DENK": 8,
+        "ChristenUnie": 5,
+        "SP": 4,
+        "BIJ1": 3,
+        "Leefbaar Rotterdam": 2,
+        "VVD": 1
+      }
+    },
+    "segment_quality": {
+      "total_segments": 298,
+      "nonempty_segments": 298,
+      "total_words": 25205,
+      "total_chars": 141338,
+      "avg_words_per_segment": 84.6,
+      "avg_chars_per_segment": 474.3,
+      "short_segment_rate": 0.1611,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 2,
+      "items_with_content": 2,
+      "coverage_rate": 1.0,
+      "items": [
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 4
+        },
+        {
+          "title": "Opvolgingsrapportage 'Hoor mij en zie mij'",
+          "segment_count": 294
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+        "start_date": "2025-02-12 00:00:00",
+        "committee": "ZOCS",
+        "review_status": "auto_approved",
+        "quality_score": 0.888,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+        "start_date": "2025-02-12 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 15,
+      "recognized_speakers": 13,
+      "unrecognized_speakers": 2,
+      "recognition_rate": 0.8667,
+      "recognized": [
+        {
+          "name": "T.S.J. (Theo) Coşkun",
+          "segment_count": 53,
+          "parties": [
+            "Commissievoorzitter"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "N. (Naoufal) Akhatab DENK",
+          "segment_count": 8,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "S. (Sabrina) van de Peppel Partij voor de Dieren",
+          "segment_count": 16,
+          "parties": [
+            "Partij voor de Dieren"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "A. (Astrid) Kockelkoren GroenLinks",
+          "segment_count": 17,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "A.B. (Tom) Breedveld  Burgercommissielid",
+          "segment_count": 4,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.E. (Merel) Vogelaar PvdA",
+          "segment_count": 24,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S.J.J. (Sam) Mak  CDA Burgercommissielid CDA",
+          "segment_count": 8,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "T. (Tim) Kind Volt",
+          "segment_count": 13,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M. (Manuel) Crielaard Leefbaar Rotterdam",
+          "segment_count": 2,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "F. (Fatih) Elbay D66",
+          "segment_count": 10,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "P.C.Z. (Precious) Sadhoe  Burgercommissielid",
+          "segment_count": 3,
+          "parties": [
+            "BIJ1"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "E.P.J. (Erik) Verweij VVD",
+          "segment_count": 1,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "F. (Faouzi) Achbar College",
+          "segment_count": 68,
+          "parties": [],
+          "recognized_as": "council_member"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "S. (Stans) van der Goudsmit Kinderombudsman Rotterdam Rijnmond",
+          "segment_count": 4,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "T.J. (Tjalling) Vonk ChristenUnie",
+          "segment_count": 5,
+          "parties": [
+            "ChristenUnie"
+          ],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 71,
+      "empty_chunks": 0,
+      "buckets": {
+        "short (50-200)": 1,
+        "medium (200-2000)": 23,
+        "long (2000-5000)": 47
+      },
+      "min_chars": 120,
+      "max_chars": 2787,
+      "avg_chars": 2082.5,
+      "median_chars": 2297,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 71,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 2,
+      "documents_with_chunks": 2,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Opvolgingsrapportage 'Hoor mij en zie mij'",
+          "chunks": 70
+        },
+        {
+          "name": "Transcript: Overlegvergadering",
+          "chunks": 1
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 71,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 71,
+      "distribution": {
+        "quote": {
+          "count": 70,
+          "rate": 0.9859
+        },
+        "full_text": {
+          "count": 1,
+          "rate": 0.0141
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "PENDING — warnings present, manual review recommended",
+    "issues": [],
+    "warnings": [
+      "Low speaker attribution: 79% (target 80%)"
+    ],
+    "scores": {
+      "speaker_attribution_rate": 0.7919,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.888
+    }
+  }
+}

@@ -1,0 +1,276 @@
+{
+  "meeting_id": "f1549c82-1e60-4625-990b-781991f2616a",
+  "audit_timestamp": "2026-04-07T21:10:28.292080",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+    "start_date": "2025-10-01 00:00:00",
+    "committee": "ZOCS",
+    "quality_score": 0.948,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 44,
+    "document_count": 4
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 255,
+      "correct_count": 255,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8274,
+      "party_attribution_rate": 0.2843,
+      "total_segments": 197,
+      "attributed_segments": 163,
+      "unattributed_segments": 34
+    },
+    "speaker_diversity": {
+      "unique_speakers": 8,
+      "unique_parties": 5,
+      "top_speaker": "Plaatsvervangend commissievoorzitter",
+      "top_speaker_segment_count": 58,
+      "monologue_rate": 0.2944,
+      "speakers": {
+        "Plaatsvervangend commissievoorzitter": 58,
+        "Adviseur": 36,
+        "T.J. (Tjalling) Vonk": 15,
+        "S.L. (Sigrid) Oosterwegel Burgercommissielid": 14,
+        "J.M. (Amy) de Bruijn": 13,
+        "S.J.J. (Sam) Mak  Burgercommissielid CDA": 13,
+        "A.B. (Tom) Breedveld Burgercommissielid": 9,
+        "E.H. (Eyasu) Balcha": 5
+      },
+      "parties": {
+        "ChristenUnie": 15,
+        "GroenLinks": 14,
+        "PvdA": 13,
+        "SP": 9,
+        "D66": 5
+      }
+    },
+    "segment_quality": {
+      "total_segments": 197,
+      "nonempty_segments": 197,
+      "total_words": 13684,
+      "total_chars": 75277,
+      "avg_words_per_segment": 69.5,
+      "avg_chars_per_segment": 382.1,
+      "short_segment_rate": 0.2589,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 4,
+      "items_with_content": 4,
+      "coverage_rate": 1.0,
+      "items": [
+        {
+          "title": "Opening",
+          "segment_count": 9
+        },
+        {
+          "title": "Toelichting op “de concept-regiovisie”",
+          "segment_count": 39
+        },
+        {
+          "title": "Toelichting op het proces (besluitvorming)",
+          "segment_count": 148
+        },
+        {
+          "title": "Sluiting",
+          "segment_count": 1
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+        "start_date": "2025-10-01 00:00:00",
+        "committee": "ZOCS",
+        "review_status": "auto_approved",
+        "quality_score": 0.948,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+        "start_date": "2025-10-01 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 8,
+      "recognized_speakers": 7,
+      "unrecognized_speakers": 1,
+      "recognition_rate": 0.875,
+      "recognized": [
+        {
+          "name": "Plaatsvervangend commissievoorzitter",
+          "segment_count": 58,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Adviseur",
+          "segment_count": 36,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "A.B. (Tom) Breedveld Burgercommissielid",
+          "segment_count": 9,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "J.M. (Amy) de Bruijn",
+          "segment_count": 13,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S.L. (Sigrid) Oosterwegel Burgercommissielid",
+          "segment_count": 14,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S.J.J. (Sam) Mak  Burgercommissielid CDA",
+          "segment_count": 13,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "E.H. (Eyasu) Balcha",
+          "segment_count": 5,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "T.J. (Tjalling) Vonk",
+          "segment_count": 15,
+          "parties": [
+            "ChristenUnie"
+          ],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 44,
+      "empty_chunks": 0,
+      "buckets": {
+        "long (2000-5000)": 23,
+        "short (50-200)": 2,
+        "medium (200-2000)": 19
+      },
+      "min_chars": 65,
+      "max_chars": 2643,
+      "avg_chars": 1896.8,
+      "median_chars": 2090,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 44,
+      "boilerplate_count": 1,
+      "boilerplate_rate": 0.0227,
+      "boilerplate_examples": [
+        {
+          "id": 11108,
+          "title": "Concluding Remarks and Next Steps",
+          "preview": "[Plaatsvervangend commissievoorzitter]: Dank u wel.. Anderen nog."
+        }
+      ]
+    },
+    "agenda_coverage": {
+      "total_documents": 4,
+      "documents_with_chunks": 4,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Opening",
+          "chunks": 5
+        },
+        {
+          "name": "Transcript: Sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Toelichting op “de concept-regiovisie”",
+          "chunks": 7
+        },
+        {
+          "name": "Transcript: Toelichting op het proces (besluitvorming)",
+          "chunks": 31
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 44,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 44,
+      "distribution": {
+        "quote": {
+          "count": 43,
+          "rate": 0.9773
+        },
+        "full_text": {
+          "count": 1,
+          "rate": 0.0227
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8274,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.948
+    }
+  }
+}

@@ -1,0 +1,355 @@
+{
+  "meeting_id": "01c0e1e0-7a87-4f0e-abc5-a6f61beb3c84",
+  "audit_timestamp": "2026-04-07T21:47:54.439322",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "judge_backend": "gemini",
+    "anthropic_model": "claude-haiku-4-5-20251001",
+    "gemini_model": "gemini-2.5-flash-lite"
+  },
+  "meeting_info": {
+    "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+    "start_date": "2025-07-09 00:00:00",
+    "committee": "BWB",
+    "quality_score": 0.973,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 172,
+    "document_count": 6
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 1199,
+      "correct_count": 1199,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.9101,
+      "party_attribution_rate": 0.4164,
+      "total_segments": 634,
+      "attributed_segments": 577,
+      "unattributed_segments": 57
+    },
+    "speaker_diversity": {
+      "unique_speakers": 14,
+      "unique_parties": 10,
+      "top_speaker": "Plaatsvervangende commissievoorzitter",
+      "top_speaker_segment_count": 147,
+      "monologue_rate": 0.2319,
+      "speakers": {
+        "Plaatsvervangende commissievoorzitter": 147,
+        "C.M. (Chantal) Zeegers": 120,
+        "D.J. (Diederik) van Dommelen": 58,
+        "A. (Astrid) Kockelkoren": 51,
+        "M.E. (Merel) Vogelaar": 50,
+        "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie": 28,
+        "T. (Tim) de Haan": 24,
+        "E. (Emin) Başoğlu Burgercommissielid": 21,
+        "L.P.A. (Luuc) Dekkers": 21,
+        "R.N. (Rashied) Dahoe": 18
+      },
+      "parties": {
+        "VVD": 58,
+        "GroenLinks": 51,
+        "PvdA": 50,
+        "D66": 24,
+        "SP": 21,
+        "Volt": 21,
+        "DENK": 18,
+        "CDA": 12,
+        "BIJ1": 7,
+        "Leefbaar Rotterdam": 2
+      }
+    },
+    "segment_quality": {
+      "total_segments": 634,
+      "nonempty_segments": 634,
+      "total_words": 53971,
+      "total_chars": 306094,
+      "avg_words_per_segment": 85.1,
+      "avg_chars_per_segment": 482.8,
+      "short_segment_rate": 0.1562,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 7,
+      "items_with_content": 6,
+      "coverage_rate": 0.8571,
+      "items": [
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 1
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 6
+        },
+        {
+          "title": "Verzameldebat Wonen",
+          "segment_count": 390
+        },
+        {
+          "title": "Initiatiefvoorstel Engberts over leegstand voor losers, woningen voor Rotterdammers",
+          "segment_count": 168
+        },
+        {
+          "title": "Beantwoording schriftelijke vragen Coskun over Bewoners: Misbruik de brand niet om ons woonrecht af te branden!",
+          "segment_count": 67
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 2
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-07-09 00:00:00",
+        "committee": "BWB",
+        "review_status": "auto_approved",
+        "quality_score": 0.973,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-07-09 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 14,
+      "recognized_speakers": 14,
+      "unrecognized_speakers": 0,
+      "recognition_rate": 1.0,
+      "recognized": [
+        {
+          "name": "Plaatsvervangende commissievoorzitter",
+          "segment_count": 147,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "E. (Emin) Başoğlu Burgercommissielid",
+          "segment_count": 21,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "R.N. (Rashied) Dahoe",
+          "segment_count": 18,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T. (Tim) de Haan",
+          "segment_count": 24,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "A. (Astrid) Kockelkoren",
+          "segment_count": 51,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "M.E. (Merel) Vogelaar",
+          "segment_count": 50,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "L.P.A. (Luuc) Dekkers",
+          "segment_count": 21,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie",
+          "segment_count": 28,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "D.J. (Diederik) van Dommelen",
+          "segment_count": 58,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.G.C. (René) Segers-Hoogendoorn",
+          "segment_count": 12,
+          "parties": [
+            "CDA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M. (Marcel) Verhoef",
+          "segment_count": 2,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "C.M. (Chantal) Zeegers",
+          "segment_count": 120,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "P.C.Z. (Precious) Sadhoe Burgercommissielid",
+          "segment_count": 7,
+          "parties": [
+            "BIJ1"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Inspreker",
+          "segment_count": 18,
+          "parties": [],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": []
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 172,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 54,
+        "long (2000-5000)": 112,
+        "short (50-200)": 6
+      },
+      "min_chars": 72,
+      "max_chars": 2732,
+      "avg_chars": 1931.1,
+      "median_chars": 2242,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 172,
+      "boilerplate_count": 2,
+      "boilerplate_rate": 0.0116,
+      "boilerplate_examples": [
+        {
+          "id": 8765,
+          "title": "Clarification on Multiple Debates",
+          "preview": "[Plaatsvervangende commissievoorzitter]: Dat zijn dan twee debatten. OK."
+        },
+        {
+          "id": 8766,
+          "title": "Skipping Commitments Section",
+          "preview": "[Plaatsvervangende commissievoorzitter]: De toezeggingen sla ik over. Sorry."
+        }
+      ]
+    },
+    "agenda_coverage": {
+      "total_documents": 6,
+      "documents_with_chunks": 6,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Beantwoording schriftelijke vragen Coskun over Bewoners: Misbruik de brand niet om ons woonrecht af te branden!",
+          "chunks": 25
+        },
+        {
+          "name": "Transcript: Initiatiefvoorstel Engberts over leegstand voor losers, woningen voor Rotterdammers",
+          "chunks": 38
+        },
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Rondvraag en sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Vaststellen van de agenda",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Verzameldebat Wonen",
+          "chunks": 105
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 172,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 172,
+      "distribution": {
+        "quote": {
+          "count": 171,
+          "rate": 0.9942
+        },
+        "full_text": {
+          "count": 1,
+          "rate": 0.0058
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.9101,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.973
+    }
+  }
+}

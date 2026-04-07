@@ -1,0 +1,169 @@
+{
+  "meeting_id": "0304e7be-4a56-4c8e-af80-8522a8727848",
+  "audit_timestamp": "2026-04-07T21:10:29.953721",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+    "start_date": "2025-06-25 00:00:00",
+    "committee": "COR",
+    "quality_score": 0.6,
+    "review_status": "pending",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 86,
+    "document_count": 1
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 487,
+      "correct_count": 487,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.0,
+      "party_attribution_rate": 0.0,
+      "total_segments": 157,
+      "attributed_segments": 0,
+      "unattributed_segments": 157
+    },
+    "speaker_diversity": {
+      "unique_speakers": 0,
+      "unique_parties": 0,
+      "top_speaker": null,
+      "top_speaker_segment_count": 0,
+      "monologue_rate": 0.0,
+      "speakers": {},
+      "parties": {}
+    },
+    "segment_quality": {
+      "total_segments": 157,
+      "nonempty_segments": 157,
+      "total_words": 30203,
+      "total_chars": 170267,
+      "avg_words_per_segment": 192.4,
+      "avg_chars_per_segment": 1084.5,
+      "short_segment_rate": 0.0828,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 1,
+      "items_with_content": 1,
+      "coverage_rate": 1.0,
+      "items": [
+        {
+          "title": "Full Meeting",
+          "segment_count": 157
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+        "start_date": "2025-06-25 00:00:00",
+        "committee": "COR",
+        "review_status": "pending",
+        "quality_score": 0.6,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+        "start_date": "2025-06-25 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 0,
+      "recognized_speakers": 0,
+      "unrecognized_speakers": 0,
+      "recognition_rate": 0.0,
+      "recognized": [],
+      "unrecognized": []
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 86,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 34,
+        "short (50-200)": 1,
+        "long (2000-5000)": 51
+      },
+      "min_chars": 194,
+      "max_chars": 2688,
+      "avg_chars": 2022.4,
+      "median_chars": 2347,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 86,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 1,
+      "documents_with_chunks": 1,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Full Meeting",
+          "chunks": 86
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 86,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 86,
+      "distribution": {
+        "quote": {
+          "count": 86,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "REJECT — fix issues before promotion",
+    "issues": [
+      "Very low speaker attribution: 0% (threshold ≥50%)"
+    ],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.0,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.6
+    }
+  }
+}

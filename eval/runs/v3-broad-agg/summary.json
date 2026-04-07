@@ -1,0 +1,61 @@
+{
+  "run_id": "v3-broad-agg",
+  "total_questions": 1,
+  "overall": {
+    "count": 1,
+    "context_precision": {
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0
+    },
+    "answer_relevance": {
+      "mean": 5,
+      "min": 5,
+      "max": 5
+    },
+    "faithfulness": {
+      "mean": 5,
+      "min": 5,
+      "max": 5
+    },
+    "completeness": {
+      "mean": 5,
+      "min": 5,
+      "max": 5
+    }
+  },
+  "by_category": {
+    "broad_aggregation": {
+      "count": 1,
+      "context_precision": {
+        "mean": 1.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "answer_relevance": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      },
+      "faithfulness": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      },
+      "completeness": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      }
+    }
+  },
+  "component_health": {
+    "avg_vector_only_pct": 0.4,
+    "avg_keyword_only_pct": 0.6,
+    "avg_both_pct": 0.0,
+    "avg_reranker_position_change": 85.61,
+    "avg_rrf_unique_pct": 0.72,
+    "avg_total_ms": 523359.404,
+    "total_questions": 1
+  }
+}

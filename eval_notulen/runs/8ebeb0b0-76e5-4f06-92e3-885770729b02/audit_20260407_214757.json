@@ -1,0 +1,390 @@
+{
+  "meeting_id": "8ebeb0b0-76e5-4f06-92e3-885770729b02",
+  "audit_timestamp": "2026-04-07T21:47:57.482775",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "judge_backend": "gemini",
+    "anthropic_model": "claude-haiku-4-5-20251001",
+    "gemini_model": "gemini-2.5-flash-lite"
+  },
+  "meeting_info": {
+    "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+    "start_date": "2025-03-12 00:00:00",
+    "committee": "BWB",
+    "quality_score": 0.963,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 155,
+    "document_count": 8
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 1146,
+      "correct_count": 1146,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8758,
+      "party_attribution_rate": 0.6646,
+      "total_segments": 483,
+      "attributed_segments": 423,
+      "unattributed_segments": 60
+    },
+    "speaker_diversity": {
+      "unique_speakers": 18,
+      "unique_parties": 9,
+      "top_speaker": "P.J.H.D. (Ellen) Verkoelen",
+      "top_speaker_segment_count": 157,
+      "monologue_rate": 0.3251,
+      "speakers": {
+        "P.J.H.D. (Ellen) Verkoelen": 157,
+        "C.M. (Chantal) Zeegers College": 44,
+        "G.J. (Co) Engberts PvdA": 28,
+        "G.G. (Gerben) van Dijk ChristenUnie Burgercommissielid ChristenUnie": 25,
+        "E.P.J. (Erik) Verweij VVD": 25,
+        "A. (Astrid) Kockelkoren GroenLinks": 24,
+        "B.J. (Bart-Joost) van Rij College": 21,
+        "T. (Tim) de Haan D66": 16,
+        "V.A. (Vanessa) Bruin Leefbaar Rotterdam": 15,
+        "D.J. (Diederik) van Dommelen VVD": 15
+      },
+      "parties": {
+        "Commissievoorzitter": 157,
+        "VVD": 43,
+        "PvdA": 33,
+        "GroenLinks": 32,
+        "D66": 16,
+        "Leefbaar Rotterdam": 15,
+        "Partij voor de Dieren": 12,
+        "SP": 7,
+        "CDA": 6
+      }
+    },
+    "segment_quality": {
+      "total_segments": 483,
+      "nonempty_segments": 483,
+      "total_words": 48014,
+      "total_chars": 267664,
+      "avg_words_per_segment": 99.4,
+      "avg_chars_per_segment": 554.2,
+      "short_segment_rate": 0.1263,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 10,
+      "items_with_content": 8,
+      "coverage_rate": 0.8,
+      "items": [
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 4
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 0
+        },
+        {
+          "title": "Inspreken Vreemd aan de orde",
+          "segment_count": 17
+        },
+        {
+          "title": "Stedelijk Sociaal Statuut",
+          "segment_count": 93
+        },
+        {
+          "title": "Verkenning Middenhuur en DAEB",
+          "segment_count": 121
+        },
+        {
+          "title": "Projectambitiedocument: Sportlaan West IJsselmonde",
+          "segment_count": 86
+        },
+        {
+          "title": "Blijven talenten hier wel wonen",
+          "segment_count": 46
+        },
+        {
+          "title": "Definitief Ontwerp Getijdenpark Feijenoord fase 1",
+          "segment_count": 106
+        },
+        {
+          "title": "Betrekken bij Middenhuur en DAEB",
+          "segment_count": 10
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-03-12 00:00:00",
+        "committee": "BWB",
+        "review_status": "auto_approved",
+        "quality_score": 0.963,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-03-12 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 18,
+      "recognized_speakers": 16,
+      "unrecognized_speakers": 2,
+      "recognition_rate": 0.8889,
+      "recognized": [
+        {
+          "name": "Inspreker Inspreker",
+          "segment_count": 2,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "V.A. (Vanessa) Bruin Leefbaar Rotterdam",
+          "segment_count": 15,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T. (Tim) de Haan D66",
+          "segment_count": 16,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "G.G. (Gerben) van Dijk ChristenUnie Burgercommissielid ChristenUnie",
+          "segment_count": 25,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "A. (Astrid) Kockelkoren GroenLinks",
+          "segment_count": 24,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "E.P.J. (Erik) Verweij VVD",
+          "segment_count": 25,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D.J. (Diederik) van Dommelen VVD",
+          "segment_count": 15,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "E. (Emin) Başoğlu  Burgercommissielid",
+          "segment_count": 7,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "J.G. (Jaap) Rozema  Burgercommissielid",
+          "segment_count": 12,
+          "parties": [
+            "Partij voor de Dieren"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "G.J. (Co) Engberts PvdA",
+          "segment_count": 28,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "C.M. (Chantal) Zeegers College",
+          "segment_count": 44,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "R.G.C. (René) Segers-Hoogendoorn CDA",
+          "segment_count": 6,
+          "parties": [
+            "CDA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D.P.A. (Dennis) Tak PvdA",
+          "segment_count": 5,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.Y. (Mina) Morkoç GroenLinks",
+          "segment_count": 8,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "Adviseur Adviseur",
+          "segment_count": 10,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.S. (Marike) Abrahamse VVD",
+          "segment_count": 3,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "P.J.H.D. (Ellen) Verkoelen",
+          "segment_count": 157,
+          "parties": [
+            "Commissievoorzitter"
+          ],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "B.J. (Bart-Joost) van Rij College",
+          "segment_count": 21,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 155,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 56,
+        "long (2000-5000)": 94,
+        "short (50-200)": 5
+      },
+      "min_chars": 89,
+      "max_chars": 2726,
+      "avg_chars": 1929.3,
+      "median_chars": 2256,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 155,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 8,
+      "documents_with_chunks": 8,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Betrekken bij Middenhuur en DAEB",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Blijven talenten hier wel wonen",
+          "chunks": 17
+        },
+        {
+          "name": "Transcript: Definitief Ontwerp Getijdenpark Feijenoord fase 1",
+          "chunks": 23
+        },
+        {
+          "name": "Transcript: Inspreken Vreemd aan de orde",
+          "chunks": 10
+        },
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Projectambitiedocument: Sportlaan West IJsselmonde",
+          "chunks": 21
+        },
+        {
+          "name": "Transcript: Stedelijk Sociaal Statuut",
+          "chunks": 40
+        },
+        {
+          "name": "Transcript: Verkenning Middenhuur en DAEB",
+          "chunks": 41
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 155,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 155,
+      "distribution": {
+        "quote": {
+          "count": 155,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8758,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.963
+    }
+  }
+}

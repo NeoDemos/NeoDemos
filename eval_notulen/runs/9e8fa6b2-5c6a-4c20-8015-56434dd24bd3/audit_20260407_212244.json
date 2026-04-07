@@ -1,0 +1,377 @@
+{
+  "meeting_id": "9e8fa6b2-5c6a-4c20-8015-56434dd24bd3",
+  "audit_timestamp": "2026-04-07T21:22:44.724604",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+    "start_date": "2025-11-20 00:00:00",
+    "committee": "BOFV",
+    "quality_score": 0.97,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 110,
+    "document_count": 9
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 745,
+      "correct_count": 745,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.9,
+      "party_attribution_rate": 0.4095,
+      "total_segments": 420,
+      "attributed_segments": 378,
+      "unattributed_segments": 42
+    },
+    "speaker_diversity": {
+      "unique_speakers": 14,
+      "unique_parties": 8,
+      "top_speaker": "M.H. (Marvin) Biljoen Commissievoorzitter",
+      "top_speaker_segment_count": 84,
+      "monologue_rate": 0.2,
+      "speakers": {
+        "M.H. (Marvin) Biljoen Commissievoorzitter": 84,
+        "F. (Faouzi) Achbar": 71,
+        "C.J. (Carola) Schouten Burgemeester": 29,
+        "J.M.D. (Joey) de Waard": 26,
+        "L.S. (Larissa) Vlieger": 26,
+        "S. (Sarah) Reitema": 22,
+        "L.S. (Larissa) Vlieger Commissievoorzitter": 22,
+        "D.A. (Dieke) van Groningen": 21,
+        "I. (Ingrid) van Wifferen": 19,
+        "T. (Tim) Kind": 13
+      },
+      "parties": {
+        "GroenLinks": 39,
+        "VVD": 31,
+        "Leefbaar Rotterdam": 26,
+        "PvdA": 22,
+        "D66": 19,
+        "Volt": 13,
+        "ChristenUnie": 12,
+        "DENK": 10
+      }
+    },
+    "segment_quality": {
+      "total_segments": 420,
+      "nonempty_segments": 420,
+      "total_words": 40524,
+      "total_chars": 223300,
+      "avg_words_per_segment": 96.5,
+      "avg_chars_per_segment": 531.7,
+      "short_segment_rate": 0.1262,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 13,
+      "items_with_content": 9,
+      "coverage_rate": 0.6923,
+      "items": [
+        {
+          "title": "Procedurevergadering",
+          "segment_count": 1
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 0
+        },
+        {
+          "title": "Besluitenlijst openbare procedurevergadering van 30-10-2025",
+          "segment_count": 1
+        },
+        {
+          "title": "Commissieplanning en lange termijn agenda raad",
+          "segment_count": 15
+        },
+        {
+          "title": "Ingekomen stukken",
+          "segment_count": 10
+        },
+        {
+          "title": "Sluiting",
+          "segment_count": 2
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 0
+        },
+        {
+          "title": "Adviezenlijst openbare overlegvergadering van 30-10-2025 en 06-11-2025",
+          "segment_count": 0
+        },
+        {
+          "title": "Aanpak jeugdoverlast en jeugdcriminaliteit",
+          "segment_count": 318
+        },
+        {
+          "title": "Halfjaarlijkse wijziging APV",
+          "segment_count": 38
+        },
+        {
+          "title": "Beantwoording vragen '80 jaar vrijheid is niet vanzelfsprekend'",
+          "segment_count": 34
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 1
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+        "start_date": "2025-11-20 00:00:00",
+        "committee": "BOFV",
+        "review_status": "auto_approved",
+        "quality_score": 0.97,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+        "start_date": "2025-11-20 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 14,
+      "recognized_speakers": 13,
+      "unrecognized_speakers": 1,
+      "recognition_rate": 0.9286,
+      "recognized": [
+        {
+          "name": "M.H. (Marvin) Biljoen Commissievoorzitter",
+          "segment_count": 84,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S. (Serkan) Soytekin",
+          "segment_count": 10,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Sarah) Reitema",
+          "segment_count": 22,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D.A. (Dieke) van Groningen",
+          "segment_count": 21,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J.M.D. (Joey) de Waard",
+          "segment_count": 26,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "I. (Ingrid) van Wifferen",
+          "segment_count": 19,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "L.S. (Larissa) Vlieger",
+          "segment_count": 26,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T. (Tim) Kind",
+          "segment_count": 13,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "F. (Faouzi) Achbar",
+          "segment_count": 71,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "C.J. (Carola) Schouten Burgemeester",
+          "segment_count": 29,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "L.S. (Larissa) Vlieger Commissievoorzitter",
+          "segment_count": 22,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.H. (Marvin) Biljoen",
+          "segment_count": 13,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "E. (Eveline) Padberg-de Haan Burgercommissielid",
+          "segment_count": 10,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "T.J. (Tjalling) Vonk",
+          "segment_count": 12,
+          "parties": [
+            "ChristenUnie"
+          ],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 110,
+      "empty_chunks": 0,
+      "buckets": {
+        "long (2000-5000)": 75,
+        "short (50-200)": 1,
+        "medium (200-2000)": 34
+      },
+      "min_chars": 123,
+      "max_chars": 2722,
+      "avg_chars": 2107.4,
+      "median_chars": 2270,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 110,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 9,
+      "documents_with_chunks": 9,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Aanpak jeugdoverlast en jeugdcriminaliteit",
+          "chunks": 86
+        },
+        {
+          "name": "Transcript: Beantwoording vragen '80 jaar vrijheid is niet vanzelfsprekend'",
+          "chunks": 8
+        },
+        {
+          "name": "Transcript: Besluitenlijst openbare procedurevergadering van 30-10-2025",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Commissieplanning en lange termijn agenda raad",
+          "chunks": 4
+        },
+        {
+          "name": "Transcript: Halfjaarlijkse wijziging APV",
+          "chunks": 7
+        },
+        {
+          "name": "Transcript: Ingekomen stukken",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Procedurevergadering",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Rondvraag en sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Sluiting",
+          "chunks": 1
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 110,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 110,
+      "distribution": {
+        "quote": {
+          "count": 107,
+          "rate": 0.9727
+        },
+        "full_text": {
+          "count": 3,
+          "rate": 0.0273
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.9,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.97
+    }
+  }
+}

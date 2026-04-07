@@ -1,0 +1,9 @@
+{$DOMAIN:localhost} {
+    reverse_proxy /mcp/* web:8001
+    reverse_proxy /* web:8000
+
+    log {
+        output file /data/caddy-access.log
+        format json
+    }
+}

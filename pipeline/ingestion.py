@@ -72,6 +72,29 @@ class SmartIngestor:
         self.max_chunk_chars = 2500        # hard ceiling per chunk
         self.overlap_chars = 250           # ~10-12 % overlap between adjacent chunks
         self.heuristic = False
+        self._transcription_corrections = self._load_transcription_corrections()
+
+    @staticmethod
+    def _load_transcription_corrections() -> List[tuple]:
+        """Load common_transcription_errors from the political dictionary as compiled regexes."""
+        dict_path = Path(__file__).resolve().parent.parent / "data" / "lexicons" / "rotterdam_political_dictionary.json"
+        corrections = []
+        try:
+            with open(dict_path, encoding="utf-8") as f:
+                data = json.load(f)
+            for pattern, replacement in data.get("common_transcription_errors", {}).items():
+                if pattern.startswith("_"):
+                    continue
+                corrections.append((re.compile(r'\b' + re.escape(pattern) + r'\b', re.IGNORECASE), replacement))
+        except Exception:
+            pass
+        return corrections
+
+    def _apply_transcription_corrections(self, text: str) -> str:
+        """Apply known Whisper transcription corrections to text."""
+        for pattern, replacement in self._transcription_corrections:
+            text = pattern.sub(replacement, text)
+        return text
 
     def ingest_document(self, doc_id: str, doc_name: str, content: str, meeting_id: str = None, metadata: Dict = None, category: str = "municipal_doc"):
         """
@@ -194,14 +217,35 @@ class SmartIngestor:
                 audio_tier = "bronze"
 
             for seg in segments:
-                speaker = seg.get("speaker", "Unknown")
-                party = seg.get("party", "")
-                text = seg.get("text", "").strip()
-                
+                speaker = seg.get("speaker") or "Unknown"   # treat None as Unknown
+                party = seg.get("party") or ""
+                text = (seg.get("text") or "").strip()
+
                 # --- Quality Filtering ---
-                # Skip "Unknown" speakers with very short text (< 50 chars)
+                # Skip empty text or unknown speakers with very short text
                 if not text or (speaker == "Unknown" and len(text) < 50):
                     continue
+                # Apply known transcription corrections (Morkoets→Morkoç, etc.)
+                text = self._apply_transcription_corrections(text)
+                # Strip Whisper repetition hallucinations
+                # 1. Skip entire segment if a single word dominates (≥70%)
+                # 2. Truncate at first 3-consecutive-word repetition block
+                words = text.split()
+                if len(words) > 10:
+                    from collections import Counter
+                    top_word, top_count = Counter(words).most_common(1)[0]
+                    if top_count / len(words) >= 0.70:
+                        continue
+                    # Check for embedded repetition: find 3+ consecutive identical words
+                    trunc_at = None
+                    for _i in range(len(words) - 2):
+                        if words[_i] == words[_i + 1] == words[_i + 2]:
+                            trunc_at = _i
+                            break
+                    if trunc_at is not None:
+                        text = " ".join(words[:trunc_at]).strip()
+                        if not text:
+                            continue
 
                 if text:
                     speaker_str = f"{speaker}"
@@ -338,9 +382,12 @@ class SmartIngestor:
 
             # Compute overlap from the raw (non-overlapped) text
             if len(raw_text) > self.overlap_chars * 2:
-                # Find a clean overlap start (sentence or paragraph boundary)
+                # Priority: speaker tag boundary — never start overlap mid-tag
+                # (rfind(". ") can land inside "L.S." or "R.G.C." causing corrupt tags)
                 search_from = max(0, len(raw_text) - self.overlap_chars - 80)
-                ol = raw_text.rfind(". ", search_from)
+                ol = raw_text.rfind("\n[", search_from)
+                if ol == -1 or ol < search_from:
+                    ol = raw_text.rfind(". ", search_from)
                 if ol == -1 or ol < search_from:
                     ol = raw_text.rfind("\n", search_from)
                 if ol == -1 or ol < search_from:
@@ -459,11 +506,27 @@ Return ONLY the JSON array."""
         return sections if sections else [{"title": title, "text": content}]
 
     def _inject_speaker_prefixes(self, chunks: List[Dict]) -> List[Dict]:
-        """Ensures every chunk starts with a [Speaker]: tag if present in the block."""
+        """Ensures every chunk starts with a [Speaker]: tag if present in the block.
+
+        Also cleans up overlap artifacts:
+          - Strips leading `. ` fragments from overlap that landed mid-sentence
+          - Strips orphaned partial speaker tags (e.g., `. (Larissa) Vlieger]:`)
+        """
         processed = []
         last_speaker_tag = None
         for chunk in chunks:
             text = chunk.get("text", "").strip()
+
+            # Clean overlap artifacts: strip leading `. partial tag]:` patterns
+            # e.g., ". (Larissa) Vlieger Commissievoorzitter]: Volgens mij..."
+            text = re.sub(r'^\.[\s]*(?:[A-Z(].*?\]:\s*)?', '', text, count=1).strip()
+
+            # Also strip bare leading `. ` from mid-sentence overlap
+            if text.startswith('. ') and not text.startswith('...'):
+                text = text[2:].strip()
+
+            chunk["text"] = text
+
             match = re.match(r"^(\[.*?\]:)", text)
             if match:
                 last_speaker_tag = match.group(1)

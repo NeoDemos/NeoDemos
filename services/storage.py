@@ -1,28 +1,17 @@
-import psycopg2
 from psycopg2.extras import RealDictCursor
-import os
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 from contextlib import contextmanager
 
+from services.db_pool import get_connection as _pool_get_connection
+
 class StorageService:
     """PostgreSQL-backed storage service for NeoDemos"""
-    
-    def __init__(self, connection_string: Optional[str] = None):
+
+    def __init__(self, connection_string: Optional[str] = None):  # noqa: ARG002 — kept for API compat
         """Initialize storage service with PostgreSQL connection"""
-        if connection_string is None:
-            # Build from environment or use default
-            host = os.getenv("DB_HOST", "localhost")
-            port = os.getenv("DB_PORT", "5432")
-            database = os.getenv("DB_NAME", "neodemos")
-            user = os.getenv("DB_USER", "postgres")
-            password = os.getenv("DB_PASSWORD", "postgres")
-            
-            connection_string = f"postgresql://{user}:{password}@{host}:{port}/{database}"
-        
-        self.connection_string = connection_string
         self._verify_connection()
-    
+
     def _verify_connection(self):
         """Verify PostgreSQL connection works"""
         try:
@@ -31,7 +20,7 @@ class StorageService:
                     cur.execute("SELECT version()")
         except Exception as e:
             raise RuntimeError(f"Failed to connect to PostgreSQL: {e}")
-    
+
     def _clean_name(self, name: Optional[str]) -> Optional[str]:
         """Remove legacy artifacts like 'zzz ' from names."""
         if not name:
@@ -42,16 +31,9 @@ class StorageService:
 
     @contextmanager
     def _get_connection(self):
-        """Context manager for database connections"""
-        conn = psycopg2.connect(self.connection_string)
-        try:
+        """Context manager for database connections (backed by shared pool)"""
+        with _pool_get_connection() as conn:
             yield conn
-            conn.commit()
-        except Exception:
-            conn.rollback()
-            raise
-        finally:
-            conn.close()
     
     def get_meetings(self, limit: int = 50, year: int = None, offset: int = 0) -> List[Dict[str, Any]]:
         """Get meetings sorted by date descending, optionally filtered by year."""

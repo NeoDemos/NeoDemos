@@ -1,0 +1,319 @@
+{
+  "meeting_id": "68df2765-a74f-49c6-b021-31e5fb4b3d73",
+  "audit_timestamp": "2026-04-07T21:22:46.756625",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+    "start_date": "2025-09-16 00:00:00",
+    "committee": "COR",
+    "quality_score": 0.947,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 37,
+    "document_count": 10
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 254,
+      "correct_count": 254,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8229,
+      "party_attribution_rate": 0.1979,
+      "total_segments": 192,
+      "attributed_segments": 158,
+      "unattributed_segments": 34
+    },
+    "speaker_diversity": {
+      "unique_speakers": 8,
+      "unique_parties": 3,
+      "top_speaker": "M.H. (Marvin) Biljoen Commissievoorzitter",
+      "top_speaker_segment_count": 54,
+      "monologue_rate": 0.2812,
+      "speakers": {
+        "M.H. (Marvin) Biljoen Commissievoorzitter": 54,
+        "B.J. (Bart-Joost) van Rij": 36,
+        "T.S.J. (Theo) Coşkun": 15,
+        "D.J. (Diederik) van Dommelen": 14,
+        "M. (Marjo) Lamers Concerncontroller": 12,
+        "T. (Thomas) Roskam": 9,
+        "Adviseur": 9,
+        "M. (Martine) Koedijk Accountant": 9
+      },
+      "parties": {
+        "SP": 15,
+        "VVD": 14,
+        "Leefbaar Rotterdam": 9
+      }
+    },
+    "segment_quality": {
+      "total_segments": 192,
+      "nonempty_segments": 192,
+      "total_words": 11944,
+      "total_chars": 67058,
+      "avg_words_per_segment": 62.2,
+      "avg_chars_per_segment": 349.3,
+      "short_segment_rate": 0.3281,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 12,
+      "items_with_content": 10,
+      "coverage_rate": 0.8333,
+      "items": [
+        {
+          "title": "Commissie tot Onderzoek van de Rekening (COR)",
+          "segment_count": 0
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 4
+        },
+        {
+          "title": "Vaststelling agenda",
+          "segment_count": 0
+        },
+        {
+          "title": "Vaststellen verslag 13 mei 2025",
+          "segment_count": 11
+        },
+        {
+          "title": "Lijst met openstaande toezeggingen",
+          "segment_count": 17
+        },
+        {
+          "title": "Planning",
+          "segment_count": 10
+        },
+        {
+          "title": "Terugkoppeling van rapporteurs",
+          "segment_count": 4
+        },
+        {
+          "title": "Collegereactie Adviesrapport COR over de Jaarrekening 2024",
+          "segment_count": 75
+        },
+        {
+          "title": "Jaarrekeningcontrole 2025",
+          "segment_count": 47
+        },
+        {
+          "title": "Artikel 213a onderzoeken",
+          "segment_count": 16
+        },
+        {
+          "title": "Raadsvoorstel Kadernota reserves en voorzieningen Rotterdam 2025",
+          "segment_count": 6
+        },
+        {
+          "title": "Rondvraag",
+          "segment_count": 2
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+        "start_date": "2025-09-16 00:00:00",
+        "committee": "COR",
+        "review_status": "auto_approved",
+        "quality_score": 0.947,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+        "start_date": "2025-09-16 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 8,
+      "recognized_speakers": 5,
+      "unrecognized_speakers": 3,
+      "recognition_rate": 0.625,
+      "recognized": [
+        {
+          "name": "M.H. (Marvin) Biljoen Commissievoorzitter",
+          "segment_count": 54,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "T.S.J. (Theo) Coşkun",
+          "segment_count": 15,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "T. (Thomas) Roskam",
+          "segment_count": 9,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D.J. (Diederik) van Dommelen",
+          "segment_count": 14,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "Adviseur",
+          "segment_count": 9,
+          "parties": [],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "M. (Marjo) Lamers Concerncontroller",
+          "segment_count": 12,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "B.J. (Bart-Joost) van Rij",
+          "segment_count": 36,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "M. (Martine) Koedijk Accountant",
+          "segment_count": 9,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 37,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 17,
+        "long (2000-5000)": 20
+      },
+      "min_chars": 252,
+      "max_chars": 2515,
+      "avg_chars": 1891.5,
+      "median_chars": 2007,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 37,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 10,
+      "documents_with_chunks": 10,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Artikel 213a onderzoeken",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: Collegereactie Adviesrapport COR over de Jaarrekening 2024",
+          "chunks": 12
+        },
+        {
+          "name": "Transcript: Jaarrekeningcontrole 2025",
+          "chunks": 11
+        },
+        {
+          "name": "Transcript: Lijst met openstaande toezeggingen",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Planning",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Raadsvoorstel Kadernota reserves en voorzieningen Rotterdam 2025",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Rondvraag",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Terugkoppeling van rapporteurs",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Vaststellen verslag 13 mei 2025",
+          "chunks": 2
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 37,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 37,
+      "distribution": {
+        "quote": {
+          "count": 36,
+          "rate": 0.973
+        },
+        "full_text": {
+          "count": 1,
+          "rate": 0.027
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8229,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.947
+    }
+  }
+}

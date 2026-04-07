@@ -1,0 +1,1054 @@
+[
+  {
+    "question_id": "ps-01",
+    "question_text": "Hoe stelde de PvdA zich op in de discussie over Feyenoord City, het stadion en de gebiedsontwikkeling?",
+    "category": "party_stance",
+    "answer": "",
+    "retrieval_metrics": {
+      "context_precision": 0.5,
+      "diversity": {
+        "document_diversity": 0.7,
+        "unique_documents": 7,
+        "total_chunks": 10,
+        "entropy": 2.646
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 86.86700003454462,
+        "vector_ms": 492.04120895592496,
+        "keyword_ms": 4586.368541989941,
+        "rrf_ms": 0.07404200732707977,
+        "reranker_ms": 0.0006249756552278996,
+        "total_ms": 5165.443415986374
+      }
+    },
+    "generation_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 5165.443415986374
+  },
+  {
+    "question_id": "ps-02",
+    "question_text": "De Asielopvang op de Silja, wat denkt Leefbaar Rotterdam daar van?",
+    "category": "party_stance",
+    "answer": "",
+    "retrieval_metrics": {
+      "context_precision": 0.5,
+      "diversity": {
+        "document_diversity": 0.5,
+        "unique_documents": 5,
+        "total_chunks": 10,
+        "entropy": 1.961
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 75.93725004699081,
+        "vector_ms": 502.41691700648516,
+        "keyword_ms": 6002.795375010464,
+        "rrf_ms": 0.06379099795594811,
+        "reranker_ms": 0.0005420297384262085,
+        "total_ms": 6581.300665973686
+      }
+    },
+    "generation_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 6581.300665973686
+  },
+  {
+    "question_id": "ba-01",
+    "question_text": "Geef me een overzicht van de uitdagingen van het doelgroepenvervoer in Rotterdam",
+    "category": "broad_aggregation",
+    "answer": "",
+    "retrieval_metrics": {
+      "context_precision": 0.5,
+      "diversity": {
+        "document_diversity": 0.8,
+        "unique_documents": 8,
+        "total_chunks": 10,
+        "entropy": 2.922
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 76.35954197030514,
+        "vector_ms": 418.5315000358969,
+        "keyword_ms": 5430.118457996286,
+        "rrf_ms": 0.07045798702165484,
+        "reranker_ms": 0.00045803608372807503,
+        "total_ms": 5925.190666981507
+      }
+    },
+    "generation_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 5925.190666981507
+  },
+  {
+    "question_id": "ba-02",
+    "question_text": "GRJR - gemeenschappelijke regeling voor jeugdzorg - geef me een overzicht van de belangrijkste uitdagingen en kansen",
+    "category": "acronym_abbreviation",
+    "answer": "",
+    "retrieval_metrics": {
+      "context_precision": 0.5,
+      "diversity": {
+        "document_diversity": 1.0,
+        "unique_documents": 10,
+        "total_chunks": 10,
+        "entropy": 3.322
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 88.22500001406297,
+        "vector_ms": 191.04158302070573,
+        "keyword_ms": 4937.45799997123,
+        "rrf_ms": 0.08554098894819617,
+        "reranker_ms": 0.000667001586407423,
+        "total_ms": 5216.90783300437
+      }
+    },
+    "generation_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 5216.90783300437
+  },
+  {
+    "question_id": "te-01",
+    "question_text": "Wat waren de grootste financiële knelpunten in 2018?",
+    "category": "temporal",
+    "answer": "",
+    "retrieval_metrics": {
+      "context_precision": 0.5,
+      "diversity": {
+        "document_diversity": 0.9,
+        "unique_documents": 9,
+        "total_chunks": 10,
+        "entropy": 3.122
+      },
+      "temporal": {
+        "applicable": true,
+        "in_range_ratio": 0.0,
+        "in_range": 0,
+        "out_of_range": 0,
+        "unknown_date": 10,
+        "total": 10
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 88.27908401144668,
+        "vector_ms": 510.55916596669704,
+        "keyword_ms": 300.50816701259464,
+        "rrf_ms": 0.06445799954235554,
+        "reranker_ms": 0.0004169996827840805,
+        "total_ms": 899.507625028491
+      }
+    },
+    "generation_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 899.507625028491
+  },
+  {
+    "question_id": "te-02",
+    "question_text": "Wat waren de grootste financiële knelpunten in 2019?",
+    "category": "temporal",
+    "answer": "",
+    "retrieval_metrics": {
+      "context_precision": 0.7,
+      "diversity": {
+        "document_diversity": 0.9,
+        "unique_documents": 9,
+        "total_chunks": 10,
+        "entropy": 3.122
+      },
+      "temporal": {
+        "applicable": true,
+        "in_range_ratio": 0.0,
+        "in_range": 0,
+        "out_of_range": 0,
+        "unknown_date": 10,
+        "total": 10
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 62.9139170050621,
+        "vector_ms": 431.9272499997169,
+        "keyword_ms": 223.8311660476029,
+        "rrf_ms": 0.030207971576601267,
+        "reranker_ms": 0.0002500019036233425,
+        "total_ms": 718.782415962778
+      }
+    },
+    "generation_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 718.782415962778
+  },
+  {
+    "question_id": "te-03",
+    "question_text": "Wat waren de grootste financiële knelpunten in 2020?",
+    "category": "temporal",
+    "answer": "",
+    "retrieval_metrics": {
+      "context_precision": 0.5,
+      "diversity": {
+        "document_diversity": 0.9,
+        "unique_documents": 9,
+        "total_chunks": 10,
+        "entropy": 3.122
+      },
+      "temporal": {
+        "applicable": true,
+        "in_range_ratio": 0.0,
+        "in_range": 0,
+        "out_of_range": 0,
+        "unknown_date": 10,
+        "total": 10
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 60.375207976903766,
+        "vector_ms": 338.4840000071563,
+        "keyword_ms": 208.1601670361124,
+        "rrf_ms": 0.03362499410286546,
+        "reranker_ms": 0.0002500019036233425,
+        "total_ms": 607.1314580040053
+      }
+    },
+    "generation_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 607.1314580040053
+  },
+  {
+    "question_id": "te-04",
+    "question_text": "Wat waren de grootste financiële knelpunten in 2021?",
+    "category": "temporal",
+    "answer": "",
+    "retrieval_metrics": {
+      "context_precision": 0.5,
+      "diversity": {
+        "document_diversity": 0.9,
+        "unique_documents": 9,
+        "total_chunks": 10,
+        "entropy": 3.122
+      },
+      "temporal": {
+        "applicable": true,
+        "in_range_ratio": 0.0,
+        "in_range": 0,
+        "out_of_range": 0,
+        "unknown_date": 10,
+        "total": 10
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 60.3824169957079,
+        "vector_ms": 344.64733401546255,
+        "keyword_ms": 199.56187502248213,
+        "rrf_ms": 0.030750001315027475,
+        "reranker_ms": 0.00041601015254855156,
+        "total_ms": 604.69941602787
+      }
+    },
+    "generation_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 604.69941602787
+  },
+  {
+    "question_id": "te-05",
+    "question_text": "Wat waren de grootste financiële knelpunten in 2022?",
+    "category": "temporal",
+    "answer": "",
+    "retrieval_metrics": {
+      "context_precision": 0.5,
+      "diversity": {
+        "document_diversity": 1.0,
+        "unique_documents": 10,
+        "total_chunks": 10,
+        "entropy": 3.322
+      },
+      "temporal": {
+        "applicable": true,
+        "in_range_ratio": 0.0,
+        "in_range": 0,
+        "out_of_range": 0,
+        "unknown_date": 10,
+        "total": 10
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 60.48083305358887,
+        "vector_ms": 353.1093749916181,
+        "keyword_ms": 297.63779195491225,
+        "rrf_ms": 0.05583302117884159,
+        "reranker_ms": 0.00045803608372807503,
+        "total_ms": 711.3830830203369
+      }
+    },
+    "generation_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 711.3830830203369
+  },
+  {
+    "question_id": "te-06",
+    "question_text": "Wat waren de grootste financiële knelpunten in 2023?",
+    "category": "temporal",
+    "answer": "",
+    "retrieval_metrics": {
+      "context_precision": 0.6,
+      "diversity": {
+        "document_diversity": 0.9,
+        "unique_documents": 9,
+        "total_chunks": 10,
+        "entropy": 3.122
+      },
+      "temporal": {
+        "applicable": true,
+        "in_range_ratio": 0.0,
+        "in_range": 0,
+        "out_of_range": 0,
+        "unknown_date": 10,
+        "total": 10
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 61.96720799198374,
+        "vector_ms": 379.3557079625316,
+        "keyword_ms": 562.8822080325335,
+        "rrf_ms": 0.06612495053559542,
+        "reranker_ms": 0.0007080379873514175,
+        "total_ms": 1004.369875008706
+      }
+    },
+    "generation_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 1004.369875008706
+  },
+  {
+    "question_id": "te-07",
+    "question_text": "Wat waren de grootste financiële knelpunten in 2024?",
+    "category": "temporal",
+    "answer": "",
+    "retrieval_metrics": {
+      "context_precision": 0.7,
+      "diversity": {
+        "document_diversity": 0.9,
+        "unique_documents": 9,
+        "total_chunks": 10,
+        "entropy": 3.122
+      },
+      "temporal": {
+        "applicable": true,
+        "in_range_ratio": 0.0,
+        "in_range": 0,
+        "out_of_range": 0,
+        "unknown_date": 10,
+        "total": 10
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 63.104082946665585,
+        "vector_ms": 397.9980000294745,
+        "keyword_ms": 573.9727499894798,
+        "rrf_ms": 0.07529102731496096,
+        "reranker_ms": 0.0005409820005297661,
+        "total_ms": 1035.3084590169601
+      }
+    },
+    "generation_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 1035.3084590169601
+  },
+  {
+    "question_id": "te-08",
+    "question_text": "Wat waren de grootste financiële knelpunten in 2025?",
+    "category": "temporal",
+    "answer": "",
+    "retrieval_metrics": {
+      "context_precision": 0.5,
+      "diversity": {
+        "document_diversity": 0.9,
+        "unique_documents": 9,
+        "total_chunks": 10,
+        "entropy": 3.122
+      },
+      "temporal": {
+        "applicable": true,
+        "in_range_ratio": 0.0,
+        "in_range": 0,
+        "out_of_range": 0,
+        "unknown_date": 10,
+        "total": 10
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 62.80366698047146,
+        "vector_ms": 862.4040419817902,
+        "keyword_ms": 116.54295795597136,
+        "rrf_ms": 0.033582968171685934,
+        "reranker_ms": 0.0005829497240483761,
+        "total_ms": 1041.8781249900348
+      }
+    },
+    "generation_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 1041.8781249900348
+  },
+  {
+    "question_id": "bv-01",
+    "question_text": "Wat zijn de belangrijkste aandachtspunten voor de gebiedsontwikkeling M4H? Geef me zowel positieve als negatieve punten",
+    "category": "balanced_view",
+    "answer": "",
+    "retrieval_metrics": {
+      "context_precision": 0.5,
+      "diversity": {
+        "document_diversity": 0.7,
+        "unique_documents": 7,
+        "total_chunks": 10,
+        "entropy": 2.646
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 58.57175000710413,
+        "vector_ms": 119.42191701382399,
+        "keyword_ms": 2385.8200410031714,
+        "rrf_ms": 0.06358401151373982,
+        "reranker_ms": 0.0005829497240483761,
+        "total_ms": 2563.96279099863
+      }
+    },
+    "generation_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 2563.96279099863
+  },
+  {
+    "question_id": "se-01",
+    "question_text": "Waarom ging het Warmtebedrijf Rotterdam failliet?",
+    "category": "specific_event",
+    "answer": "",
+    "retrieval_metrics": {
+      "context_precision": 0.6,
+      "diversity": {
+        "document_diversity": 1.0,
+        "unique_documents": 10,
+        "total_chunks": 10,
+        "entropy": 3.322
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 89.0571249765344,
+        "vector_ms": 7.063333003316075,
+        "keyword_ms": 946.5820830082521,
+        "rrf_ms": 0.12758298544213176,
+        "reranker_ms": 0.0008749775588512421,
+        "total_ms": 1042.9625419783406
+      }
+    },
+    "generation_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 1042.9625419783406
+  },
+  {
+    "question_id": "io-01",
+    "question_text": "Het nachtleven in Rotterdam laat te wensen over zeggen veel mensen, klopt dat?",
+    "category": "informal_opinion",
+    "answer": "",
+    "retrieval_metrics": {
+      "context_precision": 0.5,
+      "diversity": {
+        "document_diversity": 0.9,
+        "unique_documents": 9,
+        "total_chunks": 10,
+        "entropy": 3.122
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 63.966582994908094,
+        "vector_ms": 77.8400000417605,
+        "keyword_ms": 992.0928329811431,
+        "rrf_ms": 0.10945904068648815,
+        "reranker_ms": 0.0007080379873514175,
+        "total_ms": 1134.1848330339417
+      }
+    },
+    "generation_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 1134.1848330339417
+  },
+  {
+    "question_id": "mh-01",
+    "question_text": "Welke partijen stemden tegen het Warmtebedrijf voorstel, en wat was hun alternatief?",
+    "category": "multi_hop",
+    "answer": "",
+    "retrieval_metrics": {
+      "context_precision": 0.5,
+      "diversity": {
+        "document_diversity": 0.7,
+        "unique_documents": 7,
+        "total_chunks": 10,
+        "entropy": 2.646
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 84.86379199894145,
+        "vector_ms": 68.2020410313271,
+        "keyword_ms": 871.8767079990357,
+        "rrf_ms": 0.08483300916850567,
+        "reranker_ms": 0.0006660120561718941,
+        "total_ms": 1025.1584160141647
+      }
+    },
+    "generation_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 1025.1584160141647
+  },
+  {
+    "question_id": "mh-02",
+    "question_text": "Hoe verhoudt het budget voor cultuur zich tot het budget voor sport over de afgelopen 5 jaar?",
+    "category": "multi_hop",
+    "answer": "",
+    "retrieval_metrics": {
+      "context_precision": 0.5,
+      "diversity": {
+        "document_diversity": 0.6,
+        "unique_documents": 6,
+        "total_chunks": 10,
+        "entropy": 2.161
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 63.51149996044114,
+        "vector_ms": 68.5717499582097,
+        "keyword_ms": 755.0260839634575,
+        "rrf_ms": 0.10516599286347628,
+        "reranker_ms": 0.0006660120561718941,
+        "total_ms": 887.3464160133153
+      }
+    },
+    "generation_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 887.3464160133153
+  },
+  {
+    "question_id": "ab-01",
+    "question_text": "Is er ooit in de gemeenteraad gedebatteerd over een metro naar Hoek van Holland?",
+    "category": "absence",
+    "answer": "",
+    "retrieval_metrics": {
+      "context_precision": 0.6,
+      "diversity": {
+        "document_diversity": 0.9,
+        "unique_documents": 9,
+        "total_chunks": 10,
+        "entropy": 3.122
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 64.73129196092486,
+        "vector_ms": 60.00545801362023,
+        "keyword_ms": 805.0607910263352,
+        "rrf_ms": 0.10358297731727362,
+        "reranker_ms": 0.0007080379873514175,
+        "total_ms": 930.0825410173275
+      }
+    },
+    "generation_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 930.0825410173275
+  },
+  {
+    "question_id": "ab-02",
+    "question_text": "Heeft de gemeente Rotterdam ooit overwogen om de Erasmusbrug te sluiten voor autoverkeer?",
+    "category": "absence",
+    "answer": "",
+    "retrieval_metrics": {
+      "context_precision": 0.5,
+      "diversity": {
+        "document_diversity": 1.0,
+        "unique_documents": 10,
+        "total_chunks": 10,
+        "entropy": 3.322
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 65.09491696488112,
+        "vector_ms": 42.131958005484194,
+        "keyword_ms": 1024.7444169945084,
+        "rrf_ms": 0.11033396003767848,
+        "reranker_ms": 0.0007499475032091141,
+        "total_ms": 1132.2820829809643
+      }
+    },
+    "generation_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 1132.2820829809643
+  },
+  {
+    "question_id": "acr-01",
+    "question_text": "Wat is de rol van de MRDH in het Rotterdamse vervoersbeleid?",
+    "category": "acronym_abbreviation",
+    "answer": "",
+    "retrieval_metrics": {
+      "context_precision": 0.5,
+      "diversity": {
+        "document_diversity": 1.0,
+        "unique_documents": 10,
+        "total_chunks": 10,
+        "entropy": 3.322
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 94.64208298595622,
+        "vector_ms": 34.72458303440362,
+        "keyword_ms": 817.3388339928351,
+        "rrf_ms": 0.1022499636746943,
+        "reranker_ms": 0.000667001586407423,
+        "total_ms": 946.9124160241336
+      }
+    },
+    "generation_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 946.9124160241336
+  }
+]

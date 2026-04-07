@@ -1,0 +1,409 @@
+{
+  "meeting_id": "0843f46a-08d1-4b5a-93c7-997f3d823f97",
+  "audit_timestamp": "2026-04-07T21:10:34.258401",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Vergadering Commissie Werkgelegenheid, Inkomen, Integratie, Schuldenaanpak en Armoedebestrijding (2018-2022) 21-11-2018",
+    "start_date": "2018-11-21 00:00:00",
+    "committee": "",
+    "quality_score": 0.999,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 75,
+    "document_count": 14
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 276,
+      "correct_count": 276,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.9963,
+      "party_attribution_rate": 0.0,
+      "total_segments": 268,
+      "attributed_segments": 267,
+      "unattributed_segments": 1
+    },
+    "speaker_diversity": {
+      "unique_speakers": 13,
+      "unique_parties": 0,
+      "top_speaker": "Jami, E. (voorzitter)",
+      "top_speaker_segment_count": 84,
+      "monologue_rate": 0.3134,
+      "speakers": {
+        "Jami, E. (voorzitter)": 84,
+        "Hoogwerf, T.C. (plv. commissievoorzitter )": 44,
+        "Wijbenga-Van Nieuwenhuizen, B. (wethouder)": 21,
+        "Roest, L.L.P.R. (GroenLinks)": 20,
+        "Moti, R. (wethouder)": 19,
+        "Jami, E. (Leefbaar Rotterdam)": 18,
+        "Yigit, E. (DENK)": 16,
+        "Hoogwerf, T.C. (Leefbaar Rotterdam)": 15,
+        "Versnel, T.B. (VVD)": 8,
+        "Arsieni, N. (D66)": 7
+      },
+      "parties": {}
+    },
+    "segment_quality": {
+      "total_segments": 268,
+      "nonempty_segments": 268,
+      "total_words": 21703,
+      "total_chars": 120784,
+      "avg_words_per_segment": 81.0,
+      "avg_chars_per_segment": 450.7,
+      "short_segment_rate": 0.2761,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 22,
+      "items_with_content": 13,
+      "coverage_rate": 0.5909,
+      "items": [
+        {
+          "title": "1.01 Opening en mededelingen",
+          "segment_count": 3
+        },
+        {
+          "title": "1.02 Besluitenlijst openbare procedurevergadering van 10 oktober 2018",
+          "segment_count": 1
+        },
+        {
+          "title": "1.03 Ingekomen stukken",
+          "segment_count": 0
+        },
+        {
+          "title": "1.03.01 Algemeen",
+          "segment_count": 0
+        },
+        {
+          "title": "1.03.02 Werk en Inkomen",
+          "segment_count": 0
+        },
+        {
+          "title": "1.03.03 Integratie",
+          "segment_count": 0
+        },
+        {
+          "title": "1.03.04 Schulddienstverlening",
+          "segment_count": 3
+        },
+        {
+          "title": "1.04 Lijst van openstaande toezeggingen en schriftelijke vragen",
+          "segment_count": 1
+        },
+        {
+          "title": "1.05 Lijst van openstaande moties",
+          "segment_count": 1
+        },
+        {
+          "title": "1.06 Planning",
+          "segment_count": 8
+        },
+        {
+          "title": "1.07 Rondvraag en sluiting",
+          "segment_count": 0
+        },
+        {
+          "title": "2 Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "2.01 Opening en mededelingen",
+          "segment_count": 0
+        },
+        {
+          "title": "2.02 Vaststellen van de agenda",
+          "segment_count": 0
+        },
+        {
+          "title": "2.03 Adviezenlijsten van de openbare overlegvergaderingen van 10 oktober 2018 en 31 oktober 2018",
+          "segment_count": 1
+        },
+        {
+          "title": "2.04 Insprekers met betrekking tot onderwerpen die niet op de agenda staan",
+          "segment_count": 22
+        },
+        {
+          "title": "2.05 Openstaande toezeggingen, moties en schriftelijke vragen waarvan de termijn is overschreden",
+          "segment_count": 4
+        },
+        {
+          "title": "2.06 Onderzoeksrapport Effecten deelname aan gezondheidsbevorderende trajecten doelgroep Tegenprestatie",
+          "segment_count": 92
+        },
+        {
+          "title": "2.07 Pilot op zoek naar de meest passende vorm van dagbesteding of werk",
+          "segment_count": 5
+        },
+        {
+          "title": "2.08 Voortgang proces actieprogramma Integratie en Samenleven en Rotterdamse aanpak statushouders 2.0 (2019-2022) en afdoening moties op gebied van Integratie",
+          "segment_count": 1
+        },
+        {
+          "title": "2.08.01 Daarbij betrekken",
+          "segment_count": 125
+        },
+        {
+          "title": "2.09 Sluiting",
+          "segment_count": 1
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Vergadering Commissie Werkgelegenheid, Inkomen, Integratie, Schuldenaanpak en Armoedebestrijding (2018-2022) 21-11-2018",
+        "start_date": "2018-11-21 00:00:00",
+        "committee": null,
+        "review_status": "auto_approved",
+        "quality_score": 0.999,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Vergadering Commissie Werkgelegenheid, Inkomen, Integratie, Schuldenaanpak en Armoedebestrijding (2018-2022) 21-11-2018",
+        "start_date": "2018-11-21 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No committee found in staging meeting"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 13,
+      "recognized_speakers": 5,
+      "unrecognized_speakers": 8,
+      "recognition_rate": 0.3846,
+      "recognized": [
+        {
+          "name": "Jami, E. (voorzitter)",
+          "segment_count": 84,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Hankers (inspreker namens Leefbaar Sinterklaasfeest Rotterdam)",
+          "segment_count": 3,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Hoogwerf, T.C. (plv. commissievoorzitter )",
+          "segment_count": 44,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Moti, R. (wethouder)",
+          "segment_count": 19,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Wijbenga-Van Nieuwenhuizen, B. (wethouder)",
+          "segment_count": 21,
+          "parties": [],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "Hoogwerf, T.C. (Leefbaar Rotterdam)",
+          "segment_count": 15,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Roest, L.L.P.R. (GroenLinks)",
+          "segment_count": 20,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Yigit, E. (DENK)",
+          "segment_count": 16,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Jami, E. (Leefbaar Rotterdam)",
+          "segment_count": 18,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Arsieni, N. (D66)",
+          "segment_count": 7,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Versnel, T.B. (VVD)",
+          "segment_count": 8,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Yildirim, D. (PvdA)",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Hallema, A. (CDA)",
+          "segment_count": 7,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 75,
+      "empty_chunks": 0,
+      "buckets": {
+        "short (50-200)": 4,
+        "medium (200-2000)": 33,
+        "long (2000-5000)": 38
+      },
+      "min_chars": 65,
+      "max_chars": 2738,
+      "avg_chars": 1751.6,
+      "median_chars": 2001,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 75,
+      "boilerplate_count": 2,
+      "boilerplate_rate": 0.0267,
+      "boilerplate_examples": [
+        {
+          "id": 19966,
+          "title": "Transcript: 2.08 Voortgang proces actieprogramma Integratie en Samenleven en Rotterdamse aanpak statushouders 2.0 (2019-2022) en afdoening moties op gebied van Integratie",
+          "preview": "[Hoogwerf, T.C. (plv. commissievoorzitter )]: Als je hier hebt..."
+        },
+        {
+          "id": 19938,
+          "title": "Transcript: 2.04 Insprekers met betrekking tot onderwerpen die niet op de agenda staan",
+          "preview": "[Jami, E. (voorzitter)]: Gaat de voerzitter en overgeleiden aanwezigen?"
+        }
+      ]
+    },
+    "agenda_coverage": {
+      "total_documents": 14,
+      "documents_with_chunks": 14,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: 1.01 Opening en mededelingen",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 1.02 Besluitenlijst openbare procedurevergadering van 10 oktober 2018",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 1.03.04 Schulddienstverlening",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 1.04 Lijst van openstaande toezeggingen en schriftelijke vragen",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 1.05 Lijst van openstaande moties",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 1.06 Planning",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: 2.03 Adviezenlijsten van de openbare overlegvergaderingen van 10 oktober 2018 en 31 oktober 2018",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 2.04 Insprekers met betrekking tot onderwerpen die niet op de agenda staan",
+          "chunks": 5
+        },
+        {
+          "name": "Transcript: 2.05 Openstaande toezeggingen, moties en schriftelijke vragen waarvan de termijn is overschreden",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 2.06 Onderzoeksrapport Effecten deelname aan gezondheidsbevorderende trajecten doelgroep Tegenprestatie",
+          "chunks": 21
+        },
+        {
+          "name": "Transcript: 2.07 Pilot op zoek naar de meest passende vorm van dagbesteding of werk",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 2.08 Voortgang proces actieprogramma Integratie en Samenleven en Rotterdamse aanpak statushouders 2.0 (2019-2022) en afdoening moties op gebied van Integratie",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 2.08.01 Daarbij betrekken",
+          "chunks": 37
+        },
+        {
+          "name": "Transcript: 2.09 Sluiting",
+          "chunks": 1
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 75,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 75,
+      "distribution": {
+        "quote": {
+          "count": 69,
+          "rate": 0.92
+        },
+        "full_text": {
+          "count": 6,
+          "rate": 0.08
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.9963,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.999
+    }
+  }
+}

@@ -7,9 +7,9 @@ Use this skill when backing up, restoring, or managing data retention. For servi
 | Layer | Tool | Destination | Frequency |
 |-------|------|-------------|-----------|
 | **Code + config** | `git push` | GitHub (private) | Every meaningful change |
-| **PostgreSQL** | `pg_dump` | Google Drive (`gdrive:neodemos-backups/`) | Daily |
-| **Qdrant vectors** | Snapshot API | Google Drive (`gdrive:neodemos-backups/`) | Weekly + before migrations |
-| **Uploaded/generated files** | `rclone sync` | Google Drive (`gdrive:neodemos-backups/`) | Daily |
+| **PostgreSQL** | `pg_dump` | Google Drive (`gdrive:02_Database_Vault/`) | Daily |
+| **Qdrant vectors** | Snapshot API | Google Drive (`gdrive:03_Vector_Snapshots/`) | Weekly + before migrations |
+| **Uploaded/generated files** | `rclone sync` | Google Drive (`gdrive:04_Source_Sync/`) | Daily |
 | **.env / secrets** | Manual export | Password manager (1Password/Bitwarden) | On change |
 
 **Not backed up (reproducible):** `.venv/`, `__pycache__/`, `downloads/`, `logs/`, Docker images.
@@ -91,25 +91,34 @@ rclone config
 
 **Store rclone passwords in a password manager, not in plaintext.** The rclone config file lives at `~/.config/rclone/rclone.conf` — back this up separately to your password manager.
 
+### Google Drive folder structure
+
+```
+gdrive:
+├── 01_Engines_Legacy/
+├── 02_Database_Vault/        ← PostgreSQL dumps
+├── 03_Vector_Snapshots/      ← Qdrant snapshots
+├── 04_Source_Sync/           ← Project data files
+└── 05_Project_Admin/
+```
+
 ### Sync commands
 
 ```bash
-# Upload PostgreSQL + Qdrant backups
-rclone sync ~/backups/ gdrive:neodemos-backups/ --progress
+# Upload PostgreSQL backup
+rclone copy ~/backups/neodemos_pg_YYYYMMDD.sql.gz gdrive:02_Database_Vault/ --progress
+
+# Upload Qdrant snapshot
+rclone copy ~/backups/qdrant_notulen_YYYYMMDD.snapshot gdrive:03_Vector_Snapshots/ --progress
 
 # Verify
-rclone ls gdrive:neodemos-backups/
+rclone ls gdrive:02_Database_Vault/
+rclone ls gdrive:03_Vector_Snapshots/
 
-# Restore from backup
-rclone copy gdrive:neodemos-backups/neodemos_pg_20260405_1100.sql.gz ~/restore/
+# Restore
+rclone copy gdrive:02_Database_Vault/neodemos_pg_20260405_2352.sql.gz ~/restore/
+rclone copy gdrive:03_Vector_Snapshots/qdrant_notulen_20260406.snapshot ~/restore/
 ```
-
-### Optional: add encryption layer
-To encrypt backups at rest on Google Drive, add a `gdrive-crypt` remote wrapping `gdrive:neodemos-backups/`:
-```bash
-rclone config  # → new → name: gdrive-crypt → type: crypt → remote: gdrive:neodemos-backups
-```
-Then replace `gdrive:neodemos-backups/` with `gdrive-crypt:` in all commands above. Store the encryption password in a password manager — without it, backups are unrecoverable.
 
 ## 5. Combined Backup Script
 
@@ -160,8 +169,11 @@ fi
 # 4. rclone upload
 echo "[4/4] Uploading to Google Drive..."
 if rclone listremotes | grep -q "gdrive:"; then
-    rclone sync "$BACKUP_DIR/" gdrive:neodemos-backups/ --progress --transfers=4
-    echo "  Uploaded to gdrive:neodemos-backups/"
+    rclone copy "$BACKUP_DIR/neodemos_pg_${DATE}.sql.gz" gdrive:02_Database_Vault/ --progress
+    if [ -f "$BACKUP_DIR/qdrant_notulen_${DATE}.snapshot" ]; then
+        rclone copy "$BACKUP_DIR/qdrant_notulen_${DATE}.snapshot" gdrive:03_Vector_Snapshots/ --progress
+    fi
+    echo "  Uploaded to Google Drive."
 else
     echo "  SKIPPED: gdrive remote not configured. Run: rclone config"
 fi
@@ -201,7 +213,7 @@ gunzip -t ~/backups/neodemos_pg_YYYYMMDD_HHMM.sql.gz && echo "OK" || echo "CORRU
 
 # Verify rclone encrypted backup (check file count matches)
 LOCAL=$(ls ~/backups/ | wc -l)
-REMOTE=$(rclone ls gdrive:neodemos-backups/ | wc -l)
+REMOTE=$(rclone ls gdrive:02_Database_Vault/ | wc -l)
 echo "Local: $LOCAL files, Remote: $REMOTE files"
 
 # Full restore test (to separate database, quarterly)
@@ -218,6 +230,6 @@ dropdb -U postgres neodemos_test_restore
 | **Code lost** | `git clone https://github.com/NeoDemos/NeoDemos.git` |
 | **PostgreSQL corrupted** | Restore latest `pg_dump`: `gunzip -c backup.sql.gz \| psql -U postgres neodemos` |
 | **Qdrant corrupted** | Restore snapshot via PUT `/snapshots/recover` endpoint |
-| **Mac stolen/dead** | New Mac → clone repo → restore `.env` from password manager → restore DB + Qdrant from Drive → `rclone copy gdrive:neodemos-backups/ ~/backups/` |
+| **Mac stolen/dead** | New Mac → clone repo → restore `.env` from password manager → restore DB from `gdrive:02_Database_Vault/` + Qdrant from `gdrive:03_Vector_Snapshots/` |
 | **Google Drive compromised** | Backups are encrypted — attacker gets ciphertext only. Rotate rclone password, re-encrypt. |
 | **rclone password lost** | **Unrecoverable.** This is why it must be in a password manager. |

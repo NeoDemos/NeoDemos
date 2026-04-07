@@ -1,0 +1,358 @@
+{
+  "meeting_id": "512ce9c6-39bb-4223-9373-1ab03af85703",
+  "audit_timestamp": "2026-04-07T21:47:57.720177",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "judge_backend": "gemini",
+    "anthropic_model": "claude-haiku-4-5-20251001",
+    "gemini_model": "gemini-2.5-flash-lite"
+  },
+  "meeting_info": {
+    "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+    "start_date": "2025-02-13 00:00:00",
+    "committee": "BOFV",
+    "quality_score": 0.938,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 87,
+    "document_count": 5
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 669,
+      "correct_count": 669,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.7934,
+      "party_attribution_rate": 0.5869,
+      "total_segments": 305,
+      "attributed_segments": 242,
+      "unattributed_segments": 63
+    },
+    "speaker_diversity": {
+      "unique_speakers": 16,
+      "unique_parties": 11,
+      "top_speaker": "L.S. (Larissa) Vlieger",
+      "top_speaker_segment_count": 64,
+      "monologue_rate": 0.2098,
+      "speakers": {
+        "L.S. (Larissa) Vlieger": 64,
+        "R.A.C.J. (Robert) Simons College": 49,
+        "J. (Judith) Bokhove GroenLinks": 21,
+        "E. (Eveline) Padberg-de Haan  Burgercommissielid": 19,
+        "T.S.J. (Theo) Coşkun SP": 17,
+        "T.J. (Tjalling) Vonk ChristenUnie": 13,
+        "D.P.A. (Dennis) Tak PvdA": 10,
+        "R.G.C. (René) Segers-Hoogendoorn CDA": 8,
+        "Inspreker Inspreker": 7,
+        "T. (Tim) de Haan D66": 7
+      },
+      "parties": {
+        "Commissievoorzitter": 66,
+        "GroenLinks": 21,
+        "VVD": 19,
+        "SP": 17,
+        "ChristenUnie": 13,
+        "PvdA": 10,
+        "CDA": 8,
+        "Leefbaar Rotterdam": 7,
+        "D66": 7,
+        "Volt": 7,
+        "Partij voor de Dieren": 4
+      }
+    },
+    "segment_quality": {
+      "total_segments": 305,
+      "nonempty_segments": 305,
+      "total_words": 32750,
+      "total_chars": 177902,
+      "avg_words_per_segment": 107.4,
+      "avg_chars_per_segment": 583.3,
+      "short_segment_rate": 0.1902,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 6,
+      "items_with_content": 5,
+      "coverage_rate": 0.8333,
+      "items": [
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 2
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 2
+        },
+        {
+          "title": "Voortgang Wijk aan Zet en raadsvoorstel bijstelling wijkraden Heijplaat en Kralingseveer",
+          "segment_count": 228
+        },
+        {
+          "title": "Initiatiefnota Kind (VOLT) over Noch een Wijkhub, Noch een Loket en afdoening moties over wijkhubs",
+          "segment_count": 72
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 1
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+        "start_date": "2025-02-13 00:00:00",
+        "committee": "BOFV",
+        "review_status": "auto_approved",
+        "quality_score": 0.938,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+        "start_date": "2025-02-13 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 16,
+      "recognized_speakers": 13,
+      "unrecognized_speakers": 3,
+      "recognition_rate": 0.8125,
+      "recognized": [
+        {
+          "name": "R.T.J. (Ruud) van der Velden Partij voor de Dieren",
+          "segment_count": 4,
+          "parties": [
+            "Partij voor de Dieren"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "Inspreker Inspreker",
+          "segment_count": 7,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "T. (Thomas) Roskam Leefbaar Rotterdam",
+          "segment_count": 1,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T.S.J. (Theo) Coşkun SP",
+          "segment_count": 17,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "D.P.A. (Dennis) Tak PvdA",
+          "segment_count": 10,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T. (Tim) de Haan D66",
+          "segment_count": 7,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J. (Judith) Bokhove GroenLinks",
+          "segment_count": 21,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "J.M.D. (Joey) de Waard Leefbaar Rotterdam",
+          "segment_count": 6,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.G.C. (René) Segers-Hoogendoorn CDA",
+          "segment_count": 8,
+          "parties": [
+            "CDA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "E. (Eveline) Padberg-de Haan  Burgercommissielid",
+          "segment_count": 19,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "R.A.C.J. (Robert) Simons College",
+          "segment_count": 49,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "Adviseur Adviseur",
+          "segment_count": 7,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "T. (Tim) Kind Volt",
+          "segment_count": 7,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "L.S. (Larissa) Vlieger",
+          "segment_count": 64,
+          "parties": [
+            "Commissievoorzitter"
+          ],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "T.J. (Tjalling) Vonk ChristenUnie",
+          "segment_count": 13,
+          "parties": [
+            "ChristenUnie"
+          ],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "J.M.D. (Joey) de Waard",
+          "segment_count": 2,
+          "parties": [
+            "Commissievoorzitter"
+          ],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 87,
+      "empty_chunks": 0,
+      "buckets": {
+        "short (50-200)": 2,
+        "medium (200-2000)": 27,
+        "long (2000-5000)": 58
+      },
+      "min_chars": 108,
+      "max_chars": 2752,
+      "avg_chars": 1980.4,
+      "median_chars": 2221,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 87,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 5,
+      "documents_with_chunks": 5,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Initiatiefnota Kind (VOLT) over Noch een Wijkhub, Noch een Loket en afdoening moties over wijkhubs",
+          "chunks": 20
+        },
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Rondvraag en sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Vaststellen van de agenda",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Voortgang Wijk aan Zet en raadsvoorstel bijstelling wijkraden Heijplaat en Kralingseveer",
+          "chunks": 64
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 87,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 87,
+      "distribution": {
+        "quote": {
+          "count": 85,
+          "rate": 0.977
+        },
+        "full_text": {
+          "count": 2,
+          "rate": 0.023
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "PENDING — warnings present, manual review recommended",
+    "issues": [],
+    "warnings": [
+      "Low speaker attribution: 79% (target 80%)"
+    ],
+    "scores": {
+      "speaker_attribution_rate": 0.7934,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.938
+    }
+  }
+}

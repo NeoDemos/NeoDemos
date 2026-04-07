@@ -1,0 +1,404 @@
+{
+  "meeting_id": "f974f220-d782-4be8-8bb0-b76891929288",
+  "audit_timestamp": "2026-04-07T21:47:53.651918",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "judge_backend": "gemini",
+    "anthropic_model": "claude-haiku-4-5-20251001",
+    "gemini_model": "gemini-2.5-flash-lite"
+  },
+  "meeting_info": {
+    "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+    "start_date": "2025-09-17 00:00:00",
+    "committee": "MHEK",
+    "quality_score": 0.951,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 116,
+    "document_count": 11
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 589,
+      "correct_count": 589,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8377,
+      "party_attribution_rate": 0.2435,
+      "total_segments": 308,
+      "attributed_segments": 258,
+      "unattributed_segments": 50
+    },
+    "speaker_diversity": {
+      "unique_speakers": 13,
+      "unique_parties": 7,
+      "top_speaker": "Plaatsvervangende commissievoorzitter",
+      "top_speaker_segment_count": 125,
+      "monologue_rate": 0.4058,
+      "speakers": {
+        "Plaatsvervangende commissievoorzitter": 125,
+        "C.M. (Chantal) Zeegers": 26,
+        "P.F. (Pelle) Meurink Burgercommissielid": 22,
+        "M.S. (Marike) Abrahamse": 17,
+        "B.T.A. (Bernhard) van Meeteren Burgercommissielid CDA": 14,
+        "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie": 12,
+        "J.G. (Just) Hovens Greve Burgercommissielid": 11,
+        "I. (Ingrid) van Wifferen": 8,
+        "S.M. (Sebastiaan) Bonte": 6,
+        "Inspreker": 6
+      },
+      "parties": {
+        "D66": 30,
+        "VVD": 17,
+        "SP": 11,
+        "Leefbaar Rotterdam": 6,
+        "Volt": 6,
+        "50PLUS": 3,
+        "Forum voor Democratie": 2
+      }
+    },
+    "segment_quality": {
+      "total_segments": 308,
+      "nonempty_segments": 308,
+      "total_words": 32034,
+      "total_chars": 177244,
+      "avg_words_per_segment": 104.0,
+      "avg_chars_per_segment": 575.5,
+      "short_segment_rate": 0.2532,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 20,
+      "items_with_content": 11,
+      "coverage_rate": 0.55,
+      "items": [
+        {
+          "title": "Procedurevergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 0
+        },
+        {
+          "title": "Besluitenlijst openbare procedurevergadering van 3 september 2025",
+          "segment_count": 1
+        },
+        {
+          "title": "Ingekomen stukken",
+          "segment_count": 0
+        },
+        {
+          "title": "Algemeen",
+          "segment_count": 0
+        },
+        {
+          "title": "Haven",
+          "segment_count": 3
+        },
+        {
+          "title": "Economie",
+          "segment_count": 10
+        },
+        {
+          "title": "Mobiliteit",
+          "segment_count": 0
+        },
+        {
+          "title": "Lijst van openstaande toezeggingen, schriftelijke vragen en moties",
+          "segment_count": 5
+        },
+        {
+          "title": "Commissieplanning en lange termijn agenda raad",
+          "segment_count": 1
+        },
+        {
+          "title": "Regeling van werkzaamheden",
+          "segment_count": 0
+        },
+        {
+          "title": "Sluiting",
+          "segment_count": 0
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 1
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 14
+        },
+        {
+          "title": "Adviezenlijst openbare overlegvergadering van 3 september 2025",
+          "segment_count": 0
+        },
+        {
+          "title": "Adviescommissies Metropoolregio Rotterdam Den Haag",
+          "segment_count": 0
+        },
+        {
+          "title": "Ontwerp-Actieplan Geluid 2025-2029",
+          "segment_count": 6
+        },
+        {
+          "title": "Betrekken bij Ontwerp-Actieplan Geluid 2025-2029",
+          "segment_count": 151
+        },
+        {
+          "title": "Initiatiefnotitie D66 \"Versnel verduurzaming kleine VvE's\"",
+          "segment_count": 113
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 3
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+        "start_date": "2025-09-17 00:00:00",
+        "committee": "MHEK",
+        "review_status": "auto_approved",
+        "quality_score": 0.951,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+        "start_date": "2025-09-17 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 13,
+      "recognized_speakers": 12,
+      "unrecognized_speakers": 1,
+      "recognition_rate": 0.9231,
+      "recognized": [
+        {
+          "name": "Plaatsvervangende commissievoorzitter",
+          "segment_count": 125,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.S. (Marike) Abrahamse",
+          "segment_count": 17,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "P.F. (Pelle) Meurink Burgercommissielid",
+          "segment_count": 22,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "I. (Ingrid) van Wifferen",
+          "segment_count": 8,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie",
+          "segment_count": 12,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "B.T.A. (Bernhard) van Meeteren Burgercommissielid CDA",
+          "segment_count": 14,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "H. (Jet) Valk Burgercommissielid",
+          "segment_count": 3,
+          "parties": [
+            "50PLUS"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "J.G. (Just) Hovens Greve Burgercommissielid",
+          "segment_count": 11,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S.M. (Sebastiaan) Bonte",
+          "segment_count": 6,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "C.M. (Chantal) Zeegers",
+          "segment_count": 26,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "Inspreker",
+          "segment_count": 6,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "D. (Donatella) Schalm-Civile Burgercommissielid",
+          "segment_count": 6,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "A.R. (Ardi) Oostdijk",
+          "segment_count": 2,
+          "parties": [
+            "Forum voor Democratie"
+          ],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 116,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 56,
+        "long (2000-5000)": 56,
+        "short (50-200)": 4
+      },
+      "min_chars": 102,
+      "max_chars": 2739,
+      "avg_chars": 1652.9,
+      "median_chars": 1955,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 116,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 11,
+      "documents_with_chunks": 11,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Besluitenlijst openbare procedurevergadering van 3 september 2025",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Betrekken bij Ontwerp-Actieplan Geluid 2025-2029",
+          "chunks": 44
+        },
+        {
+          "name": "Transcript: Commissieplanning en lange termijn agenda raad",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Economie",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Haven",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Initiatiefnotitie D66 \"Versnel verduurzaming kleine VvE's\"",
+          "chunks": 54
+        },
+        {
+          "name": "Transcript: Lijst van openstaande toezeggingen, schriftelijke vragen en moties",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Ontwerp-Actieplan Geluid 2025-2029",
+          "chunks": 7
+        },
+        {
+          "name": "Transcript: Overlegvergadering",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Rondvraag en sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Vaststellen van de agenda",
+          "chunks": 3
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 116,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 116,
+      "distribution": {
+        "quote": {
+          "count": 112,
+          "rate": 0.9655
+        },
+        "full_text": {
+          "count": 4,
+          "rate": 0.0345
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8377,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.951
+    }
+  }
+}

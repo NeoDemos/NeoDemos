@@ -1,0 +1,350 @@
+{
+  "meeting_id": "17185bed-32ae-4f02-abe9-7b515cac7077",
+  "audit_timestamp": "2026-04-07T21:22:46.348158",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+    "start_date": "2025-09-24 00:00:00",
+    "committee": "MHEK",
+    "quality_score": 0.94,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 121,
+    "document_count": 3
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 715,
+      "correct_count": 715,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.799,
+      "party_attribution_rate": 0.3251,
+      "total_segments": 403,
+      "attributed_segments": 322,
+      "unattributed_segments": 81
+    },
+    "speaker_diversity": {
+      "unique_speakers": 17,
+      "unique_parties": 10,
+      "top_speaker": "Plaatsvervangende commissievoorzitter",
+      "top_speaker_segment_count": 120,
+      "monologue_rate": 0.2978,
+      "speakers": {
+        "Plaatsvervangende commissievoorzitter": 120,
+        "R.A.C.J. (Robert) Simons": 40,
+        "M.Y. (Mina) Morkoç": 31,
+        "M.S. (Marike) Abrahamse": 26,
+        "S.M. (Sebastiaan) Bonte": 20,
+        "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie": 13,
+        "P.F. (Pelle) Meurink Burgercommissielid": 12,
+        "D. (Donatella) Schalm-Civile Burgercommissielid": 12,
+        "Inspreker": 11,
+        "R.P. (Ryan) Vos Burgercommissielid": 10
+      },
+      "parties": {
+        "GroenLinks": 31,
+        "VVD": 26,
+        "Leefbaar Rotterdam": 20,
+        "D66": 12,
+        "Volt": 12,
+        "PvdA": 10,
+        "50PLUS": 8,
+        "DENK": 6,
+        "SP": 5,
+        "Partij voor de Dieren": 1
+      }
+    },
+    "segment_quality": {
+      "total_segments": 403,
+      "nonempty_segments": 403,
+      "total_words": 39333,
+      "total_chars": 218784,
+      "avg_words_per_segment": 97.6,
+      "avg_chars_per_segment": 542.9,
+      "short_segment_rate": 0.1787,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 6,
+      "items_with_content": 3,
+      "coverage_rate": 0.5,
+      "items": [
+        {
+          "title": "Technische sessie concept-ontwerp Economische visie en de concept-ontwerp Mobiliteitsvisie MRDH",
+          "segment_count": 72
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 0
+        },
+        {
+          "title": "Adviescommissies Metropoolregio Rotterdam Den Haag",
+          "segment_count": 0
+        },
+        {
+          "title": "Ondernemingsstrategie Havenbedrijf",
+          "segment_count": 171
+        },
+        {
+          "title": "Betrekken bij Ondernemingsstrategie Havenbedrijf",
+          "segment_count": 160
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+        "start_date": "2025-09-24 00:00:00",
+        "committee": "MHEK",
+        "review_status": "auto_approved",
+        "quality_score": 0.94,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+        "start_date": "2025-09-24 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 17,
+      "recognized_speakers": 17,
+      "unrecognized_speakers": 0,
+      "recognition_rate": 1.0,
+      "recognized": [
+        {
+          "name": "Inspreker",
+          "segment_count": 11,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Plaatsvervangende commissievoorzitter",
+          "segment_count": 120,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "H. (Jet) Valk Burgercommissielid",
+          "segment_count": 3,
+          "parties": [
+            "50PLUS"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "P.F. (Pelle) Meurink Burgercommissielid",
+          "segment_count": 12,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "D. (Donatella) Schalm-Civile Burgercommissielid",
+          "segment_count": 12,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie",
+          "segment_count": 13,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "R.T.J. (Ruud) van der Velden",
+          "segment_count": 1,
+          "parties": [
+            "Partij voor de Dieren"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "P.J.H.D. (Ellen) Verkoelen",
+          "segment_count": 5,
+          "parties": [
+            "50PLUS"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.P. (Ryan) Vos Burgercommissielid",
+          "segment_count": 10,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S.M. (Sebastiaan) Bonte",
+          "segment_count": 20,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "J.G. (Just) Hovens Greve Burgercommissielid",
+          "segment_count": 5,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.S. (Marike) Abrahamse",
+          "segment_count": 26,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.Y. (Mina) Morkoç",
+          "segment_count": 31,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "B.T.A. (Bernhard) van Meeteren Burgercommissielid CDA",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "E. (Elika) Rehim Zadeh",
+          "segment_count": 6,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.A.C.J. (Robert) Simons",
+          "segment_count": 40,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "Adviseur",
+          "segment_count": 2,
+          "parties": [],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": []
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 121,
+      "empty_chunks": 0,
+      "buckets": {
+        "long (2000-5000)": 68,
+        "medium (200-2000)": 51,
+        "short (50-200)": 2
+      },
+      "min_chars": 74,
+      "max_chars": 2772,
+      "avg_chars": 1909.4,
+      "median_chars": 2193,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 121,
+      "boilerplate_count": 1,
+      "boilerplate_rate": 0.0083,
+      "boilerplate_examples": [
+        {
+          "id": 10683,
+          "title": "Closing of the Meeting",
+          "preview": "[Unknown]: oktober. Ik sluit hierbij de vergadering. Welterusten allemaal."
+        }
+      ]
+    },
+    "agenda_coverage": {
+      "total_documents": 3,
+      "documents_with_chunks": 3,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Betrekken bij Ondernemingsstrategie Havenbedrijf",
+          "chunks": 52
+        },
+        {
+          "name": "Transcript: Ondernemingsstrategie Havenbedrijf",
+          "chunks": 53
+        },
+        {
+          "name": "Transcript: Technische sessie concept-ontwerp Economische visie en de concept-ontwerp Mobiliteitsvisie MRDH",
+          "chunks": 16
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 121,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 121,
+      "distribution": {
+        "quote": {
+          "count": 121,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "PENDING — warnings present, manual review recommended",
+    "issues": [],
+    "warnings": [
+      "Low speaker attribution: 80% (target 80%)"
+    ],
+    "scores": {
+      "speaker_attribution_rate": 0.799,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.94
+    }
+  }
+}

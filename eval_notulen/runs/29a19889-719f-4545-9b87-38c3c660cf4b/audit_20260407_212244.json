@@ -1,0 +1,243 @@
+{
+  "meeting_id": "29a19889-719f-4545-9b87-38c3c660cf4b",
+  "audit_timestamp": "2026-04-07T21:22:44.533617",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+    "start_date": "2025-12-02 00:00:00",
+    "committee": "ZOCS",
+    "quality_score": 0.86,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 21,
+    "document_count": 1
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 152,
+      "correct_count": 152,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8673,
+      "party_attribution_rate": 0.2212,
+      "total_segments": 113,
+      "attributed_segments": 98,
+      "unattributed_segments": 15
+    },
+    "speaker_diversity": {
+      "unique_speakers": 8,
+      "unique_parties": 6,
+      "top_speaker": "T.S.J. (Theo) Coşkun Commissievoorzitter",
+      "top_speaker_segment_count": 47,
+      "monologue_rate": 0.4159,
+      "speakers": {
+        "T.S.J. (Theo) Coşkun Commissievoorzitter": 47,
+        "Inspreker": 26,
+        "J.M. (Joan) Nunnely": 9,
+        "L.S. (Larissa) Vlieger": 6,
+        "R.P. (Ryan) Vos Burgercommissielid": 3,
+        "D.J. (Diederik) van Dommelen": 3,
+        "G.F.E. (Geert) Koster": 2,
+        "A.N.M. (Nico) van Scheijndel Burgercommissielid": 2
+      },
+      "parties": {
+        "D66": 9,
+        "GroenLinks": 6,
+        "PvdA": 3,
+        "VVD": 3,
+        "Leefbaar Rotterdam": 2,
+        "50PLUS": 2
+      }
+    },
+    "segment_quality": {
+      "total_segments": 113,
+      "nonempty_segments": 113,
+      "total_words": 8019,
+      "total_chars": 45454,
+      "avg_words_per_segment": 71.0,
+      "avg_chars_per_segment": 402.2,
+      "short_segment_rate": 0.1858,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 1,
+      "items_with_content": 1,
+      "coverage_rate": 1.0,
+      "items": [
+        {
+          "title": "Inspreekmoment Culturele Sector - Nieuwe Adviesmodel",
+          "segment_count": 113
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+        "start_date": "2025-12-02 00:00:00",
+        "committee": "ZOCS",
+        "review_status": "auto_approved",
+        "quality_score": 0.86,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+        "start_date": "2025-12-02 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 8,
+      "recognized_speakers": 8,
+      "unrecognized_speakers": 0,
+      "recognition_rate": 1.0,
+      "recognized": [
+        {
+          "name": "T.S.J. (Theo) Coşkun Commissievoorzitter",
+          "segment_count": 47,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "Inspreker",
+          "segment_count": 26,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "G.F.E. (Geert) Koster",
+          "segment_count": 2,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J.M. (Joan) Nunnely",
+          "segment_count": 9,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.P. (Ryan) Vos Burgercommissielid",
+          "segment_count": 3,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "D.J. (Diederik) van Dommelen",
+          "segment_count": 3,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "L.S. (Larissa) Vlieger",
+          "segment_count": 6,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "A.N.M. (Nico) van Scheijndel Burgercommissielid",
+          "segment_count": 2,
+          "parties": [
+            "50PLUS"
+          ],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": []
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 21,
+      "empty_chunks": 0,
+      "buckets": {
+        "long (2000-5000)": 18,
+        "medium (200-2000)": 3
+      },
+      "min_chars": 1083,
+      "max_chars": 2746,
+      "avg_chars": 2277.8,
+      "median_chars": 2309,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 21,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 1,
+      "documents_with_chunks": 1,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Inspreekmoment Culturele Sector - Nieuwe Adviesmodel",
+          "chunks": 21
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 21,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 21,
+      "distribution": {
+        "quote": {
+          "count": 21,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8673,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.86
+    }
+  }
+}

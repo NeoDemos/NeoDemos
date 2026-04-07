@@ -1,0 +1,232 @@
+{
+  "meeting_id": "c035d5a7-85b5-4739-8253-20330a52ca61",
+  "audit_timestamp": "2026-04-07T21:10:27.410148",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+    "start_date": "2025-11-12 00:00:00",
+    "committee": "BWB",
+    "quality_score": 0.818,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 32,
+    "document_count": 1
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 173,
+      "correct_count": 173,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.7273,
+      "party_attribution_rate": 0.1818,
+      "total_segments": 66,
+      "attributed_segments": 48,
+      "unattributed_segments": 18
+    },
+    "speaker_diversity": {
+      "unique_speakers": 6,
+      "unique_parties": 4,
+      "top_speaker": "Adviseur",
+      "top_speaker_segment_count": 20,
+      "monologue_rate": 0.303,
+      "speakers": {
+        "Adviseur": 20,
+        "Plaatsvervangend commissievoorzitter": 16,
+        "R.T.J. (Ruud) van der Velden": 5,
+        "D.J. (Diederik) van Dommelen": 5,
+        "T. (Tim) de Haan": 1,
+        "M. (Marcel) Verhoef": 1
+      },
+      "parties": {
+        "Partij voor de Dieren": 5,
+        "VVD": 5,
+        "D66": 1,
+        "Leefbaar Rotterdam": 1
+      }
+    },
+    "segment_quality": {
+      "total_segments": 66,
+      "nonempty_segments": 66,
+      "total_words": 12998,
+      "total_chars": 70803,
+      "avg_words_per_segment": 196.9,
+      "avg_chars_per_segment": 1072.8,
+      "short_segment_rate": 0.197,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 1,
+      "items_with_content": 1,
+      "coverage_rate": 1.0,
+      "items": [
+        {
+          "title": "Technische sessie Boijmans van Beuningen",
+          "segment_count": 66
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-11-12 00:00:00",
+        "committee": "BWB",
+        "review_status": "auto_approved",
+        "quality_score": 0.818,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-11-12 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 6,
+      "recognized_speakers": 6,
+      "unrecognized_speakers": 0,
+      "recognition_rate": 1.0,
+      "recognized": [
+        {
+          "name": "Plaatsvervangend commissievoorzitter",
+          "segment_count": 16,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Adviseur",
+          "segment_count": 20,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "R.T.J. (Ruud) van der Velden",
+          "segment_count": 5,
+          "parties": [
+            "Partij voor de Dieren"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D.J. (Diederik) van Dommelen",
+          "segment_count": 5,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T. (Tim) de Haan",
+          "segment_count": 1,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M. (Marcel) Verhoef",
+          "segment_count": 1,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        }
+      ],
+      "unrecognized": []
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 32,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 11,
+        "short (50-200)": 2,
+        "long (2000-5000)": 19
+      },
+      "min_chars": 70,
+      "max_chars": 2766,
+      "avg_chars": 1896.3,
+      "median_chars": 2366,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 32,
+      "boilerplate_count": 1,
+      "boilerplate_rate": 0.0312,
+      "boilerplate_examples": [
+        {
+          "id": 12985,
+          "title": "Museum Renovation Details (Part 3)",
+          "preview": "[Adviseur]: Ja dus. De de goederenlift die nu in Boton zit, die blijft"
+        }
+      ]
+    },
+    "agenda_coverage": {
+      "total_documents": 1,
+      "documents_with_chunks": 1,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Technische sessie Boijmans van Beuningen",
+          "chunks": 32
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 32,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 32,
+      "distribution": {
+        "quote": {
+          "count": 32,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "PENDING — warnings present, manual review recommended",
+    "issues": [],
+    "warnings": [
+      "Low speaker attribution: 73% (target 80%)"
+    ],
+    "scores": {
+      "speaker_attribution_rate": 0.7273,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.818
+    }
+  }
+}

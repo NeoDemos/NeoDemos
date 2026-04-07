@@ -1,0 +1,393 @@
+[
+  {
+    "question_id": "hal-abs-01",
+    "question_text": "Wanneer heeft de gemeenteraad het verbod op fossiele reclame in de stad besproken?",
+    "category": "hallucination_absence",
+    "answer": "De gemeenteraad van Rotterdam heeft het verbod op fossiele reclame in de stad besproken op **25 januari 2024**. Dit wordt vermeld in Bron 1.",
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 0.9,
+        "unique_documents": 9,
+        "total_chunks": 10,
+        "entropy": 3.122
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.7,
+        "keyword_only_pct": 0.3,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 7,
+        "keyword_only": 3,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 14.44,
+        "promotions_5plus": 23,
+        "demotions_5plus": 18,
+        "candidates_scored": 50
+      },
+      "rrf": {
+        "unique_from_fusion": 2,
+        "unique_pct": 0.2,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 3
+      },
+      "timings": {
+        "embedding_ms": 406.79116699902806,
+        "vector_ms": 78.26016600120056,
+        "keyword_ms": 738.0839580000611,
+        "rrf_ms": 0.13774999933957588,
+        "reranker_ms": 519.3329579997226,
+        "total_ms": 1742.8168749993347
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 5,
+        "reasoning": "Het antwoord beantwoordt de vraag volledig en direct door de exacte datum (25 januari 2024) te noemen waarop de gemeenteraad het verbod op fossiele reclame heeft besproken. Het antwoord is beknopt, relevant en verwijst naar de bron."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Het antwoord is volledig gebaseerd op de context. De datum '25 januari 2024' wordt letterlijk vermeld in Bron 1, waar staat: 'De gemeenteraad van Rotterdam, bijeen op 25 januari 2024 ter bespreking van agendapunt 7.2 De voortgang van het Klimaatactieplan Rotterdam' en vervolgens wordt fossiele reclame besproken in de motie. Het antwoord bevat geen informatie die niet in de context voorkomt."
+      },
+      "factual_correctness": {
+        "score": 0,
+        "reasoning": "Het antwoord is volledig feitelijk onjuist. Volgens het referentie-antwoord is er geen bewijs in de beschikbare raadsdocumenten dat een verbod op fossiele reclame ooit is besproken in de Rotterdamse gemeenteraad. Het antwoord beweert echter dat dit wel is gebeurd op 25 januari 2024 en verwijst naar een bron, terwijl dit onderwerp blijkbaar helemaal niet aan bod is gekomen."
+      }
+    },
+    "hallucination_metrics": {
+      "claim_verification": {
+        "claims": [
+          {
+            "claim": "De gemeenteraad van Rotterdam heeft het verbod op fossiele reclame in de stad besproken op 25 januari 2024",
+            "verdict": "supported",
+            "evidence": "De gemeenteraad van Rotterdam, bijeen op 25 januari 2024 ter bespreking van agendapunt 7.2 De voortgang van het Klimaatactieplan Rotterdam",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Dit wordt vermeld in Bron 1",
+            "verdict": "supported",
+            "evidence": "Bron 1 bevat inderdaad de motie 'Fossiele reclame uit de stad' met de datum 25 januari 2024",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          }
+        ],
+        "total_claims": 2,
+        "supported": 2,
+        "unsupported": 0,
+        "contradicted": 0,
+        "hallucination_rate": 0.0,
+        "most_dangerous_claim": null,
+        "reasoning": "Beide beweringen in het antwoord zijn correct ondersteund door de context. Bron 1 toont duidelijk dat op 25 januari 2024 een motie over fossiele reclame is besproken tijdens agendapunt 7.2 over het Klimaatactieplan Rotterdam. Het antwoord is accuraat en volledig gebaseerd op de aangeleverde bronnen."
+      },
+      "source_attribution": {
+        "score": 5,
+        "reasoning": "Het antwoord bevat een correcte bronverwijzing naar Bron 1, waarin expliciet staat dat de gemeenteraad op 25 januari 2024 bijeen was ter bespreking van agendapunt 7.2 over het Klimaatactieplan Rotterdam, waarbij de motie 'Fossiele reclame uit de stad' werd behandeld. De datum en het onderwerp worden correct gekoppeld aan de juiste bron. Er worden geen verkeerde toeschrijvingen gedaan aan partijen of personen."
+      },
+      "db_verification": {
+        "total_claims": 2,
+        "db_confirmed": 0,
+        "db_denied": 2,
+        "db_unknown": 0,
+        "db_confirmation_rate": 0.0,
+        "db_denial_rate": 1.0
+      }
+    },
+    "chunks_retrieved": 10,
+    "total_ms": 1742.8168749993347
+  },
+  {
+    "question_id": "hal-abs-02",
+    "question_text": "Hoe verliep de discussie over de invoering van een stadstol in Rotterdam?",
+    "category": "hallucination_absence",
+    "answer": "Op 24 november 2016 heeft de gemeenteraad van Rotterdam besloten om het gesprek met de stad medio januari 2017 te starten over onder andere de invoering van een stadstol en om \"Het LVerhaal van de Stad\" uiterlijk in mei 2017 te presenteren en aan de stad aan te bieden. (Bron 1)\n\nUit bron 2 blijkt dat in 2003 een discussie plaatsvond naar aanleiding van een interview met wethouder Pastors in het Rotterdams Dagblad. Dit interview ging over kansarme allochtonen en de uitspraken van de wethouder hierover. De discussie spitste zich toe op de bevolkingssamenstelling van Rotterdam en of de afkomst van mensen als criterium kon dienen voor toegang tot de stad of voor de toewijzing van woningen. Verschillende fracties hadden hierover uiteenlopende standpunten. De PvdA wilde de problemen benoemen en pleitte voor oplossingen, terwijl Leefbaar Rotterdam meer de nadruk legde op de aantallen en de gevolgen daarvan. Verschillende fracties pleitten voor spreiding, maar er was discussie over de vraag of dit spreiding of segregatie betekende. Er werden diverse moties ingediend, onder andere over het onderzoek naar de meningen van Rotterdammers over spreiding en quota. Wethouder Pastors gaf aan dat het college het probleem van de bevolkingssamenstelling serieus nam en er iets aan wilde doen, maar benadrukte dat er geen sprake zou zijn van het maken van onderscheid op grond van etniciteit, omdat dit discriminatie is en tegen de Grondwet indruist.\n\nBron 10 toont aan dat de woningcorporaties in Rotterdam al langer de waarde van wijken bijhouden met behulp van indicatoren. Tussen 2008 en 2012 is Rotterdam als geheel op het gebied van inkomen, veiligheid en WOZ verbeterd, terwijl Zuid op die punten achteruitgang of stilstand liet zien. De bewonerstevredenheid op Zuid scoorde significant lager dan in de rest van de stad. De \"Leefbaarometer\" gaf een objectieve weergave van de leefbaarheid, waarbij in de focuswijken, en ook in naoorlogse wijken aan de zuidelijke rand van Rotterdam, gebieden on",
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 1.0,
+        "unique_documents": 10,
+        "total_chunks": 10,
+        "entropy": 3.322
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 255.32816700069816,
+        "vector_ms": 39.15437499927066,
+        "keyword_ms": 897.5254580000183,
+        "rrf_ms": 0.08916700062400196,
+        "reranker_ms": 1147.9578749986104,
+        "total_ms": 2340.2361659991584
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 1,
+        "reasoning": "Het antwoord gaat bijna volledig langs de vraag heen. De vraag gaat over een stadstol (tolheffing voor autoverkeer), maar het antwoord behandelt hoofdzakelijk discussies over bevolkingssamenstelling, de Rotterdamwet, en leefbaarheid van wijken. Alleen de eerste alinea raakt het onderwerp stadstol aan, maar geeft geen inhoudelijke informatie over de discussie zelf. Het antwoord erkent aan het eind dat er geen directe informatie over stadstol wordt gevonden, wat aangeeft dat de vraag niet beantwoord kan worden met de beschikbare bronnen."
+      },
+      "faithfulness": {
+        "score": 4,
+        "reasoning": "Het antwoord is grotendeels gebaseerd op de context. De informatie over het raadsbesluit van 24 november 2016, de discussie over wethouder Pastors' interview in 2003, de wijkwaarden en bewonerstevredenheid, en de Rotterdamwet zijn allemaal direct terug te vinden in de bronnen. Echter, de laatste zin waarin wordt gesteld dat er geen directe informatie wordt gevonden over de uiteindelijke invoering van een stadstol is niet helemaal accuraat - bron 1 vermeldt wel dat er een besluit was om het gesprek over onder andere de invoering van een stadstol te starten. Dit is een minor detail dat de score iets verlaagt."
+      },
+      "factual_correctness": {
+        "score": 1,
+        "reasoning": "Het antwoord bevat een fundamentele feitelijke fout door te beweren dat de gemeenteraad op 24 november 2016 heeft besloten om een gesprek te starten over de invoering van een stadstol. Het referentie-antwoord stelt duidelijk dat er geen bewijs is dat een stadstol formeel is besproken in de Rotterdamse gemeenteraad. De rest van het antwoord gaat over totaal andere onderwerpen (bevolkingssamenstelling, Rotterdamwet, leefbaarheid) die niet gerelateerd zijn aan een stadstol. Alleen de laatste zin erkent correct dat er geen informatie over stadstol wordt gevonden, maar dit weegt niet op tegen de eerdere foutieve bewering."
+      }
+    },
+    "hallucination_metrics": {
+      "claim_verification": {
+        "claims": [
+          {
+            "claim": "Op 24 november 2016 heeft de gemeenteraad van Rotterdam besloten om het gesprek met de stad medio januari 2017 te starten over onder andere de invoering van een stadstol",
+            "verdict": "contradicted",
+            "evidence": "Bron 1 spreekt over 'Het gesprek met de stad medio januari 2017 te starten' maar gaat over 'Het Verhaal van de Stad' en niet over een stadstol. De context gaat over planning en vaststelling van een besluit, niet specifiek over een stadstol.",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Het LVerhaal van de Stad zou uiterlijk in mei 2017 worden gepresenteerd en aan de stad worden aangeboden",
+            "verdict": "supported",
+            "evidence": "Bron 1: 'Het lVerhaal van de Stad' uiterlijk in mei 2017 te presenteren en aan de stad aan te bieden.",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "In 2003 vond een discussie plaats naar aanleiding van een interview met wethouder Pastors in het Rotterdams Dagblad",
+            "verdict": "supported",
+            "evidence": "Bron 2: 'Interpellatie van de heer H.P.L. Cremers naar aanleiding van een interview met wethouder M.G.T. Pastors in het Rotterdams Dagblad van 5 september 2003'",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Het interview ging over kansarme allochtonen",
+            "verdict": "supported",
+            "evidence": "Bron 2: 'interview met wethouder M.G.T. Pastors in het Rotterdams Dagblad van 5 september 2003 getiteld 'Rotterdam zit aan de grond' over kansarme allochtonen.'",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Tussen 2008 en 2012 is Rotterdam als geheel op het gebied van inkomen, veiligheid en WOZ verbeterd, terwijl Zuid op die punten achteruitgang of stilstand liet zien",
+            "verdict": "supported",
+            "evidence": "Bron 10: 'Te zien is dat tussen 2008 en 2012 Rotterdam er als geheel op inkomen, veiligheid en WOZ op vooruit is gegaan. Zuid daarentegen laat enige achteruitgang (veiligheid en inkomen) of stilstand (WOZ) zien.'",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "De bewonerstevredenheid op Zuid scoorde significant lager dan in de rest van de stad",
+            "verdict": "supported",
+            "evidence": "Bron 10: 'Zichtbaar is dat Rotterdam-Zuid significant lager scoort dan de rest van de stad.'",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "De SP-fractie was altijd tegen de Rotterdamwet omdat zij dit een symboolpolitiek maatregel vond",
+            "verdict": "supported",
+            "evidence": "Bron 6: 'De SP-fractie is altijd tegen de Rotterdamwet geweest. Wij vinden deze maatregel symboolpolitiek'",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "D66 stelde dat evaluaties lieten zien dat er geen verband was tussen het aantal bijstandsgerechtigden en het veiligheidsniveau",
+            "verdict": "supported",
+            "evidence": "Bron 6: 'Uit de evaluaties blijkt echter dat het aantal bijstandsgerechtigden in sommige wijken enigszins daalt, maar de veiligheidsindex en de sociale index niet verbeteren. Van een dergelijke correlatie of causaliteit is dus geen sprake.'",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Het CDA vond dat de bevolking van bepaalde wijken te eenzijdig was samengesteld",
+            "verdict": "supported",
+            "evidence": "Bron 6: 'Het CDA is van mening dat de bevolking van bepaalde wijken te eenzijdig is samengesteld en dit de sociale en economische situatie in deze wijken niet ten goede komt.'",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Er wordt geen directe informatie gevonden in de bronnen over de uiteindelijke invoering van een stadstol",
+            "verdict": "supported",
+            "evidence": "De bronnen bevatten inderdaad geen informatie over de daadwerkelijke invoering van een stadstol, alleen over planning en discussies over andere onderwerpen.",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          }
+        ],
+        "total_claims": 10,
+        "supported": 8,
+        "unsupported": 0,
+        "contradicted": 2,
+        "hallucination_rate": 0.2,
+        "most_dangerous_claim": "Op 24 november 2016 heeft de gemeenteraad van Rotterdam besloten om het gesprek met de stad medio januari 2017 te starten over onder andere de invoering van een stadstol",
+        "reasoning": "Het antwoord bevat voornamelijk accurate informatie uit de bronnen, maar maakt een cruciale fout door de vraag over een stadstol te koppelen aan Bron 1 die daar niet over gaat. Dit is misleidend omdat het suggereert dat er concrete besluiten over een stadstol zijn genomen terwijl de bronnen daar geen informatie over bevatten. De meeste andere beweringen zijn wel correct ondersteund door de context."
+      },
+      "source_attribution": {
+        "score": 4,
+        "reasoning": "Het antwoord bevat grotendeels correcte toeschrijvingen aan partijen en personen. De standpunten van PvdA, Leefbaar Rotterdam, D66, CDA en SP worden correct weergegeven op basis van de bronnen. De datums en gebeurtenissen worden juist gekoppeld (24 november 2016 voor het raadsbesluit, 2003 voor het interview met wethouder Pastors). Er is één minor fout: het antwoord suggereert dat er geen directe informatie over de uiteindelijke invoering van een stadstol wordt gevonden, terwijl de vraag specifiek ging over hoe de discussie verliep, niet over de uiteindelijke invoering. Het antwoord maakt wel goed onderscheid tussen wat in de bronnen staat en eigen conclusies."
+      },
+      "db_verification": {
+        "total_claims": 10,
+        "db_confirmed": 0,
+        "db_denied": 10,
+        "db_unknown": 0,
+        "db_confirmation_rate": 0.0,
+        "db_denial_rate": 1.0
+      }
+    },
+    "chunks_retrieved": 10,
+    "total_ms": 2340.2361659991584
+  },
+  {
+    "question_id": "hal-abs-03",
+    "question_text": "Welke gemeenteraadsleden hebben gepleit voor een basisinkomen experiment in Rotterdam?",
+    "category": "hallucination_absence",
+    "answer": "Op basis van de verstrekte bronnen zijn er geen gemeenteraadsleden geïdentificeerd die gepleit hebben voor een basisinkomen experiment in Rotterdam. De bronnen gaan over onderwerpen zoals geheimhouding van rapporten, wijkteams, onderwijs en regenwaterbuffers, maar niet over basisinkomen experimenten.",
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 0.9,
+        "unique_documents": 9,
+        "total_chunks": 10,
+        "entropy": 3.122
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.5,
+        "keyword_only_pct": 0.5,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 5,
+        "keyword_only": 5,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 0,
+        "unique_pct": 0.0,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 5
+      },
+      "timings": {
+        "embedding_ms": 320.4269999987446,
+        "vector_ms": 42.88566700051888,
+        "keyword_ms": 953.0053329999646,
+        "rrf_ms": 0.12083299952792004,
+        "reranker_ms": 1063.0103329986014,
+        "total_ms": 2379.6294160001707
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 5,
+        "reasoning": "Het antwoord beantwoordt de vraag volledig en direct door duidelijk te stellen dat er geen gemeenteraadsleden zijn geïdentificeerd die voor een basisinkomen experiment hebben gepleit. Het geeft ook een transparante uitleg dat de beschikbare bronnen andere onderwerpen behandelen, wat de conclusie ondersteunt. Het antwoord is beknopt en bevat geen onnodige informatie."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Het antwoord is volledig gebaseerd op de verstrekte context. Het stelt correct vast dat er geen gemeenteraadsleden geïdentificeerd kunnen worden die gepleit hebben voor een basisinkomen experiment, omdat de bronnen dit onderwerp niet behandelen. Het antwoord geeft eerlijk aan wat wel in de bronnen staat (geheimhouding, wijkteams, onderwijs, regenwaterbuffers) en erkent dat informatie over basisinkomen experimenten ontbreekt. Dit is precies het juiste gedrag voor een RAG-systeem."
+      },
+      "factual_correctness": {
+        "score": 5,
+        "reasoning": "Het antwoord komt volledig overeen met het referentie-antwoord. Beide stellen correct vast dat er geen bewijs is gevonden voor gemeenteraadsleden die hebben gepleit voor een basisinkomen experiment in Rotterdam. Het antwoord geeft ook een correcte toelichting dat de beschikbare bronnen over andere onderwerpen gaan."
+      }
+    },
+    "hallucination_metrics": {
+      "claim_verification": {
+        "claims": [
+          {
+            "claim": "Er zijn geen gemeenteraadsleden geïdentificeerd die gepleit hebben voor een basisinkomen experiment in Rotterdam",
+            "verdict": "supported",
+            "evidence": "De bronnen bevatten geen enkele verwijzing naar basisinkomen experimenten of gemeenteraadsleden die hiervoor gepleit hebben",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "De bronnen gaan over onderwerpen zoals geheimhouding van rapporten, wijkteams, onderwijs en regenwaterbuffers",
+            "verdict": "supported",
+            "evidence": "Bron 2 behandelt geheimhouding van rapporten, Bron 4 gaat over wijkteams voor jeugd en volwassenen, Bron 4 behandelt ook onderwijs (Ibn Ghaldoun), en Bron 6 en 8 gaan over regenwaterbuffers",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "De bronnen gaan niet over basisinkomen experimenten",
+            "verdict": "supported",
+            "evidence": "Geen van de 10 bronnen bevat enige verwijzing naar basisinkomen, basisinkomen experimenten, of gerelateerde termen",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          }
+        ],
+        "total_claims": 3,
+        "supported": 3,
+        "unsupported": 0,
+        "contradicted": 0,
+        "hallucination_rate": 0.0,
+        "most_dangerous_claim": null,
+        "reasoning": "Het antwoord is volledig accuraat. Het systeem heeft correct geconstateerd dat de bronnen geen informatie bevatten over basisinkomen experimenten of gemeenteraadsleden die hiervoor gepleit hebben. Alle beweringen zijn direct verifieerbaar aan de hand van de context. Er zijn geen hallucinaties of onjuiste toeschrijvingen."
+      },
+      "source_attribution": {
+        "score": 5,
+        "reasoning": "Het antwoord is volledig correct. Er worden geen uitspraken gedaan over basisinkomen experimenten omdat deze niet in de bronnen voorkomen. Het systeem maakt correct onderscheid tussen wat wel en niet in de bronnen staat, en geeft geen verkeerde toeschrijvingen. De conclusie dat er geen gemeenteraadsleden zijn geïdentificeerd die voor een basisinkomen experiment hebben gepleit is accuraat gebaseerd op de verstrekte context."
+      },
+      "db_verification": {
+        "total_claims": 3,
+        "db_confirmed": 0,
+        "db_denied": 3,
+        "db_unknown": 0,
+        "db_confirmation_rate": 0.0,
+        "db_denial_rate": 1.0
+      }
+    },
+    "chunks_retrieved": 10,
+    "total_ms": 2379.6294160001707
+  }
+]

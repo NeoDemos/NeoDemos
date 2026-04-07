@@ -1,0 +1,257 @@
+{
+  "meeting_id": "43914385-4edb-49ae-a7e1-b01a0c6e7fda",
+  "audit_timestamp": "2026-04-07T21:22:52.431984",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Vergadering Commissie tot Onderzoek van de Rekening (2018-2022) 20-11-2018",
+    "start_date": "2018-11-20 00:00:00",
+    "committee": "COR",
+    "quality_score": 0.998,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 38,
+    "document_count": 4
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 133,
+      "correct_count": 133,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.9917,
+      "party_attribution_rate": 0.0,
+      "total_segments": 121,
+      "attributed_segments": 120,
+      "unattributed_segments": 1
+    },
+    "speaker_diversity": {
+      "unique_speakers": 8,
+      "unique_parties": 0,
+      "top_speaker": "Gerritsma, A.E. (accountant PwC)",
+      "top_speaker_segment_count": 41,
+      "monologue_rate": 0.3388,
+      "speakers": {
+        "Gerritsma, A.E. (accountant PwC)": 41,
+        "Vreugdenhil, G.J.M. (voorzitter)": 31,
+        "Hoogvliet, A. (ambtelijke ondersteuning)": 12,
+        "Rozema, J.G. (lid Commissie Onderzoek Rekening)": 11,
+        "Roest, L.L.P.R. (GroenLinks)": 9,
+        "Tak, D.P.A. (PvdA)": 8,
+        "Treuren, S. van (accountant PwC)": 4,
+        "Lansink-Bastemeijer, P.J.P. (VVD)": 4
+      },
+      "parties": {}
+    },
+    "segment_quality": {
+      "total_segments": 121,
+      "nonempty_segments": 120,
+      "total_words": 11628,
+      "total_chars": 63430,
+      "avg_words_per_segment": 96.9,
+      "avg_chars_per_segment": 528.6,
+      "short_segment_rate": 0.1074,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 5,
+      "items_with_content": 4,
+      "coverage_rate": 0.8,
+      "items": [
+        {
+          "title": "1 Opening en mededelingen",
+          "segment_count": 2
+        },
+        {
+          "title": "2 Vaststelling agenda",
+          "segment_count": 2
+        },
+        {
+          "title": "3 1e Boardletter 2018 van PWC",
+          "segment_count": 116
+        },
+        {
+          "title": "4 Planning",
+          "segment_count": 0
+        },
+        {
+          "title": "5 Rondvraag en sluiting",
+          "segment_count": 1
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Vergadering Commissie tot Onderzoek van de Rekening (2018-2022) 20-11-2018",
+        "start_date": "2018-11-20 00:00:00",
+        "committee": "COR",
+        "review_status": "auto_approved",
+        "quality_score": 0.998,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Vergadering Commissie tot Onderzoek van de Rekening (2018-2022) 20-11-2018",
+        "start_date": "2018-11-20 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 8,
+      "recognized_speakers": 1,
+      "unrecognized_speakers": 7,
+      "recognition_rate": 0.125,
+      "recognized": [
+        {
+          "name": "Vreugdenhil, G.J.M. (voorzitter)",
+          "segment_count": 31,
+          "parties": [],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "Roest, L.L.P.R. (GroenLinks)",
+          "segment_count": 9,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Gerritsma, A.E. (accountant PwC)",
+          "segment_count": 41,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Tak, D.P.A. (PvdA)",
+          "segment_count": 8,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Hoogvliet, A. (ambtelijke ondersteuning)",
+          "segment_count": 12,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Rozema, J.G. (lid Commissie Onderzoek Rekening)",
+          "segment_count": 11,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Treuren, S. van (accountant PwC)",
+          "segment_count": 4,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Lansink-Bastemeijer, P.J.P. (VVD)",
+          "segment_count": 4,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 38,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 17,
+        "long (2000-5000)": 21
+      },
+      "min_chars": 236,
+      "max_chars": 2764,
+      "avg_chars": 1888.4,
+      "median_chars": 2163,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 38,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 4,
+      "documents_with_chunks": 4,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: 1 Opening en mededelingen",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 2 Vaststelling agenda",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 3 1e Boardletter 2018 van PWC",
+          "chunks": 35
+        },
+        {
+          "name": "Transcript: 5 Rondvraag en sluiting",
+          "chunks": 1
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 38,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 38,
+      "distribution": {
+        "quote": {
+          "count": 36,
+          "rate": 0.9474
+        },
+        "full_text": {
+          "count": 2,
+          "rate": 0.0526
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.9917,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.998
+    }
+  }
+}

@@ -1,0 +1,445 @@
+{
+  "meeting_id": "ffa8cd1a-2140-4ec0-960b-6ec0b106c4be",
+  "audit_timestamp": "2026-04-07T21:22:49.421944",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+    "start_date": "2025-04-16 00:00:00",
+    "committee": "BWB",
+    "quality_score": 0.95,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 179,
+    "document_count": 12
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 1153,
+      "correct_count": 1153,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8326,
+      "party_attribution_rate": 0.4085,
+      "total_segments": 639,
+      "attributed_segments": 532,
+      "unattributed_segments": 107
+    },
+    "speaker_diversity": {
+      "unique_speakers": 17,
+      "unique_parties": 10,
+      "top_speaker": "P.J.H.D. (Ellen) Verkoelen Commissievoorzitter",
+      "top_speaker_segment_count": 164,
+      "monologue_rate": 0.2567,
+      "speakers": {
+        "P.J.H.D. (Ellen) Verkoelen Commissievoorzitter": 164,
+        "D.J. (Diederik) van Dommelen": 59,
+        "C.M. (Chantal) Zeegers": 46,
+        "G.J. (Co) Engberts": 40,
+        "M. (Marcel) Verhoef": 40,
+        "A. (Astrid) Kockelkoren": 38,
+        "P.J.P. (Pascal) Lansink-Bastemeijer": 37,
+        "T. (Tim) de Haan": 25,
+        "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie": 23,
+        "R.G.C. (René) Segers-Hoogendoorn": 15
+      },
+      "parties": {
+        "VVD": 59,
+        "Leefbaar Rotterdam": 51,
+        "PvdA": 40,
+        "GroenLinks": 38,
+        "D66": 25,
+        "CDA": 15,
+        "Partij voor de Dieren": 15,
+        "DENK": 8,
+        "SP": 8,
+        "Volt": 2
+      }
+    },
+    "segment_quality": {
+      "total_segments": 639,
+      "nonempty_segments": 639,
+      "total_words": 60028,
+      "total_chars": 331267,
+      "avg_words_per_segment": 93.9,
+      "avg_chars_per_segment": 518.4,
+      "short_segment_rate": 0.2144,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 21,
+      "items_with_content": 11,
+      "coverage_rate": 0.5238,
+      "items": [
+        {
+          "title": "Procedurevergadering",
+          "segment_count": 2
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 2
+        },
+        {
+          "title": "Commissieplanning",
+          "segment_count": 28
+        },
+        {
+          "title": "Planning inspreeksessies, werkbezoeken en technische sessies",
+          "segment_count": 2
+        },
+        {
+          "title": "Lange termijn agenda BWB en lange termijn agenda raad",
+          "segment_count": 10
+        },
+        {
+          "title": "Regelingen van Werkzaamheden",
+          "segment_count": 0
+        },
+        {
+          "title": "Initiatiefnotities/voorstellen",
+          "segment_count": 0
+        },
+        {
+          "title": "Verkenningen",
+          "segment_count": 0
+        },
+        {
+          "title": "Besluitenlijst procedurevergadering commissie BWB",
+          "segment_count": 0
+        },
+        {
+          "title": "Subcommissie bestemmingsplannen",
+          "segment_count": 0
+        },
+        {
+          "title": "Verslag subcommissie bestemmingsplannen",
+          "segment_count": 0
+        },
+        {
+          "title": "Adviezen subcommissie bestemmingsplannen",
+          "segment_count": 0
+        },
+        {
+          "title": "Ingekomen stukken",
+          "segment_count": 24
+        },
+        {
+          "title": "Lijsten van openstaande toezeggingen, schriftelijke vragen en moties",
+          "segment_count": 10
+        },
+        {
+          "title": "Sluiting",
+          "segment_count": 0
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 7
+        },
+        {
+          "title": "Adviezenlijst openbare overlegvergadering",
+          "segment_count": 6
+        },
+        {
+          "title": "Verzameldebat Funderingskwestie en Bloemhof",
+          "segment_count": 494
+        },
+        {
+          "title": "Openen Grondexploitatie Schoterboshof",
+          "segment_count": 53
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 1
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-04-16 00:00:00",
+        "committee": "BWB",
+        "review_status": "auto_approved",
+        "quality_score": 0.95,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-04-16 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 17,
+      "recognized_speakers": 16,
+      "unrecognized_speakers": 1,
+      "recognition_rate": 0.9412,
+      "recognized": [
+        {
+          "name": "P.J.H.D. (Ellen) Verkoelen Commissievoorzitter",
+          "segment_count": 164,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Inspreker",
+          "segment_count": 1,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "A. (Astrid) Kockelkoren",
+          "segment_count": 38,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "G.J. (Co) Engberts",
+          "segment_count": 40,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M. (Marcel) Verhoef",
+          "segment_count": 40,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T. (Tim) de Haan",
+          "segment_count": 25,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D.J. (Diederik) van Dommelen",
+          "segment_count": 59,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.G.C. (René) Segers-Hoogendoorn",
+          "segment_count": 15,
+          "parties": [
+            "CDA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie",
+          "segment_count": 23,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "R.N. (Rashied) Dahoe",
+          "segment_count": 8,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "B. (Benvenido) van Schaik",
+          "segment_count": 2,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.T.J. (Ruud) van der Velden",
+          "segment_count": 15,
+          "parties": [
+            "Partij voor de Dieren"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "V.A. (Vanessa) Bruin",
+          "segment_count": 9,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "E. (Emin) Başoğlu Burgercommissielid",
+          "segment_count": 8,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "C.M. (Chantal) Zeegers",
+          "segment_count": 46,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "L.P.A. (Luuc) Dekkers",
+          "segment_count": 2,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "P.J.P. (Pascal) Lansink-Bastemeijer",
+          "segment_count": 37,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 179,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 70,
+        "long (2000-5000)": 106,
+        "short (50-200)": 3
+      },
+      "min_chars": 96,
+      "max_chars": 2762,
+      "avg_chars": 1969.3,
+      "median_chars": 2212,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 179,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 12,
+      "documents_with_chunks": 12,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Adviezenlijst openbare overlegvergadering",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: Commissieplanning",
+          "chunks": 6
+        },
+        {
+          "name": "Transcript: Ingekomen stukken",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Lange termijn agenda BWB en lange termijn agenda raad",
+          "chunks": 4
+        },
+        {
+          "name": "Transcript: Lijsten van openstaande toezeggingen, schriftelijke vragen en moties",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Openen Grondexploitatie Schoterboshof",
+          "chunks": 8
+        },
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Planning inspreeksessies, werkbezoeken en technische sessies",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: Procedurevergadering",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Rondvraag en sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Vaststellen van de agenda",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Verzameldebat Funderingskwestie en Bloemhof",
+          "chunks": 146
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 179,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 179,
+      "distribution": {
+        "quote": {
+          "count": 177,
+          "rate": 0.9888
+        },
+        "full_text": {
+          "count": 2,
+          "rate": 0.0112
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8326,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.95
+    }
+  }
+}

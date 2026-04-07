@@ -1,0 +1,356 @@
+{
+  "meeting_id": "453f9e2b-759c-46ae-85fe-a843af968fc5",
+  "audit_timestamp": "2026-04-07T21:10:32.713042",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+    "start_date": "2025-01-22 00:00:00",
+    "committee": "WIOS",
+    "quality_score": 0.951,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 112,
+    "document_count": 4
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 663,
+      "correct_count": 663,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8364,
+      "party_attribution_rate": 0.7221,
+      "total_segments": 385,
+      "attributed_segments": 322,
+      "unattributed_segments": 63
+    },
+    "speaker_diversity": {
+      "unique_speakers": 17,
+      "unique_parties": 11,
+      "top_speaker": "J.M.D. (Joey) de Waard",
+      "top_speaker_segment_count": 92,
+      "monologue_rate": 0.239,
+      "speakers": {
+        "J.M.D. (Joey) de Waard": 92,
+        "A.J.A. (Agnes) Maassen D66": 30,
+        "S. (Simon) Ceulemans Leefbaar Rotterdam": 30,
+        "F. (Faouzi) Achbar College": 29,
+        "L.S. (Larissa) Vlieger GroenLinks": 25,
+        "M.E. (Merel) Vogelaar PvdA": 22,
+        "S. (Sabrina) van de Peppel Partij voor de Dieren": 15,
+        "T.B. (Tim)  Versnel College": 15,
+        "S.D. (Safa) Sodirijo  Burgercommissielid": 14,
+        "T.J. (Tjalling) Vonk ChristenUnie": 13
+      },
+      "parties": {
+        "Commissievoorzitter": 92,
+        "GroenLinks": 34,
+        "Leefbaar Rotterdam": 32,
+        "PvdA": 31,
+        "D66": 30,
+        "Partij voor de Dieren": 15,
+        "DENK": 14,
+        "ChristenUnie": 13,
+        "VVD": 9,
+        "BIJ1": 6,
+        "SP": 2
+      }
+    },
+    "segment_quality": {
+      "total_segments": 385,
+      "nonempty_segments": 385,
+      "total_words": 34142,
+      "total_chars": 191775,
+      "avg_words_per_segment": 88.7,
+      "avg_chars_per_segment": 498.1,
+      "short_segment_rate": 0.2182,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 6,
+      "items_with_content": 4,
+      "coverage_rate": 0.6667,
+      "items": [
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 4
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 0
+        },
+        {
+          "title": "Advies subcommissie over Herbenoemingen Algemeen Bestuur BOOR",
+          "segment_count": 2
+        },
+        {
+          "title": "AOW- en Jeugdtegoed 2025",
+          "segment_count": 231
+        },
+        {
+          "title": "Controle op leefgeldregeling Oekraïners",
+          "segment_count": 148
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+        "start_date": "2025-01-22 00:00:00",
+        "committee": "WIOS",
+        "review_status": "auto_approved",
+        "quality_score": 0.951,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+        "start_date": "2025-01-22 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 17,
+      "recognized_speakers": 14,
+      "unrecognized_speakers": 3,
+      "recognition_rate": 0.8235,
+      "recognized": [
+        {
+          "name": "L.S. (Larissa) Vlieger GroenLinks",
+          "segment_count": 25,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.R. (Marchiano) van Campenhout BIJ1",
+          "segment_count": 6,
+          "parties": [
+            "BIJ1"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D.A. (Dieke) van Groningen VVD",
+          "segment_count": 1,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Sarah) Reitema PvdA",
+          "segment_count": 9,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "C. (Caroline) Aafjes-van Aalst Leefbaar Rotterdam",
+          "segment_count": 2,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "A.J.A. (Agnes) Maassen D66",
+          "segment_count": 30,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J. (Jordi) Vicario VVD",
+          "segment_count": 8,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S.L. (Sigrid) Oosterwegel  Burgercommissielid",
+          "segment_count": 9,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S.D. (Safa) Sodirijo  Burgercommissielid",
+          "segment_count": 14,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "F. (Faouzi) Achbar College",
+          "segment_count": 29,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "A.B. (Tom) Breedveld  Burgercommissielid",
+          "segment_count": 2,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S. (Simon) Ceulemans Leefbaar Rotterdam",
+          "segment_count": 30,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Sabrina) van de Peppel Partij voor de Dieren",
+          "segment_count": 15,
+          "parties": [
+            "Partij voor de Dieren"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.E. (Merel) Vogelaar PvdA",
+          "segment_count": 22,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "J.M.D. (Joey) de Waard",
+          "segment_count": 92,
+          "parties": [
+            "Commissievoorzitter"
+          ],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "T.J. (Tjalling) Vonk ChristenUnie",
+          "segment_count": 13,
+          "parties": [
+            "ChristenUnie"
+          ],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "T.B. (Tim)  Versnel College",
+          "segment_count": 15,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 112,
+      "empty_chunks": 0,
+      "buckets": {
+        "short (50-200)": 5,
+        "medium (200-2000)": 37,
+        "long (2000-5000)": 70
+      },
+      "min_chars": 102,
+      "max_chars": 2766,
+      "avg_chars": 1878.4,
+      "median_chars": 2183,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 112,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 4,
+      "documents_with_chunks": 4,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Advies subcommissie over Herbenoemingen Algemeen Bestuur BOOR",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: AOW- en Jeugdtegoed 2025",
+          "chunks": 63
+        },
+        {
+          "name": "Transcript: Controle op leefgeldregeling Oekraïners",
+          "chunks": 46
+        },
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 1
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 112,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 112,
+      "distribution": {
+        "quote": {
+          "count": 112,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8364,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.951
+    }
+  }
+}

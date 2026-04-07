@@ -13,21 +13,18 @@ Dutch language throughout.
 """
 
 import json
-import psycopg2
 import re
 from typing import Dict, List, Any, Optional
 from datetime import datetime
 from collections import defaultdict
 
+from services.db_pool import get_connection
+
 class PartyPositionProfileService:
     """Build comprehensive party position profile from programme + notulen"""
-    
+
     def __init__(self, party_name: str = "GroenLinks-PvdA"):
         self.party_name = party_name
-        self.conn = psycopg2.connect(
-            "postgresql://postgres:postgres@localhost:5432/neodemos"
-        )
-        self.cursor = self.conn.cursor()
         self.party_pattern = r"(groenlinks|pvda|partij van de arbeid)"
     
     def build_party_profile(self) -> Dict[str, Any]:
@@ -140,25 +137,27 @@ class PartyPositionProfileService:
     
     def _extract_notulen_positions(self) -> Dict[str, List[Dict[str, Any]]]:
         """Extract positions from notulen (council statements, motions, votes)"""
-        
+
         positions = defaultdict(list)
-        
+
         try:
             # Get all Rotterdam Gemeenteraad notulen with GL-PvdA content
-            self.cursor.execute("""
-                SELECT d.id, d.name, d.content, m.start_date
-                FROM documents d
-                INNER JOIN meetings m ON d.meeting_id = m.id
-                INNER JOIN document_classifications dc ON d.id = dc.document_id
-                WHERE m.name = 'Gemeenteraad'
-                AND dc.is_notulen = TRUE
-                AND d.content IS NOT NULL
-                AND (d.content ILIKE '%groenlinks%' OR d.content ILIKE '%pvda%')
-                ORDER BY m.start_date DESC
-                LIMIT 50
-            """)
-            
-            notulen_docs = self.cursor.fetchall()
+            with get_connection() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("""
+                        SELECT d.id, d.name, d.content, m.start_date
+                        FROM documents d
+                        INNER JOIN meetings m ON d.meeting_id = m.id
+                        INNER JOIN document_classifications dc ON d.id = dc.document_id
+                        WHERE m.name = 'Gemeenteraad'
+                        AND dc.is_notulen = TRUE
+                        AND d.content IS NOT NULL
+                        AND (d.content ILIKE '%groenlinks%' OR d.content ILIKE '%pvda%')
+                        ORDER BY m.start_date DESC
+                        LIMIT 50
+                    """)
+
+                    notulen_docs = cur.fetchall()
             
             for doc_id, doc_name, content, meeting_date in notulen_docs:
                 if not content:

@@ -1,0 +1,81 @@
+{
+  "run_id": "v3-multihop-pre-enrich",
+  "total_questions": 2,
+  "overall": {
+    "count": 2,
+    "context_precision": {
+      "mean": 0.62,
+      "min": 0.44,
+      "max": 0.8
+    },
+    "answer_relevance": {
+      "mean": 3.5,
+      "min": 3,
+      "max": 4
+    },
+    "faithfulness": {
+      "mean": 5,
+      "min": 5,
+      "max": 5
+    },
+    "completeness": {
+      "mean": 2,
+      "min": 2,
+      "max": 2
+    },
+    "hallucination_rate": {
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "source_attribution": {
+      "mean": 4.5,
+      "min": 4,
+      "max": 5
+    }
+  },
+  "by_category": {
+    "multi_hop": {
+      "count": 2,
+      "context_precision": {
+        "mean": 0.62,
+        "min": 0.44,
+        "max": 0.8
+      },
+      "answer_relevance": {
+        "mean": 3.5,
+        "min": 3,
+        "max": 4
+      },
+      "faithfulness": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      },
+      "completeness": {
+        "mean": 2,
+        "min": 2,
+        "max": 2
+      },
+      "hallucination_rate": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "source_attribution": {
+        "mean": 4.5,
+        "min": 4,
+        "max": 5
+      }
+    }
+  },
+  "component_health": {
+    "avg_vector_only_pct": 0.0,
+    "avg_keyword_only_pct": 0.0,
+    "avg_both_pct": 0.0,
+    "avg_reranker_position_change": 0.0,
+    "avg_rrf_unique_pct": 1.0,
+    "avg_total_ms": 258970.658,
+    "total_questions": 2
+  }
+}

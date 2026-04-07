@@ -1,0 +1,699 @@
+{
+  "meeting_id": "9d4cee4f-9248-482f-abde-ed9c8589c049",
+  "audit_timestamp": "2026-04-07T21:35:10.291259",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+    "start_date": "2025-09-17 00:00:00",
+    "committee": "ZOCS",
+    "quality_score": 0.93,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 199,
+    "document_count": 8
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 1371,
+      "correct_count": 1371,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.7663,
+      "party_attribution_rate": 0.3629,
+      "total_segments": 766,
+      "attributed_segments": 587,
+      "unattributed_segments": 179
+    },
+    "speaker_diversity": {
+      "unique_speakers": 14,
+      "unique_parties": 9,
+      "top_speaker": "Plaatsvervangend commissievoorzitter",
+      "top_speaker_segment_count": 206,
+      "monologue_rate": 0.2689,
+      "speakers": {
+        "Plaatsvervangend commissievoorzitter": 206,
+        "S. (Said) Kasmi": 76,
+        "L.S. (Larissa) Vlieger": 54,
+        "G.F.E. (Geert) Koster": 51,
+        "J.M. (Joan) Nunnely": 46,
+        "R.P. (Ryan) Vos Burgercommissielid": 41,
+        "D.J. (Diederik) van Dommelen": 38,
+        "D. (Donatella) Schalm-Civile Burgercommissielid": 24,
+        "Inspreker": 15,
+        "R.T.J. (Ruud) van der Velden": 14
+      },
+      "parties": {
+        "GroenLinks": 54,
+        "Leefbaar Rotterdam": 51,
+        "D66": 46,
+        "PvdA": 41,
+        "VVD": 38,
+        "Volt": 24,
+        "Partij voor de Dieren": 14,
+        "50PLUS": 8,
+        "BIJ1": 2
+      }
+    },
+    "segment_quality": {
+      "total_segments": 766,
+      "nonempty_segments": 766,
+      "total_words": 70584,
+      "total_chars": 391251,
+      "avg_words_per_segment": 92.1,
+      "avg_chars_per_segment": 510.8,
+      "short_segment_rate": 0.1893,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 14,
+      "items_with_content": 8,
+      "coverage_rate": 0.5714,
+      "items": [
+        {
+          "title": "Besluitenlijst openbare procedurevergadering van 3 september 2025",
+          "segment_count": 4
+        },
+        {
+          "title": "Ingekomen stukken",
+          "segment_count": 2
+        },
+        {
+          "title": "Sport",
+          "segment_count": 0
+        },
+        {
+          "title": "Lijst van openstaande toezeggingen, schriftelijke vragen en moties",
+          "segment_count": 10
+        },
+        {
+          "title": "Commissieplanning en lange termijn agenda raad",
+          "segment_count": 18
+        },
+        {
+          "title": "Regeling van werkzaamheden",
+          "segment_count": 0
+        },
+        {
+          "title": "Sluiting",
+          "segment_count": 0
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 0
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 26
+        },
+        {
+          "title": "Adviezenlijst openbare overlegvergadering van 3 september 2025",
+          "segment_count": 4
+        },
+        {
+          "title": "Vrouw in beeld",
+          "segment_count": 73
+        },
+        {
+          "title": "Evaluatie Cultuurplan",
+          "segment_count": 628
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 1
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+        "start_date": "2025-09-17 00:00:00",
+        "committee": "ZOCS",
+        "review_status": "auto_approved",
+        "quality_score": 0.93,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+        "start_date": "2025-09-17 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 14,
+      "recognized_speakers": 14,
+      "unrecognized_speakers": 0,
+      "recognition_rate": 1.0,
+      "recognized": [
+        {
+          "name": "J.M. (Joan) Nunnely",
+          "segment_count": 46,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "Plaatsvervangend commissievoorzitter",
+          "segment_count": 206,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "A.N.M. (Nico) van Scheijndel Burgercommissielid",
+          "segment_count": 1,
+          "parties": [
+            "50PLUS"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "R.P. (Ryan) Vos Burgercommissielid",
+          "segment_count": 41,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S.J.J. (Sam) Mak  Burgercommissielid CDA",
+          "segment_count": 12,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "L.S. (Larissa) Vlieger",
+          "segment_count": 54,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "G.F.E. (Geert) Koster",
+          "segment_count": 51,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "P.J.H.D. (Ellen) Verkoelen",
+          "segment_count": 7,
+          "parties": [
+            "50PLUS"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D.J. (Diederik) van Dommelen",
+          "segment_count": 38,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D. (Donatella) Schalm-Civile Burgercommissielid",
+          "segment_count": 24,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "R.T.J. (Ruud) van der Velden",
+          "segment_count": 14,
+          "parties": [
+            "Partij voor de Dieren"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Said) Kasmi",
+          "segment_count": 76,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "Inspreker",
+          "segment_count": 15,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "P.C.Z. (Precious) Sadhoe Burgercommissielid",
+          "segment_count": 2,
+          "parties": [
+            "BIJ1"
+          ],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": []
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 199,
+      "empty_chunks": 0,
+      "buckets": {
+        "long (2000-5000)": 136,
+        "medium (200-2000)": 62,
+        "short (50-200)": 1
+      },
+      "min_chars": 70,
+      "max_chars": 2766,
+      "avg_chars": 2087.3,
+      "median_chars": 2300,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 199,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 8,
+      "documents_with_chunks": 8,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Adviezenlijst openbare overlegvergadering van 3 september 2025",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Besluitenlijst openbare procedurevergadering van 3 september 2025",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Commissieplanning en lange termijn agenda raad",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: Evaluatie Cultuurplan",
+          "chunks": 162
+        },
+        {
+          "name": "Transcript: Ingekomen stukken",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Lijst van openstaande toezeggingen, schriftelijke vragen en moties",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Vaststellen van de agenda",
+          "chunks": 4
+        },
+        {
+          "name": "Transcript: Vrouw in beeld",
+          "chunks": 24
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 199,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 199,
+      "distribution": {
+        "quote": {
+          "count": 198,
+          "rate": 0.995
+        },
+        "full_text": {
+          "count": 1,
+          "rate": 0.005
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "ok",
+    "n_samples": 5,
+    "avg_hallucination_rate": 0.588,
+    "safe_for_councillors": false,
+    "hallucination_types_found": [],
+    "dangerous_claims": [
+      {
+        "chunk_id": 10091,
+        "claim": "Inspreker stelt de vraag: 'hoeveel meer kwartiermakers en hoeveel meer consultants heeft deze stap nodig' — Dit suggereert kritiek op het proces dat niet in het originele transcript voorkomt, wat raadsleden kan misleiden over de inhoud van de inbreng"
+      },
+      {
+        "chunk_id": 10130,
+        "claim": "Donatella Schalm-Civile is lid van Volt en spreekt namens de Burgercommissie — dit suggereert een spreker die niet aanwezig was en attributeert standpunten aan een niet-bestaande deelnemer, wat raadsleden kan misleiden over wie welke positie innam."
+      }
+    ],
+    "chunk_results": [
+      {
+        "chunk_id": 10024,
+        "chunk_title": "Transcript: Adviezenlijst openbare overlegvergadering van 3 september 2025",
+        "chunk_index": 0,
+        "content_preview": "[R.P. (Ryan) Vos Burgercommissielid (PvdA)]: Kunt u instemmen met de vaststelling van de adviezen lijst van 3 september 2012? Voorzitter Oh de heer Vos Uhm. Ja. T is een vrij groot uh uh punt wat we v",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "R.P. (Ryan) Vos is Burgercommissielid (PvdA)",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[R.P. (Ryan) Vos Burgercommissielid (PvdA)]"
+            },
+            {
+              "claim": "R.P. Vos stelt de vraag of men kan instemmen met de vaststelling van de adviezen lijst van 3 september 2012",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Kunt u instemmen met de vaststelling van de adviezen lijst van 3 september 2012?"
+            },
+            {
+              "claim": "R.P. Vos vindt 2.00u spreektijd eigenlijk best wel weinig",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En ik vind 2.00u spreektijd eigenlijk best wel weinig."
+            },
+            {
+              "claim": "De plaatsvervangend commissievoorzitter vraagt zich af of men de spreektijd kan opplussen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dus ik vroeg mij af. Kunnen we dat iets opplussen?."
+            },
+            {
+              "claim": "R.P. Vos begrijpt van de griffier dat het voorstel 3.00u spreektijd is",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Begrijp van de griffier dat het voorstel 3.00u spreektijd is."
+            },
+            {
+              "claim": "De plaatsvervangend commissievoorzitter zegt dat hij de annotatie niet goed heeft gelezen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Oh, dan heb ik de annotatie niet goed gelezen Henk, maar volgens mij stond het 2.00u voorstel."
+            },
+            {
+              "claim": "De plaatsvervangend commissievoorzitter stelt voor om drie uur spreektijd in te stellen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ja dat, dat. Doen we drie en dan hebben we."
+            },
+            {
+              "claim": "De adviessnelheid wordt vastgesteld",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dan is hierbij de adviessnelheid vastgesteld"
+            },
+            {
+              "claim": "Het volgende agendapunt is twee, punt nul vier",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "gaan we verder met agendapunt twee, punt nul vier."
+            },
+            {
+              "claim": "Het agendapunt betreft het initiatiefvoorstel Verkoelen over Vrouw in Beeld",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En dat is het initiatiefvoorstel Verkoelen over Vrouw in Beeld."
+            },
+            {
+              "claim": "Het initiatiefvoorstel van het lid Verkoelen gaat over cultuur",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "We bespreken bij dit agendapunt het initiatiefvoorstel van het lid Verkoelen over cultuur"
+            },
+            {
+              "claim": "De commissie wordt gevraagd om de gemeenteraad te adviseren over het initiatiefvoorstel",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De commissie wordt gevraagd om de gemeenteraad te adviseren over het initiatiefvoorstel"
+            },
+            {
+              "claim": "Wethouder Kamminga en zijn ondersteuning zijn welkom",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Welkom aan wethouder Kamminga en zijn ondersteuning."
+            },
+            {
+              "claim": "Mevrouw Verkoelen is de indiener van het initiatiefvoorstel",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De indiener, mevrouw Verkoelen, start met een toelichting op het voorstel"
+            },
+            {
+              "claim": "De indiener verdedigt het voorstel zelf in het debat",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De indiener verdedigt vervolgens het voorstel zelf in het debat"
+            },
+            {
+              "claim": "Het debat vindt plaats tussen de indiener en de commissie",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Het debat vindt dus plaats tussen de indiener en de commissie."
+            },
+            {
+              "claim": "Mevrouw Verkoelen wordt uitgenodigd om links van de griffier plaats te nemen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dan wil ik graag de indiener van het initiatiefvoorstel, mevrouw Verkoelen, uitnodigen om hier links van de griffier plaats te nemen."
+            }
+          ],
+          "total_claims": 17,
+          "supported": 17,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "De AI-gegenereerde notulen zijn volledig identiek aan het originele transcript. Alle 17 feitelijke beweringen zijn direct ondersteund door passages in de context. Er zijn geen hallucinaties, fabricaties, onjuiste toeschrijvingen of andere fouten gedetecteerd. De notulen geven nauwkeurig weer wat er in de vergadering is gezegd, inclusief de discussie over spreektijd (2.00u vs 3.00u), de vaststelling van de adviezen, en de introductie van agendapunt twee over het initiatiefvoorstel Verkoelen. Dit is een zeer betrouwbare transcriptie."
+        }
+      },
+      {
+        "chunk_id": 10062,
+        "chunk_title": "Speaker's Address and Constraints",
+        "chunk_index": 13,
+        "content_preview": "[L.S. (Larissa) Vlieger (GroenLinks)]: Dank u wel, mevrouw Vlieger.\n[L.S. (Larissa) Vlieger (GroenLinks)]: Voorzitter, terugkijken is ontzettend belangrijk, zodat we ook weten hoe we naar de toekomst ",
+        "claim_verification": {
+          "claims": [],
+          "total_claims": 16,
+          "supported": 1,
+          "unsupported": 15,
+          "contradicted": 0,
+          "hallucination_rate": 0.94,
+          "most_dangerous_claim": null,
+          "reasoning": "Parsed via regex fallback (malformed JSON from judge)"
+        }
+      },
+      {
+        "chunk_id": 10091,
+        "chunk_title": "Speaker's Address and Constraints",
+        "chunk_index": 42,
+        "content_preview": "[Inspreker]: Terwijl Space en Place heel erg gaat over de discussie van wie nu eigenlijk eh, de stad is.\n[Unknown]: Nou ja,. Sorry hoor.. Het volgende. Onderdeel gaat over wat nu eigenlijk die eh cult",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Inspreker stelt dat Space en Place gaat over de discussie van wie eigenlijk de stad is",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden in het originele transcript"
+            },
+            {
+              "claim": "Inspreker beschrijft cultuur transitie als het verdelen van gelden, middelen en verantwoordelijkheid",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden in het originele transcript"
+            },
+            {
+              "claim": "Inspreker gebruikt het woord 'veerkrachtig' in relatie tot krachtige financierings mix",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden in het originele transcript"
+            },
+            {
+              "claim": "Inspreker gebruikt het woord 'toekomstbestendig' in relatie tot legitimiteit",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden in het originele transcript"
+            },
+            {
+              "claim": "Inspreker spreekt over 'nuchterheid' als onderdeel van zijn betoog",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden in het originele transcript"
+            },
+            {
+              "claim": "Inspreker stelt de vraag: 'hoeveel meer kwartiermakers en hoeveel meer consultants heeft deze stap nodig'",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden in het originele transcript"
+            },
+            {
+              "claim": "Inspreker vraagt: 'Hoeveel meer kunnen jullie nog verdragen?'",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden in het originele transcript"
+            },
+            {
+              "claim": "De inspreker beperkt zich vandaag tot één vraag",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden in het originele transcript"
+            }
+          ],
+          "total_claims": 8,
+          "supported": 0,
+          "unsupported": 8,
+          "contradicted": 0,
+          "hallucination_rate": 1.0,
+          "most_dangerous_claim": "Inspreker stelt de vraag: 'hoeveel meer kwartiermakers en hoeveel meer consultants heeft deze stap nodig' — Dit suggereert kritiek op het proces dat niet in het originele transcript voorkomt, wat raadsleden kan misleiden over de inhoud van de inbreng",
+          "reasoning": "Het gehele fragment dat als 'te controleren tekst' is aangeleverd, is NIET terug te vinden in het originele transcript. Het transcript eindigt abrupt met 'Mijn naam is Coby de Vos. Ik ben een van de co voorzitters van het Directeuren Ove' — de inspreker is nog niet eens klaar met zichzelf voor te stellen. De volledige inhoud van de 'te controleren tekst' (discussie over Space and Place, cultuur transitie, financiering, veerkrachtigheid, toekomstbestendigheid, nuchterheid, en vragen over kwartiermakers en consultants) is volledig gefabriceerd en komt niet voor in de meegeleverde context. Dit is een KRITIEKE HALLUCINATIE met zeer hoog risico voor raadsleden die op basis van deze notulen besluiten zouden nemen."
+        }
+      },
+      {
+        "chunk_id": 10130,
+        "chunk_title": "Speaker's Address and Constraints",
+        "chunk_index": 81,
+        "content_preview": "[D. (Donatella) Schalm-Civile Burgercommissielid (Volt)]: Korte toelichting Mevrouw Schalk Civiel. Ja, ik hoorde u dat zeggen, maar misschien heb ik dat verkeerd begrepen. Om om die transitie in gang ",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Donatella Schalm-Civile is lid van Volt en spreekt namens de Burgercommissie",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "De te controleren tekst bevat deze spreker, maar deze persoon komt NIET voor in het originele transcript. Het transcript bevat alleen L.S. (Larissa) Vlieger (GroenLinks), een Plaatsvervangend commissievoorzitter, en Coby de Vos (Directeuren Overleg)."
+            },
+            {
+              "claim": "Er wordt gesproken over een onafhankelijk advies en een transitie in gang zetten",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Deze onderwerpen komen niet voor in het originele transcript. Het transcript gaat over schriftelijke technische vragen en de evaluatie van het Cultuur Plan 2025-2028."
+            },
+            {
+              "claim": "Er wordt verwezen naar 'vier jaar geleden' als referentiepunt voor raadsingrijpen",
+              "verdict": "unsupported",
+              "hallucination_type": "date_displacement",
+              "evidence": "Deze specifieke tijdsverwijzing staat niet in het originele transcript."
+            },
+            {
+              "claim": "Er wordt gesproken over een 'cultuur haven' en 'Raad voor de Kunst'",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Deze termen komen niet voor in het originele transcript. Het transcript verwijst naar het Cultuur Plan 2025-2028 en een evaluatie daarvan."
+            },
+            {
+              "claim": "De spreker stelt dat 'onafhankelijk advies vaak niet de kant op valt' die jonge makers willen",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Deze bewering staat niet in het originele transcript en wordt niet door enige spreker gemaakt."
+            },
+            {
+              "claim": "Er wordt gesproken over 'talentontwikkeling' als alternatief beleid",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Dit onderwerp komt niet voor in het originele transcript."
+            },
+            {
+              "claim": "De spreker kritiseert een 'commissie die even wordt ingevlogen'",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Deze kritiek staat niet in het originele transcript."
+            }
+          ],
+          "total_claims": 7,
+          "supported": 0,
+          "unsupported": 7,
+          "contradicted": 0,
+          "hallucination_rate": 1.0,
+          "most_dangerous_claim": "Donatella Schalm-Civile is lid van Volt en spreekt namens de Burgercommissie — dit suggereert een spreker die niet aanwezig was en attributeert standpunten aan een niet-bestaande deelnemer, wat raadsleden kan misleiden over wie welke positie innam.",
+          "reasoning": "De te controleren tekst is VOLLEDIG GEGENEREERD en komt niet overeen met het originele transcript. Het originele transcript behandelt schriftelijke technische vragen over een cultuurplan-evaluatie en een inleiding door Coby de Vos van het Directeuren Overleg. De AI-gegenereerde notulen introduceren een volledig andere spreker (Donatella Schalm-Civile van Volt), andere onderwerpen (onafhankelijk advies, cultuur haven, Raad voor de Kunst), en talrijke citaten die niet in de bron voorkomen. Dit is een KRITIEKE HALLUCINATIE met een hallucinatiesnelheid van 100%. Raadsleden die op basis van deze notulen besluiten nemen, zouden ernstig misleid worden."
+        }
+      },
+      {
+        "chunk_id": 10169,
+        "chunk_title": "Speaker's Address and Constraints",
+        "chunk_index": 120,
+        "content_preview": "[G.F.E. (Geert) Koster (Leefbaar Rotterdam)]: stappen met elkaar in kunnen kunnen maken. En ook\n[Unknown]: voorzitter. Uhm heer Koster. Ja, u doet wel uitspraken. U zegt dat het niet rechtvaardig is, ",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Geert Koster (Leefbaar Rotterdam) spreekt en zegt dat iets niet rechtvaardig is",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[G.F.E. (Geert) Koster (Leefbaar Rotterdam)]: stappen met elkaar in kunnen kunnen maken. En ook [Unknown]: voorzitter. Uhm heer Koster. Ja, u doet wel uitspraken. U zegt dat het niet rechtvaardig is"
+            },
+            {
+              "claim": "Said Kasmi vraagt Koster om te concretiseren waar het geld vandaan moet komen en waar het naartoe moet gaan",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[S. (Said) Kasmi]: wel concretiseren. Wat? Waar wil u dan het geld weghalen en waar wil je het naartoe stoppen?"
+            },
+            {
+              "claim": "Koster antwoordt dat hij bedoelt dat sommige groepen ondervertegenwoordigd zijn in de middelverdeling",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[S. (Said) Kasmi)]: Daar bedoel ik mee dat ik zie dat sommige groepen nu. Ondervertegenwoordigd zijn. Als je kijkt naar hoe wij de middelen hebben verdeeld"
+            },
+            {
+              "claim": "Koster stelt dat er nog een slag in de middelverdeling kan worden gemaakt",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "en ik denk dat we daar echt nog een slag in kunnen maken."
+            }
+          ],
+          "total_claims": 4,
+          "supported": 4,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Alle feitelijke beweringen in het te controleren fragment zijn direct terug te voeren op het originele transcript. De uitspraken van Koster en Kasmi, inclusief de vragen en antwoorden, zijn letterlijk of substantieel aanwezig in de context. Er zijn geen hallucinaties, fabricaties, onjuiste toeschrijvingen of andere factische fouten gedetecteerd. Het fragment geeft nauwkeurig weer wat er in de vergadering is gezegd."
+        }
+      }
+    ]
+  },
+  "verdict": {
+    "recommendation": "REJECT — fix issues before promotion",
+    "issues": [
+      "High hallucination rate: 58.8% (threshold ≤10%)"
+    ],
+    "warnings": [
+      "Dangerous claim in chunk 10091: Inspreker stelt de vraag: 'hoeveel meer kwartiermakers en hoeveel meer consultants heeft deze stap nodig' — Dit suggeree",
+      "Dangerous claim in chunk 10130: Donatella Schalm-Civile is lid van Volt en spreekt namens de Burgercommissie — dit suggereert een spreker die niet aanwe",
+      "Low speaker attribution: 77% (target 80%)"
+    ],
+    "scores": {
+      "hallucination_rate": 0.588,
+      "speaker_attribution_rate": 0.7663,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.93
+    }
+  }
+}

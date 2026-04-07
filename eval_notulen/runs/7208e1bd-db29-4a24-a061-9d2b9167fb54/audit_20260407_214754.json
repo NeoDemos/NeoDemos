@@ -1,0 +1,469 @@
+{
+  "meeting_id": "7208e1bd-db29-4a24-a061-9d2b9167fb54",
+  "audit_timestamp": "2026-04-07T21:47:54.138459",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "judge_backend": "gemini",
+    "anthropic_model": "claude-haiku-4-5-20251001",
+    "gemini_model": "gemini-2.5-flash-lite"
+  },
+  "meeting_info": {
+    "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+    "start_date": "2025-09-03 00:00:00",
+    "committee": "MHEK",
+    "quality_score": 0.951,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 113,
+    "document_count": 15
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 738,
+      "correct_count": 738,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8382,
+      "party_attribution_rate": 0.4025,
+      "total_segments": 482,
+      "attributed_segments": 404,
+      "unattributed_segments": 78
+    },
+    "speaker_diversity": {
+      "unique_speakers": 17,
+      "unique_parties": 10,
+      "top_speaker": "M.S. (Marike) Abrahamse Commissievoorzitter",
+      "top_speaker_segment_count": 154,
+      "monologue_rate": 0.3195,
+      "speakers": {
+        "M.S. (Marike) Abrahamse Commissievoorzitter": 154,
+        "M.H. (Marvin) Biljoen": 50,
+        "D.A. (Dieke) van Groningen": 32,
+        "P.J.P. (Pascal) Lansink-Bastemeijer": 25,
+        "J.M.D. (Joey) de Waard": 21,
+        "I. (Ingrid) van Wifferen": 16,
+        "B.T.A. (Bernhard) van Meeteren Burgercommissielid CDA": 14,
+        "D. (Donatella) Schalm-Civile Burgercommissielid": 14,
+        "D.P.A. (Dennis) Tak": 13,
+        "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie": 12
+      },
+      "parties": {
+        "GroenLinks": 59,
+        "VVD": 37,
+        "Leefbaar Rotterdam": 21,
+        "D66": 16,
+        "Volt": 14,
+        "PvdA": 13,
+        "DENK": 12,
+        "SP": 12,
+        "50PLUS": 8,
+        "Forum voor Democratie": 2
+      }
+    },
+    "segment_quality": {
+      "total_segments": 482,
+      "nonempty_segments": 482,
+      "total_words": 36503,
+      "total_chars": 203481,
+      "avg_words_per_segment": 75.7,
+      "avg_chars_per_segment": 422.2,
+      "short_segment_rate": 0.1846,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 22,
+      "items_with_content": 14,
+      "coverage_rate": 0.6364,
+      "items": [
+        {
+          "title": "Procedurevergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 1
+        },
+        {
+          "title": "Besluitenlijst openbare procedurevergadering van 2 juli 2025",
+          "segment_count": 1
+        },
+        {
+          "title": "Ingekomen stukken",
+          "segment_count": 6
+        },
+        {
+          "title": "Algemeen",
+          "segment_count": 0
+        },
+        {
+          "title": "Duurzaam",
+          "segment_count": 13
+        },
+        {
+          "title": "Economie",
+          "segment_count": 2
+        },
+        {
+          "title": "Mobiliteit",
+          "segment_count": 76
+        },
+        {
+          "title": "Lijst van openstaande toezeggingen, schriftelijke vragen en moties",
+          "segment_count": 0
+        },
+        {
+          "title": "Commissieplanning en lange termijn agenda raad",
+          "segment_count": 0
+        },
+        {
+          "title": "Regeling van werkzaamheden",
+          "segment_count": 21
+        },
+        {
+          "title": "Sluiting",
+          "segment_count": 0
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 4
+        },
+        {
+          "title": "Ontmoedigen SUV's en Pick-ups",
+          "segment_count": 3
+        },
+        {
+          "title": "Adviezenlijst openbare overlegvergadering van 2 juli en 9 juli 2025",
+          "segment_count": 2
+        },
+        {
+          "title": "Adviescommissies Metropoolregio Rotterdam Den Haag",
+          "segment_count": 0
+        },
+        {
+          "title": "Rapporteurs MIRT-project Stadsbrug, HOV en Stadionpark",
+          "segment_count": 19
+        },
+        {
+          "title": "Inspreken vreemd aan de orde",
+          "segment_count": 35
+        },
+        {
+          "title": "Verkeersaso Aanpak",
+          "segment_count": 1
+        },
+        {
+          "title": "Parkeerproblematiek Plaswijckpark",
+          "segment_count": 239
+        },
+        {
+          "title": "Betrekken bij Parkeerproblematiek Plaswijckpark",
+          "segment_count": 59
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+        "start_date": "2025-09-03 00:00:00",
+        "committee": "MHEK",
+        "review_status": "auto_approved",
+        "quality_score": 0.951,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+        "start_date": "2025-09-03 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 17,
+      "recognized_speakers": 15,
+      "unrecognized_speakers": 2,
+      "recognition_rate": 0.8824,
+      "recognized": [
+        {
+          "name": "M.S. (Marike) Abrahamse Commissievoorzitter",
+          "segment_count": 154,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.Y. (Mina) Morkoç",
+          "segment_count": 9,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "B.T.A. (Bernhard) van Meeteren Burgercommissielid CDA",
+          "segment_count": 14,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "D.P.A. (Dennis) Tak",
+          "segment_count": 13,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "I. (Ingrid) van Wifferen",
+          "segment_count": 16,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D.A. (Dieke) van Groningen",
+          "segment_count": 32,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.H. (Marvin) Biljoen",
+          "segment_count": 50,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie",
+          "segment_count": 12,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "H. (Jet) Valk Burgercommissielid",
+          "segment_count": 8,
+          "parties": [
+            "50PLUS"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "D. (Donatella) Schalm-Civile Burgercommissielid",
+          "segment_count": 14,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "E. (Elika) Rehim Zadeh",
+          "segment_count": 12,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J.M.D. (Joey) de Waard",
+          "segment_count": 21,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J.G. (Just) Hovens Greve Burgercommissielid",
+          "segment_count": 12,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S.J.C. (Simon) Becker",
+          "segment_count": 5,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "Inspreker",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "A.R. (Ardi) Oostdijk",
+          "segment_count": 2,
+          "parties": [
+            "Forum voor Democratie"
+          ],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "P.J.P. (Pascal) Lansink-Bastemeijer",
+          "segment_count": 25,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 113,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 35,
+        "long (2000-5000)": 75,
+        "short (50-200)": 3
+      },
+      "min_chars": 64,
+      "max_chars": 2734,
+      "avg_chars": 2018.4,
+      "median_chars": 2319,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 113,
+      "boilerplate_count": 1,
+      "boilerplate_rate": 0.0088,
+      "boilerplate_examples": [
+        {
+          "id": 9214,
+          "title": "Transcript: Opening en mededelingen",
+          "preview": "[M.S. (Marike) Abrahamse Commissievoorzitter]: Zijn er inhoudelijk of tekstueel opmerkingen?."
+        }
+      ]
+    },
+    "agenda_coverage": {
+      "total_documents": 15,
+      "documents_with_chunks": 15,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Adviezenlijst openbare overlegvergadering van 2 juli en 9 juli 2025",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Besluitenlijst openbare procedurevergadering van 2 juli 2025",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Betrekken bij Parkeerproblematiek Plaswijckpark",
+          "chunks": 12
+        },
+        {
+          "name": "Transcript: Duurzaam",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Economie",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Ingekomen stukken",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Inspreken vreemd aan de orde",
+          "chunks": 11
+        },
+        {
+          "name": "Transcript: Mobiliteit",
+          "chunks": 9
+        },
+        {
+          "name": "Transcript: Ontmoedigen SUV's en Pick-ups",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Parkeerproblematiek Plaswijckpark",
+          "chunks": 65
+        },
+        {
+          "name": "Transcript: Rapporteurs MIRT-project Stadsbrug, HOV en Stadionpark",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Regeling van werkzaamheden",
+          "chunks": 4
+        },
+        {
+          "name": "Transcript: Vaststellen van de agenda",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Verkeersaso Aanpak",
+          "chunks": 1
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 113,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 113,
+      "distribution": {
+        "quote": {
+          "count": 109,
+          "rate": 0.9646
+        },
+        "full_text": {
+          "count": 4,
+          "rate": 0.0354
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8382,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.951
+    }
+  }
+}

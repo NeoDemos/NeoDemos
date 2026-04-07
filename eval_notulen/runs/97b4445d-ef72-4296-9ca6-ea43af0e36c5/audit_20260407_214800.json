@@ -1,0 +1,314 @@
+{
+  "meeting_id": "97b4445d-ef72-4296-9ca6-ea43af0e36c5",
+  "audit_timestamp": "2026-04-07T21:48:00.363513",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "judge_backend": "gemini",
+    "anthropic_model": "claude-haiku-4-5-20251001",
+    "gemini_model": "gemini-2.5-flash-lite"
+  },
+  "meeting_info": {
+    "name": "Vergadering 17-10-2018",
+    "start_date": "2018-10-17 00:00:00",
+    "committee": "",
+    "quality_score": 0.999,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 101,
+    "document_count": 5
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 521,
+      "correct_count": 521,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.9968,
+      "party_attribution_rate": 0.0,
+      "total_segments": 310,
+      "attributed_segments": 309,
+      "unattributed_segments": 1
+    },
+    "speaker_diversity": {
+      "unique_speakers": 14,
+      "unique_parties": 0,
+      "top_speaker": "Walgenbach, E.S. (voorzitter)",
+      "top_speaker_segment_count": 121,
+      "monologue_rate": 0.3903,
+      "speakers": {
+        "Walgenbach, E.S. (voorzitter)": 121,
+        "Visser, A.L.H. (wethouder)": 35,
+        "Leewis, S. (GroenLinks)": 28,
+        "Tak, D.P.A. (PvdA)": 23,
+        "Groningen, D.A. van (VVD)": 22,
+        "Koster, G.F.E. (Leefbaar Rotterdam)": 19,
+        "Baarle, S.R.T. van (DENK)": 19,
+        "Zeegers, C.M. (D66)": 11,
+        "Verkoelen, P.J.H.D. (50PLUS)": 9,
+        "Segers-Hoogendoorn, R.G.C. (CDA)": 6
+      },
+      "parties": {}
+    },
+    "segment_quality": {
+      "total_segments": 310,
+      "nonempty_segments": 310,
+      "total_words": 31863,
+      "total_chars": 178526,
+      "avg_words_per_segment": 102.8,
+      "avg_chars_per_segment": 575.9,
+      "short_segment_rate": 0.2935,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 8,
+      "items_with_content": 5,
+      "coverage_rate": 0.625,
+      "items": [
+        {
+          "title": "2.01 Opening en mededelingen",
+          "segment_count": 0
+        },
+        {
+          "title": "2.02 Vaststellen van de agenda",
+          "segment_count": 0
+        },
+        {
+          "title": "2.03 Adviezenlijst openbare overlegvergadering d.d. 3 oktober 2018",
+          "segment_count": 2
+        },
+        {
+          "title": "2.04 Metropoolregio Rotterdam Den Haag",
+          "segment_count": 0
+        },
+        {
+          "title": "Daarbij betrekken",
+          "segment_count": 3
+        },
+        {
+          "title": "2.05 Internationale strategie Havenbedrijf",
+          "segment_count": 231
+        },
+        {
+          "title": "2.06 Initiatiefvoorstel Nida Winkeltijdenverordening",
+          "segment_count": 73
+        },
+        {
+          "title": "2.07 Sluiting",
+          "segment_count": 1
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Vergadering 17-10-2018",
+        "start_date": "2018-10-17 00:00:00",
+        "committee": null,
+        "review_status": "auto_approved",
+        "quality_score": 0.999,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Vergadering 17-10-2018",
+        "start_date": "2018-10-17 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No committee found in staging meeting"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 14,
+      "recognized_speakers": 3,
+      "unrecognized_speakers": 11,
+      "recognition_rate": 0.2143,
+      "recognized": [
+        {
+          "name": "Walgenbach, E.S. (voorzitter)",
+          "segment_count": 121,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Visser, A.L.H. (wethouder)",
+          "segment_count": 35,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Kathmann, B.C. (wethouder)",
+          "segment_count": 3,
+          "parties": [],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "Leewis, S. (GroenLinks)",
+          "segment_count": 28,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Tak, D.P.A. (PvdA)",
+          "segment_count": 23,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Groningen, D.A. van (VVD)",
+          "segment_count": 22,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Koster, G.F.E. (Leefbaar Rotterdam)",
+          "segment_count": 19,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Baarle, S.R.T. van (DENK)",
+          "segment_count": 19,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Segers-Hoogendoorn, R.G.C. (CDA)",
+          "segment_count": 6,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Benard, M. (Partij voor de Dieren)",
+          "segment_count": 3,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Verkoelen, P.J.H.D. (50PLUS)",
+          "segment_count": 9,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Monrooij, C.E.E. (ChristenUnie-SGP)",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Noppen, B. van (NIDA Rotterdam)",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Zeegers, C.M. (D66)",
+          "segment_count": 11,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 101,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 41,
+        "short (50-200)": 2,
+        "long (2000-5000)": 58
+      },
+      "min_chars": 122,
+      "max_chars": 2764,
+      "avg_chars": 1886.5,
+      "median_chars": 2125,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 101,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 5,
+      "documents_with_chunks": 5,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: 2.03 Adviezenlijst openbare overlegvergadering d.d. 3 oktober 2018",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 2.05 Internationale strategie Havenbedrijf",
+          "chunks": 82
+        },
+        {
+          "name": "Transcript: 2.06 Initiatiefvoorstel Nida Winkeltijdenverordening",
+          "chunks": 15
+        },
+        {
+          "name": "Transcript: 2.07 Sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Daarbij betrekken",
+          "chunks": 2
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 101,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 101,
+      "distribution": {
+        "quote": {
+          "count": 99,
+          "rate": 0.9802
+        },
+        "full_text": {
+          "count": 2,
+          "rate": 0.0198
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.9968,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.999
+    }
+  }
+}

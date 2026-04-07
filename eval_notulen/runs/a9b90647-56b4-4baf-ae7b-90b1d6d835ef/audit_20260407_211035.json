@@ -1,0 +1,299 @@
+{
+  "meeting_id": "a9b90647-56b4-4baf-ae7b-90b1d6d835ef",
+  "audit_timestamp": "2026-04-07T21:10:35.353140",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Vergadering Commissie tot Onderzoek van de Rekening (2018-2022) 20-09-2018",
+    "start_date": "2018-09-20 00:00:00",
+    "committee": "COR",
+    "quality_score": 0.997,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 25,
+    "document_count": 7
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 112,
+      "correct_count": 112,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.9895,
+      "party_attribution_rate": 0.0,
+      "total_segments": 95,
+      "attributed_segments": 94,
+      "unattributed_segments": 1
+    },
+    "speaker_diversity": {
+      "unique_speakers": 10,
+      "unique_parties": 0,
+      "top_speaker": "Vreugdenhil, G.J.M. (voorzitter)",
+      "top_speaker_segment_count": 44,
+      "monologue_rate": 0.4632,
+      "speakers": {
+        "Vreugdenhil, G.J.M. (voorzitter)": 44,
+        "Onbekende spreker": 14,
+        "Hoogvliet, A. (ambtelijke ondersteuning)": 12,
+        "Roest, L.L.P.R. (GroenLinks)": 8,
+        "Goldstein, R. (accountant)": 4,
+        "Zeegers, C.M. (D66)": 3,
+        "Lansink-Bastemeijer, P.J.P. (VVD)": 3,
+        "Tak, D.P.A. (PvdA)": 3,
+        "Visser, A.L.H. (wethouder)": 2,
+        "Sjerps, C.M. (Gemeentesecretaris)": 1
+      },
+      "parties": {}
+    },
+    "segment_quality": {
+      "total_segments": 95,
+      "nonempty_segments": 95,
+      "total_words": 8092,
+      "total_chars": 44704,
+      "avg_words_per_segment": 85.2,
+      "avg_chars_per_segment": 470.6,
+      "short_segment_rate": 0.2,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 9,
+      "items_with_content": 7,
+      "coverage_rate": 0.7778,
+      "items": [
+        {
+          "title": "1 Opening en mededelingen",
+          "segment_count": 3
+        },
+        {
+          "title": "2 Vaststelling agenda",
+          "segment_count": 16
+        },
+        {
+          "title": "3 Vaststelling verslag",
+          "segment_count": 3
+        },
+        {
+          "title": "4 Mijlpalenplanning jaarrekeningcontrole 2018",
+          "segment_count": 18
+        },
+        {
+          "title": "5 Audit Charter Financial Audit Gemeente Rotterdam",
+          "segment_count": 29
+        },
+        {
+          "title": "6 Hoofdlijnen aanbesteding accountantsdiensten",
+          "segment_count": 0
+        },
+        {
+          "title": "7 Audit Feyenoord-City",
+          "segment_count": 0
+        },
+        {
+          "title": "8 Planning",
+          "segment_count": 18
+        },
+        {
+          "title": "9 Rondvraag en sluiting",
+          "segment_count": 8
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Vergadering Commissie tot Onderzoek van de Rekening (2018-2022) 20-09-2018",
+        "start_date": "2018-09-20 00:00:00",
+        "committee": "COR",
+        "review_status": "auto_approved",
+        "quality_score": 0.997,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Vergadering Commissie tot Onderzoek van de Rekening (2018-2022) 20-09-2018",
+        "start_date": "2018-09-20 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 10,
+      "recognized_speakers": 3,
+      "unrecognized_speakers": 7,
+      "recognition_rate": 0.3,
+      "recognized": [
+        {
+          "name": "Vreugdenhil, G.J.M. (voorzitter)",
+          "segment_count": 44,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Sjerps, C.M. (Gemeentesecretaris)",
+          "segment_count": 1,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Visser, A.L.H. (wethouder)",
+          "segment_count": 2,
+          "parties": [],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "Zeegers, C.M. (D66)",
+          "segment_count": 3,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Onbekende spreker",
+          "segment_count": 14,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Goldstein, R. (accountant)",
+          "segment_count": 4,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Roest, L.L.P.R. (GroenLinks)",
+          "segment_count": 8,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Lansink-Bastemeijer, P.J.P. (VVD)",
+          "segment_count": 3,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Hoogvliet, A. (ambtelijke ondersteuning)",
+          "segment_count": 12,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Tak, D.P.A. (PvdA)",
+          "segment_count": 3,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 25,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 12,
+        "long (2000-5000)": 13
+      },
+      "min_chars": 421,
+      "max_chars": 2598,
+      "avg_chars": 1943.9,
+      "median_chars": 2024,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 25,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 7,
+      "documents_with_chunks": 7,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: 1 Opening en mededelingen",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: 2 Vaststelling agenda",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: 3 Vaststelling verslag",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 4 Mijlpalenplanning jaarrekeningcontrole 2018",
+          "chunks": 5
+        },
+        {
+          "name": "Transcript: 5 Audit Charter Financial Audit Gemeente Rotterdam",
+          "chunks": 11
+        },
+        {
+          "name": "Transcript: 8 Planning",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: 9 Rondvraag en sluiting",
+          "chunks": 1
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 25,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 25,
+      "distribution": {
+        "quote": {
+          "count": 24,
+          "rate": 0.96
+        },
+        "full_text": {
+          "count": 1,
+          "rate": 0.04
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.9895,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.997
+    }
+  }
+}

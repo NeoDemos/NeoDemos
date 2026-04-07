@@ -1,0 +1,254 @@
+{
+  "meeting_id": "4d77ae63-4c16-42ac-854b-caafc4f42962",
+  "audit_timestamp": "2026-04-07T21:10:35.970628",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Vergadering Werkgroep BOOR met bestuur BOOR 13-06-2018",
+    "start_date": "2018-06-13 00:00:00",
+    "committee": "",
+    "quality_score": 0.997,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 41,
+    "document_count": 3
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 147,
+      "correct_count": 147,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.9909,
+      "party_attribution_rate": 0.0,
+      "total_segments": 110,
+      "attributed_segments": 109,
+      "unattributed_segments": 1
+    },
+    "speaker_diversity": {
+      "unique_speakers": 8,
+      "unique_parties": 0,
+      "top_speaker": "Verheij, J.W. (plv. voorzitter)",
+      "top_speaker_segment_count": 37,
+      "monologue_rate": 0.3364,
+      "speakers": {
+        "Verheij, J.W. (plv. voorzitter)": 37,
+        "Blijswijk, H. van (voorzitter college van bestuur BOOR)": 32,
+        "Zandberg, B.C. (CDA)": 16,
+        "Zevenbergen, P. (lid Algemeen bestuur BOOR)": 15,
+        "Esbeukman, J. (Leefbaar Rotterdam)": 4,
+        "Geelkerken, P. (dagelijks bestuur BOOR)": 3,
+        "Butselaar, R. van (controller BOOR)": 1,
+        "Lee, R. van der (bestuurssecretaris BOOR)": 1
+      },
+      "parties": {}
+    },
+    "segment_quality": {
+      "total_segments": 110,
+      "nonempty_segments": 110,
+      "total_words": 10994,
+      "total_chars": 60789,
+      "avg_words_per_segment": 99.9,
+      "avg_chars_per_segment": 552.6,
+      "short_segment_rate": 0.1818,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 5,
+      "items_with_content": 3,
+      "coverage_rate": 0.6,
+      "items": [
+        {
+          "title": "1 Opening en mededelingen, vaststellen agenda",
+          "segment_count": 16
+        },
+        {
+          "title": "2 Jaarverslag BOOR 2017 en eerse voortgangsrapportage 2018",
+          "segment_count": 0
+        },
+        {
+          "title": "3 Bepalen advies aan Tijdelijke commissie Sociaal",
+          "segment_count": 93
+        },
+        {
+          "title": "4 Planning",
+          "segment_count": 0
+        },
+        {
+          "title": "5 Sluiting",
+          "segment_count": 1
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Vergadering Werkgroep BOOR met bestuur BOOR 13-06-2018",
+        "start_date": "2018-06-13 00:00:00",
+        "committee": null,
+        "review_status": "auto_approved",
+        "quality_score": 0.997,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Vergadering Werkgroep BOOR met bestuur BOOR 13-06-2018",
+        "start_date": "2018-06-13 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No committee found in staging meeting"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 8,
+      "recognized_speakers": 3,
+      "unrecognized_speakers": 5,
+      "recognition_rate": 0.375,
+      "recognized": [
+        {
+          "name": "Verheij, J.W. (plv. voorzitter)",
+          "segment_count": 37,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Blijswijk, H. van (voorzitter college van bestuur BOOR)",
+          "segment_count": 32,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Lee, R. van der (bestuurssecretaris BOOR)",
+          "segment_count": 1,
+          "parties": [],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "Geelkerken, P. (dagelijks bestuur BOOR)",
+          "segment_count": 3,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Zevenbergen, P. (lid Algemeen bestuur BOOR)",
+          "segment_count": 15,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Butselaar, R. van (controller BOOR)",
+          "segment_count": 1,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Zandberg, B.C. (CDA)",
+          "segment_count": 16,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Esbeukman, J. (Leefbaar Rotterdam)",
+          "segment_count": 4,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 41,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 21,
+        "short (50-200)": 1,
+        "long (2000-5000)": 19
+      },
+      "min_chars": 109,
+      "max_chars": 2638,
+      "avg_chars": 1654.5,
+      "median_chars": 1955,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 41,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 3,
+      "documents_with_chunks": 3,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: 1 Opening en mededelingen, vaststellen agenda",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: 3 Bepalen advies aan Tijdelijke commissie Sociaal",
+          "chunks": 37
+        },
+        {
+          "name": "Transcript: 5 Sluiting",
+          "chunks": 1
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 41,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 41,
+      "distribution": {
+        "quote": {
+          "count": 40,
+          "rate": 0.9756
+        },
+        "full_text": {
+          "count": 1,
+          "rate": 0.0244
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.9909,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.997
+    }
+  }
+}

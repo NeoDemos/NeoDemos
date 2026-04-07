@@ -1,0 +1,268 @@
+{
+  "meeting_id": "24817a43-4907-491e-9afc-2453506da81e",
+  "audit_timestamp": "2026-04-07T21:10:27.370248",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+    "start_date": "2025-11-18 00:00:00",
+    "committee": "BWB",
+    "quality_score": 0.943,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 76,
+    "document_count": 3
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 487,
+      "correct_count": 487,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8084,
+      "party_attribution_rate": 0.3473,
+      "total_segments": 167,
+      "attributed_segments": 135,
+      "unattributed_segments": 32
+    },
+    "speaker_diversity": {
+      "unique_speakers": 9,
+      "unique_parties": 6,
+      "top_speaker": "P.J.H.D. (Ellen) Verkoelen Commissievoorzitter",
+      "top_speaker_segment_count": 46,
+      "monologue_rate": 0.2754,
+      "speakers": {
+        "P.J.H.D. (Ellen) Verkoelen Commissievoorzitter": 46,
+        "P.J.P. (Pascal) Lansink-Bastemeijer": 26,
+        "M.Y. (Mina) Morkoç": 20,
+        "B. (Benvenido) van Schaik": 18,
+        "R.P. (Ryan) Vos Burgercommissielid": 7,
+        "L.P.A. (Luuc) Dekkers": 7,
+        "Inspreker": 5,
+        "M.S. (Marike) Abrahamse": 4,
+        "T. (Tim) de Haan": 2
+      },
+      "parties": {
+        "GroenLinks": 20,
+        "Leefbaar Rotterdam": 18,
+        "PvdA": 7,
+        "Volt": 7,
+        "VVD": 4,
+        "D66": 2
+      }
+    },
+    "segment_quality": {
+      "total_segments": 167,
+      "nonempty_segments": 167,
+      "total_words": 25404,
+      "total_chars": 140857,
+      "avg_words_per_segment": 152.1,
+      "avg_chars_per_segment": 843.5,
+      "short_segment_rate": 0.2395,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 3,
+      "items_with_content": 3,
+      "coverage_rate": 1.0,
+      "items": [
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 1
+        },
+        {
+          "title": "Toekomstvisie Groene Waterstad 2050, Rotterdam gaat voor groen",
+          "segment_count": 152
+        },
+        {
+          "title": "Concept najaarsrapportage en 1e begrotingswijziging 2025 Recreatieschap Rottemeren",
+          "segment_count": 14
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-11-18 00:00:00",
+        "committee": "BWB",
+        "review_status": "auto_approved",
+        "quality_score": 0.943,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-11-18 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 9,
+      "recognized_speakers": 8,
+      "unrecognized_speakers": 1,
+      "recognition_rate": 0.8889,
+      "recognized": [
+        {
+          "name": "P.J.H.D. (Ellen) Verkoelen Commissievoorzitter",
+          "segment_count": 46,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Inspreker",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "B. (Benvenido) van Schaik",
+          "segment_count": 18,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.Y. (Mina) Morkoç",
+          "segment_count": 20,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "R.P. (Ryan) Vos Burgercommissielid",
+          "segment_count": 7,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "L.P.A. (Luuc) Dekkers",
+          "segment_count": 7,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.S. (Marike) Abrahamse",
+          "segment_count": 4,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T. (Tim) de Haan",
+          "segment_count": 2,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "P.J.P. (Pascal) Lansink-Bastemeijer",
+          "segment_count": 26,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 76,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 28,
+        "long (2000-5000)": 45,
+        "short (50-200)": 3
+      },
+      "min_chars": 109,
+      "max_chars": 2702,
+      "avg_chars": 1884.1,
+      "median_chars": 2252,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 76,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 3,
+      "documents_with_chunks": 3,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Concept najaarsrapportage en 1e begrotingswijziging 2025 Recreatieschap Rottemeren",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: Toekomstvisie Groene Waterstad 2050, Rotterdam gaat voor groen",
+          "chunks": 72
+        },
+        {
+          "name": "Transcript: Vaststellen van de agenda",
+          "chunks": 1
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 76,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 76,
+      "distribution": {
+        "quote": {
+          "count": 76,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8084,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.943
+    }
+  }
+}

@@ -1,0 +1,722 @@
+{
+  "meeting_id": "796a912a-d15e-4753-8003-b4e2b118b53c",
+  "audit_timestamp": "2026-04-07T21:37:05.475141",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Vergadering Commissie Werkgelegenheid, Inkomen, Integratie, Schuldenaanpak en Armoedebestrijding (2018-2022) 31-10-2018",
+    "start_date": "2018-10-31 00:00:00",
+    "committee": "",
+    "quality_score": 1.0,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 193,
+    "document_count": 6
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 922,
+      "correct_count": 922,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.9985,
+      "party_attribution_rate": 0.0,
+      "total_segments": 649,
+      "attributed_segments": 648,
+      "unattributed_segments": 1
+    },
+    "speaker_diversity": {
+      "unique_speakers": 18,
+      "unique_parties": 0,
+      "top_speaker": "Baarle, S.R.T. van (voorzitter)",
+      "top_speaker_segment_count": 155,
+      "monologue_rate": 0.2388,
+      "speakers": {
+        "Baarle, S.R.T. van (voorzitter)": 155,
+        "Jami, E. (voorzitter)": 97,
+        "Wijbenga-Van Nieuwenhuizen, B. (wethouder)": 59,
+        "Moti, R. (wethouder)": 59,
+        "Arsieni, N. (D66)": 31,
+        "Jami, E. (Leefbaar Rotterdam)": 31,
+        "Lansink-Bastemeijer, P.J.P. (VVD)": 31,
+        "Grauss, M.K.A. (wethouder)": 31,
+        "Hoogwerf, T.C. (Leefbaar Rotterdam)": 25,
+        "Yildirim, D. (PvdA)": 25
+      },
+      "parties": {}
+    },
+    "segment_quality": {
+      "total_segments": 649,
+      "nonempty_segments": 649,
+      "total_words": 65778,
+      "total_chars": 361777,
+      "avg_words_per_segment": 101.4,
+      "avg_chars_per_segment": 557.4,
+      "short_segment_rate": 0.2142,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 13,
+      "items_with_content": 6,
+      "coverage_rate": 0.4615,
+      "items": [
+        {
+          "title": "1.01 Opening",
+          "segment_count": 0
+        },
+        {
+          "title": "1.02 Vaststelling van de agenda",
+          "segment_count": 19
+        },
+        {
+          "title": "1.03 Begroting 2019 en 2e herziening begroting 2018",
+          "segment_count": 0
+        },
+        {
+          "title": "Daarbij betrekken",
+          "segment_count": 6
+        },
+        {
+          "title": "Volgorde behandeling agendapunt 3 en indicatieve aanvangstijden per portefeuille wethouders",
+          "segment_count": 0
+        },
+        {
+          "title": "15:00 uur wethouder Wijbenga",
+          "segment_count": 0
+        },
+        {
+          "title": "1.03.01 Programma Maatschappelijke Ondersteuning (Begr. 2019)",
+          "segment_count": 243
+        },
+        {
+          "title": "16:30 uur wethouder Grauss",
+          "segment_count": 0
+        },
+        {
+          "title": "1.03.02 Programma Maatschappelijke Ondersteuning (Begr. 2019)",
+          "segment_count": 125
+        },
+        {
+          "title": "18.00 uur wethouder Moti",
+          "segment_count": 0
+        },
+        {
+          "title": "1.03.03 Programma Werk en Inkomen (Begr. 2019)",
+          "segment_count": 0
+        },
+        {
+          "title": "Aangeboden conceptmoties",
+          "segment_count": 255
+        },
+        {
+          "title": "1.04 Sluiting",
+          "segment_count": 1
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Vergadering Commissie Werkgelegenheid, Inkomen, Integratie, Schuldenaanpak en Armoedebestrijding (2018-2022) 31-10-2018",
+        "start_date": "2018-10-31 00:00:00",
+        "committee": null,
+        "review_status": "auto_approved",
+        "quality_score": 1.0,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Vergadering Commissie Werkgelegenheid, Inkomen, Integratie, Schuldenaanpak en Armoedebestrijding (2018-2022) 31-10-2018",
+        "start_date": "2018-10-31 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No committee found in staging meeting"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 18,
+      "recognized_speakers": 5,
+      "unrecognized_speakers": 13,
+      "recognition_rate": 0.2778,
+      "recognized": [
+        {
+          "name": "Baarle, S.R.T. van (voorzitter)",
+          "segment_count": 155,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Jami, E. (voorzitter)",
+          "segment_count": 97,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Wijbenga-Van Nieuwenhuizen, B. (wethouder)",
+          "segment_count": 59,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Grauss, M.K.A. (wethouder)",
+          "segment_count": 31,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Moti, R. (wethouder)",
+          "segment_count": 59,
+          "parties": [],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "Vonk, T.J. (ChristenUnie-SGP)",
+          "segment_count": 10,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Arsieni, N. (D66)",
+          "segment_count": 31,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Roest, L.L.P.R. (GroenLinks)",
+          "segment_count": 24,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Hoogwerf, T.C. (Leefbaar Rotterdam)",
+          "segment_count": 25,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Verkoelen, P.J.H.D. (50PLUS)",
+          "segment_count": 16,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Jami, E. (Leefbaar Rotterdam)",
+          "segment_count": 31,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Baarle, S.R.T. van (DENK)",
+          "segment_count": 9,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Lansink-Bastemeijer, P.J.P. (VVD)",
+          "segment_count": 31,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Büyükçifci, E. (NIDA Rotterdam)",
+          "segment_count": 12,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Yildirim, D. (PvdA)",
+          "segment_count": 25,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Zevenbergen, A. van (SP)",
+          "segment_count": 18,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Yigit, E. (DENK)",
+          "segment_count": 11,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Hallema, A. (CDA)",
+          "segment_count": 4,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 193,
+      "empty_chunks": 0,
+      "buckets": {
+        "long (2000-5000)": 129,
+        "medium (200-2000)": 60,
+        "short (50-200)": 4
+      },
+      "min_chars": 115,
+      "max_chars": 2782,
+      "avg_chars": 2011.7,
+      "median_chars": 2247,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 193,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 6,
+      "documents_with_chunks": 6,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: 1.02 Vaststelling van de agenda",
+          "chunks": 4
+        },
+        {
+          "name": "Transcript: 1.03.01 Programma Maatschappelijke Ondersteuning (Begr. 2019)",
+          "chunks": 58
+        },
+        {
+          "name": "Transcript: 1.03.02 Programma Maatschappelijke Ondersteuning (Begr. 2019)",
+          "chunks": 48
+        },
+        {
+          "name": "Transcript: 1.04 Sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Aangeboden conceptmoties",
+          "chunks": 80
+        },
+        {
+          "name": "Transcript: Daarbij betrekken",
+          "chunks": 2
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 193,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 193,
+      "distribution": {
+        "quote": {
+          "count": 192,
+          "rate": 0.9948
+        },
+        "full_text": {
+          "count": 1,
+          "rate": 0.0052
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "ok",
+    "n_samples": 5,
+    "avg_hallucination_rate": 0.548,
+    "safe_for_councillors": false,
+    "hallucination_types_found": [],
+    "dangerous_claims": [
+      {
+        "chunk_id": 19348,
+        "claim": "Yildirim (PvdA) zegt dat hij 'iets meer drive en power' proeft bij GroenLinks — dit suggereert een standpunt van een raadslid dat niet in het transcript staat en kan leiden tot onjuiste attributie van politieke posities."
+      },
+      {
+        "chunk_id": 19303,
+        "claim": "Arsieni (D66) stelt dat bijstandsuitkeringen voor statushouders dalen van 1955 naar 1540 — deze specifieke financiële bedragen kunnen raadsleden misleiden bij begrotingsbeslissingen"
+      },
+      {
+        "chunk_id": 19421,
+        "claim": "Baarle zei dat het woord aan 'de halen' gaat — dit suggereert een volgende spreker die niet duidelijk is geïdentificeerd, wat raadsleden kan verwarren over wie volgende aan het woord is"
+      }
+    ],
+    "chunk_results": [
+      {
+        "chunk_id": 19338,
+        "chunk_title": "Introduction and initial remarks by Yigit (DENK)",
+        "chunk_index": 0,
+        "content_preview": "[Yigit, E. (DENK)]: Ja, dan kun je ook voorzitteren, ik moet ook straks weer, ga ik naar commissie zoek, dus dat is snel zijn in mijn betoeg, ik heb tijdens de vorige vergaading ook door het toezeging",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Yigit spreekt namens DENK",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[Yigit, E. (DENK)]"
+            },
+            {
+              "claim": "Yigit moet straks naar commissie",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "ik moet ook straks weer, ga ik naar commissie zoek"
+            },
+            {
+              "claim": "Yigit heeft tijdens vorige vergadering toezeggingen ontvangen over verschillende voorstellen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "ik heb tijdens de vorige vergaading ook door het toezegging en groot op verschillende voorsstellen"
+            },
+            {
+              "claim": "DENK vindt dat armoedebestrijding geen keuze mag zijn, zeker niet voor kinderen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "art moet de iets wat je niemand toe en ze de art moet is, geen keuze voorveel en zeker niet voor kinderen, daarom hebben wij als denk"
+            },
+            {
+              "claim": "In de begroting staat dat kinderen in armoede van 1 op 4 naar 1 op 6 moeten",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "dat kinderen die in art moet opgrief van 1 op de 4, na 1 op de 6 moet"
+            },
+            {
+              "claim": "Dit doel staat niet als target in het college",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "het staat ook niet als target in het collese"
+            },
+            {
+              "claim": "Yigit vraagt om een indicator te ontwikkelen voor het meten van ambitie",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "ook willen vragen of er een indicator kan worden ontwikkeld waarmee getoets kan worden"
+            },
+            {
+              "claim": "Er bestaat armoede in Rotterdam",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "het is wel een soort aan moet bestaat in onze stad"
+            },
+            {
+              "claim": "Yigit spreekt met mensen die voedsel weg moeten gooien in plaats van het te geven",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ik spreek wel eens onder deemst die aangeerd dat ze tassen voortberoot in andere goede etesvaren weg moeten gooien"
+            },
+            {
+              "claim": "Yigit stelt voor een platform/marktplaats op te richten voor vraag en aanbod van kleren en spullen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "is het geen idee om een pad voor om zoals bijvogeld een manplaats op de richten in het leef te roepen, waarin het vraag en aanbot van voetje waarop bijvogeld kleren, andere spullen bij elkaar komt"
+            },
+            {
+              "claim": "Yigit vraagt de wethouder wat hij hiervan vindt",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ik wil de wettaudereer vragen wat hij hier van vind"
+            },
+            {
+              "claim": "Gisteren was er een programma 'de Rotterdam project' op RTO-4",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "gisteren, kijk een meer dan een mooie mensen naar het programma de Rotterdam project. Dat op RTO-4 van Start is genaan"
+            },
+            {
+              "claim": "Het programma duurt half jaar lang",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "half jaar lang 5 dat bloos je in Rotterdam volgen"
+            },
+            {
+              "claim": "Het programma helpt mensen hun leven weer op orde te krijgen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "begrijden om een leven weer op oorde te krijgen"
+            },
+            {
+              "claim": "Het programma was succesvol in Amsterdam",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "in Amsterdam was in het succes"
+            },
+            {
+              "claim": "Yigit vindt het mooi dat dit programma onder de aandacht wordt gebracht",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "ik vind het persoonlijk heel mooi dat dit ook onder de aandag wordt gebracht"
+            },
+            {
+              "claim": "Er zijn mensen in Rotterdam zonder dak boven hun hoofd",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "maar als en ook mensen in onze stad die niet van zoals precend een dock op een hun hoofd hebben"
+            },
+            {
+              "claim": "Yigit stelt voor dit programma ook in commissie te bespreken",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Misschien is het ook een idee, dan kijk ik ook even naar de commissie om"
+            }
+          ],
+          "total_claims": 18,
+          "supported": 18,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "De te controleren tekst is identiek aan het originele transcript. Alle feitelijke beweringen in de AI-gegenereerde notulen worden direct ondersteund door het originele transcriptfragment. Er zijn geen hallucinaties, onjuiste toeschrijvingen, fabricaties of andere factische fouten gedetecteerd. Het transcript zelf bevat veel fonetische transcriptiefouten en onduidelijkheden (ASR-artefacten), maar deze zijn consistent tussen bron en notulen. De notulen geven nauwkeurig weer wat Yigit (DENK) heeft gezegd, inclusief de inhoudelijke punten over armoedebestrijding, het voedselplatform-voorstel en het Rotterdam-project-programma."
+        }
+      },
+      {
+        "chunk_id": 19348,
+        "chunk_title": "Remarks by Jami (Leefbaar Rotterdam)",
+        "chunk_index": 10,
+        "content_preview": "[Baarle, S.R.T. van (voorzitter)]: En dat soort dingen om die manier nog een breder inzetbaar te maken.\nEn dat ik kan er ook voorstellen dat er een mensen en aantal mensen zijn die die de goed nu al v",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Baarle spreekt over het breder inzetbaar maken van dingen",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "In het originele transcript spreekt Baarle alleen als voorzitter om het woord toe te kennen. De inhoudelijke uitspraken in de te controleren tekst worden aan Baarle toegeschreven, maar hij spreekt inhoudelijk niet in het originele transcript."
+            },
+            {
+              "claim": "Baarle zegt dat mensen vier jaar iets krijgen",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Dit citaat staat niet in het originele transcript. Baarle spreekt daar alleen procedureel als voorzitter."
+            },
+            {
+              "claim": "Roest (GroenLinks) zegt 'Daar laat ik er even bij een paar dades van mijn tijd'",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Roest wordt niet genoemd in het originele transcript. Deze spreker en uitspraak zijn niet aantoonbaar."
+            },
+            {
+              "claim": "Yildirim (PvdA) zegt dat hij 'iets meer drive en power' proeft bij GroenLinks",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Yildirim spreekt niet in het originele transcript. Deze uitspraak is volledig gefabriceerd."
+            },
+            {
+              "claim": "Yildirim zegt dat hij zich aansluit bij collega's van GroenLinks",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Yildirim spreekt niet in het originele transcript. Deze bewering kan niet geverifieerd worden."
+            },
+            {
+              "claim": "Yildirim zegt dat hij 'hele goede dingen gehoord' heeft van 50 plus en SP",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Yildirim spreekt niet in het originele transcript. Dit citaat is gefabriceerd."
+            },
+            {
+              "claim": "Yildirim spreekt over schoolde industrie en kosten",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Yildirim spreekt niet in het originele transcript. Deze inhoudelijke bijdrage is niet aantoonbaar."
+            },
+            {
+              "claim": "Baarle zegt dat de partij van de arbeite 'ontzettend blij' is met inspanningen",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Dit citaat staat niet in het originele transcript. Baarle spreekt daar alleen procedureel."
+            }
+          ],
+          "total_claims": 8,
+          "supported": 0,
+          "unsupported": 8,
+          "contradicted": 0,
+          "hallucination_rate": 1.0,
+          "most_dangerous_claim": "Yildirim (PvdA) zegt dat hij 'iets meer drive en power' proeft bij GroenLinks — dit suggereert een standpunt van een raadslid dat niet in het transcript staat en kan leiden tot onjuiste attributie van politieke posities.",
+          "reasoning": "De te controleren tekst bevat GEEN enkele bewering die in het originele transcript kan worden geverifieerd. Het originele transcript toont alleen Yigit (DENK) en Baarle (voorzitter) die spreken. De te controleren tekst introduceert uitgebreide inhoudelijke bijdragen van Roest (GroenLinks) en Yildirim (PvdA) die volledig afwezig zijn uit het originele transcript. Alle inhoudelijke uitspraken van Baarle in de te controleren tekst zijn ook niet aantoonbaar. Dit is een KRITIEKE HALLUCINATIE-RATE van 100%. Het systeem heeft sprakers toegevoegd die niet spraken en citaten gefabriceerd die niet bestaan. Dit vormt een ERNSTIG RISICO voor raadsleden die op basis van deze notulen besluiten zouden nemen."
+        }
+      },
+      {
+        "chunk_id": 19303,
+        "chunk_title": "Introduction and Opening Remarks",
+        "chunk_index": 23,
+        "content_preview": "[Jami, E. (voorzitter)]: En daarna de focus alleen maar te leggen op inbergeren is niet per deven niet ze altijd goed voor het meden om in de samenleving te wel de taal verbeterd als het ook een prakt",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Jami stelt dat focus alleen op inburgering niet altijd goed is voor het medezeggenschap in de samenleving",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Het originele transcript bevat geen duidelijke uitspraak van Jami over dit onderwerp. De context is ernstig vervormd en onleesbaar."
+            },
+            {
+              "claim": "Er worden combinaties gezocht van inburgering en werken/leren",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Niet aantoonbaar in het originele transcript. De context is te vervormd om dit te verifiëren."
+            },
+            {
+              "claim": "Jami vraagt naar de begeleiding per week/maand voor statushouders",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Niet duidelijk in het originele transcript aanwezig. De context is onleesbaar."
+            },
+            {
+              "claim": "Een ratio van 1 op 80 wordt genoemd als niet intensief genoeg",
+              "verdict": "unsupported",
+              "hallucination_type": "amount_error",
+              "evidence": "Dit specifieke getal (1 op 80) staat niet in het originele transcript."
+            },
+            {
+              "claim": "Arsieni (D66) stelt dat bijstandsuitkeringen voor statushouders dalen van 1955 naar 1540",
+              "verdict": "unsupported",
+              "hallucination_type": "amount_error",
+              "evidence": "Deze specifieke bedragen (1955 en 1540) staan niet in het originele transcript. Arsieni spreekt wel in de context, maar deze getallen zijn niet verifieerbaar."
+            },
+            {
+              "claim": "Arsieni verwijst naar Instagram en Uitsdram in relatie tot deze bedragen",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Deze verwijzing staat niet in het originele transcript en lijkt onwaarschijnlijk in een gemeenteraadcontext."
+            },
+            {
+              "claim": "Er wordt gesproken over een geleidelijke uitstroom uit de bijstand",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Niet duidelijk aantoonbaar in het originele transcript."
+            },
+            {
+              "claim": "Jami verwijst naar 'mevraaf van koele en mevalliëlring'",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Deze namen/personen staan niet in het originele transcript en lijken ASR-fouten of fabricaties."
+            }
+          ],
+          "total_claims": 8,
+          "supported": 0,
+          "unsupported": 8,
+          "contradicted": 0,
+          "hallucination_rate": 1.0,
+          "most_dangerous_claim": "Arsieni (D66) stelt dat bijstandsuitkeringen voor statushouders dalen van 1955 naar 1540 — deze specifieke financiële bedragen kunnen raadsleden misleiden bij begrotingsbeslissingen",
+          "reasoning": "Het originele transcript is ernstig vervormd en onleesbaar (herhaalde 'gegegegege'-sequenties en incoherente fragmenten). De AI-gegenereerde notulen bevatten uitsluitend onverifieerbare beweringen. Geen enkele feitelijke bewering kan worden ondersteund door het originele transcript. Met name de specifieke financiële bedragen (1955, 1540) en de verwijzing naar 'Instagram en Uitsdram' zijn zeer verdacht en lijken volledig gefabriceerd. Dit document is ONBETROUWBAAR voor raadsbeslissingen."
+        }
+      },
+      {
+        "chunk_id": 19421,
+        "chunk_title": "Introduction to Method 1000 Bergs",
+        "chunk_index": 35,
+        "content_preview": "[Baarle, S.R.T. van (voorzitter)]: n is het nou wat betrecht een begroting is het nou onderdeel van uw budget wat ik merk dat de plan op dit onderdeel het nog niet heel erg uitgewerkt zijn is hoe zie ",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Vonk (ChristenUnie-SGP) sprak tijdens deze vergadering",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[Vonk, T.J. (ChristenUnie-SGP)]: ja dan kveld voorzitter veel z'n gezegd..."
+            },
+            {
+              "claim": "Vonk zei blij te zijn met 'de ton' en het positieve mensbeeld",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "ik ben op blij met de ton en ook het positieve mensbeeld was prikt uit de aanpak"
+            },
+            {
+              "claim": "Vonk stelde dat maatwerk het kredo is",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "het maatwerk is het kredo waar je ook ver dan komt wie ook bent"
+            },
+            {
+              "claim": "Vonk verwees naar nieuwe energie als grote ambitie",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "hebben we ook een hele grote ambitie werd hadden in zo'n samen een hele grote ambitie hier gesteld het nieuwe energie"
+            },
+            {
+              "claim": "Vonk vroeg of de wethouder bereid is experimenten voort te zetten",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "ik ben wel benoed of de wethouder deze ook volgende gaat er eigenlijk wel vanuit maar of hij ook bereid is"
+            },
+            {
+              "claim": "Vonk stelde dat meer kredibiliteit nodig is",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "we hebben eigenlijk aler krediviteit nodig dus dan ook de experimenten"
+            },
+            {
+              "claim": "Vonk vroeg naar de prognose voor 2019 met betrekking tot het buikbeutjeet",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "zou ik nog even heel kort kan achter kunnen aangeven wat voor u de prognose is voor 2019 die als het gaat om het bijvoudt"
+            },
+            {
+              "claim": "Baarle zei dat het woord aan 'de halen' gaat",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "benieuwd volk gedaan is het woord aan de halen maar dat is naar het — geen spreker 'de halen' geïdentificeerd in context"
+            }
+          ],
+          "total_claims": 8,
+          "supported": 7,
+          "unsupported": 1,
+          "contradicted": 0,
+          "hallucination_rate": 0.12,
+          "most_dangerous_claim": "Baarle zei dat het woord aan 'de halen' gaat — dit suggereert een volgende spreker die niet duidelijk is geïdentificeerd, wat raadsleden kan verwarren over wie volgende aan het woord is",
+          "reasoning": "De AI-gegenereerde notulen bevatten grotendeels ondersteunde beweringen uit het originele transcript. De meeste uitspraken van Vonk zijn traceerbaar, hoewel het transcript zelf zeer slecht getranskribeerd is (ASR-fouten zoals 'kveld' voor 'goedenavond', 'ton' voor mogelijk 'toon', 'buikbeutjeet' voor mogelijk 'begroting'). De enige hallucinatie is de verwijzing naar 'de halen' als volgende spreker — deze persoon is niet geïdentificeerd in het originele transcript. Dit is een laag hallucinatiepercentage (13%), maar de kwaliteit van het originele transcript is dermate slecht dat verificatie van inhoudelijke juistheid zeer moeilijk is."
+        }
+      },
+      {
+        "chunk_id": 19328,
+        "chunk_title": "Introduction and Opening Remarks",
+        "chunk_index": 48,
+        "content_preview": "[Jami, E. (voorzitter)]: Omdat ze die opleinen zien als een kans op werkt.\n[Wijbenga-Van Nieuwenhuizen, B. (wethouder)]: Contactmoment met keesloot, zeker, tacht, ja, je zegt veel, maar het zijn natuu",
+        "claim_verification": {
+          "claims": [],
+          "total_claims": 8,
+          "supported": 3,
+          "unsupported": 5,
+          "contradicted": 0,
+          "hallucination_rate": 0.62,
+          "most_dangerous_claim": null,
+          "reasoning": "Parsed via regex fallback (malformed JSON from judge)"
+        }
+      }
+    ]
+  },
+  "verdict": {
+    "recommendation": "REJECT — fix issues before promotion",
+    "issues": [
+      "High hallucination rate: 54.8% (threshold ≤10%)"
+    ],
+    "warnings": [
+      "Dangerous claim in chunk 19348: Yildirim (PvdA) zegt dat hij 'iets meer drive en power' proeft bij GroenLinks — dit suggereert een standpunt van een raa",
+      "Dangerous claim in chunk 19303: Arsieni (D66) stelt dat bijstandsuitkeringen voor statushouders dalen van 1955 naar 1540 — deze specifieke financiële be",
+      "Dangerous claim in chunk 19421: Baarle zei dat het woord aan 'de halen' gaat — dit suggereert een volgende spreker die niet duidelijk is geïdentificeerd"
+    ],
+    "scores": {
+      "hallucination_rate": 0.548,
+      "speaker_attribution_rate": 0.9985,
+      "neer": 0.0,
+      "pipeline_quality_score": 1.0
+    }
+  }
+}

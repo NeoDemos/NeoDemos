@@ -1,0 +1,700 @@
+{
+  "meeting_id": "bc2a348f-725d-4b39-9078-70fdb38fc93e",
+  "audit_timestamp": "2026-04-07T21:33:18.390682",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+    "start_date": "2025-06-11 00:00:00",
+    "committee": "WIOS",
+    "quality_score": 0.974,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 128,
+    "document_count": 6
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 706,
+      "correct_count": 706,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.9136,
+      "party_attribution_rate": 0.4082,
+      "total_segments": 463,
+      "attributed_segments": 423,
+      "unattributed_segments": 40
+    },
+    "speaker_diversity": {
+      "unique_speakers": 18,
+      "unique_parties": 7,
+      "top_speaker": "J.M.D. (Joey) de Waard Commissievoorzitter",
+      "top_speaker_segment_count": 120,
+      "monologue_rate": 0.2592,
+      "speakers": {
+        "J.M.D. (Joey) de Waard Commissievoorzitter": 120,
+        "A.I. (Abigail) Norville": 48,
+        "L.S. (Larissa) Vlieger": 45,
+        "F. (Faouzi) Achbar": 39,
+        "A.J.A. (Agnes) Maassen": 32,
+        "S. (Sarah) Reitema": 28,
+        "J. (Jordi) Vicario": 21,
+        "S. (Simon) Ceulemans": 15,
+        "E.M. (Ellen) Verouden Burgercommissielid CDA": 14,
+        "F. (Femke) Bouwer-van Schie Burgercommissielid": 12
+      },
+      "parties": {
+        "GroenLinks": 45,
+        "D66": 40,
+        "PvdA": 37,
+        "VVD": 31,
+        "Leefbaar Rotterdam": 17,
+        "Volt": 15,
+        "BIJ1": 4
+      }
+    },
+    "segment_quality": {
+      "total_segments": 463,
+      "nonempty_segments": 463,
+      "total_words": 39833,
+      "total_chars": 225544,
+      "avg_words_per_segment": 86.0,
+      "avg_chars_per_segment": 487.1,
+      "short_segment_rate": 0.1231,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 7,
+      "items_with_content": 6,
+      "coverage_rate": 0.8571,
+      "items": [
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 1
+        },
+        {
+          "title": "Besluitenlijst openbare procedurevergadering van 21 mei 2025",
+          "segment_count": 0
+        },
+        {
+          "title": "Ingekomen stukken",
+          "segment_count": 25
+        },
+        {
+          "title": "Sluiting",
+          "segment_count": 2
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 3
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 8
+        },
+        {
+          "title": "Jaarstukken 2024",
+          "segment_count": 424
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+        "start_date": "2025-06-11 00:00:00",
+        "committee": "WIOS",
+        "review_status": "auto_approved",
+        "quality_score": 0.974,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+        "start_date": "2025-06-11 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 18,
+      "recognized_speakers": 16,
+      "unrecognized_speakers": 2,
+      "recognition_rate": 0.8889,
+      "recognized": [
+        {
+          "name": "J.M.D. (Joey) de Waard Commissievoorzitter",
+          "segment_count": 120,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "T. (Tim) Kind",
+          "segment_count": 3,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Simon) Ceulemans",
+          "segment_count": 15,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Sarah) Reitema",
+          "segment_count": 28,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "L.S. (Larissa) Vlieger",
+          "segment_count": 45,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J.M. (Joan) Nunnely",
+          "segment_count": 8,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "A.J.A. (Agnes) Maassen",
+          "segment_count": 32,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D.J. (Diederik) van Dommelen",
+          "segment_count": 10,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "E.M. (Ellen) Verouden Burgercommissielid CDA",
+          "segment_count": 14,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "F. (Femke) Bouwer-van Schie Burgercommissielid",
+          "segment_count": 12,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "D. (Duygu) Yildirim",
+          "segment_count": 9,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M. (Manuel) Crielaard",
+          "segment_count": 2,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J. (Jordi) Vicario",
+          "segment_count": 21,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.R. (Marchiano) van Campenhout",
+          "segment_count": 4,
+          "parties": [
+            "BIJ1"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Said) Kasmi",
+          "segment_count": 8,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "F. (Faouzi) Achbar",
+          "segment_count": 39,
+          "parties": [],
+          "recognized_as": "council_member"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "T.B. (Tim)  Versnel",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "A.I. (Abigail) Norville",
+          "segment_count": 48,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 128,
+      "empty_chunks": 0,
+      "buckets": {
+        "long (2000-5000)": 85,
+        "medium (200-2000)": 39,
+        "short (50-200)": 4
+      },
+      "min_chars": 66,
+      "max_chars": 2760,
+      "avg_chars": 1942.5,
+      "median_chars": 2346,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 128,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 6,
+      "documents_with_chunks": 6,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Ingekomen stukken",
+          "chunks": 4
+        },
+        {
+          "name": "Transcript: Jaarstukken 2024",
+          "chunks": 118
+        },
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Overlegvergadering",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Vaststellen van de agenda",
+          "chunks": 2
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 128,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 128,
+      "distribution": {
+        "quote": {
+          "count": 126,
+          "rate": 0.9844
+        },
+        "full_text": {
+          "count": 2,
+          "rate": 0.0156
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "ok",
+    "n_samples": 5,
+    "avg_hallucination_rate": 0.344,
+    "safe_for_councillors": false,
+    "hallucination_types_found": [],
+    "dangerous_claims": [
+      {
+        "chunk_id": 6877,
+        "claim": "Het college heeft het target 'schil om de school' gehaald — dit is een specifieke feitelijke bewering over een beleidsresultaat die niet in de context voorkomt en waarvan de juistheid niet kan worden geverifieerd"
+      },
+      {
+        "chunk_id": 6902,
+        "claim": "Er is een voortgangsrapportage over digitale inclusie op 5 februari — deze specifieke datum kan raadsleden misleiden bij het zoeken naar documenten of het verifiëren van timing van besluitvorming"
+      },
+      {
+        "chunk_id": 6927,
+        "claim": "A.I. (Abigail) Norville spreekt tijdens deze vergadering — Dit is een kritieke hallucinatie omdat het een volledig fictieve spreker introduceert die niet aanwezig was, wat raadsleden kan misleiden over wie wat heeft gezegd."
+      }
+    ],
+    "chunk_results": [
+      {
+        "chunk_id": 6827,
+        "chunk_title": "Transcript: Opening en mededelingen",
+        "chunk_index": 0,
+        "content_preview": "[J.M.D. (Joey) de Waard Commissievoorzitter]: Openbare vergadering van de Commissie Weerstand van 11 juni 2025 en heet ik welkom het publiek, de pers en de belangstellenden die deze commissie via de w",
+        "claim_verification": {
+          "claims": [],
+          "total_claims": 18,
+          "supported": 18,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Parsed via regex fallback (malformed JSON from judge)"
+        }
+      },
+      {
+        "chunk_id": 6852,
+        "chunk_title": "Specific Suggestions for the Committee on Work and Income, Education, etc.",
+        "chunk_index": 15,
+        "content_preview": "[A.J.A. (Agnes) Maassen (D66)]: Omdat we zeggen ja, elk jaar wordt het leven een klein beetje duurder als er sprake is van inflatie.\nDat hebben we niet bij armoede regelingen. Mijn vraag is waarom doe",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Agnes Maassen (D66) stelt dat armoederegelingen niet jaarlijks worden geïndexeerd voor inflatie",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Maassen zegt: 'Omdat we zeggen ja, elk jaar wordt het leven een klein beetje duurder als er sprake is van inflatie. Dat hebben we niet bij armoede regelingen.'"
+            },
+            {
+              "claim": "De kostprijs voor indexering van armoederegelingen bedraagt 1,5 miljoen euro",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Maassen stelt: 'Het kostte 1,5 miljoen volgens de beantwoording.'"
+            },
+            {
+              "claim": "Donna Daria heeft subsidies gekregen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Maassen zegt: 'Ja, Donna Daria, die heeft de subsidies gekregen.'"
+            },
+            {
+              "claim": "De wethouder heeft toegelicht wat er met bepaalde subsidies is gebeurd",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Maassen stelt: 'De wethouder heeft ook toegelicht dat wat er met bepaalde subsidies wel of niet is gebeurd.'"
+            },
+            {
+              "claim": "Maassen had eerder gevraagd naar Europese subsidies van Donna Daria voor vrouwenrechten winkels",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Maassen zegt: 'Maar ik had de vorige keer natuurlijk gevraagd van ja, wat is er nou gebeurd met die Europese subsidies van Donna Daria voor die vrouwenrechten winkels?'"
+            },
+            {
+              "claim": "De Bestemmingsreserve inburgering is in 2024 vrijgevallen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Maassen stelt: 'Dan de Bestemmingsreserve inburgering is in 2024 vrijgevallen'"
+            },
+            {
+              "claim": "De reserve was gevormd voor de 'ondertussen groep'",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Maassen zegt: 'en die was gevormd voor de ondertussen groep'"
+            },
+            {
+              "claim": "De ondertussen groep bestaat uit inburgeraars die al heel lang bezig zijn met het behalen van de inburgeringsverplichting",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Maassen stelt: 'ondertussen Groep is dus een groep. Inburgeraars die. Al heel lang bezig is met het behalen van. Die inburgeringsplicht'"
+            },
+            {
+              "claim": "Leden van de ondertussen groep kunnen geen lening meer afsluiten omdat ze in het oude stelsel zaten waarbij ze zelf moesten betalen voor inburgeringscursussen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Maassen zegt: 'en die geen lening meer kunnen afsluiten omdat ze in het oude stelsel zaten waarbij ze zelf moesten betalen voor hun inburgeringscursussen.'"
+            },
+            {
+              "claim": "Larissa Vlieger (GroenLinks) deelt de conclusie van Maassen over armoedebeleid",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Vlieger zegt: 'Ik deel de conclusie van mevrouw Maas als het gaat om het armoedebeleid.'"
+            },
+            {
+              "claim": "GroenLinks en de PvdA hebben veel voorstellen gedaan om dingen met ander beleid te doen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Vlieger stelt: 'Tegelijkertijd hebben wij in ieder geval GroenLinks en ook andere partijen PvdA bijvoorbeeld, veel voorstellen gedaan de afgelopen jaren om dingen met ander beleid te doen.'"
+            }
+          ],
+          "total_claims": 11,
+          "supported": 11,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Alle feitelijke beweringen in het AI-gegenereerde fragment kunnen direct worden geverifieerd in het originele transcript. De uitspraken van Agnes Maassen (D66) en Larissa Vlieger (GroenLinks) zijn letterlijk overgenomen uit de context. Er zijn geen hallucinaties gedetecteerd: geen onjuiste stemtoeschrijvingen, geen fictieve sprekers, geen verzonnen bedragen, geen valse datums, en geen gefabriceerde citaten. Het fragment bevat alleen beweringen die daadwerkelijk in de vergadering zijn uitgesproken."
+        }
+      },
+      {
+        "chunk_id": 6877,
+        "chunk_title": "Specific Suggestions for the Committee on Work and Income, Education, etc.",
+        "chunk_index": 40,
+        "content_preview": "[J.M. (Joan) Nunnely (D66)]: jaarstukken te zien zal zijn voor ons als raad. Dank je wel. Dank u wel mevrouw. Verder gaan we door naar mevrouw Nunnely.\n[J.M. (Joan) Nunnely (D66)]: Ja, dank. U. Wel, D",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Joan Nunnely spreekt namens D66",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[J.M. (Joan) Nunnely (D66)]"
+            },
+            {
+              "claim": "Het college heeft het target 'schil om de school' gehaald",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "niet gevonden in context"
+            },
+            {
+              "claim": "Nunnely vraagt naar aansluiting tussen cultuur en educatie",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Hoe is de aansluiting met cultuur en educatie geborgd?"
+            },
+            {
+              "claim": "Nunnely vraagt hoeveel leerlingen en scholen cultureel educatief aanbod hebben gehad",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Hoeveel leerlingen en scholen hebben daadwerkelijk cultureel educatief aanbod gehad via deze school"
+            },
+            {
+              "claim": "Nunnely vraagt specifiek naar voortgezet onderwijs en middelbaar beroepsonderwijs",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Specifiek in het voortgezet onderwijs en middelbaar beroepsonderwijs?"
+            },
+            {
+              "claim": "Nunnely vraagt naar structurele belemmeringen voor culturele instellingen en scholen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Welke structurele belemmeringen ervaren cultureel culturele instellingen en scholen bij het invullen van dit aanbod?"
+            },
+            {
+              "claim": "Nunnely vraagt naar het verschil tussen geplande en gerealiseerde cultuur-educatieve projecten",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Hoe verklaart het college het verschil tussen de geplande en de gerealiseerde cultuur? Educatieve"
+            },
+            {
+              "claim": "Joey de Waard is Commissievoorzitter",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[J.M.D. (Joey) de Waard Commissievoorzitter]"
+            },
+            {
+              "claim": "De Waard verwijst naar projecten in achterstandswijken in het NPR Z gebied",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "projecten in de achterstandswijken, zoals in het NPR Z gebied?"
+            },
+            {
+              "claim": "Femke Bouwer-van Schie is Burgercommissielid (Volt)",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[F. (Femke) Bouwer-van Schie Burgercommissielid (Volt)]"
+            }
+          ],
+          "total_claims": 10,
+          "supported": 9,
+          "unsupported": 1,
+          "contradicted": 0,
+          "hallucination_rate": 0.1,
+          "most_dangerous_claim": "Het college heeft het target 'schil om de school' gehaald — dit is een specifieke feitelijke bewering over een beleidsresultaat die niet in de context voorkomt en waarvan de juistheid niet kan worden geverifieerd",
+          "reasoning": "De te controleren tekst bevat voornamelijk vragen en standpunten van raadsleden die in het originele transcript voorkomen. Slechts één bewering ('Het college heeft het target schil om de school gehaald') kan niet worden geverifieerd in de context. Dit lijkt een parafrase van wat Nunnely zei, maar de exacte formulering en context ontbreken. De meeste beweringen zijn ondersteund door directe citaten uit het transcript. De hallucinatie-rate is laag (10%), wat wijst op een relatief betrouwbare transcriptie van deze sprekerbeurt."
+        }
+      },
+      {
+        "chunk_id": 6902,
+        "chunk_title": "Specific Suggestions for the Committee on Work and Income, Education, etc.",
+        "chunk_index": 65,
+        "content_preview": "[J.M.D. (Joey) de Waard Commissievoorzitter]: Ik had eigenlijk zelfs een compliment verwacht van uh, dat was geen grap.\n[F. (Faouzi) Achbar]: Uh, wat is er gebeurd op digitale inclusie? Uh voorzitter,",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Joey de Waard is commissievoorzitter",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[J.M.D. (Joey) de Waard Commissievoorzitter]"
+            },
+            {
+              "claim": "Faouzi Achbar sprak over digitale inclusie",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[F. (Faouzi) Achbar]: Uh, wat is er gebeurd op digitale inclusie?"
+            },
+            {
+              "claim": "Er was een voortgangsrapportage over digitale inclusie op 5 februari",
+              "verdict": "unsupported",
+              "hallucination_type": "date_displacement",
+              "evidence": "niet gevonden in context"
+            },
+            {
+              "claim": "Er is een Dream Space geopend in Rotterdam-Zuid in samenwerking met Microsoft en Feyenoord",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "niet gevonden in context"
+            },
+            {
+              "claim": "Er is een 'By the Future' festival dat jaarlijks wordt georganiseerd",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "niet gevonden in context"
+            },
+            {
+              "claim": "Er is samenwerking met Erasmus, hogeschool, UH, MBO's, Feyenoord, Microsoft en bibliotheek",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "niet gevonden in context"
+            },
+            {
+              "claim": "Larissa Vlieger (GroenLinks) maakte een interruptie",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[L.S. (Larissa) Vlieger (GroenLinks)]: fantastische partijen. Veel voorbeelden inderdaad, maar ook een paar interrupties."
+            },
+            {
+              "claim": "De jaarstukken bevatten onvoldoende informatie over digitale inclusie",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "niet gevonden in context"
+            }
+          ],
+          "total_claims": 8,
+          "supported": 3,
+          "unsupported": 5,
+          "contradicted": 0,
+          "hallucination_rate": 0.62,
+          "most_dangerous_claim": "Er is een voortgangsrapportage over digitale inclusie op 5 februari — deze specifieke datum kan raadsleden misleiden bij het zoeken naar documenten of het verifiëren van timing van besluitvorming",
+          "reasoning": "De te controleren tekst bevat uitspraken van Faouzi Achbar over het digitale inclusie-programma. Hoewel de spreker en het onderwerp in de context voorkomen, zijn veel specifieke details (Dream Space, Microsoft-Feyenoord samenwerking, By the Future festival, concrete samenwerkingspartners) NIET terug te vinden in het originele transcript. Dit zijn waarschijnlijk inhoudelijke uitspraken die Achbar deed, maar ze staan niet in het meegeleverde transcriptfragment. De meest gevaarlijke hallucinatie is de specifieke datum '5 februari' voor de voortgangsrapportage — dit kan raadsleden misleiden bij het zoeken naar relevante documenten. Het fragment lijkt onvolledig te zijn (eindigt abrupt met 'mevrouw van V. Te.'), wat suggereert dat de volledige context ontbreekt."
+        }
+      },
+      {
+        "chunk_id": 6927,
+        "chunk_title": "Specific Suggestions for the Committee on Work and Income, Education, etc.",
+        "chunk_index": 90,
+        "content_preview": "[A.I. (Abigail) Norville]: Dus ik heb het daadwerkelijk aan die deur gezien dat mensen zeiden Ah, ik heb je gezien op die poster, ik wil wel met je in gesprek.\nEn zo proberen we met kleine en met grot",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "A.I. (Abigail) Norville spreekt tijdens deze vergadering",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "In het originele transcript spreekt alleen D.J. (Diederik) van Dommelen (VVD). Er is geen enkele uitspraak van 'A.I. (Abigail) Norville' in de context."
+            },
+            {
+              "claim": "E.M. (Ellen) Verouden is Burgercommissielid CDA",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Deze persoon komt niet voor in het originele transcript. De context bevat alleen uitspraken van D.J. van Dommelen."
+            },
+            {
+              "claim": "S. (Sarah) Reitema (PvdA) spreekt tijdens deze vergadering",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Deze persoon komt niet voor in het originele transcript. De context bevat alleen uitspraken van D.J. van Dommelen."
+            },
+            {
+              "claim": "Het aantal intakes is in 2024 achteruit gegaan",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "Deze bewering wordt niet gemaakt in het originele transcript. Het gaat in de context over COR-onderzoeken en jaarstukken 2024, niet over intakes."
+            },
+            {
+              "claim": "Het vertrouwen in de overheid was in 2023 al laag",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "Deze bewering staat niet in het originele transcript. De context verwijst naar vertrouwen in relatie tot 210A-onderzoeken, maar niet naar 2023-gegevens."
+            },
+            {
+              "claim": "Er zijn grote fluctuaties in portefeuille-gerelateerde gesprekken en intakes",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "Deze bewering komt niet voor in het originele transcript."
+            },
+            {
+              "claim": "Posters zijn effectief gebleken in het bereiken van mensen",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "Deze bewering staat niet in het originele transcript. De context gaat over COR-onderzoeken en 210A-onderzoeken."
+            },
+            {
+              "claim": "Er worden uitgebreide voortgangsrapportages naar de raad gestuurd",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "Deze bewering staat niet in het originele transcript."
+            }
+          ],
+          "total_claims": 8,
+          "supported": 0,
+          "unsupported": 8,
+          "contradicted": 0,
+          "hallucination_rate": 1.0,
+          "most_dangerous_claim": "A.I. (Abigail) Norville spreekt tijdens deze vergadering — Dit is een kritieke hallucinatie omdat het een volledig fictieve spreker introduceert die niet aanwezig was, wat raadsleden kan misleiden over wie wat heeft gezegd.",
+          "reasoning": "De te controleren tekst is volledig gefabriceerd. Het originele transcript bevat ALLEEN uitspraken van D.J. (Diederik) van Dommelen (VVD) over COR-onderzoeken, 210A-onderzoeken en jaarstukken 2024. De AI-gegenereerde notulen introduceren drie volledig fictieve sprekers (Abigail Norville, Ellen Verouden, Sarah Reitema) en voeren een geheel ander gesprek over intakes, vertrouwen in de overheid, posters en voortgangsrapportages. Dit is een KRITIEKE FOUT: de notulen beschrijven een compleet ander debat dan wat in het transcript staat. Dit vormt een ernstig risico voor raadsleden die op basis van deze notulen besluiten zouden nemen."
+        }
+      }
+    ]
+  },
+  "verdict": {
+    "recommendation": "REJECT — fix issues before promotion",
+    "issues": [
+      "High hallucination rate: 34.4% (threshold ≤10%)"
+    ],
+    "warnings": [
+      "Dangerous claim in chunk 6877: Het college heeft het target 'schil om de school' gehaald — dit is een specifieke feitelijke bewering over een beleidsre",
+      "Dangerous claim in chunk 6902: Er is een voortgangsrapportage over digitale inclusie op 5 februari — deze specifieke datum kan raadsleden misleiden bij",
+      "Dangerous claim in chunk 6927: A.I. (Abigail) Norville spreekt tijdens deze vergadering — Dit is een kritieke hallucinatie omdat het een volledig ficti"
+    ],
+    "scores": {
+      "hallucination_rate": 0.344,
+      "speaker_attribution_rate": 0.9136,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.974
+    }
+  }
+}

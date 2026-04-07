@@ -13,3 +13,4 @@ psycopg[binary]
 pgvector
 APScheduler
 mcp[cli]>=1.0.0
+anthropic>=0.40.0

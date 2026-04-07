@@ -1,0 +1,773 @@
+{
+  "meeting_id": "27b79c43-5c78-43f9-a1b9-a004b301ce9a",
+  "audit_timestamp": "2026-04-07T21:23:45.563251",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+    "start_date": "2025-05-22 00:00:00",
+    "committee": "BOFV",
+    "quality_score": 0.896,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 150,
+    "document_count": 9
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 1143,
+      "correct_count": 1143,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.653,
+      "party_attribution_rate": 0.3028,
+      "total_segments": 611,
+      "attributed_segments": 399,
+      "unattributed_segments": 212
+    },
+    "speaker_diversity": {
+      "unique_speakers": 21,
+      "unique_parties": 11,
+      "top_speaker": "L.S. (Larissa) Vlieger Commissievoorzitter",
+      "top_speaker_segment_count": 131,
+      "monologue_rate": 0.2144,
+      "speakers": {
+        "L.S. (Larissa) Vlieger Commissievoorzitter": 131,
+        "R.A.C.J. (Robert) Simons": 49,
+        "D.P.A. (Dennis) Tak": 38,
+        "R. (Ronald) Buijt": 29,
+        "J. (Judith) Bokhove": 23,
+        "J.M.D. (Joey) de Waard": 23,
+        "E. (Eveline) Padberg-de Haan Burgercommissielid": 16,
+        "T.S.J. (Theo) Coşkun": 14,
+        "T. (Tim) de Haan": 12,
+        "S. (Serkan) Soytekin": 11
+      },
+      "parties": {
+        "PvdA": 38,
+        "GroenLinks": 33,
+        "Leefbaar Rotterdam": 31,
+        "VVD": 22,
+        "SP": 14,
+        "D66": 13,
+        "DENK": 11,
+        "Partij voor de Dieren": 8,
+        "CDA": 7,
+        "ChristenUnie": 6,
+        "Volt": 2
+      }
+    },
+    "segment_quality": {
+      "total_segments": 611,
+      "nonempty_segments": 611,
+      "total_words": 54155,
+      "total_chars": 298463,
+      "avg_words_per_segment": 88.6,
+      "avg_chars_per_segment": 488.5,
+      "short_segment_rate": 0.3732,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 13,
+      "items_with_content": 9,
+      "coverage_rate": 0.6923,
+      "items": [
+        {
+          "title": "Procedurevergadering",
+          "segment_count": 1
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 3
+        },
+        {
+          "title": "Ingekomen stukken",
+          "segment_count": 17
+        },
+        {
+          "title": "Lijst van openstaande toezeggingen, schriftelijke vragen en moties",
+          "segment_count": 5
+        },
+        {
+          "title": "Commissieplanning en lange termijn agenda raad",
+          "segment_count": 9
+        },
+        {
+          "title": "Sluiting",
+          "segment_count": 0
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 6
+        },
+        {
+          "title": "Adviezenlijst openbare overlegvergadering van 17 en 24 april 2025",
+          "segment_count": 0
+        },
+        {
+          "title": "Verbeterlijnen Wijk aan Zet na evaluatie",
+          "segment_count": 317
+        },
+        {
+          "title": "Voortgang aanpak kleine kernen",
+          "segment_count": 100
+        },
+        {
+          "title": "Vervolg (2) uitkomsten onderzoek mogelijke fraude stadsontwikkeling",
+          "segment_count": 152
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 1
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+        "start_date": "2025-05-22 00:00:00",
+        "committee": "BOFV",
+        "review_status": "auto_approved",
+        "quality_score": 0.896,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+        "start_date": "2025-05-22 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 21,
+      "recognized_speakers": 20,
+      "unrecognized_speakers": 1,
+      "recognition_rate": 0.9524,
+      "recognized": [
+        {
+          "name": "L.S. (Larissa) Vlieger Commissievoorzitter",
+          "segment_count": 131,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "J.A. (Jan) de Ridder Plaatsvervangend directeur Rekenkamer Rotterdam",
+          "segment_count": 2,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "T.S.J. (Theo) Coşkun",
+          "segment_count": 14,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "R.G.C. (René) Segers-Hoogendoorn",
+          "segment_count": 7,
+          "parties": [
+            "CDA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.S. (Marike) Abrahamse",
+          "segment_count": 3,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "E. (Eveline) Padberg-de Haan Burgercommissielid",
+          "segment_count": 16,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "J. (Judith) Bokhove",
+          "segment_count": 23,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "D.P.A. (Dennis) Tak",
+          "segment_count": 38,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J.M.D. (Joey) de Waard",
+          "segment_count": 23,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T. (Tim) de Haan",
+          "segment_count": 12,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Serkan) Soytekin",
+          "segment_count": 11,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T. (Tim) Kind",
+          "segment_count": 2,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.A.C.J. (Robert) Simons",
+          "segment_count": 49,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "R. (Ronald) Buijt",
+          "segment_count": 29,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "Adviseur",
+          "segment_count": 3,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "R.T.J. (Ruud) van der Velden",
+          "segment_count": 8,
+          "parties": [
+            "Partij voor de Dieren"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T. (Thomas) Roskam",
+          "segment_count": 8,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S.J.C. (Simon) Becker",
+          "segment_count": 3,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.H. (Marvin) Biljoen",
+          "segment_count": 10,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "F. (Fatih) Elbay",
+          "segment_count": 1,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "T.J. (Tjalling) Vonk",
+          "segment_count": 6,
+          "parties": [
+            "ChristenUnie"
+          ],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 150,
+      "empty_chunks": 0,
+      "buckets": {
+        "short (50-200)": 1,
+        "medium (200-2000)": 64,
+        "long (2000-5000)": 85
+      },
+      "min_chars": 175,
+      "max_chars": 2782,
+      "avg_chars": 1885.2,
+      "median_chars": 2187,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 150,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 9,
+      "documents_with_chunks": 9,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Commissieplanning en lange termijn agenda raad",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Ingekomen stukken",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Lijst van openstaande toezeggingen, schriftelijke vragen en moties",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Procedurevergadering",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Vaststellen van de agenda",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Verbeterlijnen Wijk aan Zet na evaluatie",
+          "chunks": 92
+        },
+        {
+          "name": "Transcript: Vervolg (2) uitkomsten onderzoek mogelijke fraude stadsontwikkeling",
+          "chunks": 36
+        },
+        {
+          "name": "Transcript: Voortgang aanpak kleine kernen",
+          "chunks": 13
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 150,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 150,
+      "distribution": {
+        "quote": {
+          "count": 149,
+          "rate": 0.9933
+        },
+        "full_text": {
+          "count": 1,
+          "rate": 0.0067
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "ok",
+    "n_samples": 5,
+    "avg_hallucination_rate": 0.314,
+    "safe_for_councillors": false,
+    "hallucination_types_found": [],
+    "dangerous_claims": [
+      {
+        "chunk_id": 5825,
+        "claim": "Van der Velden zegt dat het een flut onderzoek is — Dit is een CONTRADICTIE. Het transcript toont aan dat Van der Velden expliciet ONTKENT dit oordeel te hebben. Dit kan raadsleden misleiden over zijn werkelijke standpunt."
+      },
+      {
+        "chunk_id": 5732,
+        "claim": "Judith Bokhove (GroenLinks) zei: 'Maar ik ben blij om te horen dat er voor Leefbaar Rotterdam wel serieus zal nadenken over meer mandaat voor die wijkraden.' — Dit is gevaarlijk omdat het een uitspraak toeschrijft aan een spreker die niet in het transcript voorkomt, wat kan leiden tot onjuiste attributie van standpunten aan GroenLinks."
+      },
+      {
+        "chunk_id": 5852,
+        "claim": "Larissa Vlieger zegt: 'Voor nu en dan stemmen we af dat in ieder geval die toezegging voor de geagendeerd datum dan afgedaan is' — Dit suggereert een besluit dat niet in het transcript voorkomt en kan raadsleden misleiden over wat daadwerkelijk is afgesproken."
+      },
+      {
+        "chunk_id": 5775,
+        "claim": "Simons vermeldt dat het college na één jaar tegen hem zei 'we gaan toch niet elk jaar 1500' — dit is een onvolledig citaat dat mogelijk onjuist wordt weergegeven en kan raadsleden misleiden over collegebeslissingen"
+      }
+    ],
+    "chunk_results": [
+      {
+        "chunk_id": 5805,
+        "chunk_title": "Transcript: Voortgang aanpak kleine kernen",
+        "chunk_index": 0,
+        "content_preview": "[J.M.D. (Joey) de Waard (Leefbaar Rotterdam)]: De heer Segers. Hoogendoorn. Ja, dank u, voorzitter. Ik heb inderdaad nog 8 minuten, dus dan is zo'n kwartier bijna vol, hè? Ja,",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "J.M.D. (Joey) de Waard spreekt namens Leefbaar Rotterdam",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Sprekerprefix in origineel transcript: '[J.M.D. (Joey) de Waard (Leefbaar Rotterdam)]'"
+            },
+            {
+              "claim": "De spreker zegt dat hij nog 8 minuten spreektijd heeft",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Directe quote uit transcript: 'Ik heb inderdaad nog 8 minuten, dus dan is zo'n kwartier bijna vol, hè?'"
+            },
+            {
+              "claim": "De spreker bedankt de voorzitter",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Directe quote: 'Ja, dank u, voorzitter.'"
+            }
+          ],
+          "total_claims": 3,
+          "supported": 3,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Het te controleren fragment bevat slechts de openingszin van de bijdrage van Joey de Waard. Alle drie de feitelijke beweringen (sprekeridentiteit, spreektijd, en beleefdheidsuitdrukking) zijn direct en letterlijk terug te vinden in het originele transcript. Er zijn geen hallucinaties, onjuiste toeschrijvingen, of fabricaties gedetecteerd. Het fragment is een nauwkeurige weergave van het begin van de originele opname."
+        }
+      },
+      {
+        "chunk_id": 5825,
+        "chunk_title": "Wethouder's Prepared Response and Question",
+        "chunk_index": 7,
+        "content_preview": "[R. (Ronald) Buijt]: Dus ja,\n[R.T.J. (Ruud) van der Velden (Partij voor de Dieren)]: ik kan het. Ja, dank u. Ja. Het is een beetje kort door de bocht om dan te concluderen dat ik het een flut onderzoe",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Van der Velden zegt dat het een flut onderzoek is",
+              "verdict": "contradicted",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Van der Velden zegt: 'Het is een beetje kort door de bocht om dan te concluderen dat ik het een flut onderzoek vind.' Hij ontkent expliciet dit oordeel, hij zegt NIET dat het een flut onderzoek is."
+            },
+            {
+              "claim": "De directie van Boijmans mocht na bepaalde mails niet meer meepraten over het museum",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Van der Velden: 'naar aanleiding van die mails mag de directie van Boijmans in die tijd ineens niet meer meepraten over de over de eh over het museum.'"
+            },
+            {
+              "claim": "De ombudsman heeft iets geconstateerd",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Van der Velden: 'dat is voor mij weer een bevestiging naast wat de ombudsman al heeft geconstateerd'"
+            },
+            {
+              "claim": "Er zijn stukken zwart gelakt in de la",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Van der Velden: 'naast de stukken die zwart gelakt zijn in de la'"
+            },
+            {
+              "claim": "Van der Velden concludeert dat er iets in de doofpot wordt gestopt",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Van der Velden: 'Er wordt hier iets in de doofpot gestopt en ik zeg dat niet snel, maar die indruk, die krijg ik wel heel erg.'"
+            },
+            {
+              "claim": "Wethouder Buijt zegt dat hij het zo scherp en helder mogelijk heeft uitgelegd",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Buijt: 'Ik heb m'n m'n best gedaan om het u zo zo scherp en helder mogelijk uit te leggen'"
+            },
+            {
+              "claim": "De audit werd gehouden in 2018-2019",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Buijt: 'we hebben toen een soort een audit uh uh laten houden. 2018 2019'"
+            },
+            {
+              "claim": "Zowel Boijmans als de gemeente konden voordeel hebben van de audit",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Buijt: 'waar zowel Boijmans als de gemeente uh haar voordeel mee kan doen'"
+            },
+            {
+              "claim": "De audit was voor intern gebruik",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Buijt: 'die was voor intern gebruik'"
+            },
+            {
+              "claim": "Er werden leermomenten uit de audit getrokken",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Buijt: 'Daar zijn wel wel degelijk een aantal leermomenten uitgetrokken, zoals u ook in die brief kunt lezen.'"
+            },
+            {
+              "claim": "Buijt kon iets niet achterhalen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Buijt: 'Ik heb het gewoon niet kunnen achterhalen.'"
+            },
+            {
+              "claim": "Dennis Tak veronderstelt dat er notulen zijn van die vergaderingen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Tak: 'want ik neem aan dat er notulen zijn van die vergaderingen'"
+            },
+            {
+              "claim": "Tak vraagt of Buijt de notulen heeft gecontroleerd",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Tak: 'Dus u heeft, neem ik aan even zodat het duidelijk is, de notulen gecontroleerd'"
+            }
+          ],
+          "total_claims": 13,
+          "supported": 12,
+          "unsupported": 0,
+          "contradicted": 1,
+          "hallucination_rate": 0.08,
+          "most_dangerous_claim": "Van der Velden zegt dat het een flut onderzoek is — Dit is een CONTRADICTIE. Het transcript toont aan dat Van der Velden expliciet ONTKENT dit oordeel te hebben. Dit kan raadsleden misleiden over zijn werkelijke standpunt.",
+          "reasoning": "De AI-gegenereerde notulen bevatten één kritieke fout: een fabricated quote waarbij Van der Velden wordt geciteerd als zeggende dat het een 'flut onderzoek' is, terwijl hij in werkelijkheid het tegenovergestelde zegt ('Het is een beetje kort door de bocht om dan te concluderen dat ik het een flut onderzoek vind'). Dit is een directe contradictie met het originele transcript. De overige 12 beweringen zijn allemaal ondersteund door het transcript. Dit is een gevaarlijke hallucinatie omdat het Van der Velden's werkelijke kritiek verdraait en zijn standpunt onjuist weergeeft."
+        }
+      },
+      {
+        "chunk_id": 5732,
+        "chunk_title": "Discussion on 'Wijk aan Zet' Model",
+        "chunk_index": 19,
+        "content_preview": "[J. (Judith) Bokhove (GroenLinks)]: Maar ik ben blij om te horen dat er voor Leefbaar Rotterdam wel serieus zal nadenken over meer mandaat voor die wijkraden.\n[T. (Tim) Kind (Volt)]: En als ik de heer",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Judith Bokhove (GroenLinks) zei: 'Maar ik ben blij om te horen dat er voor Leefbaar Rotterdam wel serieus zal nadenken over meer mandaat voor die wijkraden.'",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Judith Bokhove spreekt niet in het originele transcript. Het transcript bevat alleen uitspraken van L.S. Vlieger, D.P.A. Tak, J.M.D. de Waard en T. Kind. Deze uitspraak is volledig gefabriceerd."
+            },
+            {
+              "claim": "Tim Kind (Volt) maakte een technische opmerking over artikel 83 van de Gemeentewet",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "T. (Tim) Kind (Volt) spreekt inderdaad in het transcript en maakt een technische opmerking: 'Uhm, het. Kan natuurlijk gewoon wel. We kunnen zelf besluiten hoeveel mandaat we aan de wijkraden geven. Het is letterlijk artikel 83 van de gemeenteraad van de Gemeentewet...'"
+            },
+            {
+              "claim": "Artikel 83 van de Gemeentewet stelt dat je bestuurscommissies kunt instellen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Tim Kind zegt: 'Het is letterlijk artikel 83 van de gemeenteraad van de Gemeentewet die aangeeft ja, je kan. Bestuurscommissies. Kan je instellen en dan kan je wel.'"
+            },
+            {
+              "claim": "Amsterdam stadsdelen hebben veel meer bevoegdheden dan de wijkraden in Rotterdam",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Tim Kind stelt: 'Daarom is er ook een groot verschil, bijvoorbeeld met de stadsdelen in Amsterdam, waar veel meer bevoegdheden zijn overgedragen dan de wijkraden in Rotterdam'"
+            },
+            {
+              "claim": "Zowel Amsterdam stadsdelen als Rotterdam wijkraden berusten op dezelfde wetgeving (artikel 83 Gemeentewet)",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Tim Kind zegt: 'maar zijn uiteindelijk berust op dezelfde wetgeving, namelijk artikel 83 van de Gemeentewet'"
+            }
+          ],
+          "total_claims": 5,
+          "supported": 4,
+          "unsupported": 1,
+          "contradicted": 0,
+          "hallucination_rate": 0.2,
+          "most_dangerous_claim": "Judith Bokhove (GroenLinks) zei: 'Maar ik ben blij om te horen dat er voor Leefbaar Rotterdam wel serieus zal nadenken over meer mandaat voor die wijkraden.' — Dit is gevaarlijk omdat het een uitspraak toeschrijft aan een spreker die niet in het transcript voorkomt, wat kan leiden tot onjuiste attributie van standpunten aan GroenLinks.",
+          "reasoning": "De AI-gegenereerde notulen bevatten een kritieke hallucinatie: een volledige uitspraak wordt toegeschreven aan Judith Bokhove (GroenLinks), terwijl deze persoon helemaal niet in het originele transcript spreekt. Dit is een 'speaker_presence' hallucinatie van het ergste type — het fabriceert niet alleen een citaat, maar voegt ook een spreker toe die niet aanwezig was. De overige beweringen over Tim Kind en artikel 83 van de Gemeentewet zijn correct ondersteund door het transcript. De hallucinatiesnelheid bedraagt 20%, maar het risico is hoog omdat het een partijstandpunt lijkt toe te kennen aan een partij die het niet innam."
+        }
+      },
+      {
+        "chunk_id": 5852,
+        "chunk_title": "Confirmation of Agenda Shifts",
+        "chunk_index": 34,
+        "content_preview": "[Unknown]: Voorzitter negentien is de jaarrekening volgens mij en daarna komen de twee raden voor de voorjaarsnota. Dus het kan ook in de tweede raad van de voorjaarsnota op de donderdag. Euh, zou dat",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Voorzitter negentien is de jaarrekening volgens mij",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "niet gevonden - deze uitspraak staat niet in het originele transcript"
+            },
+            {
+              "claim": "Daarna komen de twee raden voor de voorjaarsnota",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "niet gevonden - deze uitspraak staat niet in het originele transcript"
+            },
+            {
+              "claim": "Het kan ook in de tweede raad van de voorjaarsnota op de donderdag",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "niet gevonden - deze uitspraak staat niet in het originele transcript"
+            },
+            {
+              "claim": "Zou dat dan al gauw genegeerd worden volgens mij",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "niet gevonden - deze uitspraak staat niet in het originele transcript"
+            },
+            {
+              "claim": "Larissa Vlieger zegt: 'In ieder geval schuiven we door'",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden in deze context - deze exacte zin staat niet in het transcript"
+            },
+            {
+              "claim": "Larissa Vlieger zegt: 'En dan komen we daar nog even op terug, denk ik'",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden in deze context - deze exacte zin staat niet in het transcript"
+            },
+            {
+              "claim": "Larissa Vlieger zegt: 'Op welk moment dan het meest geschikt is'",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden in deze context - deze exacte zin staat niet in het transcript"
+            },
+            {
+              "claim": "Larissa Vlieger zegt: 'Ja, is dat oké?'",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden in deze context - deze exacte zin staat niet in het transcript"
+            },
+            {
+              "claim": "Larissa Vlieger zegt: 'Voor nu en dan stemmen we af dat in ieder geval die toezegging voor de geagendeerd datum dan afgedaan is'",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden in deze context - deze uitspraak staat niet in het transcript"
+            }
+          ],
+          "total_claims": 9,
+          "supported": 0,
+          "unsupported": 9,
+          "contradicted": 0,
+          "hallucination_rate": 1.0,
+          "most_dangerous_claim": "Larissa Vlieger zegt: 'Voor nu en dan stemmen we af dat in ieder geval die toezegging voor de geagendeerd datum dan afgedaan is' — Dit suggereert een besluit dat niet in het transcript voorkomt en kan raadsleden misleiden over wat daadwerkelijk is afgesproken.",
+          "reasoning": "Het gehele te controleren fragment is NIET terug te vinden in het originele transcript. Het transcript eindigt abrupt met een onvoltooide zin van Ronald Buijt. De te controleren tekst bevat uitspraken van een onbekende spreker en meerdere citaten van Larissa Vlieger die volledig afwezig zijn uit de context. Dit is een kritieke bevinding: de AI-gegenereerde notulen fabriceren een volledig dialoogfragment dat niet in de bron voorkomt. Dit vormt een ZEER HOOG RISICO voor raadsleden die op basis van deze notulen besluiten zouden nemen, omdat zij zouden denken dat bepaalde afspraken zijn gemaakt die nooit zijn besproken."
+        }
+      },
+      {
+        "chunk_id": 5775,
+        "chunk_title": "Discussion on 'Wijk aan Zet' Model",
+        "chunk_index": 62,
+        "content_preview": "[R.A.C.J. (Robert) Simons]: Niet meer en niet minder.\n[T.S.J. (Theo) Coşkun (SP)]: Nee, nee meneer, zeggen ze ook nog, heeft gelijk. Ik heb ook geen kritiek op die ambtenaren in de Rotterdam of zo, wa",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Theo Coşkun (SP) stelt voor om stadsmarinier-achtige potjes in wijken in te voeren",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "T.S.J. (Theo) Coşkun (SP): 'Hebben we ooit een keer stads mariniers ingevoerd? Die hadden ook een eigen pot om snel uh dingetjes voor mekaar te krijgen... Kunnen we niet zoiets dan veel dieper in de in de wijken of op de gebieds organisatie leggen? Iets stadsmarinier achtig potjes?'"
+            },
+            {
+              "claim": "Robert Simons reageert dat het SP is die pleit voor een nieuwe stadsmarinier",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "R.A.C.J. (Robert) Simons: 'Nou, ik ben toch mooi om nog uh mee te maken dat de SP uh pleit voor een nieuwe stadsmarinier.'"
+            },
+            {
+              "claim": "Simons noemt het concept 'doorzettingsmacht' in relatie tot stadsmarinier",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "R.A.C.J. (Robert) Simons: 'Uh, ik noem het doorzettingsmacht om de stadsmarinier.'"
+            },
+            {
+              "claim": "Simons stelt voor om meer mandaat lager in de organisatie neer te leggen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "R.A.C.J. (Robert) Simons: 'Ik denk dat we daar wel een modus in kunnen vinden met elkaar. Uh, hoe we gewoon wat meer mandaat lagen in de organisatie. Uh gaan liggen leggen.'"
+            },
+            {
+              "claim": "Simons zegt dat het geld al beschikbaar is en het gaat om prioritering",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "R.A.C.J. (Robert) Simons: 'Dat moet gewoon kunnen. Uh hoeft helemaal geen extra mensen te kosten, geen extra geld, want het geld is er gewoon. Het is alleen de prioritering.'"
+            },
+            {
+              "claim": "Simons vermeldt dat het college na één jaar tegen hem zei 'we gaan toch niet elk jaar 1500'",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "De zin wordt afgebroken in het transcript: 'de eerste keer. Uhm dat we als college na één jaar uh toen zeiden het college uh uh leden tegen mij van uh ja, wethouder Simons, we gaan toch niet elk jaar 1500' — het is onvolledig en het volledige citaat/context ontbreekt"
+            },
+            {
+              "claim": "Judith Bokhove (GroenLinks) stelt een vraag over oorzaken van onderscheidingen bij wijkraden",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "J. (Judith) Bokhove (GroenLinks) spreekt in het transcript, maar de vraag 'Op boekcover. Kunt u aangeven of u iets weet van de oorzaken waardoor die onderscheiding heeft plaatsgevonden...' is fragmentarisch en de context ervan ontbreekt volledig in het originele transcript. Dit lijkt een losstaande vraagfragment zonder context."
+            }
+          ],
+          "total_claims": 7,
+          "supported": 5,
+          "unsupported": 2,
+          "contradicted": 0,
+          "hallucination_rate": 0.29,
+          "most_dangerous_claim": "Simons vermeldt dat het college na één jaar tegen hem zei 'we gaan toch niet elk jaar 1500' — dit is een onvolledig citaat dat mogelijk onjuist wordt weergegeven en kan raadsleden misleiden over collegebeslissingen",
+          "reasoning": "De te controleren tekst bevat voornamelijk ondersteunde beweringen over standpunten die daadwerkelijk in het transcript worden uitgesproken. Echter, twee kritieke problemen zijn geïdentificeerd: (1) Een onvolledig en mogelijk onjuist weergegeven citaat van Simons over een collegebeslissing, waarbij het getal '1500' zonder context blijft staan — dit kan raadsleden misleiden over financiële of beleidsbesluiten. (2) Een vraag van Bokhove die fragmentarisch en zonder context wordt weergegeven, wat suggereert dat deze mogelijk uit een ander gedeelte van de vergadering is gehaald of onvolledig is getranscribeerd. De hallucinatiesnelheid van 29% is matig, maar de aard van de hallucinaties (onvolledig citaat, contextloze vraag) vormt een risico voor raadsleden die op basis van deze notulen besluiten nemen."
+        }
+      }
+    ]
+  },
+  "verdict": {
+    "recommendation": "REJECT — fix issues before promotion",
+    "issues": [
+      "High hallucination rate: 31.4% (threshold ≤10%)"
+    ],
+    "warnings": [
+      "Dangerous claim in chunk 5825: Van der Velden zegt dat het een flut onderzoek is — Dit is een CONTRADICTIE. Het transcript toont aan dat Van der Velden",
+      "Dangerous claim in chunk 5732: Judith Bokhove (GroenLinks) zei: 'Maar ik ben blij om te horen dat er voor Leefbaar Rotterdam wel serieus zal nadenken o",
+      "Dangerous claim in chunk 5852: Larissa Vlieger zegt: 'Voor nu en dan stemmen we af dat in ieder geval die toezegging voor de geagendeerd datum dan afge",
+      "Dangerous claim in chunk 5775: Simons vermeldt dat het college na één jaar tegen hem zei 'we gaan toch niet elk jaar 1500' — dit is een onvolledig cita",
+      "Low speaker attribution: 65% (target 80%)"
+    ],
+    "scores": {
+      "hallucination_rate": 0.314,
+      "speaker_attribution_rate": 0.653,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.896
+    }
+  }
+}

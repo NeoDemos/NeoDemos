@@ -1,12 +1,13 @@
-import psycopg2
 import asyncio
 import threading
 from typing import List, Dict, Any, Optional, Union
 from dataclasses import dataclass
 
+from services.db_pool import get_connection
+
 # Shared class-level resources to avoid redundant loading and locking issues
 _qdrant_client = None
-_reranker = None
+_reranker = None        # services.reranker.Reranker instance (Jina v3 API)
 _init_lock = threading.Lock()
 
 @dataclass
@@ -22,14 +23,13 @@ class RetrievedChunk:
     stream_type: Optional[str] = None  # e.g., 'financial', 'debate', 'fact'
     start_date: Optional[str] = None   # ISO date from Qdrant payload (e.g. "2022-03-15T00:00:00")
 
-from services.local_ai_service import LocalAIService
+from services.embedding import create_embedder, EMBEDDING_DIM, QDRANT_COLLECTION
 
 class RAGService:
     """Retrieve relevant notulen context for agenda items"""
-    
+
     def __init__(self):
-        self.db_connection_string = "postgresql://postgres:postgres@localhost:5432/neodemos"
-        self.local_ai = LocalAIService()
+        self.embedder = create_embedder()  # Nebius API (NEBIUS_API_KEY) in deployment
         self._ensure_resources_initialized()
 
     def _ensure_resources_initialized(self):
@@ -43,16 +43,27 @@ class RAGService:
                     from qdrant_client import QdrantClient
                     print("Initializing QdrantClient (Server Mode at localhost:6333)...")
                     _qdrant_client = QdrantClient(url="http://localhost:6333")
+                    # Verify the collection was built with the expected embedding model.
+                    # Catches accidental model upgrades before they silently corrupt retrieval.
+                    info = _qdrant_client.get_collection(QDRANT_COLLECTION)
+                    actual_dim = info.config.params.vectors.size
+                    if actual_dim != EMBEDDING_DIM:
+                        raise RuntimeError(
+                            f"[embedding] Dimension mismatch: collection '{QDRANT_COLLECTION}' "
+                            f"has {actual_dim}D vectors but current model produces {EMBEDDING_DIM}D. "
+                            f"Re-embed all chunks before switching models."
+                        )
+                    print(f"[embedding] Collection dimension verified: {actual_dim}D ✓")
+                except RuntimeError:
+                    raise  # dimension mismatch is fatal — let it propagate
                 except Exception as e:
                     print(f"Failed to initialize QdrantClient: {e}")
 
             if _reranker is None:
                 try:
-                    from sentence_transformers import CrossEncoder
-                    import os
-                    print("Loading Reranker (CrossEncoder) for the first time...")
-                    os.environ['TOKENIZERS_PARALLELISM'] = 'false'
-                    _reranker = CrossEncoder('cross-encoder/ms-marco-multilingual-MiniLM-L-12-v2', device='cpu')
+                    from services.reranker import create_reranker
+                    print("Loading Reranker (Jina v3)...")
+                    _reranker = create_reranker()
                 except Exception as e:
                     print(f"Failed to initialize Reranker: {e}")
 
@@ -70,7 +81,7 @@ class RAGService:
         Executes parallel searches for different dimensions of the query.
         Accepts optional 'overrides' dict with keys 'financial', 'debate', 'fact' for LLM-rewritten queries.
         date_from/date_to (ISO strings) are forwarded to all stream searches.
-        fast_mode=True skips CrossEncoder reranking in each stream (saves 3-8s per stream).
+        fast_mode=True skips Jina reranking in each stream (saves latency for interactive queries).
         """
         tasks = []
 
@@ -153,16 +164,15 @@ class RAGService:
         Args:
             date_from: Optional ISO date string (e.g. "2022-01-01") to filter results by meeting date.
             date_to:   Optional ISO date string (e.g. "2022-12-31") to filter results by meeting date.
-            fast_mode: If True, skips the CrossEncoder reranker (saves 3-8s on CPU). Use for
+            fast_mode: If True, skips Jina reranking (saves latency). Use for
                        interactive/MCP queries; leave False for deep analysis via FastAPI.
         """
         vector_results = []
         keyword_results = []
 
         # 1. Fetch from Vector Search
-        if query_embedding is None and self.local_ai.is_available():
-            # Generate embedding locally if not provided
-            query_embedding = self.local_ai.generate_embedding(query_text)
+        if query_embedding is None:
+            query_embedding = self.embedder.embed(query_text)
 
         if query_embedding is not None:
             vector_results = self._retrieve_by_vector_similarity(
@@ -217,39 +227,89 @@ class RAGService:
         else:
             fused_chunks = keyword_results
 
-        # Increase candidate pool for Reranker to maximize precision
+        # Reranker candidate pool: 5× top_k. Safe now that the reranker batches
+        # internally (LocalJinaReranker: 20 docs/batch; JinaAPI: 80KB/batch).
         fused_chunks = fused_chunks[:top_k * 5]
 
-        # 4. Rerank using Cross-Encoder (skipped in fast_mode to save 3-8s on CPU)
+        # 4. Rerank using Jina Reranker v3 (skipped in fast_mode to save latency)
         if _reranker is not None and not fast_mode:
             try:
-                pairs = [[query_text, chunk.content] for chunk in fused_chunks]
-                if pairs:
-                    scores = _reranker.predict(pairs)
+                documents = [chunk.content for chunk in fused_chunks]
+                if documents:
+                    scores = _reranker.score_pairs(query_text, documents)
                     for chunk, score in zip(fused_chunks, scores):
                         chunk.similarity_score = float(score)
 
-                    # Sort by reranker score
+                    # Sort by reranker score (Jina v3: higher = more relevant, 0-1 range)
                     fused_chunks.sort(key=lambda x: x.similarity_score, reverse=True)
 
-                    # Filter out definitely irrelevant results (multilingual reranker log-odds)
-                    fused_chunks = [c for c in fused_chunks if c.similarity_score > -2.0]
+                    # Filter out low-relevance results (Jina v3: positive = relevant)
+                    fused_chunks = [c for c in fused_chunks if c.similarity_score > -0.1]
             except Exception as e:
                 print(f"Reranking failed: {e}")
 
         return fused_chunks[:top_k]
     
+    def _retrieve_by_vector_similarity_with_filter(
+        self,
+        query_embedding: List[float],
+        top_k: int = 25,
+        qdrant_filter: Optional[Any] = None,
+        date_from: Optional[str] = None,
+        date_to: Optional[str] = None,
+    ) -> List[RetrievedChunk]:
+        """
+        Vector search with arbitrary Qdrant filter (e.g. party filter).
+        Merges the provided filter with date filters if both are present.
+        Falls back to unfiltered search if filter returns < 5 results.
+        """
+        from qdrant_client.models import Filter, FieldCondition, DatetimeRange
+
+        # Build date filter conditions
+        date_conditions = []
+        if date_from or date_to:
+            from datetime import datetime
+            date_conditions.append(FieldCondition(
+                key="start_date",
+                range=DatetimeRange(
+                    gte=datetime.fromisoformat(date_from) if date_from else None,
+                    lte=datetime.fromisoformat(date_to) if date_to else None,
+                )
+            ))
+
+        # Merge filters
+        combined_must = list(qdrant_filter.must or []) if qdrant_filter and hasattr(qdrant_filter, 'must') and qdrant_filter.must else []
+        combined_must.extend(date_conditions)
+        merged_filter = Filter(must=combined_must) if combined_must else None
+
+        results = self._retrieve_by_vector_similarity(
+            query_embedding, top_k, date_from=None, date_to=None,
+            _override_filter=merged_filter,
+        )
+
+        # Fallback: if filter too restrictive, try without the custom filter
+        if len(results) < 5 and qdrant_filter:
+            fallback_filter = Filter(must=date_conditions) if date_conditions else None
+            results = self._retrieve_by_vector_similarity(
+                query_embedding, top_k, date_from=None, date_to=None,
+                _override_filter=fallback_filter,
+            )
+
+        return results
+
     def _retrieve_by_vector_similarity(
         self,
         query_embedding: List[float],
         top_k: int = 10,
         date_from: Optional[str] = None,
         date_to: Optional[str] = None,
+        _override_filter: Optional[Any] = None,
     ) -> List[RetrievedChunk]:
         """
         Search document_chunks table using Qdrant vector similarity.
         Optional date_from/date_to (ISO strings) filter on the start_date payload field.
         Points without a start_date are excluded when a date filter is active.
+        _override_filter: if provided, used instead of building date filter internally.
         """
         if query_embedding is None:
             return []
@@ -261,8 +321,8 @@ class RAGService:
             from datetime import datetime
             from qdrant_client.models import Filter, FieldCondition, DatetimeRange, SearchParams, QuantizationSearchParams
 
-            query_filter = None
-            if date_from or date_to:
+            query_filter = _override_filter
+            if query_filter is None and (date_from or date_to):
                 query_filter = Filter(must=[FieldCondition(
                     key="start_date",
                     range=DatetimeRange(
@@ -350,36 +410,33 @@ class RAGService:
             return f"(Tabel kon niet geformatteerd worden: {e})\n{str(table_data)}"
     
     def _retrieve_by_keywords(
-        self, 
-        query_text: str, 
+        self,
+        query_text: str,
         top_k: int = 10
     ) -> List[RetrievedChunk]:
         """
         Keyword-based search on full notulen documents using BM25.
         """
         try:
-            conn = psycopg2.connect(self.db_connection_string)
-            cursor = conn.cursor()
-            
-            cursor.execute("""
-                SELECT 
-                    d.id,
-                    d.id,  -- chunk_id = document_id for full documents
-                    d.name,
-                    d.content,
-                    ts_rank(text_search, websearch_to_tsquery('dutch', %s)) as similarity_score
-                FROM documents d
-                WHERE d.name ILIKE '%%notule%%' 
-                AND d.content IS NOT NULL
-                AND text_search @@ websearch_to_tsquery('dutch', %s)
-                ORDER BY similarity_score DESC
-                LIMIT %s
-            """, [query_text, query_text, top_k])
-            
-            rows = cursor.fetchall()
-            cursor.close()
-            conn.close()
-            
+            with get_connection() as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute("""
+                        SELECT
+                            d.id,
+                            d.id,  -- chunk_id = document_id for full documents
+                            d.name,
+                            d.content,
+                            ts_rank(text_search, websearch_to_tsquery('dutch', %s)) as similarity_score
+                        FROM documents d
+                        WHERE d.name ILIKE '%%notule%%'
+                        AND d.content IS NOT NULL
+                        AND text_search @@ websearch_to_tsquery('dutch', %s)
+                        ORDER BY similarity_score DESC
+                        LIMIT %s
+                    """, [query_text, query_text, top_k])
+
+                    rows = cursor.fetchall()
+
             results = []
             for doc_id, chunk_id, title, content, sim_score in rows:
                 results.append(RetrievedChunk(
@@ -405,9 +462,6 @@ class RAGService:
         Optional date_from/date_to (ISO strings) filter via JOIN to meetings.start_date.
         """
         try:
-            conn = psycopg2.connect(self.db_connection_string)
-            cursor = conn.cursor()
-
             if mode == 'or':
                 method = "to_tsquery"
             elif mode == 'plain':
@@ -437,21 +491,21 @@ class RAGService:
                 params.append(date_to)
             params.append(top_k)
 
-            cursor.execute(f"""
-                SELECT dc.id, dc.document_id, dc.title, dc.content,
-                       ts_rank(dc.text_search, {method}('dutch', %s)) as similarity_score,
-                       dc.child_id, dc.chunk_type
-                FROM document_chunks dc
-                {date_join}
-                WHERE dc.text_search @@ {method}('dutch', %s)
-                {type_filter}
-                {date_filter}
-                ORDER BY similarity_score DESC
-                LIMIT %s
-            """, params)
-            rows = cursor.fetchall()
-            cursor.close()
-            conn.close()
+            with get_connection() as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute(f"""
+                        SELECT dc.id, dc.document_id, dc.title, dc.content,
+                               ts_rank(dc.text_search, {method}('dutch', %s)) as similarity_score,
+                               dc.child_id, dc.chunk_type
+                        FROM document_chunks dc
+                        {date_join}
+                        WHERE dc.text_search @@ {method}('dutch', %s)
+                        {type_filter}
+                        {date_filter}
+                        ORDER BY similarity_score DESC
+                        LIMIT %s
+                    """, params)
+                    rows = cursor.fetchall()
 
             results = []
             for cid, doc_id, title, content, score, child_id, c_type in rows:
@@ -472,23 +526,20 @@ class RAGService:
     def _get_chunk_questions(self, chunk_id: int) -> List[str]:
         """Get hypothetical questions for a chunk"""
         try:
-            conn = psycopg2.connect(self.db_connection_string)
-            cursor = conn.cursor()
-            
-            cursor.execute("""
-                SELECT question_text
-                FROM chunk_questions
-                WHERE chunk_id = %s
-                ORDER BY id
-            """, (chunk_id,))
-            
-            questions = [row[0] for row in cursor.fetchall()]
-            cursor.close()
-            conn.close()
-            
+            with get_connection() as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute("""
+                        SELECT question_text
+                        FROM chunk_questions
+                        WHERE chunk_id = %s
+                        ORDER BY id
+                    """, (chunk_id,))
+
+                    questions = [row[0] for row in cursor.fetchall()]
+
             return questions
-            
-        except:
+
+        except Exception:
             return []
             
     def get_parent_context(self, child_id: int, cursor=None) -> Optional[str]:
@@ -498,14 +549,12 @@ class RAGService:
                 cursor.execute("SELECT content FROM document_children WHERE id = %s", (child_id,))
                 row = cursor.fetchone()
                 return row[0] if row else None
-            
-            conn = psycopg2.connect(self.db_connection_string)
-            cursor_temp = conn.cursor()
-            cursor_temp.execute("SELECT content FROM document_children WHERE id = %s", (child_id,))
-            row = cursor_temp.fetchone()
-            cursor_temp.close()
-            conn.close()
-            return row[0] if row else None
+
+            with get_connection() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("SELECT content FROM document_children WHERE id = %s", (child_id,))
+                    row = cur.fetchone()
+                    return row[0] if row else None
         except Exception as e:
             print(f"Failed to fetch parent context: {e}")
             return None
@@ -567,79 +616,116 @@ class RAGService:
         
         idx = 1
         
-        # Use a single connection for all lookups in this loop
-        try:
-            conn = psycopg2.connect(self.db_connection_string)
+        # Use a single pooled connection for all lookups in this loop
+        with get_connection() as conn:
             cursor = conn.cursor()
-        except:
-            cursor = None
+            try:
+                for c in chunks:
+                    doc_id = str(c.document_id)
+                    p_id = c.child_id
 
-        for c in chunks:
-            doc_id = str(c.document_id)
-            p_id = c.child_id
+                    # GRANDPARENT TIER: Full document expansion
+                    if doc_stats[doc_id] / total_hits > 0.35:
+                        if doc_id in processed_docs:
+                            continue
 
-            # GRANDPARENT TIER: Full document expansion
-            if doc_stats[doc_id] / total_hits > 0.35:
-                if doc_id in processed_docs:
-                    continue
-                    
-                content = None
-                if storage_service:
-                    content = storage_service.get_document_full_content(doc_id)
-                elif cursor:
-                    cursor.execute("SELECT content FROM documents WHERE id = %s", (doc_id,))
-                    row = cursor.fetchone()
-                    content = row[0] if row else None
-                
-                if content:
-                    stream_map = {
-                        'vision': 'POLITIEK PROGRAMMA / PARTIJVISIE',
-                        'debate': 'NOTULEN / DEBATSDYNAMIEK',
-                        'financial': 'FINANCIËLE HOOFDLIJNEN',
-                        'fact': 'FEITELIJKE CONTEXT'
-                    }
-                    lbl = stream_map.get(c.stream_type, c.stream_type.upper()) if c.stream_type else "ALGEMEEN"
-                    
-                    final_context += f"[{idx}] VOLLEDIG DOCUMENT [{lbl}]: {c.title}\n"
-                    final_context += f"    Status: Sleuteldocument (>35% relevantie)\n"
-                    date_str = getattr(c, 'start_date', 'Onbekend')
-                    final_context += f"    Datum: {date_str}\n\n"
-                    
-                    full_text = content[:40000]
-                    final_context += f"{full_text}\n" 
-                    final_context += "\n" + "-" * 80 + "\n\n"
-                    
-                    verification_content += "\n" + full_text
-                    
-                    ordered_sources.append({
-                        "id": doc_id,
-                        "name": f"{c.title} (Volledig Document)",
-                        "url": getattr(c, 'url', '#'),
-                        "text": full_text,
-                        "type": c.stream_type
-                    })
-                    processed_docs.add(doc_id)
-                    idx += 1
-                continue
+                        content = None
+                        if storage_service:
+                            content = storage_service.get_document_full_content(doc_id)
+                        else:
+                            cursor.execute("SELECT content FROM documents WHERE id = %s", (doc_id,))
+                            row = cursor.fetchone()
+                            content = row[0] if row else None
 
-            # PARENT TIER: Full section expansion
-            should_expand_parent = (p_id and parent_stats[p_id] > 1) or (p_id and c.stream_type == 'debate')
-            
-            if should_expand_parent:
-                if p_id in processed_parents:
-                    continue
-                    
-                content = self.get_parent_context(p_id, cursor=cursor)
-                if content:
-                    # Attribution header
+                        if content:
+                            stream_map = {
+                                'vision': 'POLITIEK PROGRAMMA / PARTIJVISIE',
+                                'debate': 'NOTULEN / DEBATSDYNAMIEK',
+                                'financial': 'FINANCIËLE HOOFDLIJNEN',
+                                'fact': 'FEITELIJKE CONTEXT'
+                            }
+                            lbl = stream_map.get(c.stream_type, c.stream_type.upper()) if c.stream_type else "ALGEMEEN"
+
+                            final_context += f"[{idx}] VOLLEDIG DOCUMENT [{lbl}]: {c.title}\n"
+                            final_context += f"    Status: Sleuteldocument (>35% relevantie)\n"
+                            date_str = getattr(c, 'start_date', 'Onbekend')
+                            final_context += f"    Datum: {date_str}\n\n"
+
+                            full_text = content[:40000]
+                            final_context += f"{full_text}\n"
+                            final_context += "\n" + "-" * 80 + "\n\n"
+
+                            verification_content += "\n" + full_text
+
+                            ordered_sources.append({
+                                "id": doc_id,
+                                "name": f"{c.title} (Volledig Document)",
+                                "url": getattr(c, 'url', '#'),
+                                "text": full_text,
+                                "type": c.stream_type
+                            })
+                            processed_docs.add(doc_id)
+                            idx += 1
+                        continue
+
+                    # PARENT TIER: Full section expansion
+                    should_expand_parent = (p_id and parent_stats[p_id] > 1) or (p_id and c.stream_type == 'debate')
+
+                    if should_expand_parent:
+                        if p_id in processed_parents:
+                            continue
+
+                        content = self.get_parent_context(p_id, cursor=cursor)
+                        if content:
+                            # Attribution header
+                            doc_header = ""
+                            if storage_service:
+                                full_content = storage_service.get_document_full_content(doc_id)
+                                if full_content: doc_header = full_content[:1000]
+                            else:
+                                cursor.execute("SELECT content FROM documents WHERE id = %s", (doc_id,))
+                                row = cursor.fetchone()
+                                if row: doc_header = row[0][:1000]
+
+                            stream_map = {
+                                'vision': 'POLITIEK PROGRAMMA / PARTIJVISIE',
+                                'debate': 'NOTULEN / DEBATSDYNAMIEK',
+                                'financial': 'FINANCIËLE HOOFDLIJNEN',
+                                'fact': 'FEITELIJKE CONTEXT'
+                            }
+                            lbl = stream_map.get(c.stream_type, c.stream_type.upper()) if c.stream_type else "ALGEMEEN"
+
+                            final_context += f"[{idx}] VOLLEDIGE SECTIE [{lbl}]: {c.title}\n"
+                            final_context += f"    Status: Meerdere tekstsnippers gevonden (Parent)\n"
+                            date_str = getattr(c, 'start_date', 'Onbekend')
+                            final_context += f"    Datum: {date_str}\n\n"
+                            final_context += f"--- DOCUMENT START / HEADERS ---\n{doc_header}\n--- SECTION START ---\n"
+                            final_context += f"{content}\n"
+                            final_context += "\n" + "-" * 80 + "\n\n"
+
+                            verification_content += "\n" + content
+                            ordered_sources.append({
+                                "id": doc_id,
+                                "name": f"{c.title} (Sectie uit document)",
+                                "url": getattr(c, 'url', '#'),
+                                "text": content,
+                                "type": c.stream_type
+                            })
+                            processed_parents.add(p_id)
+                            idx += 1
+                        continue
+
+                    # GRANDCHILD TIER: Single fragment (Isolated hit)
+                    # Fetch document header for attribution
                     doc_header = ""
-                    if storage_service:
-                        full_content = storage_service.get_document_full_content(doc_id)
-                        if full_content: doc_header = full_content[:1000]
-                    elif cursor:
-                        cursor.execute("SELECT content FROM documents WHERE id = %s", (doc_id,))
-                        row = cursor.fetchone()
-                        if row: doc_header = row[0][:1000]
+                    if doc_id not in processed_docs:
+                        if storage_service:
+                            full_content = storage_service.get_document_full_content(doc_id)
+                            if full_content: doc_header = full_content[:1000]
+                        else:
+                            cursor.execute("SELECT content FROM documents WHERE id = %s", (doc_id,))
+                            row = cursor.fetchone()
+                            if row: doc_header = row[0][:1000]
 
                     stream_map = {
                         'vision': 'POLITIEK PROGRAMMA / PARTIJVISIE',
@@ -648,66 +734,24 @@ class RAGService:
                         'fact': 'FEITELIJKE CONTEXT'
                     }
                     lbl = stream_map.get(c.stream_type, c.stream_type.upper()) if c.stream_type else "ALGEMEEN"
-                    
-                    final_context += f"[{idx}] VOLLEDIGE SECTIE [{lbl}]: {c.title}\n"
-                    final_context += f"    Status: Meerdere tekstsnippers gevonden (Parent)\n"
+
+                    final_context += f"[{idx}] SPECIFIEK FRAGMENT [{lbl}]: {c.title}\n"
                     date_str = getattr(c, 'start_date', 'Onbekend')
                     final_context += f"    Datum: {date_str}\n\n"
-                    final_context += f"--- DOCUMENT START / HEADERS ---\n{doc_header}\n--- SECTION START ---\n"
-                    final_context += f"{content}\n"
+                    final_context += f"--- DOCUMENT START / HEADERS ---\n{doc_header}\n--- FRAGMENT START ---\n"
+                    final_context += f"{c.content}\n"
                     final_context += "\n" + "-" * 80 + "\n\n"
-                    
-                    verification_content += "\n" + content
+
+                    verification_content += "\n" + c.content
                     ordered_sources.append({
                         "id": doc_id,
-                        "name": f"{c.title} (Sectie uit document)",
+                        "name": c.title,
                         "url": getattr(c, 'url', '#'),
-                        "text": content,
+                        "text": c.content,
                         "type": c.stream_type
                     })
-                    processed_parents.add(p_id)
                     idx += 1
-                continue
+            finally:
+                cursor.close()
 
-            # GRANDCHILD TIER: Single fragment (Isolated hit)
-            # Fetch document header for attribution
-            doc_header = ""
-            if doc_id not in processed_docs:
-                if storage_service:
-                    full_content = storage_service.get_document_full_content(doc_id)
-                    if full_content: doc_header = full_content[:1000]
-                elif cursor:
-                    cursor.execute("SELECT content FROM documents WHERE id = %s", (doc_id,))
-                    row = cursor.fetchone()
-                    if row: doc_header = row[0][:1000]
-
-            stream_map = {
-                'vision': 'POLITIEK PROGRAMMA / PARTIJVISIE',
-                'debate': 'NOTULEN / DEBATSDYNAMIEK',
-                'financial': 'FINANCIËLE HOOFDLIJNEN',
-                'fact': 'FEITELIJKE CONTEXT'
-            }
-            lbl = stream_map.get(c.stream_type, c.stream_type.upper()) if c.stream_type else "ALGEMEEN"
-            
-            final_context += f"[{idx}] SPECIFIEK FRAGMENT [{lbl}]: {c.title}\n"
-            date_str = getattr(c, 'start_date', 'Onbekend')
-            final_context += f"    Datum: {date_str}\n\n"
-            final_context += f"--- DOCUMENT START / HEADERS ---\n{doc_header}\n--- FRAGMENT START ---\n"
-            final_context += f"{c.content}\n"
-            final_context += "\n" + "-" * 80 + "\n\n"
-            
-            verification_content += "\n" + c.content
-            ordered_sources.append({
-                "id": doc_id,
-                "name": c.title,
-                "url": getattr(c, 'url', '#'),
-                "text": c.content,
-                "type": c.stream_type
-            })
-            idx += 1
-            
-        if cursor:
-            cursor.close()
-            conn.close()
-            
         return final_context, ordered_sources, verification_content

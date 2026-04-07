@@ -14,12 +14,13 @@ Maintains Dutch language throughout for precision.
 """
 
 import json
-import psycopg2
 import os
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, asdict
 from datetime import datetime
 import google.genai as genai
+
+from services.db_pool import get_connection
 
 # Initialize Gemini client
 api_key = os.getenv("GEMINI_API_KEY")
@@ -55,13 +56,10 @@ class ProposalDatabase:
 
 class ProposalExtractor:
     """Extract proposal-level details from party programme"""
-    
+
     def __init__(self):
-        self.conn = psycopg2.connect(
-            "postgresql://postgres:postgres@localhost:5432/neodemos"
-        )
-        self.cursor = self.conn.cursor()
-    
+        pass  # DB connections are now obtained from the shared pool per-call
+
     def extract_all_proposals(self, party_name: str) -> ProposalDatabase:
         """
         Extract all detailed proposals from party programme.
@@ -70,13 +68,15 @@ class ProposalExtractor:
         print(f"\n{'='*70}")
         print(f"EXTRACTEN VAN GEDETAILLEERDE VOORSTELLEN: {party_name}")
         print(f"{'='*70}\n")
-        
+
         # Get programme from database
-        self.cursor.execute(
-            "SELECT pdf_content FROM party_programmes WHERE party_name = %s",
-            (party_name,)
-        )
-        result = self.cursor.fetchone()
+        with get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "SELECT pdf_content FROM party_programmes WHERE party_name = %s",
+                    (party_name,)
+                )
+                result = cur.fetchone()
         
         if not result:
             raise ValueError(f"Programma niet gevonden voor {party_name}")

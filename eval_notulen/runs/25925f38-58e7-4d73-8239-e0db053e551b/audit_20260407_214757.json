@@ -1,0 +1,294 @@
+{
+  "meeting_id": "25925f38-58e7-4d73-8239-e0db053e551b",
+  "audit_timestamp": "2026-04-07T21:47:57.553458",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "judge_backend": "gemini",
+    "anthropic_model": "claude-haiku-4-5-20251001",
+    "gemini_model": "gemini-2.5-flash-lite"
+  },
+  "meeting_info": {
+    "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+    "start_date": "2025-03-12 00:00:00",
+    "committee": "WIOS",
+    "quality_score": 0.856,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 104,
+    "document_count": 1
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 592,
+      "correct_count": 592,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8533,
+      "party_attribution_rate": 0.6795,
+      "total_segments": 259,
+      "attributed_segments": 221,
+      "unattributed_segments": 38
+    },
+    "speaker_diversity": {
+      "unique_speakers": 12,
+      "unique_parties": 11,
+      "top_speaker": "J.M.D. (Joey) de Waard",
+      "top_speaker_segment_count": 49,
+      "monologue_rate": 0.1892,
+      "speakers": {
+        "J.M.D. (Joey) de Waard": 49,
+        "T.B. (Tim)  Versnel College": 45,
+        "L.S. (Larissa) Vlieger GroenLinks": 27,
+        "M.E. (Merel) Vogelaar PvdA": 23,
+        "A.J.A. (Agnes) Maassen D66": 21,
+        "S. (Simon) Ceulemans Leefbaar Rotterdam": 17,
+        "M.R. (Marchiano) van Campenhout BIJ1": 11,
+        "J. (Jordi) Vicario VVD": 9,
+        "Z.P. (Pinar) Coşkun  Burgercommissielid": 9,
+        "T.J. (Tjalling) Vonk ChristenUnie": 6
+      },
+      "parties": {
+        "Commissievoorzitter": 49,
+        "GroenLinks": 27,
+        "PvdA": 23,
+        "D66": 21,
+        "Leefbaar Rotterdam": 17,
+        "BIJ1": 11,
+        "VVD": 9,
+        "Partij voor de Dieren": 9,
+        "ChristenUnie": 6,
+        "DENK": 2,
+        "SP": 2
+      }
+    },
+    "segment_quality": {
+      "total_segments": 259,
+      "nonempty_segments": 259,
+      "total_words": 35456,
+      "total_chars": 198066,
+      "avg_words_per_segment": 136.9,
+      "avg_chars_per_segment": 764.7,
+      "short_segment_rate": 0.1969,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 1,
+      "items_with_content": 1,
+      "coverage_rate": 1.0,
+      "items": [
+        {
+          "title": "Monitor Werk en Inkomen 3e tertaal 2024",
+          "segment_count": 259
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+        "start_date": "2025-03-12 00:00:00",
+        "committee": "WIOS",
+        "review_status": "auto_approved",
+        "quality_score": 0.856,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+        "start_date": "2025-03-12 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 12,
+      "recognized_speakers": 9,
+      "unrecognized_speakers": 3,
+      "recognition_rate": 0.75,
+      "recognized": [
+        {
+          "name": "J. (Jordi) Vicario VVD",
+          "segment_count": 9,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.R. (Marchiano) van Campenhout BIJ1",
+          "segment_count": 11,
+          "parties": [
+            "BIJ1"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.E. (Merel) Vogelaar PvdA",
+          "segment_count": 23,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "A.J.A. (Agnes) Maassen D66",
+          "segment_count": 21,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "L.S. (Larissa) Vlieger GroenLinks",
+          "segment_count": 27,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Simon) Ceulemans Leefbaar Rotterdam",
+          "segment_count": 17,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "Z.P. (Pinar) Coşkun  Burgercommissielid",
+          "segment_count": 9,
+          "parties": [
+            "Partij voor de Dieren"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "S.D. (Safa) Sodirijo  Burgercommissielid",
+          "segment_count": 2,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "A.B. (Tom) Breedveld  Burgercommissielid",
+          "segment_count": 2,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "J.M.D. (Joey) de Waard",
+          "segment_count": 49,
+          "parties": [
+            "Commissievoorzitter"
+          ],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "T.J. (Tjalling) Vonk ChristenUnie",
+          "segment_count": 6,
+          "parties": [
+            "ChristenUnie"
+          ],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "T.B. (Tim)  Versnel College",
+          "segment_count": 45,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 104,
+      "empty_chunks": 0,
+      "buckets": {
+        "short (50-200)": 5,
+        "medium (200-2000)": 33,
+        "long (2000-5000)": 66
+      },
+      "min_chars": 80,
+      "max_chars": 2718,
+      "avg_chars": 1927.5,
+      "median_chars": 2196,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 104,
+      "boilerplate_count": 1,
+      "boilerplate_rate": 0.0096,
+      "boilerplate_examples": [
+        {
+          "id": 3287,
+          "title": "Chair's Closing Remarks and Acknowledgement of Commitments",
+          "preview": "[J.M.D. (Joey) de Waard (Commissievoorzitter)]: belangstelling goed voorstellen."
+        }
+      ]
+    },
+    "agenda_coverage": {
+      "total_documents": 1,
+      "documents_with_chunks": 1,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Monitor Werk en Inkomen 3e tertaal 2024",
+          "chunks": 104
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 104,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 104,
+      "distribution": {
+        "quote": {
+          "count": 104,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8533,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.856
+    }
+  }
+}

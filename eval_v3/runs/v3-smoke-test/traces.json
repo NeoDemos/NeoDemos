@@ -1,0 +1,686 @@
+[
+  {
+    "question_id": "ps-01",
+    "query_text": "Hoe stelde de PvdA zich op in de discussie over Feyenoord City, het stadion en de gebiedsontwikkeling?",
+    "query_embedding_hash": "",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [
+      {
+        "chunk_id": 140344283727205462,
+        "content_preview": "Gebiedsontwikkeling Feyenoord City\n- Gemeentelijke position paper -\nTen behoeve van gebiedsontwikkeling, nieuw stadion en herontwikkeling Kuip\nMaart 2017",
+        "score": 0.27987057,
+        "metadata": {
+          "document_id": "5248779",
+          "title": "Gebiedsontwikkeling Feyenoord City - Gemeentelijke position paper",
+          "chunk_index": null,
+          "start_date": "2017-05-11T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 559198150340990358,
+        "content_preview": "Relatie met het coalitieakkoord/collegewerkprogramma/begroting/eerder\naangenomen moties en gedane toezeggingen:\nGemeentelijke Position Paper (Raad, 2017)\nToelichting:\nVoor een actueel beeld van het pr",
+        "score": 0.23878975,
+        "metadata": {
+          "document_id": "6086125",
+          "title": "Relatie met beleidskaders en toelichting",
+          "chunk_index": null,
+          "start_date": "2020-09-24T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1035897476600066659,
+        "content_preview": "De position paper Feyenoord City, waarin de voorwaarden zijn opgenomen\nwaaronder de gemeente Rotterdam bereid is een bijdrage te Ieveren aan de\ngebiedsontwikkeling Feyenoord City, vast te stellen.\nDe ",
+        "score": 0.22933556,
+        "metadata": {
+          "document_id": "5280431",
+          "title": "Besluit: Position paper Feyenoord City en gemeentelijke bijdrage",
+          "chunk_index": null,
+          "start_date": "2017-05-11T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 611221591653805463,
+        "content_preview": "Overwegende:\ndat hij op 11 mei 2017 een besluit heeft genomen met betrekking tot de gemeentelijke\npositie ten aanzien van de betrokkenheid in het project Feyenoord City;\ndat hij een position paper hee",
+        "score": 0.22584918,
+        "metadata": {
+          "document_id": "5506014",
+          "title": "Overwegingen bij het besluit (Position Paper)",
+          "chunk_index": null,
+          "start_date": "2017-07-04T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 597967462327527194,
+        "content_preview": "Op 11 mei 2017 heeft de raad een besluit genomen (17bb3815) met betrekking tot de\ngemeentelijke positie in het project Feyenoord City. ln de zgn. position paper zijn de\nvoorwaarden opgenomen waaronder",
+        "score": 0.20671836,
+        "metadata": {
+          "document_id": "5506014",
+          "title": "Besluitvorming en Position Paper Feyenoord City",
+          "chunk_index": null,
+          "start_date": "2017-07-04T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1136978730690839545,
+        "content_preview": "Gevraagd besluit:\nSamenvattend stellen wij u voor het project Feyenoord City aan te wijzen als risicovol project\nin de zin van de Regeling risicovolle projecten Rotterdam 2012.\nWaarom dit voorstel?IWa",
+        "score": 0.18885994,
+        "metadata": {
+          "document_id": "5506014",
+          "title": "Gevraagd besluit en Aanleiding",
+          "chunk_index": null,
+          "start_date": "2017-07-04T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 630138934992836791,
+        "content_preview": "7.  Stadion(park)ontwikkelingen/Feyenoord City\na. Presentatie door Feyenoord/OMA (incl. vragen stellen en politiek debat\nmet wethouder(s)\nTer bespreking\n- Wethoudersbrief Schneider en Visser van 21 ma",
+        "score": 0.15349561,
+        "metadata": {
+          "document_id": "3269280",
+          "title": "Agendapunt 7a: Stadion(park)ontwikkelingen/Feyenoord City - Presentatie",
+          "chunk_index": null,
+          "start_date": "2016-04-13T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 788308152464005972,
+        "content_preview": "Onderwerp:\nAfdoening motie 17bb4123 ‘Feyenoord City Onderwijzer’.\nOp welke gronden deze briefî/Waarom nu voorgelegd?\nUw raad heeft op 11 mei 2017 de Position Paper Feyenoord City vastgesteld. Hierin\nz",
+        "score": 0.14621668,
+        "metadata": {
+          "document_id": "6086127",
+          "title": "Aanleiding en context motie Feyenoord City Onderwijzer",
+          "chunk_index": null,
+          "start_date": "2020-09-24T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 29612576573643633,
+        "content_preview": "aars;\nFeyenoord City is een gezamenlijk initiatief van Feyenoord Rotterdam n.v. en Stadion\nFeijenoord N.V. om binnen de contouren van Stadionpark een nieuwe omgeving te\ncreëren met woon-, leisure-, ho",
+        "score": 0.13895363,
+        "metadata": {
+          "document_id": "5248783",
+          "title": "Projectomschrijving en financiële bijdrage gemeente",
+          "chunk_index": null,
+          "start_date": "2017-05-11T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 332409917479884440,
+        "content_preview": "Plankosten Technisch Ontwerp stadion\nVanwege de verminderde inkomsten als gevolg van de coronamaatregelen hebben\nStadion Feijenoord en BVO Feyenoord op dit moment niet voldoende middelen om\nhet Techni",
+        "score": 0.09514229,
+        "metadata": {
+          "document_id": "6086125",
+          "title": "Financiering plankosten Technisch Ontwerp stadion",
+          "chunk_index": null,
+          "start_date": "2020-09-24T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 163167977887117576,
+        "content_preview": "Geachte leden van de commissie,\nGraag informeer ik u over de laatste ontwikkelingen rondom Feyenoord City. Aanleiding\nhiervoor is het bericht1 dat Stadion Feijenoord N.V. en Feijenoord Rotterdam N V. ",
+        "score": 0.08594167,
+        "metadata": {
+          "document_id": "6068673",
+          "title": "Introduction to Feyenoord City Developments",
+          "chunk_index": null,
+          "start_date": "2018-09-13T16:15:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1005131760212487739,
+        "content_preview": "iﬂolobkuz S‘ \n. GEMEENTEPTAAQ' “ \nVergaderlng van = \nLeefbaar 11 ME’209 \nRotterdam AANGEHONIFN\nMotie: Zekerheid standplaatshouders\nDe gemeenteraad van Rotterdam, in vergadering bijeen op 11 mei 2017, ",
+        "score": 0.06923094,
+        "metadata": {
+          "document_id": "5303867",
+          "title": "Motie: Zekerheid standplaatshouders - Inleiding",
+          "chunk_index": null,
+          "start_date": "2017-05-11T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 77170032748658164,
+        "content_preview": "„ Portefeuillehouder: voorzitter raad raadsvergadering van: 4 en 6 juli 2016\nScope van het project\nWel is het noodzakelijk om duidelijk af te bakenen wat tot het risicovol project behoort,\nomdat Feyen",
+        "score": 0.04870731,
+        "metadata": {
+          "document_id": "5506014",
+          "title": "Scope van het project Feyenoord City",
+          "chunk_index": null,
+          "start_date": "2017-07-04T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 119698180689254144,
+        "content_preview": "5 Feyenoord City\n2 context Feyenoord City\n inleiding\nFeyenoord City maakt onderdeel uit van de gebiedsontwikkeling Stadionpark.\nStadionpark bestaat uit een groter gebied waarbij naast Feyenoord City o",
+        "score": 0.04354091,
+        "metadata": {
+          "document_id": "6079806",
+          "title": "Context Feyenoord City en Stadionpark",
+          "chunk_index": null,
+          "start_date": "2019-11-14T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1114716065950256226,
+        "content_preview": "Met de hierboven beschreven aanvullingen op de haalbaarheidsstudie hebben we het\nvertrouwen dat de belangrijkste vragen zijn beantwoord en dat voldoende is aangetoond\ndat de Business Case grotendeels ",
+        "score": 0.0432712,
+        "metadata": {
+          "document_id": "5248783",
+          "title": "Conclusie en ondertekening",
+          "chunk_index": null,
+          "start_date": "2017-05-11T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 731793017165417000,
+        "content_preview": "Betreft: Gebiedsontwikkeling Feyenoord\nCity ten behoeve van heel Rotterdam Zuid\nGeachte leden van de commissie bouwen, wonen en buitenruimte,",
+        "score": 0.0296628,
+        "metadata": {
+          "document_id": "6119160",
+          "title": "Betreft: Gebiedsontwikkeling Feyenoord City ten behoeve van heel Rotterdam Zuid",
+          "chunk_index": null,
+          "start_date": "2024-05-22T09:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 970402270916620690,
+        "content_preview": "Onderwerp:\nFeyenoord City\nOp welke gronden deze briefî/Waarom nu voorgelegd?\nOp donderdag 24 september bespreekt uw raadscommissie MPOF de voortgang van\nhet project Feyenoord City. Dit gebeurt op basi",
+        "score": 0.02227294,
+        "metadata": {
+          "document_id": "6086125",
+          "title": "Onderwerp en aanleiding van de brief",
+          "chunk_index": null,
+          "start_date": "2020-09-24T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 222752276112349967,
+        "content_preview": "- Stadionpark/Feyenoord City herzien -\nBeleidsherziening nodig vanwege aantal ontwikkelingen:\nNiet doorgaan Nieuwe Stadion\nBesluit station / stadsbrug\nNieuwe inzichten (Feijenoord XL)\nvullen\nKader: om",
+        "score": 0.01555078,
+        "metadata": {
+          "document_id": "6118839",
+          "title": "Stadionpark/Feyenoord City herzien",
+          "chunk_index": null,
+          "start_date": "2024-05-15T09:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1122637537708220883,
+        "content_preview": "5 Feyenoord City\n2 context Feyenoord City\n inleiding\nFeyenoord City maakt onderdeel uit van de gebiedsontwikkeling Stadionpark.\nStadionpark bestaat uit een groter gebied waarbij naast Feyenoord City o",
+        "score": 0.0073761,
+        "metadata": {
+          "document_id": "6080353",
+          "title": "Context Feyenoord City en Stadionpark",
+          "chunk_index": null,
+          "start_date": "2019-12-03T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 193420115243314406,
+        "content_preview": "Financiële betrokkenheid gemeente bij Feyenoord City\nGezien het grote aantal vragen uit uw raad en ook de berichtgeving in de media bleek\ndat er een fors aantal vragen leeft over de financiële betrokk",
+        "score": -0.00084553,
+        "metadata": {
+          "document_id": "6086125",
+          "title": "Financiële betrokkenheid van de gemeente",
+          "chunk_index": null,
+          "start_date": "2020-09-24T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 958892779498878659,
+        "content_preview": "Participatievisie Feyenoord City en Stadionpark \n 22 december 2018",
+        "score": -0.00525098,
+        "metadata": {
+          "document_id": "6075251",
+          "title": "Participatievisie Feyenoord City en Stadionpark",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 799058559218587025,
+        "content_preview": "7.  Stadion(park)ontwikkelingen/Feyenoord City\nAgendapunt wordt doorgeschoven naar de overlegvergadering van 20 april a.s.",
+        "score": -0.00650912,
+        "metadata": {
+          "document_id": "3478781",
+          "title": "Stadion(park)ontwikkelingen/Feyenoord City",
+          "chunk_index": null,
+          "start_date": "2016-05-25T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 97457233878259533,
+        "content_preview": "Nummer: 20bb5604\nOnderwerp: Beantwoording vragen Van der Velden en Verkoelen over\nlening aan Stichting Gebiedsontwikkeling aan de Maas -\nvervolgvragen op 19bb20426\nDatum: 16  juni 2020\nAfzender: Colle",
+        "score": -0.04207754,
+        "metadata": {
+          "document_id": "6084997",
+          "title": "3.02. Projecten - Besluit 20bb5604",
+          "chunk_index": null,
+          "start_date": "2020-07-09T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 256280257583309096,
+        "content_preview": "Nummer: 20bb6110\nOnderwerp: Voortgang Feyenoord City in coronatijd\nDatum: 19 mei 2020\nAfzender: Wethoudersbrief Van Gils\nBesluit: Betrekken bij bespreking Feyenoord City in een volgende\noverlegvergade",
+        "score": -0.04540836,
+        "metadata": {
+          "document_id": "6084436",
+          "title": "3.02 Projecten - Voortgang Feyenoord City",
+          "chunk_index": null,
+          "start_date": "2020-06-25T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 100609603927892021,
+        "content_preview": "Nog te plannen: MPOF\nFeyenoord City 20bb4557 Brief over impact Corrona op Feyenoord City  Naar verwachting geen ruimte op commissieagenda om\ndit nog voor het zomerreces te bespreken, mede omdat\nde aan",
+        "score": -0.05560604,
+        "metadata": {
+          "document_id": "6084488",
+          "title": "Project Feyenoord City",
+          "chunk_index": null,
+          "start_date": "2020-06-25T19:30:00",
+          "party": null
+        }
+      }
+    ],
+    "timings": {
+      "embedding_ms": 414.92687499703607
+    },
+    "config_snapshot": {
+      "top_k": 25,
+      "fast_mode": false,
+      "date_from": null,
+      "date_to": null,
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0,
+      "strategy": "party_filtered",
+      "parties": [
+        "PvdA"
+      ],
+      "per_party_counts": {
+        "PvdA": 25
+      },
+      "route": {
+        "query_type": "party_stance",
+        "top_k": 25,
+        "parties": [
+          "PvdA"
+        ],
+        "date_from": null,
+        "date_to": null,
+        "sub_queries": [],
+        "confidence": 1.0,
+        "strategy": "party_filtered"
+      }
+    }
+  },
+  {
+    "question_id": "ps-02",
+    "query_text": "De Asielopvang op de Silja, wat denkt Leefbaar Rotterdam daar van?",
+    "query_embedding_hash": "",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [
+      {
+        "chunk_id": 485087774096165132,
+        "content_preview": "3\nGROEN\nLINKSROTTERDAM SP. @PvdA\nMOTIE IEINDE AAN DE OPVANG IN DE SILJA\nDe gemeenteraad van Rotterdam, bijeen op 15 mei 2025 ter bespreking van agendapunt\n6.4 Debat over 'Erbarmelijke leefomstandighed",
+        "score": 0.49555129,
+        "metadata": {
+          "document_id": "25bb003550",
+          "title": "[25BB003550] 25bb003550",
+          "chunk_index": null,
+          "start_date": "2025-05-14T16:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 581783575308229850,
+        "content_preview": "f zal verbeteren; verzoekt het college: per direct geen kinderen en alleenstaande jonge vrouwen meer te plaatsen op de Silja totdat de situatie aantoonbaar verbeterd is; - Gemeenteraad van Rotterdam N",
+        "score": 0.37563032,
+        "metadata": {
+          "document_id": "8f563619-b2a8-428a-a265-19b1a802ff1f",
+          "title": "Voorstel inzake bezwaarschrift Wet open overheid",
+          "chunk_index": null,
+          "start_date": "None",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 903931952611803095,
+        "content_preview": "Leefbaar Rotterdam wil geen\nasielzoekerscentrum in Rotterdam, omdat wij\nhier al genoeg problemen hebben.Wij spraken\nzojuist over draagvlak, maar u haalt er heel\nandere dingen bij. Het grote deel van\nR",
+        "score": 0.34811276,
+        "metadata": {
+          "document_id": "3200678",
+          "title": "Leefbaar Rotterdam wil geen asielzoekerscentrum in Rotterdam",
+          "chunk_index": null,
+          "start_date": "2016-03-17T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1103958914714501158,
+        "content_preview": "De heer DE KLEIJN (sp). Voorts wil ik van\nde fractie van Leefbaar Rotterdam horen\nwat zij van de opvang van minderjarige\nvluchtelingen vindt. Is Leefbaar Rotterdam\ngerustgesteld en kan zij zich nu uit",
+        "score": 0.33519813,
+        "metadata": {
+          "document_id": "3533260",
+          "title": "Mr. De Kleijn (SP) asks Leefbaar Rotterdam about their stance on minor refugee reception",
+          "chunk_index": null,
+          "start_date": "2015-12-17T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 226066780952791557,
+        "content_preview": "1 https://www.nrc.nl/nieuws/2025/04/10/opvangboot-silja-is-een-snelkookpan-van-geweld-en-besmettelijke-\naandoeningen-waarschuwen-artsen-a4889562\n2 Duurzame opvang van asielzoekers is beter voor iedere",
+        "score": 0.32374227,
+        "metadata": {
+          "document_id": "6125053",
+          "title": "Bronnen en Verwijzingen",
+          "chunk_index": null,
+          "start_date": "2025-05-14T16:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 249800837559674353,
+        "content_preview": "De heer VAN ELCK (lr). Leefbaar Rotterdam is\nvoor het opvangen van oorlogsvluchtelingen, ik\nheb nooit anders gezegd. Leefbaar Rotterdam\nis echter ook voorstander van het opvangen\nvan vluchtelingen in ",
+        "score": 0.311764,
+        "metadata": {
+          "document_id": "3200678",
+          "title": "Leefbaar Rotterdam: opvang oorlogsvluchtelingen in regio, niet in Rotterdam",
+          "chunk_index": null,
+          "start_date": "2016-03-17T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 4728146237687120,
+        "content_preview": "GroenLinks Rotterdam | Coolsingel 40 kamer 3 | 3011 AD Rotterdam | fractie@groenlinksrotterdam.nl\n     Aan de voorzitter van de Gemeenteraad Rotterdam Coolsingel 40 3011 AD Rotterdam  Rotterdam, 4 okt",
+        "score": 0.28545728,
+        "metadata": {
+          "document_id": "6112788",
+          "title": "GroenLinks Rotterdam - Aanvraag actualiteit Silja",
+          "chunk_index": null,
+          "start_date": "2023-10-05T10:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 686597413307579470,
+        "content_preview": "Op dit moment is er plek voor 500 asielzoekers in Rotterdam met locaties verspreid door Rotterdam. Er zijn vier riviercruiseschepen in Rotterdam met in totaal 465 plekken en een locatie met 35 plekken",
+        "score": 0.24538361,
+        "metadata": {
+          "document_id": "6121436",
+          "title": "Asielopvang",
+          "chunk_index": null,
+          "start_date": "2024-07-11T10:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 576896541300102662,
+        "content_preview": "Op dit moment is er plek voor 500 asielzoekers in Rotterdam met locaties verspreid door\nRotterdam. Er zijn vier riviercruiseschepen in Rotterdam met in totaal 465 plekken en een\nlocatie met 35 plekken",
+        "score": 0.2338827,
+        "metadata": {
+          "document_id": "6120611",
+          "title": "Asielopvang",
+          "chunk_index": null,
+          "start_date": "2024-06-26T09:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 278559913109486784,
+        "content_preview": "Op dit moment is er plek voor 500 asielzoekers in Rotterdam met locaties verspreid door Rotterdam. Er zijn vier riviercruiseschepen in Rotterdam met in totaal 465 plekken en een locatie met 35 plekken",
+        "score": 0.21996319,
+        "metadata": {
+          "document_id": "6121015",
+          "title": "Asielopvang",
+          "chunk_index": null,
+          "start_date": "2024-07-03T09:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 601158671713489140,
+        "content_preview": "Op 20 juli 2022 stelde S. Ceulemans (Leefbaar Rotterdam) ons schriftelijke vragen over\nasielopvang en vluchtelingen Oekraïne.\n\nInleidend wordt gesteld:\n‘Vorige week ontving de raad een brief van wetho",
+        "score": 0.19856,
+        "metadata": {
+          "document_id": "6101784",
+          "title": "Inleiding schriftelijke vragen asielopvang",
+          "chunk_index": null,
+          "start_date": "2022-09-29T10:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 404021156064914097,
+        "content_preview": "De heer SIEMONS (Leefbaar Rotterdam). Wat\nis úw mening?",
+        "score": 0.19375108,
+        "metadata": {
+          "document_id": "239879",
+          "title": "Vraag van Siemons over de mening van Van den Born",
+          "chunk_index": null,
+          "start_date": "2005-03-17T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1028562981598998917,
+        "content_preview": "Leefbaar\nRotterdam\nMotie Verplicht dit jaar nog meer asielzoekers opvangen? Nee!\nDe gemeenteraad van Rotterdam, in vergadering bijeen op 16 december 2021 ter\nbespreking van 'Rotterdamse Aanpak Inburge",
+        "score": 0.16329442,
+        "metadata": {
+          "document_id": "6097083",
+          "title": "Preamble / Aanleiding",
+          "chunk_index": null,
+          "start_date": "2021-12-16T10:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 301092385540465299,
+        "content_preview": ". Migranten- en vluchtelingenorganisaties aangeven dat zij onvoldoende worden bereikt en ondersteund door de gemeente Rotterdam;",
+        "score": 0.13529716,
+        "metadata": {
+          "document_id": "6084226",
+          "title": "Constatering - Ondersteuning gemeente Rotterdam",
+          "chunk_index": null,
+          "start_date": "2020-06-18T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 285016737459564518,
+        "content_preview": "Afspraken tussen de gemeente Rotterdam, het COA en het Rijk over de doorstroomlocatie\nSilja Europe\n\nAanhef\nDe gemeente Rotterdam, het Centraal Orgaan opvang asielzoekers (hierna: COA) en de\nministerie",
+        "score": 0.1326514,
+        "metadata": {
+          "document_id": "6112096",
+          "title": "Afspraken doorstroomlocatie Silja Europe - Aanhef",
+          "chunk_index": null,
+          "start_date": "2023-09-20T09:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 952952759067611775,
+        "content_preview": "- het van de zotte is dat Rotterdam nu zelfs ook meebetaalt aan opvang van illegalen die voorheen in andere gemeenten werden opgevangen;",
+        "score": 0.08688022,
+        "metadata": {
+          "document_id": "6084107",
+          "title": "Overweging: Opvang uit andere gemeenten",
+          "chunk_index": null,
+          "start_date": "2020-06-18T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 116553286822073735,
+        "content_preview": "GroenLinks Rotterdam | Coolsingel 40 kamer 3 | 3011 AD Rotterdam | fractie@groenlinksrotterdam.nl\n\n\f\n\n6. Zijn er in Rotterdam (jonge) asielzoekers bekend met een opvangverbod die op straat\nleven? Wat ",
+        "score": 0.05671852,
+        "metadata": {
+          "document_id": "7194445",
+          "title": "[25bb005787] Zorg voor kwetsbare jonge asielzoekers",
+          "chunk_index": null,
+          "start_date": "None",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 995718068176617090,
+        "content_preview": "8‘2'\nGR.ENLINKS MOTIE Concept Motie Zorg voor vluchtelingen De gemeenteraad van Rotterdam, in vergadering bijeen op 2 juli 2020 ter bespreking van ‘Relax. Dit is Rotterdam’;",
+        "score": 0.05556549,
+        "metadata": {
+          "document_id": "6084711",
+          "title": "Preamble / aanleiding",
+          "chunk_index": null,
+          "start_date": "2020-07-02T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 703289073698026363,
+        "content_preview": "- zowel het Rotterdamse stadsbestuur als het Rijk bij de start van de Rotterdamse LW benadrukten dat opvang wordt gekoppeld aan een op terugkeer gericht begeleidingstraject van zes maanden, waaraan il",
+        "score": 0.05494311,
+        "metadata": {
+          "document_id": "6084107",
+          "title": "Constatering: Begeleidingstraject",
+          "chunk_index": null,
+          "start_date": "2020-06-18T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 247578775544525863,
+        "content_preview": "Verzoekthetcollege\n-BijhetRijkaantedringenopeenandereeninhoudelijkeverdeelsleutelm.b.t.het\nhuisvestenvanasielzoekersmetalslogischeconsequentiedatRotterdamontzien\nwordt.\nengavertotdeordevandedag.",
+        "score": -0.01505607,
+        "metadata": {
+          "document_id": "3460840",
+          "title": "Verzoekt het college",
+          "chunk_index": null,
+          "start_date": "2016-05-12T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 311891360394483794,
+        "content_preview": "Geachte commissieleden,\nMet deze brief informeer ik u over de laatste stand van zaken rondom het opvangschip de\nMPS Rotterdam aan de Sint-Jobshavenkade.\nMedio november 2023 is uw raad geïnformeerd ove",
+        "score": -0.04557718,
+        "metadata": {
+          "document_id": "6118112",
+          "title": "Betreft: verplaatsing opvangschip MPS Rotterdam",
+          "chunk_index": null,
+          "start_date": "2024-04-10T09:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 293827455283129918,
+        "content_preview": "De Rotterdamse gemeenteraad maakt zich al langer zorgen om de situatie bij Veilig Thuis\nRotterdam Rijnmond. Het meldpunt kampt al een tijd met wachtlijsten waardoor\nmeldingen niet snel en adequaat kun",
+        "score": -0.06011071,
+        "metadata": {
+          "document_id": "5279624",
+          "title": "Zorgen van de gemeenteraad en verzoek om actualiteitenraad",
+          "chunk_index": null,
+          "start_date": "2017-05-11T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 680485807738975807,
+        "content_preview": "In de commissies Jeugd Onderwijs en Cultuur en Bestuur, Veiligheid en Middelen heeft mijn fractie enkele moties ingediend. Motie 5 gaat over de bajesboten en het uitzetcentrum op Zestienhoven. Deze sc",
+        "score": -0.08826533,
+        "metadata": {
+          "document_id": "594639",
+          "title": "Motie 5: Bajesboten en uitzetcentrum Zestienhoven",
+          "chunk_index": null,
+          "start_date": "2007-11-06T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 185386784895688894,
+        "content_preview": "Motie 5, Bajesboten en uitzetcentrum sluiten\n\n“De gemeenteraad van Rotterdam, in\nvergadering bijeen op 6 en 8 november 2007\nter bespreking van de begroting 2008;\nconstaterende dat:\n- in Rotterdam nog ",
+        "score": -0.12357037,
+        "metadata": {
+          "document_id": "594639",
+          "title": "Motie 5, Bajesboten en uitzetcentrum sluiten",
+          "chunk_index": null,
+          "start_date": "2007-11-06T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1023008657371267190,
+        "content_preview": "Motie 5, Bajesboten en uitzetcentrum sluiten\nNotulen\nraadsvergadering van 6 en 8 november 2007\n“De gemeenteraad van Rotterdam, in\nvergadering bijeen op 6 en 8 november 2007\nter bespreking van de begro",
+        "score": -0.14343697,
+        "metadata": {
+          "document_id": "238765",
+          "title": "Motion 5: 'Bajesboten en uitzetcentrum sluiten'",
+          "chunk_index": null,
+          "start_date": "2007-11-06T00:00:00",
+          "party": null
+        }
+      }
+    ],
+    "timings": {
+      "embedding_ms": 686.5932920045452
+    },
+    "config_snapshot": {
+      "top_k": 25,
+      "fast_mode": false,
+      "date_from": null,
+      "date_to": null,
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0,
+      "strategy": "party_filtered",
+      "parties": [
+        "Leefbaar Rotterdam"
+      ],
+      "per_party_counts": {
+        "Leefbaar Rotterdam": 25
+      },
+      "route": {
+        "query_type": "party_stance",
+        "top_k": 25,
+        "parties": [
+          "Leefbaar Rotterdam"
+        ],
+        "date_from": null,
+        "date_to": null,
+        "sub_queries": [],
+        "confidence": 1.0,
+        "strategy": "party_filtered"
+      }
+    }
+  }
+]

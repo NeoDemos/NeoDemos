@@ -1,0 +1,1184 @@
+[
+  {
+    "question_id": "se-01",
+    "query_text": "Waarom ging het Warmtebedrijf Rotterdam failliet?",
+    "query_embedding_hash": "acc6b9079c9b1a74e9752eef403e57a4",
+    "vector_results": [
+      {
+        "chunk_id": 392609438576319966,
+        "content_preview": "Gemeente Rotterdam\nCollege van Burgemeester en Wethouders Bezoekadres: Stadhuis Coolsingel 40\n3011 AD Rotterdam\nPostadres: Postbus 70012\n3000 KP Rotterdam\nWebsite: www.rotterdam.nl\nE-mail: BBO@rotterd",
+        "score": 0.5558572,
+        "metadata": {
+          "document_id": "6086157",
+          "title": "Briefinformatie en Kenmerken",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 984266608159015468,
+        "content_preview": "Gemeente Rotterdam\nCollege van Burgemeester en Wethouders\nAan de Gemeenteraad\nBezoekadres: Stadhuis Coolsingel 40\n3011 AD Rotterdam\nPostadres: Postbus 70012\n3000 KP Rotterdam\nWebsite: www.rotterdam.nl",
+        "score": 0.5454283,
+        "metadata": {
+          "document_id": "6085227",
+          "title": "Briefkop en algemene informatie",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 590522246371511943,
+        "content_preview": "Vraag 5:\nWat gebeurt er met de liquiditeitspositie van Warmtebedrijf Rotterdam als de EC\nniet op tijd beslist?\n\nAntwoord:\nIn de steunmelding wordt hier rekening mee gehouden, daarmee kan de benodigde\n",
+        "score": 0.5437402,
+        "metadata": {
+          "document_id": "6084441",
+          "title": "Beantwoording Vraag 5 - Liquiditeitspositie WBR",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 714022981408418454,
+        "content_preview": "20519 7033 ‘ q g '  Gemeente R0tterdam Onderzoekscommissie Raadsenquête Griffie Warmtebedrijf Bezoekadres: Stadhuis Coolsingel 40, Rotterdam Postadres: Postbus 70012 3000 KP Rotterdam Internet: rotter",
+        "score": 0.54138136,
+        "metadata": {
+          "document_id": "6084440",
+          "title": "Documentheader en contactgegevens Onderzoekscommissie",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 53223152938703061,
+        "content_preview": "DE\nWARMTEWET 2\nTechnische sessie\n7-7-20\nLYDIA\nHAMEETEMAN\nINHOUDSOPGAVE\n▪ Warmte in Rotterdam\n▪ Publieke belangen\n▪ Concept zienswijze vanuit Rotterdam",
+        "score": 0.5360116,
+        "metadata": {
+          "document_id": "6084765",
+          "title": "DE WARMTEWET 2: Technische sessie",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 88559063690274429,
+        "content_preview": "WARMTE IN ROTTERDAM\nDNWW: Warmtebedrijf\nRotterdam\nLoN: Eneco\nConcessies: Eneco en Vattenfall (looptijd t/m 2043)\nOvereenkomsten: Eneco en Ennatuurlijk (HvH)\nAVR\nRoca\nShell",
+        "score": 0.53583956,
+        "metadata": {
+          "document_id": "6084765",
+          "title": "WARMTE IN ROTTERDAM",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 296928036039376895,
+        "content_preview": "Over het de\nfacto failliete Warmtebedrijf dienen wij een\nmotie in. In dit bedrijf hebben wij al € 28 miljoen\ngeïnvesteerd en veel van dit geld is al aan Shell\nen anderen betaald. Shell is er uitgestap",
+        "score": 0.5339575,
+        "metadata": {
+          "document_id": "238765",
+          "title": "Motie inzake Warmtebedrijf NV",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 27478443051288503,
+        "content_preview": "Constaterende dat: . de gemeenteraad in het najaar een richtinggevend besluit zal nemen over de toekomst van het Warmtebedrĳf Rotterdam,",
+        "score": 0.53267807,
+        "metadata": {
+          "document_id": "6084241",
+          "title": "Constaterende dat",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 16010960396049059,
+        "content_preview": "Eindrapport\nraadsenquête\nWarmtebedrijf\nRotterdam\nEindrapport\nRaadsenquête\nWarmtebedrijf\nRotterdam\nOnderzoekscommissie Warmtebedrijf Rotterdam\n17 september 2020",
+        "score": 0.5311811,
+        "metadata": {
+          "document_id": "6086331",
+          "title": "Eindrapport raadsenquête Warmtebedrijf Rotterdam",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 759899957401357471,
+        "content_preview": "3. Warmte in Rotterdam  –  door Lydia Hameeteman, adviseur duurzaamheid\ngemeente Rotterdam en/of Marcel Boere, adviseur deelnemingen gemeente\nRotterdam\n\nAandacht voor de geschiedenis van warmte in Rot",
+        "score": 0.5252538,
+        "metadata": {
+          "document_id": "6084762",
+          "title": "Programma 3: Warmte in Rotterdam",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 355393520468416661,
+        "content_preview": "20bb7733 Bekrachtiging geheimhouding inzake Warmtebedrijf De raad van de gemeente Rotterdam, gelezen de brief van het college van burgemeester en wethouders, ontvangen op 16 juni 2020, inzake ‘Stand v",
+        "score": 0.51503843,
+        "metadata": {
+          "document_id": "6084048",
+          "title": "20bb7733 Bekrachtiging geheimhouding inzake Warmtebedrijf",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 632773532146793966,
+        "content_preview": "Wet collectieve warmtevoorziening [Warmtewet 2] Toelichting op het wetsvoorstel doorTjalling de VriesTechnische sessie Gemeente Rotterdam7-7-20201",
+        "score": 0.51292515,
+        "metadata": {
+          "document_id": "6084763",
+          "title": "Wet collectieve warmtevoorziening [Warmtewet 2] Toelichting op het wetsvoorstel",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 260252177496440149,
+        "content_preview": "Energie\nHet Rotterdam Climate Initiative is het nieuwe, ambitieuze klimaatprogramma waarbij de gemeente\ntracht de CO 2-uitstoot van Rotterdam fors terug te brengen. Om een belangrijke bijdrage aan dez",
+        "score": 0.4991337,
+        "metadata": {
+          "document_id": "5642954",
+          "title": "Energie - Rotterdam Climate Initiative en warmtenet",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 263322536325489320,
+        "content_preview": "9.  Stand van zaken Warmtebedrijf Rotterdam\nDit agendapunt wordt in beslotenheid behandeld",
+        "score": 0.49858493,
+        "metadata": {
+          "document_id": "2932160",
+          "title": "Agendapunt: Warmtebedrijf Rotterdam",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 417634479579297934,
+        "content_preview": "Rotterdam, 29 januari 2019.\nOnderwerp:\nBeantwoording van de schríftelijke vragen van het raadslid G.J.M. Vreugdenhil (Leefbaar\nRotterdam) over Warmtebedrijf Rotterdam, de Leiding over Oost en de Leids",
+        "score": 0.49789602,
+        "metadata": {
+          "document_id": "6072034",
+          "title": "Beantwoording van schriftelijke vragen over Warmtebedrijf Rotterdam",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 1034622266668682046,
+        "content_preview": "Rotterdam, 2 juni 2020. 20bb006562\nOnderwerp:\nBeantwoording van de schríftelijke vragen van het raadslid R.T.j. van der Velden (Partij\nvoor de Dieren) over het Warmtebedrijf.\nPortefeuillehouder: A. Bo",
+        "score": 0.49649614,
+        "metadata": {
+          "document_id": "6084748",
+          "title": "Briefgegevens en onderwerp",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 845230111706326632,
+        "content_preview": "b 07-02-2019 S. Leewis Duurzaam warmtebedrijf Rotterdam 04-07-2019\n19bb11819 GroenLinks A. Bonte",
+        "score": 0.49531388,
+        "metadata": {
+          "document_id": "6075231",
+          "title": "Motie 'Duurzaam warmtebedrijf Rotterdam'",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 416252386079696457,
+        "content_preview": "b 07-02-2019 S. Leewis Duurzaam warmtebedrijf Rotterdam 04-07-2019\n19bb11819 GroenLinks A. Bonte",
+        "score": 0.49531388,
+        "metadata": {
+          "document_id": "6076920",
+          "title": "Motie 'Duurzaam warmtebedrijf Rotterdam'",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 899694672232348154,
+        "content_preview": "Constaterende dat: 0 de stad Rotterdam financieel en qua imago veel schade heeft ondervonden door het meest recente fraude schandaal;",
+        "score": 0.49425846,
+        "metadata": {
+          "document_id": "6090016",
+          "title": "Constatering: Schade door fraudeschandaal",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 575987566705162787,
+        "content_preview": "Toelichting:\nIn het Klimaatakkoord hebben onder andere het Rijk, provincies, gemeenten,\nwoningcorporaties en energiebedrijven met elkaar afgesproken om de gebouwde\nomgeving vrijwel CO2 vrij te maken. ",
+        "score": 0.49238598,
+        "metadata": {
+          "document_id": "6084766",
+          "title": "Context Klimaatakkoord en Rotterdamse ambities",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 154789411284198101,
+        "content_preview": "Notitie\nWarmtebedrijf Rotterdam\nVan:  Wouter Verhoeven\nDoorkiesnummer: (010) 205 3774\nE-mail: w.verhoeven@warmtebedrijfrotterdam.nl\n Aan  :  Commissieleden EHMD  en Commissieleden VOF\nVan : Warmtebedr",
+        "score": 0.49232617,
+        "metadata": {
+          "document_id": "2371388",
+          "title": "Notitie Warmtebedrijf Rotterdam",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 181670860091062044,
+        "content_preview": "Notitie\nWarmtebedrijf Rotterdam\n\nVan:  Wouter Verhoeven\nDoorkiesnummer: (010) 205 3774\nE-mail: w.verhoeven@warmtebedrijfrotterdam.nl\n\n Aan  :  Commissieleden EHMD  en Commissieleden VOF\nVan : Warmtebe",
+        "score": 0.490672,
+        "metadata": {
+          "document_id": "1703838",
+          "title": "Notitie Warmtebedrijf Rotterdam",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 782630671202540915,
+        "content_preview": "b 07-02-2019 S. Leewis Duurzaam warmtebedrijf Rotterdam 04-07-2019\n19bb11819 GroenLinks A. Bonte",
+        "score": 0.49056113,
+        "metadata": {
+          "document_id": "6076652",
+          "title": "Motie: Duurzaam warmtebedrijf Rotterdam",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 757193283260171120,
+        "content_preview": "b 07-02-2019 S. Leewis Duurzaam warmtebedrijf Rotterdam 04-07-2019\n19bb11819 GroenLinks A. Bonte",
+        "score": 0.49056113,
+        "metadata": {
+          "document_id": "6073060",
+          "title": "Motie: Duurzaam warmtebedrijf Rotterdam",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 279603480758557317,
+        "content_preview": "b 07-02-2019 S. Leewis Duurzaam warmtebedrijf Rotterdam 04-07-2019\n19bb11819 GroenLinks A. Bonte",
+        "score": 0.49056113,
+        "metadata": {
+          "document_id": "6073937",
+          "title": "Motie: Duurzaam warmtebedrijf Rotterdam",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 141413257850321027,
+        "content_preview": "b 07-02-2019 S. Leewis Duurzaam warmtebedrijf Rotterdam 04-07-2019\n19bb11819 GroenLinks A. Bonte",
+        "score": 0.49056113,
+        "metadata": {
+          "document_id": "6077468",
+          "title": "Motie: Duurzaam warmtebedrijf Rotterdam",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 1142049234149829923,
+        "content_preview": "Rotterdam, 2 juni 2020. 20bb006562\nOnderwerp:\nBeantwoording van de schríftelijke vragen van het raadslid R.T.j. van der Velden (Partij\nvoor de Dieren) over het Warmtebedrijf.\nPortefeuillehouder: A. Bo",
+        "score": 0.49031714,
+        "metadata": {
+          "document_id": "6084441",
+          "title": "Briefgegevens en onderwerp",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 269510830594280948,
+        "content_preview": ". de Rotterdamse horeca flinke financiële klappen heeft gekregen door de coronacrisis;",
+        "score": 0.48902136,
+        "metadata": {
+          "document_id": "6084217",
+          "title": "Van mening dat - Financiële situatie",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 551000678544798876,
+        "content_preview": "Gemeente Rotterdam\nCollege van Burgemeester en Wethouders\nAan de Gemeenteraad\nBezoekadres: Stadhuis Coolsingel 40\n3011 AD Rotterdam\nPostadres: Postbus 70012\n3000 KP Rotterdam\nWebsite: www.rotterdam.nl",
+        "score": 0.48816562,
+        "metadata": {
+          "document_id": "6084766",
+          "title": "Documentheader en verzendinformatie",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 21451702949063915,
+        "content_preview": "Notitie\nWarmtebedrijf Rotterdam\n\nVan: Wouter Verhoeven\nDoorkiesnummer: (010) 205 3774\nE-mail: w.verhoeven@warmtebedrijfrotterdam.nl\n\nAan : Commissieleden EHMD en Commissieleden VOF\nVan : Warmtebedrijf",
+        "score": 0.4873751,
+        "metadata": {
+          "document_id": "1608045",
+          "title": "Notitie Warmtebedrijf Rotterdam",
+          "chunk_index": null
+        }
+      }
+    ],
+    "keyword_results": [
+      {
+        "chunk_id": 1030291,
+        "content_preview": "De heer SCHNEIDER (Leefbaar Rotterdam).\nGelet op uw uitspraak over een eventueel\nfaillissement constateer ik, dat u niet overtuigd\nbent van de juistheid van door u gekozen\nconstructie. De enige reden ",
+        "score": 0.21608357,
+        "metadata": {
+          "document_id": "255531",
+          "title": "Further Debate on Nieuw Reijerwaard Structure and Risks",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 922609,
+        "content_preview": "De VOORZITTER. Het woord is aan de heer Mink, die zijn maidenspeech zal houden.\nDe heer MINK (cda). Mijnheer de voorzitter. Wat is er misgegaan en wie is daar schuldig aan? Beide vragen lijken centraa",
+        "score": 0.07214452,
+        "metadata": {
+          "document_id": "818062",
+          "title": "Het rapport van de Rekenkamer Rotterdam 'WATt heb je ervoor over', alsmede het voorstel van het presidium met betrekking tot de aanbevelingen uit dit rapport.",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 736341,
+        "content_preview": "De VOORZITTER. Het woord is aan de heer Sörensen.\nDe heer SÖRENSEN (Leefbaar Rotterdam). Mijnheer de voorzitter. Het lijkt mij duidelijk dat ik een ander verhaal heb dan de heer Cremers. Ik moet even ",
+        "score": 0.068876356,
+        "metadata": {
+          "document_id": "231060",
+          "title": "Mr. Sörensen's (Leefbaar Rotterdam) contribution",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 3011,
+        "content_preview": "24. Het (herziene) voorstel met betrekking tot het onderhandelingsresultaat scenario\nWLQ+ Warmtebedrijf Rotterdam alsmede een brief van burgemeester en wethouders\nover de toekomst van het Warmtebedrij",
+        "score": 0.065042555,
+        "metadata": {
+          "document_id": "6094140",
+          "title": "Debat Warmtebedrijf Rotterdam - Scenario WLQ+",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 753263,
+        "content_preview": "De heer BONTE (gl). Mijnheer de\nvoorzitter. Wij hebben het over het gebruik\nv an restwarmte in Rotterdam en deze\nregio. GroenLinks is voorstander van het\nproduceren en opwerken van duurzame\nenergie, m",
+        "score": 0.06488429,
+        "metadata": {
+          "document_id": "3672091",
+          "title": "GroenLinks on Residual Heat and Warmtebedrijf",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 562299,
+        "content_preview": "Nr. Partij Vragen Onderdeel Pag.\nnr.\nweb\nsite\nAntwoord\n1 D66 Mooie oplegger. Complimenten\ndaarvoor. Wel ontbreekt een\nduidelijke link met college-targets.\nNu niet goed terug te vinden in de\noplegger. ",
+        "score": 0.06309294,
+        "metadata": {
+          "document_id": "6083910",
+          "title": "Tabel: Vragen van fracties en antwoorden",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 562940,
+        "content_preview": "Nr. Partij Vragen Onderdeel Pag.\nnr.\nweb\nsite\nAntwoord\n1 D66 Mooie oplegger. Complimenten\ndaarvoor. Wel ontbreekt een\nduidelijke link met college-targets.\nNu niet goed terug te vinden in de\noplegger. ",
+        "score": 0.06303091,
+        "metadata": {
+          "document_id": "6083779",
+          "title": "Tabel met Vragen en Antwoorden",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 562373,
+        "content_preview": "Nr. Partij Vragen Onderdeel Pag.\nnr.\nweb\nsite\nAntwoord\n1 D66 Mooie oplegger. Complimenten\ndaarvoor. Wel ontbreekt een\nduidelijke link met college-targets.\nNu niet goed terug te vinden in de\noplegger. ",
+        "score": 0.06303091,
+        "metadata": {
+          "document_id": "6083718",
+          "title": "Tabel: Schriftelijke vragen van fracties en antwoorden",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 563162,
+        "content_preview": "Nr. Partij Vragen Onderdeel Pag.\nnr.\nweb\nsite\nAntwoord\n1 D66 Mooie oplegger. Complimenten\ndaarvoor. Wel ontbreekt een\nduidelijke link met college-targets.\nNu niet goed terug te vinden in de\noplegger. ",
+        "score": 0.06303091,
+        "metadata": {
+          "document_id": "6083825",
+          "title": "Tabel: Beantwoording technische vragen jaarstukken 2019",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 562734,
+        "content_preview": "Nr. Partij Vragen Onderdeel Pag.\nnr.\nweb\nsite\nAntwoord\n1 D66 Mooie oplegger. Complimenten\ndaarvoor. Wel ontbreekt een\nduidelijke link met college-targets.\nNu niet goed terug te vinden in de\noplegger. ",
+        "score": 0.06303091,
+        "metadata": {
+          "document_id": "6083767",
+          "title": "Tabel met Antwoorden op Technische Vragen",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 1177780,
+        "content_preview": "fractie Antwoord\nCU/SGP\n1 Welke overwegingen had de\nRekenkamer om de rol van de\nraad geen onderdeel te laten\nzijn van haar onderzoek?\nDe raad is in het dossier Schiekadeblok\ngeen zelfstandige speler. ",
+        "score": 0.06247707,
+        "metadata": {
+          "document_id": "6073106",
+          "title": "Table: CU/SGP Questions and Answers",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 2901,
+        "content_preview": "Mevrouw Verkoelen, 50PLUS geeft aan dat\nzij in zijn algemeenheid veel steun heeft\nvoor voorstellen die de energietransitie en\nCO2-besparing ten goede komen. U vraagt\nzich over dit project wel een aant",
+        "score": 0.061214883,
+        "metadata": {
+          "document_id": "6074154",
+          "title": "Beantwoording Bonte aan 50PLUS over urgentie en faillissement",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 768129,
+        "content_preview": "De heer KARAKUS (pvda) (wethouder). Stel\ndat wij een NV of een BV zouden oprichten en\nhet met de beoogde locatie niet goed zou\ngaan, zou u, als overheid, dan bereid zijn de BV\nof NV, waarvan u voor ho",
+        "score": 0.061214883,
+        "metadata": {
+          "document_id": "819917",
+          "title": "Council's decision on the Nieuw Reijerwaard proposal",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 179008,
+        "content_preview": "De VOORZITTER (mevrouw Nunnely). Dan heb ik op mijn lijst de heer Van Dommelen als spreker\nstaan.\nDe heer VAN DOMMELEN (vvd). Ja, dank u wel voorzitter. Ja, als je het verhaal van de kant van de\nOntde",
+        "score": 0.060350277,
+        "metadata": {
+          "document_id": "6119289",
+          "title": "Wethouder Karremans' response to the 'Ontdekhoek' debate",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 826350,
+        "content_preview": "De VOORZITTER. De heer Reijkersz.\nDe heer REIJKERSZ (Leefbaar Rotterdam). \nMijnheer de voorzitter. Ik wilde eigenlijk niets\n zeggen, maar werd geboeid door de woorden\nv an de heer Cornelissen. Hij gaa",
+        "score": 0.05907318,
+        "metadata": {
+          "document_id": "241666",
+          "title": "Leefbaar Rotterdam's Motion 6: Swapping Owned Land for Leasehold",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 1664752,
+        "content_preview": "verplichtingen aangaan en kon dus niet méér capaciteit of expertise aantrekken.\nZo wordt de leiding over de in 2007 ingelaste time out en de daarop volgende doorstart door de aandeelhouders\ngemandatee",
+        "score": 0.05823659,
+        "metadata": {
+          "document_id": "6086140",
+          "title": "VOORWOORD",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 779591,
+        "content_preview": "De VOORZITTER. Ik schors de vergadering.\n(Hierna wordt enige tijd gepauzeerd.)\nDe VOORZITTER. Ik heropen de vergadering. Voordat ik de burgemeester het woord geef, verzoek ik de leden van de raad de b",
+        "score": 0.057857793,
+        "metadata": {
+          "document_id": "233044",
+          "title": "Burgemeester reageert op het debat",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 1130109,
+        "content_preview": "De VOORZITTER. De heer Berndsen heeft\neen vraag aan u. U kunt nog even blijven\nstaan.\n\nDe heer BERNDSEN (d66). Dank u wel,\nvoorzitter, want ik heb wel een vraag aan\nde heer Gonçalves. U roept heel de ",
+        "score": 0.057648372,
+        "metadata": {
+          "document_id": "4859723",
+          "title": "Vraag van D66 aan PvdA over armoedebeleid",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 1038972,
+        "content_preview": "IV. Politiek oordeel toegespitst op het\nvraagstuk van de verantwoordelijkheden naar\naanleiding van de conclusies en aanbevelingen\nin het COT-rapport Strandrellen in Hoek van\nHolland, Dancefestival Ver",
+        "score": 0.05744034,
+        "metadata": {
+          "document_id": "2376892",
+          "title": "Political Judgment on COT Report - Strand Relllen in Hoek van Holland",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 954056,
+        "content_preview": "De VOORZITTER. Het woord is aan de heer\nGeluk.\nDe heer GELUK (cda). Mijnheer de voorzitter.\nIk heb een aanvullende vraag waarvoor ik een\nkorte aanloop nodig heb.\nDe VOORZITTER. Graag alleen een\naanvul",
+        "score": 0.057310633,
+        "metadata": {
+          "document_id": "242865",
+          "title": "Vragenhalfuur: Kredietverlening aan Sparta - Aanvullende vragen",
+          "chunk_index": null
+        }
+      }
+    ],
+    "rrf_results": [
+      {
+        "chunk_id": 392609438576319966,
+        "rrf_score": 0.016666666666666666,
+        "vector_rank": 0,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 1030291,
+        "rrf_score": 0.016666666666666666,
+        "vector_rank": null,
+        "keyword_rank": 0
+      },
+      {
+        "chunk_id": 984266608159015468,
+        "rrf_score": 0.01639344262295082,
+        "vector_rank": 1,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 922609,
+        "rrf_score": 0.01639344262295082,
+        "vector_rank": null,
+        "keyword_rank": 1
+      },
+      {
+        "chunk_id": 590522246371511943,
+        "rrf_score": 0.016129032258064516,
+        "vector_rank": 2,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 736341,
+        "rrf_score": 0.016129032258064516,
+        "vector_rank": null,
+        "keyword_rank": 2
+      },
+      {
+        "chunk_id": 714022981408418454,
+        "rrf_score": 0.015873015873015872,
+        "vector_rank": 3,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 3011,
+        "rrf_score": 0.015873015873015872,
+        "vector_rank": null,
+        "keyword_rank": 3
+      },
+      {
+        "chunk_id": 53223152938703061,
+        "rrf_score": 0.015625,
+        "vector_rank": 4,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 753263,
+        "rrf_score": 0.015625,
+        "vector_rank": null,
+        "keyword_rank": 4
+      },
+      {
+        "chunk_id": 88559063690274429,
+        "rrf_score": 0.015384615384615385,
+        "vector_rank": 5,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 562299,
+        "rrf_score": 0.015384615384615385,
+        "vector_rank": null,
+        "keyword_rank": 5
+      },
+      {
+        "chunk_id": 296928036039376895,
+        "rrf_score": 0.015151515151515152,
+        "vector_rank": 6,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 562940,
+        "rrf_score": 0.015151515151515152,
+        "vector_rank": null,
+        "keyword_rank": 6
+      },
+      {
+        "chunk_id": 27478443051288503,
+        "rrf_score": 0.014925373134328358,
+        "vector_rank": 7,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 562373,
+        "rrf_score": 0.014925373134328358,
+        "vector_rank": null,
+        "keyword_rank": 7
+      },
+      {
+        "chunk_id": 16010960396049059,
+        "rrf_score": 0.014705882352941176,
+        "vector_rank": 8,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 563162,
+        "rrf_score": 0.014705882352941176,
+        "vector_rank": null,
+        "keyword_rank": 8
+      },
+      {
+        "chunk_id": 759899957401357471,
+        "rrf_score": 0.014492753623188406,
+        "vector_rank": 9,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 562734,
+        "rrf_score": 0.014492753623188406,
+        "vector_rank": null,
+        "keyword_rank": 9
+      },
+      {
+        "chunk_id": 355393520468416661,
+        "rrf_score": 0.014285714285714285,
+        "vector_rank": 10,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 1177780,
+        "rrf_score": 0.014285714285714285,
+        "vector_rank": null,
+        "keyword_rank": 10
+      },
+      {
+        "chunk_id": 632773532146793966,
+        "rrf_score": 0.014084507042253521,
+        "vector_rank": 11,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 2901,
+        "rrf_score": 0.014084507042253521,
+        "vector_rank": null,
+        "keyword_rank": 11
+      },
+      {
+        "chunk_id": 260252177496440149,
+        "rrf_score": 0.013888888888888888,
+        "vector_rank": 12,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 768129,
+        "rrf_score": 0.013888888888888888,
+        "vector_rank": null,
+        "keyword_rank": 12
+      },
+      {
+        "chunk_id": 263322536325489320,
+        "rrf_score": 0.0136986301369863,
+        "vector_rank": 13,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 179008,
+        "rrf_score": 0.0136986301369863,
+        "vector_rank": null,
+        "keyword_rank": 13
+      },
+      {
+        "chunk_id": 417634479579297934,
+        "rrf_score": 0.013513513513513514,
+        "vector_rank": 14,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 826350,
+        "rrf_score": 0.013513513513513514,
+        "vector_rank": null,
+        "keyword_rank": 14
+      },
+      {
+        "chunk_id": 1034622266668682046,
+        "rrf_score": 0.013333333333333334,
+        "vector_rank": 15,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 1664752,
+        "rrf_score": 0.013333333333333334,
+        "vector_rank": null,
+        "keyword_rank": 15
+      },
+      {
+        "chunk_id": 845230111706326632,
+        "rrf_score": 0.013157894736842105,
+        "vector_rank": 16,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 779591,
+        "rrf_score": 0.013157894736842105,
+        "vector_rank": null,
+        "keyword_rank": 16
+      },
+      {
+        "chunk_id": 416252386079696457,
+        "rrf_score": 0.012987012987012988,
+        "vector_rank": 17,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 1130109,
+        "rrf_score": 0.012987012987012988,
+        "vector_rank": null,
+        "keyword_rank": 17
+      },
+      {
+        "chunk_id": 899694672232348154,
+        "rrf_score": 0.01282051282051282,
+        "vector_rank": 18,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 1038972,
+        "rrf_score": 0.01282051282051282,
+        "vector_rank": null,
+        "keyword_rank": 18
+      },
+      {
+        "chunk_id": 575987566705162787,
+        "rrf_score": 0.012658227848101266,
+        "vector_rank": 19,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 954056,
+        "rrf_score": 0.012658227848101266,
+        "vector_rank": null,
+        "keyword_rank": 19
+      },
+      {
+        "chunk_id": 154789411284198101,
+        "rrf_score": 0.0125,
+        "vector_rank": 20,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 181670860091062044,
+        "rrf_score": 0.012345679012345678,
+        "vector_rank": 21,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 782630671202540915,
+        "rrf_score": 0.012195121951219513,
+        "vector_rank": 22,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 757193283260171120,
+        "rrf_score": 0.012048192771084338,
+        "vector_rank": 23,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 279603480758557317,
+        "rrf_score": 0.011904761904761904,
+        "vector_rank": 24,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 141413257850321027,
+        "rrf_score": 0.011764705882352941,
+        "vector_rank": 25,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 1142049234149829923,
+        "rrf_score": 0.011627906976744186,
+        "vector_rank": 26,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 269510830594280948,
+        "rrf_score": 0.011494252873563218,
+        "vector_rank": 27,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 551000678544798876,
+        "rrf_score": 0.011363636363636364,
+        "vector_rank": 28,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 21451702949063915,
+        "rrf_score": 0.011235955056179775,
+        "vector_rank": 29,
+        "keyword_rank": null
+      }
+    ],
+    "reranker_results": [
+      {
+        "chunk_id": 392609438576319966,
+        "reranker_score": 0.04387571,
+        "pre_rerank_position": 0
+      },
+      {
+        "chunk_id": 1030291,
+        "reranker_score": 0.1437254,
+        "pre_rerank_position": 1
+      },
+      {
+        "chunk_id": 984266608159015468,
+        "reranker_score": -0.03900183,
+        "pre_rerank_position": 2
+      },
+      {
+        "chunk_id": 922609,
+        "reranker_score": 0.13100767,
+        "pre_rerank_position": 3
+      },
+      {
+        "chunk_id": 590522246371511943,
+        "reranker_score": -0.03328915,
+        "pre_rerank_position": 4
+      },
+      {
+        "chunk_id": 736341,
+        "reranker_score": -0.06124898,
+        "pre_rerank_position": 5
+      },
+      {
+        "chunk_id": 714022981408418454,
+        "reranker_score": -0.00555761,
+        "pre_rerank_position": 6
+      },
+      {
+        "chunk_id": 3011,
+        "reranker_score": 0.05820373,
+        "pre_rerank_position": 7
+      },
+      {
+        "chunk_id": 53223152938703061,
+        "reranker_score": -0.11443512,
+        "pre_rerank_position": 8
+      },
+      {
+        "chunk_id": 753263,
+        "reranker_score": 0.21814209,
+        "pre_rerank_position": 9
+      },
+      {
+        "chunk_id": 88559063690274429,
+        "reranker_score": 0.01456748,
+        "pre_rerank_position": 10
+      },
+      {
+        "chunk_id": 562299,
+        "reranker_score": -0.02876569,
+        "pre_rerank_position": 11
+      },
+      {
+        "chunk_id": 296928036039376895,
+        "reranker_score": 0.4157151,
+        "pre_rerank_position": 12
+      },
+      {
+        "chunk_id": 562940,
+        "reranker_score": -0.02883141,
+        "pre_rerank_position": 13
+      },
+      {
+        "chunk_id": 27478443051288503,
+        "reranker_score": 0.08580668,
+        "pre_rerank_position": 14
+      },
+      {
+        "chunk_id": 562373,
+        "reranker_score": -0.08436173,
+        "pre_rerank_position": 15
+      },
+      {
+        "chunk_id": 16010960396049059,
+        "reranker_score": -0.02738906,
+        "pre_rerank_position": 16
+      },
+      {
+        "chunk_id": 563162,
+        "reranker_score": -0.07557684,
+        "pre_rerank_position": 17
+      },
+      {
+        "chunk_id": 759899957401357471,
+        "reranker_score": -0.08497801,
+        "pre_rerank_position": 18
+      },
+      {
+        "chunk_id": 562734,
+        "reranker_score": -0.10063289,
+        "pre_rerank_position": 19
+      },
+      {
+        "chunk_id": 355393520468416661,
+        "reranker_score": 0.02605637,
+        "pre_rerank_position": 20
+      },
+      {
+        "chunk_id": 1177780,
+        "reranker_score": -0.1032206,
+        "pre_rerank_position": 21
+      },
+      {
+        "chunk_id": 632773532146793966,
+        "reranker_score": -0.10188889,
+        "pre_rerank_position": 22
+      },
+      {
+        "chunk_id": 2901,
+        "reranker_score": 0.10339002,
+        "pre_rerank_position": 23
+      },
+      {
+        "chunk_id": 260252177496440149,
+        "reranker_score": -0.08711612,
+        "pre_rerank_position": 24
+      },
+      {
+        "chunk_id": 768129,
+        "reranker_score": 0.10898841,
+        "pre_rerank_position": 25
+      },
+      {
+        "chunk_id": 263322536325489320,
+        "reranker_score": 0.00480167,
+        "pre_rerank_position": 26
+      },
+      {
+        "chunk_id": 179008,
+        "reranker_score": -0.0254728,
+        "pre_rerank_position": 27
+      },
+      {
+        "chunk_id": 417634479579297934,
+        "reranker_score": -0.01996951,
+        "pre_rerank_position": 28
+      },
+      {
+        "chunk_id": 826350,
+        "reranker_score": -0.03344905,
+        "pre_rerank_position": 29
+      },
+      {
+        "chunk_id": 1034622266668682046,
+        "reranker_score": -0.06970532,
+        "pre_rerank_position": 30
+      },
+      {
+        "chunk_id": 1664752,
+        "reranker_score": 0.22515987,
+        "pre_rerank_position": 31
+      },
+      {
+        "chunk_id": 845230111706326632,
+        "reranker_score": -0.01436126,
+        "pre_rerank_position": 32
+      },
+      {
+        "chunk_id": 779591,
+        "reranker_score": -0.08037324,
+        "pre_rerank_position": 33
+      },
+      {
+        "chunk_id": 416252386079696457,
+        "reranker_score": -0.02076749,
+        "pre_rerank_position": 34
+      },
+      {
+        "chunk_id": 1130109,
+        "reranker_score": -0.1010359,
+        "pre_rerank_position": 35
+      },
+      {
+        "chunk_id": 899694672232348154,
+        "reranker_score": 0.05439246,
+        "pre_rerank_position": 36
+      },
+      {
+        "chunk_id": 1038972,
+        "reranker_score": -0.10718535,
+        "pre_rerank_position": 37
+      },
+      {
+        "chunk_id": 575987566705162787,
+        "reranker_score": -0.04572503,
+        "pre_rerank_position": 38
+      },
+      {
+        "chunk_id": 954056,
+        "reranker_score": -0.15994677,
+        "pre_rerank_position": 39
+      },
+      {
+        "chunk_id": 154789411284198101,
+        "reranker_score": 0.0252014,
+        "pre_rerank_position": 40
+      },
+      {
+        "chunk_id": 181670860091062044,
+        "reranker_score": 0.01821203,
+        "pre_rerank_position": 41
+      },
+      {
+        "chunk_id": 782630671202540915,
+        "reranker_score": -0.05258059,
+        "pre_rerank_position": 42
+      },
+      {
+        "chunk_id": 757193283260171120,
+        "reranker_score": -0.05288802,
+        "pre_rerank_position": 43
+      },
+      {
+        "chunk_id": 279603480758557317,
+        "reranker_score": -0.06212377,
+        "pre_rerank_position": 44
+      },
+      {
+        "chunk_id": 141413257850321027,
+        "reranker_score": -0.07374314,
+        "pre_rerank_position": 45
+      },
+      {
+        "chunk_id": 1142049234149829923,
+        "reranker_score": -0.07707565,
+        "pre_rerank_position": 46
+      },
+      {
+        "chunk_id": 269510830594280948,
+        "reranker_score": 0.12595242,
+        "pre_rerank_position": 47
+      },
+      {
+        "chunk_id": 551000678544798876,
+        "reranker_score": -0.09045275,
+        "pre_rerank_position": 48
+      },
+      {
+        "chunk_id": 21451702949063915,
+        "reranker_score": 0.03233439,
+        "pre_rerank_position": 49
+      }
+    ],
+    "reranker_skipped": false,
+    "final_chunks": [
+      {
+        "chunk_id": 296928036039376895,
+        "content_preview": "Over het de\nfacto failliete Warmtebedrijf dienen wij een\nmotie in. In dit bedrijf hebben wij al € 28 miljoen\ngeïnvesteerd en veel van dit geld is al aan Shell\nen anderen betaald. Shell is er uitgestap",
+        "score": 0.4157151,
+        "metadata": {
+          "document_id": "238765",
+          "title": "Motie inzake Warmtebedrijf NV",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 1664752,
+        "content_preview": "verplichtingen aangaan en kon dus niet méér capaciteit of expertise aantrekken.\nZo wordt de leiding over de in 2007 ingelaste time out en de daarop volgende doorstart door de aandeelhouders\ngemandatee",
+        "score": 0.22515987,
+        "metadata": {
+          "document_id": "6086140",
+          "title": "VOORWOORD",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 753263,
+        "content_preview": "De heer BONTE (gl). Mijnheer de\nvoorzitter. Wij hebben het over het gebruik\nv an restwarmte in Rotterdam en deze\nregio. GroenLinks is voorstander van het\nproduceren en opwerken van duurzame\nenergie, m",
+        "score": 0.21814209,
+        "metadata": {
+          "document_id": "3672091",
+          "title": "GroenLinks on Residual Heat and Warmtebedrijf",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 1030291,
+        "content_preview": "De heer SCHNEIDER (Leefbaar Rotterdam).\nGelet op uw uitspraak over een eventueel\nfaillissement constateer ik, dat u niet overtuigd\nbent van de juistheid van door u gekozen\nconstructie. De enige reden ",
+        "score": 0.1437254,
+        "metadata": {
+          "document_id": "255531",
+          "title": "Further Debate on Nieuw Reijerwaard Structure and Risks",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 922609,
+        "content_preview": "De VOORZITTER. Het woord is aan de heer Mink, die zijn maidenspeech zal houden.\nDe heer MINK (cda). Mijnheer de voorzitter. Wat is er misgegaan en wie is daar schuldig aan? Beide vragen lijken centraa",
+        "score": 0.13100767,
+        "metadata": {
+          "document_id": "818062",
+          "title": "Het rapport van de Rekenkamer Rotterdam 'WATt heb je ervoor over', alsmede het voorstel van het presidium met betrekking tot de aanbevelingen uit dit rapport.",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 269510830594280948,
+        "content_preview": ". de Rotterdamse horeca flinke financiële klappen heeft gekregen door de coronacrisis;",
+        "score": 0.12595242,
+        "metadata": {
+          "document_id": "6084217",
+          "title": "Van mening dat - Financiële situatie",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 768129,
+        "content_preview": "De heer KARAKUS (pvda) (wethouder). Stel\ndat wij een NV of een BV zouden oprichten en\nhet met de beoogde locatie niet goed zou\ngaan, zou u, als overheid, dan bereid zijn de BV\nof NV, waarvan u voor ho",
+        "score": 0.10898841,
+        "metadata": {
+          "document_id": "819917",
+          "title": "Council's decision on the Nieuw Reijerwaard proposal",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 2901,
+        "content_preview": "Mevrouw Verkoelen, 50PLUS geeft aan dat\nzij in zijn algemeenheid veel steun heeft\nvoor voorstellen die de energietransitie en\nCO2-besparing ten goede komen. U vraagt\nzich over dit project wel een aant",
+        "score": 0.10339002,
+        "metadata": {
+          "document_id": "6074154",
+          "title": "Beantwoording Bonte aan 50PLUS over urgentie en faillissement",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 27478443051288503,
+        "content_preview": "Constaterende dat: . de gemeenteraad in het najaar een richtinggevend besluit zal nemen over de toekomst van het Warmtebedrĳf Rotterdam,",
+        "score": 0.08580668,
+        "metadata": {
+          "document_id": "6084241",
+          "title": "Constaterende dat",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 3011,
+        "content_preview": "24. Het (herziene) voorstel met betrekking tot het onderhandelingsresultaat scenario\nWLQ+ Warmtebedrijf Rotterdam alsmede een brief van burgemeester en wethouders\nover de toekomst van het Warmtebedrij",
+        "score": 0.05820373,
+        "metadata": {
+          "document_id": "6094140",
+          "title": "Debat Warmtebedrijf Rotterdam - Scenario WLQ+",
+          "chunk_index": null
+        }
+      }
+    ],
+    "timings": {
+      "embedding_ms": 497.9865420000351,
+      "vector_ms": 453.22424999994837,
+      "keyword_ms": 568788.3687499998,
+      "rrf_ms": 0.4605410013027722,
+      "reranker_ms": 2854.886249999254,
+      "total_ms": 572595.2289999996
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": null,
+      "date_to": null,
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  }
+]

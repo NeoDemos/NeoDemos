@@ -1,0 +1,230 @@
+{
+  "meeting_id": "f79bedb7-5e47-48a7-ac1b-fb39d758b0b2",
+  "audit_timestamp": "2026-04-07T21:22:48.446472",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Subcommissie BOOR (2022–2026)",
+    "start_date": "2025-06-02 00:00:00",
+    "committee": "Sub-BOOR",
+    "quality_score": 0.945,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 42,
+    "document_count": 1
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 155,
+      "correct_count": 155,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8161,
+      "party_attribution_rate": 0.1609,
+      "total_segments": 87,
+      "attributed_segments": 71,
+      "unattributed_segments": 16
+    },
+    "speaker_diversity": {
+      "unique_speakers": 5,
+      "unique_parties": 3,
+      "top_speaker": "D.A. (Dieke) van Groningen Commissievoorzitter",
+      "top_speaker_segment_count": 31,
+      "monologue_rate": 0.3563,
+      "speakers": {
+        "D.A. (Dieke) van Groningen Commissievoorzitter": 31,
+        "Adviseur": 26,
+        "J.M. (Joan) Nunnely": 6,
+        "S. (Simon) Ceulemans": 4,
+        "S.L. (Sigrid) Oosterwegel Burgercommissielid": 4
+      },
+      "parties": {
+        "D66": 6,
+        "Leefbaar Rotterdam": 4,
+        "GroenLinks": 4
+      }
+    },
+    "segment_quality": {
+      "total_segments": 87,
+      "nonempty_segments": 87,
+      "total_words": 9903,
+      "total_chars": 55226,
+      "avg_words_per_segment": 113.8,
+      "avg_chars_per_segment": 634.8,
+      "short_segment_rate": 0.2184,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 5,
+      "items_with_content": 1,
+      "coverage_rate": 0.2,
+      "items": [
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 0
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 0
+        },
+        {
+          "title": "Jaarstukken 2024 en 1e Voortgangsrapportage 2025 BOOR",
+          "segment_count": 87
+        },
+        {
+          "title": "Afdoening van toezeggingen",
+          "segment_count": 0
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 0
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Subcommissie BOOR (2022–2026)",
+        "start_date": "2025-06-02 00:00:00",
+        "committee": "Sub-BOOR",
+        "review_status": "auto_approved",
+        "quality_score": 0.945,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Subcommissie BOOR (2022–2026)",
+        "start_date": "2025-06-02 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 5,
+      "recognized_speakers": 5,
+      "unrecognized_speakers": 0,
+      "recognition_rate": 1.0,
+      "recognized": [
+        {
+          "name": "Adviseur",
+          "segment_count": 26,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "D.A. (Dieke) van Groningen Commissievoorzitter",
+          "segment_count": 31,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S. (Simon) Ceulemans",
+          "segment_count": 4,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S.L. (Sigrid) Oosterwegel Burgercommissielid",
+          "segment_count": 4,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "J.M. (Joan) Nunnely",
+          "segment_count": 6,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        }
+      ],
+      "unrecognized": []
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 42,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 21,
+        "long (2000-5000)": 16,
+        "short (50-200)": 5
+      },
+      "min_chars": 127,
+      "max_chars": 2734,
+      "avg_chars": 1450.0,
+      "median_chars": 1805,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 42,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 1,
+      "documents_with_chunks": 1,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Jaarstukken 2024 en 1e Voortgangsrapportage 2025 BOOR",
+          "chunks": 42
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 42,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 42,
+      "distribution": {
+        "quote": {
+          "count": 42,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8161,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.945
+    }
+  }
+}

@@ -1,0 +1,295 @@
+{
+  "run_id": "v3-full-v2",
+  "total_questions": 20,
+  "overall": {
+    "count": 20,
+    "context_precision": {
+      "mean": 0.97,
+      "min": 0.68,
+      "max": 1.0
+    },
+    "answer_relevance": {
+      "mean": 4.5,
+      "min": 2,
+      "max": 5
+    },
+    "faithfulness": {
+      "mean": 4.95,
+      "min": 4,
+      "max": 5
+    },
+    "hallucination_rate": {
+      "mean": 0.03,
+      "min": 0.0,
+      "max": 0.25
+    },
+    "source_attribution": {
+      "mean": 5,
+      "min": 5,
+      "max": 5
+    },
+    "completeness": {
+      "mean": 3.5,
+      "min": 2,
+      "max": 5
+    },
+    "factual_correctness": {
+      "mean": 1,
+      "min": 1,
+      "max": 1
+    }
+  },
+  "by_category": {
+    "absence": {
+      "count": 2,
+      "context_precision": {
+        "mean": 1.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "answer_relevance": {
+        "mean": 4.5,
+        "min": 4,
+        "max": 5
+      },
+      "faithfulness": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      },
+      "factual_correctness": {
+        "mean": 1,
+        "min": 1,
+        "max": 1
+      },
+      "hallucination_rate": {
+        "mean": 0.12,
+        "min": 0.0,
+        "max": 0.25
+      }
+    },
+    "acronym_abbreviation": {
+      "count": 2,
+      "context_precision": {
+        "mean": 1.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "answer_relevance": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      },
+      "faithfulness": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      },
+      "hallucination_rate": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      }
+    },
+    "balanced_view": {
+      "count": 1,
+      "context_precision": {
+        "mean": 1.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "answer_relevance": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      },
+      "faithfulness": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      },
+      "completeness": {
+        "mean": 4,
+        "min": 4,
+        "max": 4
+      },
+      "hallucination_rate": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "source_attribution": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      }
+    },
+    "broad_aggregation": {
+      "count": 1,
+      "context_precision": {
+        "mean": 1.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "answer_relevance": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      },
+      "faithfulness": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      },
+      "completeness": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      },
+      "hallucination_rate": {
+        "mean": 0.09,
+        "min": 0.09,
+        "max": 0.09
+      }
+    },
+    "informal_opinion": {
+      "count": 1,
+      "context_precision": {
+        "mean": 1.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "answer_relevance": {
+        "mean": 4,
+        "min": 4,
+        "max": 4
+      },
+      "faithfulness": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      },
+      "hallucination_rate": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      }
+    },
+    "multi_hop": {
+      "count": 2,
+      "context_precision": {
+        "mean": 1.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "answer_relevance": {
+        "mean": 2.5,
+        "min": 2,
+        "max": 3
+      },
+      "faithfulness": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      },
+      "completeness": {
+        "mean": 2.5,
+        "min": 2,
+        "max": 3
+      },
+      "hallucination_rate": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "source_attribution": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      }
+    },
+    "party_stance": {
+      "count": 2,
+      "context_precision": {
+        "mean": 0.72,
+        "min": 0.68,
+        "max": 0.76
+      },
+      "answer_relevance": {
+        "mean": 4.5,
+        "min": 4,
+        "max": 5
+      },
+      "faithfulness": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      },
+      "hallucination_rate": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "source_attribution": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      }
+    },
+    "specific_event": {
+      "count": 1,
+      "context_precision": {
+        "mean": 1.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "answer_relevance": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      },
+      "faithfulness": {
+        "mean": 4,
+        "min": 4,
+        "max": 4
+      },
+      "hallucination_rate": {
+        "mean": 0.17,
+        "min": 0.17,
+        "max": 0.17
+      }
+    },
+    "temporal": {
+      "count": 8,
+      "context_precision": {
+        "mean": 0.99,
+        "min": 0.933,
+        "max": 1.0
+      },
+      "answer_relevance": {
+        "mean": 4.75,
+        "min": 4,
+        "max": 5
+      },
+      "faithfulness": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      },
+      "hallucination_rate": {
+        "mean": 0.01,
+        "min": 0.0,
+        "max": 0.07
+      }
+    }
+  },
+  "component_health": {
+    "avg_vector_only_pct": 0.324,
+    "avg_keyword_only_pct": 0.426,
+    "avg_both_pct": 0.0,
+    "avg_reranker_position_change": 27.613,
+    "avg_rrf_unique_pct": 0.666,
+    "avg_total_ms": 15285.9,
+    "total_questions": 20
+  }
+}

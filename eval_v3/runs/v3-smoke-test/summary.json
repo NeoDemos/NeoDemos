@@ -1,0 +1,31 @@
+{
+  "run_id": "v3-smoke-test",
+  "total_questions": 2,
+  "overall": {
+    "count": 2,
+    "context_precision": {
+      "mean": 0.76,
+      "min": 0.76,
+      "max": 0.76
+    }
+  },
+  "by_category": {
+    "party_stance": {
+      "count": 2,
+      "context_precision": {
+        "mean": 0.76,
+        "min": 0.76,
+        "max": 0.76
+      }
+    }
+  },
+  "component_health": {
+    "avg_vector_only_pct": 0.0,
+    "avg_keyword_only_pct": 0.0,
+    "avg_both_pct": 0.0,
+    "avg_reranker_position_change": 0.0,
+    "avg_rrf_unique_pct": 1.0,
+    "avg_total_ms": 0.0,
+    "total_questions": 2
+  }
+}

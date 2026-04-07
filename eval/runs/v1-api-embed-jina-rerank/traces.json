@@ -1,0 +1,542 @@
+[
+  {
+    "question_id": "ps-01",
+    "query_text": "Hoe stelde de PvdA zich op in de discussie over Feyenoord City, het stadion en de gebiedsontwikkeling?",
+    "query_embedding_hash": "5de40f48cb15ad59d8add8e3c131bce2",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [],
+    "timings": {
+      "embedding_ms": 67.36533400010103,
+      "vector_ms": 3.2275829998980043,
+      "keyword_ms": 24.85512500004461,
+      "rrf_ms": 0.00020800007405341603,
+      "reranker_ms": 0.0003330000026835478,
+      "total_ms": 95.48879099997976
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": null,
+      "date_to": null,
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  },
+  {
+    "question_id": "ps-02",
+    "query_text": "De Asielopvang op de Silja, wat denkt Leefbaar Rotterdam daar van?",
+    "query_embedding_hash": "1a2d62aff8aa27926e5967e4c31fe5ea",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [],
+    "timings": {
+      "embedding_ms": 50.22220799992283,
+      "vector_ms": 1.9002499999487554,
+      "keyword_ms": 4.886625000040112,
+      "rrf_ms": 0.00012500004231696948,
+      "reranker_ms": 0.0002919999815276242,
+      "total_ms": 57.038959000010436
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": null,
+      "date_to": null,
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  },
+  {
+    "question_id": "ba-01",
+    "query_text": "Geef me een overzicht van de uitdagingen van het doelgroepenvervoer in Rotterdam",
+    "query_embedding_hash": "8c83d4ebde14150b935395a6259a1cee",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [],
+    "timings": {
+      "embedding_ms": 50.91175000006842,
+      "vector_ms": 1.7737079999733396,
+      "keyword_ms": 4.864833999931761,
+      "rrf_ms": 0.00012499992863013176,
+      "reranker_ms": 0.00029099999210302485,
+      "total_ms": 57.5783340000271
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": null,
+      "date_to": null,
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  },
+  {
+    "question_id": "ba-02",
+    "query_text": "GRJR - gemeenschappelijke regeling voor jeugdzorg - geef me een overzicht van de belangrijkste uitdagingen en kansen",
+    "query_embedding_hash": "c253d3900f3e7f4378e308dc705d969e",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [],
+    "timings": {
+      "embedding_ms": 48.45016599995233,
+      "vector_ms": 1.71449999993456,
+      "keyword_ms": 4.394749999960368,
+      "rrf_ms": 0.0002079999603665783,
+      "reranker_ms": 0.0004159999207331566,
+      "total_ms": 54.59095799994884
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": null,
+      "date_to": null,
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  },
+  {
+    "question_id": "te-01",
+    "query_text": "Wat waren de grootste financiële knelpunten in 2018?",
+    "query_embedding_hash": "83f4c41e8ce7da35ee7fb9be49df1224",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [],
+    "timings": {
+      "embedding_ms": 50.203166999949644,
+      "vector_ms": 1.8218749999050488,
+      "keyword_ms": 4.476791000001867,
+      "rrf_ms": 0.00012500004231696948,
+      "reranker_ms": 0.00029099999210302485,
+      "total_ms": 56.52850000001308
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": "2018-01-01",
+      "date_to": "2018-12-31",
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  },
+  {
+    "question_id": "te-02",
+    "query_text": "Wat waren de grootste financiële knelpunten in 2019?",
+    "query_embedding_hash": "2cd235dc3e353c4f008a4eecdbfdf358",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [],
+    "timings": {
+      "embedding_ms": 50.21191600008024,
+      "vector_ms": 1.7193329999827256,
+      "keyword_ms": 4.378999999971711,
+      "rrf_ms": 0.00012500004231696948,
+      "reranker_ms": 0.00012499992863013176,
+      "total_ms": 56.33899999997993
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": "2019-01-01",
+      "date_to": "2019-12-31",
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  },
+  {
+    "question_id": "te-03",
+    "query_text": "Wat waren de grootste financiële knelpunten in 2020?",
+    "query_embedding_hash": "27046f833390d3d951bf16fd7b769417",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [],
+    "timings": {
+      "embedding_ms": 50.76837499996145,
+      "vector_ms": 1.6986249999035863,
+      "keyword_ms": 4.585958999996365,
+      "rrf_ms": 0.00012499992863013176,
+      "reranker_ms": 0.0003330000026835478,
+      "total_ms": 57.07995800003118
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": "2020-01-01",
+      "date_to": "2020-12-31",
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  },
+  {
+    "question_id": "te-04",
+    "query_text": "Wat waren de grootste financiële knelpunten in 2021?",
+    "query_embedding_hash": "923e2ab62123975476e860e0ac474d22",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [],
+    "timings": {
+      "embedding_ms": 50.398542000039015,
+      "vector_ms": 1.7232080000439964,
+      "keyword_ms": 4.678834000060306,
+      "rrf_ms": 8.300003173644654e-05,
+      "reranker_ms": 0.00041600003441999434,
+      "total_ms": 56.827790999932404
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": "2021-01-01",
+      "date_to": "2021-12-31",
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  },
+  {
+    "question_id": "te-05",
+    "query_text": "Wat waren de grootste financiële knelpunten in 2022?",
+    "query_embedding_hash": "b565edf73bbc8d29092b45f72bfb3480",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [],
+    "timings": {
+      "embedding_ms": 50.46149999998306,
+      "vector_ms": 1.7159159999664553,
+      "keyword_ms": 4.772250000087297,
+      "rrf_ms": 0.00012500004231696948,
+      "reranker_ms": 0.00024999997094710125,
+      "total_ms": 56.97358299994448
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": "2022-01-01",
+      "date_to": "2022-12-31",
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  },
+  {
+    "question_id": "te-06",
+    "query_text": "Wat waren de grootste financiële knelpunten in 2023?",
+    "query_embedding_hash": "e6d12de1572ea9cc9d7a5c83b209a4b6",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [],
+    "timings": {
+      "embedding_ms": 50.618417000009686,
+      "vector_ms": 1.7119999999977153,
+      "keyword_ms": 4.388208000023042,
+      "rrf_ms": 8.300003173644654e-05,
+      "reranker_ms": 0.00016599994978605537,
+      "total_ms": 56.7437910000308
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": "2023-01-01",
+      "date_to": "2023-12-31",
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  },
+  {
+    "question_id": "te-07",
+    "query_text": "Wat waren de grootste financiële knelpunten in 2024?",
+    "query_embedding_hash": "52ca112e0239854bb27920b1cc1eb956",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [],
+    "timings": {
+      "embedding_ms": 50.37441599995418,
+      "vector_ms": 1.8135840000468306,
+      "keyword_ms": 4.401082999947903,
+      "rrf_ms": 4.200001058052294e-05,
+      "reranker_ms": 0.0001669999392106547,
+      "total_ms": 56.61299999997027
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": "2024-01-01",
+      "date_to": "2024-12-31",
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  },
+  {
+    "question_id": "te-08",
+    "query_text": "Wat waren de grootste financiële knelpunten in 2025?",
+    "query_embedding_hash": "7aef2e1048d5c3915b217a1273ae4e16",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [],
+    "timings": {
+      "embedding_ms": 50.60233300002892,
+      "vector_ms": 1.6704580000350688,
+      "keyword_ms": 4.310958000019127,
+      "rrf_ms": 0.00012499992863013176,
+      "reranker_ms": 0.00024999997094710125,
+      "total_ms": 56.60841700000674
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": "2025-01-01",
+      "date_to": "2025-12-31",
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  },
+  {
+    "question_id": "bv-01",
+    "query_text": "Wat zijn de belangrijkste aandachtspunten voor de gebiedsontwikkeling M4H? Geef me zowel positieve als negatieve punten",
+    "query_embedding_hash": "0937f40e1396ee103fccc4186af49ff3",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [],
+    "timings": {
+      "embedding_ms": 49.05504199996358,
+      "vector_ms": 1.6281670000353188,
+      "keyword_ms": 4.402124999955959,
+      "rrf_ms": 4.200001058052294e-05,
+      "reranker_ms": 0.0001669999392106547,
+      "total_ms": 55.11141699992095
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": null,
+      "date_to": null,
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  },
+  {
+    "question_id": "se-01",
+    "query_text": "Waarom ging het Warmtebedrijf Rotterdam failliet?",
+    "query_embedding_hash": "3fd6d74c9a12e9127624772887272395",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [],
+    "timings": {
+      "embedding_ms": 49.613958000009006,
+      "vector_ms": 2.4047079999718335,
+      "keyword_ms": 4.193665999991936,
+      "rrf_ms": 0.00012500004231696948,
+      "reranker_ms": 0.00029099999210302485,
+      "total_ms": 56.2344170000415
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": null,
+      "date_to": null,
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  },
+  {
+    "question_id": "io-01",
+    "query_text": "Het nachtleven in Rotterdam laat te wensen over zeggen veel mensen, klopt dat?",
+    "query_embedding_hash": "f15e153d8711ebea99dfa41f89712cf3",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [],
+    "timings": {
+      "embedding_ms": 50.28058300001703,
+      "vector_ms": 1.597500000002583,
+      "keyword_ms": 4.199374999984684,
+      "rrf_ms": 0.00012500004231696948,
+      "reranker_ms": 8.299991804960882e-05,
+      "total_ms": 56.100750000041444
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": null,
+      "date_to": null,
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  },
+  {
+    "question_id": "mh-01",
+    "query_text": "Welke partijen stemden tegen het Warmtebedrijf voorstel, en wat was hun alternatief?",
+    "query_embedding_hash": "1131defbb94cb2be57bbbbfff3a30d9a",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [],
+    "timings": {
+      "embedding_ms": 51.11154200005785,
+      "vector_ms": 1.757125000040105,
+      "keyword_ms": 4.00745799993274,
+      "rrf_ms": 0.00012500004231696948,
+      "reranker_ms": 0.00012499992863013176,
+      "total_ms": 56.90416599998116
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": null,
+      "date_to": null,
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  },
+  {
+    "question_id": "mh-02",
+    "query_text": "Hoe verhoudt het budget voor cultuur zich tot het budget voor sport over de afgelopen 5 jaar?",
+    "query_embedding_hash": "467fa9f610d0ea0ad31cc531233f7f08",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [],
+    "timings": {
+      "embedding_ms": 50.945500000011634,
+      "vector_ms": 5.016542000021218,
+      "keyword_ms": 4.5340830000668575,
+      "rrf_ms": 8.400002116104588e-05,
+      "reranker_ms": 0.00016700005289749242,
+      "total_ms": 60.52095799998369
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": null,
+      "date_to": null,
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  },
+  {
+    "question_id": "ab-01",
+    "query_text": "Is er ooit in de gemeenteraad gedebatteerd over een metro naar Hoek van Holland?",
+    "query_embedding_hash": "0f2d5b5c65fabf5e6334ed354be894b2",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [],
+    "timings": {
+      "embedding_ms": 50.42375000004995,
+      "vector_ms": 1.6727920000221275,
+      "keyword_ms": 4.421624999963569,
+      "rrf_ms": 4.200001058052294e-05,
+      "reranker_ms": 0.00024999997094710125,
+      "total_ms": 56.54454100010753
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": null,
+      "date_to": null,
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  },
+  {
+    "question_id": "ab-02",
+    "query_text": "Heeft de gemeente Rotterdam ooit overwogen om de Erasmusbrug te sluiten voor autoverkeer?",
+    "query_embedding_hash": "de725f811bae946e0531f53b51ce7cad",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [],
+    "timings": {
+      "embedding_ms": 51.11283399992317,
+      "vector_ms": 1.7374999999901775,
+      "keyword_ms": 4.425917000048685,
+      "rrf_ms": 8.299991804960882e-05,
+      "reranker_ms": 0.0003339999921081471,
+      "total_ms": 57.30470799994691
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": null,
+      "date_to": null,
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  },
+  {
+    "question_id": "acr-01",
+    "query_text": "Wat is de rol van de MRDH in het Rotterdamse vervoersbeleid?",
+    "query_embedding_hash": "144dfdfb7962f7fe0ce978bc010132af",
+    "vector_results": [],
+    "keyword_results": [],
+    "rrf_results": [],
+    "reranker_results": [],
+    "reranker_skipped": false,
+    "final_chunks": [],
+    "timings": {
+      "embedding_ms": 49.92395800002214,
+      "vector_ms": 1.6449170000214508,
+      "keyword_ms": 4.5919169999706355,
+      "rrf_ms": 8.300003173644654e-05,
+      "reranker_ms": 0.0002079999603665783,
+      "total_ms": 56.186583999988216
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": null,
+      "date_to": null,
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  }
+]

@@ -15,11 +15,12 @@ better than formal proposals alone.
 """
 
 import json
-import psycopg2
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 from datetime import datetime
 import re
+
+from services.db_pool import get_connection
 
 @dataclass
 class NotulenPosition:
@@ -36,12 +37,8 @@ class NotulenPosition:
     
 class NotulenPositionInferenceService:
     """Infer College B&W positions from meeting minutes"""
-    
+
     def __init__(self):
-        self.conn = psycopg2.connect(
-            "postgresql://postgres:postgres@localhost:5432/neodemos"
-        )
-        self.cursor = self.conn.cursor()
         # Pattern to find GroenLinks-PvdA references (unified party)
         self.party_pattern = r"(groenlinks|pvda|partij van de arbeid)"
     
@@ -68,7 +65,7 @@ class NotulenPositionInferenceService:
         }
         
         try:
-            with self.conn as conn:
+            with get_connection() as conn:
                 with conn.cursor() as cur:
                     # Get Rotterdam Gemeenteraad notulen
                     print("[1/4] Loading Rotterdam Gemeenteraad notulen...")
@@ -82,31 +79,31 @@ class NotulenPositionInferenceService:
                         AND d.content IS NOT NULL
                         ORDER BY m.start_date DESC
                     """)
-                    
+
                     notulen_docs = cur.fetchall()
                     print(f"  ✓ {len(notulen_docs)} notulen loaded")
-                    
+
                     # Analyze each notule
                     print("\n[2/4] Analyzing notulen for implicit positions...")
                     all_positions = []
-                    
+
                     for doc_id, doc_name, content, meeting_date in notulen_docs:
                         if not content:
                             continue
-                        
+
                         # Find GL-PvdA mentions
                         if not re.search(self.party_pattern, content, re.IGNORECASE):
                             continue
-                        
+
                         # Infer positions from this notule
                         positions = self._infer_from_single_notule(
                             doc_id, doc_name, content, meeting_date
                         )
                         all_positions.extend(positions)
-                    
+
                     results['posities'] = all_positions
                     print(f"  ✓ {len(all_positions)} positie-inferenties afgeleid")
-                    
+
                     # Organize by policy area
                     print("\n[3/4] Organizing by policy area...")
                     by_area = {}
@@ -115,15 +112,15 @@ class NotulenPositionInferenceService:
                         if area not in by_area:
                             by_area[area] = []
                         by_area[area].append(pos)
-                    
+
                     results['per_beleidsterrein'] = {
                         area: len(positions) for area, positions in by_area.items()
                     }
-                    
+
                     # Generate summary
                     print("\n[4/4] Generating summary...")
                     results['samenvatting'] = self._generate_summary(all_positions)
-            
+
             return results
         
         except Exception as e:

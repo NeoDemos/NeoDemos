@@ -1,0 +1,169 @@
+{
+  "meeting_id": "bca59e4e-e636-4d23-8b62-6ac58febdca3",
+  "audit_timestamp": "2026-04-07T21:10:35.719519",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Vergadering Commissie Zorg, Onderwijs, Cultuur en Sport (2018-2022) 12-09-2018",
+    "start_date": "2018-09-12 00:00:00",
+    "committee": "",
+    "quality_score": 0.6,
+    "review_status": "pending",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 147,
+    "document_count": 1
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 927,
+      "correct_count": 927,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.0,
+      "party_attribution_rate": 0.0,
+      "total_segments": 257,
+      "attributed_segments": 0,
+      "unattributed_segments": 257
+    },
+    "speaker_diversity": {
+      "unique_speakers": 0,
+      "unique_parties": 0,
+      "top_speaker": null,
+      "top_speaker_segment_count": 0,
+      "monologue_rate": 0.0,
+      "speakers": {},
+      "parties": {}
+    },
+    "segment_quality": {
+      "total_segments": 257,
+      "nonempty_segments": 257,
+      "total_words": 50793,
+      "total_chars": 285751,
+      "avg_words_per_segment": 197.6,
+      "avg_chars_per_segment": 1111.9,
+      "short_segment_rate": 0.0584,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 1,
+      "items_with_content": 1,
+      "coverage_rate": 1.0,
+      "items": [
+        {
+          "title": "Full Meeting",
+          "segment_count": 257
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Vergadering Commissie Zorg, Onderwijs, Cultuur en Sport (2018-2022) 12-09-2018",
+        "start_date": "2018-09-12 00:00:00",
+        "committee": null,
+        "review_status": "pending",
+        "quality_score": 0.6,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Vergadering Commissie Zorg, Onderwijs, Cultuur en Sport (2018-2022) 12-09-2018",
+        "start_date": "2018-09-12 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No committee found in staging meeting"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 0,
+      "recognized_speakers": 0,
+      "unrecognized_speakers": 0,
+      "recognition_rate": 0.0,
+      "recognized": [],
+      "unrecognized": []
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 147,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 52,
+        "short (50-200)": 3,
+        "long (2000-5000)": 92
+      },
+      "min_chars": 89,
+      "max_chars": 2770,
+      "avg_chars": 2037.9,
+      "median_chars": 2260,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 147,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 1,
+      "documents_with_chunks": 1,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Full Meeting",
+          "chunks": 147
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 147,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 147,
+      "distribution": {
+        "quote": {
+          "count": 147,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "REJECT — fix issues before promotion",
+    "issues": [
+      "Very low speaker attribution: 0% (threshold ≥50%)"
+    ],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.0,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.6
+    }
+  }
+}

@@ -1,0 +1,365 @@
+{
+  "meeting_id": "aa99348e-88b9-4db1-81e1-9f1e779f1807",
+  "audit_timestamp": "2026-04-07T21:22:48.479112",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+    "start_date": "2025-05-28 00:00:00",
+    "committee": "BWB",
+    "quality_score": 0.956,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 177,
+    "document_count": 8
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 881,
+      "correct_count": 881,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8536,
+      "party_attribution_rate": 0.3311,
+      "total_segments": 444,
+      "attributed_segments": 379,
+      "unattributed_segments": 65
+    },
+    "speaker_diversity": {
+      "unique_speakers": 15,
+      "unique_parties": 8,
+      "top_speaker": "P.J.P. (Pascal) Lansink-Bastemeijer",
+      "top_speaker_segment_count": 105,
+      "monologue_rate": 0.2365,
+      "speakers": {
+        "P.J.P. (Pascal) Lansink-Bastemeijer": 105,
+        "T. (Tim) de Haan Commissievoorzitter": 74,
+        "M.Y. (Mina) Morkoç": 35,
+        "M. (Marcel) Verhoef": 25,
+        "M.S. (Marike) Abrahamse": 22,
+        "Plaatsvervangende commissievoorzitter": 22,
+        "P.F. (Pelle) Meurink Burgercommissielid": 19,
+        "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie": 13,
+        "R.N. (Rashied) Dahoe": 13,
+        "R.T.J. (Ruud) van der Velden": 11
+      },
+      "parties": {
+        "GroenLinks": 35,
+        "Leefbaar Rotterdam": 34,
+        "VVD": 22,
+        "D66": 19,
+        "DENK": 13,
+        "Partij voor de Dieren": 11,
+        "Volt": 10,
+        "SP": 3
+      }
+    },
+    "segment_quality": {
+      "total_segments": 444,
+      "nonempty_segments": 444,
+      "total_words": 54556,
+      "total_chars": 302949,
+      "avg_words_per_segment": 122.9,
+      "avg_chars_per_segment": 682.3,
+      "short_segment_rate": 0.2095,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 10,
+      "items_with_content": 8,
+      "coverage_rate": 0.8,
+      "items": [
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 1
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 0
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 1
+        },
+        {
+          "title": "Vergroening",
+          "segment_count": 0
+        },
+        {
+          "title": "Verkenning vergroening",
+          "segment_count": 114
+        },
+        {
+          "title": "Jaarverslag 2024 ‘Rotterdam gaat voor groen’, Groenagenda 2023-2026",
+          "segment_count": 106
+        },
+        {
+          "title": "Actieplan Lachgasaanpak 2025-2026",
+          "segment_count": 130
+        },
+        {
+          "title": "Voortgangsrapportage Grondstoffennota 2024",
+          "segment_count": 89
+        },
+        {
+          "title": "Ontwerpen Rijnhavenpark",
+          "segment_count": 1
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 2
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-05-28 00:00:00",
+        "committee": "BWB",
+        "review_status": "auto_approved",
+        "quality_score": 0.956,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-05-28 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 15,
+      "recognized_speakers": 14,
+      "unrecognized_speakers": 1,
+      "recognition_rate": 0.9333,
+      "recognized": [
+        {
+          "name": "T. (Tim) de Haan Commissievoorzitter",
+          "segment_count": 74,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Adviseur",
+          "segment_count": 7,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "V.A. (Vanessa) Bruin",
+          "segment_count": 9,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.S. (Marike) Abrahamse",
+          "segment_count": 22,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.T.J. (Ruud) van der Velden",
+          "segment_count": 11,
+          "parties": [
+            "Partij voor de Dieren"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie",
+          "segment_count": 13,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.Y. (Mina) Morkoç",
+          "segment_count": 35,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "R.N. (Rashied) Dahoe",
+          "segment_count": 13,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M. (Marcel) Verhoef",
+          "segment_count": 25,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "L.P.A. (Luuc) Dekkers",
+          "segment_count": 10,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "E. (Emin) Başoğlu Burgercommissielid",
+          "segment_count": 3,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "P.F. (Pelle) Meurink Burgercommissielid",
+          "segment_count": 19,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Inspreker",
+          "segment_count": 11,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Plaatsvervangende commissievoorzitter",
+          "segment_count": 22,
+          "parties": [],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "P.J.P. (Pascal) Lansink-Bastemeijer",
+          "segment_count": 105,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 177,
+      "empty_chunks": 0,
+      "buckets": {
+        "long (2000-5000)": 97,
+        "medium (200-2000)": 69,
+        "short (50-200)": 11
+      },
+      "min_chars": 92,
+      "max_chars": 2774,
+      "avg_chars": 1806.5,
+      "median_chars": 2139,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 177,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 8,
+      "documents_with_chunks": 8,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Actieplan Lachgasaanpak 2025-2026",
+          "chunks": 35
+        },
+        {
+          "name": "Transcript: Jaarverslag 2024 ‘Rotterdam gaat voor groen’, Groenagenda 2023-2026",
+          "chunks": 39
+        },
+        {
+          "name": "Transcript: Ontwerpen Rijnhavenpark",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Overlegvergadering",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Rondvraag en sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Vaststellen van de agenda",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Verkenning vergroening",
+          "chunks": 61
+        },
+        {
+          "name": "Transcript: Voortgangsrapportage Grondstoffennota 2024",
+          "chunks": 37
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 177,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 177,
+      "distribution": {
+        "quote": {
+          "count": 175,
+          "rate": 0.9887
+        },
+        "full_text": {
+          "count": 2,
+          "rate": 0.0113
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8536,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.956
+    }
+  }
+}

@@ -1,0 +1,271 @@
+{
+  "meeting_id": "b90dfdbf-e77f-4c44-887d-fa5138b133ec",
+  "audit_timestamp": "2026-04-07T21:10:27.858429",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+    "start_date": "2025-10-15 00:00:00",
+    "committee": "COR",
+    "quality_score": 0.862,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 38,
+    "document_count": 1
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 207,
+      "correct_count": 207,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8721,
+      "party_attribution_rate": 0.2209,
+      "total_segments": 86,
+      "attributed_segments": 75,
+      "unattributed_segments": 11
+    },
+    "speaker_diversity": {
+      "unique_speakers": 11,
+      "unique_parties": 8,
+      "top_speaker": "M.H. (Marvin) Biljoen Commissievoorzitter",
+      "top_speaker_segment_count": 29,
+      "monologue_rate": 0.3372,
+      "speakers": {
+        "M.H. (Marvin) Biljoen Commissievoorzitter": 29,
+        "Inspreker": 26,
+        "E. (Emin) Başoğlu Burgercommissielid": 4,
+        "M. (Manuel) Crielaard": 4,
+        "S.L. (Sigrid) Oosterwegel Burgercommissielid": 3,
+        "R.P. (Ryan) Vos Burgercommissielid": 2,
+        "P.F. (Pelle) Meurink Burgercommissielid": 2,
+        "M.S.S. (Michantely) de Jong": 2,
+        "T. (Tim) Kind": 1,
+        "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie": 1
+      },
+      "parties": {
+        "SP": 4,
+        "Leefbaar Rotterdam": 4,
+        "GroenLinks": 3,
+        "PvdA": 2,
+        "D66": 2,
+        "Groep De Jong": 2,
+        "Volt": 1,
+        "VVD": 1
+      }
+    },
+    "segment_quality": {
+      "total_segments": 86,
+      "nonempty_segments": 86,
+      "total_words": 10889,
+      "total_chars": 60518,
+      "avg_words_per_segment": 126.6,
+      "avg_chars_per_segment": 703.7,
+      "short_segment_rate": 0.2209,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 1,
+      "items_with_content": 1,
+      "coverage_rate": 1.0,
+      "items": [
+        {
+          "title": "Inspreekbijdragen",
+          "segment_count": 86
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+        "start_date": "2025-10-15 00:00:00",
+        "committee": "COR",
+        "review_status": "auto_approved",
+        "quality_score": 0.862,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+        "start_date": "2025-10-15 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 11,
+      "recognized_speakers": 10,
+      "unrecognized_speakers": 1,
+      "recognition_rate": 0.9091,
+      "recognized": [
+        {
+          "name": "Inspreker",
+          "segment_count": 26,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.H. (Marvin) Biljoen Commissievoorzitter",
+          "segment_count": 29,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "R.P. (Ryan) Vos Burgercommissielid",
+          "segment_count": 2,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "P.F. (Pelle) Meurink Burgercommissielid",
+          "segment_count": 2,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "E. (Emin) Başoğlu Burgercommissielid",
+          "segment_count": 4,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S.L. (Sigrid) Oosterwegel Burgercommissielid",
+          "segment_count": 3,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "T. (Tim) Kind",
+          "segment_count": 1,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie",
+          "segment_count": 1,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M. (Manuel) Crielaard",
+          "segment_count": 4,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D.J. (Diederik) van Dommelen",
+          "segment_count": 1,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "M.S.S. (Michantely) de Jong",
+          "segment_count": 2,
+          "parties": [
+            "Groep De Jong"
+          ],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 38,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 15,
+        "short (50-200)": 6,
+        "long (2000-5000)": 17
+      },
+      "min_chars": 95,
+      "max_chars": 2658,
+      "avg_chars": 1573.5,
+      "median_chars": 1886,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 38,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 1,
+      "documents_with_chunks": 1,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Inspreekbijdragen",
+          "chunks": 38
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 38,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 38,
+      "distribution": {
+        "quote": {
+          "count": 38,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8721,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.862
+    }
+  }
+}

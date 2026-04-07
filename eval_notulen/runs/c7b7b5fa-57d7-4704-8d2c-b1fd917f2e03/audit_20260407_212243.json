@@ -1,0 +1,305 @@
+{
+  "meeting_id": "c7b7b5fa-57d7-4704-8d2c-b1fd917f2e03",
+  "audit_timestamp": "2026-04-07T21:22:43.801827",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+    "start_date": "2026-02-11 00:00:00",
+    "committee": "ZOCS",
+    "quality_score": 0.899,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 98,
+    "document_count": 4
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 667,
+      "correct_count": 667,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.6624,
+      "party_attribution_rate": 0.3097,
+      "total_segments": 465,
+      "attributed_segments": 308,
+      "unattributed_segments": 157
+    },
+    "speaker_diversity": {
+      "unique_speakers": 11,
+      "unique_parties": 7,
+      "top_speaker": "T.S.J. (Theo) Coşkun Commissievoorzitter",
+      "top_speaker_segment_count": 100,
+      "monologue_rate": 0.2151,
+      "speakers": {
+        "T.S.J. (Theo) Coşkun Commissievoorzitter": 100,
+        "S. (Said) Kasmi": 62,
+        "D.J. (Diederik) van Dommelen": 33,
+        "L.S. (Larissa) Vlieger": 31,
+        "R.P. (Ryan) Vos Burgercommissielid": 24,
+        "J.M. (Joan) Nunnely": 20,
+        "F. (Femke) Bouwer-van Schie Burgercommissielid": 16,
+        "R.T.J. (Ruud) van der Velden": 13,
+        "T. (Thomas) Roskam": 4,
+        "M.H. (Marvin) Biljoen": 3
+      },
+      "parties": {
+        "GroenLinks": 34,
+        "VVD": 33,
+        "PvdA": 24,
+        "D66": 20,
+        "Volt": 16,
+        "Partij voor de Dieren": 13,
+        "Leefbaar Rotterdam": 4
+      }
+    },
+    "segment_quality": {
+      "total_segments": 465,
+      "nonempty_segments": 465,
+      "total_words": 30215,
+      "total_chars": 170574,
+      "avg_words_per_segment": 65.0,
+      "avg_chars_per_segment": 366.8,
+      "short_segment_rate": 0.3828,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 5,
+      "items_with_content": 5,
+      "coverage_rate": 1.0,
+      "items": [
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 1
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 18
+        },
+        {
+          "title": "Raadsvoorstel instellen Cultuurhaven",
+          "segment_count": 297
+        },
+        {
+          "title": "Vervolg Museumvisie",
+          "segment_count": 142
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 7
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+        "start_date": "2026-02-11 00:00:00",
+        "committee": "ZOCS",
+        "review_status": "auto_approved",
+        "quality_score": 0.899,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+        "start_date": "2026-02-11 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 11,
+      "recognized_speakers": 11,
+      "unrecognized_speakers": 0,
+      "recognition_rate": 1.0,
+      "recognized": [
+        {
+          "name": "T.S.J. (Theo) Coşkun Commissievoorzitter",
+          "segment_count": 100,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "M.H. (Marvin) Biljoen",
+          "segment_count": 3,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "L.S. (Larissa) Vlieger",
+          "segment_count": 31,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J.M. (Joan) Nunnely",
+          "segment_count": 20,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.P. (Ryan) Vos Burgercommissielid",
+          "segment_count": 24,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "T. (Thomas) Roskam",
+          "segment_count": 4,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "F. (Femke) Bouwer-van Schie Burgercommissielid",
+          "segment_count": 16,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "D.J. (Diederik) van Dommelen",
+          "segment_count": 33,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.T.J. (Ruud) van der Velden",
+          "segment_count": 13,
+          "parties": [
+            "Partij voor de Dieren"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S.J.J. (Sam) Mak  Burgercommissielid CDA",
+          "segment_count": 2,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S. (Said) Kasmi",
+          "segment_count": 62,
+          "parties": [],
+          "recognized_as": "council_member"
+        }
+      ],
+      "unrecognized": []
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 98,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 42,
+        "long (2000-5000)": 55,
+        "short (50-200)": 1
+      },
+      "min_chars": 142,
+      "max_chars": 2800,
+      "avg_chars": 1790.4,
+      "median_chars": 2137,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 98,
+      "boilerplate_count": 1,
+      "boilerplate_rate": 0.0102,
+      "boilerplate_examples": [
+        {
+          "id": 15420,
+          "title": "Opening and Introductions",
+          "preview": "[T.S.J. (Theo) Coşkun Commissievoorzitter]: ***\n\n[T.S.J. (Theo) Coşkun Commissievoorzitter]: ***\n\n[T"
+        }
+      ]
+    },
+    "agenda_coverage": {
+      "total_documents": 4,
+      "documents_with_chunks": 4,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 4
+        },
+        {
+          "name": "Transcript: Raadsvoorstel instellen Cultuurhaven",
+          "chunks": 58
+        },
+        {
+          "name": "Transcript: Rondvraag en sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Vervolg Museumvisie",
+          "chunks": 35
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 98,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 98,
+      "distribution": {
+        "quote": {
+          "count": 98,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "PENDING — warnings present, manual review recommended",
+    "issues": [],
+    "warnings": [
+      "Low speaker attribution: 66% (target 80%)"
+    ],
+    "scores": {
+      "speaker_attribution_rate": 0.6624,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.899
+    }
+  }
+}

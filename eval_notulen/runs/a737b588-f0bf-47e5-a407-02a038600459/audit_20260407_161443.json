@@ -1,0 +1,958 @@
+{
+  "meeting_id": "a737b588-f0bf-47e5-a407-02a038600459",
+  "audit_timestamp": "2026-04-07T16:10:03.992019",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+    "start_date": "2026-02-12 00:00:00",
+    "committee": null,
+    "quality_score": 0.931,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 127,
+    "document_count": 6
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 850,
+      "correct_count": 850,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.7692,
+      "party_attribution_rate": 0.3275,
+      "total_segments": 455,
+      "attributed_segments": 350,
+      "unattributed_segments": 105
+    },
+    "speaker_diversity": {
+      "unique_speakers": 19,
+      "unique_parties": 9,
+      "top_speaker": "L.S. (Larissa) Vlieger Commissievoorzitter",
+      "top_speaker_segment_count": 96,
+      "monologue_rate": 0.211,
+      "speakers": {
+        "L.S. (Larissa) Vlieger Commissievoorzitter": 96,
+        "R.A.C.J. (Robert) Simons": 81,
+        "J.M. (Amy) de Bruijn": 38,
+        "S. (Stephan) Leewis": 20,
+        "D.J. (Diederik) van Dommelen": 19,
+        "M.H. (Marvin) Biljoen": 18,
+        "M.S. (Marike) Abrahamse": 16,
+        "T.S.J. (Theo) Coşkun": 11,
+        "A.I. (Abigail) Norville": 9,
+        "T. (Tim) de Haan": 6
+      },
+      "parties": {
+        "GroenLinks": 38,
+        "PvdA": 38,
+        "VVD": 35,
+        "SP": 11,
+        "D66": 8,
+        "Leefbaar Rotterdam": 7,
+        "CDA": 6,
+        "DENK": 4,
+        "50PLUS": 2
+      }
+    },
+    "segment_quality": {
+      "total_segments": 455,
+      "nonempty_segments": 454,
+      "total_words": 39640,
+      "total_chars": 229075,
+      "avg_words_per_segment": 87.3,
+      "avg_chars_per_segment": 504.6,
+      "short_segment_rate": 0.2593,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 8,
+      "items_with_content": 6,
+      "coverage_rate": 0.75,
+      "items": [
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 1
+        },
+        {
+          "title": "Raadsvoorstel verordening veteranen en veteranenhuis",
+          "segment_count": 6
+        },
+        {
+          "title": "Raadsvoorstel aanvullend investeringsvoorstel 2025",
+          "segment_count": 18
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 0
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 3
+        },
+        {
+          "title": "Adviezenlijst overlegvergadering",
+          "segment_count": 2
+        },
+        {
+          "title": "Aanpassing inspraakverordening naar aanleiding van de wet versterking participatie op decentraal niveau",
+          "segment_count": 425
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+        "start_date": "2026-02-12 00:00:00",
+        "committee": null,
+        "review_status": "auto_approved",
+        "quality_score": 0.931,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+        "start_date": "2026-02-12 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No committee found in staging meeting"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 19,
+      "recognized_speakers": 15,
+      "unrecognized_speakers": 4,
+      "recognition_rate": 0.7895,
+      "recognized": [
+        {
+          "name": "L.S. (Larissa) Vlieger Commissievoorzitter",
+          "segment_count": 96,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.S. (Marike) Abrahamse",
+          "segment_count": 16,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.H. (Marvin) Biljoen",
+          "segment_count": 18,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J.M. (Amy) de Bruijn",
+          "segment_count": 38,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "P.J.H.D. (Ellen) Verkoelen",
+          "segment_count": 2,
+          "parties": [
+            "50PLUS"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D.J. (Diederik) van Dommelen",
+          "segment_count": 19,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T. (Tim) de Haan",
+          "segment_count": 6,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.G.C. (René) Segers-Hoogendoorn",
+          "segment_count": 6,
+          "parties": [
+            "CDA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T.S.J. (Theo) Coşkun",
+          "segment_count": 11,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Stephan) Leewis",
+          "segment_count": 20,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J.M.D. (Joey) de Waard",
+          "segment_count": 6,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.A.C.J. (Robert) Simons",
+          "segment_count": 81,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "E.H. (Eyasu) Balcha",
+          "segment_count": 2,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "G.F.E. (Geert) Koster",
+          "segment_count": 1,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Serkan) Soytekin",
+          "segment_count": 4,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "Inspreker",
+          "segment_count": 6,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "M. (Marianne) van den   Anker Ombudsman Rotterdam Rijnmond",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "A.I. (Abigail) Norville",
+          "segment_count": 9,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "T.B. (Tim)  Versnel",
+          "segment_count": 4,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 127,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 44,
+        "long (2000-5000)": 81,
+        "short (50-200)": 2
+      },
+      "min_chars": 152,
+      "max_chars": 2742,
+      "avg_chars": 1925.0,
+      "median_chars": 2185,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 127,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 6,
+      "documents_with_chunks": 6,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Aanpassing inspraakverordening naar aanleiding van de wet versterking participatie op decentraal niveau",
+          "chunks": 118
+        },
+        {
+          "name": "Transcript: Adviezenlijst overlegvergadering",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Raadsvoorstel aanvullend investeringsvoorstel 2025",
+          "chunks": 4
+        },
+        {
+          "name": "Transcript: Raadsvoorstel verordening veteranen en veteranenhuis",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Vaststellen van de agenda",
+          "chunks": 1
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 127,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 127,
+      "distribution": {
+        "quote": {
+          "count": 126,
+          "rate": 0.9921
+        },
+        "full_text": {
+          "count": 1,
+          "rate": 0.0079
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "ok",
+    "n_samples": 8,
+    "avg_hallucination_rate": 0.02,
+    "safe_for_councillors": true,
+    "hallucination_types_found": [],
+    "dangerous_claims": [
+      {
+        "chunk_id": 424,
+        "claim": "De tekst opent met '[M. (Marianne) van den Anker Ombudsman Rotterdam Rijnmond]: . Maar even uw interpretatie daarvan.' — dit is een losstaande, onvolledige zin die de ombudsman woorden in de mond legt zonder dat deze passage aantoonbaar in het transcript staat als zelfstandige uitspraak. Dit kan verwarring scheppen over wat de ombudsman precies heeft gezegd."
+      }
+    ],
+    "chunk_results": [
+      {
+        "chunk_id": 395,
+        "chunk_title": "Transcript: Raadsvoorstel verordening veteranen en veteranenhuis",
+        "chunk_index": 0,
+        "content_preview": "[M.S. (Marike) Abrahamse (VVD)]: Ja, dank u wel voorzitter. Ik heb het voorstel bekeken en ik denk eigenlijk de belangrijke zaken die erin moesten staan, staan erin. Ik was ook bij de opening van het ",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Abrahamse (VVD) heeft het voorstel bekeken",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ik heb het voorstel bekeken"
+            },
+            {
+              "claim": "Abrahamse vindt dat de belangrijke zaken die erin moesten staan, erin staan",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "ik denk eigenlijk de belangrijke zaken die erin moesten staan, staan erin"
+            },
+            {
+              "claim": "Abrahamse was aanwezig bij de opening van het Veteranenhuis op maandag",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ik was ook bij de opening van het Veteranenhuis maandag."
+            },
+            {
+              "claim": "Bij de opening van het Veteranenhuis was iedereen tevreden",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Daar was iedereen ook tevreden."
+            },
+            {
+              "claim": "Abrahamse vindt dat het voorstel nu door kan als twee minuten debat naar de raadsvergadering",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dus wat mij betreft is dit inderdaad iets wat nu [gewoon door kan als twee minuten debat naar de raadsvergadering]"
+            },
+            {
+              "claim": "Vlieger is de Commissievoorzitter",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[L.S. (Larissa) Vlieger Commissievoorzitter]"
+            },
+            {
+              "claim": "Biljoen is lid van GroenLinks",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[M.H. (Marvin) Biljoen (GroenLinks)]"
+            },
+            {
+              "claim": "Biljoen vraagt of er nog andere fracties zijn die iets over willen zeggen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "even rond of er nog andere fracties zijn die iets over willen zeggen."
+            },
+            {
+              "claim": "Biljoen geeft het woord aan 'de heer Billion'",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De heer Billion."
+            },
+            {
+              "claim": "Vlieger spreekt steun uit voor het voorstel van de Rondons VVD om door te geleiden naar de raad",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Steun voor het voorstel van de Rondons VVD om daar in de raad door te geleiden."
+            },
+            {
+              "claim": "Vlieger meldt dat er ook steun is van een andere fractie ('Vrijf ik volgens mij ook steun')",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Vrijf ik volgens mij ook steun."
+            },
+            {
+              "claim": "Het voorstel wordt doorgestuurd als twee minuten debat voor de raad",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ja, dan besturen we dit voorstel door als twee minuten debat voor de raad."
+            },
+            {
+              "claim": "Vervolgens wordt overgegaan naar het aanvullend investeringsvoorstel 2025",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dan gaan we naar het aanvullend investeringsvoorstel 2025."
+            },
+            {
+              "claim": "De koor is eerder gevraagd om een advies over de behandelwijze van het aanvullend investeringsvoorstel 2025",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Eerder heeft u de koor gevraagd om een advies over de behandelwijze van dit voorstel."
+            },
+            {
+              "claim": "Het kooradvies en een college reactie op dat advies zijn bij de stukken te vinden",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dat kooradvies en een college reactie op dat advies vindt u ook bij de stukken."
+            },
+            {
+              "claim": "Vandaag wordt besloten over de vervolgbehandeling van het aanvullend investeringsvoorstel 2025",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Vandaag besluiten we met elkaar over de vervolgbehandeling van dit voorstel."
+            },
+            {
+              "claim": "Vlieger geeft het woord aan de voorzitter van de koor voor de toelichting",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Graag geef ik eerst het woord aan de voorzitter van de koor voor de toelichting."
+            }
+          ],
+          "total_claims": 17,
+          "supported": 17,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "De te controleren tekst is een vrijwel letterlijke weergave van het originele transcript. Alle geïdentificeerde feitelijke beweringen — over aanwezigheid bij de opening van het Veteranenhuis, standpunten van Abrahamse, de rol van Vlieger als commissievoorzitter, de partijaffiliatie van Biljoen, de steunverklaring voor doorgeleiding als twee minuten debat, en de overgang naar het aanvullend investeringsvoorstel 2025 — zijn direct terug te vinden in het bronmateriaal. Er zijn geen hallucinaties gedetecteerd. De tekst bevat geen toegevoegde details, onjuiste toeschrijvingen of gefabriceerde citaten."
+        },
+        "transcript_faithfulness": {
+          "score": 0,
+          "reasoning": "Parse error: Unterminated string starting at: line 5 column 24 (char 978)"
+        }
+      },
+      {
+        "chunk_id": 409,
+        "chunk_title": "Further Discussion on Initiative Scope and Refusal of Neighbors",
+        "chunk_index": 6,
+        "content_preview": "Er is zelfs aangegeven dat bewoners die net buiten deze beperkte afbakening van twee of drie straatvallen geweigerd moesten worden. En hun eigen initiatief zouden moeten indienen. Dit leidt tot versni",
+        "claim_verification": {
+          "claims": [],
+          "total_claims": 18,
+          "supported": 18,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Parsed via regex fallback (malformed JSON from judge)"
+        },
+        "transcript_faithfulness": {
+          "score": 5,
+          "reasoning": "Het AI-gegenereerde vergaderverslag-fragment is een vrijwel letterlijke weergave van het originele transcript. De tekst is direct overgenomen uit de inspraakreactie van de inspreker en bevat geen fabricaties, geen onjuiste toeschrijvingen, geen verdraaide stemverhoudingen en geen politiek relevante omissies. De inhoud klopt volledig met het bronmateriaal. Er zijn geen financiële bedragen, data of percentages in dit fragment die fout zouden kunnen zijn. Het fragment is een getrouwe weergave van het betreffende deel van de inspreektekst."
+        }
+      },
+      {
+        "chunk_id": 424,
+        "chunk_title": "Further Discussion on Initiative Scope and Refusal of Neighbors",
+        "chunk_index": 21,
+        "content_preview": "[M. (Marianne) van den   Anker Ombudsman Rotterdam Rijnmond]: . Maar even uw interpretatie daarvan.\n[S. (Stephan) Leewis (GroenLinks)]: En u geeft aan, ook in uw rapport, dat de burgemeester meer in p",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "De heer Leewis (GroenLinks) vraagt de ombudsman om uitleg over de positie van de burgemeester in relatie tot participatie.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[S. (Stephan) Leewis (GroenLinks)]: En u geeft aan, ook in uw rapport, dat de burgemeester meer in positie zou moeten worden gebracht. U gaf net ook al iets aan over dat het in één hand zou moeten liggen. Kan u me nog iets duidelijker uitleggen wat die positie dan zou moeten zijn?"
+            },
+            {
+              "claim": "De ombudsman geeft in haar rapport aan dat de burgemeester meer in positie zou moeten worden gebracht.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[S. (Stephan) Leewis (GroenLinks)]: En u geeft aan, ook in uw rapport, dat de burgemeester meer in positie zou moeten worden gebracht."
+            },
+            {
+              "claim": "Mevrouw De Bruijn (PvdA) stelt een vraag over de burgemeester en participatie.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[J.M. (Amy) de Bruijn (PvdA)]: Ik had dezelfde vraag over de burgemeester. Ik snapte graag een toelichting op dat stukje specifiek van burgemeester minder kwetsbaar in relatie tot participatie."
+            },
+            {
+              "claim": "Mevrouw De Bruijn verwijst naar een brief van het college van 2 februari.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[J.M. (Amy) de Bruijn (PvdA)]: Sorry, de brief van het college 2 februari."
+            },
+            {
+              "claim": "Mevrouw De Bruijn verwijst naar een brief van 5 februari.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[J.M. (Amy) de Bruijn (PvdA)]: Dan later een gewijsbrief van 5 februari."
+            },
+            {
+              "claim": "De brief van 2 februari bevatte het advies om terug te gaan naar de tekentafel.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[J.M. (Amy) de Bruijn (PvdA)]: Eerst gaat terug naar de tegentafel. En daarna toch wat gesprekken en wat sympathie."
+            },
+            {
+              "claim": "Mevrouw De Bruijn geeft aan dat zij slechts een paar jaar meeloopt in de raad.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[J.M. (Amy) de Bruijn (PvdA)]: Ik loop nog maar een paar jaar mee hier in de raad."
+            },
+            {
+              "claim": "Mevrouw De Bruijn noemt de oeververbinding als specifiek voorbeeld.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[J.M. (Amy) de Bruijn (PvdA)]: En een specifiek voorbeeld is. Wat nog leeft en speelt is de oeververbinding."
+            },
+            {
+              "claim": "Mevrouw De Bruijn stelt dat bij participatietrajecten het startpunt vaak al een politieke keuze is.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[J.M. (Amy) de Bruijn (PvdA)]: Als de gemeente het participatietraject ingaat met bewoners. Is vaak het startpunt al de politieke keuze die is gemaakt."
+            },
+            {
+              "claim": "De tekst suggereert dat de ombudsman eerder in de vergadering iets heeft gezegd over 'één hand' en de positie van de burgemeester.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[M. (Marianne) van den Anker Ombudsman Rotterdam Rijnmond]: laat nou de burgemeester samen met een wethouder daarvoor binnen het college verantwoordelijk zijn. [...] dat dat in één hand komt"
+            },
+            {
+              "claim": "De spreker die als '[M. (Marianne) van den Anker Ombudsman Rotterdam Rijnmond]' is gelabeld aan het begin van het fragment spreekt inhoudelijk over de interpretatie van haar woorden.",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Het fragment begint met '[M. (Marianne) van den Anker Ombudsman Rotterdam Rijnmond]: . Maar even uw interpretatie daarvan.' Dit is een onvolledige zin zonder duidelijke context of inhoud in het transcript. De ombudsman spreekt op dit punt niet aantoonbaar deze specifieke woorden uit als zelfstandige bijdrage."
+            }
+          ],
+          "total_claims": 11,
+          "supported": 10,
+          "unsupported": 1,
+          "contradicted": 0,
+          "hallucination_rate": 0.09,
+          "most_dangerous_claim": "De tekst opent met '[M. (Marianne) van den Anker Ombudsman Rotterdam Rijnmond]: . Maar even uw interpretatie daarvan.' — dit is een losstaande, onvolledige zin die de ombudsman woorden in de mond legt zonder dat deze passage aantoonbaar in het transcript staat als zelfstandige uitspraak. Dit kan verwarring scheppen over wat de ombudsman precies heeft gezegd.",
+          "reasoning": "Het fragment bevat grotendeels goed onderbouwde beweringen die direct terug te vinden zijn in het transcript. De vragen van Leewis (GroenLinks) en De Bruijn (PvdA) over de burgemeester, de brieven van 2 en 5 februari, de oeververbinding als voorbeeld en de participatieladder-discussie zijn allemaal aantoonbaar aanwezig in de brontekst. Het enige probleem is de openingszin die aan de ombudsman wordt toegeschreven: '... Maar even uw interpretatie daarvan.' Dit is een fragment zonder context dat als zelfstandige uitspraak van de ombudsman wordt gepresenteerd, maar in het transcript niet als zodanig herkenbaar is. Dit is een relatief laag risico, maar kan bij raadsleden verwarring scheppen over de exacte woorden van de ombudsman."
+        },
+        "transcript_faithfulness": {
+          "score": 5,
+          "reasoning": "Het AI-gegenereerde vergaderverslag-fragment is een vrijwel letterlijke weergave van het originele transcript. De uitspraken zijn correct toegeschreven aan de juiste sprekers (Leewis/GroenLinks en De Bruijn/PvdA). Er zijn geen fabricaties, geen omgedraaide stemverhoudingen, geen onjuiste bedragen of data. De inhoud komt nauwkeurig overeen met het transcript. Het fragment bevat geen politiek relevante weglatingen ten opzichte van het weergegeven gedeelte."
+        }
+      },
+      {
+        "chunk_id": 439,
+        "chunk_title": "Further Discussion on Initiative Scope and Refusal of Neighbors",
+        "chunk_index": 36,
+        "content_preview": "[L.S. (Larissa) Vlieger Commissievoorzitter]: Hoe ziet u zich dat voor zich, wethouder?\n[J.M. (Amy) de Bruijn (PvdA)]: Ja, dank voorzitter. Vandaag bespreken we dus de wijziging van de inspraakvoorden",
+        "claim_verification": {
+          "claims": [],
+          "total_claims": 15,
+          "supported": 14,
+          "unsupported": 1,
+          "contradicted": 0,
+          "hallucination_rate": 0.07,
+          "most_dangerous_claim": null,
+          "reasoning": "Parsed via regex fallback (malformed JSON from judge)"
+        },
+        "transcript_faithfulness": {
+          "score": 5,
+          "reasoning": "Het AI-gegenereerde vergaderverslag-fragment is een vrijwel letterlijke weergave van de bijdrage van mevrouw De Bruijn (PvdA) zoals die in het originele transcript staat. De uitspraak is correct toegeschreven aan J.M. (Amy) de Bruijn (PvdA). Er zijn geen fabricaties aanwezig: alle zinnen zijn direct terug te voeren op het transcript. De inhoud is volledig en accuraat overgenomen, inclusief de verwijzing naar de ombudsman, het rapport 'om armen', de aanbevelingen A tot en met N, het burgerberaad, en de kritiek op de verordening. Er zijn geen stemverhoudingen of besluiten in dit fragment die verkeerd zijn weergegeven. Er ontbreekt geen politiek relevante informatie. De enige kleine kanttekening is dat de openingszin van de voorzitter ('Hoe ziet u zich dat voor zich, wethouder?') in het origineel toebehoort aan een ander moment in het debat, maar dit is een kwestie van context en niet van fabricatie of onjuistheid binnen het fragment zelf."
+        }
+      },
+      {
+        "chunk_id": 454,
+        "chunk_title": "Further Discussion on Initiative Scope and Refusal of Neighbors",
+        "chunk_index": 51,
+        "content_preview": "[Unknown]: . Vanuit één persoon die daar regie in heeft dan dat gelijk trekt.\n[R.A.C.J. (Robert) Simons]: En dat daar een eerlijk speelvaartvelding creëert. De wethouder. Volgens mij is juist deze ver",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "De wethouder stelt dat de verordening bedoeld is om de basis te versterken.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Volgens mij is juist deze verordening bedoeld om die basis te versterken."
+            },
+            {
+              "claim": "De spelregels in de omgevingswet zijn anders dan op andere gebieden.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Maar de spelregels in de omgevingswet zijn anders dan op andere gebieden. Dus het feit alleen al dat die spelregels gewoon anders zijn. Dat wordt ook gewoon wettelijk bepaald."
+            },
+            {
+              "claim": "De wethouder stelt dat het aanstellen van één ambtenaar of bestuurder voor participatie niets verandert aan de praktijk en uitvoering.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "dan kun je wel zeggen, ja we maken één ambtenaar of één bestuurder daarvoor verantwoordelijk. Maar dat verandert nog niks aan de praktijk, aan de uitvoering."
+            },
+            {
+              "claim": "De spelregels van de omgevingswet zijn anders dan bij jeugdparticipatie of bij welzijn.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dat nog steeds die spelregels van die omgevingswet. En die zijn anders dan bij jeugdparticipatie of bij welzijn."
+            },
+            {
+              "claim": "De wethouder stelt dat participatie bij bouwen en wonen in prima handen is bij mevrouw Segers.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Maar ik denk echt dat het in de praktijk, dat het in dit geval bij mevrouw Segers, in prima handen is."
+            },
+            {
+              "claim": "Het college is bezig geweest met de directie van het concern om integraliteit te bevorderen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En wij hebben als college de afgelopen periode ook constant zijn we bezig geweest met de directie van het concern, zoals ze het zelf af en toe noemen. Om gewoon juist die integraliteit..."
+            },
+            {
+              "claim": "De wethouder stelt dat niemand een toverformule heeft, ook de ombudsman niet.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Alleen, ik heb geen toofformule. Niemand heeft een toofformule. Ook de ombudsman heeft geen toofformule."
+            },
+            {
+              "claim": "Naast de ombudsman zijn ook het burgerpanel en de wijkraden geraadpleegd.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En overigens hebben we niet alleen de ombudsman geraadpleegd. We hebben ook het burgerpanel geraadpleegd. We hebben de wijkraden geraadpleegd."
+            },
+            {
+              "claim": "De wethouder stelt dat het voorstel niet in 'Splendid Isolation' is bedacht.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dus het is niet zo dat we het alleen maar hier in Splendid Isolation hebben bedacht."
+            },
+            {
+              "claim": "Een onbekende spreker stelt dat participatie vanuit één persoon die regie heeft gelijk getrokken moet worden.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Vanuit één persoon die daar regie in heeft dan dat gelijk trekt. — Dit is een weergave van de interruptie van mevrouw De Bruijn in het transcript: 'Vanuit één persoon die daar regie in heeft dan dat gelijk trekt.'"
+            },
+            {
+              "claim": "De wethouder stelt dat een eerlijk speelveld gecreëerd moet worden.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En dat daar een eerlijk speelvaartvelding creëert. [sic, bedoeld: speelveld]"
+            }
+          ],
+          "total_claims": 11,
+          "supported": 11,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Alle feitelijke beweringen in het te controleren fragment zijn direct terug te vinden in het originele transcript. Het fragment betreft een weergave van de reactie van wethouder Simons op vragen over het 'in één hand leggen' van participatie. Alle inhoudelijke standpunten, namen (mevrouw Segers), verwijzingen naar geraadpleegde partijen (ombudsman, burgerpanel, wijkraden) en de stelling over de omgevingswet zijn aantoonbaar aanwezig in de brontekst. Er zijn geen hallucinaties gedetecteerd."
+        },
+        "transcript_faithfulness": {
+          "score": 5,
+          "reasoning": "Het AI-gegenereerde vergaderverslag-fragment is een vrijwel letterlijke weergave van het corresponderende deel uit het originele transcript. De uitspraken zijn correct toegeschreven aan wethouder R.A.C.J. (Robert) Simons. Er zijn geen fabricaties aanwezig: alle zinnen zijn direct terug te voeren op het transcript. Er ontbreekt één korte zin van mevrouw De Bruijn ('En dat daar een eerlijk speelvaartvelding creëert.') die in het verslag aan de wethouder is toegeschreven, maar bij nader inzien staat deze zin in het transcript ook als onderdeel van de overgang naar de wethouder, wat de attribuering enigszins ambigu maakt maar geen betekenisverandering oplevert. Er zijn geen stemverhoudingen of besluiten in dit fragment. Er zijn geen financiële bedragen, data of percentages in dit fragment. Politiek relevante informatie is niet weggelaten binnen de scope van dit fragment."
+        }
+      },
+      {
+        "chunk_id": 469,
+        "chunk_title": "Further Discussion on Initiative Scope and Refusal of Neighbors",
+        "chunk_index": 66,
+        "content_preview": "[R.A.C.J. (Robert) Simons]: voor de participatieverordening. Wethouder. Kijk, wij hebben hier... bij de gemeente het kompas... de ombudsman gebruikt de ladder... en daarnaast ook nog zimmen ze regelma",
+        "claim_verification": {
+          "claims": [],
+          "total_claims": 22,
+          "supported": 22,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Parsed via regex fallback (malformed JSON from judge)"
+        },
+        "transcript_faithfulness": {
+          "score": 5,
+          "reasoning": "Het AI-gegenereerde vergaderverslag-fragment is een vrijwel letterlijke weergave van het corresponderende deel uit het originele transcript. De uitspraken zijn correct toegeschreven aan de juiste sprekers (wethouder Simons, mevrouw De Bruijn, commissievoorzitter Vlieger). Er zijn geen fabricaties aangetroffen: alle zinnen zijn direct terug te voeren op het transcript. Er zijn geen stemverhoudingen of besluiten in dit fragment die onjuist zijn weergegeven. Er ontbreekt één kleine tussenopmerking van de voorzitter ('Wat is de rol?') die wel in het origineel staat en ook in het verslag is opgenomen. Het fragment is inhoudelijk volledig en politiek relevant materiaal is niet weggelaten. Financiële bedragen, data of percentages komen in dit specifieke fragment niet voor."
+        }
+      },
+      {
+        "chunk_id": 484,
+        "chunk_title": "Further Discussion on Initiative Scope and Refusal of Neighbors",
+        "chunk_index": 81,
+        "content_preview": "[M.S. (Marike) Abrahamse (VVD)]: Mevrouw Abramse. Ja, ik vond ook wel de beschouwing van de heer De Haan eerder van... ...ja, het is misschien goed om juist nu in te gaan stemmen. Maar dan kunnen we h",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Mevrouw Abrahamse (VVD) sloot zich aan bij de beschouwing van de heer De Haan over het nu instemmen met het stuk.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Mevrouw Abramse: 'Ja, ik vond ook wel de beschouwing van de heer De Haan eerder van... ...ja, het is misschien goed om juist nu in te gaan stemmen. Maar dan kunnen we het ook gaan evalueren.'"
+            },
+            {
+              "claim": "Mevrouw Abrahamse (VVD) vond de beschouwing van de heer De Haan een goede insteek.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'Vond ik een goede insteek hiervoor.'"
+            },
+            {
+              "claim": "Mevrouw Abrahamse (VVD) stelde voor het stuk als twee-minuten-debat te behandelen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'Dus ook wat ons betreft zou die gewoon als een twee-minuten-debat kunnen worden behandeld.'"
+            },
+            {
+              "claim": "De commissievoorzitter merkte op dat moties ook als amendementen ingediend moeten worden als het voorstel moet worden aangepast.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'U zei net, moties moeten natuurlijk ook amendementen dan worden ingediend... ...als het echt het voorstel moet aanpassen.'"
+            },
+            {
+              "claim": "De heer Balcha (D66) sloot zich aan bij de VVD en via de VVD bij de heer De Haan.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'De heer Baltja. Ja, ik laat me aan bij de VVD en via de VVD bij de heer De Haan.'"
+            },
+            {
+              "claim": "Mevrouw De Bruijn (PvdA) hoorde steun voor behandeling van het stuk.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'Ja, ik hoor steun voor behandeling.'"
+            },
+            {
+              "claim": "Mevrouw De Bruijn (PvdA) stelde dat er flink wat amendementen moeten komen als het stuk behandeld wordt.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'Ja, dan wil ik wel echt ook nog aan de commissieleden kijken van... ...dan moeten er flink wat amendementen komen.'"
+            },
+            {
+              "claim": "Mevrouw De Bruijn (PvdA) vreesde dat coalitiepartijen positiever zijn voor raadsbehandeling.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'Maar goed, ik vrees dat we met coalitiepartijen... ...die hier nu zo'n wat positiever voor raadsbehandeling zijn...'"
+            },
+            {
+              "claim": "Mevrouw De Bruijn (PvdA) vreesde dat bepaalde zaken het niet gaan halen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'...dat bepaalde zaken het toch niet gaan halen.'"
+            },
+            {
+              "claim": "Mevrouw De Bruijn (PvdA) baalde ervan dat de raad en gemeente waarschijnlijk vrij weinig gaan veranderen aan het stuk.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'Dus ik baal er al van dat we als raad... ...en gemeente straks worden aangekeken door de stad... ...dat we eigenlijk waarschijnlijk vrij weinig gaan veranderen aan dit stuk.'"
+            },
+            {
+              "claim": "De commissievoorzitter constateerde dat er een meerderheid is voor een twee-minuten-debat.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'Goed, ik merk dat er een meerderheid is voor een twee-minuten-debat...'"
+            },
+            {
+              "claim": "Het stuk wordt geagendeerd voor de Raad van 26 februari.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'...om dit te agenderen voor de Raad van 26 februari.'"
+            },
+            {
+              "claim": "De commissievoorzitter stelde voor om vijf minuten te schorsen voordat het volgende agendapunt begint.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'Voordat we verder gaan naar het volgende agendapunt... ...stel ik voor om vijf minuten te schorsen.'"
+            },
+            {
+              "claim": "Een onbekende spreker wilde om vijf uur verder gaan.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'Ik wil ook echt om vijf uur beginnen. Het is al vrij laat. Dus we gaan om vijf uur verder.'"
+            },
+            {
+              "claim": "De vergadering werd geschorst.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Meerdere malen: 'De vergadering is geschorst.'"
+            }
+          ],
+          "total_claims": 15,
+          "supported": 15,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Alle 15 geïdentificeerde feitelijke beweringen in het te controleren fragment zijn direct terug te vinden in het originele transcript. Er zijn geen onjuiste toeschrijvingen, gefabriceerde citaten, foutieve bedragen, onjuiste datums of andere hallucinaties aangetroffen. Het fragment betreft voornamelijk procedurele uitspraken (twee-minuten-debat, agendering voor 26 februari, schorsing) en standpunten van commissieleden over de behandeling van het participatieverordening-stuk, die allemaal accuraat zijn weergegeven."
+        },
+        "transcript_faithfulness": {
+          "score": 5,
+          "reasoning": "Het AI-gegenereerde vergaderverslag-fragment is een directe, nauwkeurige weergave van het corresponderende deel van het originele transcript. De uitspraken zijn correct toegeschreven aan de juiste sprekers (Abrahamse/VVD, Balcha/D66, De Bruijn/PvdA, Vlieger als voorzitter). De inhoud van de uitspraken klopt woordelijk of nagenoeg woordelijk met het origineel. Het besluit (meerderheid voor twee-minuten-debat, agendering voor Raad van 26 februari) is correct weergegeven. De schorsingsmededelingen zijn eveneens correct overgenomen. Er zijn geen fabricaties, geen omgedraaide stemverhoudingen en geen politiek relevante omissies binnen dit fragment. Het fragment dekt een beperkt deel van het transcript, maar wat er staat is volledig trouw aan de bron."
+        }
+      },
+      {
+        "chunk_id": 499,
+        "chunk_title": "Further Discussion on Initiative Scope and Refusal of Neighbors",
+        "chunk_index": 96,
+        "content_preview": "[R.A.C.J. (Robert) Simons]: Wethouder.\n[R.A.C.J. (Robert) Simons]: Ja, nogmaals. Een van de kritiekpunten was wat u ook nu zelf weer aangeeft. Dat de urgentie niet duidelijk bleek uit de brief. Nou, d",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Een van de kritiekpunten was dat de urgentie niet duidelijk bleek uit de brief.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De heer Van Dommelen zei: 'Mijn advies aan u is, noem het dan ook een dekkingsvoorstel en geen investeringsvoorstel de volgende keer.' En wethouder Simons erkende: 'Het was niet goed uitgeschreven. Het proces had beter gekund.'"
+            },
+            {
+              "claim": "Er is een aanvullende brief gestuurd naar aanleiding van het kritiekpunt over de urgentie.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Wethouder Simons: 'Daarvoor hebben we een aanvullende brief gestuurd.' En eerder in het transcript: 'De toelichting in de brief van 11 februari, voor zover de brief ziet op de urgentie, is voor mij voldoende.' (Van Dommelen)"
+            },
+            {
+              "claim": "De wethouder stelt dat de onderwerpen voedselbank en de Noorse kerk weinig uitleg behoeven qua urgentie.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Wethouder Simons: 'Maar daar wil ik wel opmerken dat de onderwerpen, een voedselbank of de Noorse kerk het behoud daarvan. Dat ook weinig uitleg zou behoeven qua urgentie.'"
+            },
+            {
+              "claim": "De wethouder stelt dat er de afgelopen vier jaar met regelmaat over deze onderwerpen is gesproken.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Wethouder Simons: 'Want we hebben gewoon de afgelopen vier jaar over deze onderwerp met regelmaat gesproken.'"
+            },
+            {
+              "claim": "De wethouder stelt dat van links tot rechts werd aangedrongen op deze onderwerpen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Wethouder Simons: 'En nogmaals, van links tot rechts werd daarop aangedrongen dat we dit soort dingen doen.'"
+            },
+            {
+              "claim": "De wethouder erkent dat het niet goed uitgeschreven was en het proces beter had gekund.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Wethouder Simons: 'Dus ik was ook wel, ik ben het met u eens. Het was niet goed uitgeschreven. Het proces had beter gekund.'"
+            },
+            {
+              "claim": "Mevrouw De Bruijn (PvdA) interrumpeert de wethouder.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "In het transcript staat: '[J.M. (Amy) de Bruijn (PvdA)]: Ja, een interrupje van mevrouw de Bruyne.'"
+            },
+            {
+              "claim": "De heer Van Dommelen zei dat het het college zou sieren als ze dat benoemen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De Bruijn citeert Van Dommelen: 'De heer Van Dommelen zei het ook al, het zou de wethouder en het college sieren, als je dat benoemt.' Dit sluit aan bij Van Dommelens eerdere uitspraken in het transcript."
+            },
+            {
+              "claim": "Mevrouw De Bruijn gebruikt de term 'gaslighten' om de situatie te beschrijven.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De Bruijn: 'het voelt een beetje als gaslighten. Ik denk dat we inmiddels wel beter bekend zijn met het term gaslighten.'"
+            },
+            {
+              "claim": "De wethouder zei via de voorzitter dat iedereen al vier jaar weet dat ze met dit beleid bezig zijn.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De Bruijn parafraseert de wethouder: 'de wethouder zegt het net zelf ook al via de voorzitter. Ja, jullie weten toch al dat we vier jaar met dit beleid bezig zijn.' Dit is consistent met de uitspraken van de wethouder eerder in het transcript."
+            },
+            {
+              "claim": "Mevrouw De Bruijn noemt als hypothetisch voorbeeld '10 miljoen voor sociale woningen'.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De Bruijn: 'Als ik een laatste periode aan zou komen met, ik wil nog even 10 miljoen voor sociale woningen.'"
+            },
+            {
+              "claim": "De commissievoorzitter zegt 'En daar is gewoon ruimte voor nodig.'",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[L.S. (Larissa) Vlieger Commissievoorzitter]: 'En daar is gewoon ruimte voor nodig.'"
+            }
+          ],
+          "total_claims": 12,
+          "supported": 12,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Alle twaalf geïdentificeerde feitelijke beweringen in het te controleren fragment zijn direct terug te vinden in het originele transcript. De uitspraken van wethouder Simons over de urgentiebrief, de erkenning van procesfouten, de verwijzing naar vier jaar beleid, en de interruptie van mevrouw De Bruijn (PvdA) inclusief haar gebruik van de term 'gaslighten' en het hypothetische voorbeeld van 10 miljoen voor sociale woningen zijn allemaal aantoonbaar aanwezig in de broncontext. Er zijn geen hallucinaties gedetecteerd in dit fragment."
+        },
+        "transcript_faithfulness": {
+          "score": 5,
+          "reasoning": "Het AI-gegenereerde vergaderverslag-fragment is een vrijwel letterlijke weergave van het corresponderende deel uit het originele transcript. De uitspraken zijn correct toegeschreven aan de juiste sprekers (Wethouder Simons, Commissievoorzitter Vlieger, en mevrouw De Bruijn van PvdA). Er zijn geen fabricaties aangetroffen: alle zinnen zijn direct terug te voeren op het transcript. Er ontbreekt geen politiek relevante informatie binnen het geselecteerde fragment. Er zijn geen financiële bedragen, data of percentages in dit specifieke fragment die onjuist zijn weergegeven. De enige kleine observatie is dat het fragment een selectie is uit een groter geheel, maar binnen de grenzen van het weergegeven fragment is de weergave nauwkeurig en trouw aan het origineel."
+        }
+      }
+    ]
+  },
+  "verdict": {
+    "recommendation": "PENDING — warnings present, manual review recommended",
+    "issues": [],
+    "warnings": [
+      "Dangerous claim in chunk 424: De tekst opent met '[M. (Marianne) van den Anker Ombudsman Rotterdam Rijnmond]: . Maar even uw interpretatie daarvan.' —",
+      "Low speaker attribution: 77% (target 80%)"
+    ],
+    "scores": {
+      "hallucination_rate": 0.02,
+      "speaker_attribution_rate": 0.7692,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.931
+    }
+  }
+}

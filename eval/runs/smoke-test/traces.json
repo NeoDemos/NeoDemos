@@ -1,0 +1,933 @@
+[
+  {
+    "question_id": "se-01",
+    "query_text": "Waarom ging het Warmtebedrijf Rotterdam failliet?",
+    "query_embedding_hash": "3fd6d74c9a12e9127624772887272395",
+    "vector_results": [
+      {
+        "chunk_id": 98535155102192258,
+        "content_preview": "Afgelopen zaterdag blikte het AD RD terug op de recente geschiedenis van het Rotterdams\nWarmtebedrijf in het artikel ‘Hoe het Warmtebedrijf Rotterdam wordt vermorzeld door de grote jongens’.\nHet artik",
+        "score": 0.8756545,
+        "metadata": {
+          "document_id": "6078434",
+          "title": "Aanleiding: AD RD artikel over Warmtebedrijf Rotterdam",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 606181948657120714,
+        "content_preview": "censtaterende dat . Het Warmtebedrijf (Wil-R) in de toekomst warmte zal afnemen van bedrijven actief in de fossiele industrie;",
+        "score": 0.87471366,
+        "metadata": {
+          "document_id": "6087618",
+          "title": "Constatering - Warmtebronnen Warmtebedrijf Rotterdam",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 853497995039955646,
+        "content_preview": "Betreft: Warmtebedrijf\nOnderwerp:\nWarmtebedrijf\nOp welke gronden deze briefî/Waarom nu voorgelegd?\nDe raad heeft in december 2019 ingestemd met het onder voorwaarden verlenen van\nfE 15 mln. liquiditei",
+        "score": 0.8698974,
+        "metadata": {
+          "document_id": "6087152",
+          "title": "Onderwerp en gronden voor de brief",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 52802813253844902,
+        "content_preview": "De gemeente Rotterdam heeft in 2010, na een aantal járen voorbereiding, het huidige\nWarmtebedrijf opgericht om industriële restwarmte te kunnen benutten voor de\nverwarming van woningen en bedrijfspand",
+        "score": 0.8695627,
+        "metadata": {
+          "document_id": "3524149",
+          "title": "Toelichting: 1 Inleiding",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 576916230341199301,
+        "content_preview": "De doorstart van het Warmtebedrijf N.V. 182",
+        "score": 0.86856234,
+        "metadata": {
+          "document_id": "233065",
+          "title": "Agenda Item 12: Doorstart Warmtebedrijf",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 783605881183026661,
+        "content_preview": "In maart 2006 is W arm te bed rijf NV (\"het Warmtebedrijf') opgericht. De gemeente Rotterdam is\nsamen het HbR, de Provincie Zuid-Holland en de woningcorporatie Woonbron aandeelhouder.\nMomenteel zijn b",
+        "score": 0.86805207,
+        "metadata": {
+          "document_id": "4069471",
+          "title": "Achtergrond en status Warmtebedrijf NV",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 508472668167502200,
+        "content_preview": "Voorts zijn er de problemen bij het\nWarmtebedrijf. Toen dit bedrijf werd opgericht,\nwas het een van de meest vernieuwende\nbedrijven van Nederland. Eindelijk werd er iets\ngedaan met restwarmte. Zelfs G",
+        "score": 0.867794,
+        "metadata": {
+          "document_id": "238768",
+          "title": "Problems at the Warmtebedrijf",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 378871859224270556,
+        "content_preview": "Introductie (1/2)\nHet Warmtebedrijf Rotterdam (WbR) is in 2006 opgericht met als doel zorg te dragen voor een betere benutting van restwarmte uit de Rotterdamse haven, de uitstoot van C02\nte beperken ",
+        "score": 0.8675688,
+        "metadata": {
+          "document_id": "6087183",
+          "title": "Introductie",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 18247611882257496,
+        "content_preview": "Introductie (1/2)\nHet Warmtebedrijf Rotterdam (WbR) is in 2006 opgericht met als doel zorg te dragen voor een betere benutting van restwarmte uit de Rotterdamse haven, de uitstoot van C02\nte beperken ",
+        "score": 0.8675688,
+        "metadata": {
+          "document_id": "6087131",
+          "title": "Introduction (1/2)",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 827162794592135434,
+        "content_preview": "De heer MOTI (pvda). Ik herinner mij de discussie over het Warmtebedrijf, dat wij destijds hebben ondergebracht in een NV of BV en waarmee het mis ging doordat met Shell verkeerde contracten waren ges",
+        "score": 0.8674542,
+        "metadata": {
+          "document_id": "243852",
+          "title": "Moti over vergelijking Warmtebedrijf en Nieuw Reijerwaard",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 701160016887918409,
+        "content_preview": "Warmtebedrijf\nHet college heeft op 14 juni 2005 besloten tot het oprichten van het Warmtebedrijf. Het Warmtebedrijf beoogt het leveren van (rest)warmte uit industriële bronnen in het haven- en industr",
+        "score": 0.8661375,
+        "metadata": {
+          "document_id": "4061969",
+          "title": "Warmtebedrijf",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 613006472217336408,
+        "content_preview": "9 warmte zonder leiding\n1 inleiding\n aanleiding\nIn 2006 is, mede door de gemeente Rotterdam, het Warmtebedrijf N.V. opgericht, met\nals doel het gebruik van restwarmte uit de industriële processen en d",
+        "score": 0.8660362,
+        "metadata": {
+          "document_id": "6079520",
+          "title": "1 inleiding - aanleiding",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 1067170211824481422,
+        "content_preview": "Met de oprichting van het Warmtebedrijf in 2006 wilde de gemeente Rotterdam de emissie van\nbroeikasgassen beperken en de luchtkwaliteit in Rotterdam verbeteren door de uitbreiding van\nhet warmtenet. S",
+        "score": 0.86394966,
+        "metadata": {
+          "document_id": "6079518",
+          "title": "Achtergrond en financiën Warmtebedrijf",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 87257040723728172,
+        "content_preview": "• het Rotterdamse Warmtebedrijf hiervan schade ondervindt omdat bijvoorbeeld Shell wel erg gemakkelijk onder haar maatschappelijke en ecologische verantwoordelijkheid uit komt,",
+        "score": 0.86323583,
+        "metadata": {
+          "document_id": "232969",
+          "title": "Overweging: Schade en verantwoordelijkheid Shell",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 442001396206709580,
+        "content_preview": "EINDRAPPORT RAADSENQUÊTE WARMTEBEDRIJF ROTTERDAM\nOok in 2019 wordt faillissement van het Warmtebedrijf als scenario onderzocht (zie paragraaf 5.7). RebelGroup\nconcludeert daarover dat de afwikkeling v",
+        "score": 0.86273986,
+        "metadata": {
+          "document_id": "7697087",
+          "title": "[26bb001450] Bijlage 2 behorende bij 26bb001160 over Eindrapport raadsenquête Warmtebedrijf Rotterdam",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 1143363525417564840,
+        "content_preview": "Inleiding\nDe gemeenteraad heeft op 8 december 2005 ingestemd met de oprichting van het Warmte-\nbedrijf. Het Warmtebedrijf is 27 maart jl. definitief opgericht. De gemeente Rotterdam\nparticipeert hieri",
+        "score": 0.86260545,
+        "metadata": {
+          "document_id": "6082915",
+          "title": "Inleiding: Oprichting en belang van het Warmtebedrijf",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 487515809057473222,
+        "content_preview": "Warmtebedrijf Rotterdam\nBegin vorig jaar is de uitvoering vastgelopen\nvan het project ‘Leiding over Oost’, de levering\nvan (haven)warmte in Leiden aan Vattenfall\ndoor het Warmtebedrijf. Het gevolg is ",
+        "score": 0.8625844,
+        "metadata": {
+          "document_id": "6083275",
+          "title": "Warmtebedrijf Rotterdam en Deelnemingen Status",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 544329478042287330,
+        "content_preview": ". Motie\t“Warmte\tvoor\tbestaande\tbouw”\t(16bb4570)\n77 Notulen van de raadsvergadering van 2 juni 2016\n52\nEINDRAPPORT RAADSENQUÊTE WARMTEBEDRIJF ROTTERDAM\n5.6  Uitvoering herstelplan, oriëntatie op altern",
+        "score": 0.86111295,
+        "metadata": {
+          "document_id": "6086140",
+          "title": "VOORWOORD",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 589633308944064644,
+        "content_preview": ". Zo is er bijvoorbeeld\nteleurstelling\tnaar\taanleiding\tvan\tde\tverslechterde\tfinanciële\tsituatie\ten\tover\tde\tgemaakte\texit-deal\tmet\tUniper.\nToch is er raadsbreed steun om door te gaan met het Warmtebedr",
+        "score": 0.8606453,
+        "metadata": {
+          "document_id": "6086140",
+          "title": "VOORWOORD",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 343548131110158246,
+        "content_preview": "De heer MOTI (pvda). Ik herinner mij de discussie over het Warmtebedrijf, dat wij destijds hebben ondergebracht in een NV of BV en waarmee het mis ging doordat met Shell verkeerde contracten waren ges",
+        "score": 0.8606418,
+        "metadata": {
+          "document_id": "4080653",
+          "title": "Herinnering PvdA aan Warmtebedrijf discussie",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 1140129692390400651,
+        "content_preview": "Warmtebedrijf Rotterdam Warmtebedrijf Rotterdam (WbR) transporteert warmte uit de Rotterdamse haven naar Rotterdam. Daar wordt de warmte duurzaam ingezet, bijvoorbeeld als bron voor stadsverwarming. D",
+        "score": 0.86060965,
+        "metadata": {
+          "document_id": "95ec33fe-58e7-4b5a-9c75-1080ea6f7d6f",
+          "title": "Warmtebedrijf Rotterdam",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 172512135200372469,
+        "content_preview": "Naam Warmtebedrijf N.V.\nVestigingsplaats Rotterdam\nRechtsvorm Naamloze Vennootschap\nAdres Galvanistraat 15,\n3029 AD Rotterdam\nContactpersoon De heer Wouter Verhoeven 010-2672928\nDoelstelling Het Warmt",
+        "score": 0.860509,
+        "metadata": {
+          "document_id": "245453",
+          "title": "Warmtebedrijf N.V. - Gegevens deelneming",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 877884282916883216,
+        "content_preview": "Registratienummer dienst: 378601 raadsvergadering van: 17-12-2009\nWarmtebedrijf N.V.\nGegevens deelneming\nNaam Warmtebedrijf N.V.\nVestigingsplaats Rotterdam\nRechtsvorm Naamloze Vennootschap\nAdres Galva",
+        "score": 0.860308,
+        "metadata": {
+          "document_id": "238603",
+          "title": "Section 2.20: Policy Area Economy and Port",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 521759547116462140,
+        "content_preview": "8.  Warmtebedrijf\nDe bespreking van de stukken over het Warmtebedrijf wordt uitgesteld tot een\nvolgende vergadering.",
+        "score": 0.85966295,
+        "metadata": {
+          "document_id": "225408",
+          "title": "Warmtebedrijf",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 404517604588662403,
+        "content_preview": "Startdatum 27 maart 2006\nReden Om het Warmtebedrijf tot een succes te maken is de gemeente als\naandeelhouder van groot belang. Het Warmtebedrijf draagt sterk bij aan\nde realisatie van de college doels",
+        "score": 0.8594373,
+        "metadata": {
+          "document_id": "245453",
+          "title": "Warmtebedrijf N.V. - Gegevens gemeente",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 997150758330525138,
+        "content_preview": "is om het Warmtebedrijf als overheidsbedrijf op te starten en de benodigde investeringen te doen.\nTen tijde van de oprichting is de raad wederom zeer positief over het Warmtebedrijf en het gebruik van",
+        "score": 0.8593615,
+        "metadata": {
+          "document_id": "7697087",
+          "title": "[26bb001450] Bijlage 2 behorende bij 26bb001160 over Eindrapport raadsenquête Warmtebedrijf Rotterdam",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 476912421171189694,
+        "content_preview": "Warmtebedrijf\nIn het kader van Warmtebedrijf zijn twee verplichtingen aangegaan. Ten eerste de toezegging van de directie van het\nOntwikkelingsbedrijf aan het Medisch Centrum Rijnmond-Zuid (MCRZ) d.d.",
+        "score": 0.8593005,
+        "metadata": {
+          "document_id": "233577",
+          "title": "Warmtebedrijf",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 285365592506089960,
+        "content_preview": "In maart 2006 is W arm te bed rijf NV (\"het Warmtebedrijf') opgericht. De gemeente Rotterdam is\nsamen het HbR, de Provincie Zuid-Holland en de woningcorporatie Woonbron aandeelhouder.\nMomenteel zijn b",
+        "score": 0.8592912,
+        "metadata": {
+          "document_id": "1117212",
+          "title": "Background on Warmtebedrijf NV and Financing Challenges",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 841667244534133868,
+        "content_preview": "In het kader van Warmtebedrijf zijn twee verplichtingen aangegaan. Ten eerste de toezegging van de directie van het Ontwikkelingsbedrijf aan het Medisch Centrum Rijnmond-Zuid (MCRZ) d.d. 3 juli 2006 t",
+        "score": 0.85920125,
+        "metadata": {
+          "document_id": "245449",
+          "title": "Warmtebedrijf",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 926227699597668004,
+        "content_preview": "Dit is de helft van de indicatieve liquiditeitsbehoefte van € 30 miljoen, bestaande uit: een tekort op de reguliere\nbedrijfsvoering van het Warmtebedrijf, voorbereidingskosten voor de Leiding over Oos",
+        "score": 0.85894275,
+        "metadata": {
+          "document_id": "7697087",
+          "title": "[26bb001450] Bijlage 2 behorende bij 26bb001160 over Eindrapport raadsenquête Warmtebedrijf Rotterdam",
+          "chunk_index": null
+        }
+      }
+    ],
+    "keyword_results": [
+      {
+        "chunk_id": 1030291,
+        "content_preview": "De heer SCHNEIDER (Leefbaar Rotterdam).\nGelet op uw uitspraak over een eventueel\nfaillissement constateer ik, dat u niet overtuigd\nbent van de juistheid van door u gekozen\nconstructie. De enige reden ",
+        "score": 0.21608357,
+        "metadata": {
+          "document_id": "255531",
+          "title": "Further Debate on Nieuw Reijerwaard Structure and Risks",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 922609,
+        "content_preview": "De VOORZITTER. Het woord is aan de heer Mink, die zijn maidenspeech zal houden.\nDe heer MINK (cda). Mijnheer de voorzitter. Wat is er misgegaan en wie is daar schuldig aan? Beide vragen lijken centraa",
+        "score": 0.07214452,
+        "metadata": {
+          "document_id": "818062",
+          "title": "Het rapport van de Rekenkamer Rotterdam 'WATt heb je ervoor over', alsmede het voorstel van het presidium met betrekking tot de aanbevelingen uit dit rapport.",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 736341,
+        "content_preview": "De VOORZITTER. Het woord is aan de heer Sörensen.\nDe heer SÖRENSEN (Leefbaar Rotterdam). Mijnheer de voorzitter. Het lijkt mij duidelijk dat ik een ander verhaal heb dan de heer Cremers. Ik moet even ",
+        "score": 0.068876356,
+        "metadata": {
+          "document_id": "231060",
+          "title": "Mr. Sörensen's (Leefbaar Rotterdam) contribution",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 3011,
+        "content_preview": "24. Het (herziene) voorstel met betrekking tot het onderhandelingsresultaat scenario\nWLQ+ Warmtebedrijf Rotterdam alsmede een brief van burgemeester en wethouders\nover de toekomst van het Warmtebedrij",
+        "score": 0.065042555,
+        "metadata": {
+          "document_id": "6094140",
+          "title": "Debat Warmtebedrijf Rotterdam - Scenario WLQ+",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 753263,
+        "content_preview": "De heer BONTE (gl). Mijnheer de\nvoorzitter. Wij hebben het over het gebruik\nv an restwarmte in Rotterdam en deze\nregio. GroenLinks is voorstander van het\nproduceren en opwerken van duurzame\nenergie, m",
+        "score": 0.06488429,
+        "metadata": {
+          "document_id": "3672091",
+          "title": "GroenLinks on Residual Heat and Warmtebedrijf",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 562299,
+        "content_preview": "Nr. Partij Vragen Onderdeel Pag.\nnr.\nweb\nsite\nAntwoord\n1 D66 Mooie oplegger. Complimenten\ndaarvoor. Wel ontbreekt een\nduidelijke link met college-targets.\nNu niet goed terug te vinden in de\noplegger. ",
+        "score": 0.06309294,
+        "metadata": {
+          "document_id": "6083910",
+          "title": "Tabel: Vragen van fracties en antwoorden",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 562373,
+        "content_preview": "Nr. Partij Vragen Onderdeel Pag.\nnr.\nweb\nsite\nAntwoord\n1 D66 Mooie oplegger. Complimenten\ndaarvoor. Wel ontbreekt een\nduidelijke link met college-targets.\nNu niet goed terug te vinden in de\noplegger. ",
+        "score": 0.06303091,
+        "metadata": {
+          "document_id": "6083718",
+          "title": "Tabel: Schriftelijke vragen van fracties en antwoorden",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 562940,
+        "content_preview": "Nr. Partij Vragen Onderdeel Pag.\nnr.\nweb\nsite\nAntwoord\n1 D66 Mooie oplegger. Complimenten\ndaarvoor. Wel ontbreekt een\nduidelijke link met college-targets.\nNu niet goed terug te vinden in de\noplegger. ",
+        "score": 0.06303091,
+        "metadata": {
+          "document_id": "6083779",
+          "title": "Tabel met Vragen en Antwoorden",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 562734,
+        "content_preview": "Nr. Partij Vragen Onderdeel Pag.\nnr.\nweb\nsite\nAntwoord\n1 D66 Mooie oplegger. Complimenten\ndaarvoor. Wel ontbreekt een\nduidelijke link met college-targets.\nNu niet goed terug te vinden in de\noplegger. ",
+        "score": 0.06303091,
+        "metadata": {
+          "document_id": "6083767",
+          "title": "Tabel met Antwoorden op Technische Vragen",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 563162,
+        "content_preview": "Nr. Partij Vragen Onderdeel Pag.\nnr.\nweb\nsite\nAntwoord\n1 D66 Mooie oplegger. Complimenten\ndaarvoor. Wel ontbreekt een\nduidelijke link met college-targets.\nNu niet goed terug te vinden in de\noplegger. ",
+        "score": 0.06303091,
+        "metadata": {
+          "document_id": "6083825",
+          "title": "Tabel: Beantwoording technische vragen jaarstukken 2019",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 1177780,
+        "content_preview": "fractie Antwoord\nCU/SGP\n1 Welke overwegingen had de\nRekenkamer om de rol van de\nraad geen onderdeel te laten\nzijn van haar onderzoek?\nDe raad is in het dossier Schiekadeblok\ngeen zelfstandige speler. ",
+        "score": 0.06247707,
+        "metadata": {
+          "document_id": "6073106",
+          "title": "Table: CU/SGP Questions and Answers",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 2901,
+        "content_preview": "Mevrouw Verkoelen, 50PLUS geeft aan dat\nzij in zijn algemeenheid veel steun heeft\nvoor voorstellen die de energietransitie en\nCO2-besparing ten goede komen. U vraagt\nzich over dit project wel een aant",
+        "score": 0.061214883,
+        "metadata": {
+          "document_id": "6074154",
+          "title": "Beantwoording Bonte aan 50PLUS over urgentie en faillissement",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 768129,
+        "content_preview": "De heer KARAKUS (pvda) (wethouder). Stel\ndat wij een NV of een BV zouden oprichten en\nhet met de beoogde locatie niet goed zou\ngaan, zou u, als overheid, dan bereid zijn de BV\nof NV, waarvan u voor ho",
+        "score": 0.061214883,
+        "metadata": {
+          "document_id": "819917",
+          "title": "Council's decision on the Nieuw Reijerwaard proposal",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 179008,
+        "content_preview": "De VOORZITTER (mevrouw Nunnely). Dan heb ik op mijn lijst de heer Van Dommelen als spreker\nstaan.\nDe heer VAN DOMMELEN (vvd). Ja, dank u wel voorzitter. Ja, als je het verhaal van de kant van de\nOntde",
+        "score": 0.060350277,
+        "metadata": {
+          "document_id": "6119289",
+          "title": "Wethouder Karremans' response to the 'Ontdekhoek' debate",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 826350,
+        "content_preview": "De VOORZITTER. De heer Reijkersz.\nDe heer REIJKERSZ (Leefbaar Rotterdam). \nMijnheer de voorzitter. Ik wilde eigenlijk niets\n zeggen, maar werd geboeid door de woorden\nv an de heer Cornelissen. Hij gaa",
+        "score": 0.05907318,
+        "metadata": {
+          "document_id": "241666",
+          "title": "Leefbaar Rotterdam's Motion 6: Swapping Owned Land for Leasehold",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 1664752,
+        "content_preview": "verplichtingen aangaan en kon dus niet méér capaciteit of expertise aantrekken.\nZo wordt de leiding over de in 2007 ingelaste time out en de daarop volgende doorstart door de aandeelhouders\ngemandatee",
+        "score": 0.05823659,
+        "metadata": {
+          "document_id": "6086140",
+          "title": "VOORWOORD",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 779591,
+        "content_preview": "De VOORZITTER. Ik schors de vergadering.\n(Hierna wordt enige tijd gepauzeerd.)\nDe VOORZITTER. Ik heropen de vergadering. Voordat ik de burgemeester het woord geef, verzoek ik de leden van de raad de b",
+        "score": 0.057857793,
+        "metadata": {
+          "document_id": "233044",
+          "title": "Burgemeester reageert op het debat",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 1130109,
+        "content_preview": "De VOORZITTER. De heer Berndsen heeft\neen vraag aan u. U kunt nog even blijven\nstaan.\n\nDe heer BERNDSEN (d66). Dank u wel,\nvoorzitter, want ik heb wel een vraag aan\nde heer Gonçalves. U roept heel de ",
+        "score": 0.057648372,
+        "metadata": {
+          "document_id": "4859723",
+          "title": "Vraag van D66 aan PvdA over armoedebeleid",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 1038972,
+        "content_preview": "IV. Politiek oordeel toegespitst op het\nvraagstuk van de verantwoordelijkheden naar\naanleiding van de conclusies en aanbevelingen\nin het COT-rapport Strandrellen in Hoek van\nHolland, Dancefestival Ver",
+        "score": 0.05744034,
+        "metadata": {
+          "document_id": "2376892",
+          "title": "Political Judgment on COT Report - Strand Relllen in Hoek van Holland",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 954056,
+        "content_preview": "De VOORZITTER. Het woord is aan de heer\nGeluk.\nDe heer GELUK (cda). Mijnheer de voorzitter.\nIk heb een aanvullende vraag waarvoor ik een\nkorte aanloop nodig heb.\nDe VOORZITTER. Graag alleen een\naanvul",
+        "score": 0.057310633,
+        "metadata": {
+          "document_id": "242865",
+          "title": "Vragenhalfuur: Kredietverlening aan Sparta - Aanvullende vragen",
+          "chunk_index": null
+        }
+      }
+    ],
+    "rrf_results": [
+      {
+        "chunk_id": 98535155102192258,
+        "rrf_score": 0.016666666666666666,
+        "vector_rank": 0,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 1030291,
+        "rrf_score": 0.016666666666666666,
+        "vector_rank": null,
+        "keyword_rank": 0
+      },
+      {
+        "chunk_id": 606181948657120714,
+        "rrf_score": 0.01639344262295082,
+        "vector_rank": 1,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 922609,
+        "rrf_score": 0.01639344262295082,
+        "vector_rank": null,
+        "keyword_rank": 1
+      },
+      {
+        "chunk_id": 853497995039955646,
+        "rrf_score": 0.016129032258064516,
+        "vector_rank": 2,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 736341,
+        "rrf_score": 0.016129032258064516,
+        "vector_rank": null,
+        "keyword_rank": 2
+      },
+      {
+        "chunk_id": 52802813253844902,
+        "rrf_score": 0.015873015873015872,
+        "vector_rank": 3,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 3011,
+        "rrf_score": 0.015873015873015872,
+        "vector_rank": null,
+        "keyword_rank": 3
+      },
+      {
+        "chunk_id": 576916230341199301,
+        "rrf_score": 0.015625,
+        "vector_rank": 4,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 753263,
+        "rrf_score": 0.015625,
+        "vector_rank": null,
+        "keyword_rank": 4
+      },
+      {
+        "chunk_id": 783605881183026661,
+        "rrf_score": 0.015384615384615385,
+        "vector_rank": 5,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 562299,
+        "rrf_score": 0.015384615384615385,
+        "vector_rank": null,
+        "keyword_rank": 5
+      },
+      {
+        "chunk_id": 508472668167502200,
+        "rrf_score": 0.015151515151515152,
+        "vector_rank": 6,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 562373,
+        "rrf_score": 0.015151515151515152,
+        "vector_rank": null,
+        "keyword_rank": 6
+      },
+      {
+        "chunk_id": 378871859224270556,
+        "rrf_score": 0.014925373134328358,
+        "vector_rank": 7,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 562940,
+        "rrf_score": 0.014925373134328358,
+        "vector_rank": null,
+        "keyword_rank": 7
+      },
+      {
+        "chunk_id": 18247611882257496,
+        "rrf_score": 0.014705882352941176,
+        "vector_rank": 8,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 562734,
+        "rrf_score": 0.014705882352941176,
+        "vector_rank": null,
+        "keyword_rank": 8
+      },
+      {
+        "chunk_id": 827162794592135434,
+        "rrf_score": 0.014492753623188406,
+        "vector_rank": 9,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 563162,
+        "rrf_score": 0.014492753623188406,
+        "vector_rank": null,
+        "keyword_rank": 9
+      },
+      {
+        "chunk_id": 701160016887918409,
+        "rrf_score": 0.014285714285714285,
+        "vector_rank": 10,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 1177780,
+        "rrf_score": 0.014285714285714285,
+        "vector_rank": null,
+        "keyword_rank": 10
+      },
+      {
+        "chunk_id": 613006472217336408,
+        "rrf_score": 0.014084507042253521,
+        "vector_rank": 11,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 2901,
+        "rrf_score": 0.014084507042253521,
+        "vector_rank": null,
+        "keyword_rank": 11
+      },
+      {
+        "chunk_id": 1067170211824481422,
+        "rrf_score": 0.013888888888888888,
+        "vector_rank": 12,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 768129,
+        "rrf_score": 0.013888888888888888,
+        "vector_rank": null,
+        "keyword_rank": 12
+      },
+      {
+        "chunk_id": 87257040723728172,
+        "rrf_score": 0.0136986301369863,
+        "vector_rank": 13,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 179008,
+        "rrf_score": 0.0136986301369863,
+        "vector_rank": null,
+        "keyword_rank": 13
+      },
+      {
+        "chunk_id": 442001396206709580,
+        "rrf_score": 0.013513513513513514,
+        "vector_rank": 14,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 826350,
+        "rrf_score": 0.013513513513513514,
+        "vector_rank": null,
+        "keyword_rank": 14
+      },
+      {
+        "chunk_id": 1143363525417564840,
+        "rrf_score": 0.013333333333333334,
+        "vector_rank": 15,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 1664752,
+        "rrf_score": 0.013333333333333334,
+        "vector_rank": null,
+        "keyword_rank": 15
+      },
+      {
+        "chunk_id": 487515809057473222,
+        "rrf_score": 0.013157894736842105,
+        "vector_rank": 16,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 779591,
+        "rrf_score": 0.013157894736842105,
+        "vector_rank": null,
+        "keyword_rank": 16
+      },
+      {
+        "chunk_id": 544329478042287330,
+        "rrf_score": 0.012987012987012988,
+        "vector_rank": 17,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 1130109,
+        "rrf_score": 0.012987012987012988,
+        "vector_rank": null,
+        "keyword_rank": 17
+      },
+      {
+        "chunk_id": 589633308944064644,
+        "rrf_score": 0.01282051282051282,
+        "vector_rank": 18,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 1038972,
+        "rrf_score": 0.01282051282051282,
+        "vector_rank": null,
+        "keyword_rank": 18
+      },
+      {
+        "chunk_id": 343548131110158246,
+        "rrf_score": 0.012658227848101266,
+        "vector_rank": 19,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 954056,
+        "rrf_score": 0.012658227848101266,
+        "vector_rank": null,
+        "keyword_rank": 19
+      },
+      {
+        "chunk_id": 1140129692390400651,
+        "rrf_score": 0.0125,
+        "vector_rank": 20,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 172512135200372469,
+        "rrf_score": 0.012345679012345678,
+        "vector_rank": 21,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 877884282916883216,
+        "rrf_score": 0.012195121951219513,
+        "vector_rank": 22,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 521759547116462140,
+        "rrf_score": 0.012048192771084338,
+        "vector_rank": 23,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 404517604588662403,
+        "rrf_score": 0.011904761904761904,
+        "vector_rank": 24,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 997150758330525138,
+        "rrf_score": 0.011764705882352941,
+        "vector_rank": 25,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 476912421171189694,
+        "rrf_score": 0.011627906976744186,
+        "vector_rank": 26,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 285365592506089960,
+        "rrf_score": 0.011494252873563218,
+        "vector_rank": 27,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 841667244534133868,
+        "rrf_score": 0.011363636363636364,
+        "vector_rank": 28,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 926227699597668004,
+        "rrf_score": 0.011235955056179775,
+        "vector_rank": 29,
+        "keyword_rank": null
+      }
+    ],
+    "reranker_results": [],
+    "reranker_skipped": true,
+    "final_chunks": [
+      {
+        "chunk_id": 98535155102192258,
+        "content_preview": "Afgelopen zaterdag blikte het AD RD terug op de recente geschiedenis van het Rotterdams\nWarmtebedrijf in het artikel ‘Hoe het Warmtebedrijf Rotterdam wordt vermorzeld door de grote jongens’.\nHet artik",
+        "score": 0.8756545,
+        "metadata": {
+          "document_id": "6078434",
+          "title": "Aanleiding: AD RD artikel over Warmtebedrijf Rotterdam",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 1030291,
+        "content_preview": "De heer SCHNEIDER (Leefbaar Rotterdam).\nGelet op uw uitspraak over een eventueel\nfaillissement constateer ik, dat u niet overtuigd\nbent van de juistheid van door u gekozen\nconstructie. De enige reden ",
+        "score": 0.21608357,
+        "metadata": {
+          "document_id": "255531",
+          "title": "Further Debate on Nieuw Reijerwaard Structure and Risks",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 606181948657120714,
+        "content_preview": "censtaterende dat . Het Warmtebedrijf (Wil-R) in de toekomst warmte zal afnemen van bedrijven actief in de fossiele industrie;",
+        "score": 0.87471366,
+        "metadata": {
+          "document_id": "6087618",
+          "title": "Constatering - Warmtebronnen Warmtebedrijf Rotterdam",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 922609,
+        "content_preview": "De VOORZITTER. Het woord is aan de heer Mink, die zijn maidenspeech zal houden.\nDe heer MINK (cda). Mijnheer de voorzitter. Wat is er misgegaan en wie is daar schuldig aan? Beide vragen lijken centraa",
+        "score": 0.07214452,
+        "metadata": {
+          "document_id": "818062",
+          "title": "Het rapport van de Rekenkamer Rotterdam 'WATt heb je ervoor over', alsmede het voorstel van het presidium met betrekking tot de aanbevelingen uit dit rapport.",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 853497995039955646,
+        "content_preview": "Betreft: Warmtebedrijf\nOnderwerp:\nWarmtebedrijf\nOp welke gronden deze briefî/Waarom nu voorgelegd?\nDe raad heeft in december 2019 ingestemd met het onder voorwaarden verlenen van\nfE 15 mln. liquiditei",
+        "score": 0.8698974,
+        "metadata": {
+          "document_id": "6087152",
+          "title": "Onderwerp en gronden voor de brief",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 736341,
+        "content_preview": "De VOORZITTER. Het woord is aan de heer Sörensen.\nDe heer SÖRENSEN (Leefbaar Rotterdam). Mijnheer de voorzitter. Het lijkt mij duidelijk dat ik een ander verhaal heb dan de heer Cremers. Ik moet even ",
+        "score": 0.068876356,
+        "metadata": {
+          "document_id": "231060",
+          "title": "Mr. Sörensen's (Leefbaar Rotterdam) contribution",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 52802813253844902,
+        "content_preview": "De gemeente Rotterdam heeft in 2010, na een aantal járen voorbereiding, het huidige\nWarmtebedrijf opgericht om industriële restwarmte te kunnen benutten voor de\nverwarming van woningen en bedrijfspand",
+        "score": 0.8695627,
+        "metadata": {
+          "document_id": "3524149",
+          "title": "Toelichting: 1 Inleiding",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 3011,
+        "content_preview": "24. Het (herziene) voorstel met betrekking tot het onderhandelingsresultaat scenario\nWLQ+ Warmtebedrijf Rotterdam alsmede een brief van burgemeester en wethouders\nover de toekomst van het Warmtebedrij",
+        "score": 0.065042555,
+        "metadata": {
+          "document_id": "6094140",
+          "title": "Debat Warmtebedrijf Rotterdam - Scenario WLQ+",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 576916230341199301,
+        "content_preview": "De doorstart van het Warmtebedrijf N.V. 182",
+        "score": 0.86856234,
+        "metadata": {
+          "document_id": "233065",
+          "title": "Agenda Item 12: Doorstart Warmtebedrijf",
+          "chunk_index": null
+        }
+      },
+      {
+        "chunk_id": 753263,
+        "content_preview": "De heer BONTE (gl). Mijnheer de\nvoorzitter. Wij hebben het over het gebruik\nv an restwarmte in Rotterdam en deze\nregio. GroenLinks is voorstander van het\nproduceren en opwerken van duurzame\nenergie, m",
+        "score": 0.06488429,
+        "metadata": {
+          "document_id": "3672091",
+          "title": "GroenLinks on Residual Heat and Warmtebedrijf",
+          "chunk_index": null
+        }
+      }
+    ],
+    "timings": {
+      "embedding_ms": 90.03304096404463,
+      "vector_ms": 561.1871250439435,
+      "keyword_ms": 8622.370917000808,
+      "rrf_ms": 0.10195799404755235,
+      "reranker_ms": 0.000625033862888813,
+      "total_ms": 9273.795167042408
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": null,
+      "date_to": null,
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0
+    }
+  }
+]

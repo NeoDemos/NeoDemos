@@ -1,0 +1,376 @@
+{
+  "meeting_id": "693a882d-40be-4883-995c-bedb788ad919",
+  "audit_timestamp": "2026-04-07T21:47:55.077026",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "judge_backend": "gemini",
+    "anthropic_model": "claude-haiku-4-5-20251001",
+    "gemini_model": "gemini-2.5-flash-lite"
+  },
+  "meeting_info": {
+    "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+    "start_date": "2025-06-18 00:00:00",
+    "committee": "BWB",
+    "quality_score": 0.953,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 162,
+    "document_count": 8
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 1131,
+      "correct_count": 1131,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8423,
+      "party_attribution_rate": 0.2808,
+      "total_segments": 577,
+      "attributed_segments": 486,
+      "unattributed_segments": 91
+    },
+    "speaker_diversity": {
+      "unique_speakers": 17,
+      "unique_parties": 9,
+      "top_speaker": "P.J.H.D. (Ellen) Verkoelen Commissievoorzitter",
+      "top_speaker_segment_count": 176,
+      "monologue_rate": 0.305,
+      "speakers": {
+        "P.J.H.D. (Ellen) Verkoelen Commissievoorzitter": 176,
+        "Inspreker": 62,
+        "T.B. (Tim)  Versnel": 36,
+        "M. (Marcel) Verhoef": 29,
+        "A. (Astrid) Kockelkoren": 29,
+        "D.J. (Diederik) van Dommelen": 27,
+        "C.M. (Chantal) Zeegers": 20,
+        "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie": 19,
+        "M.E. (Merel) Vogelaar": 18,
+        "T. (Tim) de Haan": 17
+      },
+      "parties": {
+        "VVD": 33,
+        "Leefbaar Rotterdam": 29,
+        "GroenLinks": 29,
+        "PvdA": 18,
+        "D66": 17,
+        "SP": 13,
+        "CDA": 11,
+        "DENK": 9,
+        "Volt": 3
+      }
+    },
+    "segment_quality": {
+      "total_segments": 577,
+      "nonempty_segments": 577,
+      "total_words": 51975,
+      "total_chars": 288565,
+      "avg_words_per_segment": 90.1,
+      "avg_chars_per_segment": 500.1,
+      "short_segment_rate": 0.1924,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 8,
+      "items_with_content": 8,
+      "coverage_rate": 1.0,
+      "items": [
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 11
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 1
+        },
+        {
+          "title": "Beantwoording vragen Kockelkoren over Cinerama moet blijven",
+          "segment_count": 190
+        },
+        {
+          "title": "Wijziging woonprogramma De Sax",
+          "segment_count": 123
+        },
+        {
+          "title": "Verkenning KNVB Campus",
+          "segment_count": 2
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 137
+        },
+        {
+          "title": "Gebiedsambitiedocument Hart van Overschie",
+          "segment_count": 90
+        },
+        {
+          "title": "Ambitiedocument Oud Crooswijk West",
+          "segment_count": 23
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-06-18 00:00:00",
+        "committee": "BWB",
+        "review_status": "auto_approved",
+        "quality_score": 0.953,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-06-18 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 17,
+      "recognized_speakers": 16,
+      "unrecognized_speakers": 1,
+      "recognition_rate": 0.9412,
+      "recognized": [
+        {
+          "name": "D.J. (Diederik) van Dommelen",
+          "segment_count": 27,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "P.J.H.D. (Ellen) Verkoelen Commissievoorzitter",
+          "segment_count": 176,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M. (Marcel) Verhoef",
+          "segment_count": 29,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "Inspreker",
+          "segment_count": 62,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "A. (Astrid) Kockelkoren",
+          "segment_count": 29,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "T.S.J. (Theo) Coşkun",
+          "segment_count": 9,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "T. (Tim) de Haan",
+          "segment_count": 17,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.G.C. (René) Segers-Hoogendoorn",
+          "segment_count": 11,
+          "parties": [
+            "CDA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.E. (Merel) Vogelaar",
+          "segment_count": 18,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "E. (Emin) Başoğlu Burgercommissielid",
+          "segment_count": 4,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "L.P.A. (Luuc) Dekkers",
+          "segment_count": 3,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie",
+          "segment_count": 19,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "C.M. (Chantal) Zeegers",
+          "segment_count": 20,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "R.N. (Rashied) Dahoe",
+          "segment_count": 9,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "E.P.J. (Erik) Verweij",
+          "segment_count": 6,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "F. (Faouzi) Achbar",
+          "segment_count": 11,
+          "parties": [],
+          "recognized_as": "council_member"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "T.B. (Tim)  Versnel",
+          "segment_count": 36,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 162,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 56,
+        "long (2000-5000)": 103,
+        "short (50-200)": 3
+      },
+      "min_chars": 96,
+      "max_chars": 2810,
+      "avg_chars": 1964.6,
+      "median_chars": 2258,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 162,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 8,
+      "documents_with_chunks": 8,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Ambitiedocument Oud Crooswijk West",
+          "chunks": 13
+        },
+        {
+          "name": "Transcript: Beantwoording vragen Kockelkoren over Cinerama moet blijven",
+          "chunks": 43
+        },
+        {
+          "name": "Transcript: Gebiedsambitiedocument Hart van Overschie",
+          "chunks": 21
+        },
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 4
+        },
+        {
+          "name": "Transcript: Rondvraag en sluiting",
+          "chunks": 47
+        },
+        {
+          "name": "Transcript: Vaststellen van de agenda",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Verkenning KNVB Campus",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Wijziging woonprogramma De Sax",
+          "chunks": 32
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 162,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 162,
+      "distribution": {
+        "quote": {
+          "count": 160,
+          "rate": 0.9877
+        },
+        "full_text": {
+          "count": 2,
+          "rate": 0.0123
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8423,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.953
+    }
+  }
+}

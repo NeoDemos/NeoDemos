@@ -1,0 +1,81 @@
+[
+  {
+    "question_id": "ba-01",
+    "question_text": "Geef me een overzicht van de uitdagingen van het doelgroepenvervoer in Rotterdam",
+    "category": "broad_aggregation",
+    "answer": "# Uitdagingen van het Doelgroepenvervoer in Rotterdam\n\nOp basis van de gemeenteraadsdocumenten heb ik **32 unieke aspecten en uitdagingen** geïdentificeerd voor het doelgroepenvervoer (DGV) in Rotterdam:\n\n## 1. Financiële en Arbeidsmarktuitdagingen\n\n- **Schaarste aan chauffeurs en geld** - tekort aan gekwalificeerd personeel gecombineerd met budgettaire beperkingen\n- **Onderbetaling chauffeurs** - motie \"Een eerlijk loon voor chauffeurs van het doelgroepenvervoer\" (BB nummer 24bb002796)\n- **Extra kosten kilometerbegrenzing** - financiële gevolgen van het loslaten van kilometerbeperkingen\n- **Inflatie en kostenstijgingen** - druk op budget voor nieuwe contractperiode vanaf 2025\n- **Afnemende kostendekkingsgraad** - door verminderd gebruik van fijnmazig openbaar vervoer\n- **Budgetten onder druk** - binnen het sociaal domein\n\n## 2. Kwaliteit en Prestaties\n\n- **Kwaliteitsproblemen dienstverlening** - motie \"Zorg voor doelgroepenvervoer met kwaliteit in nieuwe uitvraag\" (BB nummer 24bb002798)\n- **KPI's niet halen** - motie \"KPIs niet halen = betalen\" (BB nummer 24bb001013)\n- **Sturing op verbetering performance vervoerders** - uitdaging om gecontracteerde partijen te laten presteren\n- **Spanning tussen servicelevel en maakbaarheid** - verwachtingen versus operationele beperkingen\n\n## 3. Contractuele en Inkoopuitdagingen\n\n- **Aanstaande inkoop 2025** - huidige contract loopt sinds 2017\n- **Opdrachtgever- en opdrachtnemerschap** - organisatie van inkoop\n- **Keuze tussen integraal of percelen** - \"tango for three\" versus één vervoerder\n- **Aanbesteden versus inbesteden** - strategische keuze\n- **Juridische procedures** - zoals kort geding in 2017 tussen Lorem Focus B.V. en RMC\n- **Inkoopstrategie en Programma van Eisen** - opstellen duidelijke eisen en transparante KPI's\n\n## 4. Operationele en Structurele Uitdagingen\n\n- **Versnippering DGV-landschap** - gemeentelijk, Valys, Wlz- en ziekenvervoer\n- **ICT-systemen en berichtenverkeer** - aanpassingen nodig bij meerdere vervoe",
+    "route": {
+      "query_type": "broad_aggregation",
+      "top_k": 50,
+      "parties": [],
+      "date_from": null,
+      "date_to": null,
+      "sub_queries": [],
+      "confidence": 1.0,
+      "strategy": "map_reduce"
+    },
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 0.86,
+        "unique_documents": 43,
+        "total_chunks": 50,
+        "entropy": 5.364
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.4,
+        "keyword_only_pct": 0.6,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 20,
+        "keyword_only": 30,
+        "both": 0,
+        "total": 50
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 85.61,
+        "promotions_5plus": 124,
+        "demotions_5plus": 119,
+        "candidates_scored": 250
+      },
+      "rrf": {
+        "unique_from_fusion": 36,
+        "unique_pct": 0.72,
+        "vector_top_k_overlap": 5,
+        "keyword_top_k_overlap": 9
+      },
+      "timings": {
+        "embedding_ms": 519.7585830028402,
+        "vector_ms": 27.532959000382107,
+        "keyword_ms": 28072.193459003756,
+        "rrf_ms": 0.18312499742023647,
+        "reranker_ms": 494737.3787499964,
+        "total_ms": 523359.40370799653
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 5,
+        "reasoning": "Het antwoord beantwoordt de vraag volledig en systematisch. Het geeft een uitgebreid overzicht van 32 unieke uitdagingen van het doelgroepenvervoer in Rotterdam, georganiseerd in 9 logische categorieën (financieel, kwaliteit, contractueel, operationeel, duurzaamheid, toegankelijkheid, integratie, innovatie, en specifieke voorzieningen). Het antwoord is direct relevant, goed gestructureerd, en bevat concrete details zoals motienummers, data en betrokken personen. Er is geen onnodige informatie en alle genoemde aspecten zijn pertinent voor de gevraagde uitdagingen."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Het antwoord is volledig gebaseerd op de meegeleverde context. Alle 32 genoemde uitdagingen zijn direct terug te vinden in de bronnen, inclusief specifieke motienummers, data, namen van raadsleden en portefeuillehouders. De structurering in categorieën helpt bij overzichtelijkheid zonder nieuwe informatie toe te voegen. Geen enkele bewering wordt gedaan die niet in de context staat."
+      },
+      "completeness": {
+        "score": 5,
+        "reasoning": "Het antwoord is zeer volledig en behandelt alle relevante aspecten van de uitdagingen van het doelgroepenvervoer in Rotterdam. Het dekt systematisch 9 hoofdcategorieën met 32 specifieke uitdagingen, inclusief financiële aspecten (schaarste chauffeurs/geld, budgetdruk), operationele uitdagingen (versnippering, ICT-systemen), kwaliteitsproblemen (KPI's, prestaties), contractuele kwesties (inkoop 2025, aanbesteding), duurzaamheid (elektrificatie), toegankelijkheid (doelgroepen, laaggeletterdheid), en innovatie. Het antwoord integreert concrete details zoals specifieke moties met BB-nummers, betrokken personen (Jaap Janse, wethouder R. Buijt), data (technische sessie 21 juni 2023), en verschillende politieke partijen. Zowel structurele als praktische aspecten worden behandeld, evenals de complexe samenhang tussen verschillende vervoersvormen en overheidslagen."
+      }
+    },
+    "hallucination_metrics": {},
+    "chunks_retrieved": 50,
+    "total_ms": 523359.40370799653
+  }
+]

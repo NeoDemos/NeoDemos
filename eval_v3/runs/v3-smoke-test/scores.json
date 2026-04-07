@@ -1,0 +1,120 @@
+[
+  {
+    "question_id": "ps-01",
+    "question_text": "Hoe stelde de PvdA zich op in de discussie over Feyenoord City, het stadion en de gebiedsontwikkeling?",
+    "category": "party_stance",
+    "answer": "",
+    "route": {
+      "query_type": "party_stance",
+      "top_k": 25,
+      "parties": [
+        "PvdA"
+      ],
+      "date_from": null,
+      "date_to": null,
+      "sub_queries": [],
+      "confidence": 1.0,
+      "strategy": "party_filtered"
+    },
+    "retrieval_metrics": {
+      "context_precision": 0.76,
+      "diversity": {
+        "document_diversity": 0.72,
+        "unique_documents": 18,
+        "total_chunks": 25,
+        "entropy": 3.924
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.0,
+        "keyword_only_pct": 0.0,
+        "both_pct": 0.0,
+        "neither_pct": 1.0,
+        "vector_only": 0,
+        "keyword_only": 0,
+        "both": 0,
+        "total": 25
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 25,
+        "unique_pct": 1.0,
+        "vector_top_k_overlap": 0,
+        "keyword_top_k_overlap": 0
+      },
+      "timings": {
+        "embedding_ms": 414.92687499703607
+      }
+    },
+    "generation_metrics": {},
+    "hallucination_metrics": {},
+    "chunks_retrieved": 25,
+    "total_ms": 0
+  },
+  {
+    "question_id": "ps-02",
+    "question_text": "De Asielopvang op de Silja, wat denkt Leefbaar Rotterdam daar van?",
+    "category": "party_stance",
+    "answer": "",
+    "route": {
+      "query_type": "party_stance",
+      "top_k": 25,
+      "parties": [
+        "Leefbaar Rotterdam"
+      ],
+      "date_from": null,
+      "date_to": null,
+      "sub_queries": [],
+      "confidence": 1.0,
+      "strategy": "party_filtered"
+    },
+    "retrieval_metrics": {
+      "context_precision": 0.76,
+      "diversity": {
+        "document_diversity": 0.88,
+        "unique_documents": 22,
+        "total_chunks": 25,
+        "entropy": 4.404
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.0,
+        "keyword_only_pct": 0.0,
+        "both_pct": 0.0,
+        "neither_pct": 1.0,
+        "vector_only": 0,
+        "keyword_only": 0,
+        "both": 0,
+        "total": 25
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 25,
+        "unique_pct": 1.0,
+        "vector_top_k_overlap": 0,
+        "keyword_top_k_overlap": 0
+      },
+      "timings": {
+        "embedding_ms": 686.5932920045452
+      }
+    },
+    "generation_metrics": {},
+    "hallucination_metrics": {},
+    "chunks_retrieved": 25,
+    "total_ms": 0
+  }
+]

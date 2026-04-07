@@ -1,0 +1,296 @@
+{
+  "meeting_id": "59afa04d-4e6d-4c2a-8b8a-48f80503e929",
+  "audit_timestamp": "2026-04-07T21:10:29.999264",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+    "start_date": "2025-06-25 00:00:00",
+    "committee": "WIOS",
+    "quality_score": 0.967,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 66,
+    "document_count": 2
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 419,
+      "correct_count": 419,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8904,
+      "party_attribution_rate": 0.3733,
+      "total_segments": 292,
+      "attributed_segments": 260,
+      "unattributed_segments": 32
+    },
+    "speaker_diversity": {
+      "unique_speakers": 12,
+      "unique_parties": 9,
+      "top_speaker": "J.M.D. (Joey) de Waard Commissievoorzitter",
+      "top_speaker_segment_count": 73,
+      "monologue_rate": 0.25,
+      "speakers": {
+        "J.M.D. (Joey) de Waard Commissievoorzitter": 73,
+        "A.I. (Abigail) Norville": 72,
+        "L.S. (Larissa) Vlieger": 25,
+        "S. (Sarah) Reitema": 20,
+        "A.J.A. (Agnes) Maassen": 20,
+        "J. (Jordi) Vicario": 15,
+        "F. (Femke) Bouwer-van Schie Burgercommissielid": 10,
+        "M.R. (Marchiano) van Campenhout": 10,
+        "E.M. (Ellen) Verouden Burgercommissielid CDA": 6,
+        "T.J. (Tjalling) Vonk": 4
+      },
+      "parties": {
+        "GroenLinks": 25,
+        "PvdA": 20,
+        "D66": 20,
+        "VVD": 15,
+        "Volt": 10,
+        "BIJ1": 10,
+        "ChristenUnie": 4,
+        "SP": 3,
+        "DENK": 2
+      }
+    },
+    "segment_quality": {
+      "total_segments": 292,
+      "nonempty_segments": 292,
+      "total_words": 21893,
+      "total_chars": 123095,
+      "avg_words_per_segment": 75.0,
+      "avg_chars_per_segment": 421.6,
+      "short_segment_rate": 0.1404,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 4,
+      "items_with_content": 2,
+      "coverage_rate": 0.5,
+      "items": [
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 0
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 0
+        },
+        {
+          "title": "Vervolg Voortgangsrapportage armoede en schulden",
+          "segment_count": 283
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 9
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+        "start_date": "2025-06-25 00:00:00",
+        "committee": "WIOS",
+        "review_status": "auto_approved",
+        "quality_score": 0.967,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+        "start_date": "2025-06-25 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 12,
+      "recognized_speakers": 10,
+      "unrecognized_speakers": 2,
+      "recognition_rate": 0.8333,
+      "recognized": [
+        {
+          "name": "J.M.D. (Joey) de Waard Commissievoorzitter",
+          "segment_count": 73,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "L.S. (Larissa) Vlieger",
+          "segment_count": 25,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Sarah) Reitema",
+          "segment_count": 20,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J. (Jordi) Vicario",
+          "segment_count": 15,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "F. (Femke) Bouwer-van Schie Burgercommissielid",
+          "segment_count": 10,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "A.B. (Tom) Breedveld Burgercommissielid",
+          "segment_count": 3,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "A.J.A. (Agnes) Maassen",
+          "segment_count": 20,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "E.M. (Ellen) Verouden Burgercommissielid CDA",
+          "segment_count": 6,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.R. (Marchiano) van Campenhout",
+          "segment_count": 10,
+          "parties": [
+            "BIJ1"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S.D. (Safa) Sodirijo Burgercommissielid",
+          "segment_count": 2,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "A.I. (Abigail) Norville",
+          "segment_count": 72,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "T.J. (Tjalling) Vonk",
+          "segment_count": 4,
+          "parties": [
+            "ChristenUnie"
+          ],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 66,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 16,
+        "long (2000-5000)": 49,
+        "short (50-200)": 1
+      },
+      "min_chars": 111,
+      "max_chars": 2725,
+      "avg_chars": 2078.9,
+      "median_chars": 2300,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 66,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 2,
+      "documents_with_chunks": 2,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Rondvraag en sluiting",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Vervolg Voortgangsrapportage armoede en schulden",
+          "chunks": 64
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 66,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 66,
+      "distribution": {
+        "quote": {
+          "count": 66,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8904,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.967
+    }
+  }
+}

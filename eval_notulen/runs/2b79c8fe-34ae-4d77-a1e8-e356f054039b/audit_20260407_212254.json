@@ -1,0 +1,472 @@
+{
+  "meeting_id": "2b79c8fe-34ae-4d77-a1e8-e356f054039b",
+  "audit_timestamp": "2026-04-07T21:22:54.515447",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Vergadering Tijdelijke commissie voor Sociaal (2018-2022) 16-05-2018",
+    "start_date": "2018-05-16 00:00:00",
+    "committee": "",
+    "quality_score": 0.999,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 91,
+    "document_count": 13
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 398,
+      "correct_count": 398,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.997,
+      "party_attribution_rate": 0.0,
+      "total_segments": 337,
+      "attributed_segments": 336,
+      "unattributed_segments": 1
+    },
+    "speaker_diversity": {
+      "unique_speakers": 24,
+      "unique_parties": 0,
+      "top_speaker": "Bokhove, J. (voorzitter)",
+      "top_speaker_segment_count": 148,
+      "monologue_rate": 0.4392,
+      "speakers": {
+        "Bokhove, J. (voorzitter)": 148,
+        "Visser, A.L.H. (wethouder)": 54,
+        "Leewis, S. (GroenLinks)": 17,
+        "Engberts, G.J. (PvdA)": 11,
+        "Baarle, S.R.T. van (DENK)": 11,
+        "Scheijndel, A.N.M. van (50PLUS)": 9,
+        "Cicek, T. (SP)": 9,
+        "Yildirim, D. (PvdA)": 8,
+        "Elck, M.G.J van (Leefbaar Rotterdam)": 8,
+        "Foullani, J.A. (NIDA Rotterdam)": 8
+      },
+      "parties": {}
+    },
+    "segment_quality": {
+      "total_segments": 337,
+      "nonempty_segments": 337,
+      "total_words": 28849,
+      "total_chars": 161739,
+      "avg_words_per_segment": 85.6,
+      "avg_chars_per_segment": 479.9,
+      "short_segment_rate": 0.2196,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 25,
+      "items_with_content": 13,
+      "coverage_rate": 0.52,
+      "items": [
+        {
+          "title": "1 Opening en mededelingen",
+          "segment_count": 1
+        },
+        {
+          "title": "2 Besluitenlijst openbare procedurevergadering d.d. 25 april 2018",
+          "segment_count": 0
+        },
+        {
+          "title": "3 Ingekomen stukken",
+          "segment_count": 0
+        },
+        {
+          "title": "3.01 Algemeen",
+          "segment_count": 0
+        },
+        {
+          "title": "3.02 Cultuur",
+          "segment_count": 0
+        },
+        {
+          "title": "3.03 Onderwijs en Jeugd",
+          "segment_count": 0
+        },
+        {
+          "title": "3.04 Participatie",
+          "segment_count": 0
+        },
+        {
+          "title": "3.05 Sport",
+          "segment_count": 0
+        },
+        {
+          "title": "3.06 Volksgezondheid",
+          "segment_count": 0
+        },
+        {
+          "title": "3.07 Werk en Inkomen",
+          "segment_count": 0
+        },
+        {
+          "title": "3.08 Zorg",
+          "segment_count": 30
+        },
+        {
+          "title": "4 Lijst van openstaande toezeggingen en schriftelijke vragen",
+          "segment_count": 31
+        },
+        {
+          "title": "5 Lijst van openstaande moties",
+          "segment_count": 9
+        },
+        {
+          "title": "6 Planning",
+          "segment_count": 8
+        },
+        {
+          "title": "7 Rondvraag en sluiting",
+          "segment_count": 0
+        },
+        {
+          "title": "AGENDA OVERLEGVERGADERING",
+          "segment_count": 2
+        },
+        {
+          "title": "2 Vaststellen van de agenda",
+          "segment_count": 2
+        },
+        {
+          "title": "3 Adviezenlijst van de vorige overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "4 Openstaande toezeggingen, schriftelijke vragen en moties waarvan de termijn is overschreden",
+          "segment_count": 2
+        },
+        {
+          "title": "5 Beleidsnotitie Rotterdamse aanpak Veilig Sporten",
+          "segment_count": 0
+        },
+        {
+          "title": "Daarbij te betrekken",
+          "segment_count": 98
+        },
+        {
+          "title": "6 Evaluatie en trendanalyse Programma lekker Fit",
+          "segment_count": 51
+        },
+        {
+          "title": "7 Zorgleerlingen passend onderwijs in PO",
+          "segment_count": 79
+        },
+        {
+          "title": "8 Financiering Respijthuis",
+          "segment_count": 23
+        },
+        {
+          "title": "9 Sluiting",
+          "segment_count": 1
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Vergadering Tijdelijke commissie voor Sociaal (2018-2022) 16-05-2018",
+        "start_date": "2018-05-16 00:00:00",
+        "committee": null,
+        "review_status": "auto_approved",
+        "quality_score": 0.999,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Vergadering Tijdelijke commissie voor Sociaal (2018-2022) 16-05-2018",
+        "start_date": "2018-05-16 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No committee found in staging meeting"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 24,
+      "recognized_speakers": 3,
+      "unrecognized_speakers": 21,
+      "recognition_rate": 0.125,
+      "recognized": [
+        {
+          "name": "Bokhove, J. (voorzitter)",
+          "segment_count": 148,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Visser, A.L.H. (wethouder)",
+          "segment_count": 54,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Sluis, R. van (beleidsadviseur Sport en Cultuur)",
+          "segment_count": 2,
+          "parties": [],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "Yildirim, D. (PvdA)",
+          "segment_count": 8,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Elck, M.G.J van (Leefbaar Rotterdam)",
+          "segment_count": 8,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Verkoelen, P.J.H.D. (50PLUS)",
+          "segment_count": 2,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Vonk, T.J. (ChristenUnie-SGP)",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Roest, L.L.P.R. (GroenLinks)",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Versnel, T.B. (VVD)",
+          "segment_count": 6,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Scheijndel, A.N.M. van (50PLUS)",
+          "segment_count": 9,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Engberts, G.J. (PvdA)",
+          "segment_count": 11,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Balwantsingh, N. (PvdA)",
+          "segment_count": 7,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Cicek, T. (SP)",
+          "segment_count": 9,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Foullani, J.A. (NIDA Rotterdam)",
+          "segment_count": 8,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Leewis, S. (GroenLinks)",
+          "segment_count": 17,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Zandberg, B.C. (CDA)",
+          "segment_count": 2,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Gonsalvez, M.J.H. (PVV)",
+          "segment_count": 4,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Wifferen, I. van (D66)",
+          "segment_count": 4,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Baarle, S.R.T. van (DENK)",
+          "segment_count": 11,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Aalst, C. van (Leefbaar Rotterdam)",
+          "segment_count": 2,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Kornet, M. (programmamanager Rotterdam Lekker Fit!)",
+          "segment_count": 3,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Walgenbach, E.S. (D66)",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Achbar, F. (DENK)",
+          "segment_count": 4,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Postma, J.P. (GroenLinks)",
+          "segment_count": 2,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 91,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 32,
+        "long (2000-5000)": 55,
+        "short (50-200)": 4
+      },
+      "min_chars": 105,
+      "max_chars": 2761,
+      "avg_chars": 1899.5,
+      "median_chars": 2169,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 91,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 13,
+      "documents_with_chunks": 13,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: 1 Opening en mededelingen",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 2 Vaststellen van de agenda",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 3.08 Zorg",
+          "chunks": 6
+        },
+        {
+          "name": "Transcript: 4 Lijst van openstaande toezeggingen en schriftelijke vragen",
+          "chunks": 4
+        },
+        {
+          "name": "Transcript: 4 Openstaande toezeggingen, schriftelijke vragen en moties waarvan de termijn is overschreden",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 5 Lijst van openstaande moties",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 6 Evaluatie en trendanalyse Programma lekker Fit",
+          "chunks": 18
+        },
+        {
+          "name": "Transcript: 6 Planning",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: 7 Zorgleerlingen passend onderwijs in PO",
+          "chunks": 18
+        },
+        {
+          "name": "Transcript: 8 Financiering Respijthuis",
+          "chunks": 8
+        },
+        {
+          "name": "Transcript: 9 Sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: AGENDA OVERLEGVERGADERING",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Daarbij te betrekken",
+          "chunks": 28
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 91,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 91,
+      "distribution": {
+        "quote": {
+          "count": 86,
+          "rate": 0.9451
+        },
+        "full_text": {
+          "count": 5,
+          "rate": 0.0549
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.997,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.999
+    }
+  }
+}

@@ -1,0 +1,134 @@
+[
+  {
+    "question_id": "ab-01",
+    "question_text": "Is er ooit in de gemeenteraad gedebatteerd over een metro naar Hoek van Holland?",
+    "category": "absence",
+    "answer": "",
+    "route": {
+      "query_type": "absence",
+      "top_k": 10,
+      "parties": [],
+      "date_from": null,
+      "date_to": null,
+      "sub_queries": [],
+      "confidence": 1.0,
+      "strategy": "standard"
+    },
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 0.8,
+        "unique_documents": 8,
+        "total_chunks": 10,
+        "entropy": 2.922
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.4,
+        "keyword_only_pct": 0.6,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 4,
+        "keyword_only": 6,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 15.52,
+        "promotions_5plus": 20,
+        "demotions_5plus": 20,
+        "candidates_scored": 50
+      },
+      "rrf": {
+        "unique_from_fusion": 5,
+        "unique_pct": 0.5,
+        "vector_top_k_overlap": 1,
+        "keyword_top_k_overlap": 4
+      },
+      "timings": {
+        "embedding_ms": 441.7840829992201,
+        "vector_ms": 17.38445799855981,
+        "keyword_ms": 21379.042125001433,
+        "rrf_ms": 0.12533299741335213,
+        "reranker_ms": 12362.345834000735,
+        "total_ms": 34200.83279100072
+      }
+    },
+    "generation_metrics": {},
+    "hallucination_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 34200.83279100072
+  },
+  {
+    "question_id": "ab-02",
+    "question_text": "Heeft de gemeente Rotterdam ooit overwogen om de Erasmusbrug te sluiten voor autoverkeer?",
+    "category": "absence",
+    "answer": "",
+    "route": {
+      "query_type": "absence",
+      "top_k": 10,
+      "parties": [],
+      "date_from": null,
+      "date_to": null,
+      "sub_queries": [],
+      "confidence": 0.85,
+      "strategy": "standard"
+    },
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 1.0,
+        "unique_documents": 10,
+        "total_chunks": 10,
+        "entropy": 3.322
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.4,
+        "keyword_only_pct": 0.6,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 4,
+        "keyword_only": 6,
+        "both": 0,
+        "total": 10
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 11.76,
+        "promotions_5plus": 19,
+        "demotions_5plus": 19,
+        "candidates_scored": 50
+      },
+      "rrf": {
+        "unique_from_fusion": 6,
+        "unique_pct": 0.6,
+        "vector_top_k_overlap": 2,
+        "keyword_top_k_overlap": 2
+      },
+      "timings": {
+        "embedding_ms": 296.1329579993617,
+        "vector_ms": 19.75829200091539,
+        "keyword_ms": 33228.177624994714,
+        "rrf_ms": 0.045209002564661205,
+        "reranker_ms": 22275.971666997066,
+        "total_ms": 55820.17337500292
+      }
+    },
+    "generation_metrics": {},
+    "hallucination_metrics": {},
+    "chunks_retrieved": 10,
+    "total_ms": 55820.17337500292
+  }
+]

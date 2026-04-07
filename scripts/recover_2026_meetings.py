@@ -45,7 +45,7 @@ async def main():
     parser = argparse.ArgumentParser(description="Recover 2026 Committee Meetings.")
     parser.add_argument("--limit", type=int, default=3, help="Number of meetings to process")
     parser.add_argument("--apply", action="store_true", help="Actually run the pipeline (default is dry-run)")
-    parser.add_argument("--model", default="mlx-community/whisper-tiny-mlx", help="Whisper model to use")
+    parser.add_argument("--model", default="mlx-community/whisper-large-v3-turbo", help="Whisper model to use")
     parser.add_argument("--category", default="committee_transcript_test", help="Category tag for ingestion")
     args = parser.parse_args()
 

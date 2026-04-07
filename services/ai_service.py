@@ -615,39 +615,11 @@ Exclusief de tekst van de bijdrage, geordend in logische paragrafen. Geen titels
 
     def generate_embedding(self, text: str) -> Optional[List[float]]:
         """
-        Generate a vector embedding for text.
-        Prefers LocalAIService (MLX 4096-dim) to match indexed data.
-        Falls back to Gemini (3072-dim) ONLY if local is unavailable.
+        Generate a vector embedding for text via Nebius API (Qwen3-Embedding-8B, 4096-dim).
+        API-only: no local MLX, no Gemini fallback.
         """
-        # --- PREFER LOCAL MODEL (4096-dim) ---
-        try:
-            from services.local_ai_service import LocalAIService
-            local_ai = LocalAIService()
-            if local_ai.is_available():
-                emb = local_ai.generate_embedding(text)
-                if emb is not None:
-                    print(f"DEBUG: Vector search using LOCAL embedding (dim={len(emb)})")
-                    return emb
-        except Exception as e:
-            logger.warning(f"Local embedding failed, falling back to Gemini: {e}")
-
-        if not self.use_llm:
-            return None
-        
-        print("DEBUG: Vector search falling back to GEMINI embedding (dim=3072)")
-        
-        try:
-            response = self.client.models.embed_content(
-                model=self.embedding_model,
-                contents=text
-            )
-            # gemini-embedding-001 returns embeddings as a list, get the first one
-            if response.embeddings:
-                return response.embeddings[0].values
-            return None
-        except Exception as e:
-            print(f"Embedding error: {e}")
-            return None
+        from services.embedding import create_embedder
+        return create_embedder().embed(text)
 
     async def extract_temporal_filters(self, query: str) -> Dict[str, Optional[str]]:
         """

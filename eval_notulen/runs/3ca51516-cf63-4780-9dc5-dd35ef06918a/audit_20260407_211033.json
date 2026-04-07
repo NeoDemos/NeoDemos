@@ -1,0 +1,358 @@
+{
+  "meeting_id": "3ca51516-cf63-4780-9dc5-dd35ef06918a",
+  "audit_timestamp": "2026-04-07T21:10:33.861520",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Vergadering Commissie Veiligheid en Bestuur (2018-2022) 06-12-2018",
+    "start_date": "2018-12-06 00:00:00",
+    "committee": "",
+    "quality_score": 0.998,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 62,
+    "document_count": 10
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 232,
+      "correct_count": 232,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.9947,
+      "party_attribution_rate": 0.0,
+      "total_segments": 189,
+      "attributed_segments": 188,
+      "unattributed_segments": 1
+    },
+    "speaker_diversity": {
+      "unique_speakers": 13,
+      "unique_parties": 0,
+      "top_speaker": "Leewis, S. (plv. voorzitter)",
+      "top_speaker_segment_count": 80,
+      "monologue_rate": 0.4233,
+      "speakers": {
+        "Leewis, S. (plv. voorzitter)": 80,
+        "Kathmann, B.C. (wethouder)": 29,
+        "Smet, J. (GroenLinks)": 21,
+        "Wifferen, I. van (D66)": 17,
+        "Eikeren, K.J.P. van (PvdA)": 9,
+        "Biljoen, M. (inspreker)": 7,
+        "Eskes, E.C. (CDA)": 6,
+        "Steijl, A. (inspreker namens Wijkraad Noordereiland)": 5,
+        "Karremans, V.P.G. (VVD)": 4,
+        "Arsieni, N. (D66)": 3
+      },
+      "parties": {}
+    },
+    "segment_quality": {
+      "total_segments": 189,
+      "nonempty_segments": 189,
+      "total_words": 16607,
+      "total_chars": 93071,
+      "avg_words_per_segment": 87.9,
+      "avg_chars_per_segment": 492.4,
+      "short_segment_rate": 0.2434,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 16,
+      "items_with_content": 10,
+      "coverage_rate": 0.625,
+      "items": [
+        {
+          "title": "1.01 Opening en mededelingen",
+          "segment_count": 1
+        },
+        {
+          "title": "1.02 Besluitenlijst openbare procedurevergadering 22 november 2018",
+          "segment_count": 0
+        },
+        {
+          "title": "1.03 Ingekomen stukken",
+          "segment_count": 0
+        },
+        {
+          "title": "1.03.01 Veiligheid",
+          "segment_count": 11
+        },
+        {
+          "title": "1.03.02 Gebieden",
+          "segment_count": 0
+        },
+        {
+          "title": "1.03.03 Bestuur",
+          "segment_count": 1
+        },
+        {
+          "title": "1.04 Lijst van openstaande toezeggingen en schriftelijke vragen",
+          "segment_count": 3
+        },
+        {
+          "title": "1.05 Lijst van openstaande moties",
+          "segment_count": 0
+        },
+        {
+          "title": "1.06 Planning",
+          "segment_count": 1
+        },
+        {
+          "title": "1.07 Rondvraag en sluiting",
+          "segment_count": 1
+        },
+        {
+          "title": "2 Overlegvergadering",
+          "segment_count": 1
+        },
+        {
+          "title": "2.02 Vaststellen van de agenda",
+          "segment_count": 1
+        },
+        {
+          "title": "2.03 Adviezenlijst openbare overlegvergadering 22 november 2018",
+          "segment_count": 0
+        },
+        {
+          "title": "2.04 Openstaande toezeggingen, schriftelijke vragen en moties waarvan de termijn is overschreden",
+          "segment_count": 8
+        },
+        {
+          "title": "2.05 Opzet van de monitoring en evaluatie van de wijkraden en wijkcomités",
+          "segment_count": 0
+        },
+        {
+          "title": "Daarbij betrekken:",
+          "segment_count": 161
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Vergadering Commissie Veiligheid en Bestuur (2018-2022) 06-12-2018",
+        "start_date": "2018-12-06 00:00:00",
+        "committee": null,
+        "review_status": "auto_approved",
+        "quality_score": 0.998,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Vergadering Commissie Veiligheid en Bestuur (2018-2022) 06-12-2018",
+        "start_date": "2018-12-06 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No committee found in staging meeting"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 13,
+      "recognized_speakers": 6,
+      "unrecognized_speakers": 7,
+      "recognition_rate": 0.4615,
+      "recognized": [
+        {
+          "name": "Leewis, S. (plv. voorzitter)",
+          "segment_count": 80,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Kathmann, B.C. (wethouder)",
+          "segment_count": 29,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Steijl, A. (inspreker namens Wijkraad Noordereiland)",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Biljoen, M. (inspreker)",
+          "segment_count": 7,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Coşkun, T.S.J. (inspreker)",
+          "segment_count": 3,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Berg, T. van den (inspreker)",
+          "segment_count": 2,
+          "parties": [],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "Arsieni, N. (D66)",
+          "segment_count": 3,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Smet, J. (GroenLinks)",
+          "segment_count": 21,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Wifferen, I. van (D66)",
+          "segment_count": 17,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Eikeren, K.J.P. van (PvdA)",
+          "segment_count": 9,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Karremans, V.P.G. (VVD)",
+          "segment_count": 4,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Eskes, E.C. (CDA)",
+          "segment_count": 6,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Vonk, T.J. (ChristenUnie-SGP)",
+          "segment_count": 2,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 62,
+      "empty_chunks": 0,
+      "buckets": {
+        "long (2000-5000)": 30,
+        "medium (200-2000)": 30,
+        "short (50-200)": 2
+      },
+      "min_chars": 99,
+      "max_chars": 2688,
+      "avg_chars": 1671.3,
+      "median_chars": 1909,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 62,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 10,
+      "documents_with_chunks": 10,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: 1.01 Opening en mededelingen",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 1.03.01 Veiligheid",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: 1.03.03 Bestuur",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 1.04 Lijst van openstaande toezeggingen en schriftelijke vragen",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 1.06 Planning",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 1.07 Rondvraag en sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 2 Overlegvergadering",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 2.02 Vaststellen van de agenda",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 2.04 Openstaande toezeggingen, schriftelijke vragen en moties waarvan de termijn is overschreden",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Daarbij betrekken:",
+          "chunks": 52
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 62,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 62,
+      "distribution": {
+        "quote": {
+          "count": 56,
+          "rate": 0.9032
+        },
+        "full_text": {
+          "count": 6,
+          "rate": 0.0968
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.9947,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.998
+    }
+  }
+}

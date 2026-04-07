@@ -1,0 +1,328 @@
+{
+  "meeting_id": "05bc83ab-3b3a-4da6-be0b-93196e0bfda5",
+  "audit_timestamp": "2026-04-07T21:48:01.132187",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "judge_backend": "gemini",
+    "anthropic_model": "claude-haiku-4-5-20251001",
+    "gemini_model": "gemini-2.5-flash-lite"
+  },
+  "meeting_info": {
+    "name": "Vergadering Commissie Energietransitie, Duurzaamheid, Economie en Mobiliteit (2018-2022) 19-09-2018",
+    "start_date": "2018-09-19 00:00:00",
+    "committee": "",
+    "quality_score": 0.999,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 60,
+    "document_count": 7
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 345,
+      "correct_count": 345,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.9958,
+      "party_attribution_rate": 0.0,
+      "total_segments": 237,
+      "attributed_segments": 236,
+      "unattributed_segments": 1
+    },
+    "speaker_diversity": {
+      "unique_speakers": 15,
+      "unique_parties": 0,
+      "top_speaker": "Walgenbach, E.S. (voorzitter)",
+      "top_speaker_segment_count": 111,
+      "monologue_rate": 0.4684,
+      "speakers": {
+        "Walgenbach, E.S. (voorzitter)": 111,
+        "Bonte, A. (wethouder)": 22,
+        "Groningen, D.A. van (VVD)": 19,
+        "Tak, D.P.A. (PvdA)": 14,
+        "Noppen, B. van (NIDA Rotterdam)": 13,
+        "Zeegers, C.M. (D66)": 10,
+        "Monrooij, C.E.E. (ChristenUnie-SGP)": 10,
+        "Kathmann, B.C. (wethouder)": 10,
+        "Leewis, S. (GroenLinks)": 7,
+        "Benard, M. (Partij voor de Dieren)": 7
+      },
+      "parties": {}
+    },
+    "segment_quality": {
+      "total_segments": 237,
+      "nonempty_segments": 237,
+      "total_words": 19031,
+      "total_chars": 105390,
+      "avg_words_per_segment": 80.3,
+      "avg_chars_per_segment": 444.7,
+      "short_segment_rate": 0.2658,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 8,
+      "items_with_content": 7,
+      "coverage_rate": 0.875,
+      "items": [
+        {
+          "title": "1 Opening en mededelingen",
+          "segment_count": 19
+        },
+        {
+          "title": "2 Vaststellen van de agenda",
+          "segment_count": 0
+        },
+        {
+          "title": "3 Initiatiefvoorstel Buyukcifci over wijziging Winkeltijdenverordening",
+          "segment_count": 84
+        },
+        {
+          "title": "4 Afdoening motie-Bokhove Rotterdamse broodfondsen stimuleren",
+          "segment_count": 22
+        },
+        {
+          "title": "5 Voortgang Koersnota Lucht",
+          "segment_count": 64
+        },
+        {
+          "title": "6 Walstroom",
+          "segment_count": 41
+        },
+        {
+          "title": "7 Afdoening motie-Van der Lee Vinger aan de pols",
+          "segment_count": 6
+        },
+        {
+          "title": "8 Sluiting",
+          "segment_count": 1
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Vergadering Commissie Energietransitie, Duurzaamheid, Economie en Mobiliteit (2018-2022) 19-09-2018",
+        "start_date": "2018-09-19 00:00:00",
+        "committee": null,
+        "review_status": "auto_approved",
+        "quality_score": 0.999,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Vergadering Commissie Energietransitie, Duurzaamheid, Economie en Mobiliteit (2018-2022) 19-09-2018",
+        "start_date": "2018-09-19 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No committee found in staging meeting"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 15,
+      "recognized_speakers": 3,
+      "unrecognized_speakers": 12,
+      "recognition_rate": 0.2,
+      "recognized": [
+        {
+          "name": "Walgenbach, E.S. (voorzitter)",
+          "segment_count": 111,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Kathmann, B.C. (wethouder)",
+          "segment_count": 10,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Bonte, A. (wethouder)",
+          "segment_count": 22,
+          "parties": [],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "Zeegers, C.M. (D66)",
+          "segment_count": 10,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Leewis, S. (GroenLinks)",
+          "segment_count": 7,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Groningen, D.A. van (VVD)",
+          "segment_count": 19,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Monrooij, C.E.E. (ChristenUnie-SGP)",
+          "segment_count": 10,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Tak, D.P.A. (PvdA)",
+          "segment_count": 14,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Noppen, B. van (NIDA Rotterdam)",
+          "segment_count": 13,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Achbar, F. (DENK)",
+          "segment_count": 1,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Verberne, H.M. (50PLUS)",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Segers-Hoogendoorn, R.G.C. (CDA)",
+          "segment_count": 1,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Soares, M.L. (SP)",
+          "segment_count": 2,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Koster, G.F.E. (Leefbaar Rotterdam)",
+          "segment_count": 4,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Benard, M. (Partij voor de Dieren)",
+          "segment_count": 7,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 60,
+      "empty_chunks": 0,
+      "buckets": {
+        "long (2000-5000)": 35,
+        "short (50-200)": 1,
+        "medium (200-2000)": 24
+      },
+      "min_chars": 123,
+      "max_chars": 2691,
+      "avg_chars": 1954.0,
+      "median_chars": 2193,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 60,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 7,
+      "documents_with_chunks": 7,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: 1 Opening en mededelingen",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: 3 Initiatiefvoorstel Buyukcifci over wijziging Winkeltijdenverordening",
+          "chunks": 21
+        },
+        {
+          "name": "Transcript: 4 Afdoening motie-Bokhove Rotterdamse broodfondsen stimuleren",
+          "chunks": 5
+        },
+        {
+          "name": "Transcript: 5 Voortgang Koersnota Lucht",
+          "chunks": 20
+        },
+        {
+          "name": "Transcript: 6 Walstroom",
+          "chunks": 10
+        },
+        {
+          "name": "Transcript: 7 Afdoening motie-Van der Lee Vinger aan de pols",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 8 Sluiting",
+          "chunks": 1
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 60,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 60,
+      "distribution": {
+        "quote": {
+          "count": 59,
+          "rate": 0.9833
+        },
+        "full_text": {
+          "count": 1,
+          "rate": 0.0167
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.9958,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.999
+    }
+  }
+}

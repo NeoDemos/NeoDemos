@@ -16,12 +16,13 @@ Benoit ensemble validation pattern.
 """
 
 import json
-import psycopg2
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, asdict
 from datetime import datetime
 import google.genai as genai
 import os
+
+from services.db_pool import get_connection
 
 # Initialize Gemini client
 api_key = os.getenv("GEMINI_API_KEY")
@@ -65,10 +66,7 @@ class PartyProfileExtractor:
     """Extract high-confidence party profiles from multiple sources"""
 
     def __init__(self):
-        self.conn = psycopg2.connect(
-            "postgresql://postgres:postgres@localhost:5432/neodemos"
-        )
-        self.cursor = self.conn.cursor()
+        pass  # DB connections are now obtained from the shared pool per-call
 
     def extract_full_profile(
         self, party_name: str, party_pattern: str = None
@@ -120,11 +118,13 @@ class PartyProfileExtractor:
         """Extract policy positions directly from party programme"""
 
         # Get programme content
-        self.cursor.execute(
-            "SELECT pdf_content FROM party_programmes WHERE party_name = %s",
-            (party_name,),
-        )
-        result = self.cursor.fetchone()
+        with get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "SELECT pdf_content FROM party_programmes WHERE party_name = %s",
+                    (party_name,),
+                )
+                result = cur.fetchone()
         if not result:
             print(f"  ⚠️  No programme found for {party_name}")
             return {}
@@ -219,19 +219,21 @@ Return ONLY a valid JSON object (no markdown, no explanation). Format:
         """Extract actual positions from gemeenteraad notulen"""
 
         # Get all notulen for gemeenteraad meetings
-        self.cursor.execute(
-            """
-            SELECT d.id, d.name, d.content, m.start_date
-            FROM documents d
-            INNER JOIN meetings m ON d.meeting_id = m.id
-            INNER JOIN document_classifications dc ON d.id = dc.document_id
-            WHERE m.name = 'Gemeenteraad'
-            AND dc.is_notulen = TRUE
-            AND d.content IS NOT NULL
-            ORDER BY m.start_date DESC
-            """
-        )
-        notulen_docs = self.cursor.fetchall()
+        with get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
+                    SELECT d.id, d.name, d.content, m.start_date
+                    FROM documents d
+                    INNER JOIN meetings m ON d.meeting_id = m.id
+                    INNER JOIN document_classifications dc ON d.id = dc.document_id
+                    WHERE m.name = 'Gemeenteraad'
+                    AND dc.is_notulen = TRUE
+                    AND d.content IS NOT NULL
+                    ORDER BY m.start_date DESC
+                    """
+                )
+                notulen_docs = cur.fetchall()
 
         if not notulen_docs:
             print(f"  ⚠️  No notulen found for Gemeenteraad")
@@ -315,18 +317,19 @@ Return ONLY valid JSON (no markdown). Format:
         """Extract positions from moties and amendementen"""
 
         # Find all moties/amendementen (without filtering by content first - avoid ILIKE on large text)
-        self.cursor.execute(
-            """
-            SELECT d.id, d.name, d.content
-            FROM documents d
-            INNER JOIN meetings m ON d.meeting_id = m.id
-            WHERE m.name = 'Gemeenteraad'
-            AND (d.name ILIKE '%motie%' OR d.name ILIKE '%amendement%')
-            ORDER BY d.name
-            """
-        )
-
-        all_motie_docs = self.cursor.fetchall()
+        with get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
+                    SELECT d.id, d.name, d.content
+                    FROM documents d
+                    INNER JOIN meetings m ON d.meeting_id = m.id
+                    WHERE m.name = 'Gemeenteraad'
+                    AND (d.name ILIKE '%motie%' OR d.name ILIKE '%amendement%')
+                    ORDER BY d.name
+                    """
+                )
+                all_motie_docs = cur.fetchall()
 
         if not all_motie_docs:
             print(f"  ⚠️  No moties/amendementen found")
@@ -516,15 +519,16 @@ Return ONLY valid JSON (no markdown, no explanation):
     def store_profile(self, profile: PartyProfile) -> bool:
         """Store the generated profile in the database"""
         try:
-            self.cursor.execute(
-                """
-                UPDATE party_programmes
-                SET profile_json = %s, extraction_status = 'profile_extracted'
-                WHERE party_name = %s
-                """,
-                (json.dumps(asdict(profile)), profile.party_name),
-            )
-            self.conn.commit()
+            with get_connection() as conn:
+                with conn.cursor() as cur:
+                    cur.execute(
+                        """
+                        UPDATE party_programmes
+                        SET profile_json = %s, extraction_status = 'profile_extracted'
+                        WHERE party_name = %s
+                        """,
+                        (json.dumps(asdict(profile)), profile.party_name),
+                    )
             print(f"✓ Profile stored for {profile.party_name}")
             return True
         except Exception as e:

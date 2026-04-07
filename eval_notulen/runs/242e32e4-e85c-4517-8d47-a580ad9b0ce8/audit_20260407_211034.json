@@ -1,0 +1,286 @@
+{
+  "meeting_id": "242e32e4-e85c-4517-8d47-a580ad9b0ce8",
+  "audit_timestamp": "2026-04-07T21:10:34.887497",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Vergadering Commissie Bouwen, Wonen en Buitenruimte (2018-2022) 17-10-2018",
+    "start_date": "2018-10-17 00:00:00",
+    "committee": "BWB",
+    "quality_score": 0.993,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 32,
+    "document_count": 5
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 155,
+      "correct_count": 155,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.975,
+      "party_attribution_rate": 0.0,
+      "total_segments": 80,
+      "attributed_segments": 78,
+      "unattributed_segments": 2
+    },
+    "speaker_diversity": {
+      "unique_speakers": 11,
+      "unique_parties": 0,
+      "top_speaker": "Verkoelen, P.J.H.D. (voorzitter)",
+      "top_speaker_segment_count": 29,
+      "monologue_rate": 0.3625,
+      "speakers": {
+        "Verkoelen, P.J.H.D. (voorzitter)": 29,
+        "Kurvers, S.A. (wethouder)": 11,
+        "Henneman, R. (inspreker GroenGoed en Stichting Vredestuin)": 8,
+        "Kockelkoren, A. (GroenLinks)": 7,
+        "Büyükçifci, E. (NIDA Rotterdam)": 5,
+        "Vollaard, P. (Wijkpark Hofbogen)": 5,
+        "Bottinga, K.B. (Partij voor de Dieren)": 4,
+        "Dijk, G.G. van (ChristenUnie-SGP)": 3,
+        "Roon, R.C.J. de (D66)": 2,
+        "Padmos, K. (inspreker)": 2
+      },
+      "parties": {}
+    },
+    "segment_quality": {
+      "total_segments": 80,
+      "nonempty_segments": 80,
+      "total_words": 9636,
+      "total_chars": 52941,
+      "avg_words_per_segment": 120.5,
+      "avg_chars_per_segment": 661.8,
+      "short_segment_rate": 0.2,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 6,
+      "items_with_content": 5,
+      "coverage_rate": 0.8333,
+      "items": [
+        {
+          "title": "1.01 Opening",
+          "segment_count": 3
+        },
+        {
+          "title": "1.02 Vaststelling van de agenda",
+          "segment_count": 2
+        },
+        {
+          "title": "1.03 Vervolg bespreking Hofbogen",
+          "segment_count": 0
+        },
+        {
+          "title": "Daarbij betrekken",
+          "segment_count": 22
+        },
+        {
+          "title": "Inspreekbijdragen",
+          "segment_count": 51
+        },
+        {
+          "title": "1.04 Sluiting",
+          "segment_count": 2
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Vergadering Commissie Bouwen, Wonen en Buitenruimte (2018-2022) 17-10-2018",
+        "start_date": "2018-10-17 00:00:00",
+        "committee": "BWB",
+        "review_status": "auto_approved",
+        "quality_score": 0.993,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Vergadering Commissie Bouwen, Wonen en Buitenruimte (2018-2022) 17-10-2018",
+        "start_date": "2018-10-17 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 11,
+      "recognized_speakers": 4,
+      "unrecognized_speakers": 7,
+      "recognition_rate": 0.3636,
+      "recognized": [
+        {
+          "name": "Verkoelen, P.J.H.D. (voorzitter)",
+          "segment_count": 29,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Henneman, R. (inspreker GroenGoed en Stichting Vredestuin)",
+          "segment_count": 8,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Padmos, K. (inspreker)",
+          "segment_count": 2,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Kurvers, S.A. (wethouder)",
+          "segment_count": 11,
+          "parties": [],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "Roon, R.C.J. de (D66)",
+          "segment_count": 2,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Bottinga, K.B. (Partij voor de Dieren)",
+          "segment_count": 4,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Büyükçifci, E. (NIDA Rotterdam)",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Kockelkoren, A. (GroenLinks)",
+          "segment_count": 7,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Dijk, G.G. van (ChristenUnie-SGP)",
+          "segment_count": 3,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Vollaard, P. (Wijkpark Hofbogen)",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Verheij, J.W. (VVD)",
+          "segment_count": 2,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 32,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 13,
+        "short (50-200)": 1,
+        "long (2000-5000)": 18
+      },
+      "min_chars": 120,
+      "max_chars": 2640,
+      "avg_chars": 1838.5,
+      "median_chars": 2220,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 32,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 5,
+      "documents_with_chunks": 5,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: 1.01 Opening",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: 1.02 Vaststelling van de agenda",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 1.04 Sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Daarbij betrekken",
+          "chunks": 5
+        },
+        {
+          "name": "Transcript: Inspreekbijdragen",
+          "chunks": 22
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 32,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 32,
+      "distribution": {
+        "quote": {
+          "count": 30,
+          "rate": 0.9375
+        },
+        "full_text": {
+          "count": 2,
+          "rate": 0.0625
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.975,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.993
+    }
+  }
+}

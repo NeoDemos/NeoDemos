@@ -1,0 +1,1117 @@
+{
+  "meeting_id": "392d392e-1d87-49ad-b61f-0780988f27f2",
+  "audit_timestamp": "2026-04-07T21:10:36.650739",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+    "start_date": "2025-07-03 00:00:00",
+    "committee": "BOFV",
+    "quality_score": 0.963,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 157,
+    "document_count": 11
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 1002,
+      "correct_count": 1002,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8752,
+      "party_attribution_rate": 0.4599,
+      "total_segments": 561,
+      "attributed_segments": 491,
+      "unattributed_segments": 70
+    },
+    "speaker_diversity": {
+      "unique_speakers": 19,
+      "unique_parties": 12,
+      "top_speaker": "L.S. (Larissa) Vlieger Commissievoorzitter",
+      "top_speaker_segment_count": 163,
+      "monologue_rate": 0.2906,
+      "speakers": {
+        "L.S. (Larissa) Vlieger Commissievoorzitter": 163,
+        "B.J. (Bart-Joost) van Rij": 47,
+        "D.A. (Dieke) van Groningen": 46,
+        "M.H. (Marvin) Biljoen": 37,
+        "I. (Ingrid) van Wifferen": 30,
+        "T. (Thomas) Roskam": 27,
+        "P.J.H.D. (Ellen) Verkoelen": 22,
+        "C.J. (Carola) Schouten Burgemeester": 18,
+        "S. (Serkan) Soytekin": 16,
+        "S. (Stephan) Leewis": 14
+      },
+      "parties": {
+        "GroenLinks": 51,
+        "VVD": 49,
+        "Leefbaar Rotterdam": 39,
+        "D66": 30,
+        "50PLUS": 22,
+        "DENK": 16,
+        "PvdA": 14,
+        "Volt": 12,
+        "ChristenUnie": 11,
+        "CDA": 10,
+        "SP": 3,
+        "BIJ1": 1
+      }
+    },
+    "segment_quality": {
+      "total_segments": 561,
+      "nonempty_segments": 561,
+      "total_words": 52117,
+      "total_chars": 286781,
+      "avg_words_per_segment": 92.9,
+      "avg_chars_per_segment": 511.2,
+      "short_segment_rate": 0.1676,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 14,
+      "items_with_content": 9,
+      "coverage_rate": 0.6429,
+      "items": [
+        {
+          "title": "Procedurevergadering",
+          "segment_count": 1
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 1
+        },
+        {
+          "title": "Besluitenlijst openbare procedurevergadering van 12-06-2025",
+          "segment_count": 0
+        },
+        {
+          "title": "Ingekomen stukken",
+          "segment_count": 36
+        },
+        {
+          "title": "Lijst van openstaande toezeggingen, schriftelijke vragen en moties",
+          "segment_count": 7
+        },
+        {
+          "title": "Commissieplanning en lange termijn agenda raad",
+          "segment_count": 17
+        },
+        {
+          "title": "Regeling van werkzaamheden",
+          "segment_count": 17
+        },
+        {
+          "title": "Sluiting",
+          "segment_count": 0
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 4
+        },
+        {
+          "title": "Ambtsreizen",
+          "segment_count": 135
+        },
+        {
+          "title": "Concept-Voorjaarsnota 2025 en 1e Herziening 2025",
+          "segment_count": 309
+        },
+        {
+          "title": "Beantwoording vragen over 'Kies je eigen uren, als je een tram of bus gaat besturen'",
+          "segment_count": 33
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 1
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+        "start_date": "2025-07-03 00:00:00",
+        "committee": "BOFV",
+        "review_status": "auto_approved",
+        "quality_score": 0.963,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+        "start_date": "2025-07-03 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 19,
+      "recognized_speakers": 17,
+      "unrecognized_speakers": 2,
+      "recognition_rate": 0.8947,
+      "recognized": [
+        {
+          "name": "L.S. (Larissa) Vlieger Commissievoorzitter",
+          "segment_count": 163,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.H. (Marvin) Biljoen",
+          "segment_count": 37,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D.A. (Dieke) van Groningen",
+          "segment_count": 46,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "E. (Eveline) Padberg-de Haan Burgercommissielid",
+          "segment_count": 3,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "R.G.C. (René) Segers-Hoogendoorn",
+          "segment_count": 10,
+          "parties": [
+            "CDA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "P.J.H.D. (Ellen) Verkoelen",
+          "segment_count": 22,
+          "parties": [
+            "50PLUS"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Simon) Ceulemans",
+          "segment_count": 12,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Stephan) Leewis",
+          "segment_count": 14,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Serkan) Soytekin",
+          "segment_count": 16,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T. (Thomas) Roskam",
+          "segment_count": 27,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "L.P.A. (Luuc) Dekkers",
+          "segment_count": 12,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "I. (Ingrid) van Wifferen",
+          "segment_count": 30,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "C.J. (Carola) Schouten Burgemeester",
+          "segment_count": 18,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.R. (Marchiano) van Campenhout",
+          "segment_count": 1,
+          "parties": [
+            "BIJ1"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Sarah) Reitema",
+          "segment_count": 14,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.A.C.J. (Robert) Simons",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "J.G. (Just) Hovens Greve Burgercommissielid",
+          "segment_count": 3,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "T.J. (Tjalling) Vonk",
+          "segment_count": 11,
+          "parties": [
+            "ChristenUnie"
+          ],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "B.J. (Bart-Joost) van Rij",
+          "segment_count": 47,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 157,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 54,
+        "long (2000-5000)": 95,
+        "short (50-200)": 8
+      },
+      "min_chars": 61,
+      "max_chars": 2729,
+      "avg_chars": 1860.5,
+      "median_chars": 2196,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 157,
+      "boilerplate_count": 1,
+      "boilerplate_rate": 0.0064,
+      "boilerplate_examples": [
+        {
+          "id": 8225,
+          "title": "Transcript: Procedurevergadering",
+          "preview": "[L.S. (Larissa) Vlieger Commissievoorzitter]: De vergadering gaat beginnen."
+        }
+      ]
+    },
+    "agenda_coverage": {
+      "total_documents": 11,
+      "documents_with_chunks": 11,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Ambtsreizen",
+          "chunks": 40
+        },
+        {
+          "name": "Transcript: Beantwoording vragen over 'Kies je eigen uren, als je een tram of bus gaat besturen'",
+          "chunks": 7
+        },
+        {
+          "name": "Transcript: Commissieplanning en lange termijn agenda raad",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Concept-Voorjaarsnota 2025 en 1e Herziening 2025",
+          "chunks": 92
+        },
+        {
+          "name": "Transcript: Ingekomen stukken",
+          "chunks": 6
+        },
+        {
+          "name": "Transcript: Lijst van openstaande toezeggingen, schriftelijke vragen en moties",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Procedurevergadering",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Regeling van werkzaamheden",
+          "chunks": 4
+        },
+        {
+          "name": "Transcript: Rondvraag en sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Vaststellen van de agenda",
+          "chunks": 1
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 157,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 157,
+      "distribution": {
+        "quote": {
+          "count": 154,
+          "rate": 0.9809
+        },
+        "full_text": {
+          "count": 3,
+          "rate": 0.0191
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "ok",
+    "n_samples": 8,
+    "avg_hallucination_rate": 0.035,
+    "safe_for_councillors": true,
+    "hallucination_types_found": [],
+    "dangerous_claims": [
+      {
+        "chunk_id": 8309,
+        "claim": "De tekst wordt uitgesproken door L.S. (Larissa) Vlieger als Commissievoorzitter — in werkelijkheid zijn de woorden over jongerenwerkers en politiegezag afkomstig van S. (Simon) Ceulemans (Leefbaar Rotterdam). Een raadslid dat op basis van deze notulen handelt, zou ten onrechte denken dat de commissievoorzitter deze politieke stellingname innam, terwijl het een uitgesproken standpunt van Leefbaar Rotterdam betreft."
+      },
+      {
+        "chunk_id": 8353,
+        "claim": "Roskam wil de vraag over de herijking meenemen in de brief."
+      }
+    ],
+    "chunk_results": [
+      {
+        "chunk_id": 8374,
+        "chunk_title": "Transcript: Beantwoording vragen over 'Kies je eigen uren, als je een tram of bus gaat besturen'",
+        "chunk_index": 0,
+        "content_preview": "[J.G. (Just) Hovens Greve Burgercommissielid (SP)]: met het. Bestuur van de RET. De heer Schepen. Ja, voorzitter, de SP vraagt niet aan de wethouder dat hij nu roostermaker gaat worden, maar er is een",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "De SP vraagt niet aan de wethouder dat hij roostermaker gaat worden",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "de SP vraagt niet aan de wethouder dat hij nu roostermaker gaat worden"
+            },
+            {
+              "claim": "Er is een ziekteverzuim van 12,1% bij de RET",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "er is een ziekteverzuim van 12,1%, wat ook gewoon direct raakt aan niet alleen de bedrijfsvoering"
+            },
+            {
+              "claim": "Het ziekteverzuim raakt aan de bedrijfsvoering en het OV van Rotterdam",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "wat ook gewoon direct raakt aan niet alleen de bedrijfsvoering, maar überhaupt het OV van Rotterdam"
+            },
+            {
+              "claim": "Zieke medewerkers moeten worden vervangen, wat extra kosten met zich meebrengt",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Al die mensen die ziek zijn, die moeten worden vervangen, dat kost extra kosten."
+            },
+            {
+              "claim": "Het ziekteverzuim leidt tot busuitval",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dat is bus uitval."
+            },
+            {
+              "claim": "Het probleem speelt al jaren en zorgt voor minder bussen en verloop",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "er is hier gewoon echt een gigantisch probleem wat al jaren speelt wat zorgt voor minder bussen wat zorgt voor verloop"
+            },
+            {
+              "claim": "De wethouder vergelijkt de situatie bij de RET met die bij het havenbedrijf (waarbij de gemeente ook niet op de stoel gaat zitten)",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "de wethouder zegt ja, bij het havenbedrijf gaan we ook niet op de stoel zitten"
+            },
+            {
+              "claim": "De SP vindt dat de wethouder veel meer op de situatie bij de RET moet zitten",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "de SP vindt gewoon de wethouder moet daar gewoon veel meer op zitten"
+            },
+            {
+              "claim": "De wethouder geeft aan dat de gemeente als afnemer van de RET prestatieafspraken heeft",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "wij als afnemer van de RET prestatie prestatieafspraken hebben"
+            },
+            {
+              "claim": "Het aandeelhouderschap staat los van de prestatieafspraken",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En dat staat los van ons aandeelhouderschap."
+            },
+            {
+              "claim": "De keuze om taken uit te besteden is lang geleden gemaakt in de raad",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "die keuzes die heel lang geleden gemaakt in de raad"
+            },
+            {
+              "claim": "De gemeente is 99% aandeelhouder van de RET",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "als je inderdaad als 99% aandeelhouder niet van je laat horen"
+            },
+            {
+              "claim": "Het bestuur van de RET volgt de debatten in de commissie",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De RET en het bestuur van de RET volgt ook deze debatten."
+            },
+            {
+              "claim": "De wethouder gaat een brief sturen aan het bestuur van de RET met daarin de zorgen van de raad",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "die ga ik nog een keer extra bevestigen in een brief die daar de besturen gaat van de RET"
+            }
+          ],
+          "total_claims": 14,
+          "supported": 14,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Alle veertien geïdentificeerde feitelijke beweringen in de te controleren tekst zijn direct terug te vinden in het originele transcript. De AI-gegenereerde notulen zijn in dit fragment een vrijwel letterlijke weergave van het originele transcript, zonder toevoegingen, verdraaiingen of fabricaties. Er zijn geen hallucinaties gedetecteerd. Het fragment bevat geen stemtoeschrijvingen, financiële bedragen buiten het genoemde verzuimpercentage (12,1%), of standpunten die niet in het transcript staan. Het percentage van 12,1% is expliciet door de spreker zelf genoemd en wordt correct weergegeven."
+        },
+        "transcript_faithfulness": {
+          "score": 0,
+          "reasoning": "Parse error: Unterminated string starting at: line 5 column 24 (char 871)"
+        }
+      },
+      {
+        "chunk_id": 8229,
+        "chunk_title": "Transcript: Ingekomen stukken",
+        "chunk_index": 2,
+        "content_preview": "[M.H. (Marvin) Biljoen (GroenLinks)]: De heer Biljoen.\n[M.H. (Marvin) Biljoen (GroenLinks)]: Uhm. Kinderombudsman. Ja, sorry, ik was heel even afgeleid. Voorzitter. Wij zouden heel graag. We zijn ontz",
+        "claim_verification": {
+          "claims": [],
+          "total_claims": 21,
+          "supported": 19,
+          "unsupported": 0,
+          "contradicted": 2,
+          "hallucination_rate": 0.1,
+          "most_dangerous_claim": null,
+          "reasoning": "Parsed via regex fallback (malformed JSON from judge)"
+        },
+        "transcript_faithfulness": {
+          "score": 0,
+          "reasoning": "Parse error: Unterminated string starting at: line 5 column 24 (char 1132)"
+        }
+      },
+      {
+        "chunk_id": 8250,
+        "chunk_title": "Biljoen's Further Input on Travel Costs",
+        "chunk_index": 8,
+        "content_preview": "[L.S. (Larissa) Vlieger Commissievoorzitter]: doelgericht en doelmatig. Maar we moeten daar ook niet in proberen door\n[D.A. (Dieke) van Groningen (VVD)]: te slaan. Voorzitter.\n\n[D.A. (Dieke) van Groni",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Mevrouw Van Groningen (VVD) vroeg zich af waarom het debat over dienstreizen werd aangevraagd.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "\"Ja, toen dit debat wordt aangevraagd, dacht ik eigenlijk waarom gaan we dit doen?\""
+            },
+            {
+              "claim": "Mevrouw Van Groningen (VVD) vindt het oprecht belangrijk dat wethouders en de burgemeester zich vrij voelen om te bewegen en kennis en ervaring op te doen in andere steden.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "\"Want ik vind het oprecht belangrijk dat wij wethouders en de burgemeester hebben die zich vrij voelen om te bewegen en kennis en ervaring op te doen in andere steden.\""
+            },
+            {
+              "claim": "Mevrouw Van Groningen (VVD) stelde dat er niet één persoon verantwoordelijk is voor de economie van Rotterdam, maar een volledig college.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "\"er is maar niet één persoon verantwoordelijk voor onze economie. Dat vind ik eigenlijk een volledig college.\""
+            },
+            {
+              "claim": "Mevrouw Van Groningen (VVD) zei het eens te zijn met de woorden van de heer Soytekin.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "\"En in die zin ben ik het helemaal eens met de woorden van de heer Soy Tekin\""
+            },
+            {
+              "claim": "Mevrouw Van Groningen (VVD) vond het niet boeiend om in detail te discussiëren over het aantal reisdagen of kilometers, of over vliegen versus trein.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "\"dan denk ik dat het helemaal niet boeiend is om met elkaar in detail discussie te gaan voeren over het aantal reisdagen of het aantal kilometers. Of dat we nou vliegen of dat we met de trein gaan.\""
+            },
+            {
+              "claim": "Mevrouw Van Groningen (VVD) stelde dat gekeken moet worden of de stad er beter, schoner en welvarender van wordt.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "\"Volgens mij moeten we gewoon kijken of onze stad er beter van wordt, of het schoner ervan wordt en of het welvarender van wordt.\""
+            },
+            {
+              "claim": "De heer Biljoen (GroenLinks) interrumpeerde mevrouw Van Groningen als eerste.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "\"En ik zie dat een interruptie van de heer miljoen als eerste.\""
+            },
+            {
+              "claim": "De heer Biljoen (GroenLinks) stelde dat de VVD wethouders levert voor het college.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "\"Kijk de VVD, die zit nu uh die levert nu wethouders. Voor het college\""
+            },
+            {
+              "claim": "De heer Biljoen (GroenLinks) stelde dat het college heeft afgesproken om in 2030 55% CO2-uitstoot te verminderen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "\"het college hebben ze afgesproken om in 2030 55% uh te verminderen van de CO2 uitstoot.\""
+            },
+            {
+              "claim": "De heer Biljoen (GroenLinks) stelde dat de VVD met de 55% CO2-reductiedoelstelling heeft ingestemd in het coalitieakkoord.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "\"Want het is wel waar u uh mee heeft ingestemd. Uh, in het coalitieakkoord.\""
+            },
+            {
+              "claim": "Mevrouw Van Groningen (VVD) antwoordde dat er heel erg veel vliegreizen gemaakt zouden moeten worden om het CO2-target niet te halen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "\"Nou voorzitter, ik denk dat er wel heel erg veel vliegreizen moeten maken als we daarmee dat target niet zouden halen.\""
+            },
+            {
+              "claim": "Mevrouw Van Groningen (VVD) noemde het vernieuwen van het wagenpark en het klimaatneutraal maken van gebouwen als onderdelen van de CO2-aanpak.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "\"We zijn ons hele wagenpark aan het vernieuwen, zijn, onze gebouwen klimaatneutraal aan het maken.\""
+            },
+            {
+              "claim": "De commissievoorzitter (Vlieger) merkte op dat voor bestemmingen dicht in de buurt de trein prima genomen kan worden.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "\"eh, ik denk dat als het heel dicht in de buurt is kunnen ze prima de trein nemen\""
+            },
+            {
+              "claim": "De heer Dekkers (Volt) stelde dat de trein nemen niet het doel op zich moet zijn.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "\"maar dit moet niet het doel op zich zijn.\""
+            },
+            {
+              "claim": "Mevrouw Van Groningen (VVD) zei dat er geen debat hoeft te zijn 'voor de bühne'.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "\"En dan hoeft er voor mij geen debat te zijn hier voor de bühne, maar gewoon echt omdat we het belangrijk vinden.\""
+            }
+          ],
+          "total_claims": 15,
+          "supported": 15,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Alle 15 geïdentificeerde feitelijke beweringen in het te controleren fragment zijn direct terug te vinden in het originele transcript. Er zijn geen fabricaties, onjuiste toeschrijvingen, foutieve getallen of andere hallucinaties aangetroffen. Het fragment geeft de uitspraken van de sprekers nauwkeurig en volledig weer. De enige noemenswaardige observatie is dat de naam 'Biljoen' in de notulen als 'miljoen' wordt weergegeven in de sprekeridentificatie ('interruptie van de heer miljoen'), maar dit is een fonetische ASR-transcriptiefout en telt niet als hallucinatie conform de instructies."
+        },
+        "transcript_faithfulness": {
+          "score": 5,
+          "reasoning": "Het AI-gegenereerde vergaderverslag-fragment is een directe, woordelijke weergave van het corresponderende deel van het originele transcript. Alle uitspraken zijn correct toegeschreven aan dezelfde sprekers. Er zijn geen fabricaties, geen omgedraaide standpunten, geen onjuiste percentages of bedragen, en geen politiek relevante informatie weggelaten. Het fragment is een exact uitknipsel uit het transcript zonder enige inhoudelijke afwijking."
+        }
+      },
+      {
+        "chunk_id": 8299,
+        "chunk_title": "Comments on Specific Policy Areas",
+        "chunk_index": 17,
+        "content_preview": "[L.S. (Larissa) Vlieger Commissievoorzitter]: Maar ja, nieuwe burgemeester, nieuwe kansen.\n[I. (Ingrid) van Wifferen (D66)]: Wij maken ons als D66 heel vaak zorgen om dat de veiligheid heel erg wordt ",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "D66 maakt zich zorgen dat veiligheid wordt gemeten in CBS-wijken",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Wij maken ons als D66 heel vaak zorgen om dat de veiligheid heel erg wordt gemeten in CBS wijken"
+            },
+            {
+              "claim": "Door de samenstelling van enkele wijken sneeuwen onveiligheid in sommige wijken onder",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "door de samenstelling van enkele wijken. Sneeuwen sneeuwt de veiligheid en de onveiligheid in sommige wijken onder"
+            },
+            {
+              "claim": "Schiebroek Zuid wordt omhooggetrokken door Schiebroek Noord",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dat zien we bijvoorbeeld in in Schiebroek Zuid,. Die door Schiebroek Noord omhoog omhooggetrokken wordt"
+            },
+            {
+              "claim": "De wijk Sprimont wordt omhooggetrokken door het Lloyd en de Pier",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Hetzelfde geldt over de wijk Sprimont, die ook door het Lloyd en de Pier behoorlijk wordt opgetrokken"
+            },
+            {
+              "claim": "De vorige burgemeester antwoordde dat de CBS-indeling niet zomaar veranderd kan worden",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "in het verleden kregen wij als antwoord van de vorige burgemeester heel vaak van nou ja, dat kunnen we niet zomaar veranderen en we hebben het in het snotje hoor"
+            },
+            {
+              "claim": "Van Wifferen stelt voor om bij veiligheidsstatistieken een disclaimer op te leggen voor wijken die risico lopen onderschat te worden",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "ik zou het toch zelf wel heel fijn vinden als we bij de veiligheids cijfers daar een soort van kleine disclaimer op opleggen"
+            },
+            {
+              "claim": "Van Wifferen heeft ook een vraag over Mosquito's",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dan heb ik nog een vraag en het gaat dan vooral over Mosquito S."
+            },
+            {
+              "claim": "Van Wifferen erkent dat het onderwerp Mosquito's een heel ander onderwerp is zonder bruggetje",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Kijk in het een heel ander onderwerp. Ik maak ook geen bruggetje, dus ik zie u kijken van wat komt hier nu mee?"
+            },
+            {
+              "claim": "Van Wifferen schrijft de overgang naar het Mosquito-onderwerp toe aan haar slecht opgebouwde betoog",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dat kwam aan mij door mijn slecht opgebouwde betoog."
+            }
+          ],
+          "total_claims": 9,
+          "supported": 9,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Alle negen geïdentificeerde feitelijke beweringen in het fragment zijn direct terug te vinden in het originele transcript. De tekst beschrijft nauwkeurig de bijdrage van mevrouw Van Wifferen (D66) over CBS-wijkindelingen, de specifieke voorbeelden van Schiebroek Zuid/Noord en Sprimont/Lloyd/Pier, de reactie van de vorige burgemeester, het voorstel voor een disclaimer, en de overgang naar het Mosquito-onderwerp. Er zijn geen hallucinaties gedetecteerd in dit fragment."
+        },
+        "transcript_faithfulness": {
+          "score": 5,
+          "reasoning": "Het AI-gegenereerde vergaderverslag-fragment is een directe, vrijwel woordelijke weergave van het corresponderende deel uit het originele transcript. De uitspraken zijn correct toegeschreven aan de juiste sprekers (commissievoorzitter Vlieger en Van Wifferen van D66). Er zijn geen fabricaties, geen omgedraaide stemverhoudingen, geen verzonnen zinnen en geen politiek relevante informatie weggelaten. Het fragment is een getrouwe kopie van het transcript, inclusief de specifieke voorbeelden (Schiebroek Zuid, Schiebroek Noord, Sprimont, Lloyd, de Pier, CBS-wijken, Mosquito S). Er zijn geen financiële bedragen, data of percentages in dit fragment die onjuist zijn overgenomen."
+        }
+      },
+      {
+        "chunk_id": 8309,
+        "chunk_title": "Comments on Specific Policy Areas",
+        "chunk_index": 27,
+        "content_preview": "[L.S. (Larissa) Vlieger Commissievoorzitter]: Zeker niet op moment dat we ook te kampen hebben met grote capaciteitstekort bij politie en handhaving.\nWaar we wel zorgen over hebben is van hoe zit het ",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "De tekst wordt uitgesproken door L.S. (Larissa) Vlieger als Commissievoorzitter",
+              "verdict": "contradicted",
+              "hallucination_type": "speaker_presence",
+              "evidence": "In het originele transcript is dit gedeelte over jongerenwerkers en het ondermijnen van politiegezag afkomstig van S. (Simon) Ceulemans (Leefbaar Rotterdam), niet van de commissievoorzitter Vlieger. Zie: '[S. (Simon) Ceulemans (Leefbaar Rotterdam)]: ...kan het inzetten van jongerenwerkers niet leiden tot het verder ondermijnen van het gezag van de politie...'"
+            },
+            {
+              "claim": "Er is een groot capaciteitstekort bij politie en handhaving",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "In het transcript zegt Ceulemans: '...zeker niet op moment dat we ook te kampen hebben met grote capaciteitstekort bij politie en handhaving.'"
+            },
+            {
+              "claim": "De vraag wordt gesteld of het inzetten van jongerenwerkers kan leiden tot het ondermijnen van het gezag van de politie",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ceulemans: 'kan het inzetten van jongerenwerkers niet leiden tot het verder ondermijnen van het gezag van de politie als daar groepen jongeren gewenst zijn in die wijken?'"
+            },
+            {
+              "claim": "De zorg is dat jongeren minder respect voor de politie krijgen als ze gewend zijn aan de vriendelijke toon van jongerenwerkers",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ceulemans: 'Dat die groepen jongeren vervolgens nog minder respect hebben en gezag hebben voor de politie als die hen aanspreken op een toon die hen niet bevalt.'"
+            },
+            {
+              "claim": "De heer Dekkers (Volt) spreekt kort over veiligheid",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'[L.P.A. (Luuc) Dekkers (Volt)]: De heer Dekkers kort. Voorzitter, Ik hou het kort. Nee, uh, veiligheid. Is wel een heel groot topic...'"
+            },
+            {
+              "claim": "Dekkers zegt dat er veel inzet is door het college op het gebied van veiligheid",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'we zien ook veel inzet door het college. Er is al veel genoemd dus dat ga ik niet herhalen.'"
+            },
+            {
+              "claim": "Dekkers verwijst naar een initiatiefnota voor 'Feminine' die vorige week werd ingediend",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'Dus vorige week stond hier nog met een initiatiefnota voor Feminine.'"
+            },
+            {
+              "claim": "Dekkers wil inzoomen op subjectieve veiligheid",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'Ik wil eigenlijk inzoomen op uh op één stuk en dat is het gebied. Subjectieve veiligheid.'"
+            },
+            {
+              "claim": "Dekkers verwijst naar een eerder ingediende motie over social design voor de Lijnbaan",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'In het verleden hebben we ook een motie ingediend UH over social design voor de Lijnbaan.'"
+            },
+            {
+              "claim": "Inholland is aan de slag gegaan met de motie over social design voor de Lijnbaan",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'Daar is. Inholland. Toen ook mee aan de slag gegaan.'"
+            },
+            {
+              "claim": "Voor het social design project op de Lijnbaan is een Student Safety Award uitgereikt",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'Dat is zelfs nog, ik moet het goed zeggen, een Student Safety Award voor uitgereikt, dus dat is best wel een positief traject.'"
+            },
+            {
+              "claim": "Dekkers vraagt of de burgemeester samen kan optrekken met de wethouder buitenruimte om subjectieve veiligheidsbeleving mee te nemen in het design",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'is het ook echt mogelijk om. Uh uh hè voor de burgemeester om daar samen op te trekken met de wethouder buitenruimte om echt te zorgen dat we dat meenemen in het design, maar ook daarna meten'"
+            }
+          ],
+          "total_claims": 12,
+          "supported": 11,
+          "unsupported": 0,
+          "contradicted": 1,
+          "hallucination_rate": 0.08,
+          "most_dangerous_claim": "De tekst wordt uitgesproken door L.S. (Larissa) Vlieger als Commissievoorzitter — in werkelijkheid zijn de woorden over jongerenwerkers en politiegezag afkomstig van S. (Simon) Ceulemans (Leefbaar Rotterdam). Een raadslid dat op basis van deze notulen handelt, zou ten onrechte denken dat de commissievoorzitter deze politieke stellingname innam, terwijl het een uitgesproken standpunt van Leefbaar Rotterdam betreft.",
+          "reasoning": "De inhoudelijke beweringen in het fragment zijn grotendeels correct en aantoonbaar in het transcript. Het enige maar ernstige probleem is de sprekerattributie: het fragment over jongerenwerkers en het ondermijnen van politiegezag wordt in de virtuele notulen toegeschreven aan commissievoorzitter Vlieger, terwijl dit in het originele transcript duidelijk een bijdrage is van raadslid Ceulemans (Leefbaar Rotterdam). Dit is een gevaarlijke fout omdat het een politiek standpunt van een oppositiepartij toeschrijft aan de neutrale voorzitter van de commissie."
+        },
+        "transcript_faithfulness": {
+          "score": 4,
+          "reasoning": "Het AI-gegenereerde vergaderverslag-fragment is grotendeels een directe transcriptie van het originele transcript. De uitspraken zijn correct toegeschreven aan de juiste sprekers. Er zijn geen fabricaties of onjuiste stemverhoudingen. Het fragment begint echter met een zin die in het origineel wordt toegeschreven aan S. (Simon) Ceulemans (Leefbaar Rotterdam), maar in het AI-gegenereerde verslag staat deze onder L.S. (Larissa) Vlieger Commissievoorzitter. Dit is een kleine maar merkbare fout in de sprekerstoewijzing. Verder is de inhoud accuraat en zijn er geen politiek relevante omissies of gefabriceerde informatie."
+        }
+      },
+      {
+        "chunk_id": 8318,
+        "chunk_title": "Comments on Specific Policy Areas",
+        "chunk_index": 36,
+        "content_preview": "[L.S. (Larissa) Vlieger Commissievoorzitter]: En nou ja, dat we daar ook wat meer aandacht aan hebben van hé.\nMaar let op in hier is deze problematiek nog wel aan de hand, zodat uw raad daar wel kenni",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "De burgemeester heeft jongeren gevraagd naar hun beleving van de Mosquito.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Nou we hebben wel NS jongeren gevraagd naar uh hun beleving van de Mosquito en dat. Kwam niet zo heel veel reactie uit."
+            },
+            {
+              "claim": "De reactie op de vraag naar de beleving van de Mosquito was niet zo heel veel.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Nou we hebben wel NS jongeren gevraagd naar uh hun beleving van de Mosquito en dat. Kwam niet zo heel veel reactie uit."
+            },
+            {
+              "claim": "Sommige jongeren wisten niet eens dat er een Mosquito stond.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Sommigen wisten ook nog geeneens dat er een mosquito stond."
+            },
+            {
+              "claim": "De burgemeester wil plein stewards betrekken bij de evaluatie van de Mosquito.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En ik zou eigenlijk wel de plein stewards eigenlijk ook willen betrekken bij die eh, de evaluatie dan daarvan"
+            },
+            {
+              "claim": "De burgemeester stelt voor dat plein stewards de komende weken met jongeren in gesprek gaan over hoe zij tegen de Mosquito aankijken.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dus het zou dat zou mijn uhm uhm uh voorstel zijn dat zij ook de komende weken ook met de jongeren in gesprek gaan hoe zij daar zelf tegen aankijken."
+            },
+            {
+              "claim": "Mevrouw Van Wifferen (D66) vraagt of de plein stewards door heel de stad hangen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Is dat is dat dan door heel de stad waar ze hangen? Want ze hangen op verschillende plekken"
+            },
+            {
+              "claim": "De burgemeester weet niet zeker of de plein stewards in de hele stad aanwezig zijn.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dat het in de hele stad is weet ik niet, zeg ik even eerlijk."
+            },
+            {
+              "claim": "De burgemeester zegt dat het voorstel over plein stewards iets is wat zij net bedacht heeft.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dit is nu even wat ik net bedacht heb"
+            },
+            {
+              "claim": "De burgemeester zegt dat zij dit nog moet bespreken met de 'pleister' (plein stewards).",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "want ik moet dat echt met. Ook de pleister duurt nog wel even bespreken."
+            },
+            {
+              "claim": "De burgemeester zegt toe dat de plein stewards zich richten op plekken waar de meeste jongeren bij elkaar zijn.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Op de plekken waar de meeste jongeren bij elkaar zijn, laat ik het zo even kan. Dat kan ik m ongeveer zo toezeggen."
+            },
+            {
+              "claim": "Mevrouw Van Wifferen (D66) zegt zelf ook van plan te zijn een ronde te maken in de zomer.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ik ben zelf ook wel van plan om nog wel een ronde te maken van de zomer"
+            }
+          ],
+          "total_claims": 11,
+          "supported": 11,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Alle feitelijke beweringen in het te controleren fragment zijn direct terug te vinden in het originele transcript. Het fragment betreft een discussie over de evaluatie van de Mosquito en de rol van plein stewards, waarbij de burgemeester (Schouten) en mevrouw Van Wifferen (D66) aan het woord zijn. Er zijn geen gefabriceerde citaten, onjuiste toeschrijvingen, foutieve getallen of andere hallucinaties aangetroffen. De notulen geven het gesprek nauwkeurig weer."
+        },
+        "transcript_faithfulness": {
+          "score": 5,
+          "reasoning": "Het AI-gegenereerde vergaderverslag-fragment is een vrijwel letterlijke weergave van het originele transcript. De uitspraken zijn correct toegeschreven aan de juiste sprekers (Commissievoorzitter Vlieger, Van Wifferen (D66), Burgemeester Schouten). Er zijn geen fabricaties, geen omgedraaide stemverhoudingen, geen onjuiste financiële bedragen of data, en geen politiek relevante informatie weggelaten. Het fragment is een directe kopie van een deel van het transcript, zonder inhoudelijke afwijkingen."
+        }
+      },
+      {
+        "chunk_id": 8334,
+        "chunk_title": "Comments on Specific Policy Areas",
+        "chunk_index": 52,
+        "content_preview": "[T. (Thomas) Roskam (Leefbaar Rotterdam)]: En dat is ook een kengetal wat een\n[M.H. (Marvin) Biljoen (GroenLinks)]: structureel exploitatie saldo niet tot uiting geeft. Dus vandaar. De heer Bloem Ja v",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "De heer Biljoen (GroenLinks) zegt dat vorig jaar een greep werd gedaan uit de rem om de extra hobbies van het college te bekostigen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De heer Bloem Ja voorzitter. Dank voor deze uitleg. Uh. Tegelijkertijd vorig jaar hadden we deze discussie toen ook uh. Een greep werd gedaan uit de rem om naar de extra hobbies van dit college te bekostigen."
+            },
+            {
+              "claim": "GroenLinks was tegen de greep uit de rem vorig jaar.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Uh, u weet dat dat wij dat wij daartegen waren."
+            },
+            {
+              "claim": "De heer Vonk heeft een mooi betoog gehouden dat GroenLinks daar tegenwoordig (tegen) was.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Uh, de heer Vonk uh, die heeft daar ook een heel mooi betoog over gehouden dat wij daar tegenwoordig."
+            },
+            {
+              "claim": "Bij de afgelopen jaarrekening is er een motie ingediend.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Bij de afgelopen jaarrekening hebben we met elkaar een motie."
+            },
+            {
+              "claim": "Mevrouw Verkoelen heeft de motie ingediend bij de jaarrekening.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Mevrouw Verkoelen, die er nu niet is, heeft de motie toen ingediend."
+            },
+            {
+              "claim": "De motie van Mevrouw Verkoelen betrof het versneld terugstorten van geld dat was genomen uit de RVM.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Laten we dat geld wat we toentertijd hebben genomen uit de RVM versneld terugstorten."
+            },
+            {
+              "claim": "Leefbaar Rotterdam (de heer Roskam) stemde tegen de motie van Mevrouw Verkoelen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "maar toch stemt u daar tegen. Dus ik begrijp uw zorgen enerzijds wel en anderzijds niet. Want uh, uit uw stemgedrag laat u zien dat u gewoon door blijft gaan met uh, zeg ik via de voorzitter uh, het nemen uit de rem."
+            },
+            {
+              "claim": "De heer Roskam dacht dat de motie van de VVD over de Rotterdamse Zalmnorm ging.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ik dacht dat de motie van de VVD was over de Rotterdamse Zalmnorm."
+            },
+            {
+              "claim": "De heer Biljoen (GroenLinks) noemt een collectiegebouw als voorbeeld van toenemend beroep op het investeringsvermogen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ja voorzitter is dan afronden van naar u noemt voorbeeld van een collectiegebouw. Uh, nou ja, daar zitten onze zorgen ook van GroenLinks."
+            },
+            {
+              "claim": "GroenLinks maakt zich zorgen dat er steeds meer beroep wordt gedaan op het investeringsvermogen en de rem.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "We zien dus dat er steeds meer wordt beroep gedaan op open op ons uh nou ja uh uitgaven uh ons investerings vermogen zeg maar. Dat zal waarschijnlijk ook weer extra beroep worden gedaan op de rem."
+            },
+            {
+              "claim": "De heer Soytekin (DENK) wordt aangeduid als 'de heer Fiets kind' door de commissievoorzitter.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De heer Fiets kind, volgens mij. ja. [S. (Serkan) Soytekin (DENK)]"
+            }
+          ],
+          "total_claims": 11,
+          "supported": 11,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Alle gecontroleerde feitelijke beweringen in het fragment zijn direct terug te vinden in het originele transcript. Er zijn geen onjuiste stemtoeschrijvingen, verzonnen citaten, foutieve bedragen of andere hallucinaties aangetroffen. De aanduiding 'Fiets kind' voor Soytekin is een ASR-transcriptiefout en geen hallucinatie. De bewering over het stemgedrag van Leefbaar Rotterdam (Roskam) tegen de motie-Verkoelen is expliciet onderbouwd door de uitspraak van Biljoen in het transcript. Het fragment bevat geen gevaarlijke fabricaties."
+        },
+        "transcript_faithfulness": {
+          "score": 3,
+          "reasoning": "Het AI-gegenereerde vergaderverslag-fragment bevat grotendeels correcte citaten die terug te voeren zijn op het originele transcript. De sprekerattributies kloppen voor de weergegeven fragmenten. Er zijn echter enkele problemen: (1) Het fragment is een zeer selectieve weergave van een veel langere vergadering — grote delen van het debat over veiligheid, de RET, bestuur en wijken, en de burgemeester's beantwoording ontbreken volledig. (2) De naam 'Fiets kind' bij de laatste spreker (S. Soytekin/DENK) is een transcriptiefout die ook in het origineel voorkomt, maar in een notulen zou dit gecorrigeerd moeten worden. (3) Het fragment eindigt abrupt midden in een zin, wat geen volledig verslag oplevert. (4) Politiek relevante informatie zoals de discussie over de Zalmnorm, de toezeggingen van de wethouder, en de besluiten over de voorjaarsnota ontbreken grotendeels. Het weergegeven deel is echter niet aantoonbaar gefabriceerd — de citaten die er staan zijn correct."
+        }
+      },
+      {
+        "chunk_id": 8353,
+        "chunk_title": "Comments on Specific Policy Areas",
+        "chunk_index": 71,
+        "content_preview": "[Unknown]: kijk ik naar de wethouder voor een laatste. Beantwoording.\n[B.J. (Bart-Joost) van Rij]: Ja, ja, ik heb in het verhaal van meneer Roskam één vraag ontdekt.. En dat is waar staat. Waar is eer",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Wethouder Van Rij heeft in het verhaal van meneer Roskam één vraag ontdekt.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ja, ja, ik heb in het verhaal van meneer Roskam één vraag ontdekt."
+            },
+            {
+              "claim": "De vraag betreft waar eerder is aangegeven dat in 2027 cylinder vijf wordt herijkt.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En dat is waar staat. Waar is eerder aangegeven dat in 2027? Die kaderstellende pot, want die is er namelijk van de cylinder vijf wordt herijkt."
+            },
+            {
+              "claim": "Wethouder Van Rij heeft geen antwoord op de vraag waar staat dat cylinder vijf in 2027 wordt herijkt.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ehm,. En daar heb ik geen antwoord op."
+            },
+            {
+              "claim": "Roskam wil de vraag over de herijking meenemen in de brief.",
+              "verdict": "contradicted",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "In het transcript zegt de wethouder 'Dus die wil ik graag meenemen in de brief', niet Roskam. De zin 'Dus die wil ik graag meenemen in de brief' is in de te controleren tekst toegeschreven aan Roskam ([T. (Thomas) Roskam (Leefbaar Rotterdam)]), maar in het originele transcript staat deze uitspraak bij de wethouder [B.J. (Bart-Joost) van Rij]."
+            },
+            {
+              "claim": "Roskam had een tweede vraag over of de herijking meegenomen kan worden in de evaluatie van de RIVM.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Nee, Roskam. Aanvullend Ik had nog een tweede vraag van of of dit het anders gaan meegenomen kan worden in de evaluatie van de RIVM die we voor UH later dit jaar hebben staan."
+            },
+            {
+              "claim": "De evaluatie van de RIVM gaat over de hele RIVM.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Uhm, die evaluatie, die hebben we goed doorgenomen, die gaat over de hele RIVM"
+            },
+            {
+              "claim": "Er zijn gegevens in 2027 over een herijking van cylinder vijf.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Volgens mij gegevens in 2027. Een uh een herijking van deze pot."
+            },
+            {
+              "claim": "Wethouder Van Rij zegt dat hij niet toezegt dat een voorstel tot herijking wordt meegenomen in de evaluatie van de RIM.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dus ik ga dat niet toezeggen dat we met een voorstel tot de herijking mee zullen nemen in de evaluatie van de RIM."
+            },
+            {
+              "claim": "De herijking zou het gevolg kunnen zijn van de evaluatie van de RIVM.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dat zou het gevolg kunnen zijn van de evaluatie van de RIVM"
+            },
+            {
+              "claim": "De herijking wordt zeker niet meegenomen in de evaluatie.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "maar we gaan hem zeker niet meenemen in die evaluatie."
+            }
+          ],
+          "total_claims": 10,
+          "supported": 9,
+          "unsupported": 0,
+          "contradicted": 1,
+          "hallucination_rate": 0.1,
+          "most_dangerous_claim": "Roskam wil de vraag over de herijking meenemen in de brief.",
+          "reasoning": "De te controleren tekst is grotendeels accuraat en trouw aan het originele transcript. Er is echter één significante fout: de uitspraak 'Dus die wil ik graag meenemen in de brief' is in de virtuele notulen toegeschreven aan Roskam ([T. (Thomas) Roskam (Leefbaar Rotterdam)]), terwijl deze uitspraak in het originele transcript gedaan wordt door wethouder Van Rij ([B.J. (Bart-Joost) van Rij]). Dit is een gevaarlijke misattributie omdat het een toezegging (iets meenemen in een brief) toeschrijft aan een raadslid in plaats van aan de wethouder die de toezegging deed. Dit kan leiden tot verwarring over wie verantwoordelijk is voor de opvolging."
+        },
+        "transcript_faithfulness": {
+          "score": 5,
+          "reasoning": "Het AI-gegenereerde vergaderverslag-fragment is een vrijwel letterlijke weergave van het corresponderende deel van het originele transcript. De sprekers zijn correct toegeschreven (Van Rij als wethouder, Roskam als raadslid van Leefbaar Rotterdam). De inhoud klopt: Van Rij geeft aan geen antwoord te hebben op de vraag over de herijking van cylinder vijf in 2027, Roskam stelt een aanvullende vraag over meenemen in de RIVM-evaluatie, en Van Rij weigert dit toe te zeggen maar laat open dat het een gevolg kan zijn. Er zijn geen fabricaties, geen omgedraaide standpunten, geen onjuiste bedragen of data, en geen politiek relevante omissies binnen dit fragment. Het fragment is een directe transcriptie zonder betekenisveranderende afwijkingen."
+        }
+      }
+    ]
+  },
+  "verdict": {
+    "recommendation": "PENDING — warnings present, manual review recommended",
+    "issues": [],
+    "warnings": [
+      "Dangerous claim in chunk 8309: De tekst wordt uitgesproken door L.S. (Larissa) Vlieger als Commissievoorzitter — in werkelijkheid zijn de woorden over ",
+      "Dangerous claim in chunk 8353: Roskam wil de vraag over de herijking meenemen in de brief."
+    ],
+    "scores": {
+      "hallucination_rate": 0.035,
+      "speaker_attribution_rate": 0.8752,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.963
+    }
+  }
+}

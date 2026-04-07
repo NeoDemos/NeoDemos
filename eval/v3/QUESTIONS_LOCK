@@ -1,0 +1,10 @@
+MD5 (eval/data/questions.json) = f91aa24cb38a34fed35eeb26674d188f
+Questions: 21 (20 original v2 + cp-01 compound)
+Updated: 2026-04-07
+
+v2 baseline was measured on the original 20 questions.
+v3 comparisons against v2 should filter to the original 20 question IDs.
+The cp-01 question is a v3-only addition for compound query testing.
+
+Verify with:
+  md5 eval/data/questions.json

@@ -1,0 +1,374 @@
+{
+  "meeting_id": "6e94ec20-a98b-45be-8c4f-1f6f5eee32d9",
+  "audit_timestamp": "2026-04-07T21:10:29.598242",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+    "start_date": "2025-07-09 00:00:00",
+    "committee": "MHEK",
+    "quality_score": 0.953,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 135,
+    "document_count": 9
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 833,
+      "correct_count": 833,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8417,
+      "party_attribution_rate": 0.3147,
+      "total_segments": 518,
+      "attributed_segments": 436,
+      "unattributed_segments": 82
+    },
+    "speaker_diversity": {
+      "unique_speakers": 13,
+      "unique_parties": 9,
+      "top_speaker": "Plaatsvervangende commissievoorzitter",
+      "top_speaker_segment_count": 151,
+      "monologue_rate": 0.2915,
+      "speakers": {
+        "Plaatsvervangende commissievoorzitter": 151,
+        "C.M. (Chantal) Zeegers": 58,
+        "Inspreker": 38,
+        "M.Y. (Mina) Morkoç": 30,
+        "J.M. (Amy) de Bruijn Burgercommissielid": 29,
+        "M.S. (Marike) Abrahamse": 28,
+        "B.T.A. (Bernhard) van Meeteren Burgercommissielid CDA": 26,
+        "P.F. (Pelle) Meurink Burgercommissielid": 21,
+        "T.S.J. (Theo) Coşkun": 18,
+        "D. (Donatella) Schalm-Civile Burgercommissielid": 12
+      },
+      "parties": {
+        "GroenLinks": 30,
+        "PvdA": 29,
+        "VVD": 28,
+        "D66": 21,
+        "SP": 18,
+        "Volt": 12,
+        "Leefbaar Rotterdam": 10,
+        "Partij voor de Dieren": 10,
+        "Forum voor Democratie": 5
+      }
+    },
+    "segment_quality": {
+      "total_segments": 518,
+      "nonempty_segments": 518,
+      "total_words": 42072,
+      "total_chars": 241571,
+      "avg_words_per_segment": 81.2,
+      "avg_chars_per_segment": 466.4,
+      "short_segment_rate": 0.2008,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 14,
+      "items_with_content": 9,
+      "coverage_rate": 0.6429,
+      "items": [
+        {
+          "title": "Procedurevergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 0
+        },
+        {
+          "title": "Commissieplanning",
+          "segment_count": 1
+        },
+        {
+          "title": "Regeling van Werkzaamheden",
+          "segment_count": 33
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 0
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 5
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 0
+        },
+        {
+          "title": "Adviescommissies Metropoolregio Rotterdam Den Haag",
+          "segment_count": 12
+        },
+        {
+          "title": "Inspreker 'vreemd aan de orde'",
+          "segment_count": 46
+        },
+        {
+          "title": "Raadsvoorstel over Projectambitiedocument windenergie Beneluxplein",
+          "segment_count": 280
+        },
+        {
+          "title": "Betrekken bij Raadsvoorstel over Projectambitiedocument windenergie Beneluxplein",
+          "segment_count": 22
+        },
+        {
+          "title": "Concept-Voorjaarsnota 2025 en 1e Herziening 2025",
+          "segment_count": 7
+        },
+        {
+          "title": "Klimaatactieplan Rotterdam (4e update)",
+          "segment_count": 0
+        },
+        {
+          "title": "Betrekken bij  Concept-Voorjaarsnota 2025 en 1e Herziening 2025",
+          "segment_count": 112
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+        "start_date": "2025-07-09 00:00:00",
+        "committee": "MHEK",
+        "review_status": "auto_approved",
+        "quality_score": 0.953,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+        "start_date": "2025-07-09 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 13,
+      "recognized_speakers": 12,
+      "unrecognized_speakers": 1,
+      "recognition_rate": 0.9231,
+      "recognized": [
+        {
+          "name": "Plaatsvervangende commissievoorzitter",
+          "segment_count": 151,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S.M. (Sebastiaan) Bonte",
+          "segment_count": 10,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "J.M. (Amy) de Bruijn Burgercommissielid",
+          "segment_count": 29,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.Y. (Mina) Morkoç",
+          "segment_count": 30,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "P.F. (Pelle) Meurink Burgercommissielid",
+          "segment_count": 21,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "B.T.A. (Bernhard) van Meeteren Burgercommissielid CDA",
+          "segment_count": 26,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "T.S.J. (Theo) Coşkun",
+          "segment_count": 18,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "M.S. (Marike) Abrahamse",
+          "segment_count": 28,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "Inspreker",
+          "segment_count": 38,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "D. (Donatella) Schalm-Civile Burgercommissielid",
+          "segment_count": 12,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "R.T.J. (Ruud) van der Velden",
+          "segment_count": 10,
+          "parties": [
+            "Partij voor de Dieren"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "C.M. (Chantal) Zeegers",
+          "segment_count": 58,
+          "parties": [],
+          "recognized_as": "council_member"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "A.R. (Ardi) Oostdijk",
+          "segment_count": 5,
+          "parties": [
+            "Forum voor Democratie"
+          ],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 135,
+      "empty_chunks": 0,
+      "buckets": {
+        "long (2000-5000)": 84,
+        "medium (200-2000)": 50,
+        "short (50-200)": 1
+      },
+      "min_chars": 156,
+      "max_chars": 2706,
+      "avg_chars": 1973.2,
+      "median_chars": 2212,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 135,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 9,
+      "documents_with_chunks": 9,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Adviescommissies Metropoolregio Rotterdam Den Haag",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: Betrekken bij  Concept-Voorjaarsnota 2025 en 1e Herziening 2025",
+          "chunks": 37
+        },
+        {
+          "name": "Transcript: Betrekken bij Raadsvoorstel over Projectambitiedocument windenergie Beneluxplein",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Commissieplanning",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Concept-Voorjaarsnota 2025 en 1e Herziening 2025",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Inspreker 'vreemd aan de orde'",
+          "chunks": 11
+        },
+        {
+          "name": "Transcript: Overlegvergadering",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Raadsvoorstel over Projectambitiedocument windenergie Beneluxplein",
+          "chunks": 74
+        },
+        {
+          "name": "Transcript: Regeling van Werkzaamheden",
+          "chunks": 4
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 135,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 135,
+      "distribution": {
+        "quote": {
+          "count": 134,
+          "rate": 0.9926
+        },
+        "full_text": {
+          "count": 1,
+          "rate": 0.0074
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8417,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.953
+    }
+  }
+}

@@ -1,0 +1,290 @@
+{
+  "meeting_id": "1d055db3-adc7-4dea-90e4-a47b654fdb98",
+  "audit_timestamp": "2026-04-07T21:47:59.934208",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "judge_backend": "gemini",
+    "anthropic_model": "claude-haiku-4-5-20251001",
+    "gemini_model": "gemini-2.5-flash-lite"
+  },
+  "meeting_info": {
+    "name": "Vergadering Commissie tot Onderzoek van de Rekening (2018-2022) 01-11-2018",
+    "start_date": "2018-11-01 00:00:00",
+    "committee": "COR",
+    "quality_score": 0.998,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 37,
+    "document_count": 6
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 104,
+      "correct_count": 104,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.9935,
+      "party_attribution_rate": 0.0,
+      "total_segments": 153,
+      "attributed_segments": 152,
+      "unattributed_segments": 1
+    },
+    "speaker_diversity": {
+      "unique_speakers": 10,
+      "unique_parties": 0,
+      "top_speaker": "Vreugdenhil, G.J.M. (voorzitter)",
+      "top_speaker_segment_count": 51,
+      "monologue_rate": 0.3333,
+      "speakers": {
+        "Vreugdenhil, G.J.M. (voorzitter)": 51,
+        "Spijkerman, J.L. (bestuursdienst M&C)": 27,
+        "Chedi-van Hall, M. (ambtelijke ondersteuning)": 23,
+        "Hoogvliet, A. (ambtelijke ondersteuning)": 16,
+        "Rozema, J.G. (lid Commissie Onderzoek Rekening)": 10,
+        "Roest, L.L.P.R. (GroenLinks)": 9,
+        "Tak, D.P.A. (PvdA)": 9,
+        "Goldstein, R. (accountant)": 5,
+        "Lansink-Bastemeijer, P.J.P. (VVD)": 1,
+        "Visser, A.L.H. (wethouder)": 1
+      },
+      "parties": {}
+    },
+    "segment_quality": {
+      "total_segments": 153,
+      "nonempty_segments": 152,
+      "total_words": 11396,
+      "total_chars": 63046,
+      "avg_words_per_segment": 75.0,
+      "avg_chars_per_segment": 414.8,
+      "short_segment_rate": 0.1176,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 7,
+      "items_with_content": 6,
+      "coverage_rate": 0.8571,
+      "items": [
+        {
+          "title": "2 Vaststelling agenda",
+          "segment_count": 0
+        },
+        {
+          "title": "3 Vaststelling verslag van 20 september 2018",
+          "segment_count": 2
+        },
+        {
+          "title": "4 Tweede Voortgangsrapportage jaarrekening 2018",
+          "segment_count": 46
+        },
+        {
+          "title": "5 Opvolging aanbevelingen COR/Accountant met als bijlage het Audit Charter FA",
+          "segment_count": 39
+        },
+        {
+          "title": "6 Beleidsnota weerstandsvermogen en risicobeheersing Rotterdam 2018",
+          "segment_count": 58
+        },
+        {
+          "title": "7 Planning",
+          "segment_count": 7
+        },
+        {
+          "title": "8 Rondvraag en sluiting",
+          "segment_count": 1
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Vergadering Commissie tot Onderzoek van de Rekening (2018-2022) 01-11-2018",
+        "start_date": "2018-11-01 00:00:00",
+        "committee": "COR",
+        "review_status": "auto_approved",
+        "quality_score": 0.998,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Vergadering Commissie tot Onderzoek van de Rekening (2018-2022) 01-11-2018",
+        "start_date": "2018-11-01 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 10,
+      "recognized_speakers": 2,
+      "unrecognized_speakers": 8,
+      "recognition_rate": 0.2,
+      "recognized": [
+        {
+          "name": "Vreugdenhil, G.J.M. (voorzitter)",
+          "segment_count": 51,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Visser, A.L.H. (wethouder)",
+          "segment_count": 1,
+          "parties": [],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "Chedi-van Hall, M. (ambtelijke ondersteuning)",
+          "segment_count": 23,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Hoogvliet, A. (ambtelijke ondersteuning)",
+          "segment_count": 16,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Rozema, J.G. (lid Commissie Onderzoek Rekening)",
+          "segment_count": 10,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Roest, L.L.P.R. (GroenLinks)",
+          "segment_count": 9,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Goldstein, R. (accountant)",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Tak, D.P.A. (PvdA)",
+          "segment_count": 9,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Lansink-Bastemeijer, P.J.P. (VVD)",
+          "segment_count": 1,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Spijkerman, J.L. (bestuursdienst M&C)",
+          "segment_count": 27,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 37,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 13,
+        "long (2000-5000)": 23,
+        "short (50-200)": 1
+      },
+      "min_chars": 183,
+      "max_chars": 2760,
+      "avg_chars": 2007.3,
+      "median_chars": 2211,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 37,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 6,
+      "documents_with_chunks": 6,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: 3 Vaststelling verslag van 20 september 2018",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 4 Tweede Voortgangsrapportage jaarrekening 2018",
+          "chunks": 10
+        },
+        {
+          "name": "Transcript: 5 Opvolging aanbevelingen COR/Accountant met als bijlage het Audit Charter FA",
+          "chunks": 10
+        },
+        {
+          "name": "Transcript: 6 Beleidsnota weerstandsvermogen en risicobeheersing Rotterdam 2018",
+          "chunks": 14
+        },
+        {
+          "name": "Transcript: 7 Planning",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 8 Rondvraag en sluiting",
+          "chunks": 1
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 37,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 37,
+      "distribution": {
+        "quote": {
+          "count": 35,
+          "rate": 0.9459
+        },
+        "full_text": {
+          "count": 2,
+          "rate": 0.0541
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.9935,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.998
+    }
+  }
+}

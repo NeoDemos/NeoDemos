@@ -1,0 +1,317 @@
+{
+  "meeting_id": "102107ae-5953-43a9-95f8-bcfc4aa0a662",
+  "audit_timestamp": "2026-04-07T21:47:54.320853",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "judge_backend": "gemini",
+    "anthropic_model": "claude-haiku-4-5-20251001",
+    "gemini_model": "gemini-2.5-flash-lite"
+  },
+  "meeting_info": {
+    "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+    "start_date": "2025-07-09 00:00:00",
+    "committee": "WIOS",
+    "quality_score": 0.921,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 107,
+    "document_count": 3
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 589,
+      "correct_count": 589,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.7367,
+      "party_attribution_rate": 0.3367,
+      "total_segments": 300,
+      "attributed_segments": 221,
+      "unattributed_segments": 79
+    },
+    "speaker_diversity": {
+      "unique_speakers": 14,
+      "unique_parties": 9,
+      "top_speaker": "J.M.D. (Joey) de Waard Commissievoorzitter",
+      "top_speaker_segment_count": 63,
+      "monologue_rate": 0.21,
+      "speakers": {
+        "J.M.D. (Joey) de Waard Commissievoorzitter": 63,
+        "S. (Said) Kasmi": 47,
+        "J.M. (Joan) Nunnely": 21,
+        "S. (Sarah) Reitema": 18,
+        "F. (Femke) Bouwer-van Schie Burgercommissielid": 14,
+        "J. (Jordi) Vicario": 14,
+        "M.R. (Marchiano) van Campenhout": 10,
+        "S.L. (Sigrid) Oosterwegel Burgercommissielid": 8,
+        "A.B. (Tom) Breedveld Burgercommissielid": 6,
+        "S.D. (Safa) Sodirijo Burgercommissielid": 6
+      },
+      "parties": {
+        "D66": 21,
+        "PvdA": 18,
+        "Volt": 14,
+        "VVD": 14,
+        "BIJ1": 10,
+        "SP": 8,
+        "GroenLinks": 8,
+        "DENK": 6,
+        "Leefbaar Rotterdam": 2
+      }
+    },
+    "segment_quality": {
+      "total_segments": 300,
+      "nonempty_segments": 300,
+      "total_words": 33482,
+      "total_chars": 190522,
+      "avg_words_per_segment": 111.6,
+      "avg_chars_per_segment": 635.1,
+      "short_segment_rate": 0.2567,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 3,
+      "items_with_content": 3,
+      "coverage_rate": 1.0,
+      "items": [
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 2
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 1
+        },
+        {
+          "title": "Raadsvoorstel over Wijziging verordening voorzieningen huisvesting onderwijs",
+          "segment_count": 297
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+        "start_date": "2025-07-09 00:00:00",
+        "committee": "WIOS",
+        "review_status": "auto_approved",
+        "quality_score": 0.921,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+        "start_date": "2025-07-09 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 14,
+      "recognized_speakers": 14,
+      "unrecognized_speakers": 0,
+      "recognition_rate": 1.0,
+      "recognized": [
+        {
+          "name": "J.M.D. (Joey) de Waard Commissievoorzitter",
+          "segment_count": 63,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "F. (Femke) Bouwer-van Schie Burgercommissielid",
+          "segment_count": 14,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.R. (Marchiano) van Campenhout",
+          "segment_count": 10,
+          "parties": [
+            "BIJ1"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "A.B. (Tom) Breedveld Burgercommissielid",
+          "segment_count": 6,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S. (Sarah) Reitema",
+          "segment_count": 18,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J.M. (Joan) Nunnely",
+          "segment_count": 21,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S.L. (Sigrid) Oosterwegel Burgercommissielid",
+          "segment_count": 8,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S.D. (Safa) Sodirijo Burgercommissielid",
+          "segment_count": 6,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S. (Said) Kasmi",
+          "segment_count": 47,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "E.M. (Ellen) Verouden Burgercommissielid CDA",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "T.S.J. (Theo) Coşkun",
+          "segment_count": 2,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "J. (Jordi) Vicario",
+          "segment_count": 14,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M. (Manuel) Crielaard",
+          "segment_count": 2,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R. (Ronald) Buijt",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "council_member"
+        }
+      ],
+      "unrecognized": []
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 107,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 37,
+        "short (50-200)": 9,
+        "long (2000-5000)": 61
+      },
+      "min_chars": 110,
+      "max_chars": 2763,
+      "avg_chars": 1819.2,
+      "median_chars": 2145,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 107,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 3,
+      "documents_with_chunks": 3,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Raadsvoorstel over Wijziging verordening voorzieningen huisvesting onderwijs",
+          "chunks": 105
+        },
+        {
+          "name": "Transcript: Vaststellen van de agenda",
+          "chunks": 1
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 107,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 107,
+      "distribution": {
+        "quote": {
+          "count": 105,
+          "rate": 0.9813
+        },
+        "full_text": {
+          "count": 2,
+          "rate": 0.0187
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "PENDING — warnings present, manual review recommended",
+    "issues": [],
+    "warnings": [
+      "Low speaker attribution: 74% (target 80%)"
+    ],
+    "scores": {
+      "speaker_attribution_rate": 0.7367,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.921
+    }
+  }
+}

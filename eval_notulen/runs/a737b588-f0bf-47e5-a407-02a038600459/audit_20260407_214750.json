@@ -1,0 +1,386 @@
+{
+  "meeting_id": "a737b588-f0bf-47e5-a407-02a038600459",
+  "audit_timestamp": "2026-04-07T21:47:50.397947",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "judge_backend": "gemini",
+    "anthropic_model": "claude-haiku-4-5-20251001",
+    "gemini_model": "gemini-2.5-flash-lite"
+  },
+  "meeting_info": {
+    "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+    "start_date": "2026-02-12 00:00:00",
+    "committee": "BOFV",
+    "quality_score": 0.931,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 125,
+    "document_count": 6
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 850,
+      "correct_count": 850,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.7692,
+      "party_attribution_rate": 0.3275,
+      "total_segments": 455,
+      "attributed_segments": 350,
+      "unattributed_segments": 105
+    },
+    "speaker_diversity": {
+      "unique_speakers": 19,
+      "unique_parties": 9,
+      "top_speaker": "L.S. (Larissa) Vlieger Commissievoorzitter",
+      "top_speaker_segment_count": 96,
+      "monologue_rate": 0.211,
+      "speakers": {
+        "L.S. (Larissa) Vlieger Commissievoorzitter": 96,
+        "R.A.C.J. (Robert) Simons": 81,
+        "J.M. (Amy) de Bruijn": 38,
+        "S. (Stephan) Leewis": 20,
+        "D.J. (Diederik) van Dommelen": 19,
+        "M.H. (Marvin) Biljoen": 18,
+        "M.S. (Marike) Abrahamse": 16,
+        "T.S.J. (Theo) Coşkun": 11,
+        "A.I. (Abigail) Norville": 9,
+        "T. (Tim) de Haan": 6
+      },
+      "parties": {
+        "GroenLinks": 38,
+        "PvdA": 38,
+        "VVD": 35,
+        "SP": 11,
+        "D66": 8,
+        "Leefbaar Rotterdam": 7,
+        "CDA": 6,
+        "DENK": 4,
+        "50PLUS": 2
+      }
+    },
+    "segment_quality": {
+      "total_segments": 455,
+      "nonempty_segments": 454,
+      "total_words": 39640,
+      "total_chars": 229075,
+      "avg_words_per_segment": 87.3,
+      "avg_chars_per_segment": 504.6,
+      "short_segment_rate": 0.2593,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 8,
+      "items_with_content": 6,
+      "coverage_rate": 0.75,
+      "items": [
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 1
+        },
+        {
+          "title": "Raadsvoorstel verordening veteranen en veteranenhuis",
+          "segment_count": 6
+        },
+        {
+          "title": "Raadsvoorstel aanvullend investeringsvoorstel 2025",
+          "segment_count": 18
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 0
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 3
+        },
+        {
+          "title": "Adviezenlijst overlegvergadering",
+          "segment_count": 2
+        },
+        {
+          "title": "Aanpassing inspraakverordening naar aanleiding van de wet versterking participatie op decentraal niveau",
+          "segment_count": 425
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+        "start_date": "2026-02-12 00:00:00",
+        "committee": "BOFV",
+        "review_status": "auto_approved",
+        "quality_score": 0.931,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+        "start_date": "2026-02-12 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 19,
+      "recognized_speakers": 16,
+      "unrecognized_speakers": 3,
+      "recognition_rate": 0.8421,
+      "recognized": [
+        {
+          "name": "L.S. (Larissa) Vlieger Commissievoorzitter",
+          "segment_count": 96,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.S. (Marike) Abrahamse",
+          "segment_count": 16,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.H. (Marvin) Biljoen",
+          "segment_count": 18,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J.M. (Amy) de Bruijn",
+          "segment_count": 38,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "P.J.H.D. (Ellen) Verkoelen",
+          "segment_count": 2,
+          "parties": [
+            "50PLUS"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D.J. (Diederik) van Dommelen",
+          "segment_count": 19,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T. (Tim) de Haan",
+          "segment_count": 6,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.G.C. (René) Segers-Hoogendoorn",
+          "segment_count": 6,
+          "parties": [
+            "CDA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "Inspreker",
+          "segment_count": 6,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "T.S.J. (Theo) Coşkun",
+          "segment_count": 11,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "S. (Stephan) Leewis",
+          "segment_count": 20,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J.M.D. (Joey) de Waard",
+          "segment_count": 6,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.A.C.J. (Robert) Simons",
+          "segment_count": 81,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "E.H. (Eyasu) Balcha",
+          "segment_count": 2,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "G.F.E. (Geert) Koster",
+          "segment_count": 1,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Serkan) Soytekin",
+          "segment_count": 4,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "M. (Marianne) van den   Anker Ombudsman Rotterdam Rijnmond",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "A.I. (Abigail) Norville",
+          "segment_count": 9,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "T.B. (Tim)  Versnel",
+          "segment_count": 4,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 125,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 43,
+        "long (2000-5000)": 81,
+        "short (50-200)": 1
+      },
+      "min_chars": 183,
+      "max_chars": 2742,
+      "avg_chars": 1954.7,
+      "median_chars": 2218,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 125,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 6,
+      "documents_with_chunks": 6,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Aanpassing inspraakverordening naar aanleiding van de wet versterking participatie op decentraal niveau",
+          "chunks": 116
+        },
+        {
+          "name": "Transcript: Adviezenlijst overlegvergadering",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Raadsvoorstel aanvullend investeringsvoorstel 2025",
+          "chunks": 4
+        },
+        {
+          "name": "Transcript: Raadsvoorstel verordening veteranen en veteranenhuis",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Vaststellen van de agenda",
+          "chunks": 1
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 125,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 125,
+      "distribution": {
+        "quote": {
+          "count": 124,
+          "rate": 0.992
+        },
+        "full_text": {
+          "count": 1,
+          "rate": 0.008
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "PENDING — warnings present, manual review recommended",
+    "issues": [],
+    "warnings": [
+      "Low speaker attribution: 77% (target 80%)"
+    ],
+    "scores": {
+      "speaker_attribution_rate": 0.7692,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.931
+    }
+  }
+}

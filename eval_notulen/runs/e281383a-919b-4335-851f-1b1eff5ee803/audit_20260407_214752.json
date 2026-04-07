@@ -1,0 +1,363 @@
+{
+  "meeting_id": "e281383a-919b-4335-851f-1b1eff5ee803",
+  "audit_timestamp": "2026-04-07T21:47:52.409748",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "judge_backend": "gemini",
+    "anthropic_model": "claude-haiku-4-5-20251001",
+    "gemini_model": "gemini-2.5-flash-lite"
+  },
+  "meeting_info": {
+    "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+    "start_date": "2025-11-05 00:00:00",
+    "committee": "ZOCS",
+    "quality_score": 0.937,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 100,
+    "document_count": 4
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 601,
+      "correct_count": 601,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.7903,
+      "party_attribution_rate": 0.379,
+      "total_segments": 372,
+      "attributed_segments": 294,
+      "unattributed_segments": 78
+    },
+    "speaker_diversity": {
+      "unique_speakers": 18,
+      "unique_parties": 10,
+      "top_speaker": "T.S.J. (Theo) Coşkun Commissievoorzitter",
+      "top_speaker_segment_count": 92,
+      "monologue_rate": 0.2473,
+      "speakers": {
+        "T.S.J. (Theo) Coşkun Commissievoorzitter": 92,
+        "M. (Manuel) Crielaard": 26,
+        "F. (Faouzi) Achbar": 24,
+        "R. (Ronald) Buijt": 23,
+        "J.M. (Amy) de Bruijn": 21,
+        "T.J. (Tjalling) Vonk": 14,
+        "C.M. (Chantal) Zeegers": 14,
+        "A.N.M. (Nico) van Scheijndel Burgercommissielid": 10,
+        "S.L. (Sigrid) Oosterwegel Burgercommissielid": 10,
+        "S. (Stephan) Leewis": 10
+      },
+      "parties": {
+        "PvdA": 29,
+        "GroenLinks": 27,
+        "Leefbaar Rotterdam": 26,
+        "ChristenUnie": 14,
+        "50PLUS": 10,
+        "D66": 10,
+        "Volt": 8,
+        "VVD": 7,
+        "DENK": 6,
+        "SP": 4
+      }
+    },
+    "segment_quality": {
+      "total_segments": 372,
+      "nonempty_segments": 372,
+      "total_words": 30502,
+      "total_chars": 170163,
+      "avg_words_per_segment": 82.0,
+      "avg_chars_per_segment": 457.4,
+      "short_segment_rate": 0.1855,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 5,
+      "items_with_content": 4,
+      "coverage_rate": 0.8,
+      "items": [
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 4
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 2
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 0
+        },
+        {
+          "title": "Begroting 2026 e.v.",
+          "segment_count": 365
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 1
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+        "start_date": "2025-11-05 00:00:00",
+        "committee": "ZOCS",
+        "review_status": "auto_approved",
+        "quality_score": 0.937,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+        "start_date": "2025-11-05 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 18,
+      "recognized_speakers": 17,
+      "unrecognized_speakers": 1,
+      "recognition_rate": 0.9444,
+      "recognized": [
+        {
+          "name": "M. (Manuel) Crielaard",
+          "segment_count": 26,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T.S.J. (Theo) Coşkun Commissievoorzitter",
+          "segment_count": 92,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "A.N.M. (Nico) van Scheijndel Burgercommissielid",
+          "segment_count": 10,
+          "parties": [
+            "50PLUS"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "J.M. (Amy) de Bruijn",
+          "segment_count": 21,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J. (Jordi) Vicario",
+          "segment_count": 7,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "E.H. (Eyasu) Balcha",
+          "segment_count": 2,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "N. (Naoufal) Akhatab",
+          "segment_count": 6,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "S.L. (Sigrid) Oosterwegel Burgercommissielid",
+          "segment_count": 10,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "A.B. (Tom) Breedveld Burgercommissielid",
+          "segment_count": 4,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "R. (Ronald) Buijt",
+          "segment_count": 23,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "F. (Faouzi) Achbar",
+          "segment_count": 24,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "R.P. (Ryan) Vos Burgercommissielid",
+          "segment_count": 8,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S. (Stephan) Leewis",
+          "segment_count": 10,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D. (Donatella) Schalm-Civile Burgercommissielid",
+          "segment_count": 8,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "J.M. (Joan) Nunnely",
+          "segment_count": 8,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "L.S. (Larissa) Vlieger",
+          "segment_count": 7,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "C.M. (Chantal) Zeegers",
+          "segment_count": 14,
+          "parties": [],
+          "recognized_as": "council_member"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "T.J. (Tjalling) Vonk",
+          "segment_count": 14,
+          "parties": [
+            "ChristenUnie"
+          ],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 100,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 34,
+        "long (2000-5000)": 60,
+        "short (50-200)": 6
+      },
+      "min_chars": 114,
+      "max_chars": 2730,
+      "avg_chars": 1851.4,
+      "median_chars": 2146,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 100,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 4,
+      "documents_with_chunks": 4,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Begroting 2026 e.v.",
+          "chunks": 97
+        },
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Overlegvergadering",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Rondvraag en sluiting",
+          "chunks": 1
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 100,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 100,
+      "distribution": {
+        "quote": {
+          "count": 98,
+          "rate": 0.98
+        },
+        "full_text": {
+          "count": 2,
+          "rate": 0.02
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "PENDING — warnings present, manual review recommended",
+    "issues": [],
+    "warnings": [
+      "Low speaker attribution: 79% (target 80%)"
+    ],
+    "scores": {
+      "speaker_attribution_rate": 0.7903,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.937
+    }
+  }
+}

@@ -1,0 +1,448 @@
+{
+  "meeting_id": "72867699-495f-4962-bbb1-5918013019cb",
+  "audit_timestamp": "2026-04-07T21:10:30.562435",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+    "start_date": "2025-06-11 00:00:00",
+    "committee": "MHEK",
+    "quality_score": 0.959,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 128,
+    "document_count": 14
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 739,
+      "correct_count": 739,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.862,
+      "party_attribution_rate": 0.3688,
+      "total_segments": 442,
+      "attributed_segments": 381,
+      "unattributed_segments": 61
+    },
+    "speaker_diversity": {
+      "unique_speakers": 18,
+      "unique_parties": 9,
+      "top_speaker": "Plaatsvervangende commissievoorzitter",
+      "top_speaker_segment_count": 104,
+      "monologue_rate": 0.2353,
+      "speakers": {
+        "Plaatsvervangende commissievoorzitter": 104,
+        "P.J.P. (Pascal) Lansink-Bastemeijer": 45,
+        "C.M. (Chantal) Zeegers": 33,
+        "M.Y. (Mina) Morkoç": 31,
+        "R.A.C.J. (Robert) Simons": 31,
+        "M.S. (Marike) Abrahamse": 22,
+        "D. (Donatella) Schalm-Civile Burgercommissielid": 16,
+        "P.F. (Pelle) Meurink Burgercommissielid": 16,
+        "S.M. (Sebastiaan) Bonte": 15,
+        "J.G. (Just) Hovens Greve Burgercommissielid": 14
+      },
+      "parties": {
+        "GroenLinks": 45,
+        "VVD": 26,
+        "D66": 21,
+        "Volt": 16,
+        "Leefbaar Rotterdam": 15,
+        "SP": 14,
+        "Partij voor de Dieren": 14,
+        "PvdA": 11,
+        "Forum voor Democratie": 1
+      }
+    },
+    "segment_quality": {
+      "total_segments": 442,
+      "nonempty_segments": 442,
+      "total_words": 35582,
+      "total_chars": 202234,
+      "avg_words_per_segment": 80.5,
+      "avg_chars_per_segment": 457.5,
+      "short_segment_rate": 0.2104,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 18,
+      "items_with_content": 14,
+      "coverage_rate": 0.7778,
+      "items": [
+        {
+          "title": "Procedurevergadering",
+          "segment_count": 1
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 0
+        },
+        {
+          "title": "Besluitenlijst openbare procedurevergadering van 21 mei 2025",
+          "segment_count": 1
+        },
+        {
+          "title": "Ingekomen stukken",
+          "segment_count": 0
+        },
+        {
+          "title": "Algemeen",
+          "segment_count": 1
+        },
+        {
+          "title": "Haven",
+          "segment_count": 0
+        },
+        {
+          "title": "Duurzaam",
+          "segment_count": 3
+        },
+        {
+          "title": "Mobiliteit",
+          "segment_count": 9
+        },
+        {
+          "title": "Lijst van openstaande toezeggingen, schriftelijke vragen en moties",
+          "segment_count": 11
+        },
+        {
+          "title": "Regeling van werkzaamheden",
+          "segment_count": 5
+        },
+        {
+          "title": "Sluiting",
+          "segment_count": 5
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 18
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 5
+        },
+        {
+          "title": "Adviescommissies Metropoolregio Rotterdam Den Haag",
+          "segment_count": 4
+        },
+        {
+          "title": "Procedure nieuwe kerncentrale",
+          "segment_count": 196
+        },
+        {
+          "title": "Daarbij betrekken",
+          "segment_count": 0
+        },
+        {
+          "title": "Jaarstukken 2024",
+          "segment_count": 181
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 2
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+        "start_date": "2025-06-11 00:00:00",
+        "committee": "MHEK",
+        "review_status": "auto_approved",
+        "quality_score": 0.959,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+        "start_date": "2025-06-11 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 18,
+      "recognized_speakers": 16,
+      "unrecognized_speakers": 2,
+      "recognition_rate": 0.8889,
+      "recognized": [
+        {
+          "name": "Plaatsvervangende commissievoorzitter",
+          "segment_count": 104,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "D. (Donatella) Schalm-Civile Burgercommissielid",
+          "segment_count": 16,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "J.M. (Amy) de Bruijn Burgercommissielid",
+          "segment_count": 11,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "J.G. (Just) Hovens Greve Burgercommissielid",
+          "segment_count": 14,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.H. (Marvin) Biljoen",
+          "segment_count": 14,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.Y. (Mina) Morkoç",
+          "segment_count": 31,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "D.A. (Dieke) van Groningen",
+          "segment_count": 4,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "C.M. (Chantal) Zeegers",
+          "segment_count": 33,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "R.T.J. (Ruud) van der Velden",
+          "segment_count": 14,
+          "parties": [
+            "Partij voor de Dieren"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.S. (Marike) Abrahamse",
+          "segment_count": 22,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "P.F. (Pelle) Meurink Burgercommissielid",
+          "segment_count": 16,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S.M. (Sebastiaan) Bonte",
+          "segment_count": 15,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "R.A.C.J. (Robert) Simons",
+          "segment_count": 31,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "F. (Fatih) Elbay",
+          "segment_count": 2,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "I. (Ingrid) van Wifferen",
+          "segment_count": 3,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "A.R. (Ardi) Oostdijk",
+          "segment_count": 1,
+          "parties": [
+            "Forum voor Democratie"
+          ],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "P.J.P. (Pascal) Lansink-Bastemeijer",
+          "segment_count": 45,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 128,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 48,
+        "long (2000-5000)": 66,
+        "short (50-200)": 14
+      },
+      "min_chars": 112,
+      "max_chars": 2737,
+      "avg_chars": 1759.5,
+      "median_chars": 2029,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 128,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 14,
+      "documents_with_chunks": 14,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Adviescommissies Metropoolregio Rotterdam Den Haag",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Algemeen",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Besluitenlijst openbare procedurevergadering van 21 mei 2025",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Duurzaam",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Jaarstukken 2024",
+          "chunks": 49
+        },
+        {
+          "name": "Transcript: Lijst van openstaande toezeggingen, schriftelijke vragen en moties",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: Mobiliteit",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Overlegvergadering",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: Procedure nieuwe kerncentrale",
+          "chunks": 62
+        },
+        {
+          "name": "Transcript: Procedurevergadering",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Regeling van werkzaamheden",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Rondvraag en sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Vaststellen van de agenda",
+          "chunks": 1
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 128,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 128,
+      "distribution": {
+        "quote": {
+          "count": 123,
+          "rate": 0.9609
+        },
+        "full_text": {
+          "count": 5,
+          "rate": 0.0391
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.862,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.959
+    }
+  }
+}

@@ -1,0 +1,406 @@
+[
+  {
+    "question_id": "mh-01",
+    "question_text": "Welke partijen stemden tegen het Warmtebedrijf voorstel, en wat was hun alternatief?",
+    "category": "multi_hop",
+    "answer": "Op basis van de beschikbare bronnen kan ik de oorspronkelijke vraag slechts gedeeltelijk beantwoorden, omdat de bronnen geen specifieke informatie bevatten over welke partijen tegen het Warmtebedrijf voorstel stemden of wat hun alternatieve voorstellen waren.\n\n## Wat de bronnen wel laten zien:\n\n**Kritische houding van de SP:**\nUit bron 8 blijkt dat de SP-fractie zeer kritisch stond tegenover het Warmtebedrijf. De SP diende een motie in waarin zij stelden dat het Warmtebedrijf \"de facto failliet\" was en verzochten om surseance van betaling en het niet verstrekken van een overbruggingskrediet van € 18 miljoen. De SP-fractie wilde \"niet dat de gemeenteraad bij een volgende enquêtecommissie voor wat betreft het debacle met het Warmtebedrijf de zwarte piet zal krijgen.\"\n\n**Raadsbreed draagvlak voor voortzetting:**\nBron 19 toont echter dat er ondanks kritiek \"raadsbreed steun om door te gaan met het Warmtebedrijf\" was, \"grotendeels ook vanwege de hoge kosten die met een faillissement van het Warmtebedrijf gepaard zouden gaan.\" Op 2 juni 2016 werden acht moties aangenomen die kaders stelden voor vervolgkeuzes.\n\n**Beperkte informatie over alternatieven:**\nDe bronnen bevatten geen concrete informatie over specifieke alternatieve voorstellen die tegen het Warmtebedrijf voorstel werden ingediend, behalve de SP-motie voor surseance van betaling.\n\n## Conclusie:\n\nHoewel de bronnen aantonen dat er kritiek was op het Warmtebedrijf (met name van de SP), bevatten ze onvoldoende informatie om de oorspronkelijke vraag volledig te beantwoorden. Er is geen duidelijke stemming over een specifiek \"Warmtebedrijf voorstel\" gedocumenteerd waarin wordt aangegeven welke partijen tegen stemden en wat hun concrete alternatieven waren.",
+    "route": {
+      "query_type": "multi_hop",
+      "top_k": 15,
+      "parties": [],
+      "date_from": null,
+      "date_to": null,
+      "sub_queries": [],
+      "confidence": 0.8,
+      "strategy": "sub_query"
+    },
+    "retrieval_metrics": {
+      "context_precision": 0.8,
+      "diversity": {
+        "document_diversity": 0.76,
+        "unique_documents": 19,
+        "total_chunks": 25,
+        "entropy": 4.084
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.0,
+        "keyword_only_pct": 0.0,
+        "both_pct": 0.0,
+        "neither_pct": 1.0,
+        "vector_only": 0,
+        "keyword_only": 0,
+        "both": 0,
+        "total": 25
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 25,
+        "unique_pct": 1.0,
+        "vector_top_k_overlap": 0,
+        "keyword_top_k_overlap": 0
+      },
+      "timings": {
+        "total_ms": 247821.64637499955
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 3,
+        "reasoning": "Het antwoord raakt het onderwerp maar kan de vraag slechts gedeeltelijk beantwoorden. Het identificeert correct dat de SP kritisch was en een motie indiende voor surseance van betaling, maar kan niet aangeven welke andere partijen tegen stemden of wat hun alternatieven waren. Het antwoord is eerlijk over de beperkingen van de bronnen, maar mist daardoor belangrijke aspecten van de oorspronkelijke vraag."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Het antwoord is volledig gebaseerd op de meegeleverde context. Alle beweringen zijn direct terug te vinden in de bronnen: de kritische houding van de SP (bron 8), het raadsbrede draagvlak voor voortzetting ondanks kritiek (bron 19), en de acht aangenomen moties van 2 juni 2016. Cruciaal is dat het antwoord eerlijk erkent dat de bronnen onvoldoende informatie bevatten om de oorspronkelijke vraag volledig te beantwoorden - dit is correct en eerlijk gedrag van een RAG-systeem."
+      },
+      "completeness": {
+        "score": 2,
+        "reasoning": "Het antwoord is oppervlakkig en mist de helft of meer van de relevante informatie. Hoewel het correct aangeeft dat de bronnen beperkte informatie bevatten, behandelt het alleen de SP's kritische houding en het algemene raadsbrede draagvlak. Het mist belangrijke aspecten zoals de specifieke stemming, andere kritische partijen, concrete alternatieven, en de bredere politieke context rond het Warmtebedrijf. De vraag vroeg specifiek naar welke partijen tegen stemden en hun alternatieven, maar het antwoord geeft slechts fragmentarische informatie over één partij (SP) zonder duidelijke stemresultaten of uitgewerkte alternatieven te presenteren."
+      }
+    },
+    "hallucination_metrics": {
+      "claim_verification": {
+        "claims": [
+          {
+            "claim": "De SP-fractie stond zeer kritisch tegenover het Warmtebedrijf",
+            "verdict": "supported",
+            "evidence": "Over het de facto failliete Warmtebedrijf dienen wij een motie in. In dit bedrijf hebben wij al € 28 miljoen geïnvesteerd en veel van dit geld is al aan Shell en anderen betaald.",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "De SP diende een motie in waarin zij stelden dat het Warmtebedrijf 'de facto failliet' was",
+            "verdict": "supported",
+            "evidence": "Over het de facto failliete Warmtebedrijf dienen wij een motie in.",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "De SP verzocht om surseance van betaling en het niet verstrekken van een overbruggingskrediet van € 18 miljoen",
+            "verdict": "supported",
+            "evidence": "wat allemaal redenen zijn tot het aanvragen van surseance van betaling en tot het niet opnieuw verstrekken van een overbruggingskrediet van € 18 miljoen.",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "De SP-fractie wilde niet dat de gemeenteraad bij een volgende enquêtecommissie voor wat betreft het debacle met het Warmtebedrijf de zwarte piet zal krijgen",
+            "verdict": "supported",
+            "evidence": "De SP-fractie wil niet dat de gemeenteraad bij een volgende enquêtecommissie voor wat betreft het debacle met het Warmtebedrijf de zwarte piet zal krijgen.",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Er was raadsbreed steun om door te gaan met het Warmtebedrijf",
+            "verdict": "supported",
+            "evidence": "Toch is er raadsbreed steun om door te gaan met het Warmtebedrijf, grotendeels ook vanwege de hoge kosten die met een faillissement van het Warmtebedrijf gepaard zouden gaan.",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "De steun was grotendeels vanwege de hoge kosten die met een faillissement gepaard zouden gaan",
+            "verdict": "supported",
+            "evidence": "Toch is er raadsbreed steun om door te gaan met het Warmtebedrijf, grotendeels ook vanwege de hoge kosten die met een faillissement van het Warmtebedrijf gepaard zouden gaan.",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Op 2 juni 2016 werden acht moties aangenomen die kaders stelden voor vervolgkeuzes",
+            "verdict": "supported",
+            "evidence": "Op 2 juni 2016 worden er door de raad acht moties aangenomen ten aanzien van het Warmtebedrijf die kaders stellen voor de vervolgkeuzes",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "De bronnen bevatten geen concrete informatie over specifieke alternatieve voorstellen die tegen het Warmtebedrijf voorstel werden ingediend, behalve de SP-motie voor surseance van betaling",
+            "verdict": "supported",
+            "evidence": "De context bevat inderdaad geen andere concrete alternatieven dan de SP-motie voor surseance van betaling.",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Er is geen duidelijke stemming over een specifiek 'Warmtebedrijf voorstel' gedocumenteerd waarin wordt aangegeven welke partijen tegen stemden",
+            "verdict": "supported",
+            "evidence": "De context bevat geen specifieke stemming over een 'Warmtebedrijf voorstel' met uitslagen per partij.",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          }
+        ],
+        "total_claims": 9,
+        "supported": 9,
+        "unsupported": 0,
+        "contradicted": 0,
+        "hallucination_rate": 0.0,
+        "most_dangerous_claim": null,
+        "reasoning": "Alle beweringen in het antwoord zijn correct ondersteund door de context. Het systeem heeft eerlijk aangegeven dat de bronnen onvoldoende informatie bevatten om de oorspronkelijke vraag volledig te beantwoorden, en heeft alleen beweringen gedaan die direct uit de context af te leiden zijn. Er zijn geen hallucinaties gedetecteerd."
+      },
+      "source_attribution": {
+        "score": 4,
+        "reasoning": "Het antwoord toeschrijft uitspraken correct aan de juiste partijen (SP-motie over surseance van betaling, raadsbreed draagvlak voor voortzetting). De SP-kritiek wordt accuraat weergegeven uit bron 8, en het raadsbrede draagvlak uit bron 19 is correct geciteerd. Het antwoord maakt duidelijk onderscheid tussen wat in de bronnen staat en eigen conclusies. Kleine aftrek omdat het antwoord erkent dat de bronnen onvoldoende informatie bevatten voor een volledig antwoord, maar alle aanwezige toeschrijvingen zijn wel correct."
+      },
+      "db_verification": {
+        "total_claims": 9,
+        "db_confirmed": 0,
+        "db_denied": 9,
+        "db_unknown": 0,
+        "db_confirmation_rate": 0.0,
+        "db_denial_rate": 1.0
+      }
+    },
+    "chunks_retrieved": 25,
+    "total_ms": 247821.64637499955
+  },
+  {
+    "question_id": "mh-02",
+    "question_text": "Hoe verhoudt het budget voor cultuur zich tot het budget voor sport over de afgelopen 5 jaar?",
+    "category": "multi_hop",
+    "answer": "Op basis van de beschikbare bronnen kan ik de oorspronkelijke vraag over de verhouding tussen het budget voor cultuur en sport over de afgelopen 5 jaar (2019-2023) slechts gedeeltelijk beantwoorden.\n\n## Wat de bronnen wel laten zien:\n\n**Specifieke bedragen uit 2019:**\n- **Bron 3, 4, 5 en 7** tonen bestemmingsvoorstellen voor cultuur, sport en recreatie uit 2019:\n  - Regio deal cultuur: €102.000\n  - Eurovisie Songfestival 2020: €1.140.000  \n  - Museum Boijmans van Beuningen: €255.000\n  - Centrale Bibliotheek Rotterdam: €286.000\n  - Sportakkoord/living lab esports: €200.000\n  - Sportpark Noordrand: €395.000\n\n**Uit 2017:**\n- **Bron 1** vermeldt een investeringskrediet van €7.221.000 voor sportvoorzieningen in 2017\n\n**Recente ontwikkelingen (2022-2023):**\n- **Bron 10** toont voor 2022-2023:\n  - Evenementenfonds cultuur: €1.500.000\n  - Sport en recreatie evenementenfonds: €1.000.000\n  - Voorbereidingskosten sport: €250.000\n\n## Wat ontbreekt:\n\nDe bronnen bevatten **geen complete jaarlijkse budgetoverzichten** voor cultuur en sport voor de periode 2019-2023. **Bron 2** vermeldt wel dat de totale cultuurbegroting ultimo 2016 verschillende posten bevatte, maar geeft geen totaalbedrag.\n\n## Begrotingsbeslissingen die het cultuurbudget beïnvloedden:\n\n**Bron 2** laat zien dat voor het Cultuurplan 2017-2020 \"een deel van het benodigde bedrag is gevonden binnen de cultuurbegroting zelf\", wat leidde tot:\n- Verlaagde budgetten voor eenmalige subsidies \n- Verlaagde budgetten voor kunst en cultuur in de veertien Rotterdamse gebieden\n- Grotere druk op beschikbare middelen\n\n## Conclusie:\n\nIk kan de oorspronkelijke vraag niet volledig beantwoorden omdat de bronnen geen systematische vergelijking mogelijk maken van de totale cultuur- en sportbudgetten over de periode 2019-2023. De beschikbare informatie betreft vooral specifieke projecten en bestemmingsvoorstellen, niet de totale begrotingen per beleidsveld.",
+    "route": {
+      "query_type": "multi_hop",
+      "top_k": 15,
+      "parties": [],
+      "date_from": null,
+      "date_to": null,
+      "sub_queries": [],
+      "confidence": 0.8,
+      "strategy": "sub_query"
+    },
+    "retrieval_metrics": {
+      "context_precision": 0.44,
+      "diversity": {
+        "document_diversity": 0.76,
+        "unique_documents": 19,
+        "total_chunks": 25,
+        "entropy": 4.084
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.0,
+        "keyword_only_pct": 0.0,
+        "both_pct": 0.0,
+        "neither_pct": 1.0,
+        "vector_only": 0,
+        "keyword_only": 0,
+        "both": 0,
+        "total": 25
+      },
+      "reranker": {
+        "skipped": true
+      },
+      "rrf": {
+        "unique_from_fusion": 25,
+        "unique_pct": 1.0,
+        "vector_top_k_overlap": 0,
+        "keyword_top_k_overlap": 0
+      },
+      "timings": {
+        "total_ms": 270119.6698749991
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 4,
+        "reasoning": "Het antwoord erkent eerlijk dat de vraag niet volledig beantwoord kan worden door gebrek aan complete budgetgegevens, maar geeft wel alle beschikbare relevante informatie uit de bronnen. De structuur is helder met concrete bedragen waar mogelijk, en de conclusie is transparant over de beperkingen. Alleen een volledig antwoord met de gevraagde 5-jarige vergelijking zou een 5 opleveren."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Het antwoord is volledig gebaseerd op de meegeleverde context. Alle genoemde bedragen en citaten zijn direct terug te vinden in de bronnen. Cruciaal is dat het antwoord eerlijk erkent dat de oorspronkelijke vraag niet volledig beantwoord kan worden omdat de bronnen geen complete jaarlijkse budgetoverzichten bevatten voor de gevraagde periode. Dit is correct en eerlijk gedrag - het antwoord verzint geen informatie maar blijft binnen de grenzen van wat de bronnen bieden."
+      },
+      "completeness": {
+        "score": 2,
+        "reasoning": "Het antwoord is oppervlakkig en mist de helft of meer van de relevante informatie. Hoewel het enkele specifieke bedragen uit verschillende jaren noemt, ontbreekt een systematische vergelijking tussen cultuur- en sportbudgetten over de gevraagde 5-jaarsperiode. De vraag vroeg om een verhoudingsanalyse, maar het antwoord geeft vooral losse bedragen zonder duidelijke trends of vergelijkingen. Het antwoord erkent wel eerlijk de beperkingen van de beschikbare bronnen, maar dit compenseert niet voor het gebrek aan een volledige behandeling van de vraag."
+      }
+    },
+    "hallucination_metrics": {
+      "claim_verification": {
+        "claims": [
+          {
+            "claim": "De vraag betreft de verhouding tussen het budget voor cultuur en sport over de afgelopen 5 jaar (2019-2023)",
+            "verdict": "supported",
+            "evidence": "Hoe verhoudt het budget voor cultuur zich tot het budget voor sport over de afgelopen 5 jaar?",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Bron 3, 4, 5 en 7 tonen bestemmingsvoorstellen voor cultuur, sport en recreatie uit 2019",
+            "verdict": "supported",
+            "evidence": "Bestemmingsvoorstellen – Type 1 met verschillende cultuur- en sportposten",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Regio deal cultuur: €102.000",
+            "verdict": "supported",
+            "evidence": "Regio deal cultuur: Er bestaat een onderschrijding op het budget 2019 van het Cultuur deel (\"de pijler\") uit de Regiodeal. 102",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Eurovisie Songfestival 2020: €1.140.000",
+            "verdict": "supported",
+            "evidence": "Bestemmings-reserve Evenementen-fonds (VB 0024): Er bestaat een onderschrijding op het budget Eurovisie Songfestival 2020 in 2019. 1140",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Museum Boijmans van Beuningen: €255.000",
+            "verdict": "supported",
+            "evidence": "Museum Boijmans van Beuningen: In 2019 is er een onderschrijding op het budget van het museum. 255",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Centrale Bibliotheek Rotterdam: €286.000",
+            "verdict": "supported",
+            "evidence": "Onderzoeks- en voorbereidings-kosten Centrale Bibliotheek Rotterdam: De onderschrijding op budget 2019 houdt verband met onderzoeks- en voorbereidingskosten. 286",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Sportakkoord/living lab esports: €200.000",
+            "verdict": "supported",
+            "evidence": "Taakmutatie gemeentefonds: Rijksmiddelen sportakkoord - de uitvoering van het lokale nationaal sportakkoord/ living lab esports is vertraagd. 200",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Sportpark Noordrand: €395.000",
+            "verdict": "supported",
+            "evidence": "Sportpark Noordrand: Vanwege onvoorziene omstandigheden zal het overgrote deel van de werkzaamheden van het project op sportpark Noordrand pas in 2020 worden afgerond. 395",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Bron 1 vermeldt een investeringskrediet van €7.221.000 voor sportvoorzieningen in 2017",
+            "verdict": "supported",
+            "evidence": "een investeringskrediet toe te kennen van C 7.221.000,s incl. niet-verrekenbare btw t.b.v. de budgetten sportvoorzieningen in begroting 2017",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Bron 10 toont voor 2022-2023: Evenementenfonds cultuur: €1.500.000",
+            "verdict": "supported",
+            "evidence": "Cultuur Evenementenfonds: Raadsbesluit (aanvullend op de 1,5mln 0,2mln uit evenementenfonds 2023). 1.500",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Sport en recreatie evenementenfonds: €1.000.000",
+            "verdict": "supported",
+            "evidence": "Sport en recreatie Evenementenfonds: Er is een verplichting aangegaan met de organisatie van EPC. 1.000",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Voorbereidingskosten sport: €250.000",
+            "verdict": "supported",
+            "evidence": "Sport en recreatie Voorbereidingskosten IHP's MV: Noodzakelijke middelen om verplichtingen vanuit het IHP te kunnen realiseren. 250",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "De bronnen bevatten geen complete jaarlijkse budgetoverzichten voor cultuur en sport voor de periode 2019-2023",
+            "verdict": "supported",
+            "evidence": "De context bevat alleen fragmentarische bestemmingsvoorstellen en specifieke projecten, geen totaalbudgetten per jaar",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Bron 2 vermeldt wel dat de totale cultuurbegroting ultimo 2016 verschillende posten bevatte, maar geeft geen totaalbedrag",
+            "verdict": "supported",
+            "evidence": "De totale Cultuurbegroting geeft ultimo 2016 het volgende beeld: [lijst met posten maar geen totaalbedrag]",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Voor het Cultuurplan 2017-2020 is een deel van het benodigde bedrag gevonden binnen de cultuurbegroting zelf",
+            "verdict": "supported",
+            "evidence": "Hoewel het budget voor het Cultuurplan 2017-2020 per saldo gegroeid is ten opzichte van de voorgaande periode, past hier een kanttekening. Een deel van het benodigde bedrag is gevonden binnen de cultuurbegroting zelf.",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Dit leidde tot verlaagde budgetten voor eenmalige subsidies",
+            "verdict": "supported",
+            "evidence": "Zo zijn bijvoorbeeld de budgetten verlaagd voor toekenning van eenmalige subsidies op het gebied van de podiumkunsten, visuele kunsten en letteren & erfgoed.",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Dit leidde tot verlaagde budgetten voor kunst en cultuur in de veertien Rotterdamse gebieden",
+            "verdict": "supported",
+            "evidence": "Verder zijn door de budgetverschuiving naar het Cultuurplan de budgetten verlaagd voor kunst en cultuur in de veertien Rotterdamse gebieden.",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Dit leidde tot grotere druk op beschikbare middelen",
+            "verdict": "supported",
+            "evidence": "De gevolgen hiervan zijn pas in 2018 meetbaar, maar er blijkt nu al sprake van een grotere druk op de beschikbare middelen.",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          }
+        ],
+        "total_claims": 18,
+        "supported": 18,
+        "unsupported": 0,
+        "contradicted": 0,
+        "hallucination_rate": 0.0,
+        "most_dangerous_claim": null,
+        "reasoning": "Alle beweringen in het antwoord zijn correct ondersteund door de context. Het systeem heeft eerlijk aangegeven wat wel en niet beschikbaar is in de bronnen, en heeft geen specifieke cijfers of feiten verzonnen. De conclusie dat een volledige vergelijking niet mogelijk is op basis van de beschikbare informatie is accuraat en verantwoord."
+      },
+      "source_attribution": {
+        "score": 5,
+        "reasoning": "Het antwoord bevat correcte bronverwijzingen die verifieerbaar zijn in de aangeleverde context. Alle genoemde bedragen, datums en documenten komen overeen met de bronnen. Het antwoord maakt duidelijk onderscheid tussen wat wel en niet in de bronnen staat, en erkent eerlijk de beperkingen van de beschikbare informatie. Er worden geen uitspraken ten onrechte toegeschreven aan personen of partijen."
+      },
+      "db_verification": {
+        "total_claims": 18,
+        "db_confirmed": 0,
+        "db_denied": 18,
+        "db_unknown": 0,
+        "db_confirmation_rate": 0.0,
+        "db_denial_rate": 1.0
+      }
+    },
+    "chunks_retrieved": 25,
+    "total_ms": 270119.6698749991
+  }
+]

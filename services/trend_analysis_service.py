@@ -13,19 +13,16 @@ Compares:
 """
 
 import json
-import psycopg2
 from typing import Dict, List, Any
 from collections import defaultdict
 from datetime import datetime
 
+
 class TrendAnalysisService:
     """Analyze frequency patterns and trends in policy positions"""
-    
+
     def __init__(self):
-        self.conn = psycopg2.connect(
-            "postgresql://postgres:postgres@localhost:5432/neodemos"
-        )
-        self.cursor = self.conn.cursor()
+        pass  # DB connections are now obtained from the shared pool per-call
     
     def analyze_trends(self) -> Dict[str, Any]:
         """

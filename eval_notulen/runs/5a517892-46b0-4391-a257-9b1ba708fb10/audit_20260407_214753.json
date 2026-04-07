@@ -1,0 +1,232 @@
+{
+  "meeting_id": "5a517892-46b0-4391-a257-9b1ba708fb10",
+  "audit_timestamp": "2026-04-07T21:47:53.120615",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "judge_backend": "gemini",
+    "anthropic_model": "claude-haiku-4-5-20251001",
+    "gemini_model": "gemini-2.5-flash-lite"
+  },
+  "meeting_info": {
+    "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+    "start_date": "2025-10-01 00:00:00",
+    "committee": "BWB",
+    "quality_score": 0.828,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 41,
+    "document_count": 1
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 167,
+      "correct_count": 167,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.7614,
+      "party_attribution_rate": 0.1023,
+      "total_segments": 88,
+      "attributed_segments": 67,
+      "unattributed_segments": 21
+    },
+    "speaker_diversity": {
+      "unique_speakers": 6,
+      "unique_parties": 3,
+      "top_speaker": "Adviseur",
+      "top_speaker_segment_count": 27,
+      "monologue_rate": 0.3068,
+      "speakers": {
+        "Adviseur": 27,
+        "P.J.H.D. (Ellen) Verkoelen Commissievoorzitter": 27,
+        "M. (Marcel) Verhoef": 4,
+        "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie": 4,
+        "A. (Astrid) Kockelkoren": 4,
+        "T. (Tim) de Haan": 1
+      },
+      "parties": {
+        "Leefbaar Rotterdam": 4,
+        "GroenLinks": 4,
+        "D66": 1
+      }
+    },
+    "segment_quality": {
+      "total_segments": 88,
+      "nonempty_segments": 88,
+      "total_words": 15411,
+      "total_chars": 85281,
+      "avg_words_per_segment": 175.1,
+      "avg_chars_per_segment": 969.1,
+      "short_segment_rate": 0.2159,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 1,
+      "items_with_content": 1,
+      "coverage_rate": 1.0,
+      "items": [
+        {
+          "title": "Technische sessie over wijziging van het omgevingsplan Rotterdam",
+          "segment_count": 88
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-10-01 00:00:00",
+        "committee": "BWB",
+        "review_status": "auto_approved",
+        "quality_score": 0.828,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-10-01 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 6,
+      "recognized_speakers": 6,
+      "unrecognized_speakers": 0,
+      "recognition_rate": 1.0,
+      "recognized": [
+        {
+          "name": "Adviseur",
+          "segment_count": 27,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "P.J.H.D. (Ellen) Verkoelen Commissievoorzitter",
+          "segment_count": 27,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M. (Marcel) Verhoef",
+          "segment_count": 4,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie",
+          "segment_count": 4,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "T. (Tim) de Haan",
+          "segment_count": 1,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "A. (Astrid) Kockelkoren",
+          "segment_count": 4,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        }
+      ],
+      "unrecognized": []
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 41,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 12,
+        "long (2000-5000)": 27,
+        "tiny (<50)": 1,
+        "short (50-200)": 1
+      },
+      "min_chars": 23,
+      "max_chars": 2660,
+      "avg_chars": 1962.2,
+      "median_chars": 2260,
+      "tiny_rate": 0.0244,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 41,
+      "boilerplate_count": 1,
+      "boilerplate_rate": 0.0244,
+      "boilerplate_examples": [
+        {
+          "id": 11148,
+          "title": "Explanation of the System and Procedures",
+          "preview": "kt het systeem. En daar"
+        }
+      ]
+    },
+    "agenda_coverage": {
+      "total_documents": 1,
+      "documents_with_chunks": 1,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Technische sessie over wijziging van het omgevingsplan Rotterdam",
+          "chunks": 41
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 41,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 41,
+      "distribution": {
+        "quote": {
+          "count": 41,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "PENDING — warnings present, manual review recommended",
+    "issues": [],
+    "warnings": [
+      "Low speaker attribution: 76% (target 80%)"
+    ],
+    "scores": {
+      "speaker_attribution_rate": 0.7614,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.828
+    }
+  }
+}

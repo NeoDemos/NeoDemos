@@ -1,0 +1,364 @@
+{
+  "meeting_id": "d19fe543-e04f-4ac6-9645-7d4d1c8390ef",
+  "audit_timestamp": "2026-04-07T21:10:27.335616",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-sonnet-4-6"
+  },
+  "meeting_info": {
+    "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+    "start_date": "2025-11-19 00:00:00",
+    "committee": "ZOCS",
+    "quality_score": 0.938,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 52,
+    "document_count": 7
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 396,
+      "correct_count": 396,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.7931,
+      "party_attribution_rate": 0.3506,
+      "total_segments": 174,
+      "attributed_segments": 138,
+      "unattributed_segments": 36
+    },
+    "speaker_diversity": {
+      "unique_speakers": 14,
+      "unique_parties": 7,
+      "top_speaker": "T.S.J. (Theo) Coşkun Commissievoorzitter",
+      "top_speaker_segment_count": 56,
+      "monologue_rate": 0.3218,
+      "speakers": {
+        "T.S.J. (Theo) Coşkun Commissievoorzitter": 56,
+        "J.M. (Amy) de Bruijn": 16,
+        "S. (Stephan) Leewis": 11,
+        "E.P.J. (Erik) Verweij": 9,
+        "S.L. (Sigrid) Oosterwegel Burgercommissielid": 9,
+        "Adviseur": 7,
+        "M. (Manuel) Crielaard": 7,
+        "R. (Ronald) Buijt": 6,
+        "F. (Faouzi) Achbar": 6,
+        "E.H. (Eyasu) Balcha": 4
+      },
+      "parties": {
+        "GroenLinks": 20,
+        "PvdA": 16,
+        "VVD": 9,
+        "Leefbaar Rotterdam": 7,
+        "D66": 4,
+        "ChristenUnie": 3,
+        "Volt": 2
+      }
+    },
+    "segment_quality": {
+      "total_segments": 174,
+      "nonempty_segments": 174,
+      "total_words": 18140,
+      "total_chars": 103003,
+      "avg_words_per_segment": 104.3,
+      "avg_chars_per_segment": 592.0,
+      "short_segment_rate": 0.1437,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 12,
+      "items_with_content": 7,
+      "coverage_rate": 0.5833,
+      "items": [
+        {
+          "title": "Procedurevergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 20
+        },
+        {
+          "title": "Commissieplanning en lange termijn agenda raad",
+          "segment_count": 3
+        },
+        {
+          "title": "Lijst van openstaande toezeggingen, schriftelijke vragen en moties",
+          "segment_count": 0
+        },
+        {
+          "title": "Sluiting",
+          "segment_count": 0
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 1
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 0
+        },
+        {
+          "title": "Adviezenlijst openbare overlegvergadering van",
+          "segment_count": 0
+        },
+        {
+          "title": "Rapport Rekenkamer Rotterdam Wijkteams",
+          "segment_count": 36
+        },
+        {
+          "title": "Doelgroepenvervoer",
+          "segment_count": 47
+        },
+        {
+          "title": "Regeling van Werkzaamheden locatieonderzoek schaatsbaan",
+          "segment_count": 66
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 1
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+        "start_date": "2025-11-19 00:00:00",
+        "committee": "ZOCS",
+        "review_status": "auto_approved",
+        "quality_score": 0.938,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+        "start_date": "2025-11-19 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 14,
+      "recognized_speakers": 13,
+      "unrecognized_speakers": 1,
+      "recognition_rate": 0.9286,
+      "recognized": [
+        {
+          "name": "J.M. (Amy) de Bruijn",
+          "segment_count": 16,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T.S.J. (Theo) Coşkun Commissievoorzitter",
+          "segment_count": 56,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "E.H. (Eyasu) Balcha",
+          "segment_count": 4,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "E.P.J. (Erik) Verweij",
+          "segment_count": 9,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "Adviseur",
+          "segment_count": 7,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "T. (Tim) Kind",
+          "segment_count": 1,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S.L. (Sigrid) Oosterwegel Burgercommissielid",
+          "segment_count": 9,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M. (Manuel) Crielaard",
+          "segment_count": 7,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R. (Ronald) Buijt",
+          "segment_count": 6,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "S. (Stephan) Leewis",
+          "segment_count": 11,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "Inspreker",
+          "segment_count": 2,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "D. (Donatella) Schalm-Civile Burgercommissielid",
+          "segment_count": 1,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "F. (Faouzi) Achbar",
+          "segment_count": 6,
+          "parties": [],
+          "recognized_as": "council_member"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "T.J. (Tjalling) Vonk",
+          "segment_count": 3,
+          "parties": [
+            "ChristenUnie"
+          ],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 52,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 17,
+        "short (50-200)": 2,
+        "long (2000-5000)": 33
+      },
+      "min_chars": 135,
+      "max_chars": 2680,
+      "avg_chars": 1999.7,
+      "median_chars": 2363,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 52,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 7,
+      "documents_with_chunks": 7,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Commissieplanning en lange termijn agenda raad",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Doelgroepenvervoer",
+          "chunks": 13
+        },
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 4
+        },
+        {
+          "name": "Transcript: Overlegvergadering",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Rapport Rekenkamer Rotterdam Wijkteams",
+          "chunks": 10
+        },
+        {
+          "name": "Transcript: Regeling van Werkzaamheden locatieonderzoek schaatsbaan",
+          "chunks": 22
+        },
+        {
+          "name": "Transcript: Rondvraag en sluiting",
+          "chunks": 1
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 52,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 52,
+      "distribution": {
+        "quote": {
+          "count": 50,
+          "rate": 0.9615
+        },
+        "full_text": {
+          "count": 2,
+          "rate": 0.0385
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "PENDING — warnings present, manual review recommended",
+    "issues": [],
+    "warnings": [
+      "Low speaker attribution: 79% (target 80%)"
+    ],
+    "scores": {
+      "speaker_attribution_rate": 0.7931,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.938
+    }
+  }
+}

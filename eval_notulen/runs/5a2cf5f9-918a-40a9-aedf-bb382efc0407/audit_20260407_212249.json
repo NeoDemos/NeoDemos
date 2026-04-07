@@ -1,0 +1,227 @@
+{
+  "meeting_id": "5a2cf5f9-918a-40a9-aedf-bb382efc0407",
+  "audit_timestamp": "2026-04-07T21:22:49.761527",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+    "start_date": "2025-04-02 00:00:00",
+    "committee": "WIOS",
+    "quality_score": 0.808,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 44,
+    "document_count": 1
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 237,
+      "correct_count": 237,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.6939,
+      "party_attribution_rate": 0.1633,
+      "total_segments": 196,
+      "attributed_segments": 136,
+      "unattributed_segments": 60
+    },
+    "speaker_diversity": {
+      "unique_speakers": 6,
+      "unique_parties": 4,
+      "top_speaker": "Adviseur Adviseur",
+      "top_speaker_segment_count": 61,
+      "monologue_rate": 0.3112,
+      "speakers": {
+        "Adviseur Adviseur": 61,
+        "Plaatsvervangende commissievoorzitter": 43,
+        "A.J.A. (Agnes) Maassen D66": 13,
+        "L.S. (Larissa) Vlieger GroenLinks": 10,
+        "T.J. (Tjalling) Vonk ChristenUnie": 5,
+        "A.B. (Tom) Breedveld  Burgercommissielid": 4
+      },
+      "parties": {
+        "D66": 13,
+        "GroenLinks": 10,
+        "ChristenUnie": 5,
+        "SP": 4
+      }
+    },
+    "segment_quality": {
+      "total_segments": 196,
+      "nonempty_segments": 196,
+      "total_words": 14677,
+      "total_chars": 83232,
+      "avg_words_per_segment": 74.9,
+      "avg_chars_per_segment": 424.7,
+      "short_segment_rate": 0.1888,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 1,
+      "items_with_content": 1,
+      "coverage_rate": 1.0,
+      "items": [
+        {
+          "title": "Technische sessie over herijking inkomensondersteunende regelingen",
+          "segment_count": 196
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+        "start_date": "2025-04-02 00:00:00",
+        "committee": "WIOS",
+        "review_status": "auto_approved",
+        "quality_score": 0.808,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+        "start_date": "2025-04-02 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 6,
+      "recognized_speakers": 5,
+      "unrecognized_speakers": 1,
+      "recognition_rate": 0.8333,
+      "recognized": [
+        {
+          "name": "Plaatsvervangende commissievoorzitter",
+          "segment_count": 43,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Adviseur Adviseur",
+          "segment_count": 61,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "L.S. (Larissa) Vlieger GroenLinks",
+          "segment_count": 10,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "A.J.A. (Agnes) Maassen D66",
+          "segment_count": 13,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "A.B. (Tom) Breedveld  Burgercommissielid",
+          "segment_count": 4,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "T.J. (Tjalling) Vonk ChristenUnie",
+          "segment_count": 5,
+          "parties": [
+            "ChristenUnie"
+          ],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 44,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 13,
+        "long (2000-5000)": 30,
+        "short (50-200)": 1
+      },
+      "min_chars": 94,
+      "max_chars": 2643,
+      "avg_chars": 2015.4,
+      "median_chars": 2280,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 44,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 1,
+      "documents_with_chunks": 1,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Technische sessie over herijking inkomensondersteunende regelingen",
+          "chunks": 44
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 44,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 44,
+      "distribution": {
+        "quote": {
+          "count": 44,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "PENDING — warnings present, manual review recommended",
+    "issues": [],
+    "warnings": [
+      "Low speaker attribution: 69% (target 80%)"
+    ],
+    "scores": {
+      "speaker_attribution_rate": 0.6939,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.808
+    }
+  }
+}

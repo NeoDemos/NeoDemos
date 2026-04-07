@@ -1,0 +1,439 @@
+{
+  "meeting_id": "392d392e-1d87-49ad-b61f-0780988f27f2",
+  "audit_timestamp": "2026-04-07T21:22:47.481807",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+    "start_date": "2025-07-03 00:00:00",
+    "committee": "BOFV",
+    "quality_score": 0.963,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 157,
+    "document_count": 11
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 1002,
+      "correct_count": 1002,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8752,
+      "party_attribution_rate": 0.4599,
+      "total_segments": 561,
+      "attributed_segments": 491,
+      "unattributed_segments": 70
+    },
+    "speaker_diversity": {
+      "unique_speakers": 19,
+      "unique_parties": 12,
+      "top_speaker": "L.S. (Larissa) Vlieger Commissievoorzitter",
+      "top_speaker_segment_count": 163,
+      "monologue_rate": 0.2906,
+      "speakers": {
+        "L.S. (Larissa) Vlieger Commissievoorzitter": 163,
+        "B.J. (Bart-Joost) van Rij": 47,
+        "D.A. (Dieke) van Groningen": 46,
+        "M.H. (Marvin) Biljoen": 37,
+        "I. (Ingrid) van Wifferen": 30,
+        "T. (Thomas) Roskam": 27,
+        "P.J.H.D. (Ellen) Verkoelen": 22,
+        "C.J. (Carola) Schouten Burgemeester": 18,
+        "S. (Serkan) Soytekin": 16,
+        "S. (Stephan) Leewis": 14
+      },
+      "parties": {
+        "GroenLinks": 51,
+        "VVD": 49,
+        "Leefbaar Rotterdam": 39,
+        "D66": 30,
+        "50PLUS": 22,
+        "DENK": 16,
+        "PvdA": 14,
+        "Volt": 12,
+        "ChristenUnie": 11,
+        "CDA": 10,
+        "SP": 3,
+        "BIJ1": 1
+      }
+    },
+    "segment_quality": {
+      "total_segments": 561,
+      "nonempty_segments": 561,
+      "total_words": 52117,
+      "total_chars": 286781,
+      "avg_words_per_segment": 92.9,
+      "avg_chars_per_segment": 511.2,
+      "short_segment_rate": 0.1676,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 14,
+      "items_with_content": 9,
+      "coverage_rate": 0.6429,
+      "items": [
+        {
+          "title": "Procedurevergadering",
+          "segment_count": 1
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 1
+        },
+        {
+          "title": "Besluitenlijst openbare procedurevergadering van 12-06-2025",
+          "segment_count": 0
+        },
+        {
+          "title": "Ingekomen stukken",
+          "segment_count": 36
+        },
+        {
+          "title": "Lijst van openstaande toezeggingen, schriftelijke vragen en moties",
+          "segment_count": 7
+        },
+        {
+          "title": "Commissieplanning en lange termijn agenda raad",
+          "segment_count": 17
+        },
+        {
+          "title": "Regeling van werkzaamheden",
+          "segment_count": 17
+        },
+        {
+          "title": "Sluiting",
+          "segment_count": 0
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 4
+        },
+        {
+          "title": "Ambtsreizen",
+          "segment_count": 135
+        },
+        {
+          "title": "Concept-Voorjaarsnota 2025 en 1e Herziening 2025",
+          "segment_count": 309
+        },
+        {
+          "title": "Beantwoording vragen over 'Kies je eigen uren, als je een tram of bus gaat besturen'",
+          "segment_count": 33
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 1
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+        "start_date": "2025-07-03 00:00:00",
+        "committee": "BOFV",
+        "review_status": "auto_approved",
+        "quality_score": 0.963,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)",
+        "start_date": "2025-07-03 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 19,
+      "recognized_speakers": 17,
+      "unrecognized_speakers": 2,
+      "recognition_rate": 0.8947,
+      "recognized": [
+        {
+          "name": "L.S. (Larissa) Vlieger Commissievoorzitter",
+          "segment_count": 163,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.H. (Marvin) Biljoen",
+          "segment_count": 37,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D.A. (Dieke) van Groningen",
+          "segment_count": 46,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "E. (Eveline) Padberg-de Haan Burgercommissielid",
+          "segment_count": 3,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "R.G.C. (René) Segers-Hoogendoorn",
+          "segment_count": 10,
+          "parties": [
+            "CDA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "P.J.H.D. (Ellen) Verkoelen",
+          "segment_count": 22,
+          "parties": [
+            "50PLUS"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Simon) Ceulemans",
+          "segment_count": 12,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Stephan) Leewis",
+          "segment_count": 14,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Serkan) Soytekin",
+          "segment_count": 16,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T. (Thomas) Roskam",
+          "segment_count": 27,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "L.P.A. (Luuc) Dekkers",
+          "segment_count": 12,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "I. (Ingrid) van Wifferen",
+          "segment_count": 30,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "C.J. (Carola) Schouten Burgemeester",
+          "segment_count": 18,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.R. (Marchiano) van Campenhout",
+          "segment_count": 1,
+          "parties": [
+            "BIJ1"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Sarah) Reitema",
+          "segment_count": 14,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.A.C.J. (Robert) Simons",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "J.G. (Just) Hovens Greve Burgercommissielid",
+          "segment_count": 3,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "T.J. (Tjalling) Vonk",
+          "segment_count": 11,
+          "parties": [
+            "ChristenUnie"
+          ],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "B.J. (Bart-Joost) van Rij",
+          "segment_count": 47,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 157,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 54,
+        "long (2000-5000)": 95,
+        "short (50-200)": 8
+      },
+      "min_chars": 61,
+      "max_chars": 2729,
+      "avg_chars": 1860.5,
+      "median_chars": 2196,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 157,
+      "boilerplate_count": 1,
+      "boilerplate_rate": 0.0064,
+      "boilerplate_examples": [
+        {
+          "id": 8225,
+          "title": "Transcript: Procedurevergadering",
+          "preview": "[L.S. (Larissa) Vlieger Commissievoorzitter]: De vergadering gaat beginnen."
+        }
+      ]
+    },
+    "agenda_coverage": {
+      "total_documents": 11,
+      "documents_with_chunks": 11,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Ambtsreizen",
+          "chunks": 40
+        },
+        {
+          "name": "Transcript: Beantwoording vragen over 'Kies je eigen uren, als je een tram of bus gaat besturen'",
+          "chunks": 7
+        },
+        {
+          "name": "Transcript: Commissieplanning en lange termijn agenda raad",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Concept-Voorjaarsnota 2025 en 1e Herziening 2025",
+          "chunks": 92
+        },
+        {
+          "name": "Transcript: Ingekomen stukken",
+          "chunks": 6
+        },
+        {
+          "name": "Transcript: Lijst van openstaande toezeggingen, schriftelijke vragen en moties",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Procedurevergadering",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Regeling van werkzaamheden",
+          "chunks": 4
+        },
+        {
+          "name": "Transcript: Rondvraag en sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Vaststellen van de agenda",
+          "chunks": 1
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 157,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 157,
+      "distribution": {
+        "quote": {
+          "count": 154,
+          "rate": 0.9809
+        },
+        "full_text": {
+          "count": 3,
+          "rate": 0.0191
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8752,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.963
+    }
+  }
+}

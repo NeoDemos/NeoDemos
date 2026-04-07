@@ -1,0 +1,923 @@
+{
+  "meeting_id": "e9102bdf-b5b5-4d25-ba29-0bea41c27a3f",
+  "audit_timestamp": "2026-04-07T21:25:37.058673",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+    "start_date": "2025-11-19 00:00:00",
+    "committee": "BWB",
+    "quality_score": 0.949,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 203,
+    "document_count": 12
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 1252,
+      "correct_count": 1252,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8295,
+      "party_attribution_rate": 0.3353,
+      "total_segments": 692,
+      "attributed_segments": 574,
+      "unattributed_segments": 118
+    },
+    "speaker_diversity": {
+      "unique_speakers": 17,
+      "unique_parties": 10,
+      "top_speaker": "P.J.H.D. (Ellen) Verkoelen Commissievoorzitter",
+      "top_speaker_segment_count": 195,
+      "monologue_rate": 0.2818,
+      "speakers": {
+        "P.J.H.D. (Ellen) Verkoelen Commissievoorzitter": 195,
+        "A. (Astrid) Kockelkoren": 55,
+        "P.J.P. (Pascal) Lansink-Bastemeijer": 53,
+        "C.M. (Chantal) Zeegers": 48,
+        "D.J. (Diederik) van Dommelen": 46,
+        "M. (Marcel) Verhoef": 38,
+        "R.P. (Ryan) Vos Burgercommissielid": 28,
+        "Inspreker": 25,
+        "T. (Tim) de Haan": 21,
+        "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie": 18
+      },
+      "parties": {
+        "GroenLinks": 55,
+        "VVD": 46,
+        "Leefbaar Rotterdam": 42,
+        "PvdA": 28,
+        "D66": 21,
+        "CDA": 10,
+        "Volt": 9,
+        "DENK": 8,
+        "SP": 7,
+        "BIJ1": 6
+      }
+    },
+    "segment_quality": {
+      "total_segments": 692,
+      "nonempty_segments": 692,
+      "total_words": 68981,
+      "total_chars": 383619,
+      "avg_words_per_segment": 99.7,
+      "avg_chars_per_segment": 554.4,
+      "short_segment_rate": 0.1604,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 25,
+      "items_with_content": 12,
+      "coverage_rate": 0.48,
+      "items": [
+        {
+          "title": "Procedurevergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 4
+        },
+        {
+          "title": "Commissieplanning",
+          "segment_count": 18
+        },
+        {
+          "title": "Regelingen van Werkzaamheden",
+          "segment_count": 8
+        },
+        {
+          "title": "Initiatiefnotities/voorstellen",
+          "segment_count": 0
+        },
+        {
+          "title": "Verkenningen",
+          "segment_count": 0
+        },
+        {
+          "title": "Besluitenlijst openbare procedurevergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Subcommissie bestemmingsplannen",
+          "segment_count": 0
+        },
+        {
+          "title": "Verslag subcommissie bestemmingsplannen",
+          "segment_count": 0
+        },
+        {
+          "title": "Adviezen subcommissie bestemmingsplannen",
+          "segment_count": 0
+        },
+        {
+          "title": "Ingekomen stukken",
+          "segment_count": 0
+        },
+        {
+          "title": "Naar aanleiding van Schriftelijke Vragenronde",
+          "segment_count": 9
+        },
+        {
+          "title": "Bouwen en Wonen",
+          "segment_count": 7
+        },
+        {
+          "title": "Buitenruimte",
+          "segment_count": 0
+        },
+        {
+          "title": "Projecten/Vastgoed",
+          "segment_count": 4
+        },
+        {
+          "title": "Lijsten van openstaande toezeggingen, schriftelijke vragen en moties",
+          "segment_count": 11
+        },
+        {
+          "title": "Sluiting",
+          "segment_count": 2
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 0
+        },
+        {
+          "title": "Inspreker Vreemd aan de orde",
+          "segment_count": 10
+        },
+        {
+          "title": "Adviezenlijst openbare overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Funderingskwestie Algemeen",
+          "segment_count": 370
+        },
+        {
+          "title": "Gebiedsambitiedocument Bloemhof-Midden",
+          "segment_count": 248
+        },
+        {
+          "title": "Concept Uitvoeringsstrategie en -agenda Omgevingsvisie",
+          "segment_count": 0
+        },
+        {
+          "title": "Rondvraag en sluiting",
+          "segment_count": 1
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-11-19 00:00:00",
+        "committee": "BWB",
+        "review_status": "auto_approved",
+        "quality_score": 0.949,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-11-19 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 17,
+      "recognized_speakers": 15,
+      "unrecognized_speakers": 2,
+      "recognition_rate": 0.8824,
+      "recognized": [
+        {
+          "name": "P.J.H.D. (Ellen) Verkoelen Commissievoorzitter",
+          "segment_count": 195,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "R.P. (Ryan) Vos Burgercommissielid",
+          "segment_count": 28,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "V.A. (Vanessa) Bruin",
+          "segment_count": 4,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D.J. (Diederik) van Dommelen",
+          "segment_count": 46,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "A. (Astrid) Kockelkoren",
+          "segment_count": 55,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "T. (Tim) de Haan",
+          "segment_count": 21,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "E. (Emin) Başoğlu Burgercommissielid",
+          "segment_count": 7,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie",
+          "segment_count": 18,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M. (Marcel) Verhoef",
+          "segment_count": 38,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "Inspreker",
+          "segment_count": 25,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "R.N. (Rashied) Dahoe",
+          "segment_count": 8,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.G.C. (René) Segers-Hoogendoorn",
+          "segment_count": 10,
+          "parties": [
+            "CDA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "C.M. (Chantal) Zeegers",
+          "segment_count": 48,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "L.P.A. (Luuc) Dekkers",
+          "segment_count": 9,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "P.C.Z. (Precious) Sadhoe Burgercommissielid",
+          "segment_count": 6,
+          "parties": [
+            "BIJ1"
+          ],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "M. (Marianne) van den Anker Ombudsman Rotterdam Rijnmond",
+          "segment_count": 3,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "P.J.P. (Pascal) Lansink-Bastemeijer",
+          "segment_count": 53,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 203,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 69,
+        "long (2000-5000)": 133,
+        "short (50-200)": 1
+      },
+      "min_chars": 144,
+      "max_chars": 2759,
+      "avg_chars": 2006.1,
+      "median_chars": 2271,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 203,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 12,
+      "documents_with_chunks": 12,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Bouwen en Wonen",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Commissieplanning",
+          "chunks": 5
+        },
+        {
+          "name": "Transcript: Funderingskwestie Algemeen",
+          "chunks": 112
+        },
+        {
+          "name": "Transcript: Gebiedsambitiedocument Bloemhof-Midden",
+          "chunks": 65
+        },
+        {
+          "name": "Transcript: Inspreker Vreemd aan de orde",
+          "chunks": 5
+        },
+        {
+          "name": "Transcript: Lijsten van openstaande toezeggingen, schriftelijke vragen en moties",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Naar aanleiding van Schriftelijke Vragenronde",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Projecten/Vastgoed",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Regelingen van Werkzaamheden",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: Rondvraag en sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Sluiting",
+          "chunks": 3
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 203,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 203,
+      "distribution": {
+        "quote": {
+          "count": 202,
+          "rate": 0.9951
+        },
+        "full_text": {
+          "count": 1,
+          "rate": 0.0049
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "ok",
+    "n_samples": 5,
+    "avg_hallucination_rate": 0.378,
+    "safe_for_councillors": false,
+    "hallucination_types_found": [],
+    "dangerous_claims": [
+      {
+        "chunk_id": 13436,
+        "claim": "Er zijn mensen die specifiek een initiatief hebben genomen rondom peilbuizen en niet als gelijkwaardige partner worden gezien — dit suggereert een specifieke casus die niet in het originele transcript voorkomt en kan leiden tot onjuiste beleidsreacties"
+      },
+      {
+        "chunk_id": 13568,
+        "claim": "GroenLinks zegt tegen het raadsvoorstel te zullen stemmen — dit is een onjuiste stemtoeschrijving aan een spreker die niet in het originele transcript voorkomt, wat raadsleden kan misleiden over de positie van GroenLinks"
+      },
+      {
+        "chunk_id": 13588,
+        "claim": "De heer Verhoef stelt vragen over de blokaanpak — dit suggereert een specifieke spreker zonder duidelijke basis in het transcript"
+      },
+      {
+        "chunk_id": 13498,
+        "claim": "D66 had vragen over waterschap en was minder positief bij de beantwoording — dit suggereert een partijstandpunt dat niet in het transcript voorkomt en kan leiden tot onjuiste attributie van politieke posities."
+      }
+    ],
+    "chunk_results": [
+      {
+        "chunk_id": 13429,
+        "chunk_title": "Opening and Introduction",
+        "chunk_index": 0,
+        "content_preview": "[P.J.H.D. (Ellen) Verkoelen Commissievoorzitter]: De vraag is hoe de. De. Hoe we deze grote uitdaging van deze funderingsproblematiek, bodemdaling en opgaven in de ondergrond met z'n allen stadsbreed ",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Op 16 april jongstleden zijn er in de bespreking van de funderingskwestie in algemene zin en in de situatie van de wijk Bloemhof specifiek met elkaar vervlochten.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Op 16 april jongstleden zijn er in de bespreking van de funderingskwestie in algemene zin en in de situatie van de wijk Bloemhof specifiek uh met elkaar vervlochten."
+            },
+            {
+              "claim": "Toen hebben we één vergadering gehad.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Toen hebben we één vergadering gehad en uh, eerlijk is gezegd dat we toen moesten constateren..."
+            },
+            {
+              "claim": "De funderingsproblematiek in z'n algemeenheid kwam slecht uit de verf omdat men met z'n allen bovenop de zaak Bloemhof zat.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "eerlijk is gezegd dat we toen moesten constateren dat de funderingsproblematiek in z'n algemeenheid eigenlijk slecht uit de verf kwam, omdat we met z'n allen bovenop de zaak Bloemhof zaten."
+            },
+            {
+              "claim": "Men wil dit onderwerp apart behandelen met als doel aandacht voor de brede aanpak van de funderingsproblematiek.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Vandaar dat we nu dit onderwerp apart willen behandelen, met als doel dat we ook echt wel de aandacht hebben voor de brede aanpak van de funderingsproblematiek."
+            },
+            {
+              "claim": "Dit is een stadsbrede aanpak.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Uhm, dat is een stadsbrede aanpak."
+            },
+            {
+              "claim": "Men wil dat woningeigenaren van de funderingsproblemen, financiële aspecten en preventie breed behandeld gaan worden.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En wij willen heel graag dat de woningeigenaren van de funderingsproblemen, uh en de financiële aspecten en de preventie breed behandeld gaan worden."
+            },
+            {
+              "claim": "Er ligt geen raadsvoorstel voor of een raadsinformatiebrief over de aanpak van deze problematiek.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Er ligt geen raadsvoorstel voor of een raadsinformatiebrief over de aanpak van deze problematiek."
+            },
+            {
+              "claim": "Enkele te betrekken stukken zijn geagendeerd.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Wel zijn enkele te betrekken stukken stukken geagendeerd."
+            },
+            {
+              "claim": "Gisteren is een brief van de wethouder ontvangen die leest als een voortgangsbericht.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En zo heeft ie gisteren nog een brief van de wethouder ontvangen die uh leest als een voortgangsbericht."
+            },
+            {
+              "claim": "Vandaag hebben griffie en voorzitter contact gehad met de wijkraad Vreewijk.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Vandaag hebben wij overigens als griffie en voorzitter ook nog de wijkraad Vreewijk uh uh uh aan de lijn gehad, t bericht gehad"
+            },
+            {
+              "claim": "De wijkraad Vreewijk geeft aan dat zij deze week nog met een brief komen over de bodemdaling in Vreewijk.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "en die geven aan dat ook zij deze week nog met een brief komen over de bodemdaling in Vreewijk."
+            },
+            {
+              "claim": "De te controleren tekst eindigt abrupt bij 'de wijkraad Vreewijk' zonder de verdere inhoud van het originele transcript.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De te controleren tekst stopt na 'Vandaag hebben wij overigens als griffie en voorzitter ook nog de wijkraad Vreewijk' terwijl het originele transcript veel verder gaat."
+            }
+          ],
+          "total_claims": 12,
+          "supported": 12,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "De AI-gegenereerde notulen bevatten uitsluitend feitelijke beweringen die direct uit het originele transcript kunnen worden geverifieerd. Alle beweringen zijn letterlijk overgenomen uit de context. Het enige opvallende is dat de te controleren tekst onvolledig is — het stopt abrupt in het midden van een zin over de wijkraad Vreewijk, terwijl het originele transcript veel verder gaat met informatie over de ombudsman. Dit is echter een kwestie van onvolledigheid, niet van hallucinatie. Er zijn geen onjuiste toeschrijvingen, vervalste citaten, onjuiste data, of andere hallucinaties gedetecteerd. De transcriptie is nauwkeurig."
+        }
+      },
+      {
+        "chunk_id": 13436,
+        "chunk_title": "Ombudsman's Investigation and Rotterdam's Role",
+        "chunk_index": 7,
+        "content_preview": "[P.J.H.D. (Ellen) Verkoelen Commissievoorzitter]: Initiatiefnemers. Ons onderzoek omarmen, dat is los. Hopelijk binnenkort ook in uw commissie. Uh, Iets wat we gaan bespreken. Ik ga u onderbreken, men",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Ellen Verkoelen onderbreekt iemand die niet oplet tijdens de vergadering",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "In het originele transcript spreekt Ellen Verkoelen over funderingsproblematiek en Bloemhof. De passage over 'iemand niet kon opletten' staat niet in het originele transcript en wordt toegeschreven aan een 'Unknown' spreker in de AI-gegenereerde notulen."
+            },
+            {
+              "claim": "Initiatiefnemers in Rotterdam hebben het 'ontzettend zwaar' met funderingsproblemen, eenzaamheid en geweld in de buurt",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Deze uitgebreide passage over initiatiefnemers, 'clusterfuck', en integraal werken staat niet in het originele transcript. Het originele transcript behandelt alleen funderingsproblematiek en Bloemhof."
+            },
+            {
+              "claim": "Er zijn mensen die specifiek een initiatief hebben genomen rondom peilbuizen",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "Peilbuizen worden niet genoemd in het originele transcript. Dit lijkt een fabricatie of verwarring met ander materiaal."
+            },
+            {
+              "claim": "Team ombudsman werkt al twee jaar aan het verbeteren van relaties tussen gemeente en initiatiefnemers",
+              "verdict": "unsupported",
+              "hallucination_type": "amount_error",
+              "evidence": "De twee-jaar-periode staat niet in het originele transcript. Marianne van den Anker spreekt in het originele transcript alleen over het onderzoek naar funderingsproblematiek."
+            },
+            {
+              "claim": "De Erasmus casus Singel heeft dezelfde problemen als de peilbuizen-kwestie",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Erasmus casus Singel wordt niet genoemd in het originele transcript."
+            },
+            {
+              "claim": "De SP en meneer Van Dijk van de ChristenUnie hebben positieve standpunten over de aanpak",
+              "verdict": "unsupported",
+              "hallucination_type": "party_position",
+              "evidence": "De SP en ChristenUnie worden niet genoemd in het originele transcript. Geen enkele partijstandpunten worden uitgesproken in de originele context."
+            },
+            {
+              "claim": "Rotterdam is 'één oog koning' in het land der blinden",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "Deze metafoor staat niet in het originele transcript."
+            },
+            {
+              "claim": "Er zijn subsidieloket beschikbaar maar deze zijn ingewikkeld",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "Subsidieloket worden niet genoemd in het originele transcript."
+            }
+          ],
+          "total_claims": 8,
+          "supported": 0,
+          "unsupported": 8,
+          "contradicted": 0,
+          "hallucination_rate": 1.0,
+          "most_dangerous_claim": "Er zijn mensen die specifiek een initiatief hebben genomen rondom peilbuizen en niet als gelijkwaardige partner worden gezien — dit suggereert een specifieke casus die niet in het originele transcript voorkomt en kan leiden tot onjuiste beleidsreacties",
+          "reasoning": "De AI-gegenereerde notulen bevatten vrijwel geen overlap met het originele transcript. Terwijl het originele transcript gaat over funderingsproblematiek, Bloemhof, bodemdaling en de rol van de ombudsman, bevat de AI-gegenereerde tekst volledig andere onderwerpen (peilbuizen, Erasmus Singel, subsidieloket, initiatiefnemers). Dit lijkt een ernstige hallucinatie waarbij de AI een geheel ander gesprek heeft gegenereerd. Geen enkele feitelijke bewering uit de AI-gegenereerde notulen kan worden geverifieerd in het originele transcript. Dit vormt een KRITIEK risico voor raadsleden die op basis van deze notulen besluiten zouden nemen."
+        }
+      },
+      {
+        "chunk_id": 13568,
+        "chunk_title": "Critique of Omgevingsvisie vs. Omgevingsplan",
+        "chunk_index": 27,
+        "content_preview": "[P.J.H.D. (Ellen) Verkoelen Commissievoorzitter]: opgevolgd moeten worden. Dus dat wou ik nog even benadrukken. Ik ben benieuwd naar de beantwoording van de\n[A. (Astrid) Kockelkoren (GroenLinks)]: Dui",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Mevrouw Kuiken spreekt namens GroenLinks",
+              "verdict": "contradicted",
+              "hallucination_type": "speaker_presence",
+              "evidence": "In de te controleren tekst wordt gezegd 'Mevrouw Kuiken. Cor van GroenLinks.' maar in het originele transcript is geen spreker met de naam Kuiken aanwezig. De sprekers in het originele transcript zijn: P.J.H.D. (Ellen) Verkoelen (Commissievoorzitter) en onbekende sprekers. Er is geen Kuiken of Cor van GroenLinks in het originele transcript."
+            },
+            {
+              "claim": "Dit is de tweede keer dat Bloemhof Midden wordt besproken",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Origineel transcript: 'Voor de tweede keer dit jaar buigt u zich over het gebieds ambitiedocument Bloemhof Midden.'"
+            },
+            {
+              "claim": "De vorige keer verklaarde de commissie het document niet rijp voor behandeling",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Origineel transcript: 'De vorige keer verklaarde u hetzelfde document nog niet rijp voor behandeling, omdat er nog te veel vragen waren.'"
+            },
+            {
+              "claim": "Er is een half jaar verstreken tussen de twee besprekingen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Origineel transcript: 'Inmiddels een half jaar verder, heeft het college stappen genomen'"
+            },
+            {
+              "claim": "De wijkraad van Bloemhof denkt dat het document niet rijp is",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Origineel transcript: 'Zoals u heeft kunnen lezen, denkt de wijkraad van niet.'"
+            },
+            {
+              "claim": "Bodemdaling, funderingsversterking en uitgifte paal spelen een centrale rol",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Origineel transcript: 'Daarbij spelen bodemdaling, funderingsversterking en uitgifte paal een centrale rol.'"
+            },
+            {
+              "claim": "De gemeente begon meer dan twee jaar geleden met communicatie over bodemdaling in Lommel",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Origineel transcript: 'Komende januari, meer dan twee jaar nadat de gemeente met communicatie over de bodemdaling in Lommel begon'"
+            },
+            {
+              "claim": "In april maakte het college een inventarisatie met juridische invalshoeken",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Origineel transcript: 'In april heeft het college een inventarisatie gemaakt met een aantal juridische invalshoeken.'"
+            },
+            {
+              "claim": "Bloemhof is aangewezen als moderniseringslokatie in de omgevingsvisie",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Origineel transcript: 'Om dat Bloemhof in de omgevingsvisie is aangewezen als moderniseringsslocatie.'"
+            },
+            {
+              "claim": "Volgens de Omgevingswet moet aanwijzing als moderniseringslokatie via omgevingsplan, niet omgevingsvisie",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Origineel transcript: 'Dat is weer heel teleurstellend, want volgens de Omgevingswet kan dat niet met een omgevingsvisie, maar moet dat met een omgevingsplan.'"
+            },
+            {
+              "claim": "GroenLinks stelt vragen over hoeveel maatwerk in de rioolvervanging zit",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "De spreker 'Mevrouw Kuiken' of 'Cor van GroenLinks' komt niet voor in het originele transcript. De vragen worden toegeschreven aan een spreker die niet aanwezig is in de bron."
+            },
+            {
+              "claim": "GroenLinks zegt dat ophoging naar uitgiftepeil grote invloed zal hebben op monumenten in Bloemhof Zuid",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Deze uitspraak wordt toegeschreven aan een spreker die niet in het originele transcript voorkomt."
+            },
+            {
+              "claim": "GroenLinks stelt dat het onduidelijk is wat ophoging gaat betekenen voor bodemdaling",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Deze uitspraak wordt toegeschreven aan een spreker die niet in het originele transcript voorkomt."
+            },
+            {
+              "claim": "GroenLinks zegt tegen het raadsvoorstel te zullen stemmen",
+              "verdict": "unsupported",
+              "hallucination_type": "vote_attribution",
+              "evidence": "Deze stemverklaring wordt toegeschreven aan een spreker die niet in het originele transcript voorkomt. Dit is een kritieke fout voor raadsleden die op basis hiervan hun stemgedrag bepalen."
+            }
+          ],
+          "total_claims": 14,
+          "supported": 9,
+          "unsupported": 5,
+          "contradicted": 1,
+          "hallucination_rate": 0.43,
+          "most_dangerous_claim": "GroenLinks zegt tegen het raadsvoorstel te zullen stemmen — dit is een onjuiste stemtoeschrijving aan een spreker die niet in het originele transcript voorkomt, wat raadsleden kan misleiden over de positie van GroenLinks",
+          "reasoning": "De te controleren tekst bevat een fundamentele fout: de spreker wordt geïdentificeerd als 'Mevrouw Kuiken' of 'Cor van GroenLinks', maar deze persoon(en) komen niet voor in het originele transcript. Dit is een kritieke hallucinatie van het type 'speaker_presence'. Alle uitspraken die aan deze niet-bestaande spreker worden toegeschreven, zijn daarom onverifieerbaar. Met name de stemverklaring ('ik tegen dit raadsvoorstel zou stemmen') is gevaarlijk omdat het een onjuiste stemtoeschrijving aan GroenLinks zou kunnen impliceren. De feitelijke beweringen over Bloemhof Midden zelf (bodemdaling, juridische inventarisatie, omgevingsvisie) zijn wel ondersteund door het originele transcript, maar de context waarin ze worden gepresenteerd is vervalst door de onjuiste spreker-attributie."
+        }
+      },
+      {
+        "chunk_id": 13588,
+        "chunk_title": "Critique of Omgevingsvisie vs. Omgevingsplan",
+        "chunk_index": 47,
+        "content_preview": "[C.M. (Chantal) Zeegers]: Nou de paal zelf? Uh, waarschijnlijk uh niet.\n[C.M. (Chantal) Zeegers]: Of ik even mooi vanaf uh. Maar hoe dat precies zit is één. Ik. Ik. Ik ga ervan uit dat hier op uitgift",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "C.M. (Chantal) Zeegers spreekt over de paal en zegt 'waarschijnlijk uh niet'",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[C.M. (Chantal) Zeegers]: Nou de paal zelf? Uh, waarschijnlijk uh niet."
+            },
+            {
+              "claim": "Er wordt gebouwd op uitgifte peil",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ik ga ervan uit dat hier op uitgifte peil wordt gebouwd."
+            },
+            {
+              "claim": "Zeegers verwijst naar 'de viool' en 'Jerhof'",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "Transcript bevat: 'De viool. Jerhof lijkt me wel verstandig' - deze termen zijn onduidelijk en mogelijk ASR-fouten, maar kunnen niet geverifieerd worden tegen de context"
+            },
+            {
+              "claim": "Zeegers zegt dat zij destijds niet naar iets heeft gevraagd",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "want daar heb ik destijds niet naar gevraagd."
+            },
+            {
+              "claim": "Er is een blokaanpak waarover Leefbaar Rotterdam vragen stelt",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "We zijn natuurlijk bezig met de blokaanpak en daar wordt gevraagd door uh uh, Leefbaar Rotterdam."
+            },
+            {
+              "claim": "De heer Verhoef stelt vragen over de blokaanpak",
+              "verdict": "unsupported",
+              "hallucination_type": "speaker_presence",
+              "evidence": "Het transcript vermeldt 'Leefbaar Rotterdam. De heer Verhoef' maar het is onduidelijk of Verhoef de spreker is of slechts genoemd wordt. Geen directe toewijzing van vragen aan Verhoef."
+            },
+            {
+              "claim": "Er was eerst een bewonersavond voor de zomer",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "We hadden eerst een bewonersavond als voor de uh zomer, daarna kennismakingsgesprekken georganiseerd."
+            },
+            {
+              "claim": "Er waren dertien adressen aanwezig geweest",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "D'r zijn dertien adressen aanwezig geweest."
+            },
+            {
+              "claim": "Bewoners willen inzicht in de inmeting voordat zij beslissen mee te doen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "die willen eerst inzicht en ze willen eerst inzicht hebben in de inmeting. Dus de hoogte, de dorpelmeting, maar ook net over wetgegesproken en hoe dat precies is met het riool, voordat ze beslissen om mee te gaan doen"
+            },
+            {
+              "claim": "Er is een klankbordgroep met bewoners gesproken",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "we hebben nou uh recentelijk uh uh met de klankbordgroep ook gesproken. Dat zijn, dat is een groep bewoners."
+            },
+            {
+              "claim": "In maart zullen de gegevens van de metingen gereed zijn",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "In maart zullen dan ook de gegevens van die metingen allemaal uh gereed zijn."
+            },
+            {
+              "claim": "De gemeente pakt niet de eerste makkelijkste zaken eerst aan",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Uh dan uhm pakken we niet de eerste uh makkelijkste zaken eerst aan? Uh, nou, ik dacht dat denk ik eerlijk gezegd niet."
+            },
+            {
+              "claim": "De gemeente is met corporaties in gesprek over hoe zij het gaan doen",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "We zijn met natuurlijk de corporaties in gesprek over hoe zij het uh gaan doen."
+            },
+            {
+              "claim": "Corporaties hebben een heel groot deel van de woningvoorraad",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Nou, corporaties hebben natuurlijk heel groot deel van de woningvoorraad."
+            },
+            {
+              "claim": "Voor eigenaar-bewoners is het moeilijker om bijvoorbeeld een sloop nieuwbouwproject te starten",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "want voor bewoners is natuurlijk veel moeilijker om uh, bijvoorbeeld een sloop uh nieuwbouwproject te gaan starten. Dat is iets wat voor een bewoner eigenlijk niet te doen is."
+            }
+          ],
+          "total_claims": 15,
+          "supported": 13,
+          "unsupported": 2,
+          "contradicted": 0,
+          "hallucination_rate": 0.13,
+          "most_dangerous_claim": "De heer Verhoef stelt vragen over de blokaanpak — dit suggereert een specifieke spreker zonder duidelijke basis in het transcript",
+          "reasoning": "De AI-gegenereerde notulen zijn grotendeels accuraat en volgen het originele transcript nauwkeurig. Twee beweringen zijn problematisch: (1) de verwijzing naar 'de viool' en 'Jerhof' zijn waarschijnlijk ASR-transcriptiefouten die niet kunnen worden geverifieerd, en (2) de toewijzing van vragen aan 'de heer Verhoef' is onduidelijk — het transcript noemt Verhoef in verband met Leefbaar Rotterdam, maar maakt niet expliciet duidelijk dat hij de vragen stelt. Dit is een laag hallucinatie-percentage (13%), maar de speaker_presence-fout is potentieel gevaarlijk omdat het een specifieke raadslid onjuist kan toeschrijven aan een standpunt."
+        }
+      },
+      {
+        "chunk_id": 13498,
+        "chunk_title": "Ombudsman's Investigation and Rotterdam's Role",
+        "chunk_index": 69,
+        "content_preview": "[Unknown]: Uhm. D66 had ook uhm vragen over uh, waterschap en. Uhm uhm, het verhaal van uh, die waren wat minder positief heb ik denk ik bij de beantwoording van.\n[Unknown]: De vragen van het CDA al o",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "D66 had vragen over waterschap",
+              "verdict": "unsupported",
+              "hallucination_type": "party_position",
+              "evidence": "D66 wordt niet genoemd in het originele transcript. De context bevat alleen uitspraken van Ellen Verkoelen (Commissievoorzitter), Marianne van den Anker (Ombudsman), en Gerben van Dijk (ChristenUnie)."
+            },
+            {
+              "claim": "D66 was minder positief bij de beantwoording",
+              "verdict": "unsupported",
+              "hallucination_type": "party_position",
+              "evidence": "D66 wordt niet genoemd in het originele transcript. Er is geen basis voor een uitspraak over hun positie of houding."
+            },
+            {
+              "claim": "CDA had vragen",
+              "verdict": "unsupported",
+              "hallucination_type": "party_position",
+              "evidence": "CDA wordt niet genoemd in het originele transcript. Alleen ChristenUnie (Gerben van Dijk) spreekt."
+            },
+            {
+              "claim": "Gerben van Dijk is lid van ChristenUnie",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie]"
+            },
+            {
+              "claim": "Er is zand gestort in een wijk (Tussen Water/watergebied)",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De spreker zegt: 'Dus intussen water hebben we feitelijk al een coulance regeling toegepast. Dus dat ophogen van die hele wijk,. Dat hebben wij nog nooit gedaan ergens.' Dit verwijst naar zandstorting."
+            },
+            {
+              "claim": "De gemeente heeft een coulance regeling toegepast",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'Dus intussen water hebben we feitelijk al een coulance regeling toegepast.'"
+            },
+            {
+              "claim": "Dit is de eerste keer dat de gemeente zoiets heeft gedaan",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'nog nooit gedaan ergens. En dat is wel kost de gemeente geweest.'"
+            },
+            {
+              "claim": "De zandstorting heeft nieuwe problemen veroorzaakt",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'En ik begrijp nu dat dat ook weer voor nieuwe problemen veroorzaakt.'"
+            },
+            {
+              "claim": "22 kuub zand werd gestort",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "'je kan wel zeggen van ja, ik lever 22 kuub zand en daarmee moet je het maar doen.'"
+            }
+          ],
+          "total_claims": 9,
+          "supported": 6,
+          "unsupported": 3,
+          "contradicted": 0,
+          "hallucination_rate": 0.33,
+          "most_dangerous_claim": "D66 had vragen over waterschap en was minder positief bij de beantwoording — dit suggereert een partijstandpunt dat niet in het transcript voorkomt en kan leiden tot onjuiste attributie van politieke posities.",
+          "reasoning": "De AI-gegenereerde notulen introduceren drie ongesteunde beweringen over D66 en CDA die niet in het originele transcript voorkomen. Dit zijn gevaarlijke hallucinaties van het type 'party_position' omdat ze politieke standpunten toeschrijven aan partijen zonder enige basis in de bron. De beweringen over de zandstorting, coulance-regeling en nieuwe problemen zijn allemaal ondersteund door het transcript. De hallucinatierate bedraagt 33%, wat significant is voor een factcheck van vergadernotulen."
+        }
+      }
+    ]
+  },
+  "verdict": {
+    "recommendation": "REJECT — fix issues before promotion",
+    "issues": [
+      "High hallucination rate: 37.8% (threshold ≤10%)"
+    ],
+    "warnings": [
+      "Dangerous claim in chunk 13436: Er zijn mensen die specifiek een initiatief hebben genomen rondom peilbuizen en niet als gelijkwaardige partner worden g",
+      "Dangerous claim in chunk 13568: GroenLinks zegt tegen het raadsvoorstel te zullen stemmen — dit is een onjuiste stemtoeschrijving aan een spreker die ni",
+      "Dangerous claim in chunk 13588: De heer Verhoef stelt vragen over de blokaanpak — dit suggereert een specifieke spreker zonder duidelijke basis in het t",
+      "Dangerous claim in chunk 13498: D66 had vragen over waterschap en was minder positief bij de beantwoording — dit suggereert een partijstandpunt dat niet"
+    ],
+    "scores": {
+      "hallucination_rate": 0.378,
+      "speaker_attribution_rate": 0.8295,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.949
+    }
+  }
+}

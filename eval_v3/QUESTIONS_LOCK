@@ -1,0 +1,8 @@
+MD5 (eval/data/questions.json) = 6ab59fcbe8ec78f0a6ca613a61d4b273
+
+This file pins the benchmark question set used for v2-full-baseline.
+Any v3 evaluation MUST use the same eval/data/questions.json file.
+If this checksum no longer matches, results are not comparable to v2.
+
+Verify with:
+  md5 eval/data/questions.json

@@ -6,7 +6,7 @@ import os
 from dotenv import load_dotenv
 import logging
 from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.triggers.cron import CronTrigger
+from apscheduler.triggers.interval import IntervalTrigger
 import asyncio
 import json
 from datetime import datetime, date
@@ -16,21 +16,13 @@ from contextlib import asynccontextmanager
 # Load environment variables from .env file
 load_dotenv()
 
-# ROBUST MANUAL KEY FALLBACK
-if not os.getenv("GEMINI_API_KEY"):
-    try:
-        with open(".env", "r") as f:
-            for line in f:
-                if "GEMINI_API_KEY" in line:
-                    os.environ["GEMINI_API_KEY"] = line.split("=")[1].strip()
-                    print("DEBUG: Manually loaded GEMINI_API_KEY from .env")
-    except:
-        pass
+# dotenv handles .env loading above — no manual fallback needed
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+from services.db_pool import close_pool
 from services.open_raad import OpenRaadService
 from services.storage import StorageService
 from services.ai_service import AIService, GEMINI_AVAILABLE
@@ -59,6 +51,7 @@ scheduler = BackgroundScheduler()
 
 def scheduled_refresh():
     """Wrapper for async refresh to run in scheduler"""
+    logger.info("Scheduled refresh triggered (15-min interval)")
     try:
         asyncio.run(refresh_service.check_and_download())
     except Exception as e:
@@ -66,9 +59,12 @@ def scheduled_refresh():
 
 scheduler.add_job(
     scheduled_refresh,
-    CronTrigger(hour=8, minute=0),
-    id='daily_refresh',
-    name='Daily data refresh at 8 AM'
+    IntervalTrigger(minutes=15),
+    id='interval_refresh',
+    name='Check for new documents every 15 minutes',
+    max_instances=1,
+    coalesce=True,
+    misfire_grace_time=300,
 )
 
 @asynccontextmanager
@@ -77,7 +73,7 @@ async def lifespan(app: FastAPI):
     # Startup
     try:
         scheduler.start()
-        logger.info("Daily refresh scheduler started (8 AM UTC)")
+        logger.info("Refresh scheduler started (15-min interval)")
     except Exception as e:
         logger.error(f"Failed to start scheduler: {e}")
     
@@ -89,6 +85,12 @@ async def lifespan(app: FastAPI):
         logger.info("Scheduler shutdown complete")
     except Exception as e:
         logger.error(f"Failed to shutdown scheduler: {e}")
+
+    # Close the shared database connection pool
+    try:
+        close_pool()
+    except Exception as e:
+        logger.error(f"Failed to close DB pool: {e}")
 
 # Create FastAPI app with lifespan manager
 app = FastAPI(title="NeoDemos", lifespan=lifespan)
@@ -379,16 +381,7 @@ def _get_party_lens_service(party_name: str = "GroenLinks-PvdA"):
     """
     cache_key = party_name.lower()
     
-    # Temporarily disable cache and force reload for verification of fixes
-    if True:
-        import importlib
-        import services.policy_lens_evaluation_service
-        import services.llm_alignment_scorer
-        importlib.reload(services.llm_alignment_scorer)
-        importlib.reload(services.policy_lens_evaluation_service)
-        from services.policy_lens_evaluation_service import PolicyLensEvaluationService
-        
-    if True or cache_key not in _party_lens_cache:
+    if cache_key not in _party_lens_cache:
         service = PolicyLensEvaluationService(party_name=party_name)
         
         # Load party profile - searches in data/profiles/ directory
@@ -491,6 +484,11 @@ async def api_analyse_party_lens(agenda_item_id: str, party: str = "GroenLinks-P
             "recommendations": result.get('aanbevelingen', []),
             "source": "party_lens_analysis"
         }
+
+    return {
+        "error": f"Partijlensanalyse leverde geen resultaat op voor agendapunt: {item_name}",
+        "alignment_score": None
+    }
 
 @app.get("/api/analyse/unified/{agenda_item_id}")
 async def api_analyse_unified(agenda_item_id: str, party: str = "GroenLinks-PvdA"):

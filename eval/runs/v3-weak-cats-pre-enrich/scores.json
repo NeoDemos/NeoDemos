@@ -1,0 +1,261 @@
+[
+  {
+    "question_id": "ba-01",
+    "question_text": "Geef me een overzicht van de uitdagingen van het doelgroepenvervoer in Rotterdam",
+    "category": "broad_aggregation",
+    "answer": "# Uitdagingen van het Doelgroepenvervoer in Rotterdam\n\nOp basis van de gemeenteraadsdocumenten heb ik **47 unieke aspecten/uitdagingen** geïdentificeerd voor het doelgroepenvervoer in Rotterdam. Deze zijn hieronder gestructureerd weergegeven:\n\n## 1. Fundamentele Uitdagingen\n\n### Personeel en Financiën\n- **Schaarste aan chauffeurs en geld** - fundamentele uitdaging voor continuïteit en betaalbaarheid\n- **Structurele rijksbezuinigingen** van €14 miljoen vanuit Kabinet Balkenende 1, bovenop eerdere bezuinigingen van €15 miljoen\n- **Loonvoorwaarden chauffeurs** - moties pleiten voor eerlijk loon voor chauffeurs\n- **Ziekteverzuim en inhuur personeel** - circa €20,5 miljoen kosten ziekteverzuim, €11,9 miljoen inhuur extra personeel (2002)\n\n### Serviceniveau en Verwachtingen\n- **Spanning tussen verwachtingen gebruikers en grenzen aan maakbaarheid** (financieel, personeel, verkeer, milieu)\n- **Sturing op verbetering performance vervoerders** als uitdaging\n- **Kwaliteit en uitvraag contracten** - zorgen over kwaliteit in nieuwe uitvraag\n- **KPI's niet halen is betalen** - motie stelt dat bij niet-halen KPI's betaald moet worden\n\n## 2. Inkoop en Contractering\n\n### Versnippering en Complexiteit\n- **Versnippering van het DGV** - al versnipperd over gemeentelijk, Valys, Wlz-, ziekenvervoer\n- **Negatieve impact op klantoverzicht** bij opdeling over verschillende 'loketten'\n- **Complexiteit contracteren meerdere vervoerders** - vereist aanpassingen in gemeentelijke systemen, ICT, berichtenverkeer en betalingsstromen\n\n### Aanbestedingsrisico's\n- **Leerlingen- en jeugdwetvervoer als minder aantrekkelijke opdracht** - kan leiden tot minder inschrijvers\n- **Hogere vergoeding vereist** wat financieel niet realistisch is voor gemeente\n- **Juridische procedures en geschillen** - na voorlopige gunning DGV 2017-2024 aan Lorem Focus B.V. op 11 april 2017 volgden juridische stappen van RMC\n\n## 3. Duurzaamheid en Verduurzaming\n\n### Emissiedoelstellingen\n- **50% van doelgroepenvervoer was scho",
+    "route": {
+      "query_type": "broad_aggregation",
+      "top_k": 50,
+      "parties": [],
+      "date_from": null,
+      "date_to": null,
+      "sub_queries": [],
+      "confidence": 1.0,
+      "strategy": "map_reduce"
+    },
+    "retrieval_metrics": {
+      "context_precision": 1.0,
+      "diversity": {
+        "document_diversity": 0.92,
+        "unique_documents": 46,
+        "total_chunks": 50,
+        "entropy": 5.484
+      },
+      "temporal": {
+        "applicable": false,
+        "in_range_ratio": 1.0
+      }
+    },
+    "component_metrics": {
+      "contribution": {
+        "vector_only_pct": 0.42,
+        "keyword_only_pct": 0.58,
+        "both_pct": 0.0,
+        "neither_pct": 0.0,
+        "vector_only": 21,
+        "keyword_only": 29,
+        "both": 0,
+        "total": 50
+      },
+      "reranker": {
+        "skipped": false,
+        "avg_position_change": 69.7,
+        "promotions_5plus": 104,
+        "demotions_5plus": 128,
+        "candidates_scored": 250
+      },
+      "rrf": {
+        "unique_from_fusion": 25,
+        "unique_pct": 0.5,
+        "vector_top_k_overlap": 12,
+        "keyword_top_k_overlap": 13
+      },
+      "timings": {
+        "embedding_ms": 870.3491669948562,
+        "vector_ms": 95.92991699901177,
+        "keyword_ms": 23123.986708000302,
+        "rrf_ms": 0.24437499814666808,
+        "reranker_ms": 163777.40300000005,
+        "total_ms": 187868.4073330005
+      }
+    },
+    "generation_metrics": {
+      "answer_relevance": {
+        "score": 5,
+        "reasoning": "Het antwoord beantwoordt de vraag volledig en uitgebreid. Het geeft een zeer gestructureerd overzicht van 47 unieke uitdagingen van het doelgroepenvervoer in Rotterdam, georganiseerd in 8 hoofdcategorieën. Alle aspecten zijn direct relevant voor de vraag en er wordt geen onnodige informatie gegeven. Het antwoord toont diepgaande kennis van het onderwerp met concrete details, cijfers en voorbeelden uit gemeenteraadsdocumenten."
+      },
+      "faithfulness": {
+        "score": 5,
+        "reasoning": "Het antwoord is volledig gebaseerd op de meegeleverde context. Alle 47 geïdentificeerde uitdagingen zijn direct terug te vinden in de bronnen, inclusief specifieke bedragen (€14 miljoen bezuinigingen, €20,5 miljoen ziekteverzuim, 50% schoon doelgroepenvervoer), concrete data (VN-verdrag 2016, 21% laaggeletterden vs 12% landelijk), en specifieke voorbeelden (Lorem Focus B.V., RMC juridische procedure). De structurering in 8 hoofdcategorieën met subcategorieën geeft een helder overzicht zonder informatie toe te voegen die niet in de context staat."
+      },
+      "completeness": {
+        "score": 5,
+        "reasoning": "Het antwoord is zeer volledig en behandelt alle relevante aspecten van de uitdagingen van het doelgroepenvervoer in Rotterdam. Het dekt systematisch alle hoofdthema's uit de context: financiële uitdagingen (schaarste chauffeurs/geld, bezuinigingen), operationele aspecten (inkoop, contractering, versnippering), duurzaamheid (emissiedoelstellingen, elektrificatie), maatschappelijke integratie (inclusiviteit, bereikbaarheid), bestuurlijke complexiteit (meerdere bestuurslagen, governance), en communicatie-uitdagingen. Het antwoord is goed gestructureerd met 47 geïdentificeerde aspecten verdeeld over 8 hoofdcategorieën, waarbij zowel strategische als praktische uitdagingen worden benoemd. Alle relevante partijen (gemeente, vervoerders, gebruikers, rijk) komen aan bod."
+      }
+    },
+    "hallucination_metrics": {
+      "claim_verification": {
+        "claims": [
+          {
+            "claim": "Schaarste aan chauffeurs en geld is een fundamentele uitdaging",
+            "verdict": "supported",
+            "evidence": "De actuele uitdagingen in het DGV: 1. Schaarste aan chauffeurs en geld",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Structurele rijksbezuinigingen van €14 miljoen vanuit Kabinet Balkenende 1",
+            "verdict": "supported",
+            "evidence": "De stadsregio, die als enige beleidsmatig verantwoordelijk is voor het openbaar vervoer, is geconfronteerd met een rijksbezuiniging van het Kabinet Balkenende 1 met een omvang van € 14 miljoen structureel",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Eerdere bezuinigingen van €15 miljoen",
+            "verdict": "supported",
+            "evidence": "Na de bezuinigingen onder het Kabinet paars 2, die om en nabij de € 15 miljoen bedroegen",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Circa €20,5 miljoen kosten ziekteverzuim",
+            "verdict": "supported",
+            "evidence": "Het terugbrengen van het ziekteverzuim, dat op dit moment ongeveer € 20,5 miljoen kost",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "€11,9 miljoen inhuur extra personeel (2002)",
+            "verdict": "supported",
+            "evidence": "Het verminderen van het inhuren van extra personeel, dat in 2002 een kostenpost was van € 11,9 miljoen",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Spanning tussen verwachtingen gebruikers en grenzen aan maakbaarheid",
+            "verdict": "supported",
+            "evidence": "Servicelevel/verwachtingen vs grenzen aan de maakbaarheid (naast financiën en arbeidsmarkt ook verkeer en milieu)",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "50% van doelgroepenvervoer was schoon (juni 2023)",
+            "verdict": "supported",
+            "evidence": "50% van het doelgroepenvervoer is schoon",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Landelijke afspraken vereisen vanaf 2025 emissievrij busmaterieel",
+            "verdict": "supported",
+            "evidence": "landelijk afgesproken dat vanaf 2025, of zoveel eerder als mogelijk, al het nieuwe busmaterieel dat instroomt geen schadelijke stoffen meer mag uitstoten (= zero emissie)",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "VN-verdrag rechten personen met handicap (2016)",
+            "verdict": "supported",
+            "evidence": "Nederland ondertekende in 2016 het VN-verdrag over de rechten van personen met een handicap",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "21% Rotterdammers heeft moeite met lezen/schrijven (vs 12% landelijk)",
+            "verdict": "supported",
+            "evidence": "1 op de 5 Rotterdammers (21%*) heeft moeite met lezen en schrijven en is meestal ook niet digitaal vaardig. Dat is meer dan het landelijk gemiddelde (12%)",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Juridische procedures na voorlopige gunning DGV 2017-2024 aan Lorem Focus B.V. op 11 april 2017",
+            "verdict": "supported",
+            "evidence": "Op 11 april jongstleden is het doelgroepenvervoer in Rotterdam voor de periode 2017 - 2024 voorlopig gegund aan Lorem Focus B.V.",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "RMC volgde met juridische stappen",
+            "verdict": "supported",
+            "evidence": "Naar aanleiding van deze voorlopige gunning heeft RMC, de partij die tweede is geworden, vragen gesteld en twijfels geúit over de beslissing",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Krapte op elektriciteitsnet (2022)",
+            "verdict": "supported",
+            "evidence": "Rotterdam kreeg in 2022 te maken met krapte op het elektriciteitsnet",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "€6.656,1 miljoen voor Verkeer en Vervoer",
+            "verdict": "supported",
+            "evidence": "De begroting Verkeer en Vervoer laat een kostenpost zien van 6 656,1 miljoen",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Versnippering van het DGV over gemeentelijk, Valys, Wlz-, ziekenvervoer",
+            "verdict": "supported",
+            "evidence": "Het DGV in Nederland is reeds versnipperd. Denk aan het gemeentelijk DGV en het niet gemeentelijk DGV (Valys, Wlz- en ziekenvervoer)",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Leerlingen- en jeugdwetvervoer als minder aantrekkelijke opdracht",
+            "verdict": "supported",
+            "evidence": "Het leerlingen- en jeugdwetvervoer is niet de meest aantrekkelijke opdracht, getuige de uitvoeringsperikelen in het hele land",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Discriminerend effect op ouderen door rijtijdenverkorting",
+            "verdict": "supported",
+            "evidence": "De nieuwe dienstregeling sluit vele ouderen onder de Rotterdammers van sociale contacten af",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Impact op werknemers in zorg, bouw en schoonmaak",
+            "verdict": "supported",
+            "evidence": "veel werknemers, met name in de zorg, de bouw en schoonmaak, zich terecht zorgen maakten hoe ze op tijd op hun werk konden verschijnen",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Meerdere bestuurslagen betrokken maken besluitvorming complex",
+            "verdict": "supported",
+            "evidence": "De moeilijkheid van deze discussie over het openbaar vervoer in Rotterdam - dat blijkt ook steeds in de raad - is dat er verschillende bestuurslagen bij betrokken zijn, die verschillende verantwoordelijkheden hebben",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          },
+          {
+            "claim": "Gebrek aan politiek-bestuurlijk kader voor algoritme-gebruik",
+            "verdict": "supported",
+            "evidence": "Het ontbreekt aan een politiek-bestuurlijk kader dat duidelijk maakt welke normen en principes leidend zijn bij de ontwikkeling en het gebruik van algoritmes",
+            "db_match": false,
+            "db_chunk_id": null,
+            "db_evidence": "Geen overeenkomende tekst gevonden in de database"
+          }
+        ],
+        "total_claims": 20,
+        "supported": 20,
+        "unsupported": 0,
+        "contradicted": 0,
+        "hallucination_rate": 0.0,
+        "most_dangerous_claim": null,
+        "reasoning": "Alle 20 gecontroleerde beweringen zijn direct terug te vinden in de aangeleverde context. Het antwoord bevat accurate informatie over de uitdagingen van het doelgroepenvervoer in Rotterdam, inclusief specifieke bedragen, percentages en data die correct zijn overgenomen uit de bronnen. Er zijn geen hallucinaties gedetecteerd."
+      },
+      "db_verification": {
+        "total_claims": 20,
+        "db_confirmed": 0,
+        "db_denied": 20,
+        "db_unknown": 0,
+        "db_confirmation_rate": 0.0,
+        "db_denial_rate": 1.0
+      }
+    },
+    "chunks_retrieved": 50,
+    "total_ms": 187868.4073330005
+  }
+]

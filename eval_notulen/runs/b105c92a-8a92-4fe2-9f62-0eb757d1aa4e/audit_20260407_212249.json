@@ -1,0 +1,359 @@
+{
+  "meeting_id": "b105c92a-8a92-4fe2-9f62-0eb757d1aa4e",
+  "audit_timestamp": "2026-04-07T21:22:49.800861",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+    "start_date": "2025-04-02 00:00:00",
+    "committee": "BWB",
+    "quality_score": 0.937,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 156,
+    "document_count": 3
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 1003,
+      "correct_count": 1003,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.79,
+      "party_attribution_rate": 0.4976,
+      "total_segments": 619,
+      "attributed_segments": 489,
+      "unattributed_segments": 130
+    },
+    "speaker_diversity": {
+      "unique_speakers": 19,
+      "unique_parties": 10,
+      "top_speaker": "P.J.H.D. (Ellen) Verkoelen",
+      "top_speaker_segment_count": 126,
+      "monologue_rate": 0.2036,
+      "speakers": {
+        "P.J.H.D. (Ellen) Verkoelen": 126,
+        "C.M. (Chantal) Zeegers College": 64,
+        "Adviseur Adviseur": 62,
+        "Inspreker Inspreker": 36,
+        "D.J. (Diederik) van Dommelen VVD": 33,
+        "D.P.A. (Dennis) Tak PvdA": 31,
+        "A. (Astrid) Kockelkoren GroenLinks": 22,
+        "T. (Thomas) Roskam Leefbaar Rotterdam": 20,
+        "B. (Benvenido) van Schaik Leefbaar Rotterdam": 19,
+        "R.T.J. (Ruud) van der Velden Partij voor de Dieren": 13
+      },
+      "parties": {
+        "Commissievoorzitter": 126,
+        "VVD": 41,
+        "Leefbaar Rotterdam": 39,
+        "PvdA": 32,
+        "GroenLinks": 30,
+        "Partij voor de Dieren": 13,
+        "DENK": 10,
+        "D66": 8,
+        "CDA": 6,
+        "SP": 3
+      }
+    },
+    "segment_quality": {
+      "total_segments": 619,
+      "nonempty_segments": 619,
+      "total_words": 50223,
+      "total_chars": 277737,
+      "avg_words_per_segment": 81.1,
+      "avg_chars_per_segment": 448.7,
+      "short_segment_rate": 0.1858,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 5,
+      "items_with_content": 3,
+      "coverage_rate": 0.6,
+      "items": [
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 0
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 0
+        },
+        {
+          "title": "RvW Alle kaarten op tafel voor betaalbare erfpacht",
+          "segment_count": 290
+        },
+        {
+          "title": "Beantwoording schriftelijke vragen Vonk over Desiderius project",
+          "segment_count": 103
+        },
+        {
+          "title": "Technische sessie Rattenproblematiek",
+          "segment_count": 226
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-04-02 00:00:00",
+        "committee": "BWB",
+        "review_status": "auto_approved",
+        "quality_score": 0.937,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)",
+        "start_date": "2025-04-02 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 19,
+      "recognized_speakers": 17,
+      "unrecognized_speakers": 2,
+      "recognition_rate": 0.8947,
+      "recognized": [
+        {
+          "name": "A. (Astrid) Kockelkoren GroenLinks",
+          "segment_count": 22,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "T. (Thomas) Roskam Leefbaar Rotterdam",
+          "segment_count": 20,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D.P.A. (Dennis) Tak PvdA",
+          "segment_count": 31,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D.J. (Diederik) van Dommelen VVD",
+          "segment_count": 33,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.G.C. (René) Segers-Hoogendoorn CDA",
+          "segment_count": 6,
+          "parties": [
+            "CDA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.N. (Rashied) Dahoe DENK",
+          "segment_count": 10,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "T. (Tim) de Haan D66",
+          "segment_count": 8,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "E. (Emin) Başoğlu  Burgercommissielid",
+          "segment_count": 3,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "G.G. (Gerben) van Dijk ChristenUnie Burgercommissielid ChristenUnie",
+          "segment_count": 9,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "C.M. (Chantal) Zeegers College",
+          "segment_count": 64,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "G.J. (Co) Engberts PvdA",
+          "segment_count": 1,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "Inspreker Inspreker",
+          "segment_count": 36,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "R.T.J. (Ruud) van der Velden Partij voor de Dieren",
+          "segment_count": 13,
+          "parties": [
+            "Partij voor de Dieren"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "Adviseur Adviseur",
+          "segment_count": 62,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "B. (Benvenido) van Schaik Leefbaar Rotterdam",
+          "segment_count": 19,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.S. (Marike) Abrahamse VVD",
+          "segment_count": 8,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.Y. (Mina) Morkoç GroenLinks",
+          "segment_count": 8,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "P.J.H.D. (Ellen) Verkoelen",
+          "segment_count": 126,
+          "parties": [
+            "Commissievoorzitter"
+          ],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "B.J. (Bart-Joost) van Rij College",
+          "segment_count": 10,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 156,
+      "empty_chunks": 0,
+      "buckets": {
+        "long (2000-5000)": 103,
+        "medium (200-2000)": 51,
+        "short (50-200)": 2
+      },
+      "min_chars": 159,
+      "max_chars": 2796,
+      "avg_chars": 1993.7,
+      "median_chars": 2285,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 156,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 3,
+      "documents_with_chunks": 3,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Beantwoording schriftelijke vragen Vonk over Desiderius project",
+          "chunks": 25
+        },
+        {
+          "name": "Transcript: RvW Alle kaarten op tafel voor betaalbare erfpacht",
+          "chunks": 63
+        },
+        {
+          "name": "Transcript: Technische sessie Rattenproblematiek",
+          "chunks": 68
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 156,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 156,
+      "distribution": {
+        "quote": {
+          "count": 156,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "PENDING — warnings present, manual review recommended",
+    "issues": [],
+    "warnings": [
+      "Low speaker attribution: 79% (target 80%)"
+    ],
+    "scores": {
+      "speaker_attribution_rate": 0.79,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.937
+    }
+  }
+}

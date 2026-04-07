@@ -1,0 +1,71 @@
+{
+  "run_id": "v3-weak-cats-pre-enrich",
+  "total_questions": 1,
+  "overall": {
+    "count": 1,
+    "context_precision": {
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0
+    },
+    "answer_relevance": {
+      "mean": 5,
+      "min": 5,
+      "max": 5
+    },
+    "faithfulness": {
+      "mean": 5,
+      "min": 5,
+      "max": 5
+    },
+    "completeness": {
+      "mean": 5,
+      "min": 5,
+      "max": 5
+    },
+    "hallucination_rate": {
+      "mean": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    }
+  },
+  "by_category": {
+    "broad_aggregation": {
+      "count": 1,
+      "context_precision": {
+        "mean": 1.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "answer_relevance": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      },
+      "faithfulness": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      },
+      "completeness": {
+        "mean": 5,
+        "min": 5,
+        "max": 5
+      },
+      "hallucination_rate": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      }
+    }
+  },
+  "component_health": {
+    "avg_vector_only_pct": 0.42,
+    "avg_keyword_only_pct": 0.58,
+    "avg_both_pct": 0.0,
+    "avg_reranker_position_change": 69.7,
+    "avg_rrf_unique_pct": 0.5,
+    "avg_total_ms": 187868.407,
+    "total_questions": 1
+  }
+}

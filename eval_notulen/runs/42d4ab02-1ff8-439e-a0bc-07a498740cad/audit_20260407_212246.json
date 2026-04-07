@@ -1,0 +1,321 @@
+{
+  "meeting_id": "42d4ab02-1ff8-439e-a0bc-07a498740cad",
+  "audit_timestamp": "2026-04-07T21:22:46.509221",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+    "start_date": "2025-09-17 00:00:00",
+    "committee": "WIOS",
+    "quality_score": 0.968,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 96,
+    "document_count": 3
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 510,
+      "correct_count": 510,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8941,
+      "party_attribution_rate": 0.4019,
+      "total_segments": 321,
+      "attributed_segments": 287,
+      "unattributed_segments": 34
+    },
+    "speaker_diversity": {
+      "unique_speakers": 14,
+      "unique_parties": 8,
+      "top_speaker": "J.M.D. (Joey) de Waard Commissievoorzitter",
+      "top_speaker_segment_count": 92,
+      "monologue_rate": 0.2866,
+      "speakers": {
+        "J.M.D. (Joey) de Waard Commissievoorzitter": 92,
+        "F. (Faouzi) Achbar": 35,
+        "S. (Stephan) Leewis": 32,
+        "S. (Simon) Ceulemans": 32,
+        "A.I. (Abigail) Norville": 21,
+        "A.J.A. (Agnes) Maassen": 20,
+        "M.R. (Marchiano) van Campenhout": 14,
+        "F. (Femke) Bouwer-van Schie Burgercommissielid": 10,
+        "E.M. (Ellen) Verouden Burgercommissielid CDA": 7,
+        "J. (Jordi) Vicario": 7
+      },
+      "parties": {
+        "GroenLinks": 32,
+        "Leefbaar Rotterdam": 32,
+        "D66": 20,
+        "BIJ1": 14,
+        "Volt": 10,
+        "VVD": 10,
+        "DENK": 7,
+        "SP": 4
+      }
+    },
+    "segment_quality": {
+      "total_segments": 321,
+      "nonempty_segments": 321,
+      "total_words": 30920,
+      "total_chars": 176578,
+      "avg_words_per_segment": 96.3,
+      "avg_chars_per_segment": 550.1,
+      "short_segment_rate": 0.2025,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 5,
+      "items_with_content": 3,
+      "coverage_rate": 0.6,
+      "items": [
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 1
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 0
+        },
+        {
+          "title": "Adviezenlijst openbare overlegvergadering van 3 september 2025",
+          "segment_count": 0
+        },
+        {
+          "title": "Voortgangsrapportage Beleidskader basisvaardigheden",
+          "segment_count": 141
+        },
+        {
+          "title": "Monitor inburgering",
+          "segment_count": 179
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+        "start_date": "2025-09-17 00:00:00",
+        "committee": "WIOS",
+        "review_status": "auto_approved",
+        "quality_score": 0.968,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ",
+        "start_date": "2025-09-17 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 14,
+      "recognized_speakers": 12,
+      "unrecognized_speakers": 2,
+      "recognition_rate": 0.8571,
+      "recognized": [
+        {
+          "name": "J.M.D. (Joey) de Waard Commissievoorzitter",
+          "segment_count": 92,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S. (Stephan) Leewis",
+          "segment_count": 32,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "A.J.A. (Agnes) Maassen",
+          "segment_count": 20,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "E.M. (Ellen) Verouden Burgercommissielid CDA",
+          "segment_count": 7,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "F. (Femke) Bouwer-van Schie Burgercommissielid",
+          "segment_count": 10,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "J. (Jordi) Vicario",
+          "segment_count": 7,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S.D. (Safa) Sodirijo Burgercommissielid",
+          "segment_count": 7,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.R. (Marchiano) van Campenhout",
+          "segment_count": 14,
+          "parties": [
+            "BIJ1"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "A.B. (Tom) Breedveld Burgercommissielid",
+          "segment_count": 4,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S. (Simon) Ceulemans",
+          "segment_count": 32,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S.J.C. (Simon) Becker",
+          "segment_count": 3,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "F. (Faouzi) Achbar",
+          "segment_count": 35,
+          "parties": [],
+          "recognized_as": "council_member"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "A.I. (Abigail) Norville",
+          "segment_count": 21,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "T.B. (Tim)  Versnel",
+          "segment_count": 3,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 96,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 34,
+        "short (50-200)": 4,
+        "long (2000-5000)": 58
+      },
+      "min_chars": 51,
+      "max_chars": 2705,
+      "avg_chars": 1953.5,
+      "median_chars": 2270,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 96,
+      "boilerplate_count": 1,
+      "boilerplate_rate": 0.0104,
+      "boilerplate_examples": [
+        {
+          "id": 9844,
+          "title": "Concluding Remarks on Policy Framework",
+          "preview": "at in de stukken, dus ik wil best buiten de orde om"
+        }
+      ]
+    },
+    "agenda_coverage": {
+      "total_documents": 3,
+      "documents_with_chunks": 3,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Monitor inburgering",
+          "chunks": 48
+        },
+        {
+          "name": "Transcript: Overlegvergadering",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Voortgangsrapportage Beleidskader basisvaardigheden",
+          "chunks": 47
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 96,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 96,
+      "distribution": {
+        "quote": {
+          "count": 96,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8941,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.968
+    }
+  }
+}

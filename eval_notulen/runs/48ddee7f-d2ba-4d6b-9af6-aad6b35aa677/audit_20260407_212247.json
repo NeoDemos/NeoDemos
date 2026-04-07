@@ -1,0 +1,348 @@
+{
+  "meeting_id": "48ddee7f-d2ba-4d6b-9af6-aad6b35aa677",
+  "audit_timestamp": "2026-04-07T21:22:47.283116",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+    "start_date": "2025-07-09 00:00:00",
+    "committee": "ZOCS",
+    "quality_score": 0.91,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 130,
+    "document_count": 2
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 763,
+      "correct_count": 763,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.8671,
+      "party_attribution_rate": 0.3816,
+      "total_segments": 414,
+      "attributed_segments": 359,
+      "unattributed_segments": 55
+    },
+    "speaker_diversity": {
+      "unique_speakers": 20,
+      "unique_parties": 11,
+      "top_speaker": "T.S.J. (Theo) Coşkun Commissievoorzitter",
+      "top_speaker_segment_count": 105,
+      "monologue_rate": 0.2536,
+      "speakers": {
+        "T.S.J. (Theo) Coşkun Commissievoorzitter": 105,
+        "F. (Faouzi) Achbar": 62,
+        "D.P.A. (Dennis) Tak": 31,
+        "M.S. (Marike) Abrahamse": 20,
+        "J.M. (Joan) Nunnely": 18,
+        "S. (Said) Kasmi": 18,
+        "S.L. (Sigrid) Oosterwegel Burgercommissielid": 15,
+        "R.T.J. (Ruud) van der Velden": 12,
+        "D. (Donatella) Schalm-Civile Burgercommissielid": 12,
+        "A.N.M. (Nico) van Scheijndel Burgercommissielid": 11
+      },
+      "parties": {
+        "PvdA": 37,
+        "D66": 23,
+        "VVD": 20,
+        "Volt": 15,
+        "GroenLinks": 15,
+        "Partij voor de Dieren": 12,
+        "50PLUS": 11,
+        "ChristenUnie": 11,
+        "DENK": 7,
+        "Leefbaar Rotterdam": 6,
+        "SP": 1
+      }
+    },
+    "segment_quality": {
+      "total_segments": 414,
+      "nonempty_segments": 414,
+      "total_words": 39260,
+      "total_chars": 217160,
+      "avg_words_per_segment": 94.8,
+      "avg_chars_per_segment": 524.5,
+      "short_segment_rate": 0.1353,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 2,
+      "items_with_content": 2,
+      "coverage_rate": 1.0,
+      "items": [
+        {
+          "title": "RvW Kind ea over Laat huishoudelijke hulpen niet in de steek 230425",
+          "segment_count": 293
+        },
+        {
+          "title": "Diversen Cultuur",
+          "segment_count": 121
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+        "start_date": "2025-07-09 00:00:00",
+        "committee": "ZOCS",
+        "review_status": "auto_approved",
+        "quality_score": 0.91,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)",
+        "start_date": "2025-07-09 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 20,
+      "recognized_speakers": 19,
+      "unrecognized_speakers": 1,
+      "recognition_rate": 0.95,
+      "recognized": [
+        {
+          "name": "T.S.J. (Theo) Coşkun Commissievoorzitter",
+          "segment_count": 105,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "T. (Tim) Kind",
+          "segment_count": 3,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D.P.A. (Dennis) Tak",
+          "segment_count": 31,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "A.N.M. (Nico) van Scheijndel Burgercommissielid",
+          "segment_count": 11,
+          "parties": [
+            "50PLUS"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "R. (Ronald) Buijt",
+          "segment_count": 1,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "S.L. (Sigrid) Oosterwegel Burgercommissielid",
+          "segment_count": 15,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S.J.J. (Sam) Mak  Burgercommissielid CDA",
+          "segment_count": 10,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "F. (Fatih) Elbay",
+          "segment_count": 5,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "M.S. (Marike) Abrahamse",
+          "segment_count": 20,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "A.B. (Tom) Breedveld Burgercommissielid",
+          "segment_count": 1,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "F. (Faouzi) Achbar",
+          "segment_count": 62,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "R.N. (Rashied) Dahoe",
+          "segment_count": 7,
+          "parties": [
+            "DENK"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "G.F.E. (Geert) Koster",
+          "segment_count": 6,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "J.M. (Joan) Nunnely",
+          "segment_count": 18,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "R.T.J. (Ruud) van der Velden",
+          "segment_count": 12,
+          "parties": [
+            "Partij voor de Dieren"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "D. (Donatella) Schalm-Civile Burgercommissielid",
+          "segment_count": 12,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.E. (Merel) Vogelaar",
+          "segment_count": 6,
+          "parties": [
+            "PvdA"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "S. (Said) Kasmi",
+          "segment_count": 18,
+          "parties": [],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "Inspreker",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "T.J. (Tjalling) Vonk",
+          "segment_count": 11,
+          "parties": [
+            "ChristenUnie"
+          ],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 130,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 42,
+        "short (50-200)": 8,
+        "long (2000-5000)": 80
+      },
+      "min_chars": 97,
+      "max_chars": 2805,
+      "avg_chars": 1802.4,
+      "median_chars": 2306,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 130,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 2,
+      "documents_with_chunks": 2,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Diversen Cultuur",
+          "chunks": 43
+        },
+        {
+          "name": "Transcript: RvW Kind ea over Laat huishoudelijke hulpen niet in de steek 230425",
+          "chunks": 87
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 130,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 130,
+      "distribution": {
+        "quote": {
+          "count": 130,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.8671,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.91
+    }
+  }
+}

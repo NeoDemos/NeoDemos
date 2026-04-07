@@ -1,0 +1,2626 @@
+[
+  {
+    "question_id": "ab-01",
+    "query_text": "Is er ooit in de gemeenteraad gedebatteerd over een metro naar Hoek van Holland?",
+    "query_embedding_hash": "fefd44c672ef51d6ce1a98c0690ec426",
+    "vector_results": [
+      {
+        "chunk_id": 831273668500641804,
+        "content_preview": "Wellicht goed om de Inspectie Leefomgevingen Transport (ILT) om een\nuitspraak te vragen over de vraag wat de gevolgen van dit besluit zijn\nvoor de integrale veiligheid case binnen dit metro tracé.\nVoo",
+        "score": 0.52132267,
+        "metadata": {
+          "document_id": "6084530",
+          "title": "Rol van de ILT en negeren van lokaal advies",
+          "chunk_index": null,
+          "start_date": "2020-06-25T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 617869212877402513,
+        "content_preview": "De gemeenteraad van Rotterdam op 18 juni 2020 in vergadering bijeen voor de bespreking van deze motie vreemd aan de orde van de dag.",
+        "score": 0.5198961,
+        "metadata": {
+          "document_id": "6084183",
+          "title": "Preamble / Aanleiding",
+          "chunk_index": null,
+          "start_date": "2020-06-18T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 711808509907059288,
+        "content_preview": "De VOORZITTER (de heer Buijt). Motie 6, Metro op Zuid.\n‘De gemeenteraad van Rotterdam, in vergadering bijeen op 17 maart 2016 ter bespreking van het voorstel over het Rotterdams commitment aan de kand",
+        "score": 0.51515317,
+        "metadata": {
+          "document_id": "3256584",
+          "title": "Motie 6, Metro op Zuid",
+          "chunk_index": null,
+          "start_date": "2016-03-17T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 55441757689633627,
+        "content_preview": "Ten slotte dan motie 6, de metro op Zuid,\nvoorzitter. Na alles wat ik daarover gezegd\nheb, denk ik, is het begrijpelijk dat wij die\nm otie gaan ontraden, omdat deze motie\necht specifiek vraagt om een ",
+        "score": 0.5025759,
+        "metadata": {
+          "document_id": "3256584",
+          "title": "Motie 6: Metro op Zuid",
+          "chunk_index": null,
+          "start_date": "2016-03-17T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 843857959516006182,
+        "content_preview": "Beste mevrouw Stroeve,\n\nBij de behandeling van het Bestemmingsplan Hoek van Holland Spoorverlenging op 23 februari\n2017 is door Leefbaar Rotterdam de motie ‘Op Gelijke Hoogte’ ingediend en door de gem",
+        "score": 0.5021925,
+        "metadata": {
+          "document_id": "6084520",
+          "title": "Aanleiding: Motie ‘Op Gelijke Hoogte’",
+          "chunk_index": null,
+          "start_date": "2020-06-25T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1082075794060506674,
+        "content_preview": "Toelichting\nIn de huidige visie zit een inconsequentie: gesteld wordt dat er een verschuiving\nmoet plaatsvinden van autoverkeer naar OV en fiets (een verschuiving die we van\nharte ondersteunen). Vervo",
+        "score": 0.49744987,
+        "metadata": {
+          "document_id": "5277665",
+          "title": "Toelichting op het amendement",
+          "chunk_index": null,
+          "start_date": "2017-05-11T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 959876344000120005,
+        "content_preview": "‘De gemeenteraad van Rotterdam, in\nvergadering bijeen op 6 en 8 november 2007\nter bespreking van de begroting voor 2008;\nconstaterende:\n- dat de ervaringen met cameratoezicht positief\nzijn;\n- dat de p",
+        "score": 0.49636596,
+        "metadata": {
+          "document_id": "594639",
+          "title": "Motie 33, motie Camera’s in metro",
+          "chunk_index": null,
+          "start_date": "2007-11-06T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 789542477313298547,
+        "content_preview": "De heer VERHEIJ (vvd). Mijnheer de voorzitter. Vraag aan de wethouder. Als het ministerie daar toch mee bezig is en als de minister daar al een aantal dingen gaat bekijken, dan is dat toch juist een u",
+        "score": 0.49631542,
+        "metadata": {
+          "document_id": "3256584",
+          "title": "Mr. Verheij's question about discussing thorium reactors",
+          "chunk_index": null,
+          "start_date": "2016-03-17T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 365924192888978304,
+        "content_preview": "Inspreekbijdrage van de heer Stok\n\nVoorzitter, dames en heren,\nHoek van Holland heeft grote zorgen over de uiteindelijke keuze door\neen meerderheid van de Rotterdamse Raad, te kiezen voor een\ngelijkvl",
+        "score": 0.49599126,
+        "metadata": {
+          "document_id": "6084530",
+          "title": "Opening inspreekbijdrage heer Stok over kruising Hoekse Badweg",
+          "chunk_index": null,
+          "start_date": "2020-06-25T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1020864095375047161,
+        "content_preview": "Op welke gronden deze briefŶ/Waarom nu voorgelegd?\nOp 18 februari 2010 heeft de raad de motie ‘uitvoering project ondertunneling ’s-\nGravendijkwal/Henegouwerlaan’ (10GR609) van de raadsleden de heer B",
+        "score": 0.49158925,
+        "metadata": {
+          "document_id": "5248833",
+          "title": "Op welke gronden deze brief / Waarom nu voorgelegd?",
+          "chunk_index": null,
+          "start_date": "2017-06-01T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 981451591578490509,
+        "content_preview": "De gemeenteraad van Rotterdam, in vergadering bijeen op 18juni 2020, ter bespreking van Motie vreemd aan de orde van de dag ”Zet de doventolk in bij crisissituaties ”;",
+        "score": 0.4892317,
+        "metadata": {
+          "document_id": "6084201",
+          "title": "Preamble / Aanleiding",
+          "chunk_index": null,
+          "start_date": "2020-06-18T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 427310474309456272,
+        "content_preview": "Motie 33, motie Camera’s in metro\n‘De gemeenteraad van Rotterdam, in\nvergadering bijeen op 6 en 8 november 2007\nter bespreking van de begroting voor 2008;\nconstaterende:\n- dat de ervaringen met camera",
+        "score": 0.48755583,
+        "metadata": {
+          "document_id": "238765",
+          "title": "Motion 33: 'motie Camera’s in metro'",
+          "chunk_index": null,
+          "start_date": "2007-11-06T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1018926013305716493,
+        "content_preview": "Motie 33, motie Camera’s in metro\n\n‘De gemeenteraad van Rotterdam, in\nvergadering bijeen op 6 en 8 november 2007\nter bespreking van de begroting voor 2008;\nconstaterende:\n- dat de ervaringen met camer",
+        "score": 0.48622727,
+        "metadata": {
+          "document_id": "594639",
+          "title": "Motie 33, motie Camera’s in metro",
+          "chunk_index": null,
+          "start_date": "2007-11-06T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 805065333582455446,
+        "content_preview": "De Raad van de gemeente Rotterdam,\nGelezen het afdoeningsvoorstel van burgemeester en wethouders van 23 mei 2016\n(16bb3459), alsmede het nadere afdoeningsvoorstel van 5 april 2017 (17bb2952) met\nbetre",
+        "score": 0.4853605,
+        "metadata": {
+          "document_id": "5350505",
+          "title": "Preamble en aanleiding",
+          "chunk_index": null,
+          "start_date": "2017-06-01T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1028540666272569039,
+        "content_preview": "De gemeenteraad van Rotterdam, in vergadering bijeen op 18 februari 2021, ter bespreking van het voorstel tot vaststelling van het gemeentelijk rioleringsplan 2021—2025,",
+        "score": 0.48393494,
+        "metadata": {
+          "document_id": "6090030",
+          "title": "Aanleiding en context",
+          "chunk_index": null,
+          "start_date": "2021-02-18T10:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 593382013943951408,
+        "content_preview": "Geachte bestuurscommissie,\n\nOnlangs verzocht u ons college om een zienswijze kenbaar te maken op de voorgenomen\ndeelname van Metropoolregio Rotterdam Den Haag (MRDH) in het kapitaal van respectievelij",
+        "score": 0.48203808,
+        "metadata": {
+          "document_id": "3432473",
+          "title": "Inleiding zienswijze deelname MRDH",
+          "chunk_index": null,
+          "start_date": "2016-05-12T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1094023646569957308,
+        "content_preview": "MOTIE\nDicht de muizengaatjes\n\nDe gemeenteraad van Rotterdam, in vergadering bijeen op 2 juli 2020, ter bespreking van\nde zienswijze van Rotterdam op de concept-luchtvaartnota,",
+        "score": 0.48168847,
+        "metadata": {
+          "document_id": "6084562",
+          "title": "Introductie en titel van de motie",
+          "chunk_index": null,
+          "start_date": "2020-07-01T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 348671970436896558,
+        "content_preview": "Aan de gemeenteraad van Rotterdam",
+        "score": 0.48105446,
+        "metadata": {
+          "document_id": "812621",
+          "title": "Aan de gemeenteraad van Rotterdam",
+          "chunk_index": null,
+          "start_date": "2010-04-29T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 50067319525174047,
+        "content_preview": "2.04 Openstaande toezeggingen, schriftelijke vragen en moties waarvan de termijn is\noverschreden\nTer bespreking\n\n2.05 Adviescommissies Metropoolregio Rotterdam Den Haag\nTer bespreking\nDe leden van de ",
+        "score": 0.48022217,
+        "metadata": {
+          "document_id": "6084358",
+          "title": "Voortgang lopende zaken en MRDH",
+          "chunk_index": null,
+          "start_date": "2020-06-24T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 146954135292374703,
+        "content_preview": "De gemeenteraad van Rotterdam, in vergadering bĳeen op 18 februari 2021, ter bespreking van het voorstel tot vaststelling van het gemeentelijk rioleringsplan 2021—2025,",
+        "score": 0.48020086,
+        "metadata": {
+          "document_id": "6090029",
+          "title": "Aanhef en Context",
+          "chunk_index": null,
+          "start_date": "2021-02-18T10:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 23293689476707158,
+        "content_preview": "De gemeenteraad van Rotterdam, in vergadering bijeen op 9 en 11 november 2004 ter bespreking van de begroting 2005,\nconstaterende dat:\n- het college heeft afgesproken de discussie over het deelgemeent",
+        "score": 0.47998568,
+        "metadata": {
+          "document_id": "239879",
+          "title": "Motie 42, motie ‘klanttevredenheidsonderzoek deelgemeenten’",
+          "chunk_index": null,
+          "start_date": "2005-03-17T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 569295347745411265,
+        "content_preview": "3.  Het gesprek met de stad medio januari 2017 te starten.\nraadsvergadering van:     24 november 2016\\\n\n4.  Het lVerhaal van de Stad' uiterlijk in mei 2017 te presenteren en aan de stad aan te\nbieden.",
+        "score": 0.479792,
+        "metadata": {
+          "document_id": "4631483",
+          "title": "Planning en vaststelling besluit",
+          "chunk_index": null,
+          "start_date": "2016-11-24T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 862663194165566169,
+        "content_preview": "De gemeenteraad van Rotterdam, in vergadering bijeen op donderdag 18 juni 2020;",
+        "score": 0.47974396,
+        "metadata": {
+          "document_id": "6084210",
+          "title": "Inleiding",
+          "chunk_index": null,
+          "start_date": "2020-06-18T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 348666337275921287,
+        "content_preview": "Interpellatiedebat met wethouder van Gils\n\n           Rotterdam, donderdag 25 juni 2020  Geachte gemeenteraad,   50PLUS Rotterdam verzoekt de gemeenteraad van Rotterdam in vergadering bijeen op 02 jul",
+        "score": 0.47924274,
+        "metadata": {
+          "document_id": "6084589",
+          "title": "Verzoek om interpellatiedebat",
+          "chunk_index": null,
+          "start_date": "2020-07-02T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 232962706823199748,
+        "content_preview": "Rotterdam, 15 maart 2016. 16bb1747\nAan :\nde gemeenteraad\nOnderwerp:\nReactie gemeente Rotterdam op het OESO rapport “Metropolitan Review Rotterdam\nThe Hague”.",
+        "score": 0.47887754,
+        "metadata": {
+          "document_id": "3427653",
+          "title": "Documentgegevens en onderwerp",
+          "chunk_index": null,
+          "start_date": "2016-05-12T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 295546798575851430,
+        "content_preview": "raadsvergadering van 11 mei 2017\n10. Het (herziene) voorstel met betrekking tot de gemeentelijke positie ten\naanzien van Feijenoord City.\n(17bb3022)\n11. Het voorstel tot vaststelling van de zienswijze",
+        "score": 0.47853088,
+        "metadata": {
+          "document_id": "5278643",
+          "title": "Agendapunten 10 t/m 13: Feijenoord City en Verordeningen",
+          "chunk_index": null,
+          "start_date": "2017-05-11T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 742758866194573401,
+        "content_preview": "De motie over de metro op Zuid zal ook in\nhet kader van mobiliteit door mijn collega\nLangenberg worden behandeld, voorzitter.",
+        "score": 0.47838557,
+        "metadata": {
+          "document_id": "3256584",
+          "title": "Motie over metro op Zuid",
+          "chunk_index": null,
+          "start_date": "2016-03-17T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 719801775133258388,
+        "content_preview": "Tot slot voorzitter, de Gebiedscommissie en inwoners van Hoek van\nHolland, spreken de hoop uit dat de voorstemmer van een gelijkvloerse\nkruising het licht gaan zien en als nog voor een ongelijkvloerse",
+        "score": 0.47834682,
+        "metadata": {
+          "document_id": "6084530",
+          "title": "Slotpleidooi voor een ongelijkvloerse kruising en burgernabij besturen",
+          "chunk_index": null,
+          "start_date": "2020-06-25T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 120620703092200231,
+        "content_preview": "Gevraagd besluit:\nSamenvattend stellen wij u voor een gezamenlijke reactie van het college van\nBurgemeester en wethouders en de gemeenteraad op het OESO rapport “Metropolitan\nReview Rotterdam The Hagu",
+        "score": 0.4779436,
+        "metadata": {
+          "document_id": "3427653",
+          "title": "Samenvatting / Gevraagd besluit",
+          "chunk_index": null,
+          "start_date": "2016-05-12T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1032173132426816679,
+        "content_preview": "17bb3815\nGemeentelijke positie ten aanzien van Feijenoord City\nDe Raad van de gemeente Rotterdam,\ngelezen het herziene voorstel van burgemeester en wethouders van 4 april 2017\n(raadsvoorstel nr.17bb30",
+        "score": 0.47780305,
+        "metadata": {
+          "document_id": "5280431",
+          "title": "Gemeentelijke positie ten aanzien van Feijenoord City - Introductie",
+          "chunk_index": null,
+          "start_date": "2017-05-11T00:00:00",
+          "party": null
+        }
+      }
+    ],
+    "keyword_results": [
+      {
+        "chunk_id": 1038972,
+        "content_preview": "IV. Politiek oordeel toegespitst op het\nvraagstuk van de verantwoordelijkheden naar\naanleiding van de conclusies en aanbevelingen\nin het COT-rapport Strandrellen in Hoek van\nHolland, Dancefestival Ver",
+        "score": 0.9923542,
+        "metadata": {
+          "document_id": "2376892",
+          "title": "Political Judgment on COT Report - Strand Relllen in Hoek van Holland",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 354803,
+        "content_preview": "deze stukken t.z.t. in de gemeenteraad. Wij noemen de volgende voorbeelden in zowel de\nteksten van het bestemmingsplan als de teksten van het MER-rapport.\n2.1 Algemene reactie op teksten bestemmingspl",
+        "score": 0.07258453,
+        "metadata": {
+          "document_id": "5012072",
+          "title": "Algemene reactie op teksten bestemmingsplan en MER",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 884273,
+        "content_preview": "De heer VAN DER HEIJDEN (cda). Mijnheer\nde voorzitter. De belangrijkste conclusie die de\nraad vandaag zonder een spoor van\nongerustheid kan trekken is, dat de\ngemeenterekening over 2004 kan worden\ngoe",
+        "score": 0.060705464,
+        "metadata": {
+          "document_id": "237764",
+          "title": "CDA's Perspective on the Annual Report and Audit Chamber",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 564794,
+        "content_preview": "1 Inleiding\n1.1 Aanleiding\nOp 18 februari 2021 heeft de Gemeenteraad het Toeristisch ontwikkelperspectief Hoek van Holland\n(hierna afgekort tot TROP) besproken. Bij deze bespreking zijn 3 moties aange",
+        "score": 0.05924897,
+        "metadata": {
+          "document_id": "6101037",
+          "title": "1 Introduction",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 564795,
+        "content_preview": "1.1 Aanleiding\nOp 18 februari 2021 heeft de Gemeenteraad het Toeristisch ontwikkelperspectief Hoek van Holland\n(hierna afgekort tot TROP) besproken. Bij deze bespreking zijn 3 moties aangenomen die he",
+        "score": 0.05924897,
+        "metadata": {
+          "document_id": "6101037",
+          "title": "1.1 Rationale",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 230154,
+        "content_preview": "G 1046  subsidies behouden voor cultureel aanbod veiligheid goede woningen voor alle leeftijdsklasses\nG 1046  Deelgemeente moet blijven / moet weg\nG 1047  Gebiedsbestuur is een andere naam voor 'deelg",
+        "score": 0.05820471,
+        "metadata": {
+          "document_id": "255167",
+          "title": "Voorstel voor behoud van deelgemeenten",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 510103,
+        "content_preview": "De omgevingsvisie van Rotterdam heeft als motto ‘veranderstad’, maar het gevaar van goed kunnen\nomgaan met de dynamiek van snelle verandering is dat je voorbijgaat aan wat in de toekomst kwaliteit is ",
+        "score": 0.057875503,
+        "metadata": {
+          "document_id": "6091092",
+          "title": "Afsluiting",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 230174,
+        "content_preview": "Mede omdat u\nmij dwingt \"ergens\" voor te kiezen omdat dit systeem anders niets \"kan\". Het Rozenburgs\nModel is ook niet iest wat me vertrouwen geeft, maar zou ik nog eerder kiezen dan waar ik uit\nmoet ",
+        "score": 0.05728279,
+        "metadata": {
+          "document_id": "255167",
+          "title": "Voorkeur voor het Rozenburgs Model en Kritiek op Wijkparticipatie/Gebiedsbestuur",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1039653,
+        "content_preview": "IV. Politiek oordeel toegespitst op het\nvraagstuk van de verantwoordelijkheden naar\naanleiding van de conclusies en aanbevelingen\nin het COT-rapport Strandrellen in Hoek van\nHolland, Dancefestival Ver",
+        "score": 0.05664791,
+        "metadata": {
+          "document_id": "4801505",
+          "title": "Politiek oordeel COT-rapport Strandrellen Hoek van Holland",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1765512,
+        "content_preview": ". Zojuist namen we afscheid van het zeer gewaardeerde raadslid Richard Moti en hebben we Dennis Tak - Gemeenteraad van Rotterdam Notulen raadsvergadering van 11 januari 2024 pagina 4\ngeïnstalleerd als",
+        "score": 0.05572665,
+        "metadata": {
+          "document_id": "cb872cae-2099-4421-905a-858438acd19c",
+          "title": "20240111- Notulen van de raadsvergadering van 11 januari 2024213 KB",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 129381,
+        "content_preview": "Aan de stuurgroep BmR14+ van de gemeenteraad\nPostbus 70012\n3000 KP ROTTERDAM\nHoek van Holland, 22 november 2012\nBetreft: Zienswijze met betrekking tot keuze van een bestuursmodel\nRef: uw brief van 17 ",
+        "score": 0.05531721,
+        "metadata": {
+          "document_id": "255166",
+          "title": "Zienswijze van Hoek van Holland betreffende de keuze van een bestuursmodel",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 129375,
+        "content_preview": "215\nAan de stuurgroep BmR14+ van de gemeenteraad\nPostbus 70012\n3000 KP ROTTERDAM\nHoek van Holland, 22 november 2012\nBetreft: Zienswijze met betrekking tot keuze van een bestuursmodel\nRef: uw brief van",
+        "score": 0.05531721,
+        "metadata": {
+          "document_id": "255166",
+          "title": "Zienswijze Platform Wonen-Zorg-Veiligheid-Welzijn (W2ZV) Hoek van Holland",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 128578,
+        "content_preview": "Aan de stuurgroep BmR14+ van de gemeenteraad\nPostbus 70012\n3000 KP ROTTERDAM\nHoek van Holland, 22 november 2012\nBetreft: Zienswijze met betrekking tot keuze van een bestuursmodel\nRef: uw brief van 17 ",
+        "score": 0.05531721,
+        "metadata": {
+          "document_id": "644830",
+          "title": "Platform W2ZV Hoek van Holland's Zienswijze on Administrative Models",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 128583,
+        "content_preview": "Aan de stuurgroep BmR14+ van de gemeenteraad\nPostbus 70012\n3000 KP ROTTERDAM\nHoek van Holland, 22 november 2012\nBetreft: Zienswijze met betrekking tot keuze van een bestuursmodel\nRef: uw brief van 17 ",
+        "score": 0.05531721,
+        "metadata": {
+          "document_id": "644830",
+          "title": "Zienswijze van Hoek van Holland over Bestuursmodel",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 229795,
+        "content_preview": "G 404  Ik ben voor democratisch gekozen gebiedsbestuurders omdat deze, net als bij de huidige\ndeelgemeenten, de belangen van alle bewoners in het  oog kunnen houden. Een beetje\ndempende werking van ge",
+        "score": 0.054861818,
+        "metadata": {
+          "document_id": "255167",
+          "title": "Arguments for and against different governance models",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 354909,
+        "content_preview": "Rim}\ningekorraen\n‘i it\nq§::’i$%£‘ ﬁwf§Jmg:.\nBrf. P. Duijvestijn, H. v. Holland - pag. 1/2\nDe gemeenteraad,\nd.t.v. de directeur van Stadsontwikkeling, R&W/bestemmingsplannen,\nPostbus 6575\n3002 AN Rotte",
+        "score": 0.054070245,
+        "metadata": {
+          "document_id": "5012072",
+          "title": "Zienswijze Mark en Linda Remmerswaal",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1536751,
+        "content_preview": ". 2017 menzelfstandiging\nsportvoorzieningen\n17bb837 Brief van Rekenkamer Rot- 01-02- Procedurevergadermg cie.\nterdamoveropzet Gemeemeraad2017 17bb837w|Pv15-02-2017\nDatum in- Omschrij-Titel Aan wie ger",
+        "score": 0.05387637,
+        "metadata": {
+          "document_id": "5039717",
+          "title": "Doorlopende lijst 3 ingekomen stukken week 5 tot en met 7 2017",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1524491,
+        "content_preview": ". Focus op uitvoering\n1.1 \u0007Toekennen investerings- &\nuitvoeringsprogramma\n\n1.2 Hoek van Holland\nDe gemeenteraad heeft het uitvoeringsprogramma\nvoor de havendorpen omarmd en geld vrijgemaakt\nvoor de ui",
+        "score": 0.053384215,
+        "metadata": {
+          "document_id": "6117807",
+          "title": "[24bb001465] Bijlage behorende bij 24bb001429 over Kleine Kernen Aanpak",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 354906,
+        "content_preview": "Brf. P. Duijvestijn, H. v. Holland - pag. 1/2\nDe gemeenteraad,\nd.t.v. de directeur van Stadsontwikkeling, R&W/bestemmingsplannen,\nPostbus 6575\n3002 AN Rotterdam\nBetreft: ontwerpbestemmingsplannen proj",
+        "score": 0.053176735,
+        "metadata": {
+          "document_id": "5012072",
+          "title": "Keuze nieuw station Strand",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 779598,
+        "content_preview": "De heer ABOUTALEB. Mijnheer de voorzitter. De heer Pastors heeft in zijn tweede termijn blijkbaar zijn neiging niet kunnen onderdrukken iets over mijn identiteit te zeggen. Ik vind dat vals van hem. W",
+        "score": 0.053019125,
+        "metadata": {
+          "document_id": "233044",
+          "title": "Burgemeester over de gebeurtenissen en de rol van de gemeente",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      }
+    ],
+    "rrf_results": [
+      {
+        "chunk_id": 831273668500641804,
+        "rrf_score": 0.016666666666666666,
+        "vector_rank": 0,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 1038972,
+        "rrf_score": 0.016666666666666666,
+        "vector_rank": null,
+        "keyword_rank": 0
+      },
+      {
+        "chunk_id": 617869212877402513,
+        "rrf_score": 0.01639344262295082,
+        "vector_rank": 1,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 354803,
+        "rrf_score": 0.01639344262295082,
+        "vector_rank": null,
+        "keyword_rank": 1
+      },
+      {
+        "chunk_id": 711808509907059288,
+        "rrf_score": 0.016129032258064516,
+        "vector_rank": 2,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 884273,
+        "rrf_score": 0.016129032258064516,
+        "vector_rank": null,
+        "keyword_rank": 2
+      },
+      {
+        "chunk_id": 55441757689633627,
+        "rrf_score": 0.015873015873015872,
+        "vector_rank": 3,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 564794,
+        "rrf_score": 0.015873015873015872,
+        "vector_rank": null,
+        "keyword_rank": 3
+      },
+      {
+        "chunk_id": 843857959516006182,
+        "rrf_score": 0.015625,
+        "vector_rank": 4,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 564795,
+        "rrf_score": 0.015625,
+        "vector_rank": null,
+        "keyword_rank": 4
+      },
+      {
+        "chunk_id": 1082075794060506674,
+        "rrf_score": 0.015384615384615385,
+        "vector_rank": 5,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 230154,
+        "rrf_score": 0.015384615384615385,
+        "vector_rank": null,
+        "keyword_rank": 5
+      },
+      {
+        "chunk_id": 959876344000120005,
+        "rrf_score": 0.015151515151515152,
+        "vector_rank": 6,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 510103,
+        "rrf_score": 0.015151515151515152,
+        "vector_rank": null,
+        "keyword_rank": 6
+      },
+      {
+        "chunk_id": 789542477313298547,
+        "rrf_score": 0.014925373134328358,
+        "vector_rank": 7,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 230174,
+        "rrf_score": 0.014925373134328358,
+        "vector_rank": null,
+        "keyword_rank": 7
+      },
+      {
+        "chunk_id": 365924192888978304,
+        "rrf_score": 0.014705882352941176,
+        "vector_rank": 8,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 1039653,
+        "rrf_score": 0.014705882352941176,
+        "vector_rank": null,
+        "keyword_rank": 8
+      },
+      {
+        "chunk_id": 1020864095375047161,
+        "rrf_score": 0.014492753623188406,
+        "vector_rank": 9,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 1765512,
+        "rrf_score": 0.014492753623188406,
+        "vector_rank": null,
+        "keyword_rank": 9
+      },
+      {
+        "chunk_id": 981451591578490509,
+        "rrf_score": 0.014285714285714285,
+        "vector_rank": 10,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 129381,
+        "rrf_score": 0.014285714285714285,
+        "vector_rank": null,
+        "keyword_rank": 10
+      },
+      {
+        "chunk_id": 427310474309456272,
+        "rrf_score": 0.014084507042253521,
+        "vector_rank": 11,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 129375,
+        "rrf_score": 0.014084507042253521,
+        "vector_rank": null,
+        "keyword_rank": 11
+      },
+      {
+        "chunk_id": 1018926013305716493,
+        "rrf_score": 0.013888888888888888,
+        "vector_rank": 12,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 128578,
+        "rrf_score": 0.013888888888888888,
+        "vector_rank": null,
+        "keyword_rank": 12
+      },
+      {
+        "chunk_id": 805065333582455446,
+        "rrf_score": 0.0136986301369863,
+        "vector_rank": 13,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 128583,
+        "rrf_score": 0.0136986301369863,
+        "vector_rank": null,
+        "keyword_rank": 13
+      },
+      {
+        "chunk_id": 1028540666272569039,
+        "rrf_score": 0.013513513513513514,
+        "vector_rank": 14,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 229795,
+        "rrf_score": 0.013513513513513514,
+        "vector_rank": null,
+        "keyword_rank": 14
+      },
+      {
+        "chunk_id": 593382013943951408,
+        "rrf_score": 0.013333333333333334,
+        "vector_rank": 15,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 354909,
+        "rrf_score": 0.013333333333333334,
+        "vector_rank": null,
+        "keyword_rank": 15
+      },
+      {
+        "chunk_id": 1094023646569957308,
+        "rrf_score": 0.013157894736842105,
+        "vector_rank": 16,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 1536751,
+        "rrf_score": 0.013157894736842105,
+        "vector_rank": null,
+        "keyword_rank": 16
+      },
+      {
+        "chunk_id": 348671970436896558,
+        "rrf_score": 0.012987012987012988,
+        "vector_rank": 17,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 1524491,
+        "rrf_score": 0.012987012987012988,
+        "vector_rank": null,
+        "keyword_rank": 17
+      },
+      {
+        "chunk_id": 50067319525174047,
+        "rrf_score": 0.01282051282051282,
+        "vector_rank": 18,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 354906,
+        "rrf_score": 0.01282051282051282,
+        "vector_rank": null,
+        "keyword_rank": 18
+      },
+      {
+        "chunk_id": 146954135292374703,
+        "rrf_score": 0.012658227848101266,
+        "vector_rank": 19,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 779598,
+        "rrf_score": 0.012658227848101266,
+        "vector_rank": null,
+        "keyword_rank": 19
+      },
+      {
+        "chunk_id": 23293689476707158,
+        "rrf_score": 0.0125,
+        "vector_rank": 20,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 569295347745411265,
+        "rrf_score": 0.012345679012345678,
+        "vector_rank": 21,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 862663194165566169,
+        "rrf_score": 0.012195121951219513,
+        "vector_rank": 22,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 348666337275921287,
+        "rrf_score": 0.012048192771084338,
+        "vector_rank": 23,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 232962706823199748,
+        "rrf_score": 0.011904761904761904,
+        "vector_rank": 24,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 295546798575851430,
+        "rrf_score": 0.011764705882352941,
+        "vector_rank": 25,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 742758866194573401,
+        "rrf_score": 0.011627906976744186,
+        "vector_rank": 26,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 719801775133258388,
+        "rrf_score": 0.011494252873563218,
+        "vector_rank": 27,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 120620703092200231,
+        "rrf_score": 0.011363636363636364,
+        "vector_rank": 28,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 1032173132426816679,
+        "rrf_score": 0.011235955056179775,
+        "vector_rank": 29,
+        "keyword_rank": null
+      }
+    ],
+    "reranker_results": [
+      {
+        "chunk_id": 831273668500641804,
+        "reranker_score": 0.29255664,
+        "pre_rerank_position": 0
+      },
+      {
+        "chunk_id": 1038972,
+        "reranker_score": 0.17180407,
+        "pre_rerank_position": 1
+      },
+      {
+        "chunk_id": 617869212877402513,
+        "reranker_score": 0.06052061,
+        "pre_rerank_position": 2
+      },
+      {
+        "chunk_id": 354803,
+        "reranker_score": 0.19685405,
+        "pre_rerank_position": 3
+      },
+      {
+        "chunk_id": 711808509907059288,
+        "reranker_score": 0.117927,
+        "pre_rerank_position": 4
+      },
+      {
+        "chunk_id": 884273,
+        "reranker_score": -0.038849,
+        "pre_rerank_position": 5
+      },
+      {
+        "chunk_id": 55441757689633627,
+        "reranker_score": 0.1053676,
+        "pre_rerank_position": 6
+      },
+      {
+        "chunk_id": 564794,
+        "reranker_score": 0.34924483,
+        "pre_rerank_position": 7
+      },
+      {
+        "chunk_id": 843857959516006182,
+        "reranker_score": 0.08430921,
+        "pre_rerank_position": 8
+      },
+      {
+        "chunk_id": 564795,
+        "reranker_score": 0.3007144,
+        "pre_rerank_position": 9
+      },
+      {
+        "chunk_id": 1082075794060506674,
+        "reranker_score": -0.03489145,
+        "pre_rerank_position": 10
+      },
+      {
+        "chunk_id": 230154,
+        "reranker_score": -0.04057913,
+        "pre_rerank_position": 11
+      },
+      {
+        "chunk_id": 959876344000120005,
+        "reranker_score": -0.02288902,
+        "pre_rerank_position": 12
+      },
+      {
+        "chunk_id": 510103,
+        "reranker_score": -0.09479701,
+        "pre_rerank_position": 13
+      },
+      {
+        "chunk_id": 789542477313298547,
+        "reranker_score": -0.12910901,
+        "pre_rerank_position": 14
+      },
+      {
+        "chunk_id": 230174,
+        "reranker_score": -0.04279983,
+        "pre_rerank_position": 15
+      },
+      {
+        "chunk_id": 365924192888978304,
+        "reranker_score": 0.09490513,
+        "pre_rerank_position": 16
+      },
+      {
+        "chunk_id": 1039653,
+        "reranker_score": 0.01224984,
+        "pre_rerank_position": 17
+      },
+      {
+        "chunk_id": 1020864095375047161,
+        "reranker_score": -0.04645896,
+        "pre_rerank_position": 18
+      },
+      {
+        "chunk_id": 1765512,
+        "reranker_score": 0.40453374,
+        "pre_rerank_position": 19
+      },
+      {
+        "chunk_id": 981451591578490509,
+        "reranker_score": -0.02486541,
+        "pre_rerank_position": 20
+      },
+      {
+        "chunk_id": 129381,
+        "reranker_score": 0.15819441,
+        "pre_rerank_position": 21
+      },
+      {
+        "chunk_id": 427310474309456272,
+        "reranker_score": 0.14202434,
+        "pre_rerank_position": 22
+      },
+      {
+        "chunk_id": 129375,
+        "reranker_score": 0.11666109,
+        "pre_rerank_position": 23
+      },
+      {
+        "chunk_id": 1018926013305716493,
+        "reranker_score": 0.03327776,
+        "pre_rerank_position": 24
+      },
+      {
+        "chunk_id": 128578,
+        "reranker_score": 0.04528451,
+        "pre_rerank_position": 25
+      },
+      {
+        "chunk_id": 805065333582455446,
+        "reranker_score": -0.01419601,
+        "pre_rerank_position": 26
+      },
+      {
+        "chunk_id": 128583,
+        "reranker_score": 0.04626596,
+        "pre_rerank_position": 27
+      },
+      {
+        "chunk_id": 1028540666272569039,
+        "reranker_score": -0.01863031,
+        "pre_rerank_position": 28
+      },
+      {
+        "chunk_id": 229795,
+        "reranker_score": -0.04061958,
+        "pre_rerank_position": 29
+      },
+      {
+        "chunk_id": 593382013943951408,
+        "reranker_score": -0.02556921,
+        "pre_rerank_position": 30
+      },
+      {
+        "chunk_id": 354909,
+        "reranker_score": 0.16809538,
+        "pre_rerank_position": 31
+      },
+      {
+        "chunk_id": 1094023646569957308,
+        "reranker_score": -0.05621829,
+        "pre_rerank_position": 32
+      },
+      {
+        "chunk_id": 1536751,
+        "reranker_score": 0.17855656,
+        "pre_rerank_position": 33
+      },
+      {
+        "chunk_id": 348671970436896558,
+        "reranker_score": 0.02803217,
+        "pre_rerank_position": 34
+      },
+      {
+        "chunk_id": 1524491,
+        "reranker_score": 0.30699548,
+        "pre_rerank_position": 35
+      },
+      {
+        "chunk_id": 50067319525174047,
+        "reranker_score": -0.01935478,
+        "pre_rerank_position": 36
+      },
+      {
+        "chunk_id": 354906,
+        "reranker_score": 0.13411202,
+        "pre_rerank_position": 37
+      },
+      {
+        "chunk_id": 146954135292374703,
+        "reranker_score": -0.08700034,
+        "pre_rerank_position": 38
+      },
+      {
+        "chunk_id": 779598,
+        "reranker_score": -0.01130662,
+        "pre_rerank_position": 39
+      },
+      {
+        "chunk_id": 23293689476707158,
+        "reranker_score": -0.09056003,
+        "pre_rerank_position": 40
+      },
+      {
+        "chunk_id": 569295347745411265,
+        "reranker_score": -0.04544635,
+        "pre_rerank_position": 41
+      },
+      {
+        "chunk_id": 862663194165566169,
+        "reranker_score": -0.10751037,
+        "pre_rerank_position": 42
+      },
+      {
+        "chunk_id": 348666337275921287,
+        "reranker_score": 0.0310086,
+        "pre_rerank_position": 43
+      },
+      {
+        "chunk_id": 232962706823199748,
+        "reranker_score": 0.04898143,
+        "pre_rerank_position": 44
+      },
+      {
+        "chunk_id": 295546798575851430,
+        "reranker_score": -0.03711424,
+        "pre_rerank_position": 45
+      },
+      {
+        "chunk_id": 742758866194573401,
+        "reranker_score": 0.22796144,
+        "pre_rerank_position": 46
+      },
+      {
+        "chunk_id": 719801775133258388,
+        "reranker_score": 0.15053198,
+        "pre_rerank_position": 47
+      },
+      {
+        "chunk_id": 120620703092200231,
+        "reranker_score": 0.05204422,
+        "pre_rerank_position": 48
+      },
+      {
+        "chunk_id": 1032173132426816679,
+        "reranker_score": -0.10078391,
+        "pre_rerank_position": 49
+      }
+    ],
+    "reranker_skipped": false,
+    "final_chunks": [
+      {
+        "chunk_id": 1765512,
+        "content_preview": ". Zojuist namen we afscheid van het zeer gewaardeerde raadslid Richard Moti en hebben we Dennis Tak - Gemeenteraad van Rotterdam Notulen raadsvergadering van 11 januari 2024 pagina 4\ngeïnstalleerd als",
+        "score": 0.40453374,
+        "metadata": {
+          "document_id": "cb872cae-2099-4421-905a-858438acd19c",
+          "title": "20240111- Notulen van de raadsvergadering van 11 januari 2024213 KB",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 564794,
+        "content_preview": "1 Inleiding\n1.1 Aanleiding\nOp 18 februari 2021 heeft de Gemeenteraad het Toeristisch ontwikkelperspectief Hoek van Holland\n(hierna afgekort tot TROP) besproken. Bij deze bespreking zijn 3 moties aange",
+        "score": 0.34924483,
+        "metadata": {
+          "document_id": "6101037",
+          "title": "1 Introduction",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1524491,
+        "content_preview": ". Focus op uitvoering\n1.1 \u0007Toekennen investerings- &\nuitvoeringsprogramma\n\n1.2 Hoek van Holland\nDe gemeenteraad heeft het uitvoeringsprogramma\nvoor de havendorpen omarmd en geld vrijgemaakt\nvoor de ui",
+        "score": 0.30699548,
+        "metadata": {
+          "document_id": "6117807",
+          "title": "[24bb001465] Bijlage behorende bij 24bb001429 over Kleine Kernen Aanpak",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 564795,
+        "content_preview": "1.1 Aanleiding\nOp 18 februari 2021 heeft de Gemeenteraad het Toeristisch ontwikkelperspectief Hoek van Holland\n(hierna afgekort tot TROP) besproken. Bij deze bespreking zijn 3 moties aangenomen die he",
+        "score": 0.3007144,
+        "metadata": {
+          "document_id": "6101037",
+          "title": "1.1 Rationale",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 831273668500641804,
+        "content_preview": "Wellicht goed om de Inspectie Leefomgevingen Transport (ILT) om een\nuitspraak te vragen over de vraag wat de gevolgen van dit besluit zijn\nvoor de integrale veiligheid case binnen dit metro tracé.\nVoo",
+        "score": 0.29255664,
+        "metadata": {
+          "document_id": "6084530",
+          "title": "Rol van de ILT en negeren van lokaal advies",
+          "chunk_index": null,
+          "start_date": "2020-06-25T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 742758866194573401,
+        "content_preview": "De motie over de metro op Zuid zal ook in\nhet kader van mobiliteit door mijn collega\nLangenberg worden behandeld, voorzitter.",
+        "score": 0.22796144,
+        "metadata": {
+          "document_id": "3256584",
+          "title": "Motie over metro op Zuid",
+          "chunk_index": null,
+          "start_date": "2016-03-17T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 354803,
+        "content_preview": "deze stukken t.z.t. in de gemeenteraad. Wij noemen de volgende voorbeelden in zowel de\nteksten van het bestemmingsplan als de teksten van het MER-rapport.\n2.1 Algemene reactie op teksten bestemmingspl",
+        "score": 0.19685405,
+        "metadata": {
+          "document_id": "5012072",
+          "title": "Algemene reactie op teksten bestemmingsplan en MER",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1536751,
+        "content_preview": ". 2017 menzelfstandiging\nsportvoorzieningen\n17bb837 Brief van Rekenkamer Rot- 01-02- Procedurevergadermg cie.\nterdamoveropzet Gemeemeraad2017 17bb837w|Pv15-02-2017\nDatum in- Omschrij-Titel Aan wie ger",
+        "score": 0.17855656,
+        "metadata": {
+          "document_id": "5039717",
+          "title": "Doorlopende lijst 3 ingekomen stukken week 5 tot en met 7 2017",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1038972,
+        "content_preview": "IV. Politiek oordeel toegespitst op het\nvraagstuk van de verantwoordelijkheden naar\naanleiding van de conclusies en aanbevelingen\nin het COT-rapport Strandrellen in Hoek van\nHolland, Dancefestival Ver",
+        "score": 0.17180407,
+        "metadata": {
+          "document_id": "2376892",
+          "title": "Political Judgment on COT Report - Strand Relllen in Hoek van Holland",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 354909,
+        "content_preview": "Rim}\ningekorraen\n‘i it\nq§::’i$%£‘ ﬁwf§Jmg:.\nBrf. P. Duijvestijn, H. v. Holland - pag. 1/2\nDe gemeenteraad,\nd.t.v. de directeur van Stadsontwikkeling, R&W/bestemmingsplannen,\nPostbus 6575\n3002 AN Rotte",
+        "score": 0.16809538,
+        "metadata": {
+          "document_id": "5012072",
+          "title": "Zienswijze Mark en Linda Remmerswaal",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      }
+    ],
+    "timings": {
+      "embedding_ms": 490.05087499972433,
+      "vector_ms": 147.3931669970625,
+      "keyword_ms": 34867.30945799354,
+      "rrf_ms": 0.05720800254493952,
+      "reranker_ms": 111878.63949999883,
+      "total_ms": 147383.5671659981
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": null,
+      "date_to": null,
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0,
+      "route": {
+        "query_type": "absence",
+        "top_k": 10,
+        "parties": [],
+        "date_from": null,
+        "date_to": null,
+        "sub_queries": [],
+        "confidence": 1.0,
+        "strategy": "standard"
+      }
+    }
+  },
+  {
+    "question_id": "ab-02",
+    "query_text": "Heeft de gemeente Rotterdam ooit overwogen om de Erasmusbrug te sluiten voor autoverkeer?",
+    "query_embedding_hash": "d5be120763fb57d3de775d6b28dd6b20",
+    "vector_results": [
+      {
+        "chunk_id": 1129303194557145318,
+        "content_preview": "De Raad van de gemeente Rotterdam,",
+        "score": 0.50248665,
+        "metadata": {
+          "document_id": "738210",
+          "title": "De Raad van de gemeente Rotterdam,",
+          "chunk_index": null,
+          "start_date": "2011-04-07T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 78512230882737502,
+        "content_preview": "• Rotterdam een lange traditie heeft van open stadsgesprekken rond majeure stadsprojecten zoals de oorspronkelijke architectenselecties bij de huidige bibliotheek en het NAi-gebouw, de ontwerp-selecti",
+        "score": 0.50009775,
+        "metadata": {
+          "document_id": "6084819",
+          "title": "Overwegende dat: Traditie van stadsgesprekken",
+          "chunk_index": null,
+          "start_date": "2020-07-08T09:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 348671970436896558,
+        "content_preview": "Aan de gemeenteraad van Rotterdam",
+        "score": 0.4958921,
+        "metadata": {
+          "document_id": "812621",
+          "title": "Aan de gemeenteraad van Rotterdam",
+          "chunk_index": null,
+          "start_date": "2010-04-29T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 956395620154432690,
+        "content_preview": "MOTIE Rekener wel op\nDe Gemeenteraad van Rotterdam in vergadering bijeen op 20 april 2017 ter bespreking van het\nvoorstel tot vaststelling van het stedelijk verkeersplan Rotterdam 2016-2030,",
+        "score": 0.49289536,
+        "metadata": {
+          "document_id": "5277658",
+          "title": "Titel en vergaderingscontext",
+          "chunk_index": null,
+          "start_date": "2017-05-11T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 805065333582455446,
+        "content_preview": "De Raad van de gemeente Rotterdam,\nGelezen het afdoeningsvoorstel van burgemeester en wethouders van 23 mei 2016\n(16bb3459), alsmede het nadere afdoeningsvoorstel van 5 april 2017 (17bb2952) met\nbetre",
+        "score": 0.48678875,
+        "metadata": {
+          "document_id": "5350505",
+          "title": "Preamble en aanleiding",
+          "chunk_index": null,
+          "start_date": "2017-06-01T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 834432417751519265,
+        "content_preview": "De gemeenteraad van Rotterdam, in vergadering bijeen op 9 en 11 november 2004 ter bespreking van de conceptbegroting 2005 van de gemeente Rotterdam\noverwegende dat:\n- het college van B & W zich gestel",
+        "score": 0.4863971,
+        "metadata": {
+          "document_id": "239879",
+          "title": "Motie 34, motie kunstbruggen",
+          "chunk_index": null,
+          "start_date": "2005-03-17T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 617869212877402513,
+        "content_preview": "De gemeenteraad van Rotterdam op 18 juni 2020 in vergadering bijeen voor de bespreking van deze motie vreemd aan de orde van de dag.",
+        "score": 0.4849039,
+        "metadata": {
+          "document_id": "6084183",
+          "title": "Preamble / Aanleiding",
+          "chunk_index": null,
+          "start_date": "2020-06-18T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1005007376666591734,
+        "content_preview": "3.54 In het algemeen willen we bij de\nverkeersonderzoeken opmerken dat we\nbedenkingen hebben bij de veronderstelde en\ningecalculeerde afname van\nverkeersintensiteiten door toenemend gebruik\nvan openba",
+        "score": 0.4840269,
+        "metadata": {
+          "document_id": "2542835",
+          "title": "Verkeersonderzoeken en Maastunnel Onderhoud",
+          "chunk_index": null,
+          "start_date": "2015-10-14T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 745050091451010194,
+        "content_preview": "3.54 In het algemeen willen we bij de\nverkeersonderzoeken opmerken dat we\nbedenkingen hebben bij de veronderstelde en\ningecalculeerde afname van\nverkeersintensiteiten door toenemend gebruik\nvan openba",
+        "score": 0.48380685,
+        "metadata": {
+          "document_id": "2542885",
+          "title": "Verkeersonderzoeken en verkeersintensiteiten",
+          "chunk_index": null,
+          "start_date": "2015-10-14T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1094023646569957308,
+        "content_preview": "MOTIE\nDicht de muizengaatjes\n\nDe gemeenteraad van Rotterdam, in vergadering bijeen op 2 juli 2020, ter bespreking van\nde zienswijze van Rotterdam op de concept-luchtvaartnota,",
+        "score": 0.48169762,
+        "metadata": {
+          "document_id": "6084562",
+          "title": "Introductie en titel van de motie",
+          "chunk_index": null,
+          "start_date": "2020-07-01T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 704849789884807746,
+        "content_preview": "GROENLINKS @ PVCIA ‚ 20% &M Rotterdam D 6  ‚;ÈENYERAîD rotterdam “\"ring van 2 JUL! 2920 AÁNGäPÉGËĲE-Îl‘il De gemeenteraad van Rotterdam, in vergadering bijeen op 2 juli ter bespreking van de voortgang",
+        "score": 0.4806651,
+        "metadata": {
+          "document_id": "6084707",
+          "title": "Preamble / Aanleiding",
+          "chunk_index": null,
+          "start_date": "2020-07-02T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 694456635557734104,
+        "content_preview": "Motie Fietsen voor een schone stad\nDe gemeenteraad van Rotterdam, in vergadering bijeen op 14 juli 2020 ter bespreking van\nde voorjaarsbrief en de eerste herziening 2020,",
+        "score": 0.48053998,
+        "metadata": {
+          "document_id": "6084814",
+          "title": "Preamble / Aanleiding",
+          "chunk_index": null,
+          "start_date": "2020-07-08T09:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 163328468126074002,
+        "content_preview": "1-7bloE>é3\\8\nGROENLINKSPRXTQDAAM0 §:':,‘:;\",‘;?,'\nMy\nGemeentoraadsfractie Rotterdan\nDe gemeenteraad van Rotterdam, in vergadering bijeen op 20 april 2017 ter bespreking van\nhet voorstel tot vaststelli",
+        "score": 0.47969052,
+        "metadata": {
+          "document_id": "5277660",
+          "title": "Document Header and Introduction",
+          "chunk_index": null,
+          "start_date": "2017-05-11T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 267475382939551036,
+        "content_preview": "%— L€€fbaar PARTĲ VOOR DE VRIJHEID ZÚÁÁÛJW ROTTERDAM ““—‘*’êâïî‘a-î Rotterdam vergaat….„âîzt'“ Motie Veilig zonder overlast l 2\" JULI 2020 “'-\"f'”h'r \"'.í'w. . . -u..4_—_—_\\ *x‘L' UËF‘Jë-3 ‚;_qf De ge",
+        "score": 0.4794712,
+        "metadata": {
+          "document_id": "6084727",
+          "title": "Preamble en context",
+          "chunk_index": null,
+          "start_date": "2020-07-02T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 913093011690466616,
+        "content_preview": "\\‘Ho\\o363>OC\n.-_g\nAmendement in één keer goed\nDe gemeenteraad van Rotterdam bijeen op 20 april 2017, ter bespreking van Het\nStedelijk Verkeersplan Rotterdam 2016-2030,",
+        "score": 0.47826055,
+        "metadata": {
+          "document_id": "5277665",
+          "title": "Kop en inleiding van het amendement",
+          "chunk_index": null,
+          "start_date": "2017-05-11T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 8412980308368154,
+        "content_preview": "zdaaq}ló\nGEMEENTERAAD ‘ ì'ERGADEKINu VAN 1 BJULI 2020 ROTTERDAM VERWORPEN Motie: Burgers mogen niet opdraaien voor Porthos / De gemeenteraad van Rotterdam, in vergadering bijeen op 16 juli 2020, ter b",
+        "score": 0.4778592,
+        "metadata": {
+          "document_id": "6085433",
+          "title": "Preamble en context",
+          "chunk_index": null,
+          "start_date": "2020-07-16T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 379059819244150052,
+        "content_preview": ". de Gemeente Rotterdam in het afgelopen year met succes het bereik van veel regelingen heeft weten te vergroten;",
+        "score": 0.47767937,
+        "metadata": {
+          "document_id": "6084167",
+          "title": "Constatering: Bereik regelingen",
+          "chunk_index": null,
+          "start_date": "2020-06-18T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 672846652294807699,
+        "content_preview": "dS+VGemeente Rotterdam",
+        "score": 0.47749752,
+        "metadata": {
+          "document_id": "4070179",
+          "title": "dS+VGemeente Rotterdam",
+          "chunk_index": null,
+          "start_date": "2007-01-25T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 658368137706166291,
+        "content_preview": "0 Hierbij wenselijk is dat de Gemeente Rotterdam de ontmoeting zoveel mogelijk faciliteert om zodoende de dialoog op gang te krijgen om kloven te overbruggen; '",
+        "score": 0.47737062,
+        "metadata": {
+          "document_id": "6084708",
+          "title": "Overweging faciliteren dialoog en ontmoeting",
+          "chunk_index": null,
+          "start_date": "2020-07-02T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 785336512595098897,
+        "content_preview": "MOTIE\nWegen gaat niet zonder schaal\n\nDe gemeenteraad van Rotterdam, in vergadering bijeen op 2 juli 2020, ter bespreking van\nde zienswijze van Rotterdam op de concept-luchtvaartnota,",
+        "score": 0.4754769,
+        "metadata": {
+          "document_id": "6084563",
+          "title": "Motie: Wegen gaat niet zonder schaal - Introductie",
+          "chunk_index": null,
+          "start_date": "2020-07-01T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1119331313510915549,
+        "content_preview": "17bb3429\nStedelijk Verkeersplan Rotterdam 2030+\nDe Raad van de gemeente Rotterdam,\nGelezen het voorstel van burgemeester en wethouders van 7 februari 2017, 17bb559 tot\nvaststelling van het Stedelijk V",
+        "score": 0.47515863,
+        "metadata": {
+          "document_id": "5277717",
+          "title": "Vaststelling Stedelijk Verkeersplan Rotterdam 2017-2030+",
+          "chunk_index": null,
+          "start_date": "2017-05-11T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 345491672806429196,
+        "content_preview": "De gemeenteraad van Rotterdam, in vergadering bijeen op 14 en 16 juli 2020, ter bespreking van het voorstel tot vaststelling van de Beleidsnota investeringen Rotterdam 2020, Besluit:",
+        "score": 0.4741756,
+        "metadata": {
+          "document_id": "6085216",
+          "title": "Inleiding en besluitvorming",
+          "chunk_index": null,
+          "start_date": "2020-07-14T10:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 762782054499928598,
+        "content_preview": "De gemeenteraad van Rotterdam, in vergadering bijeen op 14 en 16 juli 2020, ter bespreking van het voorstel tot vaststelling van de Beleidsnota investeringen Rotterdam 2020,",
+        "score": 0.47369325,
+        "metadata": {
+          "document_id": "6085261",
+          "title": "Inleiding en vergadering",
+          "chunk_index": null,
+          "start_date": "2020-07-16T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 569082873961395564,
+        "content_preview": "De gemeenteraad van Rotterdam, in vergadering bijeen op 14 en 16 juli 2020, ter bespreking van het voorstel tot vaststelling van de Beleidsnota investeringen Rotterdam 2020,",
+        "score": 0.47343332,
+        "metadata": {
+          "document_id": "6085103",
+          "title": "Aanleiding en vergadering",
+          "chunk_index": null,
+          "start_date": "2020-07-14T10:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 80350028757176217,
+        "content_preview": "Daarom wil de Gemeente Rotterdam\nhaar bewoners en bezoekers inzicht geven in\nhoe druk het op specifieke plekken in de stad is",
+        "score": 0.4733256,
+        "metadata": {
+          "document_id": "6084033",
+          "title": "Doelstelling van de Druktemeter",
+          "chunk_index": null,
+          "start_date": "2020-06-17T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 23197179582177712,
+        "content_preview": "Verzoekt het college: . de behoefte voor een eventuele verruiming van de openingstijden van de Rotterdamse terrassen te inventariseren; . indien deze behoefte er is, een pilot te starten met een verru",
+        "score": 0.4731444,
+        "metadata": {
+          "document_id": "6084217",
+          "title": "Verzoekt het college / Decision",
+          "chunk_index": null,
+          "start_date": "2020-06-18T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 990430408240536479,
+        "content_preview": "Daarom wil de Gemeente Rotterdam\nhaar bewoners en bezoekers inzicht geven in\nhoe druk het op specifieke plekken in de stad is",
+        "score": 0.47309265,
+        "metadata": {
+          "document_id": "6084580",
+          "title": "Doelstelling Gemeente Rotterdam",
+          "chunk_index": null,
+          "start_date": "2020-07-01T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 470933064087401029,
+        "content_preview": "- De Rotterdamse gemeenteraad heeft uitgesproken dat er geen ruimte voor groei van RTHA is.",
+        "score": 0.47257492,
+        "metadata": {
+          "document_id": "6084690",
+          "title": "Overweging: Standpunt gemeenteraad over groei",
+          "chunk_index": null,
+          "start_date": "2020-07-02T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 862663194165566169,
+        "content_preview": "De gemeenteraad van Rotterdam, in vergadering bijeen op donderdag 18 juni 2020;",
+        "score": 0.4722054,
+        "metadata": {
+          "document_id": "6084210",
+          "title": "Inleiding",
+          "chunk_index": null,
+          "start_date": "2020-06-18T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1072704342242305760,
+        "content_preview": "De gemeenteraad van Rotterdam, in vergadering bijeen op 14 en 16 juli 2020, ter bespreking van het voorstel tot vaststelling van de Beleidsnota investeringen Rotterdam 2020, Besluit:",
+        "score": 0.4720664,
+        "metadata": {
+          "document_id": "6085377",
+          "title": "Besluitvormingscontext",
+          "chunk_index": null,
+          "start_date": "2020-07-16T13:00:00",
+          "party": null
+        }
+      }
+    ],
+    "keyword_results": [
+      {
+        "chunk_id": 124390,
+        "content_preview": "In deze paragraaf behandelen we de resultaten van het onderzoek. We kijken daarbij naar het doelbereik van de maatregelen, milieueffecten, techniek, inpasbaarheid en kosten en opbrengsten.\nWe maken da",
+        "score": 0.060591873,
+        "metadata": {
+          "document_id": "6109626",
+          "title": "4.2 Resultaten",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 886740,
+        "content_preview": "Innovatie verkeer en vervoer\n18 EDBR\nHet EDBR vraag het college invulling te geven aan mogelijke innovatieve toepassingen om de\nbereikbaarheid van Rotterdam op een duurzame wijze te verbeteren.\n24 Hav",
+        "score": 0.058373045,
+        "metadata": {
+          "document_id": "4795979",
+          "title": "Traffic, Transport, and Environmental Concerns",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 230154,
+        "content_preview": "G 1046  subsidies behouden voor cultureel aanbod veiligheid goede woningen voor alle leeftijdsklasses\nG 1046  Deelgemeente moet blijven / moet weg\nG 1047  Gebiedsbestuur is een andere naam voor 'deelg",
+        "score": 0.058049086,
+        "metadata": {
+          "document_id": "255167",
+          "title": "Voorstel voor behoud van deelgemeenten",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 979041,
+        "content_preview": "BIJLAGE AFSPRAKENLIJST BESTUURLUKE OVERLEGGGEN MIRT NAJAAR2008\nNOORDVLEUGEL EN UTRECHT\n\n1. Verstedelijkingsafspraken\n*I* Afspraak dat de Noordvleugel werkt aan een gebiedsdocument voor de Metropoolreg",
+        "score": 0.057962947,
+        "metadata": {
+          "document_id": "4798620",
+          "title": "BIJLAGE AFSPRAKENLIJST BESTUURLUKE OVERLEGGGEN MIRT NAJAAR2008 - NOORDVLEUGEL EN UTRECHT",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 123526,
+        "content_preview": "OV (alternatief 6; een korte tunnel met tram)\ngebaseerd op de aangedragen ideeën uit\nhet participatieproces. Daarnaast hebben\ndeelnemers hun mening kunnen geven over de\nonderzochte oplossingen. De uit",
+        "score": 0.057717737,
+        "metadata": {
+          "document_id": "6112143",
+          "title": "Participatie",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1147942,
+        "content_preview": "Verslag van de hoorzitting van de Gebiedscommissie Centrum over het\nCollectiegebouw Boijmans\nmaandag 6 oktober 2014 om 19:30 uur in Het Nieuwe Instituut te Rotterdam\n\nAanwezig\n\nLeden Gebiedscommissie ",
+        "score": 0.056209914,
+        "metadata": {
+          "document_id": "2204657",
+          "title": "Verslag van de hoorzitting van de Gebiedscommissie Centrum over het Collectiegebouw Boijmans",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 736337,
+        "content_preview": "De heer CREMERS (pvda). Mijnheer de voorzitter. Vandaag ligt het openbaar vervoer in Rotterdam plat. Het land is in beroering, 60.000 mensen stonden op de Coolsingel en 300.000 op het Museumplein. De ",
+        "score": 0.05525444,
+        "metadata": {
+          "document_id": "231060",
+          "title": "General considerations by Mr. Cremers (PvdA)",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 196778,
+        "content_preview": "y Op het herstel van de waterlopen - en de financiering hiervan - wordt\nsummier ingegaan. Langs een groot\ndeel van de Rel loopt de\nnatgasleiding van de NAM en dit\ngeeft een beperking v.w.b. de\nverbred",
+        "score": 0.054885652,
+        "metadata": {
+          "document_id": "6094866",
+          "title": "y Op het herstel van de waterlopen - en de financiering hiervan - wordt summier ingegaan.",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 685498,
+        "content_preview": "VB. Interpellatie van de heer H.P.L.\nCremers naar aanleiding van een interview met\nwethouder M.G.T. Pastors in het Rotterdams\nDagblad van 5 september 2003 getiteld\n'Rotterdam zit aan de grond' over ka",
+        "score": 0.054822017,
+        "metadata": {
+          "document_id": "249858",
+          "title": "Interpellation on Wethouder Pastors' Interview",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 468001,
+        "content_preview": "De VOORZITTER. Dan zijn we nu aangekomen bij het interpellatiedebat. Ik wil even checken of wethouder Bokhove meeluistert. Check. Ja, zij is beschikbaar. Kunnen we haar ook zien? Wethouder Bokhove, ku",
+        "score": 0.054661777,
+        "metadata": {
+          "document_id": "6083507",
+          "title": "2.1 Interpellatiedebat over 'Negeren raadsmeerderheid inzake verkeersexperimenten', aangevraagd door het lid Simons",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 922609,
+        "content_preview": "De VOORZITTER. Het woord is aan de heer Mink, die zijn maidenspeech zal houden.\nDe heer MINK (cda). Mijnheer de voorzitter. Wat is er misgegaan en wie is daar schuldig aan? Beide vragen lijken centraa",
+        "score": 0.05310471,
+        "metadata": {
+          "document_id": "818062",
+          "title": "Het rapport van de Rekenkamer Rotterdam 'WATt heb je ervoor over', alsmede het voorstel van het presidium met betrekking tot de aanbevelingen uit dit rapport.",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 444642,
+        "content_preview": "Notulen raadsvergadering van 18 juni 2015\nNotulen\nNotulen van de raadsvergadering van 18 juni 2015\nNotulen van de raadsvergadering van 18\njuni 2015 (avondzitting)\nVoor de agenda wordt verwezen naar\nvo",
+        "score": 0.05287061,
+        "metadata": {
+          "document_id": "4083320",
+          "title": "Notulen van de Raadsvergadering van 18 juni 2015 (Avondzitting)",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 123522,
+        "content_preview": "In de MIRT-Verkenning Oeververbindingen regio Rotterdam zijn, binnen de deelstu-\ndie Oeververbinding en openbaar vervoer (O&OV,) zes alternatieven gedefinieerd. De\nalternatieven zijn uitgewerkt, onder",
+        "score": 0.05261203,
+        "metadata": {
+          "document_id": "6112143",
+          "title": "2.2.2 Totstandkoming voorkeursalternatief stadsbrug en HOV",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1233705,
+        "content_preview": "dS+V\nGemeente Rotterdam\nNotitie\nVerkeer 8, Vervoer\nVan: Peter de Graaf\nSteller: Judith Boelhouwerc\nE-mail: J.Boelhouwers@dsv.roîìerdam.nl\nFax: O10 - 489 4887\nTelefoon: O10 - 489 7253\nBezoekadres: EP2,",
+        "score": 0.052574605,
+        "metadata": {
+          "document_id": "4794049",
+          "title": "dS+V Notitie: Stand van zaken Bundels",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 121959,
+        "content_preview": "In de MIRT-Verkenning Oeververbindingen regio Rotterdam zijn, binnen de dee lstu-\ndie Oeververbinding en openbaar vervoer (O&OV,) zes alternatieven gedefinieerd.\nDe alternatieven zijn uitgewerkt, onde",
+        "score": 0.052540254,
+        "metadata": {
+          "document_id": "6112386",
+          "title": "Formation of the Preferred Alternative - Stadsbrug and HOV",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 548538,
+        "content_preview": "# Naam City Comment Datum\n1. Geanonimiseerd Rotterdam Ik teken omdat ik het zonde vindt als ons mooie park verstoord gaat worden door grootschalige horeca en\nautoverkeer. Ik zit bovendien niet te wach",
+        "score": 0.052153233,
+        "metadata": {
+          "document_id": "6075870",
+          "title": "Petitie Inzendingen",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 413182,
+        "content_preview": "Bijlage 1.\nParapluherziening evenementen Rotterdam\nParapluherziening evenementen Rotterdam\nA K O E S T I S C H E  O P M E R K I N G E N\nIn opdracht van:\n Skihut exploitatie bv\n Postbus 81107\n 3009 GC ",
+        "score": 0.051865004,
+        "metadata": {
+          "document_id": "6097843",
+          "title": "Bijlage 1: Akoestische Opmerkingen",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 122842,
+        "content_preview": "De heer ABOUTALEB. Ja voorzitter,\nhartelijk dank.\nDe VOORZITTER (de heer Van Schaik).\nUw microfoon staat uit.\nDe heer ABOUTALEB. Ook vanuit mijn\npositie dank aan allen die hieraan\nbijgedragen hebben, ",
+        "score": 0.05151039,
+        "metadata": {
+          "document_id": "6089228",
+          "title": "Antwoord burgemeester op vragen over digitale kluis en amendement D66",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 185630,
+        "content_preview": "Inhoudsopgave\nInleiding: waarom een Aanvulling ROER? 10\n1.1. Introductie 10\n1.2. Doel en afbakening van dit rapport 11\n1.3. Te nemen besluit: (partiële) herziening van de Rotterdamse Omgevingsvisie\n12",
+        "score": 0.05130383,
+        "metadata": {
+          "document_id": "6112141",
+          "title": "Inhoudsopgave",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 1190717,
+        "content_preview": "4. Beschikbare weerstandscapaciteit\n4.1 Incidentele en structurele componenten beschikbare weerstandscapaciteit\nIn het BBV is niet voorgeschreven welke bestanddelen behoren tot de weerstandscapaciteit",
+        "score": 0.051247206,
+        "metadata": {
+          "document_id": "227416",
+          "title": "4.1 Incidentele en structurele componenten beschikbare weerstandscapaciteit",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      }
+    ],
+    "rrf_results": [
+      {
+        "chunk_id": 1129303194557145318,
+        "rrf_score": 0.016666666666666666,
+        "vector_rank": 0,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 124390,
+        "rrf_score": 0.016666666666666666,
+        "vector_rank": null,
+        "keyword_rank": 0
+      },
+      {
+        "chunk_id": 78512230882737502,
+        "rrf_score": 0.01639344262295082,
+        "vector_rank": 1,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 886740,
+        "rrf_score": 0.01639344262295082,
+        "vector_rank": null,
+        "keyword_rank": 1
+      },
+      {
+        "chunk_id": 348671970436896558,
+        "rrf_score": 0.016129032258064516,
+        "vector_rank": 2,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 230154,
+        "rrf_score": 0.016129032258064516,
+        "vector_rank": null,
+        "keyword_rank": 2
+      },
+      {
+        "chunk_id": 956395620154432690,
+        "rrf_score": 0.015873015873015872,
+        "vector_rank": 3,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 979041,
+        "rrf_score": 0.015873015873015872,
+        "vector_rank": null,
+        "keyword_rank": 3
+      },
+      {
+        "chunk_id": 805065333582455446,
+        "rrf_score": 0.015625,
+        "vector_rank": 4,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 123526,
+        "rrf_score": 0.015625,
+        "vector_rank": null,
+        "keyword_rank": 4
+      },
+      {
+        "chunk_id": 834432417751519265,
+        "rrf_score": 0.015384615384615385,
+        "vector_rank": 5,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 1147942,
+        "rrf_score": 0.015384615384615385,
+        "vector_rank": null,
+        "keyword_rank": 5
+      },
+      {
+        "chunk_id": 617869212877402513,
+        "rrf_score": 0.015151515151515152,
+        "vector_rank": 6,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 736337,
+        "rrf_score": 0.015151515151515152,
+        "vector_rank": null,
+        "keyword_rank": 6
+      },
+      {
+        "chunk_id": 1005007376666591734,
+        "rrf_score": 0.014925373134328358,
+        "vector_rank": 7,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 196778,
+        "rrf_score": 0.014925373134328358,
+        "vector_rank": null,
+        "keyword_rank": 7
+      },
+      {
+        "chunk_id": 745050091451010194,
+        "rrf_score": 0.014705882352941176,
+        "vector_rank": 8,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 685498,
+        "rrf_score": 0.014705882352941176,
+        "vector_rank": null,
+        "keyword_rank": 8
+      },
+      {
+        "chunk_id": 1094023646569957308,
+        "rrf_score": 0.014492753623188406,
+        "vector_rank": 9,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 468001,
+        "rrf_score": 0.014492753623188406,
+        "vector_rank": null,
+        "keyword_rank": 9
+      },
+      {
+        "chunk_id": 704849789884807746,
+        "rrf_score": 0.014285714285714285,
+        "vector_rank": 10,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 922609,
+        "rrf_score": 0.014285714285714285,
+        "vector_rank": null,
+        "keyword_rank": 10
+      },
+      {
+        "chunk_id": 694456635557734104,
+        "rrf_score": 0.014084507042253521,
+        "vector_rank": 11,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 444642,
+        "rrf_score": 0.014084507042253521,
+        "vector_rank": null,
+        "keyword_rank": 11
+      },
+      {
+        "chunk_id": 163328468126074002,
+        "rrf_score": 0.013888888888888888,
+        "vector_rank": 12,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 123522,
+        "rrf_score": 0.013888888888888888,
+        "vector_rank": null,
+        "keyword_rank": 12
+      },
+      {
+        "chunk_id": 267475382939551036,
+        "rrf_score": 0.0136986301369863,
+        "vector_rank": 13,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 1233705,
+        "rrf_score": 0.0136986301369863,
+        "vector_rank": null,
+        "keyword_rank": 13
+      },
+      {
+        "chunk_id": 913093011690466616,
+        "rrf_score": 0.013513513513513514,
+        "vector_rank": 14,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 121959,
+        "rrf_score": 0.013513513513513514,
+        "vector_rank": null,
+        "keyword_rank": 14
+      },
+      {
+        "chunk_id": 8412980308368154,
+        "rrf_score": 0.013333333333333334,
+        "vector_rank": 15,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 548538,
+        "rrf_score": 0.013333333333333334,
+        "vector_rank": null,
+        "keyword_rank": 15
+      },
+      {
+        "chunk_id": 379059819244150052,
+        "rrf_score": 0.013157894736842105,
+        "vector_rank": 16,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 413182,
+        "rrf_score": 0.013157894736842105,
+        "vector_rank": null,
+        "keyword_rank": 16
+      },
+      {
+        "chunk_id": 672846652294807699,
+        "rrf_score": 0.012987012987012988,
+        "vector_rank": 17,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 122842,
+        "rrf_score": 0.012987012987012988,
+        "vector_rank": null,
+        "keyword_rank": 17
+      },
+      {
+        "chunk_id": 658368137706166291,
+        "rrf_score": 0.01282051282051282,
+        "vector_rank": 18,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 185630,
+        "rrf_score": 0.01282051282051282,
+        "vector_rank": null,
+        "keyword_rank": 18
+      },
+      {
+        "chunk_id": 785336512595098897,
+        "rrf_score": 0.012658227848101266,
+        "vector_rank": 19,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 1190717,
+        "rrf_score": 0.012658227848101266,
+        "vector_rank": null,
+        "keyword_rank": 19
+      },
+      {
+        "chunk_id": 1119331313510915549,
+        "rrf_score": 0.0125,
+        "vector_rank": 20,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 345491672806429196,
+        "rrf_score": 0.012345679012345678,
+        "vector_rank": 21,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 762782054499928598,
+        "rrf_score": 0.012195121951219513,
+        "vector_rank": 22,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 569082873961395564,
+        "rrf_score": 0.012048192771084338,
+        "vector_rank": 23,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 80350028757176217,
+        "rrf_score": 0.011904761904761904,
+        "vector_rank": 24,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 23197179582177712,
+        "rrf_score": 0.011764705882352941,
+        "vector_rank": 25,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 990430408240536479,
+        "rrf_score": 0.011627906976744186,
+        "vector_rank": 26,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 470933064087401029,
+        "rrf_score": 0.011494252873563218,
+        "vector_rank": 27,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 862663194165566169,
+        "rrf_score": 0.011363636363636364,
+        "vector_rank": 28,
+        "keyword_rank": null
+      },
+      {
+        "chunk_id": 1072704342242305760,
+        "rrf_score": 0.011235955056179775,
+        "vector_rank": 29,
+        "keyword_rank": null
+      }
+    ],
+    "reranker_results": [
+      {
+        "chunk_id": 1129303194557145318,
+        "reranker_score": 0.06968772,
+        "pre_rerank_position": 0
+      },
+      {
+        "chunk_id": 124390,
+        "reranker_score": 0.27478996,
+        "pre_rerank_position": 1
+      },
+      {
+        "chunk_id": 78512230882737502,
+        "reranker_score": 0.07292788,
+        "pre_rerank_position": 2
+      },
+      {
+        "chunk_id": 886740,
+        "reranker_score": 0.18919173,
+        "pre_rerank_position": 3
+      },
+      {
+        "chunk_id": 348671970436896558,
+        "reranker_score": 0.01859201,
+        "pre_rerank_position": 4
+      },
+      {
+        "chunk_id": 230154,
+        "reranker_score": 0.01899751,
+        "pre_rerank_position": 5
+      },
+      {
+        "chunk_id": 956395620154432690,
+        "reranker_score": 0.19087079,
+        "pre_rerank_position": 6
+      },
+      {
+        "chunk_id": 979041,
+        "reranker_score": 0.05853505,
+        "pre_rerank_position": 7
+      },
+      {
+        "chunk_id": 805065333582455446,
+        "reranker_score": 0.06481386,
+        "pre_rerank_position": 8
+      },
+      {
+        "chunk_id": 123526,
+        "reranker_score": 0.08055976,
+        "pre_rerank_position": 9
+      },
+      {
+        "chunk_id": 834432417751519265,
+        "reranker_score": 0.06309481,
+        "pre_rerank_position": 10
+      },
+      {
+        "chunk_id": 1147942,
+        "reranker_score": -0.04496507,
+        "pre_rerank_position": 11
+      },
+      {
+        "chunk_id": 617869212877402513,
+        "reranker_score": 0.16244948,
+        "pre_rerank_position": 12
+      },
+      {
+        "chunk_id": 736337,
+        "reranker_score": 0.06108332,
+        "pre_rerank_position": 13
+      },
+      {
+        "chunk_id": 1005007376666591734,
+        "reranker_score": -0.02226603,
+        "pre_rerank_position": 14
+      },
+      {
+        "chunk_id": 196778,
+        "reranker_score": 0.04259592,
+        "pre_rerank_position": 15
+      },
+      {
+        "chunk_id": 745050091451010194,
+        "reranker_score": -0.1004089,
+        "pre_rerank_position": 16
+      },
+      {
+        "chunk_id": 685498,
+        "reranker_score": 0.10858241,
+        "pre_rerank_position": 17
+      },
+      {
+        "chunk_id": 1094023646569957308,
+        "reranker_score": 0.05619069,
+        "pre_rerank_position": 18
+      },
+      {
+        "chunk_id": 468001,
+        "reranker_score": 0.09560749,
+        "pre_rerank_position": 19
+      },
+      {
+        "chunk_id": 704849789884807746,
+        "reranker_score": -0.05977674,
+        "pre_rerank_position": 20
+      },
+      {
+        "chunk_id": 922609,
+        "reranker_score": 0.04657269,
+        "pre_rerank_position": 21
+      },
+      {
+        "chunk_id": 694456635557734104,
+        "reranker_score": -0.02815462,
+        "pre_rerank_position": 22
+      },
+      {
+        "chunk_id": 444642,
+        "reranker_score": 0.10634249,
+        "pre_rerank_position": 23
+      },
+      {
+        "chunk_id": 163328468126074002,
+        "reranker_score": -0.03113026,
+        "pre_rerank_position": 24
+      },
+      {
+        "chunk_id": 123522,
+        "reranker_score": 0.12645742,
+        "pre_rerank_position": 25
+      },
+      {
+        "chunk_id": 267475382939551036,
+        "reranker_score": 0.07610594,
+        "pre_rerank_position": 26
+      },
+      {
+        "chunk_id": 1233705,
+        "reranker_score": -0.02022075,
+        "pre_rerank_position": 27
+      },
+      {
+        "chunk_id": 913093011690466616,
+        "reranker_score": 0.10986159,
+        "pre_rerank_position": 28
+      },
+      {
+        "chunk_id": 121959,
+        "reranker_score": 0.06457683,
+        "pre_rerank_position": 29
+      },
+      {
+        "chunk_id": 8412980308368154,
+        "reranker_score": 0.01368491,
+        "pre_rerank_position": 30
+      },
+      {
+        "chunk_id": 548538,
+        "reranker_score": 0.17900406,
+        "pre_rerank_position": 31
+      },
+      {
+        "chunk_id": 379059819244150052,
+        "reranker_score": 0.04225542,
+        "pre_rerank_position": 32
+      },
+      {
+        "chunk_id": 413182,
+        "reranker_score": 0.12419659,
+        "pre_rerank_position": 33
+      },
+      {
+        "chunk_id": 672846652294807699,
+        "reranker_score": 0.01253186,
+        "pre_rerank_position": 34
+      },
+      {
+        "chunk_id": 122842,
+        "reranker_score": -0.05770381,
+        "pre_rerank_position": 35
+      },
+      {
+        "chunk_id": 658368137706166291,
+        "reranker_score": 0.18876217,
+        "pre_rerank_position": 36
+      },
+      {
+        "chunk_id": 185630,
+        "reranker_score": 0.13989863,
+        "pre_rerank_position": 37
+      },
+      {
+        "chunk_id": 785336512595098897,
+        "reranker_score": 0.16093989,
+        "pre_rerank_position": 38
+      },
+      {
+        "chunk_id": 1190717,
+        "reranker_score": -0.08775549,
+        "pre_rerank_position": 39
+      },
+      {
+        "chunk_id": 1119331313510915549,
+        "reranker_score": 0.02094384,
+        "pre_rerank_position": 40
+      },
+      {
+        "chunk_id": 345491672806429196,
+        "reranker_score": -0.06995904,
+        "pre_rerank_position": 41
+      },
+      {
+        "chunk_id": 762782054499928598,
+        "reranker_score": -0.09526643,
+        "pre_rerank_position": 42
+      },
+      {
+        "chunk_id": 569082873961395564,
+        "reranker_score": -0.10287197,
+        "pre_rerank_position": 43
+      },
+      {
+        "chunk_id": 80350028757176217,
+        "reranker_score": -0.05575839,
+        "pre_rerank_position": 44
+      },
+      {
+        "chunk_id": 23197179582177712,
+        "reranker_score": -0.01892734,
+        "pre_rerank_position": 45
+      },
+      {
+        "chunk_id": 990430408240536479,
+        "reranker_score": -0.13626598,
+        "pre_rerank_position": 46
+      },
+      {
+        "chunk_id": 470933064087401029,
+        "reranker_score": -0.03433196,
+        "pre_rerank_position": 47
+      },
+      {
+        "chunk_id": 862663194165566169,
+        "reranker_score": -0.0899194,
+        "pre_rerank_position": 48
+      },
+      {
+        "chunk_id": 1072704342242305760,
+        "reranker_score": -0.10530899,
+        "pre_rerank_position": 49
+      }
+    ],
+    "reranker_skipped": false,
+    "final_chunks": [
+      {
+        "chunk_id": 124390,
+        "content_preview": "In deze paragraaf behandelen we de resultaten van het onderzoek. We kijken daarbij naar het doelbereik van de maatregelen, milieueffecten, techniek, inpasbaarheid en kosten en opbrengsten.\nWe maken da",
+        "score": 0.27478996,
+        "metadata": {
+          "document_id": "6109626",
+          "title": "4.2 Resultaten",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 956395620154432690,
+        "content_preview": "MOTIE Rekener wel op\nDe Gemeenteraad van Rotterdam in vergadering bijeen op 20 april 2017 ter bespreking van het\nvoorstel tot vaststelling van het stedelijk verkeersplan Rotterdam 2016-2030,",
+        "score": 0.19087079,
+        "metadata": {
+          "document_id": "5277658",
+          "title": "Titel en vergaderingscontext",
+          "chunk_index": null,
+          "start_date": "2017-05-11T00:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 886740,
+        "content_preview": "Innovatie verkeer en vervoer\n18 EDBR\nHet EDBR vraag het college invulling te geven aan mogelijke innovatieve toepassingen om de\nbereikbaarheid van Rotterdam op een duurzame wijze te verbeteren.\n24 Hav",
+        "score": 0.18919173,
+        "metadata": {
+          "document_id": "4795979",
+          "title": "Traffic, Transport, and Environmental Concerns",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 658368137706166291,
+        "content_preview": "0 Hierbij wenselijk is dat de Gemeente Rotterdam de ontmoeting zoveel mogelijk faciliteert om zodoende de dialoog op gang te krijgen om kloven te overbruggen; '",
+        "score": 0.18876217,
+        "metadata": {
+          "document_id": "6084708",
+          "title": "Overweging faciliteren dialoog en ontmoeting",
+          "chunk_index": null,
+          "start_date": "2020-07-02T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 548538,
+        "content_preview": "# Naam City Comment Datum\n1. Geanonimiseerd Rotterdam Ik teken omdat ik het zonde vindt als ons mooie park verstoord gaat worden door grootschalige horeca en\nautoverkeer. Ik zit bovendien niet te wach",
+        "score": 0.17900406,
+        "metadata": {
+          "document_id": "6075870",
+          "title": "Petitie Inzendingen",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 617869212877402513,
+        "content_preview": "De gemeenteraad van Rotterdam op 18 juni 2020 in vergadering bijeen voor de bespreking van deze motie vreemd aan de orde van de dag.",
+        "score": 0.16244948,
+        "metadata": {
+          "document_id": "6084183",
+          "title": "Preamble / Aanleiding",
+          "chunk_index": null,
+          "start_date": "2020-06-18T13:00:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 785336512595098897,
+        "content_preview": "MOTIE\nWegen gaat niet zonder schaal\n\nDe gemeenteraad van Rotterdam, in vergadering bijeen op 2 juli 2020, ter bespreking van\nde zienswijze van Rotterdam op de concept-luchtvaartnota,",
+        "score": 0.16093989,
+        "metadata": {
+          "document_id": "6084563",
+          "title": "Motie: Wegen gaat niet zonder schaal - Introductie",
+          "chunk_index": null,
+          "start_date": "2020-07-01T19:30:00",
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 185630,
+        "content_preview": "Inhoudsopgave\nInleiding: waarom een Aanvulling ROER? 10\n1.1. Introductie 10\n1.2. Doel en afbakening van dit rapport 11\n1.3. Te nemen besluit: (partiële) herziening van de Rotterdamse Omgevingsvisie\n12",
+        "score": 0.13989863,
+        "metadata": {
+          "document_id": "6112141",
+          "title": "Inhoudsopgave",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 123522,
+        "content_preview": "In de MIRT-Verkenning Oeververbindingen regio Rotterdam zijn, binnen de deelstu-\ndie Oeververbinding en openbaar vervoer (O&OV,) zes alternatieven gedefinieerd. De\nalternatieven zijn uitgewerkt, onder",
+        "score": 0.12645742,
+        "metadata": {
+          "document_id": "6112143",
+          "title": "2.2.2 Totstandkoming voorkeursalternatief stadsbrug en HOV",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      },
+      {
+        "chunk_id": 413182,
+        "content_preview": "Bijlage 1.\nParapluherziening evenementen Rotterdam\nParapluherziening evenementen Rotterdam\nA K O E S T I S C H E  O P M E R K I N G E N\nIn opdracht van:\n Skihut exploitatie bv\n Postbus 81107\n 3009 GC ",
+        "score": 0.12419659,
+        "metadata": {
+          "document_id": "6097843",
+          "title": "Bijlage 1: Akoestische Opmerkingen",
+          "chunk_index": null,
+          "start_date": null,
+          "party": null
+        }
+      }
+    ],
+    "timings": {
+      "embedding_ms": 266.5142499972717,
+      "vector_ms": 31.4578329998767,
+      "keyword_ms": 19501.22770800226,
+      "rrf_ms": 0.09291699825553223,
+      "reranker_ms": 22539.450292002584,
+      "total_ms": 42338.8561249958
+    },
+    "config_snapshot": {
+      "top_k": 10,
+      "fast_mode": false,
+      "date_from": null,
+      "date_to": null,
+      "score_threshold": 0.15,
+      "reranker_threshold": -2.0,
+      "route": {
+        "query_type": "absence",
+        "top_k": 10,
+        "parties": [],
+        "date_from": null,
+        "date_to": null,
+        "sub_queries": [],
+        "confidence": 0.85,
+        "strategy": "standard"
+      }
+    }
+  }
+]

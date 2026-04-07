@@ -1,0 +1,390 @@
+{
+  "meeting_id": "96928c9f-5776-4ef8-8d37-5dac83e55d17",
+  "audit_timestamp": "2026-04-07T21:22:52.000974",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "anthropic_model": "claude-haiku-4-5-20251001"
+  },
+  "meeting_info": {
+    "name": "Vergadering Commissie Werkgelegenheid, Inkomen, Integratie, Schuldenaanpak en Armoedebestrijding (2018-2022) 05-12-2018",
+    "start_date": "2018-12-05 00:00:00",
+    "committee": "",
+    "quality_score": 0.999,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 78,
+    "document_count": 10
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 333,
+      "correct_count": 333,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.9962,
+      "party_attribution_rate": 0.0,
+      "total_segments": 265,
+      "attributed_segments": 264,
+      "unattributed_segments": 1
+    },
+    "speaker_diversity": {
+      "unique_speakers": 15,
+      "unique_parties": 0,
+      "top_speaker": "Baarle, S.R.T. van (voorzitter)",
+      "top_speaker_segment_count": 118,
+      "monologue_rate": 0.4453,
+      "speakers": {
+        "Baarle, S.R.T. van (voorzitter)": 118,
+        "Grauss, M.K.A. (wethouder)": 43,
+        "Jami, E. (Leefbaar Rotterdam)": 19,
+        "Roest, L.L.P.R. (GroenLinks)": 16,
+        "Verkoelen, P.J.H.D. (50PLUS)": 10,
+        "Moti, R. (wethouder)": 9,
+        "Arsieni, N. (D66)": 8,
+        "Vonk, T.J. (ChristenUnie-SGP)": 7,
+        "Graaf, van der (inspreker namens Ypsilon)": 7,
+        "Büyükçifci, E. (NIDA Rotterdam)": 7
+      },
+      "parties": {}
+    },
+    "segment_quality": {
+      "total_segments": 265,
+      "nonempty_segments": 265,
+      "total_words": 24813,
+      "total_chars": 137071,
+      "avg_words_per_segment": 93.6,
+      "avg_chars_per_segment": 517.2,
+      "short_segment_rate": 0.1962,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 21,
+      "items_with_content": 10,
+      "coverage_rate": 0.4762,
+      "items": [
+        {
+          "title": "1.01 Opening door de voorzitter",
+          "segment_count": 1
+        },
+        {
+          "title": "1.02 Besluitenlijst openbare procedurevergadering van 21 november 2018",
+          "segment_count": 0
+        },
+        {
+          "title": "1.03 Ingekomen stukken",
+          "segment_count": 0
+        },
+        {
+          "title": "1.03.01 Algemeen",
+          "segment_count": 0
+        },
+        {
+          "title": "1.03.02 Schulddienstverlening",
+          "segment_count": 12
+        },
+        {
+          "title": "1.04 Lijst van openstaande toezeggingen en schriftelijke vragen",
+          "segment_count": 16
+        },
+        {
+          "title": "1.05 Lijst van openstaande moties",
+          "segment_count": 0
+        },
+        {
+          "title": "1.06 Planning",
+          "segment_count": 5
+        },
+        {
+          "title": "1.07 Rondvraag en sluiting",
+          "segment_count": 0
+        },
+        {
+          "title": "2 Overlegvergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "2.01 Opening",
+          "segment_count": 0
+        },
+        {
+          "title": "2.02 Vaststelling van de agenda",
+          "segment_count": 4
+        },
+        {
+          "title": "2.03 Vaststelling van de adviezenlijst van de openbare overlegvergadering van 21 november 2018",
+          "segment_count": 0
+        },
+        {
+          "title": "2.04 Openstaande toezeggingen, moties en schriftelijke vragen waarvan de termijn is overschreden",
+          "segment_count": 1
+        },
+        {
+          "title": "2.05 Pilot op zoek naar de meest passende vorm van dagbesteding of werk",
+          "segment_count": 0
+        },
+        {
+          "title": "inspreker: Namens Ypsilon spreekt mevrouw van der Graaf in.",
+          "segment_count": 42
+        },
+        {
+          "title": "2.06 10-maandsrapportage",
+          "segment_count": 36
+        },
+        {
+          "title": "2.07 Onderzoeksrapport 'Onder bewind gestelde Rotterdammers'",
+          "segment_count": 0
+        },
+        {
+          "title": "2.07.01 Daarbij betrekken",
+          "segment_count": 0
+        },
+        {
+          "title": "2.07.02 Achtergrondinformatie",
+          "segment_count": 147
+        },
+        {
+          "title": "2.08 Sluiting",
+          "segment_count": 1
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Vergadering Commissie Werkgelegenheid, Inkomen, Integratie, Schuldenaanpak en Armoedebestrijding (2018-2022) 05-12-2018",
+        "start_date": "2018-12-05 00:00:00",
+        "committee": null,
+        "review_status": "auto_approved",
+        "quality_score": 0.999,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Vergadering Commissie Werkgelegenheid, Inkomen, Integratie, Schuldenaanpak en Armoedebestrijding (2018-2022) 05-12-2018",
+        "start_date": "2018-12-05 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No committee found in staging meeting"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 15,
+      "recognized_speakers": 5,
+      "unrecognized_speakers": 10,
+      "recognition_rate": 0.3333,
+      "recognized": [
+        {
+          "name": "Baarle, S.R.T. van (voorzitter)",
+          "segment_count": 118,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Weststrate, R. (griffier)",
+          "segment_count": 1,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Graaf, van der (inspreker namens Ypsilon)",
+          "segment_count": 7,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Moti, R. (wethouder)",
+          "segment_count": 9,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Grauss, M.K.A. (wethouder)",
+          "segment_count": 43,
+          "parties": [],
+          "recognized_as": "role"
+        }
+      ],
+      "unrecognized": [
+        {
+          "name": "Arsieni, N. (D66)",
+          "segment_count": 8,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Jami, E. (Leefbaar Rotterdam)",
+          "segment_count": 19,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Verkoelen, P.J.H.D. (50PLUS)",
+          "segment_count": 10,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Roest, L.L.P.R. (GroenLinks)",
+          "segment_count": 16,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Vonk, T.J. (ChristenUnie-SGP)",
+          "segment_count": 7,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Versnel, T.B. (VVD)",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Zevenbergen, A. van (SP)",
+          "segment_count": 5,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Yildirim, D. (PvdA)",
+          "segment_count": 6,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Büyükçifci, E. (NIDA Rotterdam)",
+          "segment_count": 7,
+          "parties": [],
+          "recognized_as": "unknown"
+        },
+        {
+          "name": "Hallema, A. (CDA)",
+          "segment_count": 3,
+          "parties": [],
+          "recognized_as": "unknown"
+        }
+      ]
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 78,
+      "empty_chunks": 0,
+      "buckets": {
+        "long (2000-5000)": 44,
+        "short (50-200)": 2,
+        "medium (200-2000)": 32
+      },
+      "min_chars": 130,
+      "max_chars": 2654,
+      "avg_chars": 1929.3,
+      "median_chars": 2237,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 78,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 10,
+      "documents_with_chunks": 10,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: 1.01 Opening door de voorzitter",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 1.03.02 Schulddienstverlening",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: 1.04 Lijst van openstaande toezeggingen en schriftelijke vragen",
+          "chunks": 3
+        },
+        {
+          "name": "Transcript: 1.06 Planning",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: 2.02 Vaststelling van de agenda",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 2.04 Openstaande toezeggingen, moties en schriftelijke vragen waarvan de termijn is overschreden",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: 2.06 10-maandsrapportage",
+          "chunks": 14
+        },
+        {
+          "name": "Transcript: 2.07.02 Achtergrondinformatie",
+          "chunks": 36
+        },
+        {
+          "name": "Transcript: 2.08 Sluiting",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: inspreker: Namens Ypsilon spreekt mevrouw van der Graaf in.",
+          "chunks": 17
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 78,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 78,
+      "distribution": {
+        "quote": {
+          "count": 76,
+          "rate": 0.9744
+        },
+        "full_text": {
+          "count": 2,
+          "rate": 0.0256
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "skipped",
+    "message": "--skip-llm flag set"
+  },
+  "verdict": {
+    "recommendation": "APPROVE — all thresholds met, safe to promote",
+    "issues": [],
+    "warnings": [],
+    "scores": {
+      "speaker_attribution_rate": 0.9962,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.999
+    }
+  }
+}
