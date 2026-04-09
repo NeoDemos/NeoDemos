@@ -202,6 +202,13 @@ class CommitteeNotulenPipeline:
                    committee_filter.lower() not in committee.lower():
                     continue
 
+            # UUID-based IDs work with iBabs web; numeric IDs are duplicates
+            # from iBabs bulk import — skip them if a UUID version exists
+            import re as _re
+            if not _re.match(r'^[0-9a-f]{8}-[0-9a-f]{4}-', m_id):
+                # Numeric ID — likely a duplicate. Skip it.
+                continue
+
             url = f"https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/{m_id}"
             meeting = {
                 "id": m_id,

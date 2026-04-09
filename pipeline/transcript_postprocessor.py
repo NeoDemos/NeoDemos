@@ -38,7 +38,7 @@ logger = logging.getLogger(__name__)
 
 CHUNK_MINUTES = 12          # Minutes of transcript per LLM chunk
 OVERLAP_MINUTES = 2         # Overlap between adjacent chunks
-MAX_PARALLEL_CALLS = 3      # Concurrent Gemini calls
+MAX_PARALLEL_CALLS = 5      # Concurrent Gemini calls (batch processing)
 RETRY_ATTEMPTS = 3
 RETRY_DELAY_S = 2
 INTER_CALL_DELAY_S = 0.5   # Rate limit protection
@@ -233,14 +233,18 @@ class TranscriptPostProcessor:
     # ── Gemini API Calls ─────────────────────────────────────────────────
 
     async def _call_gemini(self, prompt: str, model: str = PASS1_MODEL) -> str:
-        """Call Gemini API with retry logic."""
+        """Call Gemini API with retry logic and timeout."""
         try:
             import google.genai as genai
+            from google.genai.types import HttpOptions
         except ImportError:
             logger.error("google-genai not installed")
             return ""
 
-        client = genai.Client(api_key=self.api_key)
+        client = genai.Client(
+            api_key=self.api_key,
+            http_options=HttpOptions(timeout=120_000),  # 120s timeout per call
+        )
 
         for attempt in range(RETRY_ATTEMPTS):
             try:
@@ -576,51 +580,65 @@ GESCHREVEN NOTULEN:"""
         numbered_seg_re = re.compile(r'\[SEG-\d+\]\[([^\]]+)\]:\s*(.*?)(?=\n\[SEG-|\Z)', re.DOTALL)
         fallback_seg_re = re.compile(r'\[([^\]]+)\]:\s*(.*?)(?=\n\[|\Z)', re.DOTALL)
 
+        # Process batches in parallel (MAX_PARALLEL_CALLS concurrent)
+        semaphore = asyncio.Semaphore(MAX_PARALLEL_CALLS)
+        results = [None] * len(batches)  # ordered results
+        completed = [0]  # mutable counter
+
+        async def _process_batch(bi: int, batch: List[Dict]):
+            async with semaphore:
+                batch_text = self._segments_to_text(batch)
+
+                # Pass 1: correction
+                p1_result = await self._call_gemini(
+                    self._build_pass1_prompt(batch_text, meeting_context), model=PASS1_MODEL
+                )
+                if not p1_result:
+                    p1_result = batch_text
+
+                # Pass 2: register conversion
+                p2_result = await self._call_gemini(
+                    self._build_pass2_prompt(p1_result.strip(), meeting_context), model=PASS2_MODEL
+                )
+                if not p2_result:
+                    p2_result = p1_result
+
+                # Parse output into segments
+                batch_segments = []
+                matches = list(numbered_seg_re.finditer(p2_result))
+                if not matches:
+                    matches = list(fallback_seg_re.finditer(p2_result))
+
+                if matches:
+                    for m in matches:
+                        speaker_str = m.group(1).strip()
+                        text = m.group(2).strip()
+                        if not text:
+                            continue
+                        party_m = re.match(r'^(.+?)\s*\(([^)]+)\)$', speaker_str)
+                        if party_m:
+                            speaker, party = party_m.group(1).strip(), party_m.group(2).strip()
+                        else:
+                            speaker, party = speaker_str, ""
+                        batch_segments.append({"speaker": speaker, "party": party,
+                                               "text": text, "confidence": 1.0})
+                else:
+                    for seg in batch:
+                        batch_segments.append(dict(seg))
+
+                results[bi] = batch_segments
+                completed[0] += 1
+                if completed[0] % 20 == 0:
+                    logger.info(f"    [{completed[0]}/{len(batches)}] batches done")
+
+        # Launch all batches concurrently (semaphore limits parallelism)
+        await asyncio.gather(*[_process_batch(bi, batch) for bi, batch in enumerate(batches)])
+
+        # Flatten ordered results
         new_segments = []
-        for bi, batch in enumerate(batches):
-            batch_text = self._segments_to_text(batch)
-
-            # Pass 1: correction
-            p1_result = await self._call_gemini(
-                self._build_pass1_prompt(batch_text, meeting_context), model=PASS1_MODEL
-            )
-            if not p1_result:
-                p1_result = batch_text
-
-            # Pass 2: register conversion
-            p2_result = await self._call_gemini(
-                self._build_pass2_prompt(p1_result.strip(), meeting_context), model=PASS2_MODEL
-            )
-            if not p2_result:
-                p2_result = p1_result
-
-            # Parse output into segments
-            matches = list(numbered_seg_re.finditer(p2_result))
-            if not matches:
-                matches = list(fallback_seg_re.finditer(p2_result))
-
-            if matches:
-                for m in matches:
-                    speaker_str = m.group(1).strip()
-                    text = m.group(2).strip()
-                    if not text:
-                        continue
-                    party_m = re.match(r'^(.+?)\s*\(([^)]+)\)$', speaker_str)
-                    if party_m:
-                        speaker, party = party_m.group(1).strip(), party_m.group(2).strip()
-                    else:
-                        speaker, party = speaker_str, ""
-                    new_segments.append({"speaker": speaker, "party": party,
-                                         "text": text, "confidence": 1.0})
-            else:
-                # Fallback: keep original batch segments with cleaned text
-                for seg in batch:
-                    new_segments.append(dict(seg))
-
-            if (bi + 1) % 20 == 0:
-                logger.info(f"    [{bi + 1}/{len(batches)}] batches done")
-
-            await asyncio.sleep(INTER_CALL_DELAY_S)
+        for batch_segs in results:
+            if batch_segs:
+                new_segments.extend(batch_segs)
 
         # ── Rebuild transcript structure (distribute into agenda items) ──
         result = dict(transcript)

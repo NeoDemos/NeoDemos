@@ -31,8 +31,20 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DB_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/neodemos")
+def _build_db_url():
+    url = os.getenv("DATABASE_URL")
+    if url:
+        return url
+    user = os.getenv("DB_USER", "postgres")
+    pw = os.getenv("DB_PASSWORD", "postgres")
+    host = os.getenv("DB_HOST", "localhost")
+    port = os.getenv("DB_PORT", "5432")
+    name = os.getenv("DB_NAME", "neodemos")
+    return f"postgresql://{user}:{pw}@{host}:{port}/{name}"
+
+DB_URL = _build_db_url()
 QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", "")
 STAGING_COLLECTION = "committee_transcripts_staging"
 PRODUCTION_COLLECTION = "notulen_chunks"
 
@@ -289,7 +301,7 @@ def promote_meeting(meeting_id: str) -> bool:
             sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
             from services.ai_service import AIService
 
-            qdrant = QdrantClient(url=QDRANT_URL)
+            qdrant = QdrantClient(url=QDRANT_URL, api_key=QDRANT_API_KEY if QDRANT_API_KEY else None)
             local_ai = AIService()
 
             # Fetch meeting metadata for payload enrichment

@@ -34,7 +34,18 @@ load_dotenv()
 
 import psycopg2
 
-DB_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/neodemos")
+def _build_db_url():
+    url = os.getenv("DATABASE_URL")
+    if url:
+        return url
+    user = os.getenv("DB_USER", "postgres")
+    pw = os.getenv("DB_PASSWORD", "postgres")
+    host = os.getenv("DB_HOST", "localhost")
+    port = os.getenv("DB_PORT", "5432")
+    name = os.getenv("DB_NAME", "neodemos")
+    return f"postgresql://{user}:{pw}@{host}:{port}/{name}"
+
+DB_URL = _build_db_url()
 CACHE_DIR = Path("output/transcripts/staging_cache")
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")

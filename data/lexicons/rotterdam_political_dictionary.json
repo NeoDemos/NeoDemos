@@ -1,0 +1,682 @@
+{
+  "_description": "Rotterdam municipal political vocabulary for Whisper initial_prompt priming and LLM post-processing. Keeps proper nouns, party names, and domain terms correctly transcribed.",
+  "parties": [
+    "GroenLinks-PvdA",
+    "VVD",
+    "D66",
+    "CDA",
+    "PVV",
+    "SP",
+    "DENK",
+    "Leefbaar Rotterdam",
+    "Volt",
+    "Bij1",
+    "NIDA",
+    "Partij voor de Dieren",
+    "50PLUS",
+    "ChristenUnie-SGP",
+    "Socialisten 010",
+    "Hart voor Rotterdam",
+    "PvdA",
+    "GroenLinks"
+  ],
+  "roles": [
+    "burgemeester",
+    "wethouder",
+    "raadslid",
+    "griffier",
+    "commissievoorzitter",
+    "raadsvoorzitter",
+    "fractievoorzitter",
+    "commissielid",
+    "stadsbestuurder",
+    "gemeentesecretaris",
+    "directeur",
+    "concerndirecteur"
+  ],
+  "council_members": {
+    "_note": "Current and recent Rotterdam council members. Surnames most commonly mangled by ASR.",
+    "surnames": [
+      "Aboutaleb",
+      "Bonte",
+      "De Langen",
+      "Kasmi",
+      "Bokhove",
+      "El Boujdaini",
+      "Moti",
+      "Wijbenga",
+      "Van Gils",
+      "Naoum Haimé",
+      "De Jong",
+      "Mohandis",
+      "Van der Ven",
+      "Buijt",
+      "Temmink",
+      "Kathmann",
+      "Van Baarle",
+      "Simons",
+      "Bal",
+      "Kurvers",
+      "Chowdhury",
+      "Ornek",
+      "Benali",
+      "Langenberg",
+      "Reedijk",
+      "Grauss",
+      "Achbar",
+      "Tuzgöl",
+      "El Khattabi",
+      "Öztürk",
+      "Van Tijn",
+      "Kelderman",
+      "Kockelkoren",
+      "Reumkens",
+      "Van Alphen",
+      "Engfriet",
+      "Van Woensel",
+      "Zeegers",
+      "Akhatab",
+      "Morkoç",
+      "Coşkun"
+    ],
+    "members": {
+      "Aafjes-van Aalst": {
+        "full_name": "C. (Caroline) Aafjes-van Aalst",
+        "party": "Leefbaar Rotterdam",
+        "role": ""
+      },
+      "Abrahamse": {
+        "full_name": "M.S. (Marike) Abrahamse",
+        "party": "VVD",
+        "role": ""
+      },
+      "Achbar": {
+        "full_name": "F. (Faouzi) Achbar",
+        "party": "DENK",
+        "role": "wethouder"
+      },
+      "Akhatab": {
+        "full_name": "N. (Naoufal) Akhatab",
+        "party": "DENK",
+        "role": ""
+      },
+      "Balcha": {
+        "full_name": "E.H. (Eyasu) Balcha",
+        "party": "D66",
+        "role": ""
+      },
+      "Başoğlu": {
+        "full_name": "E. (Emin) Başoğlu",
+        "party": "SP",
+        "role": "burgercommissielid"
+      },
+      "Becker": {
+        "full_name": "S.J.C. (Simon) Becker",
+        "party": "Commissievoorzitter",
+        "role": ""
+      },
+      "Bijleveld": {
+        "full_name": "V. (Venus) Bijleveld",
+        "party": "BIJ1",
+        "role": "burgercommissielid"
+      },
+      "Biljoen": {
+        "full_name": "M.H. (Marvin) Biljoen",
+        "party": "GroenLinks",
+        "role": ""
+      },
+      "Bokhove": {
+        "full_name": "J. (Judith) Bokhove",
+        "party": "GroenLinks",
+        "role": ""
+      },
+      "Bonte": {
+        "full_name": "S.M. (Sebastiaan) Bonte",
+        "party": "Leefbaar Rotterdam",
+        "role": ""
+      },
+      "Bouwer-van Schie": {
+        "full_name": "F. (Femke) Bouwer-van Schie",
+        "party": "Volt",
+        "role": "burgercommissielid"
+      },
+      "Breedveld": {
+        "full_name": "A.B. (Tom) Breedveld",
+        "party": "SP",
+        "role": "burgercommissielid"
+      },
+      "Bruin": {
+        "full_name": "V.A. (Vanessa) Bruin",
+        "party": "Leefbaar Rotterdam",
+        "role": ""
+      },
+      "Buijt": {
+        "full_name": "R. (Ronald) Buijt",
+        "party": "VVD",
+        "role": "wethouder"
+      },
+      "Ceulemans": {
+        "full_name": "S. (Simon) Ceulemans",
+        "party": "Leefbaar Rotterdam",
+        "role": ""
+      },
+      "Coşkun": {
+        "full_name": "Z.P. (Pinar) Coşkun",
+        "party": "Partij voor de Dieren",
+        "role": "burgercommissielid"
+      },
+      "Crielaard": {
+        "full_name": "M. (Manuel) Crielaard",
+        "party": "Leefbaar Rotterdam",
+        "role": ""
+      },
+      "Dahoe": {
+        "full_name": "R.N. (Rashied) Dahoe",
+        "party": "DENK",
+        "role": ""
+      },
+      "Dekkers": {
+        "full_name": "L.P.A. (Luuc) Dekkers",
+        "party": "Volt",
+        "role": ""
+      },
+      "Elbay": {
+        "full_name": "F. (Fatih) Elbay",
+        "party": "D66",
+        "role": ""
+      },
+      "Engberts": {
+        "full_name": "G.J. (Co) Engberts",
+        "party": "PvdA",
+        "role": ""
+      },
+      "Hovens Greve": {
+        "full_name": "J.G. (Just) Hovens Greve",
+        "party": "SP",
+        "role": "burgercommissielid"
+      },
+      "Kasmi": {
+        "full_name": "S. (Said) Kasmi",
+        "party": "PvdA",
+        "role": "wethouder"
+      },
+      "Keulen": {
+        "full_name": "S.J. (Sjoerd) Keulen",
+        "party": "",
+        "role": ""
+      },
+      "Kind": {
+        "full_name": "T. (Tim) Kind",
+        "party": "Volt",
+        "role": ""
+      },
+      "Kockelkoren": {
+        "full_name": "A. (Astrid) Kockelkoren",
+        "party": "GroenLinks",
+        "role": ""
+      },
+      "Koedijk": {
+        "full_name": "M. (Martine) Koedijk",
+        "party": "",
+        "role": ""
+      },
+      "Koster": {
+        "full_name": "G.F.E. (Geert) Koster",
+        "party": "Leefbaar Rotterdam",
+        "role": ""
+      },
+      "Lamers": {
+        "full_name": "M. (Marjo) Lamers",
+        "party": "",
+        "role": ""
+      },
+      "Lammering Varela": {
+        "full_name": "S.F. (Steven) Lammering Varela",
+        "party": "PvdA",
+        "role": ""
+      },
+      "Lansink-Bastemeijer": {
+        "full_name": "P.J.P. (Pascal) Lansink-Bastemeijer",
+        "party": "VVD",
+        "role": "wethouder"
+      },
+      "Leewis": {
+        "full_name": "S. (Stephan) Leewis",
+        "party": "GroenLinks",
+        "role": ""
+      },
+      "Maassen": {
+        "full_name": "A.J.A. (Agnes) Maassen",
+        "party": "D66",
+        "role": ""
+      },
+      "Mak": {
+        "full_name": "S.J.J. (Sam) Mak",
+        "party": "",
+        "role": "burgercommissielid"
+      },
+      "Meurink": {
+        "full_name": "P.F. (Pelle) Meurink",
+        "party": "D66",
+        "role": "burgercommissielid"
+      },
+      "Morkoç": {
+        "full_name": "M.Y. (Mina) Morkoç",
+        "party": "GroenLinks",
+        "role": ""
+      },
+      "Norville": {
+        "full_name": "A.I. (Abigail) Norville",
+        "party": "",
+        "role": ""
+      },
+      "Nunnely": {
+        "full_name": "J.M. (Joan) Nunnely",
+        "party": "D66",
+        "role": ""
+      },
+      "Oostdijk": {
+        "full_name": "A.R. (Ardi) Oostdijk",
+        "party": "Forum voor Democratie",
+        "role": ""
+      },
+      "Oosterwegel": {
+        "full_name": "S.L. (Sigrid) Oosterwegel",
+        "party": "GroenLinks",
+        "role": "burgercommissielid"
+      },
+      "Padberg-de Haan": {
+        "full_name": "E. (Eveline) Padberg-de Haan",
+        "party": "VVD",
+        "role": "burgercommissielid"
+      },
+      "Rehim Zadeh": {
+        "full_name": "E. (Elika) Rehim Zadeh",
+        "party": "DENK",
+        "role": ""
+      },
+      "Reitema": {
+        "full_name": "S. (Sarah) Reitema",
+        "party": "PvdA",
+        "role": ""
+      },
+      "Roskam": {
+        "full_name": "T. (Thomas) Roskam",
+        "party": "Leefbaar Rotterdam",
+        "role": ""
+      },
+      "Rozema": {
+        "full_name": "J.G. (Jaap) Rozema",
+        "party": "Partij voor de Dieren",
+        "role": "burgercommissielid"
+      },
+      "Sadhoe": {
+        "full_name": "P.C.Z. (Precious) Sadhoe",
+        "party": "BIJ1",
+        "role": "burgercommissielid"
+      },
+      "Schalm-Civile": {
+        "full_name": "D. (Donatella) Schalm-Civile",
+        "party": "Volt",
+        "role": "burgercommissielid"
+      },
+      "Schouten": {
+        "full_name": "C.J. (Carola) Schouten",
+        "party": "ChristenUnie",
+        "role": "burgemeester"
+      },
+      "Segers-Hoogendoorn": {
+        "full_name": "R.G.C. (René) Segers-Hoogendoorn",
+        "party": "CDA",
+        "role": ""
+      },
+      "Simons": {
+        "full_name": "R.A.C.J. (Robert) Simons",
+        "party": "Leefbaar Rotterdam",
+        "role": "wethouder"
+      },
+      "Sodirijo": {
+        "full_name": "S.D. (Safa) Sodirijo",
+        "party": "DENK",
+        "role": "burgercommissielid"
+      },
+      "Soytekin": {
+        "full_name": "S. (Serkan) Soytekin",
+        "party": "DENK",
+        "role": ""
+      },
+      "Tak": {
+        "full_name": "D.P.A. (Dennis) Tak",
+        "party": "PvdA",
+        "role": ""
+      },
+      "Valk": {
+        "full_name": "H. (Jet) Valk",
+        "party": "50PLUS",
+        "role": "burgercommissielid"
+      },
+      "Verhoef": {
+        "full_name": "M. (Marcel) Verhoef",
+        "party": "Leefbaar Rotterdam",
+        "role": ""
+      },
+      "Verkoelen": {
+        "full_name": "P.J.H.D. (Ellen) Verkoelen",
+        "party": "50PLUS",
+        "role": ""
+      },
+      "Verouden": {
+        "full_name": "E.M. (Ellen) Verouden",
+        "party": "",
+        "role": "burgercommissielid"
+      },
+      "Versnel": {
+        "full_name": "T.B. (Tim) Versnel",
+        "party": "D66",
+        "role": "wethouder"
+      },
+      "Verweij": {
+        "full_name": "E.P.J. (Erik) Verweij",
+        "party": "VVD",
+        "role": ""
+      },
+      "Vicario": {
+        "full_name": "J. (Jordi) Vicario",
+        "party": "VVD",
+        "role": ""
+      },
+      "Vlieger": {
+        "full_name": "L.S. (Larissa) Vlieger",
+        "party": "GroenLinks",
+        "role": ""
+      },
+      "Vogelaar": {
+        "full_name": "M.E. (Merel) Vogelaar",
+        "party": "PvdA",
+        "role": ""
+      },
+      "Vonk": {
+        "full_name": "T.J. (Tjalling) Vonk",
+        "party": "ChristenUnie",
+        "role": ""
+      },
+      "Vos": {
+        "full_name": "R.P. (Ryan) Vos",
+        "party": "PvdA",
+        "role": "burgercommissielid"
+      },
+      "Wempe": {
+        "full_name": "H. (Hilgo) Wempe",
+        "party": "Volt",
+        "role": "burgercommissielid"
+      },
+      "Yildirim": {
+        "full_name": "D. (Duygu) Yildirim",
+        "party": "PvdA",
+        "role": ""
+      },
+      "Zeegers": {
+        "full_name": "C.M. (Chantal) Zeegers",
+        "party": "D66",
+        "role": "wethouder"
+      },
+      "de Bruijn": {
+        "full_name": "J.M. (Amy) de Bruijn",
+        "party": "PvdA",
+        "role": "burgercommissielid"
+      },
+      "de Haan": {
+        "full_name": "T. (Tim) de Haan",
+        "party": "D66",
+        "role": ""
+      },
+      "de Jong": {
+        "full_name": "M.S.S. (Michantely) de Jong",
+        "party": "Groep De Jong",
+        "role": ""
+      },
+      "de Ridder": {
+        "full_name": "J.A. (Jan) de Ridder",
+        "party": "",
+        "role": ""
+      },
+      "de Waard": {
+        "full_name": "J.M.D. (Joey) de Waard",
+        "party": "Leefbaar Rotterdam",
+        "role": ""
+      },
+      "van Campenhout": {
+        "full_name": "M.R. (Marchiano) van Campenhout",
+        "party": "BIJ1",
+        "role": ""
+      },
+      "van Dijk": {
+        "full_name": "G.G. (Gerben) van Dijk",
+        "party": "",
+        "role": "burgercommissielid"
+      },
+      "van Dommelen": {
+        "full_name": "D.J. (Diederik) van Dommelen",
+        "party": "VVD",
+        "role": ""
+      },
+      "van Gilst": {
+        "full_name": "M.D. (Marcel) van Gilst",
+        "party": "",
+        "role": ""
+      },
+      "van Groningen": {
+        "full_name": "D.A. (Dieke) van Groningen",
+        "party": "VVD",
+        "role": ""
+      },
+      "van Meeteren": {
+        "full_name": "B.T.A. (Bernhard) van Meeteren",
+        "party": "",
+        "role": "burgercommissielid"
+      },
+      "van Rij": {
+        "full_name": "B.J. (Bart-Joost) van Rij",
+        "party": "CDA",
+        "role": "wethouder"
+      },
+      "van Schaik": {
+        "full_name": "B. (Benvenido) van Schaik",
+        "party": "Leefbaar Rotterdam",
+        "role": ""
+      },
+      "van Scheijndel": {
+        "full_name": "A.N.M. (Nico) van Scheijndel",
+        "party": "50PLUS",
+        "role": "burgercommissielid"
+      },
+      "van Wifferen": {
+        "full_name": "I. (Ingrid) van Wifferen",
+        "party": "D66",
+        "role": ""
+      },
+      "van de Peppel": {
+        "full_name": "S. (Sabrina) van de Peppel",
+        "party": "Partij voor de Dieren",
+        "role": ""
+      },
+      "van den Anker": {
+        "full_name": "M. (Marianne) van den Anker",
+        "party": "",
+        "role": ""
+      },
+      "van der Anker": {
+        "full_name": "M. (Marianne) van der Anker",
+        "party": "",
+        "role": ""
+      },
+      "van der Goudsmit": {
+        "full_name": "S. (Stans) van der Goudsmit",
+        "party": "",
+        "role": ""
+      },
+      "van der Velden": {
+        "full_name": "R.T.J. (Ruud) van der Velden",
+        "party": "Partij voor de Dieren",
+        "role": ""
+      }
+    }
+  },
+  "municipal_terms": [
+    "raadsvoorstel",
+    "raadsvergadering",
+    "commissievergadering",
+    "motie",
+    "amendement",
+    "interpellatie",
+    "initiatiefvoorstel",
+    "besluitenlijst",
+    "notulen",
+    "annotaties",
+    "agendapunt",
+    "hamerstuk",
+    "bespreekstuk",
+    "toezegging",
+    "collegebesluit",
+    "collegebrief",
+    "bestuurlijke reactie",
+    "raadsbrief",
+    "technische vragen",
+    "schriftelijke vragen",
+    "mondelinge vragen",
+    "tweeminutendebat",
+    "spoeddebat",
+    "debat op hoofdlijnen",
+    "verordening",
+    "beleidskader",
+    "uitvoeringsplan",
+    "gemeenteraad",
+    "commissie",
+    "gebiedscommissie",
+    "wijkraad",
+    "stadsbestuur",
+    "college van B en W",
+    "college van burgemeester en wethouders",
+    "griffie",
+    "rekenkamer",
+    "ombudsman"
+  ],
+  "financial_terms": [
+    "begroting",
+    "voorjaarsnota",
+    "najaarsnota",
+    "jaarstukken",
+    "jaarrekening",
+    "tienmaandsrapportage",
+    "programmarekening",
+    "meerjarenbegroting",
+    "dekkingsvoorstel",
+    "bestemmingsreserve",
+    "weerstandsvermogen",
+    "budgetrecht",
+    "subsidie",
+    "investeringskrediet",
+    "exploitatie"
+  ],
+  "rotterdam_specific": [
+    "Coolsingel",
+    "Erasmusbrug",
+    "Erasmus MC",
+    "Ahoy",
+    "Feyenoord City",
+    "De Kuip",
+    "Stadion Feijenoord",
+    "Maashaven",
+    "Rijnhaven",
+    "Katendrecht",
+    "Delfshaven",
+    "Charlois",
+    "Feijenoord",
+    "IJsselmonde",
+    "Kralingen-Crooswijk",
+    "Prins Alexander",
+    "Noord",
+    "Hillegersberg-Schiebroek",
+    "Hoogvliet",
+    "Hoek van Holland",
+    "Pernis",
+    "Rozenburg",
+    "Overschie",
+    "Centrum",
+    "Haven-Industrieel Complex",
+    "Havenbedrijf Rotterdam",
+    "RET",
+    "MRDH",
+    "DCMR",
+    "Woonstad Rotterdam",
+    "Havensteder",
+    "Vestia",
+    "GGD Rotterdam-Rijnmond",
+    "VRR",
+    "Veiligheidsregio Rotterdam-Rijnmond",
+    "watdoetdegemeente.rotterdam.nl"
+  ],
+  "committee_names": [
+    "Commissie BWB",
+    "Commissie BOFV",
+    "Commissie MHEK",
+    "Commissie ZOCS",
+    "Commissie WVBZ",
+    "Commissie Bestuur, Welzijn en Buitenruimte",
+    "Commissie Bouwen, Ondernemen, Financiën en Veiligheid",
+    "Commissie Mobiliteit, Haven, Economie en Klimaat",
+    "Commissie Zorg, Onderwijs, Cultuur en Sport",
+    "Commissie Wonen, Volkshuisvesting, Buitenruimte en Zorg"
+  ],
+  "common_transcription_errors": {
+    "_note": "Regex pattern -> correct replacement. Used by EntityNormalizer.correct_terms().",
+    "a bout a leb": "Aboutaleb",
+    "about aleb": "Aboutaleb",
+    "about a leb": "Aboutaleb",
+    "leef baar": "Leefbaar",
+    "groen links": "GroenLinks",
+    "christen unie": "ChristenUnie",
+    "partij voor de dieren": "Partij voor de Dieren",
+    "raads voorstel": "raadsvoorstel",
+    "raads vergadering": "raadsvergadering",
+    "commissie vergadering": "commissievergadering",
+    "agenda punt": "agendapunt",
+    "hamer stuk": "hamerstuk",
+    "bespreek stuk": "bespreekstuk",
+    "besluitenl ijst": "besluitenlijst",
+    "voor jaarsnota": "voorjaarsnota",
+    "na jaarsnota": "najaarsnota",
+    "jaar stukken": "jaarstukken",
+    "begr oting": "begroting",
+    "ver ordening": "verordening",
+    "gebieds commissie": "gebiedscommissie",
+    "moti": "motie",
+    "amandement": "amendement",
+    "amen dement": "amendement",
+    "inter pellatie": "interpellatie",
+    "b en w": "B en W",
+    "b en we": "B en W",
+    "er asmus brug": "Erasmusbrug",
+    "achtab": "Akhatab",
+    "akatab": "Akhatab",
+    "achatab": "Akhatab",
+    "agatab": "Akhatab",
+    "ak atab": "Akhatab",
+    "naoefal": "Naoufal",
+    "naoeufal": "Naoufal",
+    "morkoets": "Morkoç",
+    "morkots": "Morkoç",
+    "morkotz": "Morkoç",
+    "tuzgol": "Tuzgöl",
+    "tuzgul": "Tuzgöl",
+    "ozturk": "Öztürk",
+    "osturk": "Öztürk",
+    "el kattabi": "El Khattabi",
+    "el katabi": "El Khattabi",
+    "coskun": "Coşkun",
+    "joskoen": "Coşkun",
+    "zechers": "Zeegers",
+    "zeechers": "Zeegers"
+  },
+  "whisper_initial_prompt": "Vergadering van de commissie van de gemeenteraad van Rotterdam. Aanwezig zijn burgemeester Aboutaleb, wethouders Bonte, De Langen, Kasmi, Wijbenga. Raadsleden en commissieleden: Akhatab, Morkoç, Coşkun, Tuzgöl, Öztürk, El Khattabi, Zeegers, Biljoen, Abrahamse. Partijen: GroenLinks-PvdA, VVD, D66, CDA, PVV, SP, DENK, Leefbaar Rotterdam, Volt, Bij1, NIDA, Partij voor de Dieren, 50PLUS, ChristenUnie-SGP. Besproken worden moties, amendementen, raadsvoorstellen, de voorjaarsnota, begroting, jaarstukken, tienmaandsrapportage. De griffier noteert. Agendapunten worden behandeld."
+}
