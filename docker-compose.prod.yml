@@ -1,0 +1,159 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: neodemos-postgres
+    environment:
+      POSTGRES_DB: neodemos
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - neodemos-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+
+  qdrant:
+    image: qdrant/qdrant:v1.17.0
+    container_name: neodemos-qdrant
+    ports:
+      - "127.0.0.1:6333:6333"
+      - "127.0.0.1:6334:6334"
+    volumes:
+      - /home/deploy/neodemos-data/qdrant_storage:/qdrant/storage
+    environment:
+      QDRANT__SERVICE__API_KEY: ${QDRANT_API_KEY:-}
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/6333'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - neodemos-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 12G
+
+  web:
+    build: .
+    container_name: neodemos-web
+    environment:
+      NEODEMOS_CITY: ${NEODEMOS_CITY:-rotterdam}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: neodemos
+      DB_USER: postgres
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_POOL_SIZE: 10
+      DB_MAX_OVERFLOW: 20
+      QDRANT_URL: http://qdrant:6333
+      QDRANT_API_KEY: ${QDRANT_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      ORI_API_KEY: ${ORI_API_KEY:-}
+      NEBIUS_API_KEY: ${NEBIUS_API_KEY}
+      HOST: 0.0.0.0
+      PORT: 8000
+      ENVIRONMENT: production
+      DEBUG: "false"
+      LOG_LEVEL: INFO
+      SECRET_KEY: ${SECRET_KEY}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      SESSION_MAX_AGE: ${SESSION_MAX_AGE:-604800}
+      ALLOWED_HOSTS: neodemos.nl,www.neodemos.nl,neodemos.eu,www.neodemos.eu
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data
+      - ./output:/app/output
+      - ./logs:/app/logs
+    networks:
+      - neodemos-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+
+  mcp:
+    build: .
+    container_name: neodemos-mcp
+    command: ["python", "mcp_server_v3.py", "--http", "--port", "8001"]
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: neodemos
+      DB_USER: postgres
+      DB_PASSWORD: ${DB_PASSWORD}
+      QDRANT_URL: http://qdrant:6333
+      QDRANT_API_KEY: ${QDRANT_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      NEBIUS_API_KEY: ${NEBIUS_API_KEY}
+    ports:
+      - "127.0.0.1:8001:8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -so /dev/null -w '%{http_code}' http://localhost:8001/mcp | grep -qE '^[2-4]'"]
+      interval: 30s
+      timeout: 10s
+      start_period: 15s
+      retries: 3
+    networks:
+      - neodemos-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: neodemos-caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile.prod:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - web
+      - mcp
+    networks:
+      - neodemos-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+
+volumes:
+  postgres_data:
+  caddy_data:
+  caddy_config:
+
+networks:
+  neodemos-network:
+    driver: bridge

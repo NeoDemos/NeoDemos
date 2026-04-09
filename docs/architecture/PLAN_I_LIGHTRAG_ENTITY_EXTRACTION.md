@@ -1,10 +1,19 @@
 # Plan I: LightRAG — Entity Extraction & Graph Retrieval
 
-**Status:** Not started
-**Estimated cost:** ~$30-50 in API calls
-**Estimated time:** 2-3 days coding + 12-16 hours batch processing
-**Dependencies:** Benefits from Plan G (better context → better extraction), but can run independently
-**Risk level:** Medium
+**Status:** Layer 1 COMPLETE — deterministic edges built (merged with Plan G, 2026-04-08)
+**Actual cost so far:** $0 (rule-based extraction, no LLM calls)
+**Actual time:** ~2 hours (entity cleaning + relationship population)
+**Dependencies:** Plan G Phase A (completed)
+**Risk level:** Low (Layer 1), Medium (Layer 2-3)
+
+> **2026-04-08 UPDATE:** Plan I Layer 1 executed as part of merged G+I pipeline.
+> kg_entities cleaned: 881,169 (from 1.19M noisy). 57,633 kg_relationships edges created
+> (DIENT_IN: 55,535, AANGENOMEN/VERWORPEN: 1,755, LID_VAN: 205, STEMT_VOOR/TEGEN: 71,
+> IS_WETHOUDER_VAN: 67). politician_registry: 228 records. domain_gazetteer: 2,217 entities.
+> See `/docs/architecture/PLAN_GI_MERGED_STATUS.md` for full execution log.
+>
+> **Remaining:** Layer 2 (Flair NER, $0) and Layer 3 (Gemini Flash Lite, ~$90-130)
+> for semantic relationships and answerable_questions.
 
 ---
 

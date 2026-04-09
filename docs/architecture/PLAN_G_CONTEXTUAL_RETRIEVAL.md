@@ -1,11 +1,22 @@
 # Plan G: Metadata Enrichment (Revised — No Vector Dilution)
 
-**Status:** Not started
-**Estimated cost:** ~$1-2 in API calls
-**Estimated time:** 1 day coding + 3-5 hours batch processing
-**Dependencies:** None (can run independently)
+**Status:** Phase A COMPLETE (merged with Plan I into unified pipeline, 2026-04-08)
+**Actual cost:** $0 (rule-based extraction, no LLM calls needed for Phase A)
+**Actual time:** ~1.5 hours processing on 1.6M chunks
+**Dependencies:** None
 **Risk level:** Low
-**Revision date:** 2026-04-07 (updated 2026-04-07 for pipeline upgrades)
+**Revision date:** 2026-04-08
+
+> **2026-04-08 UPDATE:** Plan G Phase A was executed as part of a merged G+I pipeline.
+> All 1,627,899 chunks enriched with section_topic, key_entities, vote_outcome,
+> vote_counts, indieners, motion_number via rule-based extraction (Tier 2).
+> Enriched tsvector index (dual-dictionary: dutch + simple) built.
+> Metadata synced to Qdrant payloads. BM25 query in rag_service.py switched to
+> text_search_enriched. zoek_moties() in mcp_server_v3.py returns structured vote data.
+> See `/docs/architecture/PLAN_GI_MERGED_STATUS.md` for full execution log.
+> 
+> **Remaining:** Phase B (entity pre-filtering) and Phase C (coreference resolution)
+> are deferred to after Tier 1 (Flair NER) and Tier 3 (Gemini Flash Lite) execution.
 
 ---
 
@@ -31,7 +42,7 @@ rejected in favour of metadata enrichment. The reasons:
 
 4. **NAACL 2025**: Fixed 200-word chunks matched or beat semantic chunking across
    retrieval and answer generation tasks. Fancy embedding-time enrichment is not the lever.
-
+1
 ### Why our hierarchy already solves the context problem
 
 Our `expand_to_hierarchical_context()` reconstructs context at retrieval time:

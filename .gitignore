@@ -27,6 +27,9 @@ qdrant
 # Docker
 docker-desktop
 
+# Kamal
+.kamal/secrets
+
 # Runtime state
 *.pid
 .healer_pid

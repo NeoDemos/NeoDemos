@@ -408,7 +408,7 @@ class RoyalcastScraper:
         # Try events API first
         if metadata.events_path:
             try:
-                url = f"{BASE_URL}{metadata.events_path}"
+                url = metadata.events_path if metadata.events_path.startswith("http") else f"{BASE_URL}{metadata.events_path}"
                 logger.info(f"Fetching events: {url}")
                 resp = self.session.get(url, timeout=30)
                 if resp.ok and resp.text.strip():

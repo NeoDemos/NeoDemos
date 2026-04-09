@@ -482,7 +482,7 @@ class RAGService:
                     date_parts.append("m.start_date <= %s")
                 date_filter = "AND " + " AND ".join(date_parts)
 
-            params = [query_text, query_text]
+            params = [query_text, query_text, query_text, query_text]
             if chunk_type:
                 params.append(chunk_type)
             if date_from:
@@ -495,11 +495,11 @@ class RAGService:
                 with conn.cursor() as cursor:
                     cursor.execute(f"""
                         SELECT dc.id, dc.document_id, dc.title, dc.content,
-                               ts_rank(dc.text_search, {method}('dutch', %s)) as similarity_score,
+                               ts_rank(dc.text_search_enriched, {method}('dutch', %s) || {method}('simple', %s)) as similarity_score,
                                dc.child_id, dc.chunk_type
                         FROM document_chunks dc
                         {date_join}
-                        WHERE dc.text_search @@ {method}('dutch', %s)
+                        WHERE dc.text_search_enriched @@ ({method}('dutch', %s) || {method}('simple', %s))
                         {type_filter}
                         {date_filter}
                         ORDER BY similarity_score DESC

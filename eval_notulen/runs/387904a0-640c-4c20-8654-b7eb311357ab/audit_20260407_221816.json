@@ -1,0 +1,827 @@
+{
+  "meeting_id": "387904a0-640c-4c20-8654-b7eb311357ab",
+  "audit_timestamp": "2026-04-07T22:15:36.906494",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "judge_backend": "gemini",
+    "anthropic_model": "claude-haiku-4-5-20251001",
+    "gemini_model": "gemini-2.5-flash-lite"
+  },
+  "meeting_info": {
+    "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+    "start_date": "2026-02-11 00:00:00",
+    "committee": "MHEK",
+    "quality_score": 0.87,
+    "review_status": "auto_approved",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 147,
+    "document_count": 11
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 826,
+      "correct_count": 826,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.7681,
+      "party_attribution_rate": 0.2106,
+      "total_segments": 565,
+      "attributed_segments": 434,
+      "unattributed_segments": 131
+    },
+    "speaker_diversity": {
+      "unique_speakers": 14,
+      "unique_parties": 6,
+      "top_speaker": "Plaatsvervangend commissievoorzitter",
+      "top_speaker_segment_count": 116,
+      "monologue_rate": 0.2053,
+      "speakers": {
+        "Plaatsvervangend commissievoorzitter": 116,
+        "M.S. (Marike) Abrahamse Commissievoorzitter": 60,
+        "C.M. (Chantal) Zeegers": 55,
+        "Adviseur": 37,
+        "P.F. (Pelle) Meurink Burgercommissielid": 28,
+        "M.Y. (Mina) Morkoç": 28,
+        "Inspreker": 20,
+        "B.T.A. (Bernhard) van Meeteren Burgercommissielid CDA": 19,
+        "H. (Hilgo) Wempe Burgercommissielid": 17,
+        "J.G. (Just) Hovens Greve Burgercommissielid": 17
+      },
+      "parties": {
+        "GroenLinks": 32,
+        "D66": 28,
+        "Volt": 17,
+        "SP": 17,
+        "VVD": 13,
+        "Leefbaar Rotterdam": 12
+      }
+    },
+    "segment_quality": {
+      "total_segments": 565,
+      "nonempty_segments": 565,
+      "total_words": 43543,
+      "total_chars": 252136,
+      "avg_words_per_segment": 77.1,
+      "avg_chars_per_segment": 446.3,
+      "short_segment_rate": 0.4106,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 17,
+      "items_with_content": 8,
+      "coverage_rate": 0.4706,
+      "items": [
+        {
+          "title": "Procedurevergadering",
+          "segment_count": 0
+        },
+        {
+          "title": "Opening en mededelingen",
+          "segment_count": 2
+        },
+        {
+          "title": "Besluitenlijst openbare procedurevergadering  14 januari 2026",
+          "segment_count": 0
+        },
+        {
+          "title": "Lange Termijn Agenda Raad",
+          "segment_count": 1
+        },
+        {
+          "title": "Regeling(en) van Werkzaamheden",
+          "segment_count": 0
+        },
+        {
+          "title": "Ingekomen stukken",
+          "segment_count": 0
+        },
+        {
+          "title": "Algemeen",
+          "segment_count": 0
+        },
+        {
+          "title": "Haven",
+          "segment_count": 11
+        },
+        {
+          "title": "Duurzaam",
+          "segment_count": 2
+        },
+        {
+          "title": "Economie",
+          "segment_count": 0
+        },
+        {
+          "title": "Mobiliteit",
+          "segment_count": 25
+        },
+        {
+          "title": "Afscheid burgercommissieleden",
+          "segment_count": 7
+        },
+        {
+          "title": "Overlegvergadering",
+          "segment_count": 1
+        },
+        {
+          "title": "Vaststellen van de agenda",
+          "segment_count": 12
+        },
+        {
+          "title": "Adviescommissies Metropoolregio Rotterdam Den Haag",
+          "segment_count": 3
+        },
+        {
+          "title": "Inspreken vreemd aan de orde",
+          "segment_count": 31
+        },
+        {
+          "title": "Klimaatmaatregelen voor 2030 en Vijfde update Klimaatactieplan Rotterdam",
+          "segment_count": 470
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+        "start_date": "2026-02-11 00:00:00",
+        "committee": "MHEK",
+        "review_status": "auto_approved",
+        "quality_score": 0.87,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)",
+        "start_date": "2026-02-11 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 14,
+      "recognized_speakers": 14,
+      "unrecognized_speakers": 0,
+      "recognition_rate": 1.0,
+      "recognized": [
+        {
+          "name": "M.S. (Marike) Abrahamse Commissievoorzitter",
+          "segment_count": 60,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "S.M. (Sebastiaan) Bonte",
+          "segment_count": 12,
+          "parties": [
+            "Leefbaar Rotterdam"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "H. (Hilgo) Wempe Burgercommissielid",
+          "segment_count": 17,
+          "parties": [
+            "Volt"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "P.F. (Pelle) Meurink Burgercommissielid",
+          "segment_count": 28,
+          "parties": [
+            "D66"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.Y. (Mina) Morkoç",
+          "segment_count": 28,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "council_member"
+        },
+        {
+          "name": "J.G. (Just) Hovens Greve Burgercommissielid",
+          "segment_count": 17,
+          "parties": [
+            "SP"
+          ],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.H. (Marvin) Biljoen",
+          "segment_count": 4,
+          "parties": [
+            "GroenLinks"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "Inspreker",
+          "segment_count": 20,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "B.T.A. (Bernhard) van Meeteren Burgercommissielid CDA",
+          "segment_count": 19,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Plaatsvervangend commissievoorzitter",
+          "segment_count": 116,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "Adviseur",
+          "segment_count": 37,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "M.S. (Marike) Abrahamse",
+          "segment_count": 13,
+          "parties": [
+            "VVD"
+          ],
+          "recognized_as": "party_member_unverified_name"
+        },
+        {
+          "name": "G.G. (Gerben) van Dijk Burgercommissielid ChristenUnie",
+          "segment_count": 8,
+          "parties": [],
+          "recognized_as": "role"
+        },
+        {
+          "name": "C.M. (Chantal) Zeegers",
+          "segment_count": 55,
+          "parties": [],
+          "recognized_as": "council_member"
+        }
+      ],
+      "unrecognized": []
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 147,
+      "empty_chunks": 0,
+      "buckets": {
+        "short (50-200)": 5,
+        "medium (200-2000)": 61,
+        "long (2000-5000)": 81
+      },
+      "min_chars": 50,
+      "max_chars": 2759,
+      "avg_chars": 1884.7,
+      "median_chars": 2167,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 147,
+      "boilerplate_count": 3,
+      "boilerplate_rate": 0.0204,
+      "boilerplate_examples": [
+        {
+          "id": 806,
+          "title": "Transcript: Overlegvergadering",
+          "preview": "[M.S. (Marike) Abrahamse Commissievoorzitter]: *** De vergadering gaat beginnen."
+        },
+        {
+          "id": 796,
+          "title": "Transcript: Lange Termijn Agenda Raad",
+          "preview": "[M.S. (Marike) Abrahamse Commissievoorzitter]: ***"
+        },
+        {
+          "id": 795,
+          "title": "Transcript: Opening en mededelingen",
+          "preview": "[M.S. (Marike) Abrahamse Commissievoorzitter]: ***\n\n[M.S. (Marike) Abrahamse Commissievoorzitter]: *"
+        }
+      ]
+    },
+    "agenda_coverage": {
+      "total_documents": 11,
+      "documents_with_chunks": 11,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Adviescommissies Metropoolregio Rotterdam Den Haag",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Afscheid burgercommissieleden",
+          "chunks": 2
+        },
+        {
+          "name": "Transcript: Duurzaam",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Haven",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Inspreken vreemd aan de orde",
+          "chunks": 16
+        },
+        {
+          "name": "Transcript: Klimaatmaatregelen voor 2030 en Vijfde update Klimaatactieplan Rotterdam",
+          "chunks": 117
+        },
+        {
+          "name": "Transcript: Lange Termijn Agenda Raad",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Mobiliteit",
+          "chunks": 5
+        },
+        {
+          "name": "Transcript: Opening en mededelingen",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Overlegvergadering",
+          "chunks": 1
+        },
+        {
+          "name": "Transcript: Vaststellen van de agenda",
+          "chunks": 1
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 147,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 147,
+      "distribution": {
+        "quote": {
+          "count": 144,
+          "rate": 0.9796
+        },
+        "full_text": {
+          "count": 3,
+          "rate": 0.0204
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "ok",
+    "n_samples": 5,
+    "avg_hallucination_rate": 0.024,
+    "safe_for_councillors": true,
+    "hallucination_types_found": [],
+    "dangerous_claims": [
+      {
+        "chunk_id": 884,
+        "claim": "De wethouder zegt: 'Waar is dan die ambitie? Waar zeg je dan, we gaan er gewoon voor en let's go.'"
+      }
+    ],
+    "chunk_results": [
+      {
+        "chunk_id": 798,
+        "chunk_title": "Transcript: Duurzaam",
+        "chunk_index": 0,
+        "content_preview": "[M.Y. (Mina) Morkoç (GroenLinks)]: Volgens u. Ja, lijkt me een goed plan. Ik vind het natuurlijk jammer dat door alles wat er gaande is in ons landelijke politiek dat de wetenschappelijke klimaatraad ",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "M.Y. (Mina) Morkoç (GroenLinks) zegt dat ze het jammer vindt dat de wetenschappelijke klimaatraad niet de ruimte heeft om mee te kijken door de landelijke politiek.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[M.Y. (Mina) Morkoç (GroenLinks)]: Ik vind het natuurlijk jammer dat door alles wat er gaande is in ons landelijke politiek dat de wetenschappelijke klimaatraad niet de ruimte heeft om nu mee te kijken."
+            },
+            {
+              "claim": "M.Y. (Mina) Morkoç (GroenLinks) vindt het een goed idee dat de wetenschappelijke klimaatraad voorstelt om een keer langs te komen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Maar fijn dat ze zelf voorstellen dat ze dan een keertje langskomen. Dat lijkt me een goed idee."
+            },
+            {
+              "claim": "M.S. (Marike) Abrahamse kondigt aan dat ze naar het beleidsveld economie gaat.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dan ga ik naar het beleidsveld economie."
+            },
+            {
+              "claim": "Het afdoeningsvoorstel voor de motie van Kampenhout gaat over compensatie of alternatieve locatie voor marktkraameigenaren bij evenementen in Rotterdam.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Het afdoeningsvoorstel voor de motie van Kampenhout over compensatie of alternatieve locatie voor marktkraameigenaren bij evenementen in Rotterdam."
+            },
+            {
+              "claim": "M.S. (Marike) Abrahamse ziet niemand aanwezig bij de motie van Kampenhout.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ik zie niet dat er iemand aanwezig is bij één."
+            },
+            {
+              "claim": "M.S. (Marike) Abrahamse stelt een afdoeningsvoorstel voor een motie van haar eigen hand voor over de bus die wel wil, maar niet mag vergroenen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dat is dan een afdoeningsmotie voor... Of afdoeningsvoorstel voor een motie van mijn eigen hand over de bus die wel wil, maar niet mag vergroenen."
+            },
+            {
+              "claim": "De motie over de bus die wel wil, maar niet mag vergroenen, kan inderdaad worden afgedaan.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Deze kan inderdaad worden afgedaan."
+            },
+            {
+              "claim": "M.S. (Marike) Abrahamse gaat vervolgens naar mobiliteit.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dan gaan we naar mobiliteit."
+            },
+            {
+              "claim": "Het afdoeningsvoorstel van de motie El Filali gaat over de tram gemist.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Afdoeningsvoorstel van de motie El Filali over de tram gemist."
+            },
+            {
+              "claim": "De hyperloop staat klaar.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De hyperloop staat klaar."
+            },
+            {
+              "claim": "Er wordt geadviseerd de motie El Filali als afgedaan te beschouwen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En daar wordt ook geadviseerd deze motie als afgedaan te beschouwen."
+            }
+          ],
+          "total_claims": 11,
+          "supported": 11,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Alle feitelijke beweringen in de te controleren tekst zijn direct ondersteund door het originele transcript. Er zijn geen onjuiste of niet-verifieerbare beweringen geconstateerd."
+        }
+      },
+      {
+        "chunk_id": 817,
+        "chunk_title": "Transcript: Inspreken vreemd aan de orde",
+        "chunk_index": 8,
+        "content_preview": "[M.S. (Marike) Abrahamse Commissievoorzitter]: Dank u wel. Zijn er nog andere vragen? De heer Biljoen, volgens mij.\n[M.H. (Marvin) Biljoen (GroenLinks)]: Dank voorzitter. En ook dank aan de insprekers",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "De heer Biljoen bedankt de insprekers voor het delen van hun verhaal, wat helpt voor het debat met de wethouder.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[M.H. (Marvin) Biljoen (GroenLinks)]: Dank voorzitter. En ook dank aan de insprekers dat ze vandaag hun verhaal hier weer hebben gedeeld met de commissie. Dat helpt ons ook voor het debat wat we morgen zullen hebben met de wethouder."
+            },
+            {
+              "claim": "De heer Biljoen geeft aan dat een aantal punten van de insprekers direct worden doorgeleid naar de wethouder.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[M.H. (Marvin) Biljoen (GroenLinks)]: Een aantal van jullie punten zal ik ook gewoon direct doorleiden naar de wethouder om daar ook gewoon een helder antwoord op te krijgen, want die vragen hebben wij ook."
+            },
+            {
+              "claim": "De heer Biljoen vraagt de heer Talat hoe de ondernemers geïnformeerd worden over de opeenstapeling van maatregelen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[M.H. (Marvin) Biljoen (GroenLinks)]: De heer Talat, allereerst, ik ben regelmatig bij uw lands geweest en ik heb heel veel van de punten die u natuurlijk vandaag ook weer meegegeven, daar weet ik eigenlijk al een antwoord op, maar ik vroeg me nog wel af. U geeft aan dat er iedere keer zoveel door elkaar heen wordt gegaan. Maatregel, maatregel, maatregel. Hoe worden de ondernemers daarin geïnformeerd?"
+            },
+            {
+              "claim": "De heer Biljoen vraagt de heer Talat hoe de ondernemers geïnformeerd worden vanuit zijn positie als ondernemer zelf en als voorzitter van de BIS.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[M.H. (Marvin) Biljoen (GroenLinks)]: Eén, vanuit uw positie als ondernemer zelf, maar twee, ook vanuit uw positie als voorzitter van de BIS."
+            },
+            {
+              "claim": "De heer Biljoen vraagt naar de reactie op de schade die ondernemers ondervinden door de maatregelen en wat als alternatief wordt geboden.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[M.H. (Marvin) Biljoen (GroenLinks)]: En ten tweede, wat is de reactie daarop? Want u geeft natuurlijk ook aan dus dat de ondernemers daar wellicht ook schade aan ondervinden. Hoe wordt daarop gereageerd en wat wordt daar als alternatief voor geboden?"
+            },
+            {
+              "claim": "De heer Biljoen vraagt welk perspectief aan de insprekers wordt gegeven, gezien de verkeerssituatie.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[M.H. (Marvin) Biljoen (GroenLinks)]: En dat is eigenlijk ook wel een beetje in het licht wat ik eigenlijk aan u beiden heb, van welk perspectief wordt aan u beiden gegeven? Want als de auto's niet over de kruisplein kunnen rijden, maar vervolgens eigenlijk ook alles stop zet op de reiskruiskade, dan is dat denk ik geen perspectief."
+            },
+            {
+              "claim": "De heer Biljoen vraagt of er een lange termijnvisie is geschetst voor de insprekers onder het huidige college.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[M.H. (Marvin) Biljoen (GroenLinks)]: Dus ik vraag me af, is er een lange termijn aan u geschetst, gewoon in de afgelopen jaren onder dit college?"
+            },
+            {
+              "claim": "De heer Biljoen stelt een vraag aan de heer Baardens over de verkeersveiligheid op het plein.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[M.H. (Marvin) Biljoen (GroenLinks)]: En dan alleen nog één vraag, voorzitter, aan de heer Baardens. Wat u gaf ook aan, van dus dat eigenlijk het meest onveilige stukje van de kruisplein is daar bij de westkruiskade, bij de westersingel. Kunt u wat vertellen over hoe uw ervaring is, zeg maar, met de verkeersveiligheid op dit moment op het plein?"
+            },
+            {
+              "claim": "De heer Biljoen vraagt naar de ervaring met de verkeersveiligheid in de huidige situatie, inclusief voor lopen, fietsen en auto's.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[M.H. (Marvin) Biljoen (GroenLinks)]: Ook in de huidige situatie? En dan naar voor alle mogelijkheden. Dus gewoon mensen die lopen en fietsen, maar ook eventueel voor auto's. Hoe dat in uw ervaring is, en ook wat eventueel klanten tegen u aan u meegeven."
+            },
+            {
+              "claim": "De voorzitter vraagt of er nog andere vragen zijn aan de insprekers en of ze die gelijk kunnen beantwoorden.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "[M.S. (Marike) Abrahamse Commissievoorzitter]: Dank u wel. Zijn er nog andere vragen aan de insprekers? Heeft u even tijd nodig? Of kunt u ze gelijk beantwoorden?"
+            },
+            {
+              "claim": "De heer Talat wordt aangesproken om te antwoorden.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De heer Talat?"
+            }
+          ],
+          "total_claims": 11,
+          "supported": 11,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Alle feitelijke beweringen in de te controleren tekst zijn direct ondersteund door het originele transcript. Er zijn geen onjuistheden of onverifieerbare claims gevonden."
+        }
+      },
+      {
+        "chunk_id": 855,
+        "chunk_title": "Critique of Wind Turbine Size and Financial Viability",
+        "chunk_index": 30,
+        "content_preview": "[Unknown]: Even kijken, dan misschien even, daar was ook een vraag, van de heer Van Meteren over hoe we hebben gekeken naar de grondstoffentransitie en of we niet te veel vanuit het huidige hebben ger",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "De heer Van Meteren vroeg hoe er is gekeken naar de grondstoffentransitie en of er niet te veel vanuit het huidige is geredeneerd bij het kijken naar de ketens.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De heer Van Meteren. Dank u wel mevrouw de voorzitter. Ik wou beginnen met 07. De stuur op de toekomstbestendige bedrijvigheid. Ik had eigenlijk verwacht. Ik vind het een goed punt. Maar ik had eigenlijk verwacht dat ze dat zo aanpakken vanuit de grondstoffentransitie. Van wat hebben we in Europa nodig om te maken? Hoe kan je dat vergroenen? En dan kijken welke bedrijven pak je erbij? Heb je daarvoor nodig? En wat moet daarin gebeuren? In plaats van uit te gaan van de bestaande bedrijven. En daar een selectie in te maken. Bent u het daarmee eens? Dat is mijn eerste vraag."
+            },
+            {
+              "claim": "Als je alles wilt produceren aan grondstoffen in Nederland wat we nodig hebben, dan moet er veel bij wat we allang niet meer hebben.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Kijk, als je alles wilt produceren aan grondstoffen in Nederland, wat wij vervolgens ook weer ergens nodig hebben, verderop in de Nederlandse industrie, dan moet er heel veel bij wat we allang niet meer hebben."
+            },
+            {
+              "claim": "Het is een kunst om binnen wat we nu hebben te gaan en te kijken wat we echt willen behouden.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dus het is denk ik al een hele kunst om binnen wat we nu hebben, te gaan. En om te kijken wat je echt wilt behouden."
+            },
+            {
+              "claim": "De ketens, zeker in de chemie, zijn ingewikkeld in elkaar gezet.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ook omdat die ketens, zeker in de chemie, zo ingewikkeld in elkaar zitten."
+            },
+            {
+              "claim": "Als je de basismoleculen maakt, gaan die vaak naar allerlei andere processen waar weer allerlei andere stofjes van gemaakt worden.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Want als je de basismoleculen maakt, die gaan dan vaak weer naar allerlei andere processen waar weer allerlei andere stofjes van gemaakt worden."
+            },
+            {
+              "claim": "Het is goed om dit niet alleen op Rotterdams of Nederlandse schaal te bekijken, maar veel meer op een Europese schaal.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En het is goed om dit niet alleen op Rotterdams of Nederlandse schaal te bekijken, maar veel meer op een Europese schaal."
+            },
+            {
+              "claim": "De vraag is wat we in ieder geval in Europa willen blijven produceren en wat we daarvan in Rotterdam hebben.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Wat willen we in ieder geval in Europa blijven produceren? Wat hebben we daarvan in Rotterdam?"
+            },
+            {
+              "claim": "Het Botlek cluster in Rotterdam is behoorlijk geïntegreerd, waardoor er veel efficiëntievoordelen zijn omdat men elkaars stoom en elektriciteit gebruikt.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Want we hebben in Rotterdam bijvoorbeeld het Botlek cluster is behoorlijk geïntegreerd, waardoor je heel veel efficiëntievoordelen hebt, omdat je elkaars stoom en elektriciteit en dat soort zaken gebruikt."
+            },
+            {
+              "claim": "Het zou zonde zijn om een efficiënt cluster te verliezen omdat hier misschien bepaalde kosten hoger zijn dan op een andere plek in Europa of op de wereld.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En dan zou het zonde zijn als je een heel efficiënt cluster verliest, omdat hier misschien bepaalde kosten hoger zijn dan op een andere plek in Europa of op de wereld, waar het cluster minder geclusterd is of minder efficiënt is."
+            },
+            {
+              "claim": "Als je hier echt in wilt gaan kiezen, heb je een kader nodig om hiernaar te kijken.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Maar als je hier echt in wilt gaan kiezen, dan heb je ook een kader nodig om hiernaar te kijken."
+            },
+            {
+              "claim": "Je kunt ook kijken naar wat de zaken zijn die we het minst gemakkelijk uit het buitenland kunnen betrekken, omdat er maar een beperkt aantal landen zijn waar we het vandaan halen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Je kunt ook kijken naar wat zijn nu de zaken die we bijvoorbeeld het minst gemakkelijk uit het buitenland kunnen betrekken, omdat er maar een beperkt aantal landen zijn waar we het vandaan halen."
+            },
+            {
+              "claim": "Een van de adviezen is om te kijken hoe je tot een kader kunt komen om de afweging te maken van wat je wilt behouden.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En als het gaat om wat voor onderzoeken zou je nu in gang kunnen zetten, dan zou een van mijn adviezen wel zijn om eens te kijken naar hoe je tot een kader kunt komen om die afweging te maken, van wat je wilt behouden."
+            },
+            {
+              "claim": "Als je alles wilt behouden en verduurzamen, kost dat heel veel geld, omdat het vaak duurder wordt als je groener gaat produceren, zeker op korte termijn.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Want als je alles wilt behouden, hebben we ook opgeschreven, en wilt verduurzamen, dan kost dat echt heel veel geld, want het wordt vaak duurder op het moment dat je groener gaat produceren, in ieder geval aan de kant van de investeringen van de bedrijven, en zeker op korte termijn."
+            },
+            {
+              "claim": "Je moet er slim naar kijken en doorkiezen, want als je alles doet, heb je kans dat je alles half doet en uiteindelijk niets overhoudt.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dus je moet daar slim naar kijken en doorkiezen, want als je alles doet heb je kans dat je alles half doet en uiteindelijk niets overhoudt."
+            },
+            {
+              "claim": "Zo'n kader is inherent ook politiek en het beweegt.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Zo'n kader is natuurlijk inherent ook politiek. En het beweegt."
+            }
+          ],
+          "total_claims": 15,
+          "supported": 15,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Alle beweringen in de te controleren tekst zijn direct ondersteund door passages in het originele transcript. Er zijn geen unsupported of contradicted claims gevonden."
+        }
+      },
+      {
+        "chunk_id": 884,
+        "chunk_title": "Critique of Wind Turbine Size and Financial Viability",
+        "chunk_index": 59,
+        "content_preview": "[Plaatsvervangend commissievoorzitter]: En er zijn een paar voorbeelden die ik wil geven en een paar vragen die ik heb.\nOm te beginnen, er is in het stedelijk gebied een reductiepotentieel van 30 mega",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Er is in het stedelijk gebied een reductiepotentieel van 30 megawatt.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Om te beginnen, er is in het stedelijk gebied een reductiepotentieel van 30 megawatt."
+            },
+            {
+              "claim": "De wethouder blijft vooral in nuances hangen in plaats van dit potentieel te omarmen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Maar in plaats van deze potentie te omarmen, blijft de wethouder vooral in die nuances hangen."
+            },
+            {
+              "claim": "De realisatie van de projecten is afhankelijk van tijdige financiering, passende wet- en regelgeving en de benodigde regie binnen een complexe uitvoeringspraktijk.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De realisatie van de projecten is afhankelijk van tijdige financiering, een passende wet en regelgeving en de benodigde regie binnen een complexe uitvoeringspraktijk."
+            },
+            {
+              "claim": "De wethouder zegt: 'Waar is dan die ambitie? Waar zeg je dan, we gaan er gewoon voor en let's go.'",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden"
+            },
+            {
+              "claim": "Hetzelfde wordt gelezen in de reactie van de wethouder over de moonshot projecten van de klimaataanjagers.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Hetzelfde lees ik eigenlijk in de reactie van de wethouder over de moonshub projecten van de klimaataanjagers."
+            },
+            {
+              "claim": "Het college beschouwt het actieproces, het projectplan daarmee als een waardevolle, maar niet bindende bijdrage aan het gesprek over de verdere invulling van de Rotterdamse klimaatopgave.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "We lezen daar, het college beschouwt het actieproces, het projectplan daarmee als een waardevolle, maar niet bindende bijdrage aan het gesprek over de verdere invulling van de Rotterdamse klimaatopgave."
+            },
+            {
+              "claim": "Waarom wordt er niet gewoon besloten om nu al iets te doen met dit advies?",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En juist daar zou ik willen zeggen, waarom wordt er niet gewoon besloten om nu al iets te doen met dit advies?"
+            },
+            {
+              "claim": "De onderzoeken die zojuist zijn gehoord, zouden we nu al kunnen inzetten.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De onderzoeken die u misschien zojuist heeft gehoord, zouden we nu al kunnen inzetten,"
+            },
+            {
+              "claim": "Samenwerkingen die we nu al zouden kunnen aangaan, zodat in ieder geval, alleen is, ik ben aan het afronden voor de interruptie, al zou het al enkel zijn dat deze ideeën concreter worden gemaakt, om meegenomen te worden in de documenten die worden gegeven aan het nieuwe college.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "samenwerkingen die we nu al zouden kunnen aangaan, zodat in ieder geval, alleen is, ik ben aan het afronden voor de interruptie, al zou het al enkel zijn dat deze ideeën concreter worden gemaakt, om meegenomen te worden in de documenten die worden gegeven aan het nieuwe college."
+            },
+            {
+              "claim": "Van joh, zodra je komt, begin al gewoon te rennen, rennend beginnen.",
+              "verdict": "unsupported",
+              "hallucination_type": "fabricated_quote",
+              "evidence": "niet gevonden"
+            },
+            {
+              "claim": "Daar zou ik een voorstander van zijn en ik hoop de wethouder ook.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Daar zou ik een voorstander van zijn en ik hoop de wethouder ook."
+            },
+            {
+              "claim": "Mevrouw Morkertsen en ik zijn niet helemaal oneens in deze, maar ik lees denk ik toch wel deze brief anders.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Volgens mij zijn mevrouw Morkertsen en ik niet helemaal oneens in deze, maar ik lees denk ik toch wel deze brief anders."
+            },
+            {
+              "claim": "Want ik lees het vooral heel erg als een uitnodiging voor ons om een gesprek aan te gaan, en een college die niet over zichzelf heen wil stappen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Want ik lees het vooral heel erg als een uitnodiging voor ons om een gesprek aan te gaan, en een college die niet over zichzelf heen wil stappen."
+            },
+            {
+              "claim": "En volgens mij zitten hier voldoende aanknopingspunten om te zeggen, nou als wij hier punten inzien die waarvan wij denken, pak dat nu alvast op, dat wij richting kunnen geven.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En volgens mij zitten hier voldoende aanknopingspunten om te zeggen, nou als wij hier punten inzien die waarvan wij denken, pak dat nu alvast op, dat wij richting kunnen geven."
+            },
+            {
+              "claim": "Versus dat het nog niet alles onarmd wordt, er wordt ook namelijk niks niet onderarmd.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Versus dat het nog niet alles onarmd wordt, er wordt ook namelijk niks niet onderarmd."
+            },
+            {
+              "claim": "Dus volgens mij presenteert mevrouw Morkertsen het misschien nu wat negatiever dan ik in ieder geval het zou willen lezen, want volgens mij zit hier juist heel veel ruimte voor ons om iets van te vinden.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dus volgens mij presenteert mevrouw Morkertsen het misschien nu wat negatiever dan ik in ieder geval het zou willen lezen, want volgens mij zit hier juist heel veel ruimte voor ons om iets van te vinden."
+            }
+          ],
+          "total_claims": 17,
+          "supported": 15,
+          "unsupported": 2,
+          "contradicted": 0,
+          "hallucination_rate": 0.12,
+          "most_dangerous_claim": "De wethouder zegt: 'Waar is dan die ambitie? Waar zeg je dan, we gaan er gewoon voor en let's go.'",
+          "reasoning": "De AI-gegenereerde notulen bevatten twee feitelijke beweringen die niet direct in het transcript te verifiëren zijn. De eerste is een citaat dat niet letterlijk in het transcript voorkomt. De tweede is een citaat dat niet letterlijk in het transcript voorkomt. De rest van de beweringen zijn ondersteund door het transcript."
+        }
+      },
+      {
+        "chunk_id": 913,
+        "chunk_title": "Critique of Wind Turbine Size and Financial Viability",
+        "chunk_index": 88,
+        "content_preview": "[C.M. (Chantal) Zeegers]: Ik denk dat dat wel extra subsidies van onze zijde zal vragen.\nOmdat dat in sommige gevallen nog wel duurder is dan andere vormen van bouw. Dus ergens zal je... We hebben ook",
+        "claim_verification": {
+          "claims": [],
+          "total_claims": 810,
+          "supported": 810,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Parsed via regex fallback (malformed JSON from judge)"
+        }
+      }
+    ]
+  },
+  "verdict": {
+    "recommendation": "PENDING — warnings present, manual review recommended",
+    "issues": [],
+    "warnings": [
+      "Dangerous claim in chunk 884: De wethouder zegt: 'Waar is dan die ambitie? Waar zeg je dan, we gaan er gewoon voor en let's go.'",
+      "Low speaker attribution: 77% (target 80%)"
+    ],
+    "scores": {
+      "hallucination_rate": 0.024,
+      "speaker_attribution_rate": 0.7681,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.87
+    }
+  }
+}

@@ -194,3 +194,17 @@ main {
     color: #888;
     min-width: 80px;
 }
+
+/* Footer with version badge */
+footer {
+    text-align: center;
+    padding: 1.5rem 5%;
+    border-top: 1px solid var(--border-color);
+    margin-top: 3rem;
+}
+
+.version-badge {
+    font-size: 0.75rem;
+    color: #999;
+    letter-spacing: 0.3px;
+}

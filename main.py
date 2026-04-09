@@ -1,8 +1,11 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import StreamingResponse
+from fastapi import FastAPI, Request, Depends, Form
+from fastapi.responses import StreamingResponse, RedirectResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 import os
+import re
 from dotenv import load_dotenv
 import logging
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -22,6 +25,7 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+from neodemos_version import VERSION_LABEL, DISPLAY_NAME, STAGE
 from services.db_pool import close_pool
 from services.open_raad import OpenRaadService
 from services.storage import StorageService
@@ -29,6 +33,11 @@ from services.ai_service import AIService, GEMINI_AVAILABLE
 from services.refresh_service import RefreshService
 from services.party_position_profile_service import PartyPositionProfileService
 from services.policy_lens_evaluation_service import PolicyLensEvaluationService
+from services.auth_dependencies import (
+    auth_service, require_login, require_admin, get_api_user,
+    get_current_user, sign_session_id, unsign_session_id,
+    generate_csrf_token,
+)
 
 raad_service = OpenRaadService()
 storage = StorageService()
@@ -67,18 +76,51 @@ scheduler.add_job(
     misfire_grace_time=300,
 )
 
+def cleanup_sessions():
+    """Purge expired sessions from the database."""
+    try:
+        count = auth_service.cleanup_expired_sessions()
+        if count:
+            logger.info(f"Cleaned up {count} expired sessions")
+    except Exception as e:
+        logger.error(f"Session cleanup failed: {e}")
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Manage app lifecycle - start scheduler on startup, shutdown on exit"""
+    # Seed admin user from environment
+    admin_email = os.getenv("ADMIN_EMAIL")
+    admin_password = os.getenv("ADMIN_PASSWORD")
+    if admin_email and admin_password:
+        try:
+            if not auth_service.get_user_by_email(admin_email):
+                auth_service.create_user(
+                    admin_email, admin_password, display_name="Admin", role="admin"
+                )
+                logger.info(f"Admin user seeded: {admin_email}")
+        except Exception as e:
+            logger.error(f"Failed to seed admin user: {e}")
+
     # Startup
     try:
         scheduler.start()
         logger.info("Refresh scheduler started (15-min interval)")
     except Exception as e:
         logger.error(f"Failed to start scheduler: {e}")
-    
+
+    # Schedule daily session cleanup
+    scheduler.add_job(
+        cleanup_sessions,
+        IntervalTrigger(hours=24),
+        id='session_cleanup',
+        name='Purge expired sessions daily',
+        max_instances=1,
+        coalesce=True,
+        replace_existing=True,
+    )
+
     yield
-    
+
     # Shutdown
     try:
         scheduler.shutdown()
@@ -94,6 +136,34 @@ async def lifespan(app: FastAPI):
 
 # Create FastAPI app with lifespan manager
 app = FastAPI(title="NeoDemos", lifespan=lifespan)
+
+# Security headers middleware
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["X-NeoDemos-Version"] = VERSION_LABEL
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; "
+            "script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; "
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+            "font-src https://fonts.gstatic.com; "
+            "img-src 'self' data:; "
+            "frame-ancestors 'none'"
+        )
+        return response
+
+app.add_middleware(SecurityHeadersMiddleware)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://neodemos.nl", "https://www.neodemos.nl"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "DELETE"],
+    allow_headers=["Authorization", "Content-Type"],
+)
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -114,21 +184,346 @@ def tojson_filter(obj):
 
 templates.env.filters['tojson'] = tojson_filter
 
+# Version context available in all templates (footer badge, cache busting)
+templates.env.globals["version_label"] = VERSION_LABEL
+templates.env.globals["display_name"] = DISPLAY_NAME
+templates.env.globals["stage"] = STAGE
+
+
+# ── Auth routes (public) ──
+
+@app.get("/login")
+async def login_page(request: Request, success: str = None):
+    # Generate a temporary CSRF token (not session-bound for login page)
+    csrf = generate_csrf_token("login-form")
+    return templates.TemplateResponse(name="login.html", request=request, context={
+        "title": "Inloggen", "csrf_token": csrf, "error": None, "success": success,
+    })
+
+@app.post("/login")
+async def login_submit(
+    request: Request,
+    email: str = Form(...),
+    password: str = Form(...),
+    csrf_token: str = Form(""),
+):
+    # Rate limiting
+    if not auth_service.check_login_rate_limit(email):
+        csrf = generate_csrf_token("login-form")
+        return templates.TemplateResponse(name="login.html", request=request, context={
+            "title": "Inloggen", "csrf_token": csrf, "email": email,
+            "error": "Te veel mislukte pogingen. Probeer het over 15 minuten opnieuw.",
+        })
+
+    user = auth_service.authenticate(email, password)
+    if not user:
+        auth_service.record_failed_login(email)
+        csrf = generate_csrf_token("login-form")
+        return templates.TemplateResponse(name="login.html", request=request, context={
+            "title": "Inloggen", "csrf_token": csrf, "email": email,
+            "error": "Ongeldige inloggegevens.",
+        })
+
+    if not user["is_active"]:
+        csrf = generate_csrf_token("login-form")
+        return templates.TemplateResponse(name="login.html", request=request, context={
+            "title": "Inloggen", "csrf_token": csrf, "email": email,
+            "error": "Uw account is gedeactiveerd. Neem contact op met de beheerder.",
+        })
+
+    # Create session
+    ip = request.client.host if request.client else None
+    ua = request.headers.get("user-agent", "")[:200]
+    session_id = auth_service.create_session(user["id"], ip_address=ip, user_agent=ua)
+    signed = sign_session_id(session_id)
+
+    response = RedirectResponse(url="/", status_code=303)
+    is_prod = os.getenv("ENVIRONMENT", "").lower() == "production"
+    response.set_cookie(
+        "session_id", signed,
+        httponly=True, secure=is_prod, samesite="lax", path="/",
+        max_age=int(os.getenv("SESSION_MAX_AGE", "604800")),
+    )
+    return response
+
+@app.get("/register")
+async def register_page(request: Request):
+    csrf = generate_csrf_token("register-form")
+    return templates.TemplateResponse(name="register.html", request=request, context={
+        "title": "Registreren", "csrf_token": csrf, "error": None,
+    })
+
+@app.post("/register")
+async def register_submit(
+    request: Request,
+    email: str = Form(...),
+    password: str = Form(...),
+    password_confirm: str = Form(...),
+    display_name: str = Form(""),
+    csrf_token: str = Form(""),
+):
+    ip = request.client.host if request.client else "unknown"
+
+    # Rate limiting
+    if not auth_service.check_register_rate_limit(ip):
+        csrf = generate_csrf_token("register-form")
+        return templates.TemplateResponse(name="register.html", request=request, context={
+            "title": "Registreren", "csrf_token": csrf, "email": email,
+            "display_name": display_name,
+            "error": "Te veel registraties. Probeer het later opnieuw.",
+        })
+
+    # Validation
+    email_clean = email.lower().strip()
+    if not re.match(r'^[^@\s]+@[^@\s]+\.[^@\s]+$', email_clean):
+        csrf = generate_csrf_token("register-form")
+        return templates.TemplateResponse(name="register.html", request=request, context={
+            "title": "Registreren", "csrf_token": csrf, "email": email,
+            "display_name": display_name,
+            "error": "Ongeldig e-mailadres.",
+        })
+
+    if len(password) < 8:
+        csrf = generate_csrf_token("register-form")
+        return templates.TemplateResponse(name="register.html", request=request, context={
+            "title": "Registreren", "csrf_token": csrf, "email": email,
+            "display_name": display_name,
+            "error": "Wachtwoord moet minimaal 8 tekens bevatten.",
+        })
+
+    if password != password_confirm:
+        csrf = generate_csrf_token("register-form")
+        return templates.TemplateResponse(name="register.html", request=request, context={
+            "title": "Registreren", "csrf_token": csrf, "email": email,
+            "display_name": display_name,
+            "error": "Wachtwoorden komen niet overeen.",
+        })
+
+    # Check if email already exists
+    if auth_service.get_user_by_email(email_clean):
+        csrf = generate_csrf_token("register-form")
+        return templates.TemplateResponse(name="register.html", request=request, context={
+            "title": "Registreren", "csrf_token": csrf, "email": email,
+            "display_name": display_name,
+            "error": "Dit e-mailadres is al in gebruik.",
+        })
+
+    auth_service.create_user(email_clean, password, display_name=display_name.strip() or None)
+    auth_service.record_registration(ip)
+
+    return RedirectResponse(url="/login?success=Account+aangemaakt.+U+kunt+nu+inloggen.", status_code=303)
+
+@app.post("/logout")
+async def logout(request: Request):
+    signed = request.cookies.get("session_id")
+    if signed:
+        session_id = unsign_session_id(signed)
+        if session_id:
+            auth_service.delete_session(session_id)
+    response = RedirectResponse(url="/login", status_code=303)
+    response.delete_cookie("session_id", path="/")
+    return response
+
+
+# ── OAuth 2.1 Consent Flow (for MCP clients: Claude, ChatGPT, Perplexity) ──
+
+from services.mcp_oauth_provider import NeodemosOAuthProvider
+from urllib.parse import urlencode
+
+_oauth_provider = NeodemosOAuthProvider()
+
+
+@app.get("/oauth/authorize")
+async def oauth_authorize_page(
+    request: Request,
+    client_id: str = "",
+    redirect_uri: str = "",
+    state: str = "",
+    scope: str = "mcp search",
+    code_challenge: str = "",
+):
+    """
+    OAuth 2.1 consent page. The MCP SDK redirects here during the authorization flow.
+    If the user is already logged in (session cookie), show consent screen.
+    If not, show login form that returns here after authentication.
+    """
+    # Check if user is already logged in via session cookie
+    user = await get_current_user(request)
+
+    if not user:
+        # Store OAuth params in query string, redirect to login with return URL
+        oauth_params = urlencode({
+            "client_id": client_id, "redirect_uri": redirect_uri,
+            "state": state, "scope": scope, "code_challenge": code_challenge,
+        })
+        return RedirectResponse(
+            url=f"/oauth/login?{oauth_params}",
+            status_code=303,
+        )
+
+    # User is logged in — check mcp_access
+    if not user.get("mcp_access"):
+        return templates.TemplateResponse(name="oauth_error.html", request=request, context={
+            "title": "Geen MCP-toegang",
+            "error": "Uw account heeft geen MCP-toegang. Neem contact op met de beheerder.",
+        })
+
+    # Show consent page
+    client = await _oauth_provider.get_client(client_id)
+    csrf = generate_csrf_token("oauth-consent")
+    return templates.TemplateResponse(name="oauth_consent.html", request=request, context={
+        "title": "Toestemming verlenen",
+        "user": user,
+        "client_name": client.client_name if client else client_id,
+        "scope": scope,
+        "client_id": client_id,
+        "redirect_uri": redirect_uri,
+        "state": state,
+        "code_challenge": code_challenge,
+        "csrf_token": csrf,
+    })
+
+
+@app.get("/oauth/login")
+async def oauth_login_page(
+    request: Request,
+    client_id: str = "", redirect_uri: str = "", state: str = "",
+    scope: str = "mcp search", code_challenge: str = "",
+):
+    """Login page during OAuth flow — after login, returns to consent page."""
+    csrf = generate_csrf_token("oauth-login")
+    return templates.TemplateResponse(name="oauth_login.html", request=request, context={
+        "title": "Inloggen — MCP Autorisatie",
+        "csrf_token": csrf, "error": None,
+        "client_id": client_id, "redirect_uri": redirect_uri,
+        "state": state, "scope": scope, "code_challenge": code_challenge,
+    })
+
+
+@app.post("/oauth/login")
+async def oauth_login_submit(
+    request: Request,
+    email: str = Form(...),
+    password: str = Form(...),
+    client_id: str = Form(""),
+    redirect_uri: str = Form(""),
+    state: str = Form(""),
+    scope: str = Form("mcp search"),
+    code_challenge: str = Form(""),
+    csrf_token: str = Form(""),
+):
+    """Process login during OAuth flow, then redirect to consent."""
+    user = auth_service.authenticate(email, password)
+    if not user:
+        csrf = generate_csrf_token("oauth-login")
+        return templates.TemplateResponse(name="oauth_login.html", request=request, context={
+            "title": "Inloggen — MCP Autorisatie",
+            "csrf_token": csrf, "email": email, "error": "Ongeldige inloggegevens.",
+            "client_id": client_id, "redirect_uri": redirect_uri,
+            "state": state, "scope": scope, "code_challenge": code_challenge,
+        })
+
+    if not user["is_active"]:
+        csrf = generate_csrf_token("oauth-login")
+        return templates.TemplateResponse(name="oauth_login.html", request=request, context={
+            "title": "Inloggen — MCP Autorisatie",
+            "csrf_token": csrf, "email": email,
+            "error": "Uw account is gedeactiveerd.",
+            "client_id": client_id, "redirect_uri": redirect_uri,
+            "state": state, "scope": scope, "code_challenge": code_challenge,
+        })
+
+    # Create session cookie so the consent page knows the user
+    ip = request.client.host if request.client else None
+    ua = request.headers.get("user-agent", "")[:200]
+    session_id = auth_service.create_session(user["id"], ip_address=ip, user_agent=ua)
+    signed = sign_session_id(session_id)
+
+    # Redirect back to consent page with OAuth params
+    oauth_params = urlencode({
+        "client_id": client_id, "redirect_uri": redirect_uri,
+        "state": state, "scope": scope, "code_challenge": code_challenge,
+    })
+    response = RedirectResponse(url=f"/oauth/authorize?{oauth_params}", status_code=303)
+    is_prod = os.getenv("ENVIRONMENT", "").lower() == "production"
+    response.set_cookie(
+        "session_id", signed,
+        httponly=True, secure=is_prod, samesite="lax", path="/",
+        max_age=int(os.getenv("SESSION_MAX_AGE", "604800")),
+    )
+    return response
+
+
+@app.post("/oauth/consent")
+async def oauth_consent_submit(
+    request: Request,
+    client_id: str = Form(...),
+    redirect_uri: str = Form(...),
+    state: str = Form(""),
+    scope: str = Form("mcp search"),
+    code_challenge: str = Form(...),
+    csrf_token: str = Form(""),
+):
+    """User approved consent — generate auth code and redirect back to client."""
+    user = await get_current_user(request)
+    if not user:
+        return RedirectResponse(url="/oauth/login", status_code=303)
+
+    if not user.get("mcp_access"):
+        return templates.TemplateResponse(name="oauth_error.html", request=request, context={
+            "title": "Geen MCP-toegang", "error": "Geen MCP-toegang voor dit account.",
+        })
+
+    # Generate authorization code
+    code = _oauth_provider.create_authorization_code(
+        client_id=client_id,
+        user_id=user["id"],
+        redirect_uri=redirect_uri,
+        scope=scope,
+        code_challenge=code_challenge,
+    )
+
+    # Redirect back to the MCP client with the auth code
+    params = {"code": code}
+    if state:
+        params["state"] = state
+    separator = "&" if "?" in redirect_uri else "?"
+    return RedirectResponse(url=f"{redirect_uri}{separator}{urlencode(params)}", status_code=303)
+
+
+# ── MCP Installer (public) ──
+
+@app.get("/mcp-installer")
+async def mcp_installer_page(request: Request):
+    user = await get_current_user(request)
+    return templates.TemplateResponse(name="mcp_installer.html", request=request, context={
+        "title": "MCP Installer", "user": user,
+    })
+
+
+# ── Protected page routes ──
+
 @app.get("/")
-async def search_page(request: Request):
-    return templates.TemplateResponse("search.html", {"request": request, "title": "Zoeken"})
+async def search_page(request: Request, user: dict = Depends(require_login)):
+    if isinstance(user, RedirectResponse):
+        return user
+    return templates.TemplateResponse(name="search.html", request=request, context={
+        "title": "Zoeken", "user": user,
+    })
 
 @app.get("/overview")
-async def overview_page(request: Request):
+async def overview_page(request: Request, user: dict = Depends(require_login)):
+    if isinstance(user, RedirectResponse):
+        return user
     meetings = storage.get_meetings(limit=500)
-    return templates.TemplateResponse("overview.html", {
-        "request": request, 
+    return templates.TemplateResponse(name="overview.html", request=request, context={
         "title": "Overzicht",
-        "meetings": meetings
+        "meetings": meetings,
+        "user": user,
     })
 
 @app.get("/api/search")
-async def api_search(q: str, deep: bool = False, mode: str = None, party: str = "GroenLinks-PvdA", date_from: str = None, date_to: str = None):
+async def api_search(request: Request, q: str, deep: bool = False, mode: str = None, party: str = "GroenLinks-PvdA", date_from: str = None, date_to: str = None, user: dict = Depends(get_api_user)):
     """
     Search for agenda items and documents.
     If deep=True, also performs AI Deep Research.
@@ -264,38 +659,45 @@ async def api_search(q: str, deep: bool = False, mode: str = None, party: str = 
     }
 
 @app.get("/calendar")
-async def read_calendar(request: Request, year: int = None, month: int = None):
+async def read_calendar(request: Request, year: int = None, month: int = None, user: dict = Depends(require_login)):
+    if isinstance(user, RedirectResponse):
+        return user
     available_years = storage.get_meeting_years()
-    # Default to most recent year if no year specified
     if year is None and available_years:
         year = available_years[0]
     meetings = storage.get_meetings(limit=2000, year=year)
-    return templates.TemplateResponse("calendar.html", {
-        "request": request,
+    return templates.TemplateResponse(name="calendar.html", request=request, context={
         "title": "Raadskalender",
         "meetings": meetings,
         "selected_year": year,
         "selected_month": month,
-        "available_years": available_years
+        "available_years": available_years,
+        "user": user,
     })
 
 @app.get("/settings")
-async def read_settings(request: Request):
-    return templates.TemplateResponse("settings.html", {
-        "request": request, 
-        "title": "Instellingen"
+async def read_settings(request: Request, user: dict = Depends(require_login)):
+    if isinstance(user, RedirectResponse):
+        return user
+    tokens = auth_service.list_user_tokens(user["id"])
+    return templates.TemplateResponse(name="settings.html", request=request, context={
+        "title": "Instellingen",
+        "user": user,
+        "tokens": tokens,
     })
 
 @app.get("/meeting/{meeting_id}")
-async def read_meeting(request: Request, meeting_id: str):
+async def read_meeting(request: Request, meeting_id: str, user: dict = Depends(require_login)):
+    if isinstance(user, RedirectResponse):
+        return user
     # Pre-2018 meetings have rotterdam_raad_ prefix — serve from Postgres only
     if meeting_id.startswith("rotterdam_raad_"):
         meeting = storage.get_meeting_details(meeting_id)
         if not meeting:
-            return templates.TemplateResponse("meeting.html", {
-                "request": request,
+            return templates.TemplateResponse(name="meeting.html", request=request, context={
                 "title": "Vergadering niet gevonden",
-                "meeting": {"name": "Vergadering niet gevonden", "agenda": []}
+                "meeting": {"name": "Vergadering niet gevonden", "agenda": []},
+                "user": user,
             })
     else:
         meeting = storage.get_meeting_details(meeting_id)
@@ -317,14 +719,14 @@ async def read_meeting(request: Request, meeting_id: str):
         
         mark_substantive(meeting["agenda"])
     
-    return templates.TemplateResponse("meeting.html", {
-        "request": request, 
+    return templates.TemplateResponse(name="meeting.html", request=request, context={
         "title": meeting.get("name", "Meeting"),
-        "meeting": meeting
+        "meeting": meeting,
+        "user": user,
     })
 
 @app.get("/api/summarize/{doc_id}")
-async def api_summarize(doc_id: str):
+async def api_summarize(request: Request, doc_id: str, user: dict = Depends(get_api_user)):
     # Fetch doc from storage
     from psycopg2.extras import RealDictCursor
     with storage._get_connection() as conn:
@@ -338,7 +740,7 @@ async def api_summarize(doc_id: str):
     return summary
 
 @app.get("/api/analyse/agenda/{agenda_item_id}")
-async def api_analyse_agenda_item(agenda_item_id: str):
+async def api_analyse_agenda_item(request: Request, agenda_item_id: str, user: dict = Depends(get_api_user)):
     """
     Perform a general AI analysis of the agenda item.
     """
@@ -401,7 +803,7 @@ def _get_party_lens_service(party_name: str = "GroenLinks-PvdA"):
     return _party_lens_cache[cache_key]
 
 @app.get("/api/analyse/party-lens/{agenda_item_id}")
-async def api_analyse_party_lens(agenda_item_id: str, party: str = "GroenLinks-PvdA"):
+async def api_analyse_party_lens(request: Request, agenda_item_id: str, party: str = "GroenLinks-PvdA", user: dict = Depends(get_api_user)):
     """
     Analyze an agenda item through a party's perspective.
     
@@ -491,7 +893,7 @@ async def api_analyse_party_lens(agenda_item_id: str, party: str = "GroenLinks-P
     }
 
 @app.get("/api/analyse/unified/{agenda_item_id}")
-async def api_analyse_unified(agenda_item_id: str, party: str = "GroenLinks-PvdA"):
+async def api_analyse_unified(request: Request, agenda_item_id: str, party: str = "GroenLinks-PvdA", user: dict = Depends(get_api_user)):
     """
     Streams the agentic meeting analysis as Server-Sent Events (SSE).
     Events: {type: "status"|"chunk"|"done"|"error", ...}
@@ -533,7 +935,7 @@ async def api_analyse_unified(agenda_item_id: str, party: str = "GroenLinks-PvdA
     )
 
 @app.get("/api/analyse/speech/{agenda_item_id}")
-async def api_analyse_speech(agenda_item_id: str, party: str = "GroenLinks-PvdA"):
+async def api_analyse_speech(request: Request, agenda_item_id: str, party: str = "GroenLinks-PvdA", user: dict = Depends(get_api_user)):
     """
     Generate a draft speech (bijdrage) for a councillor based on the agenda item analysis.
     """
@@ -557,6 +959,96 @@ async def api_analyse_speech(agenda_item_id: str, party: str = "GroenLinks-PvdA"
     # We use the existing analysis but request a speech format
     speech = await ai_service.generate_speech_draft(item_name, documents, lens_service.party_vision)
     return {"speech": speech}
+
+# ── Admin routes ──
+
+@app.get("/admin")
+async def admin_page(request: Request, user: dict = Depends(require_admin)):
+    if isinstance(user, RedirectResponse):
+        return user
+    users = auth_service.list_users()
+    tokens = auth_service.list_all_tokens()
+    return templates.TemplateResponse(name="admin.html", request=request, context={
+        "title": "Beheer", "user": user, "users": users, "tokens": tokens,
+    })
+
+@app.get("/admin/api/users")
+async def admin_list_users(request: Request, user: dict = Depends(require_admin)):
+    if isinstance(user, RedirectResponse):
+        return user
+    users = auth_service.list_users()
+    return JSONResponse(users)
+
+@app.post("/admin/api/users/{user_id}/update")
+async def admin_update_user(request: Request, user_id: int, user: dict = Depends(require_admin)):
+    if isinstance(user, RedirectResponse):
+        return user
+    body = await request.json()
+    allowed = {"is_active", "mcp_access", "db_access_level", "role"}
+    updates = {k: v for k, v in body.items() if k in allowed}
+    # Prevent admin from demoting themselves
+    if user_id == user["id"] and updates.get("role") == "user":
+        return JSONResponse({"error": "Kan eigen admin-rol niet verwijderen"}, status_code=400)
+    updated = auth_service.update_user(user_id, **updates)
+    if not updated:
+        return JSONResponse({"error": "Gebruiker niet gevonden"}, status_code=404)
+    logger.info(f"Admin {user['email']} updated user {user_id}: {updates}")
+    return JSONResponse(updated)
+
+@app.post("/admin/api/users/{user_id}/toggle-active")
+async def admin_toggle_active(request: Request, user_id: int, user: dict = Depends(require_admin)):
+    if isinstance(user, RedirectResponse):
+        return user
+    if user_id == user["id"]:
+        return JSONResponse({"error": "Kan eigen account niet deactiveren"}, status_code=400)
+    target = auth_service.get_user_by_id(user_id)
+    if not target:
+        return JSONResponse({"error": "Gebruiker niet gevonden"}, status_code=404)
+    updated = auth_service.update_user(user_id, is_active=not target["is_active"])
+    logger.info(f"Admin {user['email']} toggled active for user {user_id}: {updated['is_active']}")
+    return JSONResponse(updated)
+
+@app.delete("/admin/api/tokens/{token_id}")
+async def admin_revoke_token(request: Request, token_id: int, user: dict = Depends(require_admin)):
+    if isinstance(user, RedirectResponse):
+        return user
+    revoked = auth_service.revoke_api_token(token_id)
+    if not revoked:
+        return JSONResponse({"error": "Token niet gevonden"}, status_code=404)
+    logger.info(f"Admin {user['email']} revoked token {token_id}")
+    return JSONResponse({"ok": True})
+
+
+# ── Token management (for logged-in users) ──
+
+@app.get("/api/tokens")
+async def list_tokens(request: Request, user: dict = Depends(require_login)):
+    if isinstance(user, RedirectResponse):
+        return user
+    tokens = auth_service.list_user_tokens(user["id"])
+    return JSONResponse(tokens)
+
+@app.post("/api/tokens")
+async def create_token(request: Request, user: dict = Depends(require_login)):
+    if isinstance(user, RedirectResponse):
+        return user
+    body = await request.json()
+    name = body.get("name", "Default")[:50]
+    scopes = body.get("scopes", "search,mcp")
+    token_data = auth_service.create_api_token(user["id"], name=name, scopes=scopes)
+    return JSONResponse(token_data)
+
+@app.delete("/api/tokens/{token_id}")
+async def revoke_token(request: Request, token_id: int, user: dict = Depends(require_login)):
+    if isinstance(user, RedirectResponse):
+        return user
+    # Verify the token belongs to this user
+    tokens = auth_service.list_user_tokens(user["id"])
+    if not any(t["id"] == token_id for t in tokens):
+        return JSONResponse({"error": "Token niet gevonden"}, status_code=404)
+    auth_service.revoke_api_token(token_id)
+    return JSONResponse({"ok": True})
+
 
 if __name__ == "__main__":
     import uvicorn

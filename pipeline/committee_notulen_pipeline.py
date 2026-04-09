@@ -265,13 +265,22 @@ class CommitteeNotulenPipeline:
         n_items = len(transcript.get("agenda_items", []))
         agenda_score = min(n_items / 3, 1.0)
 
+        # Metric: completeness (detect VTT gaps and incomplete sentences)
+        import re
+        gap_patterns = re.compile(r'(\*\s*){3,}|(\.\s*){3,}|([A-Z]{2,}\s){3,}|\b(\w+)(\s+\4){2,}\b')
+        incomplete_re = re.compile(r'^.{20,}[^.!?:;)"\s]$')
+        gaps = sum(1 for s in all_segments if gap_patterns.search(s.get("text", "")))
+        incomplete = sum(1 for s in all_segments if incomplete_re.match(s.get("text", "").strip()))
+        completeness_score = 1.0 - min((gaps + incomplete) / total, 1.0) if total else 0
+
         # Weighted composite
         score = (
-            0.15 * seg_score +
+            0.10 * seg_score +
             0.30 * speaker_score +
             0.20 * density_score +
-            0.20 * confidence_score +
-            0.15 * agenda_score
+            0.15 * confidence_score +
+            0.15 * agenda_score +
+            0.10 * completeness_score
         )
 
         # Determine review status
@@ -291,6 +300,9 @@ class CommitteeNotulenPipeline:
             "density_score": round(density_score, 3),
             "confidence_score": round(confidence_score, 3),
             "agenda_score": round(agenda_score, 3),
+            "completeness_score": round(completeness_score, 3),
+            "gap_segments": gaps,
+            "incomplete_segments": incomplete,
             "avg_chars_per_segment": round(avg_chars, 1),
             "transcript_source": source,
         }
@@ -322,9 +334,24 @@ class CommitteeNotulenPipeline:
             logger.info(f"  Transcript acquired: {transcript.get('total_segments', 0)} segments "
                          f"(source: {source})")
 
+            # ── Step 1.5: Agenda detection for single-item transcripts ─
+            n_items = len(transcript.get("agenda_items", []))
+            if n_items <= 1:
+                from pipeline.agenda_detector import detect_and_split_agenda
+                logger.info("  Step 1.5: Detecting agenda boundaries for single-item transcript...")
+                transcript = detect_and_split_agenda(transcript)
+
             # ── Step 2: Post-process with LLM ────────────────────────
             logger.info("  Step 2: LLM post-processing (two-pass)...")
             transcript = self.postprocessor.process(transcript)
+
+            # ── Step 2.5: Speaker enrichment + party fill ────────────
+            from services.speaker_inference import SpeakerInferenceEnricher
+            enricher = SpeakerInferenceEnricher()
+            enricher.enrich(transcript)
+            enricher.resolve_insprekers(transcript)
+            enricher.fill_party_from_dictionary(transcript)
+            enricher.filter_garbage_speakers(transcript)
 
             # ── Step 3: Quality scoring ──────────────────────────────
             logger.info("  Step 3: Computing quality score...")

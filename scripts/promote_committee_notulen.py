@@ -290,11 +290,7 @@ def promote_meeting(meeting_id: str) -> bool:
             from services.ai_service import AIService
 
             qdrant = QdrantClient(url=QDRANT_URL)
-            local_ai = AIService(skip_llm=True)
-
-            if not local_ai.is_available():
-                print("  ! LocalAIService not available — cannot generate embeddings")
-                raise RuntimeError("Embedding service unavailable")
+            local_ai = AIService()
 
             # Fetch meeting metadata for payload enrichment
             s_cur.execute(

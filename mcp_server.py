@@ -31,9 +31,24 @@ from dotenv import load_dotenv
 load_dotenv(PROJECT_ROOT / ".env")
 
 from mcp.server.fastmcp import FastMCP
+from mcp.server.transport_security import TransportSecuritySettings
+
+# When running behind a reverse proxy (Caddy) the Host header will be the
+# public domain, not localhost.  Build security settings that allow both
+# localhost development and production hostnames.
+_allowed_hosts = [
+    "127.0.0.1:*", "localhost:*", "[::1]:*",         # local dev
+    "mcp.neodemos.nl", "mcp.neodemos.eu",             # production
+    "neodemos-mcp:*",                                 # Docker-internal
+]
+_transport_security = TransportSecuritySettings(
+    enable_dns_rebinding_protection=True,
+    allowed_hosts=_allowed_hosts,
+)
 
 mcp = FastMCP(
     "neodemos",
+    transport_security=_transport_security,
     instructions=(
         "# NeoDemos — Rotterdam Gemeenteraad Assistent\n\n"
         "## Gebruik van dit systeem\n"
@@ -867,36 +882,64 @@ def haal_partijstandpunt_op(
 
 
 def _build_http_app():
-    """Return the ASGI app, optionally wrapped with API key auth middleware."""
+    """Return the ASGI app wrapped with token auth middleware.
+
+    Validates Bearer tokens against the api_tokens DB table.
+    Falls back to MCP_API_KEY env var for backward compatibility.
+    """
     from starlette.responses import Response as _Response
 
     base_app = mcp.streamable_http_app()
-    api_key = os.getenv("MCP_API_KEY", "").strip()
+    legacy_api_key = os.getenv("MCP_API_KEY", "").strip()
 
-    if not api_key:
-        return base_app
-
-    class _ApiKeyMiddleware:
-        """Simple ASGI middleware: require Authorization: Bearer <MCP_API_KEY>."""
+    class _TokenAuthMiddleware:
+        """ASGI middleware: validate Bearer token against DB or legacy env var."""
 
         def __init__(self, app):
             self._app = app
+            self._auth_service = None
+
+        def _get_auth(self):
+            if self._auth_service is None:
+                from services.auth_service import AuthService
+                self._auth_service = AuthService()
+            return self._auth_service
 
         async def __call__(self, scope, receive, send):
             if scope["type"] == "http":
                 headers = dict(scope.get("headers", []))
                 auth = headers.get(b"authorization", b"").decode()
-                if not (auth.startswith("Bearer ") and auth[7:] == api_key):
+
+                if not auth.startswith("Bearer "):
                     resp = _Response(
-                        '{"error":"Unauthorized"}',
+                        '{"error":"Authorization: Bearer <token> header required"}',
                         status_code=401,
                         media_type="application/json",
                     )
                     await resp(scope, receive, send)
                     return
+
+                token = auth[7:]
+
+                # Legacy env var check (backward compat)
+                if legacy_api_key and token == legacy_api_key:
+                    await self._app(scope, receive, send)
+                    return
+
+                # DB token validation
+                user = self._get_auth().validate_api_token(token, required_scope="mcp")
+                if not user or not user.get("mcp_access"):
+                    resp = _Response(
+                        '{"error":"Invalid or unauthorized token"}',
+                        status_code=403,
+                        media_type="application/json",
+                    )
+                    await resp(scope, receive, send)
+                    return
+
             await self._app(scope, receive, send)
 
-    return _ApiKeyMiddleware(base_app)
+    return _TokenAuthMiddleware(base_app)
 
 
 if __name__ == "__main__":

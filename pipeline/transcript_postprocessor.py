@@ -22,6 +22,7 @@ Usage:
 
 import os
 import json
+import re
 import asyncio
 import logging
 from pathlib import Path
@@ -43,7 +44,7 @@ RETRY_DELAY_S = 2
 INTER_CALL_DELAY_S = 0.5   # Rate limit protection
 
 PASS1_MODEL = "gemini-2.5-flash-lite"
-PASS2_MODEL = "gemini-2.5-flash-lite"  # Can upgrade to gemini-2.5-flash if quality demands
+PASS2_MODEL = "gemini-2.5-flash-lite"
 
 
 class TranscriptPostProcessor:
@@ -84,6 +85,92 @@ class TranscriptPostProcessor:
             parts.append(f"Termen: {', '.join(terms)}")
         return "\n".join(parts)
 
+    # ── VTT Pre-Cleaning ─────────────────────────────────────────────────
+
+    def _preclean_segment_text(self, text: str) -> str:
+        """Remove VTT captioning artifacts before LLM processing.
+
+        Handles: repeated-char noise (*** ***, ED ED ED), dot-gap sequences,
+        Whisper hallucination loops (hum hum hum), and normalises ellipsis.
+        """
+        if not text:
+            return text
+
+        # 1. Star artifacts: "*** *** ***" or "* * * *"
+        text = re.sub(r'(\*\s*){3,}', '', text)
+
+        # 2. Repeated-caps noise: "ED ED ED ED" (3+ identical upper tokens)
+        text = re.sub(r'\b([A-Z]{2,})(?:\s+\1){2,}\b', '', text)
+
+        # 3. Whisper hallucination loops: "hum hum hum …" (3+ repeated words)
+        text = re.sub(r'\b(\w+)(?:\s+\1){2,}\b', r'\1', text, flags=re.IGNORECASE)
+
+        # 4. VTT dot-gap sequences: "... ...text... ...more"  →  "text more"
+        #    Also bare ". . . ." sequences
+        text = re.sub(r'(?:\.\s*){3,}', '… ', text)       # normalise to single ellipsis
+        text = re.sub(r'…\s*…+', '… ', text)               # collapse consecutive ellipses
+
+        # 5. Strip leading/trailing ellipsis (VTT gap markers, not meaningful punctuation)
+        text = re.sub(r'^\s*…\s*', '', text)
+        text = re.sub(r'\s*…\s*$', '', text)
+        # Replace mid-sentence ellipsis with space (VTT dropped words, not meaningful pause)
+        text = re.sub(r'\s*…\s*', ' ', text)
+
+        # 6. Disfluency removal: strip fillers like "uh", "uh,", "een uh inspreker"
+        #    Pattern: optional comma before, the filler, optional comma/period after
+        text = re.sub(r',?\s*\b(?:eh|uhm?|uh|hmm?)\b[,.]?\s*', ' ', text, flags=re.IGNORECASE)
+        # Strip filler words at segment start when followed by lowercase continuation
+        text = re.sub(r'^(?:nou\s+ja|zeg\s+maar|eigenlijk)\s*[,.]\s*(?=[a-z])', '', text, flags=re.IGNORECASE)
+
+        # 7. Trim whitespace runs introduced by removals
+        text = re.sub(r'  +', ' ', text).strip()
+
+        # 8. Drop segments that became empty or near-empty after cleaning
+        if len(text) < 3:
+            return ''
+
+        return text
+
+    def _preclean_transcript(self, transcript: Dict) -> Dict:
+        """Run pre-cleaning on all segments. Returns a modified copy.
+
+        Computes artifact_rate based on segments DROPPED (empty after cleaning),
+        not segments merely modified (e.g. disfluency removal).
+        """
+        result = dict(transcript)
+        total = 0
+        cleaned = 0
+        dropped = 0
+
+        for item in result.get('agenda_items', []):
+            new_segments = []
+            for seg in item.get('segments', []):
+                total += 1
+                original = seg.get('text', '')
+                clean = self._preclean_segment_text(original)
+                if clean != original:
+                    cleaned += 1
+                if clean:
+                    seg_copy = dict(seg)
+                    seg_copy['text'] = clean
+                    new_segments.append(seg_copy)
+                else:
+                    dropped += 1
+            item['segments'] = new_segments
+
+        # artifact_rate = fraction of segments DROPPED (truly garbage),
+        # not merely modified (disfluency cleanup doesn't count)
+        artifact_rate = dropped / total if total else 0
+        result['preclean_stats'] = {
+            'total_segments': total,
+            'segments_cleaned': cleaned,
+            'segments_dropped': dropped,
+            'artifact_rate': round(artifact_rate, 3),
+        }
+        logger.info(f"  Pre-clean: {cleaned}/{total} segments touched, "
+                     f"{dropped} dropped, artifact rate {artifact_rate:.1%}")
+        return result
+
     # ── Chunking ─────────────────────────────────────────────────────────
 
     def _chunk_segments(self, segments: List[Dict], chunk_minutes: int = CHUNK_MINUTES,
@@ -116,9 +203,14 @@ class TranscriptPostProcessor:
 
         return chunks
 
-    def _segments_to_text(self, segments: List[Dict]) -> str:
-        """Convert segments to readable text for LLM processing."""
+    def _segments_to_text(self, segments: List[Dict], numbered: bool = True) -> str:
+        """Convert segments to readable text for LLM processing.
+
+        When numbered=True, each line gets a [SEG-NNN] prefix as an anchor
+        to prevent the LLM from merging adjacent same-speaker segments.
+        """
         lines = []
+        seg_idx = 0
         for seg in segments:
             speaker = seg.get("speaker", "")
             party = seg.get("party", "")
@@ -129,7 +221,12 @@ class TranscriptPostProcessor:
             prefix = f"[{speaker}]" if speaker else "[Spreker onbekend]"
             if party:
                 prefix = f"[{speaker} ({party})]"
-            lines.append(f"{prefix}: {text}")
+
+            seg_idx += 1
+            if numbered:
+                lines.append(f"[SEG-{seg_idx:03d}]{prefix}: {text}")
+            else:
+                lines.append(f"{prefix}: {text}")
 
         return "\n".join(lines)
 
@@ -161,7 +258,54 @@ class TranscriptPostProcessor:
 
         return ""
 
-    # ── Pass 1: Segment-Level Correction ─────────────────────────────────
+    # ── Prompt Builders (small-batch mode) ─────────────────────────────
+
+    def _build_pass1_prompt(self, batch_text: str, meeting_context: str) -> str:
+        """Build Pass 1 prompt for a small batch of segments."""
+        dict_context = self._build_dictionary_context()
+        return f"""Je bent een transcriptie-editor die automatische ondertiteling corrigeert van een vergadering van de Rotterdamse gemeenteraad.
+
+CONTEXT:
+{meeting_context}
+
+WOORDENLIJST (gebruik deze exacte schrijfwijzen):
+{dict_context}
+
+INSTRUCTIES:
+1. Corrigeer spel- en typfouten, vooral bij namen van raadsleden en partijen
+2. Herstel leestekens (punten, komma's, vraagtekens)
+3. Schrijf afkortingen correct (B en W, COR, iBabs)
+4. KRITIEK: Behoud ELKE [SEG-NNN] regel als apart segment. Produceer EXACT hetzelfde aantal regels.
+5. Verander NIETS aan de inhoudelijke betekenis
+
+TRANSCRIPT:
+{batch_text}
+
+GECORRIGEERD TRANSCRIPT:"""
+
+    def _build_pass2_prompt(self, batch_text: str, meeting_context: str) -> str:
+        """Build Pass 2 prompt for a small batch of segments."""
+        dict_context = self._build_dictionary_context()
+        return f"""Je bent een professionele notulist van de gemeente Rotterdam. Zet deze transcriptie-segmenten om naar geschreven Nederlands.
+
+CONTEXT:
+{meeting_context}
+
+WOORDENLIJST:
+{dict_context}
+
+INSTRUCTIES:
+1. Zet gesproken Nederlands om naar geschreven Nederlands
+2. HERSTEL ONTBREKENDE WOORDEN: vul ontbrekende lidwoorden, voorzetsels en hulpwerkwoorden aan waar de bedoeling duidelijk is
+3. KRITIEK: Behoud ELKE [SEG-NNN] regel. Zelfde aantal regels in output als input. VOEG NIET SAMEN.
+4. Behoud alle namen, cijfers, datums en politieke standpunten exact
+
+TRANSCRIPT:
+{batch_text}
+
+GESCHREVEN NOTULEN:"""
+
+    # ── Pass 1: Segment-Level Correction (legacy chunk mode) ─────────
 
     async def _pass1_correct_chunk(self, chunk_text: str, chunk_idx: int,
                                     prev_tail: str, meeting_context: str) -> str:
@@ -182,9 +326,10 @@ INSTRUCTIES:
 1. Corrigeer spel- en typfouten, vooral bij namen van raadsleden en partijen
 2. Herstel leestekens (punten, komma's, vraagtekens)
 3. Schrijf afkortingen correct (B en W, COR, iBabs)
-4. Behoud de [Spreker (Partij)]: prefix-structuur EXACT
-5. Verander NIETS aan de inhoudelijke betekenis
-6. Voeg geen informatie toe die er niet was
+4. Behoud de [SEG-NNN][Spreker (Partij)]: prefix-structuur EXACT
+5. KRITIEK: Elke [SEG-NNN] prefix is een apart segment. Produceer EXACT hetzelfde aantal [SEG-NNN] regels als in de input. VOEG GEEN segmenten samen. Elk input-segment moet exact één output-segment opleveren.
+6. Verander NIETS aan de inhoudelijke betekenis
+7. Voeg geen informatie toe die er niet was
 
 TRANSCRIPT:
 {chunk_text}
@@ -218,17 +363,23 @@ INSTRUCTIES:
    - Verwijder opvulwoorden (eh, uhm, nou ja, zeg maar, eigenlijk als opvulwoord)
    - Verwijder valse starts en herhalingen
    - Maak onvolledige zinnen af waar de bedoeling duidelijk is
-2. BEHOUD:
+2. HERSTEL ONTBREKENDE WOORDEN:
+   - Ondertiteling laat soms woorden weg (lidwoorden, voorzetsels, werkwoorden)
+   - Als een zin grammaticaal onvolledig is maar de bedoeling duidelijk, vul het ontbrekende woord aan
+   - Bij twijfel: laat de zin intact, voeg GEEN woorden toe waarvan je de betekenis niet zeker weet
+   - Let speciaal op: ontbrekende lidwoorden (de/het/een), voorzetsels (in/op/van/aan), en hulpwerkwoorden (is/heeft/wordt)
+3. BEHOUD:
    - Alle politieke standpunten en uitspraken exact zoals bedoeld
    - Specifieke namen, cijfers, datums en bedragen
    - De toon en strekking van het debat
-   - De [Spreker (Partij)]: prefix-structuur
-3. VERWIJDER NIET:
+   - De [SEG-NNN][Spreker (Partij)]: prefix-structuur
+4. KRITIEK — SEGMENTEN NIET SAMENVOEGEN:
+   - Behoud elk [SEG-NNN] als apart segment
+   - VOEG NOOIT meerdere segmenten samen tot één alinea
+   - De segment-nummering moet intact blijven: zelfde aantal [SEG-NNN] regels in output als in input
+5. VERWIJDER NIET:
    - Inhoudelijke uitspraken die als "ja" of "nee" een stemming of reactie zijn
    - Interrupties die inhoudelijk relevant zijn
-4. Formatteer als professionele notulen:
-   - Elke sprekersbijdrage als apart blok
-   - Duidelijke alinea-indeling bij thema-wisselingen
 
 TRANSCRIPT:
 {chunk_text}
@@ -264,18 +415,30 @@ GESCHREVEN NOTULEN:"""
                 all_segments.append(seg_copy)
         return all_segments
 
-    def _rebuild_transcript(self, transcript: Dict, processed_text: str) -> Dict:
+    def _rebuild_transcript(self, transcript: Dict, processed_text: str,
+                            expected_count: int = 0) -> Dict:
         """Rebuild the transcript structure from processed text.
 
-        The processed text has [Speaker (Party)]: blocks. We map them back
-        into the transcript's agenda_items structure.
+        Parses [SEG-NNN][Speaker (Party)]: blocks back into segments.
+        Falls back to old format if the LLM stripped segment numbers.
         """
-        import re
 
-        # Parse processed text back into segments
-        pattern = re.compile(r'\[([^\]]+)\]:\s*(.*?)(?=\n\[|\Z)', re.DOTALL)
+        # Try numbered format first: [SEG-NNN][Speaker (Party)]: text
+        numbered_pattern = re.compile(
+            r'\[SEG-\d+\]\[([^\]]+)\]:\s*(.*?)(?=\n\[SEG-|\Z)', re.DOTALL
+        )
+        # Fallback: [Speaker (Party)]: text (old format)
+        fallback_pattern = re.compile(
+            r'\[([^\]]+)\]:\s*(.*?)(?=\n\[|\Z)', re.DOTALL
+        )
+
+        matches = list(numbered_pattern.finditer(processed_text))
+        if not matches:
+            logger.info("  LLM stripped segment numbers, using fallback parser")
+            matches = list(fallback_pattern.finditer(processed_text))
+
         new_segments = []
-        for match in pattern.finditer(processed_text):
+        for match in matches:
             speaker_str = match.group(1).strip()
             text = match.group(2).strip()
             if not text:
@@ -296,6 +459,15 @@ GESCHREVEN NOTULEN:"""
                 "text": text,
                 "confidence": 1.0,  # Post-processed = high confidence
             })
+
+        # Segment collapse validation
+        if expected_count and new_segments:
+            retention = len(new_segments) / expected_count
+            if retention < 0.7:
+                logger.warning(
+                    f"  SEGMENT COLLAPSE: {expected_count} input -> {len(new_segments)} output "
+                    f"({retention:.0%} retention). LLM may have merged segments."
+                )
 
         # Distribute back into agenda items proportionally
         result = dict(transcript)
@@ -370,29 +542,111 @@ GESCHREVEN NOTULEN:"""
             logger.warning("No segments to post-process")
             return transcript
 
-        logger.info(f"Post-processing {len(all_segments)} segments in 2 passes...")
+        # ── Pre-clean: strip VTT artifacts (free, no LLM) ───────────
+        transcript = self._preclean_transcript(transcript)
+        preclean_stats = transcript.get('preclean_stats', {})
+        all_segments = self._flatten_segments(transcript)
 
-        # ── Pass 1: Segment correction ───────────────────────────────────
-        chunks = self._chunk_segments(all_segments)
-        pass1_text = await self._process_pass(
-            chunks, meeting_context, self._pass1_correct_chunk, "Pass 1 (correction)"
-        )
+        # Guard rail: skip LLM passes for heavily-damaged single-item transcripts.
+        # When >40% of segments are artifacts AND there's only one agenda item,
+        # the LLM tends to collapse everything into a summary instead of cleaning
+        # segment-by-segment. Pre-clean alone is safer here.
+        n_items = len(transcript.get('agenda_items', []))
+        artifact_rate = preclean_stats.get('artifact_rate', 0)
+        if artifact_rate > 0.40 and n_items <= 1:
+            logger.warning(
+                f"  High artifact rate ({artifact_rate:.0%}) with single agenda item — "
+                f"skipping LLM passes to prevent summary collapse. Pre-clean only."
+            )
+            return transcript
 
-        # ── Pass 2: Register conversion ──────────────────────────────────
-        # Re-chunk the pass 1 output as plain text blocks
-        lines = pass1_text.split("\n")
-        text_chunks = []
-        chunk_size = 80  # ~80 lines per chunk for pass 2
-        for i in range(0, len(lines), chunk_size):
-            text_chunks.append(lines[i:i + chunk_size])
+        logger.info(f"Post-processing {len(all_segments)} segments in small-batch mode...")
 
-        pass2_text = await self._process_pass(
-            text_chunks, meeting_context, self._pass2_polish_chunk, "Pass 2 (register)"
-        )
+        # ── Small-batch processing ───────────────────────────────────────
+        # Send groups of BATCH_SIZE segments per LLM call. Small enough that
+        # the LLM can't aggressively merge, large enough for context.
+        BATCH_SIZE = 5
+        batches = []
+        for i in range(0, len(all_segments), BATCH_SIZE):
+            batches.append(all_segments[i:i + BATCH_SIZE])
 
-        # ── Rebuild transcript structure ─────────────────────────────────
-        result = self._rebuild_transcript(transcript, pass2_text)
-        logger.info(f"Post-processing complete. {result.get('total_segments', 0)} segments in output.")
+        logger.info(f"  {len(batches)} batches of ~{BATCH_SIZE} segments (2 passes each)...")
+
+        # Parse each batch result back into per-segment dicts directly
+        numbered_seg_re = re.compile(r'\[SEG-\d+\]\[([^\]]+)\]:\s*(.*?)(?=\n\[SEG-|\Z)', re.DOTALL)
+        fallback_seg_re = re.compile(r'\[([^\]]+)\]:\s*(.*?)(?=\n\[|\Z)', re.DOTALL)
+
+        new_segments = []
+        for bi, batch in enumerate(batches):
+            batch_text = self._segments_to_text(batch)
+
+            # Pass 1: correction
+            p1_result = await self._call_gemini(
+                self._build_pass1_prompt(batch_text, meeting_context), model=PASS1_MODEL
+            )
+            if not p1_result:
+                p1_result = batch_text
+
+            # Pass 2: register conversion
+            p2_result = await self._call_gemini(
+                self._build_pass2_prompt(p1_result.strip(), meeting_context), model=PASS2_MODEL
+            )
+            if not p2_result:
+                p2_result = p1_result
+
+            # Parse output into segments
+            matches = list(numbered_seg_re.finditer(p2_result))
+            if not matches:
+                matches = list(fallback_seg_re.finditer(p2_result))
+
+            if matches:
+                for m in matches:
+                    speaker_str = m.group(1).strip()
+                    text = m.group(2).strip()
+                    if not text:
+                        continue
+                    party_m = re.match(r'^(.+?)\s*\(([^)]+)\)$', speaker_str)
+                    if party_m:
+                        speaker, party = party_m.group(1).strip(), party_m.group(2).strip()
+                    else:
+                        speaker, party = speaker_str, ""
+                    new_segments.append({"speaker": speaker, "party": party,
+                                         "text": text, "confidence": 1.0})
+            else:
+                # Fallback: keep original batch segments with cleaned text
+                for seg in batch:
+                    new_segments.append(dict(seg))
+
+            if (bi + 1) % 20 == 0:
+                logger.info(f"    [{bi + 1}/{len(batches)}] batches done")
+
+            await asyncio.sleep(INTER_CALL_DELAY_S)
+
+        # ── Rebuild transcript structure (distribute into agenda items) ──
+        result = dict(transcript)
+        original_items = transcript.get("agenda_items", [])
+        total_orig = sum(len(item.get("segments", [])) for item in original_items)
+
+        if total_orig and new_segments:
+            seg_idx = 0
+            new_items = []
+            for item in original_items:
+                orig_count = len(item.get("segments", []))
+                proportion = orig_count / total_orig
+                take = max(1, round(proportion * len(new_segments)))
+                new_item = dict(item)
+                new_item["segments"] = new_segments[seg_idx:seg_idx + take]
+                seg_idx += take
+                new_items.append(new_item)
+            if seg_idx < len(new_segments) and new_items:
+                new_items[-1]["segments"].extend(new_segments[seg_idx:])
+            result["agenda_items"] = new_items
+
+        result["post_processed"] = True
+        result["total_segments"] = len(new_segments)
+        retention = len(new_segments) / len(all_segments) if all_segments else 0
+        logger.info(f"Post-processing complete. {len(all_segments)} input -> "
+                     f"{len(new_segments)} output segments ({retention:.0%} retention).")
         return result
 
     def process(self, transcript: Dict) -> Dict:

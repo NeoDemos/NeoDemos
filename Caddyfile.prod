@@ -1,0 +1,21 @@
+neodemos.nl, www.neodemos.nl {
+    reverse_proxy neodemos-web:8000
+
+    log {
+        output file /data/caddy-access.log
+        format json
+    }
+}
+
+mcp.neodemos.nl, mcp.neodemos.eu {
+    reverse_proxy neodemos-mcp:8001
+
+    log {
+        output file /data/caddy-mcp.log
+        format json
+    }
+}
+
+neodemos.eu, www.neodemos.eu {
+    redir https://neodemos.nl{uri} permanent
+}

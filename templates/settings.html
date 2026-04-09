@@ -102,27 +102,105 @@
     }
 
     @keyframes fadein {
-        from {
-            bottom: 0;
-            opacity: 0;
-        }
-
-        to {
-            bottom: 30px;
-            opacity: 1;
-        }
+        from { bottom: 0; opacity: 0; }
+        to { bottom: 30px; opacity: 1; }
     }
 
     @keyframes fadeout {
-        from {
-            bottom: 30px;
-            opacity: 1;
-        }
+        from { bottom: 30px; opacity: 1; }
+        to { bottom: 0; opacity: 0; }
+    }
 
-        to {
-            bottom: 0;
-            opacity: 0;
-        }
+    .tokens-section {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 2px solid #e2e8f0;
+    }
+
+    .token-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+    }
+
+    .token-table th {
+        text-align: left;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #718096;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .token-table td {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .generate-btn {
+        background-color: var(--accent-color, #d4af37);
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+
+    .generate-btn:hover { opacity: 0.85; }
+
+    .revoke-btn-sm {
+        padding: 0.25rem 0.6rem;
+        border: 1px solid #e53e3e;
+        border-radius: 4px;
+        background: #fff;
+        color: #e53e3e;
+        cursor: pointer;
+        font-size: 0.75rem;
+        font-family: inherit;
+        transition: all 0.2s;
+    }
+
+    .revoke-btn-sm:hover { background: #e53e3e; color: white; }
+
+    .new-token-display {
+        background: #f0fff4;
+        border: 1px solid #9ae6b4;
+        padding: 1rem;
+        border-radius: 6px;
+        margin: 1rem 0;
+        display: none;
+    }
+
+    .new-token-display code {
+        display: block;
+        background: #1a202c;
+        color: #68d391;
+        padding: 0.75rem;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        word-break: break-all;
+        margin: 0.5rem 0;
+    }
+
+    .new-token-display .warning {
+        font-size: 0.8rem;
+        color: #c53030;
+        font-weight: 500;
+    }
+
+    .token-name-input {
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #cbd5e0;
+        border-radius: 4px;
+        font-family: inherit;
+        font-size: 0.9rem;
+        margin-right: 0.5rem;
+        width: 200px;
     }
 </style>
 
@@ -183,6 +261,54 @@
     </div>
 
     <button class="save-btn" onclick="saveSettings()">Wijzigingen Opslaan</button>
+
+    <div class="tokens-section">
+        <h3>API Tokens</h3>
+        <p style="color: #718096; font-size: 0.9em; margin-bottom: 1rem;">
+            Gebruik API tokens om de zoek-API en MCP-server programmatisch te benaderen.
+        </p>
+
+        <div style="margin-bottom: 1rem;">
+            <input type="text" class="token-name-input" id="token-name" placeholder="Token naam" value="Default">
+            <button class="generate-btn" onclick="generateToken()">Nieuw Token Aanmaken</button>
+        </div>
+
+        <div class="new-token-display" id="new-token-display">
+            <strong>Uw nieuwe API token:</strong>
+            <code id="new-token-value"></code>
+            <button class="generate-btn" style="font-size:0.8rem;padding:0.3rem 0.8rem;margin-top:0.25rem;" onclick="copyToken()">Kopieer Token</button>
+            <p class="warning">Dit token wordt slechts eenmalig getoond. Kopieer het nu!</p>
+        </div>
+
+        {% if tokens %}
+        <table class="token-table">
+            <thead>
+                <tr>
+                    <th>Naam</th>
+                    <th>Scopes</th>
+                    <th>Aangemaakt</th>
+                    <th>Laatst Gebruikt</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tokens-tbody">
+                {% for t in tokens %}
+                {% if t.is_active %}
+                <tr data-token-id="{{ t.id }}">
+                    <td>{{ t.name }}</td>
+                    <td style="font-family:monospace;font-size:0.8rem;color:#718096;">{{ t.scopes }}</td>
+                    <td style="font-size:0.8rem;color:#718096;">{{ t.created_at[:10] }}</td>
+                    <td style="font-size:0.8rem;color:#718096;">{{ t.last_used_at[:10] if t.last_used_at else 'Nooit' }}</td>
+                    <td><button class="revoke-btn-sm" onclick="revokeToken({{ t.id }}, this)">Intrekken</button></td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="color:#a0aec0;font-size:0.9rem;">Nog geen tokens aangemaakt.</p>
+        {% endif %}
+    </div>
 </div>
 <div id="toast">Instellingen succesvol opgeslagen!</div>
 {% endblock %}
@@ -229,6 +355,42 @@
         const toast = document.getElementById('toast');
         toast.className = 'show';
         setTimeout(function () { toast.className = toast.className.replace('show', ''); }, 3000);
+    }
+
+    async function generateToken() {
+        const name = document.getElementById('token-name').value || 'Default';
+        const res = await fetch('/api/tokens', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({name: name, scopes: 'search,mcp'})
+        });
+        if (res.ok) {
+            const data = await res.json();
+            document.getElementById('new-token-value').textContent = data.token;
+            document.getElementById('new-token-display').style.display = 'block';
+        } else {
+            alert('Fout bij aanmaken token');
+        }
+    }
+
+    function copyToken() {
+        const token = document.getElementById('new-token-value').textContent;
+        navigator.clipboard.writeText(token).then(() => {
+            const toast = document.getElementById('toast');
+            toast.textContent = 'Token gekopieerd!';
+            toast.className = 'show';
+            setTimeout(function () { toast.className = ''; toast.textContent = 'Instellingen succesvol opgeslagen!'; }, 3000);
+        });
+    }
+
+    async function revokeToken(tokenId, btn) {
+        if (!confirm('Weet u zeker dat u dit token wilt intrekken?')) return;
+        const res = await fetch(`/api/tokens/${tokenId}`, {method: 'DELETE'});
+        if (res.ok) {
+            btn.closest('tr').remove();
+        } else {
+            alert('Fout bij intrekken token');
+        }
     }
 </script>
 {% endblock %}

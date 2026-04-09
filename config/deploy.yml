@@ -1,0 +1,130 @@
+# Kamal deployment configuration for NeoDemos
+# Docs: https://kamal-deploy.org/docs/configuration/
+
+service: neodemos
+image: ghcr.io/neodemos/neodemos
+
+servers:
+  web:
+    hosts:
+      - 178.104.137.168
+    options:
+      network: kamal
+
+ssh:
+  user: deploy
+  keys:
+    - ~/.ssh/neodemos_ed25519
+
+registry:
+  server: ghcr.io
+  username: NeoDemos
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+env:
+  clear:
+    NEODEMOS_CITY: rotterdam
+    DB_HOST: neodemos-postgres
+    DB_PORT: "5432"
+    DB_NAME: neodemos
+    DB_USER: postgres
+    DB_POOL_SIZE: "10"
+    DB_MAX_OVERFLOW: "20"
+    QDRANT_URL: http://neodemos-qdrant:6333
+    HOST: 0.0.0.0
+    PORT: "8000"
+    ENVIRONMENT: production
+    DEBUG: "false"
+    LOG_LEVEL: INFO
+    DOMAIN: neodemos.nl
+    ALLOWED_HOSTS: neodemos.nl,www.neodemos.nl,neodemos.eu,www.neodemos.eu,mcp.neodemos.nl,mcp.neodemos.eu
+  secret:
+    - DB_PASSWORD
+    - GEMINI_API_KEY
+    - NEBIUS_API_KEY
+    - QDRANT_API_KEY
+    - SECRET_KEY
+    - ORI_API_KEY
+    - ADMIN_EMAIL
+    - ADMIN_PASSWORD
+
+proxy:
+  ssl: true
+  host: neodemos.nl
+  app_port: 8000
+
+healthcheck:
+  path: /login
+  port: 8000
+  max_attempts: 15
+  interval: 5
+
+accessories:
+  postgres:
+    image: postgres:16
+    host: 178.104.137.168
+    port: "127.0.0.1:5432:5432"
+    env:
+      clear:
+        POSTGRES_DB: neodemos
+        POSTGRES_USER: postgres
+      secret:
+        - DB_PASSWORD
+    volumes:
+      - neodemos-postgres-data:/var/lib/postgresql/data
+    options:
+      memory: 4G
+      name: neodemos-postgres
+      network: kamal
+
+  qdrant:
+    image: qdrant/qdrant:v1.13.2
+    host: 178.104.137.168
+    port: "127.0.0.1:6333:6333"
+    env:
+      clear:
+        QDRANT__SERVICE__API_KEY: ""
+    volumes:
+      - /home/deploy/neodemos-data/qdrant_storage:/qdrant/storage
+    options:
+      memory: 12G
+      name: neodemos-qdrant
+      network: kamal
+
+  mcp:
+    image: ghcr.io/neodemos/neodemos
+    host: 178.104.137.168
+    port: "127.0.0.1:8001:8001"
+    cmd: "python mcp_server_v3.py --http --port 8001"
+    env:
+      clear:
+        DB_HOST: neodemos-postgres
+        DB_PORT: "5432"
+        DB_NAME: neodemos
+        DB_USER: postgres
+        QDRANT_URL: http://neodemos-qdrant:6333
+      secret:
+        - DB_PASSWORD
+        - GEMINI_API_KEY
+        - NEBIUS_API_KEY
+        - QDRANT_API_KEY
+    options:
+      memory: 1G
+      name: neodemos-mcp
+      network: kamal
+
+  caddy:
+    image: caddy:2-alpine
+    host: 178.104.137.168
+    port: "80:80"
+    options:
+      publish:
+        - "443:443"
+      memory: 128M
+      name: neodemos-caddy
+      network: kamal
+    volumes:
+      - /home/deploy/neodemos-config/Caddyfile:/etc/caddy/Caddyfile:ro
+      - neodemos-caddy-data:/data
+      - neodemos-caddy-config:/config

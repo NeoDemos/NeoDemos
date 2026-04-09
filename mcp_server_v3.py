@@ -1,26 +1,27 @@
 #!/usr/bin/env python3
 """
-NeoDemos MCP Server v3
-----------------------
-Upgraded retrieval layer for Claude Desktop.
+NeoDemos MCP Server — Civic Intelligence for Rotterdam City Council
+-------------------------------------------------------------------
+Pure retrieval layer for Claude Desktop, ChatGPT, and Perplexity.
+All analysis, synthesis, and reasoning is performed by the host LLM.
 
-Same design principle as v1: this server is purely a retrieval layer.
-All analysis, synthesis, and reasoning is performed by Claude Desktop.
-
-v3 improvements over v1:
-  - Jina API reranking (not fast_mode) — better chunk quality
+Features:
+  - Hybrid search: BM25 (dual-dictionary dutch+simple) + vector (Qwen3-8B)
+  - Jina API reranking for chunk quality
   - Party-filtered retrieval via Qdrant payload filter
+  - Structured motie/amendement metadata (indieners, vote outcomes, vote counts)
   - Dynamic top_k based on query complexity
   - Temporal phrase extraction from Dutch text
   - Financial table boost for budget queries
-  - Enriched metadata display (party, committee, doc_type)
+  - Knowledge graph: 57K+ relationship edges (LID_VAN, DIENT_IN, STEMT_VOOR/TEGEN)
 
 API usage: minimal — only Nebius embedding (1/query) + Jina reranking (1-3/query).
-No LLM calls. Claude Desktop IS the reasoning engine.
+No LLM calls. The host AI assistant IS the reasoning engine.
 
-Transport: stdio (Claude Desktop default)
+Transport: stdio (default) or SSE (for remote deployment)
 """
 
+import os
 import re
 import sys
 import json
@@ -36,12 +37,42 @@ sys.path.insert(0, str(PROJECT_ROOT))
 from dotenv import load_dotenv
 load_dotenv(PROJECT_ROOT / ".env")
 
+from neodemos_version import DISPLAY_NAME, VERSION_LABEL
 from mcp.server.fastmcp import FastMCP
+from mcp.server.auth.settings import AuthSettings, ClientRegistrationOptions
+
+# OAuth 2.1 auth — only enabled for HTTP transports (not stdio)
+_transport = sys.argv[1] if len(sys.argv) > 1 else "stdio"
+_auth_settings = None
+_auth_provider = None
+
+if _transport in ("sse", "streamable-http", "--http"):
+    from services.mcp_oauth_provider import NeodemosOAuthProvider
+    _base_url = os.environ.get("NEODEMOS_BASE_URL", "https://neodemos.nl")
+    _auth_provider = NeodemosOAuthProvider()
+    _auth_settings = AuthSettings(
+        issuer_url=_base_url,
+        resource_server_url=_base_url,
+        client_registration_options=ClientRegistrationOptions(
+            enabled=True,
+            valid_scopes=["mcp", "search"],
+            default_scopes=["mcp", "search"],
+        ),
+        required_scopes=["mcp"],
+    )
+
+_port = int(os.environ.get("MCP_PORT", "8001"))
+_host = os.environ.get("MCP_HOST", "0.0.0.0")
 
 mcp = FastMCP(
-    "neodemos_v3",
+    DISPLAY_NAME,
+    auth_server_provider=_auth_provider,
+    auth=_auth_settings,
+    host=_host if _transport != "stdio" else "127.0.0.1",
+    port=_port,
     instructions=(
-        "Je bent een assistent voor Rotterdam gemeenteraad vergaderingen. "
+        f"Je bent verbonden met {DISPLAY_NAME} {VERSION_LABEL}, een civic intelligence platform "
+        "voor de Rotterdamse gemeenteraad (90.000+ documenten, 2002-heden). "
         "Gebruik de beschikbare tools om relevante raadsinformatie op te halen. "
         "Analyseer en synthetiseer de opgehaalde data zelf — de tools doen alleen retrieval. "
         "Antwoord altijd in het Nederlands tenzij de gebruiker anders vraagt. "
@@ -909,9 +940,17 @@ def zoek_moties(
     with get_connection() as conn:
         cur = conn.cursor()
         cur.execute(f"""
-            SELECT d.id, d.name, m.start_date, LEFT(d.content, 400)
+            SELECT d.id, d.name, m.start_date, LEFT(d.content, 400),
+                   dc_enrich.indieners, dc_enrich.vote_outcome, dc_enrich.vote_counts
             FROM documents d
             LEFT JOIN meetings m ON d.meeting_id = m.id
+            LEFT JOIN LATERAL (
+                SELECT indieners, vote_outcome, vote_counts
+                FROM document_chunks
+                WHERE document_id = d.id
+                  AND (indieners IS NOT NULL OR vote_outcome IS NOT NULL)
+                LIMIT 1
+            ) dc_enrich ON true
             WHERE {where}
             ORDER BY m.start_date DESC
             LIMIT %s
@@ -936,12 +975,20 @@ def zoek_moties(
         lines.append(f"_Indiener: {indiener}_")
     lines.append("")
 
-    for i, (doc_id, name, start_date, content) in enumerate(rows, 1):
+    for i, (doc_id, name, start_date, content, indieners, vote_outcome, vote_counts) in enumerate(rows, 1):
         d = str(start_date)[:10] if start_date else "?"
-        parsed_uitkomst = _parse_uitkomst(name or "")
+        # Prefer enriched vote_outcome over regex-parsed from title
+        parsed_uitkomst = vote_outcome or _parse_uitkomst(name or "")
         content_clean = (content or "").replace("\n", " ")[:300]
         lines.append(f"### [{i}] {d} — {name[:100]}")
         lines.append(f"**Uitkomst:** {parsed_uitkomst}")
+        if vote_counts:
+            import json as _json
+            counts_str = _json.dumps(vote_counts) if isinstance(vote_counts, dict) else str(vote_counts)
+            lines.append(f"**Stemverhouding:** {counts_str}")
+        if indieners:
+            indiener_str = ", ".join(indieners) if isinstance(indieners, list) else str(indieners)
+            lines.append(f"**Indieners:** {indiener_str}")
         lines.append(f"_{content_clean}_")
         lines.append(f"_document_id: {doc_id}_\n")
 
@@ -1321,4 +1368,26 @@ def zoek_uitspraken_op_rol(
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    mcp.run(transport="stdio")
+    import argparse
+
+    parser = argparse.ArgumentParser(description=f"{DISPLAY_NAME} MCP Server")
+    parser.add_argument(
+        "transport", nargs="?", default="stdio",
+        choices=["stdio", "sse", "streamable-http"],
+        help="Transport protocol (default: stdio)",
+    )
+    parser.add_argument("--port", type=int, default=8001, help="Port for HTTP transports")
+    parser.add_argument("--host", default="0.0.0.0", help="Host for HTTP transports")
+    # Legacy flag from docker-compose
+    parser.add_argument("--http", action="store_true", help="Alias for 'streamable-http'")
+    args = parser.parse_args()
+
+    transport = "streamable-http" if args.http else args.transport
+
+    # Override host/port from CLI args
+    if transport != "stdio":
+        mcp.settings.host = args.host
+        mcp.settings.port = args.port
+
+    print(f"{DISPLAY_NAME} {VERSION_LABEL} — transport={transport} port={args.port}", flush=True)
+    mcp.run(transport=transport)

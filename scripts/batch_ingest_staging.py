@@ -19,6 +19,7 @@ DB_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:543
 
 def main():
     from pipeline.staging_ingestor import StagingIngestor
+    from pipeline.transcript_postprocessor import TranscriptPostProcessor
     from pipeline.committee_notulen_pipeline import derive_committee, CommitteeNotulenPipeline
 
     # Already-staged
@@ -31,6 +32,7 @@ def main():
 
     pipeline = CommitteeNotulenPipeline.__new__(CommitteeNotulenPipeline)
     ingestor = StagingIngestor(db_url=DB_URL, chunk_only=True)
+    postprocessor = TranscriptPostProcessor()
 
     # Find candidates
     candidates = []
@@ -62,6 +64,9 @@ def main():
             cache = f"output/transcripts/staging_cache/{mid}.json"
             if not os.path.exists(cache):
                 shutil.copy(fpath, cache)
+
+            # Post-process before ingestion (pre-clean + 2-pass LLM)
+            transcript = postprocessor.process(transcript)
 
             ingestor.ensure_staging_meeting(
                 meeting_id=mid, name=name, start_date=date,

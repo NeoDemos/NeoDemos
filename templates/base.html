@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }} | NeoDemos</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/style.css?v={{ version_label }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -16,17 +16,32 @@
     <header>
         <div class="logo">Neo<span>Demos</span></div>
         <nav>
+            {% if user %}
             <a href="/">Zoeken</a>
             <a href="/calendar">Kalender</a>
             <a href="/overview">Overzicht</a>
+            <a href="/mcp-installer">MCP</a>
             <a href="/settings">Instellingen</a>
+            {% if user.role == 'admin' %}
+            <a href="/admin">Beheer</a>
+            {% endif %}
+            <form method="POST" action="/logout" style="display:inline;">
+                <button type="submit" style="background:none;border:none;color:var(--secondary-color);font-weight:500;cursor:pointer;font-family:inherit;font-size:inherit;padding:0;margin-left:2rem;">Uitloggen</button>
+            </form>
+            {% else %}
+            <a href="/login">Inloggen</a>
+            <a href="/mcp-installer">MCP</a>
+            {% endif %}
         </nav>
     </header>
     <main>
         {% block content %}
         {% endblock %}
     </main>
-    <script src="/static/js/app.js"></script>
+    <footer>
+        <span class="version-badge">{{ display_name }} {{ version_label }}</span>
+    </footer>
+    <script src="/static/js/app.js?v={{ version_label }}"></script>
     {% block extra_scripts %}
     {% endblock %}
 </body>

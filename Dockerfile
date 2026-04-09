@@ -2,7 +2,7 @@
 # Production-ready Docker image for NeoDemos
 # Supports: Rotterdam, Amsterdam, Den Haag, and extensible to other Dutch cities
 
-FROM python:3.13-slim
+FROM python:3.12-slim
 
 # Set working directory
 WORKDIR /app
@@ -34,7 +34,7 @@ RUN mkdir -p /app/logs /app/data/pipeline /app/data/profiles /app/output
 
 # Health check - verify API is responding
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
-    CMD curl -f http://localhost:${PORT:-8000}/ || exit 1
+    CMD curl -f http://localhost:${PORT:-8000}/login || exit 1
 
 # Expose port
 EXPOSE ${PORT:-8000}

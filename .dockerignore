@@ -1,0 +1,33 @@
+# Data directories (large, mounted as volumes)
+data/
+output/
+logs/
+snapshots/
+downloads/
+storage/
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Environment and secrets
+.env
+.kamal/secrets
+
+# Git
+.git/
+
+# Dev files
+*.log
+*.out
+.DS_Store
+sandbox/
+eval_notulen/
+docs/
+brain/
+tmp_*
+*.wav
+*.mp4
+*.xlsx

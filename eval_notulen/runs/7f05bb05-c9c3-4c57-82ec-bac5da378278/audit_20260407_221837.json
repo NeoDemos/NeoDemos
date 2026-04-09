@@ -1,0 +1,607 @@
+{
+  "meeting_id": "7f05bb05-c9c3-4c57-82ec-bac5da378278",
+  "audit_timestamp": "2026-04-07T22:18:16.228110",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "judge_backend": "gemini",
+    "anthropic_model": "claude-haiku-4-5-20251001",
+    "gemini_model": "gemini-2.5-flash-lite"
+  },
+  "meeting_info": {
+    "name": "Vergadering Subcommissie BOOR 28-11-2018",
+    "start_date": "2018-11-28 00:00:00",
+    "committee": "Sub-BOOR",
+    "quality_score": 0.6,
+    "review_status": "rejected",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 53,
+    "document_count": 1
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 233,
+      "correct_count": 233,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.0,
+      "party_attribution_rate": 0.0,
+      "total_segments": 96,
+      "attributed_segments": 0,
+      "unattributed_segments": 96
+    },
+    "speaker_diversity": {
+      "unique_speakers": 0,
+      "unique_parties": 0,
+      "top_speaker": null,
+      "top_speaker_segment_count": 0,
+      "monologue_rate": 0.0,
+      "speakers": {},
+      "parties": {}
+    },
+    "segment_quality": {
+      "total_segments": 96,
+      "nonempty_segments": 96,
+      "total_words": 17079,
+      "total_chars": 94469,
+      "avg_words_per_segment": 177.9,
+      "avg_chars_per_segment": 984.1,
+      "short_segment_rate": 0.1146,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 1,
+      "items_with_content": 1,
+      "coverage_rate": 1.0,
+      "items": [
+        {
+          "title": "Full Meeting",
+          "segment_count": 96
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Vergadering Subcommissie BOOR 28-11-2018",
+        "start_date": "2018-11-28 00:00:00",
+        "committee": "Sub-BOOR",
+        "review_status": "rejected",
+        "quality_score": 0.6,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Vergadering Subcommissie BOOR 28-11-2018",
+        "start_date": "2018-11-28 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 0,
+      "recognized_speakers": 0,
+      "unrecognized_speakers": 0,
+      "recognition_rate": 0.0,
+      "recognized": [],
+      "unrecognized": []
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 53,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 27,
+        "short (50-200)": 2,
+        "long (2000-5000)": 24
+      },
+      "min_chars": 101,
+      "max_chars": 2585,
+      "avg_chars": 1737.6,
+      "median_chars": 1960,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 53,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 1,
+      "documents_with_chunks": 1,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Full Meeting",
+          "chunks": 53
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 53,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 53,
+      "distribution": {
+        "quote": {
+          "count": 53,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "ok",
+    "n_samples": 5,
+    "avg_hallucination_rate": 0.124,
+    "safe_for_councillors": false,
+    "hallucination_types_found": [],
+    "dangerous_claims": [
+      {
+        "chunk_id": 20347,
+        "claim": "Er zijn nog vier openstaande vragen."
+      }
+    ],
+    "chunk_results": [
+      {
+        "chunk_id": 20337,
+        "chunk_title": "Opening and Welcome",
+        "chunk_index": 0,
+        "content_preview": "[Unknown]: Dan kunnen we beginnen, nog niste commissie compleet. Goedemorgen allemaal. Ik heb jullie allemaal van harte welkom in deze vraadering van 28 november 2018 van de Subcommissie Bore. Van Bor",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "De vergadering is van de Subcommissie Bore.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Goedemorgen allemaal. Ik heb jullie allemaal van harte welkom in deze vraadering van 28 november 2018 van de Subcommissie Bore."
+            },
+            {
+              "claim": "De datum van de vergadering is 28 november 2018.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Goedemorgen allemaal. Ik heb jullie allemaal van harte welkom in deze vraadering van 28 november 2018 van de Subcommissie Bore."
+            },
+            {
+              "claim": "De heer Geelkaken is voorzitter van het algemeen bestuur.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Die hiervan Gelkarken, voorzitter van het algemeen bestuur."
+            },
+            {
+              "claim": "De heer Herzevenbergen ligt van het algemeen bestuur.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Die herziefen bergen, ligt van het algemeen bestuur."
+            },
+            {
+              "claim": "De heer van Bleiswijk is voorzitter van het college van bestuur.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Die hiervan Bleisweik, voorzitter van het collese van bestuur."
+            },
+            {
+              "claim": "De heer Vreder is van winkele hoofdfinancier.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Vreder ik van winkele hoofdfinanceen"
+            },
+            {
+              "claim": "Mevrouw van de Lee is bestuurssecretaris.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "en mevrouw van de lee bestuurzikretaris."
+            },
+            {
+              "claim": "De heer Heresburgman is verhinderd.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Vanuit de commissie is de heresburgman verhindert."
+            },
+            {
+              "claim": "Er zijn drie personen vertegenwoordigd in de commissie vanwege een vacature.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Weegens een ontstaande vakiture in de commissie zijn mevandaag met drie personen vertegen worden."
+            },
+            {
+              "claim": "Er wordt gewerkt om de commissie weer voltallig te krijgen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De wordt aangewerkt om de commissie weer vondalig te krijgen."
+            }
+          ],
+          "total_claims": 10,
+          "supported": 10,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Alle feitelijke beweringen in de te controleren tekst zijn ondersteund door het originele transcriptfragment. Er zijn geen onjuiste of niet-verifieerbare beweringen gevonden."
+        }
+      },
+      {
+        "chunk_id": 20347,
+        "chunk_title": "Board's Perspective on Education",
+        "chunk_index": 10,
+        "content_preview": "[Unknown]: Dat spelen twee dingen, één wat is over het, nou, de kueel academische studies zou maken, en twee is, we hebben een overheid de presentatie op het alge, het bestuurst buurro, dat heet A,\n[U",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Er zijn twee dingen die belangrijk zijn: ten eerste, wat is het, nou, de koel academische studies die gemaakt worden, en ten tweede, we hebben een overheidsinstantie, het bestuursbureau, dat heet A.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dat spelen twee dingen, één wat is over het, nou, de kueel academische studies zou maken, en twee is, we hebben een overheid de presentatie op het alge, het bestuurst buurro, dat heet A,"
+            },
+            {
+              "claim": "De financiele punten uit de brief die laat is bezorgd, zijn besproken.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dat zijn, denk ik. Dat is een goed bekijk. De financiele punten uit de brib die zo laatig is te raavond bij u is besorgd."
+            },
+            {
+              "claim": "Er moet een korte schorsing plaatsvinden omdat er iets niet helemaal goed gaat met de camera-beelden.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dank u wel voorzitter. Dank u wel voor deze toe ligt, ik heb begrepen dat wij heel even kwart moeten schorsen, omdat de iets niet helemaal goed gaat met zijn camera-beelden."
+            },
+            {
+              "claim": "De vergadering gaat verder en iedereen is weer in beeld.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Oké, ik ga er open de vergaadering, als we het goed is, zijn we nu allemaal in de field en ook met onze voorkant in wild."
+            },
+            {
+              "claim": "Er zijn nog vier openstaande vragen.",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "niet gevonden"
+            },
+            {
+              "claim": "Er wordt straks over de financiën en drie scholen gesproken.",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "niet gevonden"
+            },
+            {
+              "claim": "Er zijn nog wat toezeggingen die afgedaan zouden moeten worden door de 'boren'.",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "niet gevonden"
+            },
+            {
+              "claim": "Er is een mondelinge toelichting op de toezeggingen mogelijk.",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "niet gevonden"
+            },
+            {
+              "claim": "De toezeggingen zijn het die ontbreken.",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "niet gevonden"
+            },
+            {
+              "claim": "Er is een toelichting gegeven op de overheid.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Volgens mij ging dit enkel over de overheid. En is daar zo juist een toelichting opgegeven."
+            },
+            {
+              "claim": "Er zijn nog andere dingen die ontbreken.",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "niet gevonden"
+            },
+            {
+              "claim": "Er is gesproken over de tevredenheidspolingen en de topfunctionaris.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Over de teverredeheid spijligen en de topfunctionaris. Daar staat ook iets over de inderbrief."
+            }
+          ],
+          "total_claims": 13,
+          "supported": 5,
+          "unsupported": 8,
+          "contradicted": 0,
+          "hallucination_rate": 0.62,
+          "most_dangerous_claim": "Er zijn nog vier openstaande vragen.",
+          "reasoning": "De AI-gegenereerde notulen bevatten een aantal beweringen die niet direct terug te vinden zijn in de verstrekte transcriptfragmenten. Met name de beweringen over het aantal openstaande vragen, de specifieke onderwerpen die besproken zouden worden (financiën, drie scholen, toezeggingen door 'boren'), en de aard van de ontbrekende toezeggingen zijn niet te verifiëren. De bewering dat er vier openstaande vragen zijn, wordt als de meest gevaarlijke beschouwd omdat het een specifiek aantal noemt dat niet in de context staat."
+        }
+      },
+      {
+        "chunk_id": 20357,
+        "chunk_title": "Board's Perspective on Education",
+        "chunk_index": 20,
+        "content_preview": "[Unknown]: Dat is ook een heel onnieplomendiek.\n[Unknown]: Realit er moet ik daar wel bij zeggen dat het hele weerstandsmag beleid. Ook al afhankt van wat er rond die onderhoudsvoorzieningspeelt. Ik h",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Het hele beleid rondom het weerstandsvermogen is afhankelijk van wat er rond de onderhoudsvoorziening speelt.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Realit er moet ik daar wel bij zeggen dat het hele weerstandsmag beleid. Ook al afhankt van wat er rond die onderhoudsvoorzieningspeelt."
+            },
+            {
+              "claim": "De discussie over het weerstandsvermogen is nog niet klaar.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ik heb dat de proberen toe te lichten. Die discussie, als ik het zorg nog niet, is het niet klaar."
+            },
+            {
+              "claim": "Er wordt zo snel mogelijk gewerkt aan het beleid rondom het weerstandsvermogen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dus hij willen zo snel mogelijk werken."
+            },
+            {
+              "claim": "Bij de volgende kwartaalrapportage zal er een uitgewerkt beleid voor het weerstandsvermogen komen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ik denk dat de toezing niet ervan is dat bij de volgende met het korteerapportage. We liest met een uitgewoordge beleid weerstandsmag gekomen."
+            },
+            {
+              "claim": "Als de kwestie rondom de onderhoudsvoorziening niet is uitgekristalliseerd, kan het beleid voor het weerstandsvermogen nog niet goed worden gedaan.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Maar als je een kante kwest hieronder als we zinig nog niet geret is, dan kunnen we dat nog niet goed doen. Hoe vervelen dat ook is. Maar laten we een eten van met elkaar afspekken dat we bij die voortransapportage. De meest gezellige vervalen van zaken melden. Mocht het zo zijn dat je onderhoudsquest niet is uitgekrissealliseerd. En we dus nog niet aan een voortwaardig gedragen beleid weerstandsmag gekomen."
+            }
+          ],
+          "total_claims": 5,
+          "supported": 5,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Alle feitelijke beweringen in de te controleren tekst zijn ondersteund door het originele transcript."
+        }
+      },
+      {
+        "chunk_id": 20367,
+        "chunk_title": "Board's Perspective on Education",
+        "chunk_index": 30,
+        "content_preview": "[Unknown]: Dat hoorde ik zo met tegenweg.\n[Unknown]: Ik heb je dus naar de kwaliteit van het onderwijs. En daar gaat het over de aantal zwaakersheerswakkerscholen. En het vrouwen en even na de denken ",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "De spreker merkt op dat de ambitie van scholen om boven het vereiste niveau uit te stijgen, zoals beschreven in het jaarplan, niet altijd zichtbaar is op schoolniveau.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De spreker zegt: \"De ambities die scholen daar een boven hebben, die beschrijven zijn in hun jaarplanen. Die jaarplanen worden ontkritisch gelezen en gevolgd. Als u zegt, ik zou ook in de rapportein. Je eigenlijk meer terug willen zien over wat daar dan gebeurt.\""
+            },
+            {
+              "claim": "De spreker stelt dat het belangrijk is om de samenwerking tussen regulier en speciaal onderwijs te bevorderen, en dat dit niet uniek is voor de organisatie 'Bor'.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De spreker zegt: \"Toen ik het last ombruk voor mij wel de samenwerking in de daad tussen regering en speciaal onderwijs. Dat niet unique voor bor overgend.\""
+            },
+            {
+              "claim": "De spreker daagt uit dat het openbaar onderwijs een voortrekkersrol zou moeten spelen in passend onderwijs.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De spreker zegt: \"Maar ik zou eigenlijk wel willen uitdagen dat we vanuit het openbaar onderwijs. Daarop in zet om zeker een voortrekken zolde zespelen. Ik ben een passend onderwijs.\""
+            },
+            {
+              "claim": "De spreker vindt dat de samenwerking tussen onderwijs en zorg, met name rondom thuiszitters, verbeterd moet worden.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De spreker zegt: \"En de samenwerking. Ik had die even om er deze onderwerpen voor. Je hebt dat goed is een samenwerking. De zin van de prioriteit, de de drie prioriteit. Naast de identiteit en kwaliteit. Samwerking daar zit natuurlijk een enorme ol voor de gemeente. Omdat goed te doen. Als gaat er voor de samenwerking, dus het onderwijs een de zorg. De temas pas het onderwijs kwam. Het langs maar ook het thuis zit.\""
+            },
+            {
+              "claim": "De spreker vraagt naar de ontwikkeling van het ziekteverzuimpercentage bij leerkrachten.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De spreker zegt: \"Maar ik ben benieuwd hoe dat zich ontwikkeld en het is misschien heel vlauw. Maar is iedereen ook het best bevoegd die voor de klast staat?\""
+            },
+            {
+              "claim": "De spreker vraagt of iedereen die voor de klas staat, ook daadwerkelijk bevoegd is.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De spreker zegt: \"Maar ik ben benieuwd hoe dat zich ontwikkeld en het is misschien heel vlauw. Maar is iedereen ook het best bevoegd die voor de klast staat?\""
+            }
+          ],
+          "total_claims": 6,
+          "supported": 6,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Alle claims in de te controleren tekst zijn ondersteund door het originele transcript. Er zijn geen onjuiste of niet-verifieerbare beweringen gevonden."
+        }
+      },
+      {
+        "chunk_id": 20377,
+        "chunk_title": "Board's Perspective on Education",
+        "chunk_index": 40,
+        "content_preview": "[Unknown]: Ik hoop dat het was voor dit. Dank wel voor deze toelichting. Ik wil de hier van Geo-Kaken, ook nog ga je vertwoordig geven.\n[Unknown]: Voorzitter, over de samenwerking en wat we vandaag ge",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Ik hoop dat het was voor dit.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ik hoop dat het was voor dit."
+            },
+            {
+              "claim": "Dank wel voor deze toelichting.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dank wel voor deze toelichting."
+            },
+            {
+              "claim": "Ik wil de hier van Geo-Kaken, ook nog ga je vertwoordig geven.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ik wil de hier van Geo-Kaken, ook nog ga je vertwoordig geven."
+            },
+            {
+              "claim": "Voorzitter, over de samenwerking en wat we vandaag gemeente verwacht op dat vlak, wat we hebben ongezet en nu beter ook een goed aangeven.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Voorzitter, over de samenwerking en wat we vandaag gemeente verwacht op dat vlak, wat we hebben ongezet en nu beter ook een goed aangeven."
+            },
+            {
+              "claim": "Onderwijs is of zichzelf een belangrijk vedenmeen in het kare van de juchten, de opvoeding en de bewustwoording van burgen in een stad als Rotam te zijn.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Onderwijs is of zichzelf een belangrijk vedenmeen in het kare van de juchten, de opvoeding en de bewustwoording van burgen in een stad als Rotam te zijn."
+            },
+            {
+              "claim": "Onderwijs kan best veel achter uur op een dag in die order vergroorden worden ook echt gedorciert, onderwijs gegeven en achter uur bedacht zit er ook in de gemeenschap waarbij voor een voorlijkheid verdragen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Onderwijs kan best veel achter uur op een dag in die order vergroorden worden ook echt gedorciert, onderwijs gegeven en achter uur bedacht zit er ook in de gemeenschap waarbij voor een voorlijkheid verdragen."
+            },
+            {
+              "claim": "Maar zes er nu op een dag en twee dagen de werk zit er niet.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Maar zes er nu op een dag en twee dagen de werk zit er niet."
+            },
+            {
+              "claim": "In het tereplaans de leerlingen zijn ingetbed in een week in de gezin in vraagste kund die ver, de macht van boer oversteigen, maar de hoofdfracht nog al divers is.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "In het tereplaans de leerlingen zijn ingetbed in een week in de gezin in vraagste kund die ver, de macht van boer oversteigen, maar de hoofdfracht nog al divers is."
+            },
+            {
+              "claim": "En waarbij tegen aanloop is dat we van aangeven in de stad verkoekert werken.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En waarbij tegen aanloop is dat we van aangeven in de stad verkoekert werken."
+            },
+            {
+              "claim": "Dat werkt voor alle lijden boordoed iets dan onderwijs.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dat werkt voor alle lijden boordoed iets dan onderwijs."
+            },
+            {
+              "claim": "Maar doe je wel het minder aan.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Maar doe je wel het minder aan."
+            },
+            {
+              "claim": "Jurch zorg dat is veel anders geregeld, terwijs het rondom de veiligheid onderwijking voor heeft die invloed het zetera.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Jurch zorg dat is veel anders geregeld, terwijs het rondom de veiligheid onderwijking voor heeft die invloed het zetera."
+            },
+            {
+              "claim": "En het zijn net mensen, ook er wel te dan samenwerken in de we best moeilijk.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En het zijn net mensen, ook er wel te dan samenwerken in de we best moeilijk."
+            },
+            {
+              "claim": "En de gedachte is dat we dat vlak in de konpebruie door ons niet meer kunnen permiteren, omdat niet echt sypstandsjeerde stapken in de zetten.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En de gedachte is dat we dat vlak in de konpebruie door ons niet meer kunnen permiteren, omdat niet echt sypstandsjeerde stapken in de zetten."
+            },
+            {
+              "claim": "Samen met de gemeente, samen met de ketenpartes, samen met omgeving van de jeugd.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Samen met de gemeente, samen met de ketenpartes, samen met omgeving van de jeugd."
+            },
+            {
+              "claim": "Dat we ook wel dat we gaan melk aan een constanten lijn uitragen, dat het ook echt serieusch nodig wordt en dat we ook inhouden en voormaag geven.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dat we ook wel dat we gaan melk aan een constanten lijn uitragen, dat het ook echt serieusch nodig wordt en dat we ook inhouden en voormaag geven."
+            },
+            {
+              "claim": "En dat vlakt maar aan ons bij zorgen in het kale van de onmacht, om die echt alle kwamen te goede samenwerking inhouden en voorm te geven.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En dat vlakt maar aan ons bij zorgen in het kale van de onmacht, om die echt alle kwamen te goede samenwerking inhouden en voorm te geven."
+            },
+            {
+              "claim": "Dat is ook te reden, dat we graag te ook met de gemeente met de gemeente gaat en met u erover in contacten te reden en gespect erovervoeren.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dat is ook te reden, dat we graag te ook met de gemeente met de gemeente gaat en met u erover in contacten te reden en gespect erovervoeren."
+            },
+            {
+              "claim": "Want de kunnen ons niet permiteren, denk ik, om er niet echt sypstandsjeerde stapken en verbetering ook in de proces te naar de voort te brengen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Want de kunnen ons niet permiteren, denk ik, om er niet echt sypstandsjeerde stapken en verbetering ook in de proces te naar de voort te brengen."
+            },
+            {
+              "claim": "We zien echt zons heel groot vraagt zich op onze scholen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "We zien echt zons heel groot vraagt zich op onze scholen."
+            },
+            {
+              "claim": "Maar die scholen in de in de accimatieleringen heel directe gaan lopen, want als een jong of mijje eten vind ik goed gaat en dus een hoofdvraag op dat vlak moet mijn elders aan het debak, als het naar haar.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Maar die scholen in de in de accimatieleringen heel directe gaan lopen, want als een jong of mijje eten vind ik goed gaat en dus een hoofdvraag op dat vlak moet mijn elders aan het debak, als het naar haar."
+            },
+            {
+              "claim": "En als dat maar heel lang duurt, dan ziet die direct graag tot dat deze streus uitpak verkinderen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En als dat maar heel lang duurt, dan ziet die direct graag tot dat deze streus uitpak verkinderen."
+            },
+            {
+              "claim": "Hoe dat in feiten negatieve ervaringen heeft ook een laatste de kwaliteit van leven, van werken en van burgen en van Rotterdam zijn.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Hoe dat in feiten negatieve ervaringen heeft ook een laatste de kwaliteit van leven, van werken en van burgen en van Rotterdam zijn."
+            }
+          ],
+          "total_claims": 23,
+          "supported": 23,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Alle beweringen in de te controleren tekst zijn ondersteund door het originele transcript. Er zijn geen onjuistheden of tegenstrijdigheden gevonden."
+        }
+      }
+    ]
+  },
+  "verdict": {
+    "recommendation": "REJECT — fix issues before promotion",
+    "issues": [
+      "High hallucination rate: 12.4% (threshold ≤10%)",
+      "Very low speaker attribution: 0% (threshold ≥50%)"
+    ],
+    "warnings": [
+      "Dangerous claim in chunk 20347: Er zijn nog vier openstaande vragen."
+    ],
+    "scores": {
+      "hallucination_rate": 0.124,
+      "speaker_attribution_rate": 0.0,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.6
+    }
+  }
+}

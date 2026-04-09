@@ -1,0 +1,580 @@
+{
+  "meeting_id": "0304e7be-4a56-4c8e-af80-8522a8727848",
+  "audit_timestamp": "2026-04-07T22:03:09.092094",
+  "config": {
+    "qdrant_staging_collection": "committee_transcripts_staging",
+    "max_hallucination_rate": 0.05,
+    "min_speaker_attribution_rate": 0.8,
+    "min_quality_score": 0.7,
+    "judge_backend": "gemini",
+    "anthropic_model": "claude-haiku-4-5-20251001",
+    "gemini_model": "gemini-2.5-flash-lite"
+  },
+  "meeting_info": {
+    "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+    "start_date": "2025-06-25 00:00:00",
+    "committee": "COR",
+    "quality_score": 0.6,
+    "review_status": "rejected",
+    "transcript_source": "vtt",
+    "promoted_at": "",
+    "chunk_count": 86,
+    "document_count": 1
+  },
+  "transcript_quality": {
+    "neer": {
+      "neer": 0.0,
+      "total_occurrences": 487,
+      "correct_count": 487,
+      "error_count": 0,
+      "error_examples": []
+    },
+    "speaker_attribution": {
+      "attribution_rate": 0.0,
+      "party_attribution_rate": 0.0,
+      "total_segments": 157,
+      "attributed_segments": 0,
+      "unattributed_segments": 157
+    },
+    "speaker_diversity": {
+      "unique_speakers": 0,
+      "unique_parties": 0,
+      "top_speaker": null,
+      "top_speaker_segment_count": 0,
+      "monologue_rate": 0.0,
+      "speakers": {},
+      "parties": {}
+    },
+    "segment_quality": {
+      "total_segments": 157,
+      "nonempty_segments": 157,
+      "total_words": 30203,
+      "total_chars": 170267,
+      "avg_words_per_segment": 192.4,
+      "avg_chars_per_segment": 1084.5,
+      "short_segment_rate": 0.0828,
+      "avg_confidence": null,
+      "low_confidence_rate": null,
+      "has_confidence_scores": false
+    },
+    "agenda_coverage": {
+      "agenda_items_total": 1,
+      "items_with_content": 1,
+      "coverage_rate": 1.0,
+      "items": [
+        {
+          "title": "Full Meeting",
+          "segment_count": 157
+        }
+      ]
+    }
+  },
+  "db_consistency": {
+    "metadata": {
+      "status": "ok",
+      "staging": {
+        "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+        "start_date": "2025-06-25 00:00:00",
+        "committee": "COR",
+        "review_status": "rejected",
+        "quality_score": 0.6,
+        "transcript_source": "vtt"
+      },
+      "production": {
+        "name": "Commissie tot Onderzoek van de Rekening (2022-2026)",
+        "start_date": "2025-06-25 00:00:00",
+        "committee": null
+      },
+      "issues": []
+    },
+    "entity_consistency": {
+      "status": "skipped",
+      "message": "No production chunks found for this committee"
+    },
+    "speaker_presence": {
+      "total_unique_speakers": 0,
+      "recognized_speakers": 0,
+      "unrecognized_speakers": 0,
+      "recognition_rate": 0.0,
+      "recognized": [],
+      "unrecognized": []
+    }
+  },
+  "chunk_quality": {
+    "length_distribution": {
+      "total_chunks": 86,
+      "empty_chunks": 0,
+      "buckets": {
+        "medium (200-2000)": 34,
+        "short (50-200)": 1,
+        "long (2000-5000)": 51
+      },
+      "min_chars": 194,
+      "max_chars": 2688,
+      "avg_chars": 2022.4,
+      "median_chars": 2347,
+      "tiny_rate": 0.0,
+      "oversized_rate": 0.0
+    },
+    "boilerplate": {
+      "total_chunks": 86,
+      "boilerplate_count": 0,
+      "boilerplate_rate": 0.0,
+      "boilerplate_examples": []
+    },
+    "agenda_coverage": {
+      "total_documents": 1,
+      "documents_with_chunks": 1,
+      "empty_documents": 0,
+      "coverage_rate": 1.0,
+      "documents": [
+        {
+          "name": "Transcript: Full Meeting",
+          "chunks": 86
+        }
+      ],
+      "empty_document_names": []
+    },
+    "duplicates": {
+      "total_chunks": 86,
+      "duplicate_groups": 0,
+      "duplicate_chunk_count": 0,
+      "duplicate_rate": 0.0,
+      "examples": []
+    },
+    "chunk_types": {
+      "total": 86,
+      "distribution": {
+        "quote": {
+          "count": 86,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "hallucination_check": {
+    "status": "ok",
+    "n_samples": 5,
+    "avg_hallucination_rate": 0.0975,
+    "safe_for_councillors": false,
+    "hallucination_types_found": [],
+    "dangerous_claims": [
+      {
+        "chunk_id": 7534,
+        "claim": "Mevrouw Egeraat heeft het gevoel dat haar ideeën zijn meegenomen door het college."
+      }
+    ],
+    "chunk_results": [
+      {
+        "chunk_id": 7517,
+        "chunk_title": "Opening and Welcome",
+        "chunk_index": 0,
+        "content_preview": "[Unknown]: Goedemiddag allemaal. Goedemiddag allemaal. Wij gaan langzaam beginnen. Mevrouw Plieger. Welkom allemaal bij dit inspreek moment voor burgers, organisatie en wijkraden. Als input op de besp",
+        "claim_verification": {
+          "claims": [],
+          "total_claims": 515,
+          "supported": 511,
+          "unsupported": 2,
+          "contradicted": 2,
+          "hallucination_rate": 0.01,
+          "most_dangerous_claim": null,
+          "reasoning": "Parsed via regex fallback (malformed JSON from judge)"
+        }
+      },
+      {
+        "chunk_id": 7534,
+        "chunk_title": "Vluchtelingenwerk Nederland - Asylum and Integration Services",
+        "chunk_index": 17,
+        "content_preview": "[Unknown]: Dus stel je voor dat de Voorjaarsnota 2025 eens echt het verschil gaat maken voor sociaal en voor bewoners.\nDat Rotterdam zou investeren in mensen en in stenen en dat de weerbaarheid van de",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "De Voorjaarsnota 2025 moet het verschil gaan maken voor sociaal en voor bewoners.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Stel je voor dat de Voorjaarsnota 2025 eens echt het verschil gaat maken voor sociaal en voor bewoners."
+            },
+            {
+              "claim": "Rotterdam zou moeten investeren in mensen en in stenen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dat Rotterdam zou investeren in mensen en in stenen"
+            },
+            {
+              "claim": "De weerbaarheid van deze stad moet niet alleen gemeten worden in euro's, maar ook in menswaardigheid.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "en dat de weerbaarheid van deze stad niet alleen gemeten wordt in euro's, maar ook in menswaardigheid."
+            },
+            {
+              "claim": "Mevrouw Egeraat heeft een constructief deltaplan ingediend.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "U heeft een constructief deltaplan ingediend."
+            },
+            {
+              "claim": "Mevrouw Egeraat heeft het gevoel dat haar ideeën zijn meegenomen door het college.",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "niet gevonden"
+            },
+            {
+              "claim": "Het college heeft na eerdere oproepen van mevrouw Egeraat geluisterd.",
+              "verdict": "unsupported",
+              "hallucination_type": "other",
+              "evidence": "niet gevonden"
+            },
+            {
+              "claim": "Er is een vraag aan mevrouw Abrahams over pleisters plakken.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ik heb een vraag aan mevrouw Abrahams. Twee vragen. U had over pleisters plakken."
+            },
+            {
+              "claim": "Mevrouw Abrahams moet voorbeelden geven van pleisters die geplakt worden en die nu dus niet goed zijn, dus geen structurele oplossing zijn.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Kunt u daar een voorbeeld van noemen? Voorbeelden van noemen van van die pleisters. Die geplakt worden en die nu dus niet goed zijn, dus geen structurele oplossing zijn?."
+            }
+          ],
+          "total_claims": 8,
+          "supported": 5,
+          "unsupported": 3,
+          "contradicted": 0,
+          "hallucination_rate": 0.38,
+          "most_dangerous_claim": "Mevrouw Egeraat heeft het gevoel dat haar ideeën zijn meegenomen door het college.",
+          "reasoning": "De analyse identificeerde 8 claims. 5 claims werden ondersteund door de context. 3 claims waren niet ondersteund, omdat de context geen informatie bevatte over het gevoel van mevrouw Egeraat of of het college naar haar had geluisterd. Deze claims werden geclassificeerd als 'other' hallucinatie. De meest gevaarlijke claim is de niet-ondersteunde claim over de gevoelens van mevrouw Egeraat, omdat deze een subjectieve interpretatie toeschrijft die niet verifieerbaar is in de tekst."
+        }
+      },
+      {
+        "chunk_id": 7551,
+        "chunk_title": "Vluchtelingenwerk Nederland - Asylum and Integration Services",
+        "chunk_index": 34,
+        "content_preview": "[Unknown]: Was Knoert gezellig.\n[Unknown]: Vorige maand. Zag ik een afdoening voorstel voorbij komen. Uiteindelijk was. Wat het voor november 23 gebeurde, was een motie en een opdracht aan het college",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "Het was 'Knoert gezellig'.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En ondanks dat het hartstikke koud was,. Was Knoert gezellig."
+            },
+            {
+              "claim": "Vorige maand zag ik een afdoening voorstel voorbij komen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Vorige maand. Zag ik een afdoening voorstel voorbij komen."
+            },
+            {
+              "claim": "Wat voor november 2023 gebeurde, was een motie en een opdracht aan het college.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Wat het voor november 23 gebeurde, was een motie en een opdracht aan het college."
+            },
+            {
+              "claim": "Vorige maand rapporteerde de wethouder over de afdoening van die motie.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En vorige maand rapporteerde de wethouder. Over de afdoening van die motie."
+            },
+            {
+              "claim": "Dit wordt op 2 juli, dus volgende week, besproken.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Gaat u op 2 juli dus volgende week bespreken."
+            },
+            {
+              "claim": "In het afdoening voorstel wordt een aantal dingen verteld.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En in het afdoening voorstel. Wordt een aantal dingen verteld."
+            },
+            {
+              "claim": "Het is best een lang verhaal.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Het is best een lang verhaal."
+            },
+            {
+              "claim": "Ik weet niet of dat gebruikelijk is, maar ik vond het echt opvallend lang.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ik weet niet of dat gebruikelijk is, maar ik vond het echt opvallend lang."
+            },
+            {
+              "claim": "Allereerst complimenten voor het werk van de werkgroep.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Allereerst complimenten voor het werk van de werkgroep."
+            },
+            {
+              "claim": "Een werkgroep die bij elkaar is gekomen op initiatief van de wijkraad.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Een werkgroep die bij elkaar is gekomen op initiatief van de wijkraad."
+            },
+            {
+              "claim": "BOP, destijds voorzitter van de wijkraad, is vandaag ook bij.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "BOP, destijds voorzitter van de wijkraad, is vandaag ook bij."
+            },
+            {
+              "claim": "Die werkgroep. Daar zijn een aantal ambtenaren.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Die werkgroep. Daar zijn een aantal ambtenaren."
+            },
+            {
+              "claim": "Daar zaten partners uit de wijk.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Daar zaten partners uit de wijk."
+            },
+            {
+              "claim": "Daar zetten wij de fondsen in.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Daar zetten wij de fondsen in."
+            },
+            {
+              "claim": "Verschillende Rotterdamse fondsen hebben er aan meegewerkt.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Verschillende Rotterdamse fondsen hebben er aan meegewerkt"
+            },
+            {
+              "claim": "Zelfs twee adviesbureaus hebben vrijwillig daar een bijdrage geleverd om te kijken welke andere bronnen van inkomsten mogelijk zijn voor het werk van het Kinderparadijs.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "en zelfs twee adviesbureaus hebben vrijwillig daar een bijdrage geleverd om te kijken welke andere bronnen van inkomsten mogelijk zijn voor het werk van het Kinderparadijs."
+            },
+            {
+              "claim": "Dat heeft een heleboel prachtige nieuwe plannen opgeleverd.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dat heeft een heleboel prachtige nieuwe plannen opgeleverd."
+            },
+            {
+              "claim": "Allemaal leuke dingen die we kunnen gaan doen en die ik ook eigenlijk heel graag wil gaan doen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Allemaal leuke dingen die we kunnen gaan doen en die ik ook eigenlijk heel graag wil gaan doen."
+            },
+            {
+              "claim": "Alleen wordt het niet opleveren was.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Alleen wordt het niet opleveren was."
+            },
+            {
+              "claim": "Hoe financieren we nu het kinderparadijs?",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Hoe financieren we nu het kinderparadijs?"
+            },
+            {
+              "claim": "Die basis?",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Die basis?"
+            },
+            {
+              "claim": "Het onderwerp kwam al een paar keer eerder voorbij.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Het onderwerp kwam al een paar keer eerder voorbij."
+            },
+            {
+              "claim": "Allerlei projecten waar heel veel mogelijkheden voor.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Allerlei projecten waar heel veel mogelijkheden voor."
+            },
+            {
+              "claim": "Met de basis niet.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Met de basis niet."
+            },
+            {
+              "claim": "En de wethouder onderstreept dat eigenlijk ook in de brief dat af en toe niks voorstelt.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En de wethouder onderstreept dat eigenlijk ook in de brief dat af en toe niks voorstelt."
+            },
+            {
+              "claim": "Dat die zegt van ja.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dat die zegt van ja."
+            },
+            {
+              "claim": "De basis van het kinderparadijs zal gesubsidieerd moeten blijven.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De basis van het kinderparadijs zal gesubsidieerd moeten blijven."
+            },
+            {
+              "claim": "Nou, dat was ook de conclusie van de werkgroep.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Nou, dat was ook de conclusie van de werkgroep."
+            },
+            {
+              "claim": "De wethouder zegt ook dat hij het geld niet heeft.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Wethouder zegt ook dat die het geld niet heeft."
+            },
+            {
+              "claim": "En dat is natuurlijk wel heel teleurstellend.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En dat is natuurlijk wel heel teleurstellend."
+            },
+            {
+              "claim": "De vraag was eigenlijk om een structurele oplossing.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "De vraag was eigenlijk om een structurele oplossing."
+            },
+            {
+              "claim": "Hij wijst nog naar jeugdzorg.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Hij wijst nog naar jeugdzorg."
+            },
+            {
+              "claim": "En maakt daarbij ook melding van ja, dat is eigenlijk het geld wat je nu investeert aan de voorkant.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "En maakt daarbij ook melding van ja, dat is eigenlijk het geld wat je nu investeert aan de voorkant."
+            },
+            {
+              "claim": "Dat bespaar je uiteindelijk.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Dat bespaar je uiteindelijk."
+            },
+            {
+              "claim": "Bij Jeugdzorg wordt nog verwezen naar het oude Koopmans wijsheid van de Raad voor de Baat uit.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Bij Jeugdzorg wordt nog verwezen naar het oude Koopmans wijsheid van de Raad voor de Baat uit"
+            },
+            {
+              "claim": "En ik ben op zich hartstikke in hem eens.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "en ik ben op zich hartstikke in hem eens."
+            },
+            {
+              "claim": "Overigens geldt dat niet alleen voor jeugdzorg.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Overigens geldt dat niet alleen voor jeugdzorg."
+            },
+            {
+              "claim": "Ditzelfde argument, deze zelfde argumentatie, geldt ook voor allerlei andere dingen.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ditzelfde argument,. Deze zelfde argumentatie, geldt ook voor allerlei andere dingen."
+            },
+            {
+              "claim": "Als het gaat om jeugd preventie, maar bijvoorbeeld ook als het gaat om armoedebestrijding.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Als het gaat om jeugd preventie, maar bijvoorbeeld ook als het gaat om armoedebestrijding."
+            },
+            {
+              "claim": "Want ook armoede kun je voorkomen, of in ieder geval het risico op armoede een stuk kleiner maken.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Want ook armoede kun je. Voorkomen, of in ieder geval het risico op armoede een stuk kleiner maken."
+            }
+          ],
+          "total_claims": 40,
+          "supported": 40,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Alle beweringen in de te controleren tekst zijn ondersteund door het meegeleverde transcript."
+        }
+      },
+      {
+        "chunk_id": 7568,
+        "chunk_title": "Vluchtelingenwerk Nederland - Asylum and Integration Services",
+        "chunk_index": 51,
+        "content_preview": "[Unknown]: Daar kunt u gebruik van maken en dan zien we u om 6.45u weer terug.\n[Unknown]: Goedenavond, Goedenavond. We gaan verder met het inspreken moment voor de voorjaarsnota en de eerste herzienin",
+        "claim_verification": {
+          "claims": [
+            {
+              "claim": "De vergadering gaat verder met het inspreekmoment voor de voorjaarsnota en de eerste herziening van 2025.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Goedenavond, Goedenavond. We gaan verder met het inspreken moment voor de voorjaarsnota en de eerste herziening van 2025."
+            },
+            {
+              "claim": "De heer Van Leerdam is de eerste inspreker voor het avondprogramma.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "Ja, en dan gaan we verder met de eerste inspreker voor het avondprogramma en dat is de heer Van Leerdam."
+            },
+            {
+              "claim": "De heer Van Leerdam krijgt vijf minuten de tijd om zijn verhaal te delen met de raad.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "U krijgt vijf minuutjes de tijd om je verhaal te delen met de raad"
+            },
+            {
+              "claim": "Na het verhaal van de heer Van Leerdam worden vragen aan hem gesteld die hij in één keer kan beantwoorden.",
+              "verdict": "supported",
+              "hallucination_type": null,
+              "evidence": "en vervolgens wordt de vraag aan u gesteld. Die kunt u opschrijven en dan in één keer beantwoorden."
+            }
+          ],
+          "total_claims": 4,
+          "supported": 4,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": 0.0,
+          "most_dangerous_claim": null,
+          "reasoning": "Alle beweringen in de te controleren tekst zijn direct ondersteund door het transcript."
+        }
+      },
+      {
+        "chunk_id": 7585,
+        "chunk_title": "Vluchtelingenwerk Nederland - Asylum and Integration Services",
+        "chunk_index": 68,
+        "content_preview": "[Unknown]: Dat dat u aan de bel trekt eigenlijk, en dat dat de gemeente gewoon in actie moet komen.\n[Unknown]: Dank, dank de commissie, want er zijn geen andere vragen. Dus dan geven we eerst het woor",
+        "claim_verification": {
+          "claims": [],
+          "total_claims": 0,
+          "supported": 0,
+          "unsupported": 0,
+          "contradicted": 0,
+          "hallucination_rate": null,
+          "reasoning": "API error: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}"
+        }
+      }
+    ]
+  },
+  "verdict": {
+    "recommendation": "REJECT — fix issues before promotion",
+    "issues": [
+      "Very low speaker attribution: 0% (threshold ≥50%)"
+    ],
+    "warnings": [
+      "Moderate hallucination rate: 9.8% (threshold 5%)",
+      "Dangerous claim in chunk 7534: Mevrouw Egeraat heeft het gevoel dat haar ideeën zijn meegenomen door het college."
+    ],
+    "scores": {
+      "hallucination_rate": 0.0975,
+      "speaker_attribution_rate": 0.0,
+      "neer": 0.0,
+      "pipeline_quality_score": 0.6
+    }
+  }
+}

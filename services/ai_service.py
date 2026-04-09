@@ -1236,6 +1236,84 @@ OUTPUT (Map the debate):
             yield {"type": "error", "message": f"Analyse mislukt: {str(e)}"}
             return
 
+        # ── Agentic loop: confidence check + conditional RAG retrieval ──
+        supplementary_context = ""
+        try:
+            confidence_prompt = f"""Je bent een kwaliteitscontroleur voor gemeenteraadsanalyses.
+Beoordeel de volledigheid van de onderstaande extractie en debatkaart voor het onderwerp: "{item_name}".
+
+EXTRACTED FACTS:
+{extracted_facts[:6000]}
+
+DEBATE MAP:
+{debate_map[:6000]}
+
+Beoordeel op deze criteria:
+- Zijn er concrete bedragen/data of ontbreken die?
+- Zijn de standpunten van meerdere partijen vertegenwoordigd of alleen van één partij?
+- Zijn er gaten in de tijdlijn?
+- Ontbreken er cruciale tegenstanders of voorstanders?
+
+Antwoord in EXACT dit JSON-formaat (geen andere tekst):
+{{"confidence": "HIGH|LOW", "missing": "korte beschrijving van wat ontbreekt (max 30 woorden)", "search_query": "zoekquery voor ontbrekende info (max 15 woorden, alleen als LOW)"}}"""
+
+            conf_response = await loop.run_in_executor(
+                None,
+                lambda: self.client.models.generate_content(
+                    model=self.model_name, contents=confidence_prompt
+                ),
+            )
+            conf_text = conf_response.text.strip()
+            # Parse JSON from response (handle markdown code blocks)
+            if "```" in conf_text:
+                conf_text = conf_text.split("```")[1]
+                if conf_text.startswith("json"):
+                    conf_text = conf_text[4:]
+                conf_text = conf_text.strip()
+            conf_data = json.loads(conf_text)
+            confidence = conf_data.get("confidence", "HIGH")
+            logger.info(f"Agentic loop confidence: {confidence} — {conf_data.get('missing', 'n/a')}")
+
+            if confidence == "LOW" and conf_data.get("search_query"):
+                yield {"type": "status", "message": "Aanvullende context ophalen..."}
+                from services.rag_service import RAGService
+                rag = RAGService()
+                targeted_query = conf_data["search_query"]
+                targeted_embedding = self.generate_embedding(targeted_query)
+                supplementary_chunks = rag.retrieve_relevant_context(
+                    query_text=targeted_query,
+                    query_embedding=targeted_embedding,
+                    top_k=10,
+                    fast_mode=True,
+                )
+                if supplementary_chunks:
+                    supplementary_parts = []
+                    for sc in supplementary_chunks:
+                        supplementary_parts.append(f"[RAG] {sc.title}: {sc.content[:500]}")
+                    supplementary_context = "\n\n".join(supplementary_parts)
+                    # Add supplementary sources to ordered_sources
+                    existing_ids = {s["name"] for s in ordered_sources}
+                    for sc in supplementary_chunks:
+                        if sc.title not in existing_ids:
+                            ordered_sources.append({
+                                "id": len(ordered_sources) + 1,
+                                "name": sc.title,
+                                "url": "#",
+                            })
+                            existing_ids.add(sc.title)
+                    logger.info(f"Agentic loop: added {len(supplementary_chunks)} supplementary chunks")
+        except Exception as e:
+            # Confidence check is best-effort — never block synthesis
+            logger.warning(f"Agentic confidence check failed (non-fatal): {e}")
+
+        # Build supplementary section for synthesis if we found extra context
+        supplementary_section = ""
+        if supplementary_context:
+            supplementary_section = f"""
+AANVULLENDE CONTEXT (uit raadsarchieven):
+{supplementary_context}
+"""
+
         synthesis_prompt = f"""Je bent een strategisch adviseur die een formeel 'Debat-voorbereidingsdossier' schrijft.
 Gebruik de 'Extracted Facts' en 'Debate Map' om een gestructureerd rapport te maken in de officiële PvdA-standaardindeling.
 
@@ -1288,7 +1366,7 @@ EXTRACTED FACTS & TIMELINE:
 
 DEBATE MAP & POSITIONS:
 {debate_map}
-"""
+{supplementary_section}"""
 
         # Stage 3: streaming synthesis
         yield {"type": "status", "message": "Rapport schrijven (3/3)..."}
