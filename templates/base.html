@@ -14,7 +14,7 @@
 
 <body>
     <header>
-        <div class="logo">Neo<span>Demos</span></div>
+        <a href="/" class="logo" aria-label="NeoDemos home">Neo<span>Demos</span></a>
         <nav>
             {% if user %}
             <a href="/">Zoeken</a>
@@ -26,11 +26,12 @@
             <a href="/admin">Beheer</a>
             {% endif %}
             <form method="POST" action="/logout" style="display:inline;">
-                <button type="submit" style="background:none;border:none;color:var(--secondary-color);font-weight:500;cursor:pointer;font-family:inherit;font-size:inherit;padding:0;margin-left:2rem;">Uitloggen</button>
+                <button type="submit" class="nav-link-button">Uitloggen</button>
             </form>
             {% else %}
-            <a href="/login">Inloggen</a>
+            <a href="/">Zoeken</a>
             <a href="/mcp-installer">MCP</a>
+            <a href="/login">Inloggen</a>
             {% endif %}
         </nav>
     </header>

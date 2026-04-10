@@ -3,13 +3,13 @@
 {% block content %}
 <style>
     .installer-container {
-        max-width: 800px;
+        max-width: 860px;
         margin: 2rem auto;
     }
 
     .installer-hero {
         text-align: center;
-        padding: 2rem 0 3rem;
+        padding: 2rem 0 2.5rem;
     }
 
     .installer-hero h1 {
@@ -21,111 +21,142 @@
     .installer-hero p {
         font-size: 1.05rem;
         color: #718096;
-        max-width: 600px;
+        max-width: 620px;
         margin: 0 auto;
     }
 
-    .installer-cards {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1.5rem;
-        margin-bottom: 2rem;
+    /* ── Method tabs ── */
+    .method-tabs {
+        display: flex;
+        gap: 0;
+        margin-bottom: 0;
+        border-bottom: 2px solid #e2e8f0;
     }
 
-    @media (max-width: 600px) {
-        .installer-cards {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    .installer-card {
-        background: #fff;
-        padding: 2rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        text-align: center;
-    }
-
-    .installer-card h3 {
-        margin-bottom: 0.5rem;
-        color: var(--secondary-color);
-    }
-
-    .installer-card p {
-        font-size: 0.9rem;
-        color: #718096;
-        margin-bottom: 1.5rem;
-    }
-
-    .download-btn {
-        display: inline-block;
-        padding: 0.7rem 1.5rem;
-        background: var(--secondary-color);
-        color: white;
+    .method-tab {
+        padding: 0.75rem 1.5rem;
+        background: none;
         border: none;
-        border-radius: 6px;
         font-size: 0.95rem;
         font-weight: 600;
-        cursor: not-allowed;
-        opacity: 0.5;
-        text-decoration: none;
+        color: #718096;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -2px;
+        transition: all 0.2s;
     }
 
-    .download-btn.coming-soon::after {
-        content: ' (binnenkort)';
-        font-weight: 400;
-        font-size: 0.85rem;
+    .method-tab.active {
+        color: var(--primary-color);
+        border-bottom-color: var(--primary-color);
     }
 
-    .manual-section {
+    .method-tab:hover:not(.active) {
+        color: #4a5568;
+    }
+
+    .method-panel {
+        display: none;
         background: #fff;
         padding: 2rem;
-        border-radius: 8px;
+        border-radius: 0 0 8px 8px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .method-panel.active {
+        display: block;
+    }
+
+    .recommended-badge {
+        display: inline-block;
+        background: #c6f6d5;
+        color: #276749;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 0.15rem 0.5rem;
+        border-radius: 8px;
+        margin-left: 0.4rem;
+        vertical-align: middle;
+        text-transform: uppercase;
+    }
+
+    /* ── Sections ── */
+    .install-section {
         margin-bottom: 2rem;
     }
 
-    .manual-section h3 {
-        margin-bottom: 1rem;
+    .install-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .install-section h3 {
+        font-size: 1.1rem;
         color: var(--secondary-color);
-        border-bottom: 1px solid #e2e8f0;
-        padding-bottom: 0.5rem;
-    }
-
-    .manual-section h4 {
-        margin-top: 1.5rem;
-        margin-bottom: 0.5rem;
-        color: #4a5568;
-    }
-
-    .manual-section ol {
-        padding-left: 1.5rem;
-        color: #4a5568;
-    }
-
-    .manual-section li {
         margin-bottom: 0.75rem;
-        line-height: 1.5;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
+    .install-section h4 {
+        font-size: 0.95rem;
+        color: #4a5568;
+        margin: 1.25rem 0 0.5rem;
+    }
+
+    .install-section p, .install-section li {
+        color: #4a5568;
+        font-size: 0.92rem;
+        line-height: 1.6;
+    }
+
+    .install-section ol {
+        padding-left: 1.5rem;
+    }
+
+    .install-section li {
+        margin-bottom: 0.5rem;
+    }
+
+    .step-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        background: var(--primary-color);
+        color: #fff;
+        border-radius: 50%;
+        font-size: 0.75rem;
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+
+    /* ── Code blocks ── */
     .code-block {
         background: #1a202c;
         color: #e2e8f0;
-        padding: 1.25rem;
+        padding: 1rem 1.25rem;
         border-radius: 6px;
         overflow-x: auto;
         font-family: 'Courier New', monospace;
-        font-size: 0.85rem;
+        font-size: 0.84rem;
         line-height: 1.5;
         position: relative;
-        margin: 1rem 0;
+        margin: 0.75rem 0;
+    }
+
+    .code-block pre {
+        margin: 0;
+        white-space: pre-wrap;
+        word-break: break-all;
     }
 
     .copy-btn {
         position: absolute;
         top: 0.5rem;
         right: 0.5rem;
-        padding: 0.3rem 0.6rem;
+        padding: 0.3rem 0.7rem;
         background: rgba(255, 255, 255, 0.1);
         color: #a0aec0;
         border: 1px solid rgba(255, 255, 255, 0.15);
@@ -141,116 +172,411 @@
         color: #fff;
     }
 
-    .token-note {
-        background: #fffbeb;
-        border: 1px solid #fbbf24;
-        padding: 1rem;
+    .copy-btn.copied {
+        background: #276749;
+        color: #c6f6d5;
+        border-color: #276749;
+    }
+
+    /* ── Primary action button ── */
+    .action-btn {
+        display: inline-block;
+        padding: 0.75rem 1.75rem;
+        background: var(--primary-color);
+        color: white;
+        border: none;
         border-radius: 6px;
-        font-size: 0.9rem;
-        color: #92400e;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: opacity 0.2s;
+    }
+
+    .action-btn:hover {
+        opacity: 0.9;
+    }
+
+    .action-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .action-btn-secondary {
+        background: var(--secondary-color);
+    }
+
+    /* ── Token generation area ── */
+    .token-generate-area {
+        background: #f7fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+    }
+
+    .token-display {
+        display: none;
         margin-top: 1rem;
     }
 
-    .token-note a {
-        color: var(--accent-color);
+    .token-display.visible {
+        display: block;
+    }
+
+    .token-warning {
+        background: #fffbeb;
+        border: 1px solid #fbbf24;
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        color: #92400e;
+        margin-bottom: 1rem;
+    }
+
+    .token-value {
+        background: #1a202c;
+        color: #68d391;
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.82rem;
+        word-break: break-all;
+        position: relative;
+    }
+
+    /* ── Info callout ── */
+    .info-callout {
+        background: #ebf8ff;
+        border: 1px solid #90cdf4;
+        padding: 1rem;
+        border-radius: 6px;
+        font-size: 0.88rem;
+        color: #2a4365;
+        margin: 1rem 0;
+    }
+
+    .info-callout strong {
+        color: #1a365d;
+    }
+
+    /* ── Login prompt ── */
+    .login-prompt {
+        text-align: center;
+        padding: 2rem;
+        background: #f7fafc;
+        border: 1px dashed #cbd5e0;
+        border-radius: 8px;
+        margin: 1rem 0;
+    }
+
+    .login-prompt p {
+        margin-bottom: 1rem;
+        color: #4a5568;
+    }
+
+    /* ── Tool table ── */
+    .tools-section {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        margin-top: 2rem;
+    }
+
+    .tools-section h3 {
+        margin-bottom: 1rem;
+        color: var(--secondary-color);
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 0.5rem;
+    }
+
+    .separator {
+        border: none;
+        border-top: 1px solid #e2e8f0;
+        margin: 1.5rem 0;
+    }
+
+    /* ── Spinner ── */
+    .spinner {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255,255,255,0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+        margin-right: 0.5rem;
+        vertical-align: middle;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* ── Tabs within panels ── */
+    .client-tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .client-tab {
+        padding: 0.4rem 1rem;
+        background: #edf2f7;
+        border: none;
+        border-radius: 6px;
+        font-size: 0.85rem;
         font-weight: 600;
+        color: #4a5568;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .client-tab.active {
+        background: var(--primary-color);
+        color: #fff;
+    }
+
+    .client-panel {
+        display: none;
+    }
+
+    .client-panel.active {
+        display: block;
+    }
+
+    @media (max-width: 600px) {
+        .method-tabs {
+            flex-direction: column;
+        }
+        .method-tab {
+            border-bottom: none;
+            border-left: 2px solid transparent;
+            margin-bottom: 0;
+            margin-left: 0;
+        }
+        .method-tab.active {
+            border-left-color: var(--primary-color);
+            border-bottom-color: transparent;
+        }
     }
 </style>
 
 <div class="installer-container">
     <div class="installer-hero">
         <h1>NeoDemos MCP Server</h1>
-        <p>Verbind Claude of ChatGPT met de Rotterdamse raadsinformatie via het Model Context Protocol (MCP).</p>
+        <p>Verbind Claude, ChatGPT of andere AI-assistenten met 90.000+ Rotterdamse raadsdocumenten via het Model Context Protocol.</p>
     </div>
 
-    <div class="installer-cards">
-        <div class="installer-card">
-            <h3>Claude Desktop</h3>
-            <p>Gebruik NeoDemos direct in Claude Desktop met automatische configuratie.</p>
-            <button class="download-btn coming-soon">Download Installer</button>
-        </div>
-        <div class="installer-card">
-            <h3>ChatGPT</h3>
-            <p>Verbind NeoDemos met ChatGPT via de MCP-integratie.</p>
-            <button class="download-btn coming-soon">Download Installer</button>
-        </div>
+    <!-- ── Method selector ── -->
+    <div class="method-tabs">
+        <button class="method-tab active" data-target="oauth-panel">
+            OAuth (automatisch) <span class="recommended-badge">Aanbevolen</span>
+        </button>
+        <button class="method-tab" data-target="token-panel">
+            API Token (handmatig)
+        </button>
     </div>
 
-    <div class="manual-section">
-        <h3>Handmatige Configuratie</h3>
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- PANEL 1: OAuth — zero-config, Claude handles auth  -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div id="oauth-panel" class="method-panel active">
 
-        <h4>Claude Desktop</h4>
-        <ol>
-            <li>Open Claude Desktop en ga naar <strong>Settings &rarr; Developer &rarr; Edit Config</strong>.</li>
-            <li>Voeg het volgende toe aan uw <code>claude_desktop_config.json</code>:</li>
-        </ol>
+        <div class="info-callout">
+            <strong>Geen token nodig!</strong>
+            De MCP-server gebruikt OAuth 2.1 — Claude opent automatisch een inlogvenster bij de eerste verbinding.
+            U hoeft alleen de server-URL toe te voegen.
+        </div>
 
-        <div class="code-block" id="claude-config">
-            <button class="copy-btn" onclick="copyCode('claude-config')">Kopieer</button>
+        <div class="client-tabs">
+            <button class="client-tab active" data-target="oauth-claude-desktop">Claude Desktop</button>
+            <button class="client-tab" data-target="oauth-claude-code">Claude Code (CLI)</button>
+            <button class="client-tab" data-target="oauth-chatgpt">ChatGPT</button>
+        </div>
+
+        <!-- Claude Desktop -->
+        <div id="oauth-claude-desktop" class="client-panel active">
+            <div class="install-section">
+                <h4><span class="step-number">1</span> Open Claude Desktop</h4>
+                <p>Ga naar <strong>Settings &rarr; Integrations</strong> (of Developer &rarr; Edit Config in oudere versies).</p>
+
+                <h4><span class="step-number">2</span> Voeg de server toe</h4>
+                <p>Klik op <strong>Add Integration</strong> en plak de volgende URL:</p>
+
+                <div class="code-block" id="oauth-url-block">
+                    <button class="copy-btn" onclick="copyText('{{ mcp_url }}', this)">Kopieer</button>
+                    <pre>{{ mcp_url }}</pre>
+                </div>
+
+                <p style="margin-top:0.75rem;font-size:0.88rem;color:#718096;">
+                    Of voeg het handmatig toe aan uw <code>claude_desktop_config.json</code>:
+                </p>
+
+                <div class="code-block" id="oauth-config-block">
+                    <button class="copy-btn" onclick="copyCode('oauth-config-block')">Kopieer</button>
 <pre>{
   "mcpServers": {
     "neodemos": {
-      "url": "https://mcp.neodemos.nl/mcp",
-      "headers": {
-        "Authorization": "Bearer UW_API_TOKEN"
-      }
+      "url": "{{ mcp_url }}"
     }
   }
 }</pre>
+                </div>
+
+                <h4><span class="step-number">3</span> Inloggen</h4>
+                <p>Bij de eerste keer dat u een NeoDemos-tool gebruikt, opent Claude een browservenster om in te loggen op neodemos.nl.
+                   Na toestemming werkt alles automatisch.</p>
+
+                {% if not user %}
+                <div class="info-callout">
+                    Nog geen account? <a href="/register" style="font-weight:600;">Registreer hier</a> zodat u klaar bent wanneer Claude om inlog vraagt.
+                </div>
+                {% endif %}
+            </div>
         </div>
 
-        <h4>Claude Code (CLI)</h4>
-        <ol>
-            <li>Voeg de MCP-server toe via de CLI:</li>
-        </ol>
+        <!-- Claude Code -->
+        <div id="oauth-claude-code" class="client-panel">
+            <div class="install-section">
+                <h4><span class="step-number">1</span> Voer dit commando uit in uw terminal</h4>
 
-        <div class="code-block" id="claude-code-config">
-            <button class="copy-btn" onclick="copyCode('claude-code-config')">Kopieer</button>
-<pre>claude mcp add neodemos \
-  --transport streamable-http \
-  --url https://mcp.neodemos.nl/mcp \
-  --header "Authorization: Bearer UW_API_TOKEN"</pre>
+                <div class="code-block" id="oauth-cc-block">
+                    <button class="copy-btn" onclick="copyCode('oauth-cc-block')">Kopieer</button>
+                    <pre>claude mcp add neodemos --url {{ mcp_url }}</pre>
+                </div>
+
+                <p style="margin-top:0.5rem;">Claude Code handelt de OAuth-flow automatisch af bij eerste gebruik.</p>
+            </div>
         </div>
 
-        <h4>ChatGPT Desktop</h4>
-        <ol>
-            <li>Open ChatGPT Desktop en ga naar <strong>Settings &rarr; Beta Features &rarr; MCP Servers</strong>.</li>
-            <li>Klik op <strong>Add Server</strong> en voer in:</li>
-        </ol>
+        <!-- ChatGPT -->
+        <div id="oauth-chatgpt" class="client-panel">
+            <div class="install-section">
+                <h4><span class="step-number">1</span> Open ChatGPT Desktop</h4>
+                <p>Ga naar <strong>Settings &rarr; Beta Features &rarr; MCP Servers</strong>.</p>
 
-        <div class="code-block" id="chatgpt-config">
-            <button class="copy-btn" onclick="copyCode('chatgpt-config')">Kopieer</button>
-<pre>Server URL: https://mcp.neodemos.nl/mcp
-Authorization: Bearer UW_API_TOKEN</pre>
-        </div>
+                <h4><span class="step-number">2</span> Voeg de server toe</h4>
+                <p>Klik op <strong>Add Server</strong> en voer de URL in:</p>
 
-        <div class="token-note">
-            {% if user %}
-            Vervang <code>UW_API_TOKEN</code> met uw persoonlijke API-token.
-            U kunt een token aanmaken op de <a href="/settings">Instellingen</a> pagina.
-            {% else %}
-            U moet eerst <a href="/login">inloggen</a> om een API-token aan te maken.
-            Na het inloggen kunt u op de Instellingen pagina een token genereren.
-            {% endif %}
+                <div class="code-block" id="oauth-chatgpt-block">
+                    <button class="copy-btn" onclick="copyText('{{ mcp_url }}', this)">Kopieer</button>
+                    <pre>{{ mcp_url }}</pre>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="manual-section">
-        <h3>Beschikbare Tools</h3>
-        <p style="color:#718096;margin-bottom:1rem;">De NeoDemos MCP-server biedt de volgende tools voor het doorzoeken van raadsinformatie:</p>
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- PANEL 2: API Token — manual bearer token approach   -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div id="token-panel" class="method-panel">
+
+        <div class="info-callout">
+            Gebruik deze methode als uw AI-client geen OAuth ondersteunt, of als u liever een vast token gebruikt.
+        </div>
+
+        {% if user %}
+        <!-- Logged in — show token generation -->
+        <div class="install-section">
+            <h3>API Token Genereren</h3>
+
+            {% if existing_tokens %}
+            <p style="margin-bottom:0.75rem;">U heeft al {{ existing_tokens|length }} token(s). U kunt een nieuw token genereren of een bestaand token gebruiken via <a href="/settings" style="font-weight:600;">Instellingen</a>.</p>
+            {% endif %}
+
+            <div class="token-generate-area">
+                <p style="margin-bottom:1rem;">Klik om automatisch een API token aan te maken en configuratie te genereren.</p>
+                <button class="action-btn" id="generate-token-btn" onclick="generateToken()">
+                    Token Genereren
+                </button>
+
+                <div class="token-display" id="token-result">
+                    <div class="token-warning">
+                        Kopieer uw token nu — deze wordt maar eenmaal getoond!
+                    </div>
+                    <div class="token-value" id="token-value-display">
+                        <button class="copy-btn" onclick="copyText(document.getElementById('raw-token').textContent, this)" style="top:0.4rem;right:0.4rem;">Kopieer</button>
+                        <span id="raw-token"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="separator">
+
+        <div class="install-section" id="token-config-section" style="display:none;">
+            <h3>Configuratie met uw token</h3>
+
+            <div class="client-tabs">
+                <button class="client-tab active" data-target="token-claude-desktop">Claude Desktop</button>
+                <button class="client-tab" data-target="token-claude-code">Claude Code (CLI)</button>
+                <button class="client-tab" data-target="token-chatgpt">ChatGPT</button>
+            </div>
+
+            <!-- Claude Desktop -->
+            <div id="token-claude-desktop" class="client-panel active">
+                <p>Voeg toe aan <code>claude_desktop_config.json</code>:</p>
+                <div class="code-block" id="token-desktop-config">
+                    <button class="copy-btn" onclick="copyCode('token-desktop-config')">Kopieer</button>
+                    <pre id="token-desktop-pre"></pre>
+                </div>
+            </div>
+
+            <!-- Claude Code -->
+            <div id="token-claude-code" class="client-panel">
+                <p>Voer uit in uw terminal:</p>
+                <div class="code-block" id="token-cc-config">
+                    <button class="copy-btn" onclick="copyCode('token-cc-config')">Kopieer</button>
+                    <pre id="token-cc-pre"></pre>
+                </div>
+            </div>
+
+            <!-- ChatGPT -->
+            <div id="token-chatgpt" class="client-panel">
+                <p>Voer in bij <strong>Settings &rarr; Beta Features &rarr; MCP Servers &rarr; Add Server</strong>:</p>
+                <div class="code-block" id="token-chatgpt-config">
+                    <button class="copy-btn" onclick="copyCode('token-chatgpt-config')">Kopieer</button>
+                    <pre id="token-chatgpt-pre"></pre>
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+        <!-- Not logged in — prompt login -->
+        <div class="login-prompt">
+            <p>Log in of registreer om automatisch een API token te genereren.</p>
+            <a href="/login?next=/mcp-installer" class="action-btn">Inloggen</a>
+            <a href="/register" class="action-btn action-btn-secondary" style="margin-left:0.5rem;">Registreren</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- Tools overview                                      -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="tools-section">
+        <h3>Beschikbare Tools (13)</h3>
+        <p style="color:#718096;margin-bottom:1rem;font-size:0.9rem;">Na installatie kan uw AI-assistent de volgende tools gebruiken:</p>
         <table class="admin-table" style="margin:0;">
             <thead>
                 <tr><th>Tool</th><th>Beschrijving</th></tr>
             </thead>
             <tbody>
-                <tr><td><code>zoek_raadshistorie</code></td><td>Zoek door raadsdocumenten met datum- en commissiefilters</td></tr>
-                <tr><td><code>zoek_financieel</code></td><td>Zoek financiele data en tabellen</td></tr>
-                <tr><td><code>zoek_moties</code></td><td>Zoek moties en amendementen</td></tr>
-                <tr><td><code>zoek_uitspraken</code></td><td>Zoek debatfragmenten</td></tr>
-                <tr><td><code>lijst_vergaderingen</code></td><td>Lijst vergaderingen per jaar/commissie</td></tr>
-                <tr><td><code>haal_vergadering_op</code></td><td>Haal details op van een specifieke vergadering</td></tr>
-                <tr><td><code>analyseer_agendapunt</code></td><td>Analyseer een agendapunt met partijprofiel</td></tr>
-                <tr><td><code>scan_breed</code></td><td>Brede categorische zoekactie</td></tr>
+                <tr><td><code>zoek_raadshistorie</code></td><td>Zoek raadsdocumenten met datum-, partij- en commissiefilters</td></tr>
+                <tr><td><code>zoek_financieel</code></td><td>Zoek financiele data en tabellen (begrotingen, jaarstukken)</td></tr>
+                <tr><td><code>zoek_moties</code></td><td>Zoek moties en amendementen met stemuitslag</td></tr>
+                <tr><td><code>zoek_uitspraken</code></td><td>Zoek debatfragmenten op persoon of onderwerp</td></tr>
+                <tr><td><code>zoek_uitspraken_op_rol</code></td><td>Uitspraken met rolherkenning (wethouder, raadslid, etc.)</td></tr>
+                <tr><td><code>zoek_gerelateerd</code></td><td>Vind gerelateerde documenten bij een fragment</td></tr>
+                <tr><td><code>scan_breed</code></td><td>Brede zoekactie over alle documenttypen</td></tr>
+                <tr><td><code>lijst_vergaderingen</code></td><td>Lijst vergaderingen per jaar of commissie</td></tr>
+                <tr><td><code>haal_vergadering_op</code></td><td>Haal volledige details op van een vergadering</td></tr>
+                <tr><td><code>analyseer_agendapunt</code></td><td>Analyseer agendapunt met partijperspectief</td></tr>
+                <tr><td><code>haal_partijstandpunt_op</code></td><td>Partijstandpunt op een specifiek onderwerp</td></tr>
+                <tr><td><code>tijdlijn_besluitvorming</code></td><td>Tijdlijn van besluitvorming rond een thema</td></tr>
+                <tr><td><code>lees_fragment</code></td><td>Lees een volledig document op basis van ID</td></tr>
             </tbody>
         </table>
     </div>
@@ -259,14 +585,93 @@ Authorization: Bearer UW_API_TOKEN</pre>
 
 {% block extra_scripts %}
 <script>
+    // ── Tab switching ──
+    document.querySelectorAll('.method-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.method-panel').forEach(p => p.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById(tab.dataset.target).classList.add('active');
+        });
+    });
+
+    document.querySelectorAll('.client-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const group = tab.closest('.method-panel') || tab.closest('.install-section');
+            group.querySelectorAll('.client-tab').forEach(t => t.classList.remove('active'));
+            group.querySelectorAll('.client-panel').forEach(p => p.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById(tab.dataset.target).classList.add('active');
+        });
+    });
+
+    // ── Copy helpers ──
+    function copyText(text, btn) {
+        navigator.clipboard.writeText(text.trim()).then(() => {
+            if (btn) {
+                btn.textContent = 'Gekopieerd!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = 'Kopieer';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }
+        });
+    }
+
     function copyCode(blockId) {
         const block = document.getElementById(blockId);
         const pre = block.querySelector('pre');
-        navigator.clipboard.writeText(pre.textContent.trim()).then(() => {
-            const btn = block.querySelector('.copy-btn');
-            btn.textContent = 'Gekopieerd!';
-            setTimeout(() => { btn.textContent = 'Kopieer'; }, 2000);
-        });
+        const btn = block.querySelector('.copy-btn');
+        copyText(pre.textContent, btn);
+    }
+
+    // ── Token generation ──
+    async function generateToken() {
+        const btn = document.getElementById('generate-token-btn');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner"></span>Genereren...';
+
+        try {
+            const resp = await fetch('/api/mcp/generate-token', { method: 'POST' });
+            const data = await resp.json();
+
+            if (!resp.ok) {
+                alert(data.error || 'Fout bij genereren van token');
+                btn.disabled = false;
+                btn.textContent = 'Token Genereren';
+                return;
+            }
+
+            // Show the token
+            document.getElementById('raw-token').textContent = data.token;
+            document.getElementById('token-result').classList.add('visible');
+
+            // Fill in the config snippets
+            const mcp_url = data.mcp_url;
+            const token = data.token;
+
+            document.getElementById('token-desktop-pre').textContent = JSON.stringify(
+                data.claude_desktop_config, null, 2
+            );
+
+            document.getElementById('token-cc-pre').textContent = data.claude_code_command;
+
+            document.getElementById('token-chatgpt-pre').textContent =
+                'Server URL: ' + mcp_url + '\nAuthorization: Bearer ' + token;
+
+            // Show the config section
+            document.getElementById('token-config-section').style.display = '';
+
+            // Update button
+            btn.textContent = 'Nieuw Token Genereren';
+            btn.disabled = false;
+
+        } catch (err) {
+            alert('Netwerkfout: ' + err.message);
+            btn.disabled = false;
+            btn.textContent = 'Token Genereren';
+        }
     }
 </script>
 {% endblock %}

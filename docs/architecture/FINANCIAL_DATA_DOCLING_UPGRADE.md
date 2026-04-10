@@ -59,22 +59,54 @@ Any ORI document with ≥3 detected tables after Docling processing gets table c
 Following the established best practice from committee transcript ingestion:
 
 ```
-PDF → Docling Extraction → Staging Schema (chunks only, no vectors)
-                              ↓
-                          Quality Review (automated + manual)
-                              ↓
-                          Promotion to Production (embed + Qdrant upsert)
+PDF → Docling Extraction (local GPU) → Staging Schema (chunks only, no vectors)
+                                          ↓
+                                      Quality Review (automated + manual)
+                                          ↓
+                                      Promotion to Production (embed + Qdrant upsert)
 ```
 
-### Cloud Database Connections
+### Cloud Database Access via SSH Tunnel
 
-All scripts use environment variables for cloud DB access:
+All work runs **locally on Apple Silicon** with SSH tunnel to the Hetzner production server:
 
-| Service | Env Var | Notes |
-|---------|---------|-------|
-| PostgreSQL | `DATABASE_URL` | Cloud-hosted production DB |
-| Qdrant | `QDRANT_URL` + `QDRANT_API_KEY` | Qdrant Cloud (HTTPS) |
-| Embeddings | `NEBIUS_API_KEY` | Qwen3-Embedding-8B via Nebius |
+```bash
+./scripts/dev_tunnel.sh --bg   # Start tunnel in background
+# Forwards: localhost:5432 → Hetzner PostgreSQL, localhost:6333 → Hetzner Qdrant
+```
+
+Scripts connect to cloud DBs via localhost ports (tunnel transparent):
+
+| Service | Connection | Tunneled To |
+|---------|-----------|-------------|
+| PostgreSQL | `localhost:5432` | Hetzner `178.104.137.168:5432` |
+| Qdrant | `localhost:6333` | Hetzner `178.104.137.168:6333` |
+| Embeddings | `NEBIUS_API_KEY` | Nebius Cloud API (direct) |
+
+**Prerequisite**: SSH tunnel must be running before any ingestion script. Scripts should check tunnel status at startup.
+
+### Local GPU Acceleration for Docling
+
+Docling runs locally on Apple Silicon, leveraging PyTorch MPS (Metal Performance Shaders) for the TableFormer model:
+
+```python
+# Docling automatically uses MPS backend on Apple Silicon
+# TableFormerMode.ACCURATE uses a transformer model → GPU-accelerated
+pipeline_options = PdfPipelineOptions(do_table_structure=True)
+pipeline_options.table_structure_options.mode = TableFormerMode.ACCURATE
+```
+
+**Parallel processing**: Run multiple Docling workers in parallel to maximize Apple Silicon throughput:
+- 4 concurrent PDF processes (one per efficiency core cluster)
+- Each process handles one PDF at a time
+- `multiprocessing.Pool(workers=4)` with per-worker Docling instance
+- Monitor RAM: each Docling instance uses ~2-3GB; 4 workers = ~10GB
+
+**Expected speedup** vs. single-threaded CPU:
+- MPS GPU acceleration: ~2-3x faster per PDF
+- 4x parallelism: ~8-12x total throughput
+- Tier 0 (28 PDFs): ~2-3 hours instead of ~18 hours
+- Tier 1 (500 PDFs): ~8-15 hours instead of ~80 hours
 
 ### Staging Schema Extension
 
@@ -122,7 +154,7 @@ No replacement needed — these are new documents. Standard staging → promotio
 |------|---------|
 | `scripts/download_financial_pdfs.py` | Scrape watdoetdegemeente.nl + download all Tier 0 PDFs |
 | `pipeline/financial_ingestor.py` | Docling-based extraction → staging schema ingestion |
-| `scripts/ingest_financial_docs.py` | Orchestrator: download → extract → stage → promote |
+| `scripts/ingest_financial_docs.py` | Orchestrator: tunnel check → download → parallel extract → stage → promote |
 | `scripts/discover_ori_financial.py` | Query ORI API for Tier 1-3 financial PDFs |
 | `scripts/promote_financial_docs.py` | Review + promote financial docs (extends promotion pattern) |
 
@@ -171,7 +203,7 @@ Core class: `FinancialDocumentIngestor` (extends `StagingIngestor`)
 ```
 Input: PDF path + metadata from staging.financial_documents
   ↓
-Docling DocumentConverter (TableFormerMode.ACCURATE)
+Docling DocumentConverter (TableFormerMode.ACCURATE, MPS GPU)
   ↓
 For each element in Docling output:
   IF table:
@@ -187,9 +219,27 @@ Write to staging.documents, staging.document_children, staging.document_chunks
 Update staging.financial_documents (docling_tables_found, docling_chunks_created)
 ```
 
+**Parallel processing** (in orchestrator `scripts/ingest_financial_docs.py`):
+
+```python
+from multiprocessing import Pool
+
+def process_single_pdf(pdf_record):
+    """Worker function — each process gets its own Docling instance."""
+    ingestor = FinancialDocumentIngestor(db_url=DB_URL)
+    ingestor.process(pdf_record)
+
+# Pre-flight: verify SSH tunnel is active
+assert check_tunnel(), "SSH tunnel not running. Start with: ./scripts/dev_tunnel.sh --bg"
+
+with Pool(processes=4) as pool:
+    pool.map(process_single_pdf, pending_pdfs)
+```
+
 Key design decisions:
 
 - **Staging only** — no embeddings, no Qdrant writes during extraction
+- **SSH tunnel check** — orchestrator verifies `localhost:5432` and `localhost:6333` are reachable before starting
 - **Table-aware chunking**: Never split a table across chunks. Each table = one chunk.
 - **Narrative chunking**: Docling markdown text, split at ~1000 chars respecting paragraph boundaries
 - **Document hierarchy**: `document_children` per chapter/section detected by Docling headings
@@ -281,27 +331,28 @@ Step 7: Tier 3 adaptive scan of remaining ORI financial agenda items
 
 ---
 
-## Processing Estimates
+## Processing Estimates (Apple Silicon GPU + 4x Parallel)
 
 | Step | Count | Docling Time | Embed Time | Total |
 |------|-------|-------------|-----------|-------|
-| Tier 0 (watdoetdegemeente) | 28 PDFs | ~12-18h (CPU) | ~4-5h | ~20h |
-| Tier 1 (ORI high-value) | ~500 PDFs | ~40-80h (CPU) | ~10h | ~50-90h |
-| Tier 2 (ORI medium-value) | ~600 PDFs | ~30-60h (CPU) | ~10h | ~40-70h |
-| Tier 3 (ORI adaptive) | ~500 PDFs | ~20-40h (CPU) | ~5h | ~25-45h |
+| Tier 0 (watdoetdegemeente) | 28 PDFs | ~2-3h | ~4-5h | ~7-8h |
+| Tier 1 (ORI high-value) | ~500 PDFs | ~8-15h | ~10h | ~18-25h |
+| Tier 2 (ORI medium-value) | ~600 PDFs | ~6-12h | ~10h | ~16-22h |
+| Tier 3 (ORI adaptive) | ~500 PDFs | ~4-8h | ~5h | ~9-13h |
 
-**Speedup options:**
-- GPU: 10x faster Docling (if available)
-- Parallel CPU: 4 PDFs simultaneously → 4x faster
-- `TableFormerMode.FAST`: 2x faster, slightly lower quality
-- ORI `text_pages`: For Tier 3, use pre-extracted text from ORI instead of Docling for non-table documents
+**Local Apple Silicon setup:**
+- MPS (Metal) GPU acceleration for Docling's TableFormer model: ~2-3x per PDF
+- 4 parallel workers via `multiprocessing.Pool`: ~4x throughput
+- Combined: ~8-12x faster than single-threaded CPU
+- RAM budget: ~10GB for 4 Docling workers + system overhead
 
 **Estimated total new chunks:** 50,000-100,000 across all tiers (based on 692 tables from one 916-page jaarstukken).
 
 **Estimated cost:**
 - Nebius embedding: ~$1-2 total (bulk rate)
-- Docling: Free (CPU only, no API costs)
+- Docling: Free (local GPU, no API costs)
 - ORI API: Free (public, no auth required)
+- SSH tunnel: Free (existing Hetzner server)
 
 ---
 

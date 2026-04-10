@@ -88,6 +88,269 @@
     input:checked+.slider:before {
         transform: translateX(20px);
     }
+
+    /* ── Landing content (anonymous only) ── */
+    .landing-section {
+        max-width: 800px;
+        margin: 4rem auto 0;
+        padding: 0 1rem;
+    }
+
+    .about-block {
+        background: #fdfdfd;
+        border-left: 4px solid var(--accent-color);
+        padding: 2rem 2.25rem;
+        border-radius: 0 12px 12px 0;
+        margin-bottom: 4rem;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    }
+
+    .about-block h2 {
+        margin: 0 0 1rem;
+        color: var(--secondary-color);
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+
+    .about-block p {
+        font-size: 1.05rem;
+        line-height: 1.7;
+        color: #4a5568;
+        margin: 0 0 1rem;
+    }
+
+    .about-block p:last-child {
+        margin-bottom: 0;
+    }
+
+    /* ── MCP section (FactSet-inspired) ── */
+    .mcp-section {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 3rem 2.5rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+        margin-bottom: 3rem;
+    }
+
+    .mcp-eyebrow {
+        display: inline-block;
+        background: rgba(212, 175, 55, 0.12);
+        color: var(--accent-color);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 0.35rem 0.85rem;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+    }
+
+    .mcp-section h2 {
+        font-size: 1.85rem;
+        margin: 0 0 0.75rem;
+        color: var(--secondary-color);
+        font-weight: 800;
+        line-height: 1.25;
+    }
+
+    .mcp-section .lead {
+        font-size: 1.05rem;
+        line-height: 1.65;
+        color: #4a5568;
+        margin-bottom: 2rem;
+    }
+
+    .mcp-explainer {
+        background: #f7fafc;
+        border-radius: 10px;
+        padding: 1.5rem 1.75rem;
+        margin-bottom: 2rem;
+    }
+
+    .mcp-explainer h3 {
+        font-size: 1rem;
+        margin: 0 0 0.6rem;
+        color: var(--secondary-color);
+        font-weight: 700;
+    }
+
+    .mcp-explainer p {
+        font-size: 0.95rem;
+        line-height: 1.65;
+        color: #4a5568;
+        margin: 0;
+    }
+
+    .mcp-features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.25rem;
+        margin-bottom: 2rem;
+    }
+
+    .mcp-feature {
+        padding: 1.25rem;
+        background: #fafbfc;
+        border-radius: 10px;
+        border: 1px solid #edf2f7;
+    }
+
+    .mcp-feature .icon {
+        font-size: 1.4rem;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .mcp-feature h4 {
+        margin: 0 0 0.4rem;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--secondary-color);
+    }
+
+    .mcp-feature p {
+        margin: 0;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        color: #718096;
+    }
+
+    .mcp-examples {
+        background: #1a202c;
+        color: #e2e8f0;
+        border-radius: 10px;
+        padding: 1.5rem 1.75rem;
+        margin-bottom: 2rem;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .mcp-examples h3 {
+        margin: 0 0 1rem;
+        font-size: 0.85rem;
+        color: #a0aec0;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-weight: 700;
+    }
+
+    .mcp-examples ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .mcp-examples li {
+        padding: 0.55rem 0;
+        font-size: 0.92rem;
+        line-height: 1.5;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        color: #cbd5e0;
+    }
+
+    .mcp-examples li:last-child {
+        border-bottom: none;
+    }
+
+    .mcp-examples li::before {
+        content: '"';
+        color: var(--accent-color);
+        margin-right: 0.25rem;
+    }
+
+    .mcp-examples li::after {
+        content: '"';
+        color: var(--accent-color);
+        margin-left: 0.25rem;
+    }
+
+    .mcp-cta {
+        display: flex;
+        gap: 0.85rem;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .mcp-cta-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.85rem 1.75rem;
+        background: var(--secondary-color);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .mcp-cta-primary:hover {
+        opacity: 0.92;
+        transform: translateY(-1px);
+    }
+
+    .mcp-cta-secondary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.85rem 1.5rem;
+        color: var(--secondary-color);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.92rem;
+    }
+
+    .mcp-cta-secondary:hover {
+        color: var(--accent-color);
+    }
+
+    .mcp-clients {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #edf2f7;
+        font-size: 0.82rem;
+        color: #718096;
+        align-items: center;
+    }
+
+    .mcp-clients strong {
+        color: #4a5568;
+        margin-right: 0.5rem;
+    }
+
+    .mcp-client-pill {
+        background: #edf2f7;
+        padding: 0.3rem 0.75rem;
+        border-radius: 12px;
+        color: #4a5568;
+        font-weight: 500;
+    }
+
+    /* Inline search hint */
+    .search-hint {
+        max-width: 800px;
+        margin: -0.5rem auto 1rem;
+        font-size: 0.85rem;
+        color: #c53030;
+        text-align: center;
+        min-height: 1.2em;
+    }
+
+    @media (max-width: 600px) {
+        .mcp-section {
+            padding: 2rem 1.5rem;
+        }
+        .about-block {
+            padding: 1.5rem;
+        }
+        .mcp-section h2 {
+            font-size: 1.5rem;
+        }
+    }
 </style>
 
 <div class="search-container" style="max-width: 800px; margin: 0 auto; padding: 2rem 0;">
@@ -111,12 +374,14 @@
             style="display: none; position: absolute; bottom: 100%; left: 0; width: 320px; background: white; border: 1px solid #eef2f6; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.12); z-index: 2000; margin-bottom: 12px; overflow: hidden;">
             <div
                 style="padding: 1rem; background: #fcfdfe; border-bottom: 1px solid #f0f4f8; font-size: 0.75rem; font-weight: 700; color: #8898aa; letter-spacing: 0.05em;">
-                DIRECHTE KOPPELING</div>
+                DIRECTE KOPPELING</div>
             <div id="mention-items">
                 <!-- Items injected by JS -->
             </div>
         </div>
     </div>
+
+    <div id="search-hint" class="search-hint" aria-live="polite"></div>
 
     <!-- Toggle Below Search Box -->
     <div style="margin-bottom: 3rem; display: flex; justify-content: center; align-items: center; gap: 1rem; background: #f8fafc; padding: 0.8rem; border-radius: 40px; width: fit-content; margin-left: auto; margin-right: auto; border: 1px solid #e2e8f0;">
@@ -166,12 +431,119 @@
             <!-- Keyword results appear here -->
         </div>
     </div>
+
+    {% if not user %}
+    <!-- ─────────────────────────────────────────────── -->
+    <!-- Landing content (anonymous visitors only)        -->
+    <!-- ─────────────────────────────────────────────── -->
+    <section id="landing-content" class="landing-section">
+
+        <!-- About NeoDemos -->
+        <div class="about-block">
+            <h2>Wat is NeoDemos?</h2>
+            <p>
+                Onze democratie is te kwetsbaar om aan oude technologie over te laten.
+                NeoDemos geeft burgers, politici, ambtenaren en media de mogelijkheid om op
+                eenvoudige wijze inzicht te krijgen in de complexe documentenbrei van
+                gemeentes.
+            </p>
+            <p style="font-size:0.92rem;color:#718096;">
+                90.000+ Rotterdamse raadsdocumenten, doorzoekbaar met AI &mdash;
+                van moties en amendementen tot debatfragmenten en jaarstukken.
+            </p>
+        </div>
+
+        <!-- MCP section (FactSet-inspired) -->
+        <div class="mcp-section">
+            <span class="mcp-eyebrow">Voor ontwikkelaars &amp; analisten</span>
+            <h2>Gebruik NeoDemos in je eigen AI-assistent</h2>
+            <p class="lead">
+                Je kan NeoDemos vandaag al testen in je eigen AI-toepassing. Verbind Claude,
+                ChatGPT of een andere AI-assistent direct met de Rotterdamse raadsinformatie
+                via het Model Context Protocol &mdash; zonder kopieer- en plakwerk.
+            </p>
+
+            <div class="mcp-explainer">
+                <h3>Wat is MCP, in gewone taal?</h3>
+                <p>
+                    Het <strong>Model Context Protocol (MCP)</strong> is een open standaard
+                    waarmee AI-assistenten rechtstreeks kunnen praten met externe databronnen.
+                    In plaats van losse PDF&rsquo;s te uploaden naar je AI, vraagt jouw
+                    AI-assistent rechtstreeks aan NeoDemos: <em>&ldquo;Wat heeft de
+                    gemeenteraad sinds 2023 gezegd over de Maastunnel?&rdquo;</em> &mdash; en
+                    krijgt direct antwoord met bronvermelding, citaten en stemuitslagen uit
+                    onze database van 90.000+ documenten.
+                </p>
+            </div>
+
+            <div class="mcp-features">
+                <div class="mcp-feature">
+                    <span class="icon">&#128279;</span>
+                    <h4>Directe toegang</h4>
+                    <p>13 Nederlandstalige tools voor moties, vergaderingen, partijstandpunten en meer.</p>
+                </div>
+                <div class="mcp-feature">
+                    <span class="icon">&#128269;</span>
+                    <h4>Hybride zoek</h4>
+                    <p>BM25 + vector search + AI reranking voor scherpe resultaten in elke vraag.</p>
+                </div>
+                <div class="mcp-feature">
+                    <span class="icon">&#128737;</span>
+                    <h4>Veilig &amp; transparant</h4>
+                    <p>OAuth 2.1 authenticatie. Pure retrieval &mdash; jouw AI doet de redenering.</p>
+                </div>
+                <div class="mcp-feature">
+                    <span class="icon">&#9889;</span>
+                    <h4>In 1 minuut klaar</h4>
+                    <p>Plak &eacute;&eacute;n URL in Claude Desktop &mdash; klaar. Geen tokens beheren.</p>
+                </div>
+            </div>
+
+            <div class="mcp-examples">
+                <h3>Voorbeeldvragen voor jouw AI-assistent</h3>
+                <ul>
+                    <li>Welke moties heeft GroenLinks-PvdA ingediend over woningbouw in 2025?</li>
+                    <li>Wat zei wethouder Achbar over de Maastunnel-renovatie?</li>
+                    <li>Geef me een tijdlijn van de besluitvorming rond de NPRZ-uitbreiding.</li>
+                    <li>Hoeveel heeft de gemeente in 2024 begroot voor jeugdzorg?</li>
+                </ul>
+            </div>
+
+            <div class="mcp-cta">
+                <a href="/mcp-installer" class="mcp-cta-primary">
+                    Installeer voor Claude &rarr;
+                </a>
+                <a href="/register" class="mcp-cta-secondary">
+                    Maak gratis account aan
+                </a>
+            </div>
+
+            <div class="mcp-clients">
+                <strong>Werkt met:</strong>
+                <span class="mcp-client-pill">Claude Desktop</span>
+                <span class="mcp-client-pill">Claude Code</span>
+                <span class="mcp-client-pill">ChatGPT</span>
+                <span class="mcp-client-pill">Cursor</span>
+                <span class="mcp-client-pill">Elke MCP-compatibele client</span>
+            </div>
+        </div>
+    </section>
+    {% endif %}
 </div>
 
 <script>
     async function performSearch() {
-        const query = document.getElementById('search-input').value;
-        if (!query || query.length < 3) return;
+        const query = document.getElementById('search-input').value.trim();
+        const hint = document.getElementById('search-hint');
+        if (hint) hint.textContent = '';
+        if (!query) {
+            if (hint) hint.textContent = 'Voer een zoekterm in.';
+            return;
+        }
+        if (query.length < 3) {
+            if (hint) hint.textContent = 'Minimaal 3 tekens om te zoeken.';
+            return;
+        }
 
         const isDebateMode = document.getElementById('debate-mode').checked;
 

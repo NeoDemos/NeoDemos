@@ -36,16 +36,17 @@ class AuthService:
         password: str,
         display_name: str = None,
         role: str = "user",
+        mcp_access: bool = True,
     ) -> dict:
         hashed = _hash_password(password)
         with get_connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(
-                    """INSERT INTO users (email, password_hash, display_name, role)
-                       VALUES (%s, %s, %s, %s)
+                    """INSERT INTO users (email, password_hash, display_name, role, mcp_access)
+                       VALUES (%s, %s, %s, %s, %s)
                        RETURNING id, email, password_hash, display_name, role, is_active,
                                  mcp_access, db_access_level, created_at""",
-                    (email.lower().strip(), hashed, display_name, role),
+                    (email.lower().strip(), hashed, display_name, role, mcp_access),
                 )
                 row = cur.fetchone()
         return self._user_row_to_dict(row)

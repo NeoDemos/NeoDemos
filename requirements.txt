@@ -8,6 +8,7 @@ pydantic-settings
 python-multipart
 pypdf
 google-genai
+openai>=2.31.0
 psycopg2-binary
 psycopg[binary]
 pgvector

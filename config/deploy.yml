@@ -104,6 +104,8 @@ accessories:
         DB_NAME: neodemos
         DB_USER: postgres
         QDRANT_URL: http://neodemos-qdrant:6333
+        MCP_BASE_URL: https://mcp.neodemos.nl
+        NEODEMOS_BASE_URL: https://neodemos.nl
       secret:
         - DB_PASSWORD
         - GEMINI_API_KEY

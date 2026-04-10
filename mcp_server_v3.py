@@ -48,11 +48,11 @@ _auth_provider = None
 
 if _transport in ("sse", "streamable-http", "--http"):
     from services.mcp_oauth_provider import NeodemosOAuthProvider
-    _base_url = os.environ.get("NEODEMOS_BASE_URL", "https://neodemos.nl")
+    _mcp_base_url = os.environ.get("MCP_BASE_URL", "https://mcp.neodemos.nl")
     _auth_provider = NeodemosOAuthProvider()
     _auth_settings = AuthSettings(
-        issuer_url=_base_url,
-        resource_server_url=_base_url,
+        issuer_url=_mcp_base_url,
+        resource_server_url=_mcp_base_url,
         client_registration_options=ClientRegistrationOptions(
             enabled=True,
             valid_scopes=["mcp", "search"],
@@ -351,6 +351,7 @@ def zoek_financieel(
     onderwerp: str,
     datum_van: Optional[str] = None,
     datum_tot: Optional[str] = None,
+    budget_year: Optional[int] = None,
     max_resultaten: int = 12,
 ) -> str:
     """
@@ -367,6 +368,9 @@ def zoek_financieel(
         onderwerp: Financieel onderwerp (bijv. "jeugdzorg begroting 2023")
         datum_van: Startdatum filter, ISO formaat (aanbevolen voor recente vragen)
         datum_tot: Einddatum filter, ISO formaat
+        budget_year: Doeljaar van het budget (bijv. 2025 voor de Begroting 2025 die
+                     in 2024 werd ingediend). Gebruik dit voor begrotingsvragen op een
+                     specifiek jaar — nauwkeuriger dan datum_van/datum_tot.
         max_resultaten: Aantal resultaten (standaard 12)
     """
     rag = _get_rag()
@@ -378,6 +382,24 @@ def zoek_financieel(
     # Use the user's query directly — no keyword stuffing that dilutes intent
     query = onderwerp
 
+    # Resolve budget_year → set of document IDs via staging metadata
+    # (budget_years is the TARGET fiscal year, not the discussion/submission date)
+    budget_year_doc_ids: Optional[list] = None
+    if budget_year is not None:
+        with get_connection() as conn:
+            cur = conn.cursor()
+            cur.execute(
+                "SELECT id FROM staging.financial_documents WHERE budget_years @> ARRAY[%s]::int[]",
+                (budget_year,),
+            )
+            budget_year_doc_ids = [str(r[0]) for r in cur.fetchall()]
+            cur.close()
+        if not budget_year_doc_ids:
+            return (
+                f"## Financiële gegevens: '{onderwerp}'\n\n"
+                f"_Geen documenten gevonden voor budgetjaar {budget_year}._"
+            )
+
     # Standard retrieval with reranking
     chunks = rag.retrieve_relevant_context(
         query_text=query,
@@ -387,11 +409,20 @@ def zoek_financieel(
         fast_mode=False,
     )
 
+    # Post-filter by budget_year if set (staging.financial_documents.budget_years is authoritative)
+    if budget_year_doc_ids is not None:
+        doc_id_set = set(budget_year_doc_ids)
+        chunks = [c for c in chunks if str(c.document_id) in doc_id_set]
+
     # Boost: also retrieve table-type chunks, but filtered to the SAME topic
-    from qdrant_client.models import Filter, FieldCondition, MatchValue
-    table_filter = Filter(must=[
-        FieldCondition(key="chunk_type", match=MatchValue(value="table"))
-    ])
+    from qdrant_client.models import Filter, FieldCondition, MatchValue, MatchAny
+    table_must = [FieldCondition(key="chunk_type", match=MatchValue(value="table"))]
+    if budget_year_doc_ids is not None:
+        # Narrow table boost to matching budget-year docs only
+        table_must.append(
+            FieldCondition(key="document_id", match=MatchAny(any=budget_year_doc_ids))
+        )
+    table_filter = Filter(must=table_must)
     query_embedding = rag.embedder.embed(onderwerp)
     table_chunks = rag._retrieve_by_vector_similarity_with_filter(
         query_embedding,
@@ -437,6 +468,8 @@ def zoek_financieel(
                 break
 
     header = f"## Financiële gegevens: '{onderwerp}'"
+    if budget_year is not None:
+        header += f"\n_Budgetjaar: {budget_year} ({len(budget_year_doc_ids)} documenten)_"
     if datum_van or datum_tot:
         header += f"\n_Periode: {datum_van or '…'} — {datum_tot or 'heden'}_"
 

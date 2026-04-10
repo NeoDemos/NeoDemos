@@ -475,7 +475,7 @@ async def oauth_consent_submit(
         })
 
     # Generate authorization code
-    code = _oauth_provider.create_authorization_code(
+    code = await _oauth_provider.create_authorization_code(
         client_id=client_id,
         user_id=user["id"],
         redirect_uri=redirect_uri,
@@ -493,20 +493,77 @@ async def oauth_consent_submit(
 
 # ── MCP Installer (public) ──
 
+_MCP_SERVER_URL = os.getenv("MCP_BASE_URL", "https://mcp.neodemos.nl") + "/mcp"
+
+
 @app.get("/mcp-installer")
 async def mcp_installer_page(request: Request):
     user = await get_current_user(request)
+    token_data = None
+    existing_tokens = []
+    if user:
+        existing_tokens = auth_service.list_user_tokens(user["id"])
     return templates.TemplateResponse(name="mcp_installer.html", request=request, context={
-        "title": "MCP Installer", "user": user,
+        "title": "MCP Installer",
+        "user": user,
+        "mcp_url": _MCP_SERVER_URL,
+        "token_data": token_data,
+        "existing_tokens": existing_tokens,
+    })
+
+
+@app.post("/api/mcp/generate-token")
+async def generate_mcp_token(request: Request):
+    """Auto-generate an API token for MCP use. Returns JSON with token and config snippets."""
+    user = await get_current_user(request)
+    if not user:
+        return JSONResponse({"error": "Niet ingelogd"}, status_code=401)
+    if not user.get("is_active"):
+        return JSONResponse({"error": "Account is gedeactiveerd"}, status_code=403)
+
+    # Grant mcp_access if not already set
+    if not user.get("mcp_access"):
+        auth_service.update_user(user["id"], mcp_access=True)
+
+    # Generate token
+    token_data = auth_service.create_api_token(
+        user_id=user["id"],
+        name="MCP Auto-Install",
+        scopes="search,mcp",
+    )
+
+    return JSONResponse({
+        "token": token_data["token"],
+        "mcp_url": _MCP_SERVER_URL,
+        "claude_desktop_config": {
+            "mcpServers": {
+                "neodemos": {
+                    "url": _MCP_SERVER_URL,
+                    "headers": {
+                        "Authorization": f"Bearer {token_data['token']}"
+                    }
+                }
+            }
+        },
+        "claude_code_command": (
+            f"claude mcp add neodemos"
+            f" --transport streamable-http"
+            f" --url {_MCP_SERVER_URL}"
+            f' --header "Authorization: Bearer {token_data["token"]}"'
+        ),
     })
 
 
 # ── Protected page routes ──
 
 @app.get("/")
-async def search_page(request: Request, user: dict = Depends(require_login)):
-    if isinstance(user, RedirectResponse):
-        return user
+async def search_page(request: Request):
+    """Public landing page: search box + about + MCP section.
+
+    Anonymous users see the explainer + MCP teaser below the search.
+    Logged-in users see a clean search-only experience.
+    """
+    user = await get_current_user(request)
     return templates.TemplateResponse(name="search.html", request=request, context={
         "title": "Zoeken", "user": user,
     })

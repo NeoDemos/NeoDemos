@@ -35,9 +35,30 @@ header {
     font-weight: 700;
     letter-spacing: -0.5px;
     color: var(--secondary-color);
+    text-decoration: none;
+}
+
+.logo:hover {
+    opacity: 0.85;
 }
 
 .logo span {
+    color: var(--accent-color);
+}
+
+.nav-link-button {
+    background: none;
+    border: none;
+    color: var(--secondary-color);
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 0;
+    margin-left: 2rem;
+}
+
+.nav-link-button:hover {
     color: var(--accent-color);
 }
 

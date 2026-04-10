@@ -40,9 +40,16 @@ class RAGService:
         with _init_lock:
             if _qdrant_client is None:
                 try:
+                    import os
                     from qdrant_client import QdrantClient
-                    print("Initializing QdrantClient (Server Mode at localhost:6333)...")
-                    _qdrant_client = QdrantClient(url="http://localhost:6333")
+                    qdrant_url = os.getenv("QDRANT_URL", "http://localhost:6333")
+                    qdrant_api_key = os.getenv("QDRANT_API_KEY", None)
+                    print(f"Initializing QdrantClient ({qdrant_url})...")
+                    _qdrant_client = QdrantClient(
+                        url=qdrant_url,
+                        api_key=qdrant_api_key,
+                        timeout=60,
+                    )
                     # Verify the collection was built with the expected embedding model.
                     # Catches accidental model upgrades before they silently corrupt retrieval.
                     info = _qdrant_client.get_collection(QDRANT_COLLECTION)

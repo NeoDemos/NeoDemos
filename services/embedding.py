@@ -81,6 +81,44 @@ class NebiusEmbedder:
             print(f"[embedding] Nebius API error: {e}")
             return None
 
+    def embed_batch(self, texts: List[str], batch_size: int = 64) -> List[Optional[List[float]]]:
+        """Embed multiple texts in batches via the Nebius API.
+
+        Returns a list of embeddings (or None for failures) aligned with input.
+        """
+        results: List[Optional[List[float]]] = [None] * len(texts)
+        uncached_indices = []
+        uncached_texts = []
+
+        for i, text in enumerate(texts):
+            key = _cache_key(text)
+            if key in _EMBED_CACHE:
+                _EMBED_CACHE.move_to_end(key)
+                results[i] = list(_EMBED_CACHE[key])
+            else:
+                uncached_indices.append(i)
+                uncached_texts.append(text)
+
+        # Process uncached in batches
+        for b_start in range(0, len(uncached_texts), batch_size):
+            batch = uncached_texts[b_start : b_start + batch_size]
+            try:
+                response = self.client.embeddings.create(
+                    model=self.model,
+                    input=batch,
+                )
+                for j, item in enumerate(response.data):
+                    idx = uncached_indices[b_start + j]
+                    emb = item.embedding
+                    results[idx] = emb
+                    _EMBED_CACHE[_cache_key(batch[j])] = tuple(emb)
+                    if len(_EMBED_CACHE) > _EMBED_CACHE_MAX:
+                        _EMBED_CACHE.popitem(last=False)
+            except Exception as e:
+                logger.error(f"Nebius batch embedding failed: {e}")
+
+        return results
+
     def is_available(self) -> bool:
         return True
 
