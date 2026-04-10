@@ -143,13 +143,16 @@ class CommitteeNotulenPipeline:
         cur = conn.cursor()
 
         try:
-            # Find committee meetings without official notulen
+            # Find committee meetings without official notulen.
+            # Use ibabs_url (synced from ORI) instead of constructing from id —
+            # iBabs UUIDs rotate, so the source-of-truth column must be queried.
             query = """
-                SELECT m.id, m.name, m.committee, m.start_date
+                SELECT m.id, m.name, m.committee, m.start_date, m.ibabs_url
                 FROM public.meetings m
                 WHERE EXTRACT(YEAR FROM m.start_date) = %s
                   AND (m.committee ILIKE '%%Commissie%%'
                        OR m.name ILIKE '%%Commissie%%')
+                  AND m.ibabs_url IS NOT NULL
                   AND NOT EXISTS (
                       SELECT 1 FROM public.documents d
                       WHERE d.meeting_id = m.id
@@ -202,14 +205,11 @@ class CommitteeNotulenPipeline:
                    committee_filter.lower() not in committee.lower():
                     continue
 
-            # UUID-based IDs work with iBabs web; numeric IDs are duplicates
-            # from iBabs bulk import — skip them if a UUID version exists
-            import re as _re
-            if not _re.match(r'^[0-9a-f]{8}-[0-9a-f]{4}-', m_id):
-                # Numeric ID — likely a duplicate. Skip it.
-                continue
-
-            url = f"https://rotterdamraad.bestuurlijkeinformatie.nl/Agenda/Index/{m_id}"
+            # Use the aligned ibabs_url from the DB (set by sync_ibabs_urls.py)
+            # This is the current iBabs UUID, not our internal meeting ID.
+            url = row[4]
+            if not url:
+                continue  # ibabs_url not yet aligned — skip
             meeting = {
                 "id": m_id,
                 "name": name,

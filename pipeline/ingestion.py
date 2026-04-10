@@ -45,8 +45,20 @@ class SmartIngestor:
         re.MULTILINE
     )
 
-    def __init__(self, db_url: str = "postgresql://postgres:postgres@localhost:5432/neodemos",
+    def __init__(self, db_url: str = None,
                  chunk_only: bool = False):
+        if db_url is None:
+            import os
+            url = os.getenv("DATABASE_URL")
+            if url:
+                db_url = url
+            else:
+                user = os.getenv("DB_USER", "postgres")
+                pw = os.getenv("DB_PASSWORD", "postgres")
+                host = os.getenv("DB_HOST", "localhost")
+                port = os.getenv("DB_PORT", "5432")
+                name = os.getenv("DB_NAME", "neodemos")
+                db_url = f"postgresql://{user}:{pw}@{host}:{port}/{name}"
         """
         Args:
             db_url: Postgres connection string

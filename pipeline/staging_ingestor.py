@@ -17,6 +17,7 @@ All chunking, embedding, and storage logic is inherited unchanged.
 
 import logging
 import hashlib
+import os
 import psycopg2
 from psycopg2.extras import execute_values
 from qdrant_client.models import PointStruct
@@ -25,16 +26,35 @@ from pipeline.ingestion import SmartIngestor
 logger = logging.getLogger(__name__)
 
 
+def _default_db_url():
+    try:
+        from dotenv import load_dotenv
+        load_dotenv()
+    except ImportError:
+        pass
+    url = os.getenv("DATABASE_URL")
+    if url:
+        return url
+    user = os.getenv("DB_USER", "postgres")
+    pw = os.getenv("DB_PASSWORD", "postgres")
+    host = os.getenv("DB_HOST", "localhost")
+    port = os.getenv("DB_PORT", "5432")
+    name = os.getenv("DB_NAME", "neodemos")
+    return f"postgresql://{user}:{pw}@{host}:{port}/{name}"
+
+
 class StagingIngestor(SmartIngestor):
     """SmartIngestor that writes to the staging schema and staging Qdrant collection."""
 
     def __init__(
         self,
-        db_url: str = "postgresql://postgres:postgres@localhost:5432/neodemos",
+        db_url: str = None,
         chunk_only: bool = False,
         staging_schema: str = "staging",
         qdrant_collection: str = "committee_transcripts_staging",
     ):
+        if db_url is None:
+            db_url = _default_db_url()
         super().__init__(db_url=db_url, chunk_only=chunk_only)
         self.staging_schema = staging_schema
         self.collection_name = qdrant_collection  # overrides "notulen_chunks"

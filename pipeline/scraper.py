@@ -13,6 +13,7 @@ Usage:
 
 from __future__ import annotations
 
+import os
 import re
 import json
 import logging
@@ -444,6 +445,26 @@ class RoyalcastScraper:
             resp.raise_for_status()
         except Exception as e:
             logger.error(f"Failed to fetch iBabs page for speakers: {e}")
+            return []
+
+        # Auto-self-heal: detect Foutpagina (iBabs error page) — happens when
+        # the UUID has rotated. Mark the URL as needing re-verification so the
+        # next sync_ibabs_urls.py run picks it up.
+        if "Foutpagina - iBabs" in resp.text:
+            logger.warning(f"  iBabs returned Foutpagina for {ibabs_url[-40:]} — UUID likely rotated")
+            try:
+                import psycopg2 as _pg
+                _conn = _pg.connect(self._db_url() if hasattr(self, '_db_url') else os.getenv('DATABASE_URL', ''))
+                _cur = _conn.cursor()
+                _cur.execute(
+                    "UPDATE public.meetings SET ibabs_url_verified_at = NULL WHERE ibabs_url = %s",
+                    (ibabs_url,)
+                )
+                _conn.commit()
+                _cur.close(); _conn.close()
+                logger.info("  Marked URL as stale — will be re-aligned on next sync")
+            except Exception as e:
+                logger.debug(f"  Could not mark stale: {e}")
             return []
 
         soup = BeautifulSoup(resp.text, "lxml")
