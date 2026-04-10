@@ -55,7 +55,7 @@ _Released: 2026-04-08_
 - Semantic relationships (HEEFT_BUDGET, BETREFT_WIJK, etc.)
 
 ### v0.2.0 (alpha) — GraphRAG + Trustworthy Numbers
-_Target: 2 weeks from 2026-04-10 kickoff_
+_Target: 2026-04-24 (2 weeks from 2026-04-10 kickoff)_
 
 **Strategic reorientation (2026-04-10):** v0.2.0 is now scoped to ship the highest-impact features that structurally beat AethiQs MAAT. The previously-planned "Flair NER + Gemini enrichment" items are folded into Workstream 1 below as prerequisites for GraphRAG, not a separate release.
 
@@ -73,66 +73,65 @@ _Target: 2 weeks from 2026-04-10 kickoff_
 - Completeness ≥ 3.5 (from 2.75 baseline)
 - Faithfulness ≥ 4.5 (no regression)
 - Numeric accuracy on 30-question financial benchmark = 100%
-- 14 consecutive days of clean nightly runs on Rotterdam
+- Nightly pipeline deployed and running (14-day clean streak certified in v0.2.1)
 - Source-spans-only summaries pass strip-test on 50 random documents
 
 ### v0.2.1 (alpha) — Search Beyond Rotterdam
-_Target: 1 week after v0.2.0_
+_Target: 2026-05-08 (2 weeks after v0.2.0 — nightly pipeline must accumulate 14 clean days from v0.2.0 deploy)_
 
-- [ ] Multi-portal connectors in `pipeline/sources/`: `ibabs.py` (refactored), `notubiz.py`, `go.py`, `ori_fallback.py`
-- [ ] **Search-only mode** for 5 ORI-fallback gemeenten (Apeldoorn, Zoetermeer, Maastricht, Enschede, Bodegraven)
-- [ ] Document journey UI: `/journey/{id}` route + `templates/journey.html` with vertical timeline
+- [ ] Multi-portal connectors in `pipeline/sources/`: `ibabs.py` (refactored), `notubiz.py`, `go.py`, `ori_fallback.py` — ORI-fallback only (consumes ORI-scraped metadata; no deep transcript/webcast scraping for new gemeenten yet)
+- [ ] **Search-only mode** for 5 ORI-fallback gemeenten (Apeldoorn, Zoetermeer, Maastricht, Enschede, Bodegraven) — BM25 + vector search over ORI document text; no KG, financial lines, or journeys
+- [ ] Document journey UI: `/journey/{id}` route + `templates/journey.html` with vertical timeline (backend `traceer_document` from v0.2.0 powers this)
 - [ ] HLS webcast player (`templates/meeting_player.html`) accepting `?t=<seconds>`
 - [ ] Citation upgrade: every transcript-derived chunk gets `[▶ MM:SS]` deep-link in `_format_chunks_v3`
 
-### v0.3.0 (beta) — Open MCP Surface
-_Target: 4 weeks after v0.2.1_
+**Eval gate (must pass before tag):**
+- 14 consecutive days of clean nightly runs on Rotterdam (clock starts at v0.2.0 deploy)
 
-- [ ] TypeScript codegen for MCP tools — `@neodemos/mcp-tools` published to npm
+### v0.3.0 (beta) — Open MCP Surface + First External Testers
+_Target: 2026-06-05 (4 weeks after v0.2.1)_
+
+- [ ] TypeScript codegen for MCP tools — `@neodemos/mcp-tools` published to npm (generated from `services/mcp_tool_registry.py`; requires npm org setup + CI publish pipeline)
 - [ ] Anthropic [Code Execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp) example workflows
 - [ ] Anomaly-detection rate limiting (FactSet pattern)
-- [ ] Promote 2 of the 5 search-only gemeenten to full mode (KG + financial + journey)
+- [ ] Promote 2 of the 5 search-only gemeenten to full mode (KG + financial + journey) — **data-pipeline-bound**: Flair NER + Gemini enrichment + KG build for each gemeente takes 3-5 days compute; schedule these runs early in the sprint
 - [ ] ThemeFinder-style per-agenda-item theme maps + multi-round structured summarization
 - [ ] ChatGPT and Perplexity MCP registration
-- [ ] First external testers onboarded
+- [ ] First external testers onboarded (≤5; requires scoped OAuth from WS4, onboarding guide, and rate limits in place)
+- [ ] Developer documentation started: tool reference + quickstart guide (needed before testers arrive)
 
 ### v0.4.0 (beta) — User Testing Ready
-_Target: 4 weeks after v0.3.0_
+_Target: 2026-07-03 (4 weeks after v0.3.0)_
 
-- [ ] Native Notubiz adapter (one customer-driven gemeente)
-- [ ] `vergelijk_gemeenten` cross-municipality comparison MCP tool
-- [ ] Council-watcher agent (push alerts on new agenda items matching saved queries)
-- [ ] Public eval scoreboard at `neodemos.nl/eval` with live precision/faithfulness/numeric-accuracy
+- [ ] Native Notubiz adapter for one customer-driven gemeente — Rotterdam uses iBabs; many other Dutch municipalities use Notubiz (different platform, different API/HTML structure). "Native" means full-depth ingestion (documents, transcripts, speakers, webcasts) equivalent to what `pipeline/scraper.py` does for iBabs — not the ORI-fallback/search-only mode planned for v0.2.1. "Customer-driven" means: don't build speculatively; only when a specific Notubiz gemeente commits as a paying pilot customer.
+- [ ] `vergelijk_gemeenten` cross-municipality comparison MCP tool — requires ≥2 full-mode municipalities (Rotterdam + the 2 promoted in v0.3.0)
+- [ ] Council-watcher agent: monitor new agenda items matching saved queries; push alerts via email + webhook (Slack/Teams)
+- [ ] Public eval scoreboard at `neodemos.nl/eval` with live precision/faithfulness/numeric-accuracy (scheduled eval job + public read-only page)
 
-### v0.5.0 (beta) — Multi-Municipality Foundation
+### v0.5.0 (beta) — Multi-Municipality Foundation + Agentic Features
 _Target: TBD_
 
-- [ ] `bestuurslaag` column on kg_entities and politician_registry
-- [ ] Parameterized prompts and regex by organisatie
-- [ ] Second municipality pilot (smaller city, assuming more limited dataset, e.g. Vlaardingen or Maasssluis)
+- [ ] `bestuurslaag` column on `kg_entities` and `politician_registry` (schema migration + backfill for Rotterdam)
+- [ ] Parameterized prompts and regexes by `organisatie` — audit all hardcoded Rotterdam-specific strings across pipeline + MCP + templates
+- [ ] Second municipality pilot (smaller city with more limited dataset, e.g. Vlaardingen or Maassluis)
 - [ ] Per-city domain gazetteers
+- [ ] Scheduled briefing generation (council-watcher extended: digest emails on configurable schedule)
 
-### v0.6.0 (beta) — Agentic Features
+### v0.6.0 (rc) — Release Candidate
 _Target: TBD_
 
-- [ ] Council-watcher agent (monitor new agenda items, push alerts)
-- [ ] Scheduled briefing generation
-- [ ] Cross-municipality comparison queries
-
-### v0.7.0 (rc) — Release Candidate
-_Target: TBD_
-
-- [ ] Full audit pass on all data
-- [ ] Performance optimization (latency targets: <3s for simple queries)
-- [ ] Documentation for external developers
-- [ ] Security review
+- [ ] Full data quality audit: spot-check KG edges (sample 500), financial lines (reconcile against source PDFs for 3 years), politician registry completeness
+- [ ] Performance targets: p50 < 2s for `zoek_*` tools, p50 < 5s for `traceer_*` tools (profile and fix top regressions)
+- [ ] External security review (pentest on MCP OAuth surface + API endpoints)
+- [ ] Developer documentation complete: all MCP tools documented with examples, integration guide, rate limits
+- [ ] Expand external testers to ≤30
 
 ### v1.0.0 (GA) — General Availability
 _Target: TBD_
 
 - [ ] Public launch
-- [ ] Developer API + API keys
-- [ ] SLA for uptime and data freshness
+- [ ] Developer API + API keys (self-serve portal)
+- [ ] SLA for uptime (99.5%) and data freshness (T+8h for new meetings)
 - [ ] Billing infrastructure (B2B subscriptions)
 
 ---
