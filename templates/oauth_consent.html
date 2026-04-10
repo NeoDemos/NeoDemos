@@ -19,7 +19,7 @@
     .btn-row { display: flex; gap: 0.75rem; }
     .btn-row button { flex: 1; padding: 0.75rem; border: none; border-radius: 6px;
         font-size: 1rem; cursor: pointer; }
-    .btn-approve { background: var(--primary-color); color: #fff; }
+    .btn-approve { background: #2c3e50; color: #fff; }
     .btn-approve:hover { opacity: 0.9; }
     .btn-deny { background: #e2e8f0; color: #4a5568; }
     .btn-deny:hover { background: #cbd5e0; }
@@ -57,7 +57,7 @@
             <input type="hidden" name="state" value="{{ state }}">
             <input type="hidden" name="scope" value="{{ scope }}">
             <input type="hidden" name="code_challenge" value="{{ code_challenge }}">
-            <button type="submit" class="btn-approve" style="flex:1;">Toestaan</button>
+            <button type="submit" class="btn-approve" style="flex:1;">Accepteren</button>
         </form>
         <button class="btn-deny" onclick="window.close();" style="flex:0.6;">Weigeren</button>
     </div>
