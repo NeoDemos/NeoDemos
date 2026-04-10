@@ -164,6 +164,26 @@ def create_staging_schema(drop_first: bool = False):
         """)
         print("+ Created staging.pipeline_meeting_log")
 
+        # ── 3b. Financial document tracking ─────────────────────────────
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS staging.financial_documents (
+                id TEXT PRIMARY KEY,
+                doc_type TEXT NOT NULL,
+                fiscal_year INTEGER NOT NULL,
+                source_url TEXT,
+                source TEXT DEFAULT 'watdoetdegemeente',
+                pdf_path TEXT,
+                page_count INTEGER,
+                docling_tables_found INTEGER,
+                docling_chunks_created INTEGER,
+                review_status TEXT DEFAULT 'pending',
+                quality_score FLOAT,
+                promoted_at TIMESTAMP,
+                created_at TIMESTAMP DEFAULT NOW()
+            );
+        """)
+        print("+ Created staging.financial_documents")
+
         # ── 4. Indexes ──────────────────────────────────────────────────
         cur.execute("CREATE INDEX IF NOT EXISTS idx_stg_meetings_date ON staging.meetings(start_date);")
         cur.execute("CREATE INDEX IF NOT EXISTS idx_stg_meetings_committee ON staging.meetings(committee);")
@@ -177,6 +197,9 @@ def create_staging_schema(drop_first: bool = False):
         cur.execute("CREATE INDEX IF NOT EXISTS idx_stg_assign_meeting ON staging.document_assignments(meeting_id);")
         cur.execute("CREATE INDEX IF NOT EXISTS idx_stg_pml_run ON staging.pipeline_meeting_log(pipeline_run_id);")
         cur.execute("CREATE INDEX IF NOT EXISTS idx_stg_pml_meeting ON staging.pipeline_meeting_log(meeting_id);")
+        cur.execute("CREATE INDEX IF NOT EXISTS idx_stg_findocs_type ON staging.financial_documents(doc_type);")
+        cur.execute("CREATE INDEX IF NOT EXISTS idx_stg_findocs_status ON staging.financial_documents(review_status);")
+        cur.execute("CREATE INDEX IF NOT EXISTS idx_stg_findocs_year ON staging.financial_documents(fiscal_year);")
         print("+ Created indexes")
 
         conn.commit()
