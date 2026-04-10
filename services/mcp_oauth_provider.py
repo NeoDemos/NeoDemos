@@ -80,7 +80,7 @@ class NeodemosOAuthProvider:
             else None
         )
         name = client_info.client_name or "Unnamed Client"
-        redirect_uris = list(client_info.redirect_uris)
+        redirect_uris = [str(u) for u in client_info.redirect_uris]
         grant_types = list(client_info.grant_types or ["authorization_code"])
         response_types = list(client_info.response_types or ["code"])
         scope = client_info.scope or "mcp search"
