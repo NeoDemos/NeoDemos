@@ -50,7 +50,7 @@ env:
     - ADMIN_EMAIL
     - ADMIN_PASSWORD
 
-deploy_timeout: 120
+deploy_timeout: 300
 
 proxy:
   ssl: true

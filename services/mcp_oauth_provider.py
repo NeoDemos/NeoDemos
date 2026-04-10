@@ -147,8 +147,8 @@ class NeodemosOAuthProvider:
                 row = cur.fetchone()
         if not row:
             return None
-        expires_at = row[6]
-        if datetime.utcnow() > expires_at:
+        expires_at_dt = row[6]
+        if datetime.utcnow() > expires_at_dt:
             logger.warning("Authorization code %s has expired", authorization_code[:8])
             return None
         scopes = row[4].split() if row[4] else []
@@ -158,7 +158,7 @@ class NeodemosOAuthProvider:
             redirect_uri=row[3],
             scopes=scopes,
             code_challenge=row[5],
-            expires_at=expires_at,
+            expires_at=expires_at_dt.timestamp(),
             redirect_uri_provided_explicitly=True,
         )
 
@@ -240,7 +240,7 @@ class NeodemosOAuthProvider:
             token=row[0],
             client_id=row[1],
             scopes=scopes,
-            expires_at=row[3],
+            expires_at=row[3].timestamp(),
         )
 
     # ── 7. Exchange refresh token for new tokens ──
@@ -299,8 +299,8 @@ class NeodemosOAuthProvider:
                 row = cur.fetchone()
         if not row:
             return None
-        expires_at = row[3]
-        if datetime.utcnow() > expires_at:
+        expires_at_dt = row[3]
+        if datetime.utcnow() > expires_at_dt:
             logger.warning("Access token expired for client %s", row[1])
             return None
         scopes = row[2].split() if row[2] else []
@@ -308,7 +308,7 @@ class NeodemosOAuthProvider:
             token=row[0],
             client_id=row[1],
             scopes=scopes,
-            expires_at=expires_at,
+            expires_at=expires_at_dt.timestamp(),
         )
 
     # ── 9. Revoke token ──
