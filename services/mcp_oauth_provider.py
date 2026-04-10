@@ -240,7 +240,7 @@ class NeodemosOAuthProvider:
             token=row[0],
             client_id=row[1],
             scopes=scopes,
-            expires_at=row[3].timestamp(),
+            expires_at=int(row[3].timestamp()),
         )
 
     # ── 7. Exchange refresh token for new tokens ──
@@ -308,7 +308,7 @@ class NeodemosOAuthProvider:
             token=row[0],
             client_id=row[1],
             scopes=scopes,
-            expires_at=expires_at_dt.timestamp(),
+            expires_at=int(expires_at_dt.timestamp()),
         )
 
     # ── 9. Revoke token ──
