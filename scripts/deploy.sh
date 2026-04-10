@@ -2,12 +2,12 @@
 # ──────────────────────────────────────────────────────────────
 # Safe deployment script for NeoDemos.
 #
-# Runs pre-flight checks, creates a backup on the server,
-# then deploys via Kamal with a post-deploy verification.
+# Runs pre-flight checks, creates a DB backup on the server,
+# syncs code via rsync, and rebuilds containers with docker compose.
 #
 # Usage:
 #   ./scripts/deploy.sh              # full deploy with checks
-#   ./scripts/deploy.sh --skip-tests # skip local test suite
+#   ./scripts/deploy.sh --skip-tests # skip syntax checks
 #   ./scripts/deploy.sh --dry-run    # checks only, no deploy
 # ──────────────────────────────────────────────────────────────
 
@@ -16,6 +16,7 @@ set -euo pipefail
 REMOTE_HOST="178.104.137.168"
 SSH_USER="deploy"
 SSH_KEY="$HOME/.ssh/neodemos_ed25519"
+REMOTE_DIR="/home/deploy/neodemos"
 DOMAIN="neodemos.nl"
 MCP_DOMAIN="mcp.neodemos.nl"
 
@@ -115,9 +116,36 @@ BACKUP_EOF
 
 # ── 3. Deploy ──
 
-step "6/8  Deploying via Kamal..."
-echo "  Building Docker image and pushing to ghcr.io..."
-kamal deploy 2>&1 | tail -20
+step "6/8  Syncing code and rebuilding containers..."
+echo "  Rsyncing to $REMOTE_HOST..."
+rsync -az \
+  -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" \
+  --exclude='.git' \
+  --exclude='.venv' \
+  --exclude='.kamal' \
+  --exclude='.claude' \
+  --exclude='__pycache__' \
+  --exclude='*.pyc' \
+  --exclude='.env' \
+  --exclude='data/' \
+  --exclude='output/' \
+  --exclude='logs/' \
+  --exclude='qdrant/' \
+  --exclude='snapshots/' \
+  --exclude='*.db' \
+  --exclude='*.xlsx' \
+  --exclude='tmp_*' \
+  --exclude='brain/' \
+  --exclude='memory-bank/' \
+  --exclude='.DS_Store' \
+  --exclude='eval_notulen/runs/' \
+  --exclude='rag_evaluator/results/' \
+  --exclude='node_modules/' \
+  . "$SSH_USER@$REMOTE_HOST:$REMOTE_DIR/"
+
+echo "  Building and restarting web + mcp..."
+ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no "$SSH_USER@$REMOTE_HOST" \
+  "cd $REMOTE_DIR && docker compose -f docker-compose.prod.yml up -d --build web mcp 2>&1"
 
 # ── 4. Post-deploy verification ──
 
@@ -155,5 +183,4 @@ echo "  Web:      https://${DOMAIN}"
 echo "  MCP:      https://${MCP_DOMAIN}"
 echo "  Backup:   pre_deploy_${TIMESTAMP}.sql.gz"
 echo ""
-echo "  To rollback:  kamal rollback"
-echo "  Server logs:  kamal app logs --since 5m"
+echo "  Server logs:  ssh -i ~/.ssh/neodemos_ed25519 deploy@178.104.137.168 'docker logs neodemos-web --tail 50'"
