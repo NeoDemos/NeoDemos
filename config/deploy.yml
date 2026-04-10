@@ -94,7 +94,7 @@ accessories:
       network: kamal
 
   mcp:
-    image: neodemos/neodemos
+    image: ghcr.io/neodemos/neodemos
     host: 178.104.137.168
     port: "127.0.0.1:8001:8001"
     cmd: "python mcp_server_v3.py --http --port 8001"
@@ -115,7 +115,7 @@ accessories:
     options:
       memory: 1G
       name: neodemos-mcp
-      network: kamal
+      network: neodemos_neodemos-network
 
   caddy:
     image: caddy:2-alpine
