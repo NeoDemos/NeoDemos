@@ -26,8 +26,10 @@ import re
 import sys
 import json
 import glob
+import time
+import threading
 from services.db_pool import get_connection
-from datetime import date
+from datetime import date, datetime
 from typing import Optional
 from pathlib import Path
 
@@ -88,6 +90,57 @@ mcp = FastMCP(
         "zijn verworpen en hoe stemde partij X'), gebruik meerdere tool calls in sequentie."
     ),
 )
+
+# ---------------------------------------------------------------------------
+# Query logging — appends one JSONL line per tool call to logs/mcp_queries.jsonl
+# ---------------------------------------------------------------------------
+
+_QUERY_LOG = PROJECT_ROOT / "logs" / "mcp_queries.jsonl"
+_LOG_LOCK = threading.Lock()
+
+
+def _log_query(tool_name: str, params: dict, result: str, latency_ms: int) -> None:
+    """Append one JSONL line. Never raises — logging must not crash the tool."""
+    try:
+        entry = {
+            "ts": datetime.utcnow().isoformat() + "Z",
+            "tool": tool_name,
+            "params": params,
+            "latency_ms": latency_ms,
+            "result_chars": len(result),
+        }
+        _QUERY_LOG.parent.mkdir(parents=True, exist_ok=True)
+        with _LOG_LOCK:
+            with open(_QUERY_LOG, "a", encoding="utf-8") as f:
+                f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    except Exception:
+        pass
+
+
+def logged_tool(func):
+    """Drop-in for @logged_tool — registers with FastMCP and logs to mcp_queries.jsonl."""
+    import inspect
+    import functools
+
+    sig = inspect.signature(func)
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            bound = sig.bind(*args, **kwargs)
+            bound.apply_defaults()
+            log_params = {k: v for k, v in bound.arguments.items() if v is not None}
+        except Exception:
+            log_params = kwargs
+
+        t0 = time.monotonic()
+        result = func(*args, **kwargs)
+        latency_ms = int((time.monotonic() - t0) * 1000)
+        _log_query(func.__name__, log_params, result, latency_ms)
+        return result
+
+    return mcp.tool()(wrapper)
+
 
 # ---------------------------------------------------------------------------
 # Lazy service singletons
@@ -303,7 +356,7 @@ def _retrieve_with_reranking(
 # Tool 1 — Algemene raadshistorie zoekfunctie
 # ---------------------------------------------------------------------------
 
-@mcp.tool()
+@logged_tool
 def zoek_raadshistorie(
     vraag: str,
     datum_van: Optional[str] = None,
@@ -346,7 +399,7 @@ def zoek_raadshistorie(
 # Tool 2 — Financiële gegevens (with table boost)
 # ---------------------------------------------------------------------------
 
-@mcp.tool()
+@logged_tool
 def zoek_financieel(
     onderwerp: str,
     datum_van: Optional[str] = None,
@@ -480,7 +533,7 @@ def zoek_financieel(
 # Tool 3 — Uitspraken en citaten (party-filtered)
 # ---------------------------------------------------------------------------
 
-@mcp.tool()
+@logged_tool
 def zoek_uitspraken(
     onderwerp: str,
     partij_of_raadslid: Optional[str] = None,
@@ -535,7 +588,7 @@ def zoek_uitspraken(
 # Tool 4 — Vergaderdetails ophalen (unchanged from v1)
 # ---------------------------------------------------------------------------
 
-@mcp.tool()
+@logged_tool
 def haal_vergadering_op(
     vergadering_id: Optional[str] = None,
     datum: Optional[str] = None,
@@ -596,7 +649,7 @@ def haal_vergadering_op(
 # Tool 5 — Lijst van vergaderingen (unchanged from v1)
 # ---------------------------------------------------------------------------
 
-@mcp.tool()
+@logged_tool
 def lijst_vergaderingen(
     jaar: Optional[int] = None,
     commissie: Optional[str] = None,
@@ -644,7 +697,7 @@ def lijst_vergaderingen(
 # Tool 6 — Tijdlijn besluitvorming (with reranking)
 # ---------------------------------------------------------------------------
 
-@mcp.tool()
+@logged_tool
 def tijdlijn_besluitvorming(
     onderwerp: str,
     datum_van: Optional[str] = None,
@@ -751,7 +804,7 @@ def tijdlijn_besluitvorming(
 # Tool 7 — Agendapunt analyse (with reranking)
 # ---------------------------------------------------------------------------
 
-@mcp.tool()
+@logged_tool
 def analyseer_agendapunt(
     agendapunt_id: str,
     partij: str = "GroenLinks-PvdA",
@@ -826,7 +879,7 @@ def analyseer_agendapunt(
 # Tool 8 — Partijstandpunt (party-filtered)
 # ---------------------------------------------------------------------------
 
-@mcp.tool()
+@logged_tool
 def haal_partijstandpunt_op(
     beleidsgebied: str,
     partij: str = "GroenLinks-PvdA",
@@ -889,7 +942,7 @@ def haal_partijstandpunt_op(
 # Tool 9 — Zoek moties en amendementen (direct SQL on document names)
 # ---------------------------------------------------------------------------
 
-@mcp.tool()
+@logged_tool
 def zoek_moties(
     onderwerp: str,
     uitkomst: Optional[str] = None,
@@ -1032,7 +1085,7 @@ def zoek_moties(
 # Tool 10 — Breed scannen (many results, short previews — for deep research)
 # ---------------------------------------------------------------------------
 
-@mcp.tool()
+@logged_tool
 def scan_breed(
     vraag: str,
     datum_van: Optional[str] = None,
@@ -1095,7 +1148,7 @@ def scan_breed(
 # Tool 10 — Lees volledig fragment (deep read after scan)
 # ---------------------------------------------------------------------------
 
-@mcp.tool()
+@logged_tool
 def lees_fragment(
     document_id: str,
     max_fragmenten: int = 5,
@@ -1156,7 +1209,7 @@ def lees_fragment(
 # Tool 12 — Zoek gerelateerde documenten (cross-referencing)
 # ---------------------------------------------------------------------------
 
-@mcp.tool()
+@logged_tool
 def zoek_gerelateerd(
     document_id: str,
     max_resultaten: int = 10,
@@ -1340,7 +1393,7 @@ def _resolve_role_date_range(naam: str, rol: Optional[str] = None) -> tuple[Opti
     return None, None
 
 
-@mcp.tool()
+@logged_tool
 def zoek_uitspraken_op_rol(
     naam: str,
     onderwerp: str,
