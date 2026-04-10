@@ -1,0 +1,23 @@
+#!/bin/bash
+# Post-deploy hook: connect new web container to Caddy's network with the stable alias
+# that Caddy uses for routing (neodemos-web:8000).
+
+set -e
+
+SERVER="deploy@178.104.137.168"
+SSH_KEY="$HOME/.ssh/neodemos_ed25519"
+CADDY_NETWORK="neodemos_neodemos-network"
+WEB_ALIAS="neodemos-web"
+
+# Find the newly deployed container (named neodemos-web-<sha>)
+NEW_CONTAINER=$(ssh -i "$SSH_KEY" "$SERVER" \
+  "docker ps --filter 'name=neodemos-web-' --format '{{.Names}}' | head -1")
+
+if [ -z "$NEW_CONTAINER" ]; then
+  echo "post-deploy: no neodemos-web-<sha> container found, skipping network alias"
+  exit 0
+fi
+
+echo "post-deploy: connecting $NEW_CONTAINER to $CADDY_NETWORK as alias $WEB_ALIAS"
+ssh -i "$SSH_KEY" "$SERVER" \
+  "docker network connect --alias $WEB_ALIAS $CADDY_NETWORK $NEW_CONTAINER 2>/dev/null && echo 'connected' || echo 'already connected or failed'"

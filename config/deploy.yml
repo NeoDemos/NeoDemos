@@ -8,6 +8,8 @@ servers:
   web:
     hosts:
       - 178.104.137.168
+    options:
+      network: neodemos_neodemos-network
 
 builder:
   arch: amd64
@@ -49,17 +51,6 @@ env:
     - ORI_API_KEY
     - ADMIN_EMAIL
     - ADMIN_PASSWORD
-
-deploy_timeout: 300
-
-proxy:
-  ssl: true
-  host: neodemos.nl
-  app_port: 8000
-  healthcheck:
-    path: /login
-    interval: 5
-    timeout: 30
 
 accessories:
   postgres:
@@ -126,7 +117,7 @@ accessories:
         - "443:443"
       memory: 128M
       name: neodemos-caddy
-      network: kamal
+      network: neodemos_neodemos-network
     volumes:
       - /home/deploy/neodemos-config/Caddyfile:/etc/caddy/Caddyfile:ro
       - neodemos-caddy-data:/data
