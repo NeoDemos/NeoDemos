@@ -4,6 +4,8 @@ import json
 import asyncio
 from typing import Dict, Any, Optional, List
 from collections import Counter
+from dotenv import load_dotenv
+load_dotenv()
 
 try:
     import google.genai as genai
@@ -17,21 +19,6 @@ logger = logging.getLogger(__name__)
 class AIService:
     def __init__(self, api_key: Optional[str] = None):
         self.api_key = api_key or os.getenv("GEMINI_API_KEY")
-        
-        # FAIL-SAFE: Manually read .env if key is missing from environment
-        if not self.api_key:
-            try:
-                # Use project absolute path to ensure recovery
-                abs_env = "/Users/dennistak/Documents/Final Frontier/NeoDemos/.env"
-                if os.path.exists(abs_env):
-                    with open(abs_env, "r") as f:
-                        for line in f:
-                            if "GEMINI_API_KEY" in line and "=" in line:
-                                self.api_key = line.split("=")[1].strip().strip("'").strip('"')
-                                os.environ["GEMINI_API_KEY"] = self.api_key
-                                break
-            except:
-                pass
 
         # Initialize Gemini API if available and key is set
         if GEMINI_AVAILABLE and self.api_key:
