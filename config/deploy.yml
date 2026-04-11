@@ -125,6 +125,9 @@ accessories:
         timeout: 10
     env:
       clear:
+        # PORT=8001 tells the Dockerfile HEALTHCHECK to curl the right port
+        # (the MCP server listens on 8001, not the web default of 8000).
+        PORT: "8001"
         DB_HOST: neodemos-postgres
         DB_PORT: "5432"
         DB_NAME: neodemos

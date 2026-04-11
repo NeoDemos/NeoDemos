@@ -2,371 +2,232 @@
 
 Use this skill when deploying, starting, stopping, or troubleshooting the NeoDemos stack. For security hardening, authentication, and secrets management, see `/secure`.
 
-## Full Service Map
+---
+
+## ⚠️ Hard rules (read first, no exceptions)
+
+1. **Deploys go through Kamal.** `git commit → git push → kamal deploy → live`. Never rsync files to the host. Never `ssh` to the host and run `docker` or `docker compose` commands for production services. If Kamal is not working, **stop and diagnose** — do not improvise a workaround.
+2. **Docker runtime is Colima, NOT Docker Desktop.** If a Kamal build fails with `dial unix /Users/dennistak/.colima/default/docker.sock`, run `colima start` — do not tell the user to "start Docker Desktop". Dennis does not run Docker Desktop.
+3. **Kamal binary is NOT in PATH.** It lives at `/opt/homebrew/lib/ruby/gems/4.0.0/bin/kamal`. `which kamal` returns empty; that does not mean it's missing.
+4. **kamal-proxy is the sole public reverse proxy.** There is no Caddy, no Traefik, no nginx. Everything public goes through kamal-proxy on ports 80/443, including TLS termination via Let's Encrypt.
+5. **Protect the postgres named volume** `neodemos_postgres_data` — it holds all council data (2865 meetings + chunks + embeddings). Never accept a config change that would switch it to an anonymous volume. Never run `docker compose` on the host — it can silently trigger a postgres recreate.
+
+---
+
+## Production topology (as of 2026-04-11 after Caddy → kamal-proxy migration)
 
 ```
 Internet
   │
-  ├── HTTPS (443) ──► Caddy (auto-TLS reverse proxy)
-  │                      │
-  │                      ├── /* ──────────► FastAPI web app (uvicorn, port 8000)
-  │                      │                    ├── GET /            → Search UI
-  │                      │                    ├── GET /meeting/*   → Meeting detail + analysis
-  │                      │                    ├── GET /calendar    → Calendar view
-  │                      │                    ├── GET /api/*       → JSON API + SSE streaming
-  │                      │                    └── GET /health      → Health check endpoint
-  │                      │
-  │                      └── (not exposed) ──► MCP server (stdio or SSE, port 8001)
+  ├── HTTPS (443) ──► kamal-proxy  ─┬─► neodemos-web-<sha>  :8000  (FastAPI)
+  │                                 └─► neodemos-mcp         :8001  (MCP server)
   │
-  └── (localhost only) ──► PostgreSQL (5432)
-                         ► Qdrant (6333/6334)
+  └── (kamal-internal Docker network)
+           ├── neodemos-postgres :5432
+           └── neodemos-qdrant   :6333/6334
 ```
 
-**5 services total:**
+- **Host:** Hetzner VPS `178.104.137.168`
+- **SSH:** `ssh -i ~/.ssh/neodemos_ed25519 deploy@178.104.137.168`
+- **Registry:** `ghcr.io/neodemos/neodemos` (single image shared by web service and all accessories)
+- **Kamal config:** [config/deploy.yml](config/deploy.yml) · **Secrets:** [.kamal/secrets](.kamal/secrets)
+- **Docker network:** `kamal` (managed by Kamal, all containers join it automatically)
 
-| Service | Role | Port | Exposed? |
-|---------|------|------|----------|
-| **FastAPI** (`main.py`) | Web frontend + API | 8000 | Via reverse proxy |
-| **PostgreSQL** | Meetings, documents, chunks, BM25 search | 5432 | Never |
-| **Qdrant** | Vector search (607K+ points) | 6333 | Never |
-| **Caddy/nginx** | TLS termination, security headers | 443 | Yes |
-| **MCP server** (`mcp_server.py`) | Claude Desktop / Co-Work tools | 8001 (SSE) or stdio | See below |
+### Kamal service/accessory layout
 
-## Quick Start: Local User Testing
+| Name | Kamal type | Container | Role |
+|---|---|---|---|
+| `neodemos` | service (`web`) | `neodemos-web-<sha>` | FastAPI app, uvicorn on 8000 |
+| `mcp` | accessory | `neodemos-mcp` | MCP server, uvicorn on 8001, OAuth 2.1 |
+| `postgres` | accessory | `neodemos-postgres` | DB — named volume `neodemos_postgres_data` |
+| `qdrant` | accessory | `neodemos-qdrant` | Vector store — bind mount `/home/deploy/neodemos-data/qdrant_storage` |
+
+Note: there is **no `caddy` accessory anymore**. kamal-proxy handles 80/443 directly and is managed via `kamal proxy *` commands, not via the accessories block.
+
+### Public hostnames (all issued by Let's Encrypt, auto-renewed by kamal-proxy)
+
+| Host | Routes to | Notes |
+|---|---|---|
+| `neodemos.nl` | `neodemos-web:8000` | Primary |
+| `www.neodemos.nl` | `neodemos-web:8000` | |
+| `neodemos.eu` | `neodemos-web:8000` | 301 → `neodemos.nl` via `CanonicalHostRedirectMiddleware` in [main.py](main.py) |
+| `www.neodemos.eu` | `neodemos-web:8000` | 301 → `neodemos.nl` |
+| `mcp.neodemos.nl` | `neodemos-mcp:8001` | OAuth 2.1 at `/mcp` |
+| `mcp.neodemos.eu` | `neodemos-mcp:8001` | |
+
+---
+
+## The commands you actually use
+
+All commands run from the project root. Either add Kamal to your PATH or alias it:
 
 ```bash
-# 1. Configure environment (see /secure for secrets)
-cp .env.example .env
-# Edit .env with real values
-
-# 2. Start core services
-# PostgreSQL (already running locally, or via Docker):
-docker compose up -d postgres
-
-# Qdrant (standalone binary, NOT Docker — uses local data/qdrant_storage):
-qdrant --config-path config/config.yaml &
-
-# FastAPI:
-cd /Users/dennistak/Documents/Final Frontier/NeoDemos
-.venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000
-
-# 3. Expose for testers (pick one):
-# Option A: ngrok (simplest, HTTPS included)
-ngrok http 8000 --basic-auth "tester:your_password"
-
-# Option B: LAN-only (no internet exposure)
-# Just share http://<your-ip>:8000 on local network
-
-# Option C: Caddy on VPS (see "HTTPS with Caddy" below)
+export KAMAL=/opt/homebrew/lib/ruby/gems/4.0.0/bin/kamal
 ```
 
-## Docker Compose Deployment (Full Stack)
-
-### Production docker-compose with all services
-
-The existing `docker-compose.yml` has `postgres` + `web` + `nginx`. For production, add Qdrant and use a prod override.
-
-**Create `docker-compose.prod.yml`:**
-```yaml
-services:
-  postgres:
-    ports:
-      - "127.0.0.1:5432:5432"      # Localhost only
-    environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD}  # No default fallback in prod
-    command: >
-      postgres
-        -c log_connections=on
-        -c log_disconnections=on
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-
-  qdrant:
-    image: qdrant/qdrant:v1.13.2
-    container_name: neodemos-qdrant
-    ports:
-      - "127.0.0.1:6333:6333"      # REST API, localhost only
-      - "127.0.0.1:6334:6334"      # gRPC, localhost only
-    volumes:
-      - ./data/qdrant_storage:/qdrant/storage
-      - ./config/config.yaml:/qdrant/config/production.yaml:ro
-    environment:
-      QDRANT__SERVICE__API_KEY: ${QDRANT_API_KEY:-}
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:6333/healthz"]
-      interval: 15s
-      timeout: 5s
-      retries: 3
-    networks:
-      - neodemos-network
-    restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          memory: 4G
-
-  web:
-    environment:
-      ENVIRONMENT: production
-      DEBUG: "false"
-      QDRANT_API_KEY: ${QDRANT_API_KEY:-}
-      QDRANT_URL: http://qdrant:6333
-    ports:
-      - "127.0.0.1:8000:8000"      # Behind reverse proxy only
-    depends_on:
-      postgres:
-        condition: service_healthy
-      qdrant:
-        condition: service_healthy
-    deploy:
-      resources:
-        limits:
-          memory: 4G
-
-  # Remove nginx from prod — use Caddy externally instead
-```
+### Full deploy (web code changed)
 
 ```bash
-# Deploy
-DB_PASSWORD="<generated>" GEMINI_API_KEY="<key>" QDRANT_API_KEY="<key>" \
-  docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
-
-# Verify
-docker compose ps
-curl -f http://localhost:8000/health
+colima status >/dev/null 2>&1 || colima start
+git commit -am "fix foo"
+git push
+$KAMAL deploy
 ```
 
-## MCP Server Deployment
+This builds + pushes + blue-green-deploys the `neodemos` web service. kamal-proxy waits for the new container to pass its `/up` healthcheck, then atomically swaps traffic from the old container to the new one. Old container is stopped after drain (default 30s). Does **not** touch accessories.
 
-The MCP server has two deployment modes:
+### Deploy an MCP code change
 
-### Mode 1: Claude Desktop (local, stdio) — Current Setup
-
-This is how it works today. Claude Desktop launches `mcp_server.py` as a subprocess.
-
-```json
-// ~/Library/Application Support/Claude/claude_desktop_config.json
-{
-  "mcpServers": {
-    "neodemos": {
-      "command": "/Users/dennistak/Documents/Final Frontier/NeoDemos/.venv/bin/python",
-      "args": ["/Users/dennistak/Documents/Final Frontier/NeoDemos/mcp_server.py"],
-      "env": { "PYTHONPATH": "/Users/dennistak/Documents/Final Frontier/NeoDemos" }
-    }
-  }
-}
-```
-
-**Requires:** Your Mac running, PostgreSQL + Qdrant + embedding model all local. No network exposure needed.
-
-### Mode 2: Claude Co-Work / Remote (SSE transport) — For User Testing
-
-Claude Co-Work and remote clients can't use stdio. They need an HTTP-based transport.
-
-To run the MCP server over SSE (Server-Sent Events):
-
-```python
-# At the bottom of mcp_server.py, change:
-if __name__ == "__main__":
-    import sys
-    transport = sys.argv[1] if len(sys.argv) > 1 else "stdio"
-    if transport == "sse":
-        mcp.run(transport="sse", host="127.0.0.1", port=8001)
-    else:
-        mcp.run(transport="stdio")
-```
+The MCP accessory shares the same Docker image as the web service. Steps:
 
 ```bash
-# Start MCP server in SSE mode (behind reverse proxy)
-.venv/bin/python mcp_server.py sse
+colima status >/dev/null 2>&1 || colima start
+git commit -am "fix mcp thing"
+git push
+$KAMAL build push                # builds + pushes new :latest
+$KAMAL accessory reboot mcp      # recreates neodemos-mcp with new image
 ```
 
-Then expose via Caddy alongside the main app:
-```
-yourdomain.com {
-    # Main web app
-    reverse_proxy /api/* localhost:8000
-    reverse_proxy /* localhost:8000
+Or if you also changed web code, `$KAMAL deploy` handles the web side; then `$KAMAL accessory reboot mcp` for MCP.
 
-    # MCP SSE endpoint (for Claude Co-Work)
-    handle /mcp/* {
-        reverse_proxy localhost:8001
-    }
-}
-```
-
-**Important:** The MCP SSE endpoint should be authenticated. See `/secure` for how to add API key auth.
-
-## Embedding Strategy
-
-Embeddings run **on your Mac only** (Apple Silicon + MLX + Qwen3-8B). This is intentional:
-- The bulk 607K+ points are already embedded
-- Daily ingest is small volume (a few documents per day)
-- No need to deploy GPU infrastructure for this
-
-**How daily ingest works:**
-1. `RefreshService` runs at 8 AM via scheduler (in `main.py`) — downloads new docs to PostgreSQL
-2. You run embedding manually when needed, or (future) via the auto-ingest pipeline
-3. The deployed server reads from Qdrant, never writes to it
-
-**If the Mac is off:** The deployed web app still works — it queries existing vectors in Qdrant. New documents just won't have embeddings until you run the ingest again.
-
-## HTTPS with Caddy
+### Restart a single accessory without rebuilding
 
 ```bash
-# Install
-sudo apt install -y caddy    # Debian/Ubuntu
-# or: brew install caddy      # macOS
+$KAMAL accessory reboot <name>   # mcp | postgres | qdrant
 ```
 
-Create `Caddyfile`:
-```
-yourdomain.com {
-    reverse_proxy localhost:8000
-
-    log {
-        output file /var/log/caddy/neodemos.log
-        format json
-    }
-}
-```
-
-Caddy auto-provisions TLS certificates via Let's Encrypt. No manual cert management.
+### Inspect logs
 
 ```bash
-caddy run --config Caddyfile
+$KAMAL app logs -f                       # web service
+$KAMAL accessory logs mcp -f             # MCP
+$KAMAL accessory logs postgres --lines 100
+$KAMAL proxy logs -f                     # kamal-proxy (ACME issues, routing decisions)
 ```
 
-Security headers are handled by `/secure` — add them to the Caddyfile as described there.
-
-## Process Management (systemd)
-
-For VPS deployment without Docker:
-
-**`/etc/systemd/system/neodemos.service`:**
-```ini
-[Unit]
-Description=NeoDemos FastAPI Application
-After=network.target postgresql.service
-
-[Service]
-Type=simple
-User=neodemos
-Group=neodemos
-WorkingDirectory=/opt/neodemos
-EnvironmentFile=/opt/neodemos/.env
-ExecStart=/opt/neodemos/.venv/bin/uvicorn main:app \
-    --host 127.0.0.1 \
-    --port 8000 \
-    --workers 4 \
-    --limit-max-requests 1000 \
-    --timeout-keep-alive 65 \
-    --access-log
-Restart=always
-RestartSec=5
-
-[Install]
-WantedBy=multi-user.target
-```
-
-**`/etc/systemd/system/neodemos-mcp.service`** (optional, for SSE mode):
-```ini
-[Unit]
-Description=NeoDemos MCP Server (SSE)
-After=neodemos.service
-
-[Service]
-Type=simple
-User=neodemos
-WorkingDirectory=/opt/neodemos
-EnvironmentFile=/opt/neodemos/.env
-ExecStart=/opt/neodemos/.venv/bin/python mcp_server.py sse
-Restart=always
-RestartSec=5
-
-[Install]
-WantedBy=multi-user.target
-```
+### Rollback
 
 ```bash
-sudo systemctl enable neodemos neodemos-mcp
-sudo systemctl start neodemos neodemos-mcp
+$KAMAL rollback <previous_sha>           # web service to a previous image
 ```
 
-## Health Checks & Monitoring
+For accessories, the rollback path is to pin the previous image SHA in `deploy.yml` and re-boot the accessory.
 
-### Health Endpoint (add to main.py)
+---
 
-```python
-@app.get("/health")
-async def health_check():
-    checks = {"status": "ok", "services": {}}
-    # PostgreSQL
-    try:
-        with storage._get_connection() as conn:
-            with conn.cursor() as cur:
-                cur.execute("SELECT 1")
-        checks["services"]["postgres"] = "ok"
-    except:
-        checks["services"]["postgres"] = "error"
-        checks["status"] = "degraded"
-    # Qdrant
-    try:
-        from qdrant_client import QdrantClient
-        client = QdrantClient(url="http://localhost:6333")
-        info = client.get_collection("notulen_chunks")
-        checks["services"]["qdrant"] = f"ok ({info.points_count} points)"
-    except:
-        checks["services"]["qdrant"] = "error"
-        checks["status"] = "degraded"
-    return checks
-```
-
-### Monitoring Commands
+## Pre-flight checklist (before any deploy)
 
 ```bash
-# All services
-curl -s http://localhost:8000/health | python -m json.tool
-
-# Qdrant
-curl -s http://localhost:6333/collections/notulen_chunks | python -m json.tool
-
-# PostgreSQL connections
-psql -U postgres -d neodemos -c "SELECT count(*) FROM pg_stat_activity;"
-
-# Logs
-docker compose logs -f --tail=100 web        # Docker
-journalctl -u neodemos -f --no-pager         # systemd
+colima status                                # Docker runtime up?
+ls /opt/homebrew/lib/ruby/gems/4.0.0/bin/kamal   # Kamal binary reachable?
+git status                                   # Clean working tree? Kamal clones from git, uncommitted tracked changes are skipped.
+curl -sI https://neodemos.nl/ | head -1       # Production currently healthy?
+curl -sI https://mcp.neodemos.nl/mcp | head -1  # Expect HTTP/2 401 (OAuth challenge)
 ```
 
-## Deployment Topology Options
+If any fail, fix them first — do not improvise a workaround.
 
-| Scenario | Stack | Notes |
-|----------|-------|-------|
-| **User testing (local)** | uvicorn + ngrok | Simplest. `ngrok http 8000 --basic-auth` |
-| **User testing (VPS)** | Caddy + uvicorn + systemd | Auto-TLS, proper security |
-| **Production (self-hosted)** | Docker Compose + Caddy | Full isolation, all 5 services |
-| **Production (cloud)** | Docker + managed Postgres + Qdrant Cloud | Replace local services with managed ones |
+---
 
-## Rollback Plan
+## Verification after a deploy
 
 ```bash
-# Docker: roll back to previous image
-docker compose down
-docker compose up -d --no-build    # Uses cached image
+# Public-facing
+curl -sI https://neodemos.nl/login                # 200 via HTTP/2
+curl -sI https://mcp.neodemos.nl/mcp              # 401 WWW-Authenticate: Bearer
 
-# Git: roll back code
-git log --oneline -5               # Find last good commit
-git checkout <commit-hash> -- main.py services/
+# TLS cert freshness
+echo | openssl s_client -servername neodemos.nl -connect neodemos.nl:443 2>/dev/null \
+  | openssl x509 -noout -dates
+# expect: Let's Encrypt E7 or E8 issuer, notAfter 90 days out
+
+# Container state (read-only)
+ssh -i ~/.ssh/neodemos_ed25519 deploy@178.104.137.168 \
+  "sudo docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Image}}'"
+
+# MCP query log — every tool call appends one JSONL line
+ssh -i ~/.ssh/neodemos_ed25519 deploy@178.104.137.168 \
+  "sudo docker exec neodemos-mcp tail -5 /app/logs/mcp_queries.jsonl"
 ```
 
-For database and Qdrant backup/restore procedures, see `/backup`.
+All containers should be `Up ... (healthy)` and the image should be `ghcr.io/neodemos/neodemos:<sha>` or `:latest` — **not** a locally-built `neodemos-*:latest`. A local image name is a red flag that someone bypassed Kamal.
 
-## What NOT to Deploy to Production
+---
 
-- **MLX models** — Apple Silicon only. Embedding stays on your Mac.
+## Common failure modes & fixes
+
+### `dial unix /Users/dennistak/.colima/default/docker.sock: no such file or directory`
+
+Colima is stopped. Run `colima start`. Do **not** try to switch docker context, recreate the buildx builder, or "start Docker Desktop" — Dennis does not use Docker Desktop.
+
+### `which kamal` → nothing
+
+Kamal is not in PATH but IS installed at `/opt/homebrew/lib/ruby/gems/4.0.0/bin/kamal`. Use the absolute path.
+
+### Kamal build says "Building from a local git clone, so ignoring these uncommitted changes: ..."
+
+Informational — Kamal clones from the working tree's git, so uncommitted changes to tracked files are NOT baked into the image. Commit first if you want your changes deployed. Untracked files are also skipped.
+
+### `kamal accessory reboot mcp` fails with name conflict
+
+An old exited container is blocking the name. SSH in and remove it: `sudo docker rm neodemos-mcp`, then retry. This should only happen if someone bypassed Kamal previously.
+
+### kamal-proxy won't boot: "Bind for 0.0.0.0:80 failed: port is already allocated"
+
+Something else is holding 80/443. Check `sudo netstat -tlnp | grep -E ':80 |:443 '` on the host. There should only be kamal-proxy's `docker-proxy` processes holding those ports. If you find a rogue Caddy/nginx/etc., that's the problem — take it down, not kamal-proxy.
+
+### kamal-proxy logs show `Healthcheck failed ... dial tcp: lookup <container> on ... network is unreachable`
+
+kamal-proxy cannot resolve the target container over Docker DNS. This means the new container is on a different network than the `kamal` network that kamal-proxy lives on. Check `config/deploy.yml` for any stray `options.network:` overrides — they must NOT override to a non-`kamal` network.
+
+### ACME cert issuance failed for one hostname
+
+1. Check DNS: `dig +short A <hostname>` — must resolve to `178.104.137.168`
+2. Check CAA records: `dig +short CAA <hostname>` — must allow `letsencrypt.org` (or be empty)
+3. Check kamal-proxy logs: `$KAMAL proxy logs --lines 100 | grep -i acme`
+4. Let's Encrypt rate limits: 5 failed validations per hostname per hour, 5 duplicate cert requests per week. If you're hitting these, wait an hour and retry, or debug with staging first.
+5. **Staging ACME first** (safer for debugging, no rate-limit exposure): add `run.env.clear.ACME_DIRECTORY: https://acme-staging-v02.api.letsencrypt.org/directory` under the proxy block and redeploy. Staging certs are untrusted but prove the flow works.
+
+### Postgres container in "Created" state, won't start
+
+Someone ran `docker compose up` or `docker network connect` on the host and put postgres into a broken state. The named volume `neodemos_postgres_data` should still be intact — run `sudo docker start neodemos-postgres` on the host. Then verify: `sudo docker exec neodemos-postgres psql -U postgres -d neodemos -c 'SELECT COUNT(*) FROM meetings;'` (should return ~2865 as of 2026-04).
+
+### MCP endpoint returns connection failure, neodemos.nl is up
+
+The `neodemos-mcp` accessory has crashed or is stopped. Check `$KAMAL accessory logs mcp --lines 100`. Reboot with `$KAMAL accessory reboot mcp`.
+
+---
+
+## Incident log (keep this section honest — newest on top)
+
+### 2026-04-11 — Caddy → kamal-proxy migration (completed)
+
+**What happened:** The previous commit `392213b "Fix Kamal deploy: remove kamal-proxy, use Caddy as sole reverse proxy"` left the stack in a broken hybrid state. Caddy held 80/443, kamal-proxy ran in a degraded no-port state, and Kamal's deploy flow still tried to register with kamal-proxy over Docker DNS that couldn't resolve across networks. Result: **every web service deploy silently failed for 11+ hours** — the running `neodemos-web` container was from the pre-Kamal era with image ID `7c186fdad945` (no git-SHA tag).
+
+**What was done:** Migrated to kamal-proxy as the sole public reverse proxy, matching Kamal v2's canonical architecture.
+
+- `main.py`: added `/up` liveness endpoint + `CanonicalHostRedirectMiddleware` for `.eu → .nl` redirects (kamal-proxy has no native cross-TLD redirect feature).
+- `mcp_server_v3.py`: added `/up` liveness endpoint via FastMCP's `@mcp.custom_route` decorator.
+- `config/deploy.yml`: added `proxy:` blocks to web service and MCP accessory; removed `options.network` overrides so containers join the `kamal` network where kamal-proxy can resolve them by container name.
+- Removed Caddy accessory, `Caddyfile`, `Caddyfile.prod`, and the broken post-deploy hook.
+- 6 Let's Encrypt certs issued in one burst (neodemos.nl, www.neodemos.nl, neodemos.eu, www.neodemos.eu, mcp.neodemos.nl, mcp.neodemos.eu).
+
+**Verification path used:** Phase 1 (HTTP-only, alternate ports 4444/4445, Caddy still running on 80/443) confirmed routing + healthchecks worked. Phase 3 cut over to 80/443 with TLS; cert issuance completed in under a minute. Total public traffic interruption: ~1 minute.
+
+**Lessons baked into the hard rules above:**
+- No rsync/SSH fallbacks. Ever.
+- Colima, not Docker Desktop.
+- Kamal binary lives at `/opt/homebrew/lib/ruby/gems/4.0.0/bin/kamal`.
+- Never `docker compose` on the host.
+- kamal-proxy is the sole public proxy — do not stack another reverse proxy in front of it.
+- Protect the `neodemos_postgres_data` named volume.
+
+---
+
+## What NOT to deploy
+
+- **MLX models** — Apple Silicon only. Embedding stays on Dennis's Mac.
 - **Sandbox scripts** (`sandbox/`) — debug tools, not production code.
 - **Migration scripts** (`scripts/migrate_*.py`) — run manually, never exposed.
-- **`data/` directory** — mount as volume, never bake into Docker image.
+- **`data/` directory** — mounted as a volume, never baked into the image.
+- **`.env` file** — secrets flow through Kamal's `.kamal/secrets`, not the image.

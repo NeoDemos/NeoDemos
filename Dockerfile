@@ -32,9 +32,12 @@ COPY . .
 # Create directories for data, logs, and output
 RUN mkdir -p /app/logs /app/data/pipeline /app/data/profiles /app/output
 
-# Health check - verify API is responding
+# Health check - works for both the web service (port 8000) and the MCP
+# accessory (port 8001). Both expose a /up liveness endpoint that returns
+# 200 OK without touching DB/Qdrant. The PORT env var is set per service in
+# config/deploy.yml.
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
-    CMD curl -f http://localhost:${PORT:-8000}/login || exit 1
+    CMD curl -f http://localhost:${PORT:-8000}/up || exit 1
 
 # Expose port
 EXPOSE ${PORT:-8000}
