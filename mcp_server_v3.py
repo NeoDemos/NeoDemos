@@ -92,6 +92,20 @@ mcp = FastMCP(
 )
 
 # ---------------------------------------------------------------------------
+# Liveness probe — consumed by kamal-proxy during deploy health checks.
+# Returns 200 OK without touching DB/Qdrant so it stays fast and unauthenticated.
+# ---------------------------------------------------------------------------
+
+from starlette.responses import PlainTextResponse as _PlainTextResponse
+from starlette.requests import Request as _StarletteRequest
+
+
+@mcp.custom_route("/up", methods=["GET"])
+async def _kamal_liveness(request: _StarletteRequest):  # pragma: no cover
+    return _PlainTextResponse("ok", status_code=200)
+
+
+# ---------------------------------------------------------------------------
 # Query logging — appends one JSONL line per tool call to logs/mcp_queries.jsonl
 # ---------------------------------------------------------------------------
 

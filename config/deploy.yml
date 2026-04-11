@@ -8,8 +8,19 @@ servers:
   web:
     hosts:
       - 178.104.137.168
-    options:
-      network: neodemos_neodemos-network
+    # Note: no `options.network` override — let the container join the default
+    # `kamal` network so kamal-proxy can resolve it by container name.
+    proxy:
+      # Phase 1 (HTTP-only verification, Caddy still owns 80/443): ssl disabled,
+      # test via alternate ports set with `kamal proxy boot_config set --http-port 4444`.
+      # Flip to `ssl: true` + full hosts list in Phase 3 once verified.
+      ssl: false
+      host: neodemos.nl
+      app_port: 8000
+      healthcheck:
+        path: /up
+        interval: 3
+        timeout: 10
 
 builder:
   arch: amd64
@@ -92,8 +103,17 @@ accessories:
   mcp:
     image: ghcr.io/neodemos/neodemos
     host: 178.104.137.168
-    port: "127.0.0.1:8001:8001"
     cmd: "python mcp_server_v3.py --http --port 8001"
+    # Phase 1: same HTTP-only proxy model as the web service. kamal-proxy will
+    # route mcp.neodemos.nl (via Host header in test) to this accessory.
+    proxy:
+      ssl: false
+      host: mcp.neodemos.nl
+      app_port: 8001
+      healthcheck:
+        path: /up
+        interval: 3
+        timeout: 10
     env:
       clear:
         DB_HOST: neodemos-postgres
@@ -111,7 +131,7 @@ accessories:
     options:
       memory: 1G
       name: neodemos-mcp
-      network: neodemos_neodemos-network
+      # No network override — let kamal-proxy see the accessory on the `kamal` network.
 
   caddy:
     image: caddy:2-alpine

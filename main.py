@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request, Depends, Form
-from fastapi.responses import StreamingResponse, RedirectResponse, JSONResponse
+from fastapi.responses import StreamingResponse, RedirectResponse, JSONResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
@@ -137,6 +137,21 @@ async def lifespan(app: FastAPI):
 # Create FastAPI app with lifespan manager
 app = FastAPI(title="NeoDemos", lifespan=lifespan)
 
+# Canonical-host redirect: permanent 301 from neodemos.eu / www.neodemos.eu
+# to the equivalent path on https://neodemos.nl. Previously handled by Caddy;
+# moved here when we switched the public reverse proxy to kamal-proxy, which
+# has no native cross-TLD redirect feature.
+class CanonicalHostRedirectMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        host = (request.headers.get("host") or "").split(":")[0].lower()
+        if host.endswith("neodemos.eu"):
+            target = f"https://neodemos.nl{request.url.path}"
+            if request.url.query:
+                target += f"?{request.url.query}"
+            return RedirectResponse(url=target, status_code=301)
+        return await call_next(request)
+
+
 # Security headers middleware
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
@@ -155,7 +170,10 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         )
         return response
 
+# Note: Starlette runs middleware in reverse registration order for incoming
+# requests, so the redirect middleware must be added LAST to execute FIRST.
 app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(CanonicalHostRedirectMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
@@ -567,6 +585,15 @@ async def generate_mcp_token(request: Request):
             f' --header "Authorization: Bearer {token_data["token"]}"'
         ),
     })
+
+
+# ── Liveness probe (Kamal / kamal-proxy convention) ──
+
+@app.get("/up", include_in_schema=False)
+async def kamal_up():
+    """Liveness probe consumed by kamal-proxy during deploys.
+    Must return 200 quickly without touching DB/Qdrant."""
+    return PlainTextResponse("ok", status_code=200)
 
 
 # ── Protected page routes ──
