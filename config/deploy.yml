@@ -141,18 +141,3 @@ accessories:
       memory: 1G
       name: neodemos-mcp
       # No network override — let kamal-proxy see the accessory on the `kamal` network.
-
-  caddy:
-    image: caddy:2-alpine
-    host: 178.104.137.168
-    port: "80:80"
-    options:
-      publish:
-        - "443:443"
-      memory: 128M
-      name: neodemos-caddy
-      network: neodemos_neodemos-network
-    volumes:
-      - /home/deploy/neodemos-config/Caddyfile:/etc/caddy/Caddyfile:ro
-      - neodemos-caddy-data:/data
-      - neodemos-caddy-config:/config
