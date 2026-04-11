@@ -63,7 +63,7 @@ _Target: 2026-04-24 (2 weeks from 2026-04-10 kickoff)_
 
 **Workstreams in v0.2.0:**
 - [ ] **WS1 GraphRAG** — Flair NER + Gemini enrichment + ~500K KG edges + `services/graph_retrieval.py` + 5th retrieval stream + `traceer_motie` + `vergelijk_partijen` MCP tools
-- [ ] **WS2 Trustworthy financial** — `financial_lines` Postgres table + `vraag_begrotingsregel` + `vergelijk_begrotingsjaren` + verification token (zero-paraphrase contract on euros)
+- [ ] **WS2 Trustworthy financial** — `financial_lines` Postgres table + `vraag_begrotingsregel` + `vergelijk_begrotingsjaren` + verification token (zero-paraphrase contract on euros). **Includes Waalwijk** financial docs (begroting 2025 + jaarstukken 2024): Waalwijk is on iBabs (`waalwijk.bestuurlijkeinformatie.nl`), same scraper as Rotterdam, one tenant config entry. They are currently running a MAAT pilot on exactly this use case — we already have it in production. Counter-demo planned at pilot evaluation release.
 - [ ] **WS3 Document journey** — `document_journeys` view + `traceer_document` MCP tool (UI deferred to v0.2.1)
 - [ ] **WS4 Best-in-class MCP** — tool registry + `get_neodemos_context` primer + tool-collision detection + scoped OAuth + audit log + parameter/output filters (FactSet defense-in-depth)
 - [ ] **WS5 Reliable nightly ingest** — 7-step idempotent job graph + advisory locks + smoke test + admin dashboard (Rotterdam only)
@@ -76,37 +76,49 @@ _Target: 2026-04-24 (2 weeks from 2026-04-10 kickoff)_
 - Nightly pipeline deployed and running (14-day clean streak certified in v0.2.1)
 - Source-spans-only summaries pass strip-test on 50 random documents
 
-### v0.2.1 (alpha) — Search Beyond Rotterdam
+### v0.2.1 (alpha) — Public Face
 _Target: 2026-05-08 (2 weeks after v0.2.0 — nightly pipeline must accumulate 14 clean days from v0.2.0 deploy)_
 
-- [ ] Multi-portal connectors in `pipeline/sources/`: `ibabs.py` (refactored), `notubiz.py`, `go.py`, `ori_fallback.py` — ORI-fallback only (consumes ORI-scraped metadata; no deep transcript/webcast scraping for new gemeenten yet)
+_Renamed from "Search Beyond Rotterdam" on 2026-04-11 after Archibot competitive review: the public landing pages (`/publiek`, `/eval`, `/coverage`, `/governance`, `/mcp`) are now the centerpiece of this release. Multi-portal connectors ship alongside them but are no longer the headline._
+
+- [ ] Multi-portal connectors in `pipeline/sources/`: `ibabs.py` (refactored), `notubiz.py`, `go.py`, `ori_fallback.py` — ORI-fallback only
 - [ ] **Search-only mode** for 5 ORI-fallback gemeenten (Apeldoorn, Zoetermeer, Maastricht, Enschede, Bodegraven) — BM25 + vector search over ORI document text; no KG, financial lines, or journeys
 - [ ] Document journey UI: `/journey/{id}` route + `templates/journey.html` with vertical timeline (backend `traceer_document` from v0.2.0 powers this)
 - [ ] HLS webcast player (`templates/meeting_player.html`) accepting `?t=<seconds>`
 - [ ] Citation upgrade: every transcript-derived chunk gets `[▶ MM:SS]` deep-link in `_format_chunks_v3`
+- [ ] **`neodemos.nl/publiek`** — anonymous landing page, zero-login AI search + summarize + traceer (modeled on Archibot's public dashboard, direct wedge vs MAAT paywall)
+- [ ] **`neodemos.nl/eval`** — public eval scoreboard (*promoted from v0.4*) with ≥2 named baseline comparators (Gemini Flash web grounding, ChatGPT-4 web search) and a named human evaluator; live precision / faithfulness / completeness / numeric-accuracy + per-question source-chunk trace
+- [ ] **`neodemos.nl/mcp`** — public MCP catalog with "Try in Claude Desktop" buttons (WS4 §6.5)
+- [ ] **`neodemos.nl/coverage`** — public OCR-quality/coverage dashboard (WS5 §7.1): indexed, rejected (by reason), pending reprocess per gemeente
+- [ ] **`neodemos.nl/governance`** — one-pager: models in use, data residency, training-data policy, refusal policy, eval methodology link, incident history (removes procurement-questionnaire friction)
+- [ ] **Public-AI audit** — every endpoint against the §2.1 constraint (see V0_2_BEAT_MAAT_PLAN.md)
 
 **Eval gate (must pass before tag):**
 - 14 consecutive days of clean nightly runs on Rotterdam (clock starts at v0.2.0 deploy)
+- All 5 public landing pages render and link correctly; `/eval` has run at least one full benchmark pass against each named comparator
 
-### v0.3.0 (beta) — Open MCP Surface + First External Testers
+### v0.3.0 (beta) — Open MCP Surface + Anchor Municipal Connectors
 _Target: 2026-06-05 (4 weeks after v0.2.1)_
 
 - [ ] TypeScript codegen for MCP tools — `@neodemos/mcp-tools` published to npm (generated from `services/mcp_tool_registry.py`; requires npm org setup + CI publish pipeline)
 - [ ] Anthropic [Code Execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp) example workflows
 - [ ] Anomaly-detection rate limiting (FactSet pattern)
 - [ ] Promote 2 of the 5 search-only gemeenten to full mode (KG + financial + journey) — **data-pipeline-bound**: Flair NER + Gemini enrichment + KG build for each gemeente takes 3-5 days compute; schedule these runs early in the sprint
-- [ ] ThemeFinder-style per-agenda-item theme maps + multi-round structured summarization
-- [ ] ChatGPT and Perplexity MCP registration
 - [ ] First external testers onboarded (≤5; requires scoped OAuth from WS4, onboarding guide, and rate limits in place)
 - [ ] Developer documentation started: tool reference + quickstart guide (needed before testers arrive)
+- [ ] **Native Parlaeus adapter** `pipeline/sources/parlaeus.py` *(added 2026-04-11)* — Parlaeus (made by Qualigraf; "Qualigraf" in MAAT's VNG integration list IS Parlaeus) covers **3 of the 5 anchor MAAT customers**: Apeldoorn (~265k residents), Maastricht, and Bodegraven-Reeuwijk. Qualigraf confirmed live at `apeldoorn.parlaeus.nl`, `maastricht.parlaeus.nl`. Parlaeus = ~2% of Dutch municipalities by count but 3/5 of our highest-priority competitive targets. Prerequisite: v0.2.1 ORI-fallback for these gemeenten live and stable.
 
-### v0.4.0 (beta) — User Testing Ready
+### v0.4.0 (beta) — User Testing Ready + Voice + Historical Depth
 _Target: 2026-07-03 (4 weeks after v0.3.0)_
 
-- [ ] Native Notubiz adapter for one customer-driven gemeente — Rotterdam uses iBabs; many other Dutch municipalities use Notubiz (different platform, different API/HTML structure). "Native" means full-depth ingestion (documents, transcripts, speakers, webcasts) equivalent to what `pipeline/scraper.py` does for iBabs — not the ORI-fallback/search-only mode planned for v0.2.1. "Customer-driven" means: don't build speculatively; only when a specific Notubiz gemeente commits as a paying pilot customer.
+- [ ] _(Public eval scoreboard promoted to v0.2.1 on 2026-04-11 — see above)_
 - [ ] `vergelijk_gemeenten` cross-municipality comparison MCP tool — requires ≥2 full-mode municipalities (Rotterdam + the 2 promoted in v0.3.0)
 - [ ] Council-watcher agent: monitor new agenda items matching saved queries; push alerts via email + webhook (Slack/Teams)
-- [ ] Public eval scoreboard at `neodemos.nl/eval` with live precision/faithfulness/numeric-accuracy (scheduled eval job + public read-only page)
+- [ ] **Voice-first citizen PWA** — thin wrapper over the public MCP surface for Claude/Gemini voice modes; structurally impossible for MAAT's stack (V0_2_BEAT_MAAT_PLAN.md §9). Prerequisite: v0.3.0 public MCP surface stable.
+- [ ] **Native Notubiz adapter** `pipeline/sources/notubiz.py` — Notubiz = ~38% of Dutch municipalities (second-largest portal after iBabs). No confirmed anchor MAAT customers on Notubiz (Apeldoorn is Parlaeus, not Notubiz — confirmed 2026-04-11). ORI-fallback in v0.2.1 gives partial coverage; this is full-depth ingestion. Prerequisite: Parlaeus adapter (v0.3.0) shipped and stable.
+- [ ] **ThemeFinder-style** per-agenda-item theme maps + multi-round structured summarization
+- [ ] ChatGPT and Perplexity MCP registration
+- [ ] **Pre-2018 historical backfill** *(added 2026-04-11)* — iterate Rotterdam iBabs calendar backwards from 2018, diff against `documents`, produce `reports/pre_2018_missing.csv`, human sanity-check (earliest iBabs date? doc types? OCR-able?), then run approved set through hardened pipeline in small off-peak batches. Update `neodemos.nl/coverage` with "historische diepte" badge. Full methodology in V0_2_BEAT_MAAT_PLAN.md §7.1.
 
 ### v0.5.0 (beta) — Multi-Municipality Foundation + Agentic Features
 _Target: TBD_

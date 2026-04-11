@@ -53,6 +53,38 @@
   - [ ] Implement Search interface for meetings/topics.
 - [x] Optimization: Switched to Greedy Bin Packing (Large docs first when headroom allows).
 
+## MCP Query Quality Fixes (from FEEDBACK_LOG 2026-04-10)
+
+- [ ] **[BUG/HIGH] `zoek_moties`: initiatiefvoorstel gemist door naam-filter**
+  - Root cause: `mcp_server_v3.py:977` filtert alleen op `d.name ILIKE '%initiatiefvoorstel%'`.
+    Documenten waarvan de naam niet letterlijk "initiatiefvoorstel" bevat (bijv. "Voorstel
+    Engberts en Vogelaar - Leegstand") vallen er volledig buiten, vóór de zoektermen lopen.
+  - Fix: voeg content-fallback toe aan de type-gate:
+    ```sql
+    (LOWER(d.name) LIKE '%motie%'
+     OR LOWER(d.name) LIKE '%amendement%'
+     OR LOWER(d.name) LIKE '%initiatiefvoorstel%'
+     OR LOWER(d.content) LIKE '%initiatiefvoorstel%')   -- ← nieuw
+    ```
+  - Aanvullend: voeg `document_type` kolom toe aan `documents` tabel (classificatie al
+    aanwezig in `raadsvoorstel_extraction_service.py:95`); gebruik die als primaire filter
+    zodat we niet meer afhankelijk zijn van naam-matching.
+
+- [ ] **[BUG/MEDIUM] `zoek_moties`: trage response bij overzichtsvragen**
+  - Root cause: meerdere `lees_fragment` calls worden sequentieel uitgevoerd; geen fan-out.
+  - Fix: MCP-tool retourneert al `LEFT(d.content, 400)` — evalueer of preview voldoende is
+    zodat aparte `lees_fragment` calls voor de meeste overzichtsvragen overbodig worden.
+    Als de preview te kort is: verhoog naar 800 chars of voeg een `include_preview: bool`
+    param toe die de caller laat kiezen.
+
+- [ ] **[BUG/HIGH] Financiële pipeline: stille hallucination bij ontbrekende waarden**
+  - Root cause: bij ontbrekende jaardata vult het model gaten op met schattingen zonder
+    disclaimer. Clusterindeling varieert per jaar ("Stedelijke ontwikkeling" vs "SIO").
+  - Fix 1: nooit een numerieke waarde retourneren zonder een primaire bron-chunk; voeg een
+    `bronvermelding`-veld toe aan `zoek_financieel`-resultaten.
+  - Fix 2: implementeer IV3-taakvelden als canonieke aggregatielaag (zie
+    findo.nl/content/taakvelden-gemeenten) zodat clusters consistent zijn over jaren heen.
+
 ## Phase 4: Video & Rich Context (Future)
 - [ ] Investigate `rotterdamraad.bestuurlijkeinformatie.nl` for video links.
 - [ ] Process video recordings for the RAG platform.

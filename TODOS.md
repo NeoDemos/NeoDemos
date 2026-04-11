@@ -1,18 +1,40 @@
-# NeoDemos — Open TODOs
+# NeoDemos — Triage Inbox & Operations
 
-Quick-capture list. Larger workstreams live in [docs/architecture/V0_2_BEAT_MAAT_PLAN.md](docs/architecture/V0_2_BEAT_MAAT_PLAN.md) and handoffs in [docs/handoffs/](docs/handoffs/).
+**Scope rules** *(updated 2026-04-11 — keeps this file from becoming a graveyard)*:
+
+- **Feature work lives in [`docs/handoffs/`](docs/handoffs/).** If an item has a clear workstream home, move it there — do not keep it here.
+- **Raw observations live in [`brain/FEEDBACK_LOG.md`](brain/FEEDBACK_LOG.md).** This file is for *already-triaged* items that need follow-up.
+- **What belongs here:**
+  - (a) Items triaged from `FEEDBACK_LOG.md` that genuinely have no clear WS home (**max 7 days** — if it lingers, either force a WS assignment or discard)
+  - (b) Operational / ops tasks that don't fit any WS (deploys, certs, gitignore, log rotation, one-off scripts)
+  - (c) Explicit parking with a re-eval date
+- **Weekly triage ritual (Mondays):** walk `FEEDBACK_LOG.md` and the Triage Inbox below. Each item → WS handoff edit, memory update, operational task, or discard. No item stays untriaged for more than 7 days.
 
 ---
 
-## Now / this week
+## Triage inbox
+
+*Items awaiting WS assignment. Weekly-cleaned. **Empty is a healthy state** — if this section is always growing, triage discipline is slipping.*
+
+_(empty — last cleaned 2026-04-11)_
+
+---
+
+## Operational / ops
 
 - [ ] Review overnight pipeline run results (2025 + 2018 data batches)
 - [ ] Commit `docs/VERSIONING.md` changes + `.kamal/` accessory config
-- [ ] First pass through [brain/FEEDBACK_LOG.md](brain/FEEDBACK_LOG.md) from today's Claude.ai MCP test session
+- [ ] Verify Kamal deploy after `.kamal/` config changes
+- [ ] Add `logs/mcp_queries.jsonl` to `.gitignore` (query log, not for version control)
+- [ ] Set up log rotation for `logs/mcp_queries.jsonl` (cron or logrotate)
+- [ ] Write a quick analysis script: `scripts/analyze_query_log.py` — top tools, slow calls, popular queries
+- [ ] After ~50 real MCP queries logged: review and seed [rag_evaluator/data/questions.json](rag_evaluator/data/questions.json) with real user questions
 
 ---
 
 ## v0.2.0 workstreams (target 2026-04-24)
+
+*Dashboard view only. Feature tasks live in the handoff docs — do NOT duplicate them here.*
 
 | # | Workstream | Handoff | Status |
 |---|---|---|---|
@@ -25,26 +47,28 @@ Quick-capture list. Larger workstreams live in [docs/architecture/V0_2_BEAT_MAAT
 
 ---
 
-## Infrastructure / ops
+## Parked (re-eval on listed trigger)
 
-- [ ] Verify Kamal deploy after `.kamal/` config changes
-- [ ] Add `logs/mcp_queries.jsonl` to `.gitignore` (query log, not for version control)
-- [ ] Set up log rotation for `logs/mcp_queries.jsonl` (cron or logrotate)
-
----
-
-## Observability (new, from query logging)
-
-- [ ] Write a quick analysis script: `scripts/analyze_query_log.py` — top tools, slow calls, popular queries
-- [ ] After ~50 real queries: review log and seed [rag_evaluator/data/questions.json](rag_evaluator/data/questions.json) with real user questions
+- [ ] **WS5b — Multi-portal connectors (search-only first)** — re-eval on v0.2.0 ship; moves active in v0.2.1. Handoff: [WS5b_MULTI_PORTAL.md](docs/handoffs/WS5b_MULTI_PORTAL.md)
+- [ ] **Audio transcript pipeline** (notulen → annotaties for commissievergaderingen) — re-eval at v0.2.1 ship
 
 ---
 
-## Deferred to v0.2.1
+## Triage log
 
-- [ ] WS5b — Multi-portal connectors (search-only first)
-- [ ] Audio transcript pipeline (notulen → annotaties for commissievergaderingen)
+*Items recently moved out of this file. Keeps the audit trail without the clutter.*
+
+| Date | Item | Moved to | Reason |
+|---|---|---|---|
+| 2026-04-11 | `zoek_moties` title-only bug for single-word queries | [WS4 §MCP tool bug fixes](docs/handoffs/WS4_MCP_DISCIPLINE.md) | MCP tool quality fix — natural WS4 home |
+| 2026-04-11 | RAG BM25 `%notule%` fallback filter | [WS1 §Phase B](docs/handoffs/WS1_GRAPHRAG.md) | `services/rag_service.py` bug; WS1 already edits that file |
+| 2026-04-11 | Overview query latency (`zoek_moties` → `lees_fragment` sequential) | [WS4 §MCP tool bug fixes](docs/handoffs/WS4_MCP_DISCIPLINE.md) | Tool API design (preview chars, batch tool) |
+| 2026-04-11 | IV3 / taakvelden canonical aggregation layer | [WS2 §IV3 canonical aggregation](docs/handoffs/WS2_FINANCIAL.md) | Explicit WS2 prerequisite — financial schema concern |
+| 2026-04-11 | Chunk → `document_id` attribution audit (from FEEDBACK_LOG) | [WS5a §Data integrity audit](docs/handoffs/WS5a_NIGHTLY_PIPELINE.md) | Ingest integrity — pipeline reliability concern |
+| 2026-04-11 | `lees_fragment(query=...)` re-ranking (from FEEDBACK_LOG) | [WS4 §Tool API improvements](docs/handoffs/WS4_MCP_DISCIPLINE.md) | MCP tool API change |
+| 2026-04-11 | `corpus_coverage` metadata on search tool responses (from FEEDBACK_LOG) | [WS4 §Tool API improvements](docs/handoffs/WS4_MCP_DISCIPLINE.md) | Output schema change (depends on WS5a coverage data) |
+| 2026-04-11 | Snippet provenance verification (from FEEDBACK_LOG) | [WS4 §Defense-in-depth Layer 4](docs/handoffs/WS4_MCP_DISCIPLINE.md) | Fits naturally in the output filter |
 
 ---
 
-_Add new items at the top of the relevant section. Move to plan docs once scoped._
+_Add new items at the top of the **Triage inbox**, not inside sections they don't belong in. Move to handoff docs once a WS is assigned, then log the move in the Triage log above._

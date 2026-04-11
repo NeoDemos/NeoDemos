@@ -94,6 +94,7 @@ Today: 15-min `refresh_service.check_and_download()` runs in [`main.py:69`](../.
 - [ ] **All writer steps wrap their writes in `pg_advisory_lock(42)` ... `pg_advisory_unlock(42)`**. Reads (search queries from the live MCP server) are never blocked.
 - [ ] If a previous run is still holding the lock (e.g. crashed without unlock), the new run waits with a 30-min timeout, then aborts and writes a `pipeline_failures` row.
 - [ ] Document the lock contract in `pipeline/README.md` and reference it from this handoff and from `project_embedding_process.md`.
+- [ ] **Route `EntityNormalizer` through `services/db_pool.py`** *(added 2026-04-11 from QA pass)* — [pipeline/normalization.py:25-32](../../pipeline/normalization.py#L25-L32) `EntityNormalizer._get_connection` opens a raw `psycopg2.connect(self.db_url)` instead of using the shared pool. Every other writer in the codebase goes through [services/db_pool.py](../../services/db_pool.py) — which is what `pg_advisory_lock(42)` discipline relies on to serialize writes. `EntityNormalizer` is called from [pipeline/main_pipeline.py](../../pipeline/main_pipeline.py) and [pipeline/committee_notulen_pipeline.py](../../pipeline/committee_notulen_pipeline.py), both of which will run under this nightly job graph. Refactor: replace the cached `self.connection` pattern with a `get_connection()` context manager per call site in `normalize_speaker` (or, if contention makes per-call checkout too chatty, borrow one connection for the lifetime of a `normalize_segments` batch and return it on exit). Audit all callers to ensure they cooperate with the new lifecycle.
 
 ### Failure handling (~1 day)
 
@@ -130,6 +131,18 @@ This part is shared with WS5b (UI is in v0.2.1) but the schema work must happen 
 - [ ] Ensure every transcript chunk in Qdrant has `start_seconds`, `end_seconds`, `webcast_url` in its payload. Check [`pipeline/staging_ingestor.py:12`](../../pipeline/staging_ingestor.py#L12) — `start_date` is currently the only timestamp field.
 - [ ] **Backfill script** `scripts/nightly/backfill_webcast_timestamps.py` — populates the new payload fields for existing transcript chunks by re-querying `committee_transcripts_staging`. Must run with advisory lock.
 
+### Data integrity audit — chunk → document_id attribution (~1 day) *(added 2026-04-11, triaged from [FEEDBACK_LOG.md 2026-04-11](../../brain/FEEDBACK_LOG.md))*
+
+**Why this is in WS5a and not WS1 or WS4:** the failure mode is an *ingest-time* attribution bug, not a retrieval bug. A search for parkeertarieven returned `doc 246823` with a snippet showing "Centrum €3.50 / Buiten centrum €2.00", but when `lees_fragment` was called the document turned out to be a GroenLinks kaderbrief about urban development — no parking content at all. The only way this happens is if a chunk's `document_id` does not match the document the chunk text actually came from. That's an ingest pipeline integrity failure. **This is the single most dangerous failure mode in the platform** because it produces confident-looking hallucinations that no LLM can catch without auditing every source manually.
+
+- [ ] **`scripts/audit_chunk_attribution.py`** — reads every chunk in PostgreSQL `chunks` and Qdrant, verifies that the text content substring-matches the referenced document's raw text blob. Outputs `reports/chunk_attribution_audit.csv` with rows: `(chunk_id, document_id, match_type, severity)` where `match_type ∈ {exact, substring, fuzzy, mismatch}`. Target: 100% `exact` or `substring`; zero `mismatch`.
+- [ ] **Root cause analysis** — for any `mismatch` row, trace back through the ingest pipeline (which script wrote the chunk, what was the document hash at write time, was there a concurrent write). Likely culprits: stale document cache, hash collision, ordering bug in `pipeline/staging_ingestor.py`.
+- [ ] **Regression test** — new test `tests/pipeline/test_chunk_attribution.py` that ingests a known fixture set and asserts zero mismatches. Becomes a permanent part of the smoke test in step `00_smoke_test.py`.
+- [ ] **Corrective action** — if mismatches are found, write `scripts/repair_chunk_attribution.py` that either re-attributes (if the source doc is findable by hash) or quarantines (if not) affected chunks. Runs under `pg_advisory_lock(42)`.
+- [ ] **Acceptance** — audit run produces zero `mismatch` rows; smoke test asserts the invariant; add `chunk_attribution_audit_passed` to the daily 07:00 CET health email.
+
+**Related FEEDBACK_LOG entry:** [2026-04-11 zoek_raadshistorie / lees_fragment — Parkeertarieven Rotterdam](../../brain/FEEDBACK_LOG.md), specifically the "doc 246823 was a false positive" failure mode.
+
 ## Acceptance criteria
 
 - [ ] All 7 nightly scripts exist under `scripts/nightly/` and run end-to-end on a known-good test document
@@ -141,6 +154,7 @@ This part is shared with WS5b (UI is in v0.2.1) but the schema work must happen 
 - [ ] `/admin/pipeline` page live and accurate
 - [ ] Daily 07:00 CET email being delivered
 - [ ] Webcast `start_seconds`/`end_seconds`/`webcast_url` populated on all transcript Qdrant payloads (backfilled)
+- [ ] **Chunk attribution audit run produces zero `mismatch` rows** *(added 2026-04-11)* — `scripts/audit_chunk_attribution.py` clean; regression test in place; invariant part of the smoke test
 - [ ] **14 consecutive days of clean nightly runs** with zero manual interventions
 
 ## Eval gate

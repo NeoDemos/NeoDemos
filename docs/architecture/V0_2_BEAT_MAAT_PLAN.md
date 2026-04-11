@@ -30,7 +30,8 @@ MAAT (AethiQs) is a **closed-UI semantic search + summarization shell** that sit
 
 | Feature | Source | Notes |
 |---|---|---|
-| Semantic search across docs + audio + video | [VNG case study](https://vng.nl/praktijkvoorbeelden/jouw-maatje-voor-het-vinden-van-raadsinformatie) | "Vector embeddings" not stated; black box |
+| Closed-domain RAG (chunked docs + transcripts + cite-returning generator) | [Waalwijk pilot press release](https://aethiqs.nl/gemeente-waalwijk-start-pilot-met-ai%E2%80%91assistent-maat/), [Emerce wire](https://www.emerce.nl/wire/gemeente-waalwijk-start-pilot-aiassistent-maat-begrotingscyclus-2026) | **Pipeline never publicly disclosed.** The words "RAG", "embedding", "vector store", "LLM", "knowledge graph" appear zero times across all AethiQs marketing. Verbatim Waalwijk copy: *"baseert antwoorden alleen op de ingelezen documenten en transcripties"* + *"directe bronverwijzingen (documentpassage of vergaderfragment)"* — textbook naive single-round RAG. Front-end inspected from Zoetermeer live page: jQuery + Tailwind + Azure Blob CDN (`aetazusamaatfrontend.blob.core.windows.net`) confirmed. Backend is **likely Django** (CSRF token pattern in forms) and **likely Elasticsearch** (referenced in page inspection), both inferred not confirmed — AethiQs has not disclosed their stack. |
+| **Public (free) tier = BM25 only** | Live inspection of [zoetermeer.aethiqs-maat.nl/search/](https://zoetermeer.aethiqs-maat.nl/search/) | Natural-language query *"Wanneer sprak de pvda over parkeren"* → **0 results**. Keyword query *"pvda parkeren"* → 12. The `Doorzoek de inhoud van alle relevante tekst- en vergaderfragmenten` button (the actual RAG feature) is **greyed out for non-logged-in users**. AI toolbox is paywalled. **MAAT has structurally chosen not to serve citizens with AI.** |
 | Nightly auto-transcripts of meetings | [aethiqs.nl/maat/raadsinformatie/](https://aethiqs.nl/maat/raadsinformatie/) | Quality not disclosed |
 | Second-level webcast playback | Zoetermeer customer page | UI feature |
 | Multi-portal: iBabs, Notubiz, GO, Qualigraf | VNG | Confirmed integrations |
@@ -46,7 +47,7 @@ MAAT (AethiQs) is a **closed-UI semantic search + summarization shell** that sit
 |---|---|---|
 | **Eval scoreboard** (precision/faithfulness/recall) | None published | They cannot be benchmarked. The UK i.AI [Consult/ThemeFinder](https://github.com/i-dot-ai/themefinder) project publishes F1 = 0.79–0.82 against human reviewers — *that* is the bar in govtech 2026 |
 | **Open MCP/API surface** | None — closed UI only | Customers cannot wire MAAT into their own LLM agents. [European Parliament's Archibot](https://claude.com/customers/european-parliament) and [Riksdagsmonitor](https://github.com/Hack23/riksdagsmonitor) (32 MCP tools) are the new bar |
-| **Knowledge graph / structured retrieval** | Not advertised | Pure semantic search hits a ceiling on multi-hop questions (ACL 2025: legal RAG hallucination rate still 17% for top commercial systems — see [Stanford legal RAG study](https://dho.stanford.edu/wp-content/uploads/Legal_RAG_Hallucinations.pdf)) |
+| **Knowledge graph / structured retrieval** | Zero public mentions — not in any press release, case study, customer article, or griffier interview. Their "timeline" widget is a flat chronological accordion UI (client-side only), not a traversal graph. | Pure semantic search hits a ceiling on multi-hop questions (ACL 2025: legal RAG hallucination rate still 17% for top commercial systems — see [Stanford legal RAG study](https://dho.stanford.edu/wp-content/uploads/Legal_RAG_Hallucinations.pdf)). **NeoDemos already has 57K typed KG edges today** (`LID_VAN`, `DIENT_IN`, `STEMT_VOOR/TEGEN`, `SPREEKT_OVER`, `BETREFT`) with 500K–1M targeted in WS1 — a structural capability MAAT's architecture does not contain at all. |
 | **Structured numeric extraction** for budget docs | "Answers questions about the begroting" — no schema | Pure-text RAG over jaarstukken paraphrases numbers. This is *the* failure mode for begrotingscyclus questions |
 | **Provenance / verification tokens** | "Source citations" only | FactSet's enterprise MCP framework explicitly calls out "output filtering before response" as a defense-in-depth requirement |
 | **Multi-municipality comparison** | Per-gemeente by construction | Closed-tenancy architecture cannot answer "hoe staat Rotterdam tegenover Amsterdam over warmtenetten" |
@@ -85,6 +86,18 @@ The user-stated ranking, locked for v0.2–v0.4:
 
 The order matters: items 1–4 are the *moat*. Items 5–8 are *parity table-stakes* without which the moat cannot be demoed.
 
+### 2.1 Strategic wedge — Public-AI-by-default
+
+MAAT's public tier is BM25 keyword search in a prettier wrapper; every AI feature (semantic `doorzoek`, summarization, chat, dossier) is **behind a paid login**. This is the single largest asymmetric opening in the Dutch govtech market right now.
+
+**Hard design constraint, applies across every workstream in this plan:**
+
+> **Every MCP tool and every RAG endpoint that does not contain PII MUST be callable unauthenticated in production.** Rate-limiting and CAPTCHA where needed, but no login wall on semantic search, no login wall on summarization, no login wall on `traceer_motie`, no login wall on `vraag_begrotingsregel`. Login is reserved for *personalization* (saved searches, dossier builder, alerts) — never for *access*.
+
+This is free to ship (it's a policy, not code) and it reframes the entire v0.2 marketing narrative. Every existing workstream must be audited against this constraint before v0.2.0 ships. The public MCP endpoint and public web UI are both in scope.
+
+**Govtech precedent:** the European Parliament ships [Archibot](https://claude.com/customers/european-parliament) (aka "Ask the EP Archives") as a public anonymous dashboard at [archidash.europarl.europa.eu/ep-archives-anonymous-dashboard](https://archidash.europarl.europa.eu/ep-archives-anonymous-dashboard) — the URL literally contains "anonymous". The EP built a RAG assistant over 1952-era legislative history (Claude 3 Sonnet on Amazon Bedrock, ~75K indexed files per third-party analysis — Bussola-Tech; the EP's own marketing says "2.1M documents" which is the archive size, not the indexed corpus), no login required, 50+ languages. If the EP can ship an anonymous AI dashboard over European legislative archives, a Dutch gemeente can ship one over its begroting. This precedent dissolves the procurement objection MAAT's paywall implicitly accepts.
+
 ---
 
 ## 3. Workstream 1 — GraphRAG Retrieval (Priority 1)
@@ -95,10 +108,12 @@ The order matters: items 1–4 are the *moat*. Items 5–8 are *parity table-sta
 
 These were already planned. They are **prerequisites** for GraphRAG, not separate work:
 
-- [ ] **Flair `ner-dutch-large`** on all 1.6M chunks (key_entities coverage 28% → ~65%) — already scoped in old v0.2.0
-- [ ] **Gemini Flash Lite enrichment**: `answerable_questions` + section_topic refinement + semantic relationships (`HEEFT_BUDGET`, `BETREFT_WIJK`, `SPREEKT_OVER`) — old v0.2.0, ~$90–130
-- [ ] **kg_relationships scale-up:** 57K → ~500K–1M edges
-- [ ] **Quality audit:** SQL counts + deterministic spot-checks + LLM-judge sample of 200 entities
+- [ ] **[Quick win — do first] Layer 1 enrichment over chunk text, not just doc title** — current state populates `key_entities` on 28% of chunks via gazetteer-match against the **parent document title** only. Chunks whose body mentions a known entity ("Heemraadssingel", "Middelland") but whose document title is generic ("Voortgangsrapportage parkeren 2024") get zero tags → invisible to the Qdrant payload filter. Cheap fix: second pass of [`scripts/enrich_and_extract.py`](scripts/enrich_and_extract.py) scanning chunk bodies against the existing 2.217-entry `data/knowledge_graph/domain_gazetteer.json`. No NER, no LLM, no new dependencies. Closes the most common location-query failure mode (see [FEEDBACK_LOG.md 2026-04-11](../../brain/FEEDBACK_LOG.md) Heemraadssingel entry) before Flair even runs. **Added 2026-04-11.**
+- [ ] **Flair `ner-dutch-large`** on all 1.6M chunks (key_entities coverage 28% → ~65%, combined with the quick-win pass above expect ~75%) — already scoped in old v0.2.0
+- [ ] **BAG-based location layer as KG edges** *(added 2026-04-11)* — import [BAG](https://www.pdok.nl/introductie/-/article/basisregistratie-adressen-en-gebouwen-ba-1) joined to [CBS Wijk- en Buurtkaart](https://www.cbs.nl/nl-nl/dossier/nederland-regionaal/geografische-data/wijk-en-buurtkaart-2024) and emit `LOCATED_IN` edges in `kg_relationships`. For Rotterdam: ~5.000 straten + ~80 buurten + 14 gebieden + 1 gemeente. After import, a query for "Heemraadssingel" walks one hop to "Middelland" → "Delfshaven" → "Rotterdam" via the existing graph traversal — no separate lookup table needed. **Critical multi-tenant design constraints, locked now, paid back by WS5b:** (1) primary key for Location nodes is the **BAG 16-digit `openbare_ruimte` ID**, NOT the street name (street names collide across municipalities — "Hoofdstraat" in 100+ towns); (2) every `Location` entity has a mandatory `gemeente` attribute; (3) `LOCATED_IN` edges carry a `level` attribute (`buurt`/`wijk`/`gebied`/`stadsdeel`/`gemeente`) so Amsterdam stadsdelen, Utrecht wijken-only, and Rotterdam gebieden all fit the same schema without per-tenant migrations. These three choices add zero work in v0.2.0 but make v0.2.1 multi-portal expansion essentially free for the location layer.
+- [ ] **Gemini Flash Lite enrichment**: `answerable_questions` + section_topic refinement + semantic relationships (`HEEFT_BUDGET`, `BETREFT_WIJK`, `SPREEKT_OVER`) — old v0.2.0, ~$90–130. `BETREFT_WIJK` should resolve targets to BAG-canonical Location IDs rather than free-text wijk names.
+- [ ] **kg_relationships scale-up:** 57K → ~500K–1M edges (Flair semantic relationships dominate; BAG hierarchy adds the ~5K location skeleton)
+- [ ] **Quality audit:** SQL counts + deterministic spot-checks + LLM-judge sample of 200 entities, plus a regression check that the [FEEDBACK_LOG.md 2026-04-11](../../brain/FEEDBACK_LOG.md) Heemraadssingel query now returns chunks (was 0 hits)
 
 ### 3.2 New build
 
@@ -144,11 +159,20 @@ Pure-text RAG over jaarstukken/voorjaarsnota produces sentences like *"Het progr
 - [ ] **`zoek_financieel` upgrade** ([mcp_server_v3.py:349](mcp_server_v3.py#L349)) — when the query mentions a specific programma/jaar, route to the structured tool first; fall back to text RAG only for narrative questions
 - [ ] **Verification token** — every numeric answer from these tools includes a `verification` field: `{table_cell_ref, sha256_of_source_chunk, retrieved_at}`. UI/agent can re-fetch and assert the cell content unchanged.
 - [ ] **Coverage**: backfill `financial_lines` for jaarstukken + voorjaarsnota + begroting + 10-maandsrapportage 2018–2026 (existing scripts in [scripts/run_financial_batch.py](scripts/run_financial_batch.py))
+- [ ] **Waalwijk financial docs ingested in v0.2.0** alongside Rotterdam *(added 2026-04-11)*. Waalwijk is on **iBabs** (`waalwijk.bestuurlijkeinformatie.nl` — confirmed live with financial documents visible). Cost: one tenant config entry. Their public financial docs (begroting 2025 confirmed at `waalwijk.begrotingsapp.nl/begroting-2025` and on iBabs; jaarstukken 2024, voorjaarsnota, 10-maands) go through the exact same `financial_ingestor.py` → `financial_lines` pipeline we're building for Rotterdam. This is zero new engineering and proves the WS2 pipeline is gemeente-agnostic from day one.
 
 ### 4.3 Eval target
 
 - [ ] **Numeric accuracy benchmark**: 30 hand-curated "exact-number" questions where the answer is a euro amount. **Target: 100% exact match** (not "within 10%"). This is the trust contract.
 - [ ] Hallucination floor: zero euros in any answer that don't appear verbatim in `financial_lines`
+- [ ] **Waalwijk counter-demo** *(updated 2026-04-11)*. WS2 delivers for Rotterdam in v0.2.0 exactly what Waalwijk is paying MAAT to pilot-evaluate. Since we're also ingesting Waalwijk's iBabs financial docs in v0.2.0, the counter-demo costs zero extra work.
+  - **Pilot status (verified 2026-04-11):** started ~25 September 2025 ([Dutch IT Channel](https://www.dutchitchannel.nl/news/712416/gemeente-waalwijk-lanceert-ai-assistent-maat-voor-begrotingscyclus-2026)), no published end date, no evaluation report found. Window still open. AethiQs is actively using Waalwijk as sales collateral to offer temporary access to other municipalities during the 2026 budget period.
+  - **Key quote** — Jeroen Deneer (gemeentesecretaris Waalwijk): *"Met MAAT verwachten we dat technische vragen sneller en consistenter beantwoord kunnen worden, zonder extra druk op de ambtelijke organisatie."* These are the exact questions `vraag_begrotingsregel` answers with a specific euro amount and table cell reference.
+  - **Note:** comparison in step 3 is against MAAT's free public tier (BM25 only) — we cannot test their paid RAG. Acknowledge this explicitly in the published piece; the relevant question is whether their paid tier returns exact line items or paraphrased prose, which their marketing does not address.
+  1. From Waalwijk's iBabs (`waalwijk.bestuurlijkeinformatie.nl`), pull the begrotingsbehandeling raadsvergadering for November 2024 — the public record of questions asked when begroting 2025 was debated.
+  2. Run those questions against `vraag_begrotingsregel` + `vergelijk_begrotingsjaren` → `{programma, bedrag_eur, jaar, page, table_cell_ref}` per answer.
+  3. Run same questions against MAAT free public tier → document the BM25-only gap.
+  4. Publish timed to Waalwijk's evaluation report or AethiQs' next public knowledge event.
 
 ---
 
@@ -212,6 +236,7 @@ Adopt these conventions repository-wide ([mcp_server_v3.py](mcp_server_v3.py)):
   - Available gemeenten + their portals
   - Date coverage per source
   - Council composition (parties, seats, current coalition)
+  - **Current wethouders by portfolio** *(added 2026-04-11)* — name, party, start date, portfolios; generated from `persons_roles` table at server boot, never hardcoded. This is the fix for LLM role-date hallucination: LLMs confidently guess political tenure from training data (e.g. "wethouder until 2026 elections" when the actual switch was mid-coalition in July 2024). The right fix is data in the primer, not behavioral instructions in tool descriptions.
   - Document type taxonomy
   - Known limitations ("financial lines only available 2018+ for Rotterdam")
   - Recommended tool sequences for common questions ("voor begrotingsvragen, gebruik eerst `vraag_begrotingsregel`, dan `zoek_financieel` voor toelichting")
@@ -229,6 +254,28 @@ Adopt these conventions repository-wide ([mcp_server_v3.py](mcp_server_v3.py)):
 - [ ] **Generate a TypeScript stub package** at build time: `services/mcp_codegen.py` reads the registry → emits `dist/neodemos-mcp/<tool>.ts` wrapper functions matching Anthropic's [code execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp) pattern
 - [ ] **Publish to npm as `@neodemos/mcp-tools`** — agents using Claude Code or similar code-first MCP harnesses get 98.7% token savings out of the box
 - [ ] **README in the npm package** with the recommended workflow: import → call typed functions → only the relevant data hits the model context
+
+### 6.5 Public MCP catalog — direct competitive wedge vs MAAT's closed UI
+
+MAAT has no documented API, no MCP surface, no OpenAPI — the product *is* the Django UI. This makes our tool contracts themselves a marketing artifact.
+
+- [ ] **`docs/mcp-catalog.md`** — auto-generated from `mcp_tool_registry.py` on every release, committed to the repo, served at `neodemos.nl/mcp`. Each tool entry contains: name, description-for-agents, parameters, output schema, example call, example LLM interaction, latency p50, cost per call, and a red-team section listing what the tool will refuse. FactSet "tool contract as API contract" pattern made public.
+- [ ] **Browsable tool gallery** at `/mcp` with a "Try in Claude Desktop" button per tool that emits the right MCP client config. Zero-friction onboarding for journalists, researchers, and other gemeenten.
+- [ ] Linked from the homepage and from every search result ("Deze resultaten zijn ook opvraagbaar via MCP — [bekijk de tool](neodemos.nl/mcp/zoek_raadsstuk)")
+
+### 6.6 Mistral Le Chat compatibility — Europe-first amplifier *(added 2026-04-11)*
+
+NeoDemos is European civic infrastructure. Shipping only on Claude/ChatGPT clients quietly cedes the European-AI-sovereignty narrative to the closest competitor that ships a Mistral integration. Le Chat has been the only major chat client with **free-tier** MCP custom connectors since 2025-09-02 (Notion/GitHub/Linear/Stripe ship in their official directory), supports OAuth 2.1 + DCR + streamable HTTP `/mcp`, and reaches mobile (iOS/Android) — three properties Claude.ai does not have today.
+
+The transport, OAuth, and discipline work in §6.1–§6.4 *already produces* a Le Chat-compatible server. Verified 2026-04-11: NeoDemos's existing `mcp_server_v3.py` + `services/mcp_oauth_provider.py` + MCP SDK 1.26 emit a 401 + `WWW-Authenticate: Bearer ..., resource_metadata="..."` per RFC 9728 (the one hard requirement of Le Chat's auth-detection probe), and the FastMCP-generated tool schemas are clean of `$id`/`$schema`/`$defs`/`$ref` (the Mistral grammar-compiler rejection list per [litellm#13389](https://github.com/BerriAI/litellm/pull/13389)). Marginal engineering work: ~2 days, scoped to a single subsection in [WS4 §Mistral Le Chat compatibility](../handoffs/WS4_MCP_DISCIPLINE.md).
+
+The strategic adds are:
+- **Public no-auth `https://mcp.neodemos.nl/public/mcp`** — second FastMCP instance over the same registry, registers only retrieval tools tagged `public=True`. A journalist or citizen pastes one URL into Le Chat free, no login. This is the §2.1 public-AI-by-default constraint, made executable in the single chat client whose business model permits it. Claude.ai's connectors require Pro; OpenAI's require ChatGPT Plus; Le Chat's are free. The wedge is asymmetric and time-limited.
+- **Mobile reach** via Le Chat iOS/Android — NeoDemos has no other mobile path before v0.3.0 PWA work.
+- **EU sovereignty story made literal** — French model, German hosting (Hetzner FSN), Dutch council data, zero US hop. This is the procurement-friendly narrative for Dutch gemeenten that Claude/ChatGPT integrations *cannot* match without re-routing through US infrastructure.
+- **Output discipline as a forcing function** — Mistral Medium 3.1 / Magistral Medium 1.2 / Small 3.2 (Le Chat's model router rotates among these) are weaker at long-context and ambiguous tool selection than Claude Opus. Designing for them improves the experience for *every* client. Mitigations (server-side temporal-extraction fallback, pre-rendered Markdown answer skeletons, strict tool-budget cap ≤25) are detailed in [WS4 §Output discipline for weaker models](../handoffs/WS4_MCP_DISCIPLINE.md).
+
+**Pitch one-liner:** *"NeoDemos is the only Dutch civic intelligence platform that ships free-tier MCP on the European chat assistant Dutch gemeenten can procure without a US hop. MAAT's product is a closed Django UI; ours is a tool contract that any LLM in Le Chat, Claude, or ChatGPT can call."*
 
 ### 6.5 Eval target
 
@@ -260,6 +307,17 @@ The current state is *partial* automation: [main.py:69](main.py#L69) runs `refre
 - [ ] **Daily health email** at 07:00 CET listing yesterday's runs, items processed, errors. Use existing Hetzner mailer.
 - [ ] **`/admin/pipeline` page** in [templates/admin.html](templates/admin.html) showing job graph status (green/yellow/red per step), last run, queue depth
 - [ ] **Smoke test job** running every hour: ingest one known-good test document end-to-end, fail the deploy if it doesn't make it through
+- [ ] **OCR quality gate + public coverage dashboard** — *direct wedge vs both MAAT (hides coverage) and Archibot (silently rejected 95% of the archive: 75K indexed out of 1.5M available — the single biggest under-told fact from their case study)*. Add a `rejection_reason` column to `documents` (values: `ocr_low_confidence`, `unparseable_structure`, `duplicate_hash`, `out_of_scope`, `pending_reprocess`). Pipeline step `03b_ocr_quality_gate` runs a confidence check; anything below threshold is rejected with the reason logged, not silently dropped. Ship **`neodemos.nl/coverage`** as a public dashboard showing: total documents per gemeente, indexed, rejected (grouped by reason), pending reprocess, last-run timestamp. Backfill Rotterdam on ship. **Pitch:** *"We don't silently include garbage, we don't silently exclude it either. Here's exactly what's in our index and what isn't."*
+- [ ] **Pre-2018 historical backfill** *(added 2026-04-11, assigned to v0.3.0 — see §9)*. Current state: full coverage 2018–2026, partial pre-2018. Rotterdam is on iBabs (`bestuurlijkeinformatie.nl`), which exposes a paginated meeting calendar going back to whenever the gemeente first adopted the system (estimated ~2010–2012 for Rotterdam; pre-iBabs records, if any, would require the Stadsarchief separately).
+
+  **How we discover the missing documents (audit methodology):**
+  1. **`scripts/audit_pre_2018_coverage.py`** — iterates the iBabs calendar endpoint backwards from 2018-01-01, paginating through all historical meetings by year. For each meeting: fetch the agenda, collect all document GUIDs, compare against `documents.source_url` (or a hash of the GUID). Emit `reports/pre_2018_missing.csv` with columns `(meeting_date, meeting_id, document_guid, document_url, document_type, reason_absent)`. `reason_absent` can be: `not_in_db`, `in_db_but_no_chunks`, `in_db_but_ocr_rejected`. This gives a clean count of the actual gap — not a guess.
+  2. **Hard-stop check**: what is the earliest iBabs record date for Rotterdam? If iBabs returns nothing before 2010, the pre-2010 archive lives in a different system (Rotterdam Stadsarchief or earlier portal). Log the earliest available date and surface it on `/coverage` — don't promise data that isn't there.
+  3. **Human sanity-check before any ingestion**: share `pre_2018_missing.csv` with Dennis. Questions to answer: how many docs? what types (raadsbesluiten, moties, notulen, bijlagen, persberichten)? Is there a hard iBabs cut-off year? Are the missing items OCR-able (are they scanned PDFs or born-digital)?
+  4. **Run the approved set** through the hardened pipeline in small batches (≤500 docs/run) during off-peak hours, honoring the `pg_advisory_lock` writer rule. Pipeline steps: OCR quality gate → Docling → chunking → embedding → staging → KG enrichment → promotion.
+  5. **Update `/coverage`** with a "historische diepte" badge showing earliest indexed document date.
+
+  **Not v0.2.0 critical.** Slot into v0.3.0 after the 14-day nightly stability bake. Benefit: multi-decade trend queries that neither MAAT nor Archibot can answer for the same corpus.
 
 ### 7.2 Multi-portal connectors — search-only first
 
@@ -282,7 +340,27 @@ The user is explicit: **search-only first, AI tooling later**. This is the right
 - [ ] **Single Qdrant collection with mandatory `gemeente` payload filter** (NOT per-gemeente collections — simpler reranker pooling)
 - [ ] **Search-only mode flag** per gemeente: if `mode='search_only'`, the ingest pipeline runs steps 01–05 and stops (no KG enrichment, no financial-lines extraction, no journey building). The MCP search tools work; the GraphRAG/financial/journey tools return `not available for this gemeente yet`.
 - [ ] **Tenant config**: `data/tenants/<gemeente>/config.yml` declaring portal type, mode, branding
-- [ ] **Day-1 coverage target**: enable search-only for **5 additional gemeenten** via the ORI fallback (zero per-gemeente engineering). Pick gemeenten where MAAT is or has been pitching: Apeldoorn, Zoetermeer, Maastricht, Enschede, Bodegraven.
+- [ ] **Portal map for the 5 target gemeenten** *(verified 2026-04-11 from live URLs + Digimonitor data)*:
+
+  | Gemeente | Portal | URL confirmed | In ORI? | v0.2.1 strategy |
+  |---|---|---|---|---|
+  | Zoetermeer | **iBabs** | `zoetermeer.bestuurlijkeinformatie.nl` | Yes, gaps | Direct iBabs scraper — same code as Rotterdam |
+  | Enschede | **iBabs** | `enschede.bestuurlijkeinformatie.nl` | Yes, gaps | Direct iBabs scraper |
+  | **Apeldoorn** | **Parlaeus** (= Qualigraf) | `apeldoorn.parlaeus.nl` ✓ confirmed live | Yes | ORI fallback v0.2.1; native Parlaeus adapter v0.3.0 |
+  | Maastricht | **Parlaeus** (= Qualigraf) | `maastricht.parlaeus.nl` ✓ confirmed | Yes | ORI fallback v0.2.1 |
+  | Bodegraven-Reeuwijk | **Parlaeus** (= Qualigraf) | parlaeus portal ✓ confirmed by search | Yes | ORI fallback v0.2.1 |
+  | **Waalwijk** *(pilot target)* | **iBabs** | `waalwijk.bestuurlijkeinformatie.nl` ✓ financial docs confirmed | Yes, gaps | iBabs scraper direct — financial docs are here |
+
+  **Correction 2026-04-11:** Apeldoorn is **Parlaeus, not Notubiz**. Earlier inference from `apeldoorn.raadsinformatie.nl` (a legacy/ORI-viewer URL) was wrong; `apeldoorn.parlaeus.nl` is the current live RIS, confirmed from [ANP persportaal](https://persportaal.anp.nl/artikel/8e519f62-8c2c-4a9e-b5d0-9f051f629e37/ai-zoekmachine-maat-verbetert-zoekfunctionaliteit-in-apeldoorns-raadsinformatiesysteem) and search results. Note: **Parlaeus is made by Qualigraf** — the "Qualigraf" integration in MAAT's VNG case study IS the Parlaeus integration. 3 of 5 target municipalities are on Parlaeus. Notubiz has no confirmed anchor targets in this list.
+
+  Key finding (wooverheid.nl, July 2024): **iBabs has the largest ORI gaps** — agenda items and attachments appear on the web but are missing from the ORI API. Notubiz gaps are smaller. Figures not published; directional only. **Do NOT use ORI fallback for Zoetermeer or Enschede** — use the existing iBabs scraper.
+
+- [ ] **Day-1 strategy by portal type:**
+  - **Zoetermeer + Enschede + Waalwijk (iBabs)**: extend `pipeline/sources/ibabs.py` with gemeente config entries. Same domain structure as Rotterdam, same scraper, zero new code.
+  - **Apeldoorn + Maastricht + Bodegraven (Parlaeus)**: ORI fallback for v0.2.1 search-only; native `pipeline/sources/parlaeus.py` adapter in v0.3.0 (3 anchor targets justifies this over Notubiz).
+  - **Notubiz**: no confirmed anchor target municipalities identified yet. Build opportunistically in v0.4 when a Notubiz gemeente commits.
+- [ ] **Portal-agnostic persistent citation IDs** — *direct competitive wedge vs MAAT, whose citations are hard-coupled to `{gemeente}.bestuurlijkeinformatie.nl/Reports/Item/<guid>` URLs*. Every document and every chunk gets a stable `neodemos://doc/<sha256-prefix>` and `neodemos://chunk/<id>` URI that resolves to whichever portal the gemeente is on today. Store `portal_url_history[]` per document so migrations are traceable. All MCP tool outputs return the `neodemos://` URI as the primary citation and the current portal URL as a convenience link. **Pitch to gemeenten:** *"Our citations still work in 10 years even if you change portals. MAAT's don't."*
+- [ ] **Inherits BAG-native location layer from WS1** *(added 2026-04-11)* — WS1 builds the location KG using BAG `openbare_ruimte` IDs as primary keys (not street names) with mandatory `gemeente` attributes and a generic `LOCATED_IN` edge `level` attribute. WS5b therefore gets Apeldoorn/Zoetermeer/Maastricht/Enschede/Bodegraven location coverage essentially for free: import the relevant BAG subset for each new gemeente, emit the hierarchy edges, done. No schema migration, no street-name disambiguation, no canonicalization fight. The five day-1 search-only gemeenten should each have their BAG location skeleton imported as part of the backfill. *(Prerequisite: BAG location layer must be implemented in WS1 first — coordinate with WS1 §3.2 timeline.)*
 
 ### 7.3 Stage gate (this is what "without overloading ourselves" looks like)
 
@@ -362,7 +440,7 @@ We are *ahead* of MAAT here on architecture — we just don't expose it well.
 | WS1 GraphRAG | Foundations (Flair, Gemini enrichment, ~500K edges) + `traceer_motie` + `vergelijk_partijen` + 5th retrieval stream |
 | WS2 Financial | `financial_lines` table + `vraag_begrotingsregel` + `vergelijk_begrotingsjaren` + verification token |
 | WS3 Journey | `document_journeys` view + `traceer_document` MCP tool (no UI yet) |
-| WS4 MCP | Tool registry, `get_neodemos_context`, audit log, scope-based auth |
+| WS4 MCP | Tool registry, `get_neodemos_context`, audit log, scope-based auth, **Mistral Le Chat compatibility** *(added 2026-04-11)* — verified `/mcp` end-to-end against Le Chat custom connector, public no-auth `/public/mcp` endpoint for the §2.1 wedge, server-side temporal-extraction fallback, pre-rendered Markdown answer skeletons, Le Chat installer card, `mcp[cli]` pin, submit to Mistral connectors directory. See [WS4 §Mistral Le Chat compatibility](../handoffs/WS4_MCP_DISCIPLINE.md). |
 | WS5 Pipeline | Job graph + smoke test + advisory lock + admin page (Rotterdam only) |
 | WS5 Multi-portal | **Deferred to v0.2.1** |
 | WS6 Summarization | `summarizer.py` + source-spans-only mode + cached per-document summaries |
@@ -374,14 +452,20 @@ We are *ahead* of MAAT here on architecture — we just don't expose it well.
 - 14 consecutive days clean nightly runs on Rotterdam
 - Source-spans-only summaries pass strip-test on 50 random documents
 
-### v0.2.1 — "Search Beyond Rotterdam" (alpha)
+### v0.2.1 — "Public Face" (alpha)
 **Target:** 1 week after v0.2.0
 
 - WS5 Multi-portal: ORI-fallback adapter live, search-only mode for 5 gemeenten (Apeldoorn, Zoetermeer, Maastricht, Enschede, Bodegraven)
 - WS3 Journey: UI route `/journey/{id}` + `templates/journey.html`
 - WS5 Webcast: HLS player + timestamp citations in all transcript chunks
+- **`neodemos.nl/publiek`** — first-class anonymous landing page, zero-login search + summarize + traceer, modeled on [Archibot's anonymous dashboard](https://archidash.europarl.europa.eu/ep-archives-anonymous-dashboard). The name "publiek" is deliberate branding of the public-AI wedge (§2.1). Every demo link goes here; the gemeente-branded pages become secondary.
+- **Public eval scoreboard at `neodemos.nl/eval`** *(promoted from v0.4)* — live precision / faithfulness / completeness, numeric-accuracy from the financial benchmark, per-question trace with source chunks. **Requirements added 2026-04-11:** must include **≥2 named baseline comparators** (proposed: Gemini Flash with web grounding + ChatGPT-4 web search; add MAAT free-tier via a nightly scraper if their ToS permit) and a **named human evaluator** who signed off on the question set (proposed: Rotterdam griffier or a Dutch-politics academic — credit on the methodology page). Archibot's published eval is "30 questions by an EU legislative-history expert vs ChatGPT 3.5" — a beatable bar if we publish a more rigorous methodology with named comparators.
+- **Public MCP catalog at `neodemos.nl/mcp`** *(WS4 §6.5)* — browsable, with "Try in Claude Desktop" buttons
+- **Public coverage dashboard at `neodemos.nl/coverage`** *(WS5 §7.1)* — OCR quality gate transparency
+- **Governance one-pager at `neodemos.nl/governance`** — half-day write-up covering: models in use (Gemini Flash, Claude, Jina v3), data residency (Hetzner FSN EU), training-data policy (never trained on user queries or gemeente documents), refusal policy, eval methodology link, incident history. Removes 80% of procurement security-questionnaire friction. Archibot's entire procurement narrative leans on "Constitutional AI + permanent control of the solution"; ours should be more specific and more auditable.
+- **Public-AI audit** — run the §2.1 constraint check against every shipped endpoint; any tool behind a login wall that doesn't need PII gets unlocked or gets a public tracking issue
 
-### v0.3.0 — "Open MCP Surface" (beta)
+### v0.3.0 — "Open MCP Surface + Citizen Voice" (beta)
 **Target:** 4 weeks after v0.2.1
 
 - WS4 MCP: TypeScript codegen + `@neodemos/mcp-tools` published to npm + Code Execution with MCP example workflows
@@ -390,11 +474,14 @@ We are *ahead* of MAAT here on architecture — we just don't expose it well.
 - WS6 Summarization: ThemeFinder-style per-agenda-item theme maps + multi-round structured mode
 - ChatGPT and Perplexity MCP registration (was old v0.4)
 - First external testers onboarded (was old v0.4)
+- **Voice-first citizen PWA** — *direct wedge vs MAAT, which is desktop-web-only and architecturally cannot reach mobile/voice without a rewrite*. A thin PWA wrapping the public MCP surface so a citizen can say *"Hé, wat besloot de gemeenteraad van Rotterdam vorig jaar over parkeren in IJsselmonde?"* and get a cited answer in 10 seconds. This is structurally impossible for MAAT's jQuery+Django+session-cookie stack. No native app needed — PWA + existing MCP tools + Claude/Gemini voice modes.
+- **Pre-2018 historical backfill** *(WS5 §7.1, added 2026-04-11)* — run the audit script, sanity-check the diff, and push the missing set through the hardened pipeline in small off-peak batches. Enables multi-decade trend queries (*"hoe is Leefbaar Rotterdam's standpunt over warmtenetten veranderd sinds 2014?"*) that neither MAAT nor Archibot can answer for the same corpus. Update `neodemos.nl/coverage` with a "historische diepte" badge once complete.
+- **Native Notubiz adapter** `pipeline/sources/notubiz.py` *(promoted from v0.4 on 2026-04-11)* — Apeldoorn uses Notubiz (`apeldoorn.raadsinformatie.nl`), is an anchor MAAT customer, and ORI-only gives incomplete coverage for it. Notubiz covers ~38% of all Dutch municipalities (Digimonitor), so this adapter has the highest multi-portal leverage of any portal after iBabs. Scope: full-depth ingestion — documents, transcripts, speakers, webcasts — equivalent to iBabs Rotterdam. Not search-only. Prerequisite: v0.2.1 ORI-fallback for Apeldoorn must be live and stable first so we have a diff target.
 
 ### v0.4.0 — "User Testing Ready" (beta)
 **Target:** 4 weeks after v0.3.0
 
-- Native Notubiz adapter (one customer-driven gemeente)
+- _(Notubiz adapter promoted to v0.3.0 — see above)_
 - Cross-gemeente comparison (`vergelijk_gemeenten`) — depends on WS1 + WS5
 - Council-watcher agent (push alerts on new agenda items matching saved queries)
 - Public eval scoreboard at `neodemos.nl/eval` showing live precision/faithfulness/numeric-accuracy

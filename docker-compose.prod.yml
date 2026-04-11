@@ -1,6 +1,19 @@
 services:
   postgres:
-    image: postgres:16
+    # pgvector/pgvector:pg16-trixie is the official community image that
+    # bundles the pgvector extension on top of postgres:16. We explicitly
+    # use the -trixie (Debian 13) variant rather than the default -bookworm
+    # (Debian 12) variant so glibc matches what the database was created
+    # with (2.41). Downgrading glibc causes a "collation version mismatch"
+    # warning on every connection and risks subtle btree-index inconsistency
+    # on text columns.
+    #
+    # Required because chunk_questions.embedding is a vector column — plain
+    # postgres:16 can't load the extension's .so file, which breaks pg_dump
+    # at backup time. Changed 2026-04-11 after discovering the 00:00 CET
+    # cron had been failing with:
+    #   could not access file "$libdir/vector": No such file or directory
+    image: pgvector/pgvector:pg16-trixie
     container_name: neodemos-postgres
     environment:
       POSTGRES_DB: neodemos
@@ -16,7 +29,13 @@ services:
       timeout: 5s
       retries: 5
     networks:
+      # Dual-homed 2026-04-11: Kamal-managed web/mcp containers live on the
+      # external `kamal` network (created by kamal-proxy). Postgres must be
+      # reachable from there, or every deploy orphans the app from the DB.
+      # The compose-managed `neodemos-network` is kept for tools that still
+      # expect it (nightly pipeline scripts, psql from the host, etc.).
       - neodemos-network
+      - kamal
     restart: unless-stopped
     deploy:
       resources:
@@ -157,3 +176,10 @@ volumes:
 networks:
   neodemos-network:
     driver: bridge
+  # `kamal` is created by kamal-proxy on first deploy and is external to this
+  # compose project. Declaring it `external: true` means compose will attach
+  # services to it without trying to manage its lifecycle. This keeps postgres
+  # reachable from the Kamal-managed web/mcp containers after any compose
+  # recreate. See 2026-04-11 post-mortem in docs/hetzner/ for why this matters.
+  kamal:
+    external: true

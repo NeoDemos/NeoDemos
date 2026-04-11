@@ -76,7 +76,17 @@ env:
 
 accessories:
   postgres:
-    image: postgres:16
+    # NOTE 2026-04-11: postgres is currently docker-compose-managed
+    # (docker-compose.prod.yml), NOT Kamal-managed. This accessory entry is
+    # the declarative target for a future migration — keep it in sync with
+    # the compose file so the migration doesn't regress. Before switching,
+    # the volume name drift between compose (`neodemos_postgres_data`) and
+    # this config (`neodemos-postgres-data`) must be reconciled or the new
+    # container will come up with an empty database.
+    #
+    # Image must be pgvector/pgvector:pg16 — vanilla postgres:16 lacks the
+    # vector shared library and pg_dump breaks on tables with vector columns.
+    image: pgvector/pgvector:pg16
     host: 178.104.137.168
     port: "127.0.0.1:5432:5432"
     env:

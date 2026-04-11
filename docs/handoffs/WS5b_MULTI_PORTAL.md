@@ -123,6 +123,16 @@ Stop being Rotterdam-only on the source side. Refactor `pipeline/scraper.py` int
 - [ ] Verify each gemeente: `SELECT COUNT(*) FROM documents WHERE gemeente='X'`; `SELECT COUNT(*) FROM chunks WHERE gemeente='X'`
 - [ ] Test search end-to-end on each gemeente subdomain
 
+### BAG location skeleton per gemeente (~0.5 day total) *(added 2026-04-11)*
+
+WS1 already shipped the BAG-native location layer schema with the Rotterdam dataset. WS5b only needs to **rerun the import for each new gemeente** — no schema work, no canonicalization, no street-name disambiguation, because WS1 locked the design constraints (BAG `openbare_ruimte` IDs as PK, mandatory `gemeente` attribute, `LOCATED_IN` edge `level` attribute).
+
+- [ ] **Inherited design constraint check** — read [WS1_GRAPHRAG.md §Phase A "BAG-based location hierarchy"](WS1_GRAPHRAG.md) before starting; do NOT re-key Location nodes by name; do NOT add per-gemeente schema fields. If the constraints feel wrong, escalate — fixing them in WS5b means rewriting WS1's location KG.
+- [ ] **For each of the 5 day-1 gemeenten**, run `scripts/import_bag_locations.py --gemeente <name>` (the script WS1 ships) to fetch the relevant PDOK BAG subset + CBS Wijk- en Buurtkaart slice and emit `LOCATED_IN` edges into `kg_relationships`. Estimated volume per gemeente: a few thousand street nodes + buurt/wijk/gemeente edges. Trivial compared to the document backfill.
+- [ ] **Verify**: `SELECT COUNT(*) FROM kg_entities WHERE type='Location' AND gemeente='X'` returns expected order of magnitude per gemeente; `SELECT COUNT(*) FROM kg_relationships WHERE relationship='LOCATED_IN' AND ...` matches.
+- [ ] **Per-gemeente sub-municipal level** — Apeldoorn uses wijken, Zoetermeer uses wijken, Maastricht uses buurten, Enschede uses stadsdelen + wijken, Bodegraven-Reeuwijk has no formal sub-municipal level. The `level` attribute on `LOCATED_IN` edges absorbs this variation without code changes; just verify each tenant's hierarchy looks sensible vs. the gemeente's own published structure. Document any edge cases in `data/tenants/<gemeente>/notes.md` for future reference.
+- [ ] **Search-only consequence**: even though the GraphRAG MCP tools (`traceer_motie`, `vergelijk_partijen`) stay disabled for these gemeenten, the location KG itself is *available* — meaning future v0.3.0 promotion of any of these gemeenten to full mode is location-skeleton-ready out of the box.
+
 ### DNS / Caddy (~0.5 day)
 
 - [ ] Add subdomain wildcards to Caddy: `*.neodemos.nl` → same upstream as `neodemos.nl`
@@ -142,6 +152,7 @@ Stop being Rotterdam-only on the source side. Refactor `pipeline/scraper.py` int
 - [ ] DNS + Caddy serving `*.neodemos.nl`
 - [ ] UI shows "Beperkte modus" badge on search-only gemeenten
 - [ ] `get_neodemos_context()` accurately reports each gemeente's mode and capabilities
+- [ ] **BAG location skeleton imported for all 5 search-only gemeenten** *(added 2026-04-11)* — `kg_entities` contains Location nodes keyed by BAG `openbare_ruimte` IDs with the correct `gemeente` attribute, and `kg_relationships` contains the matching `LOCATED_IN` edges
 
 ## Eval gate
 
