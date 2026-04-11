@@ -12,10 +12,15 @@ servers:
     # `kamal` network so kamal-proxy can resolve it by container name.
     proxy:
       # Phase 1 (HTTP-only verification, Caddy still owns 80/443): ssl disabled,
-      # test via alternate ports set with `kamal proxy boot_config set --http-port 4444`.
-      # Flip to `ssl: true` + full hosts list in Phase 3 once verified.
+      # test via alternate ports 4444/4445. Flip to `ssl: true` in Phase 3.
+      # All four TLDs are routed into the app; `.eu` variants are 301-redirected
+      # to `neodemos.nl` by CanonicalHostRedirectMiddleware in main.py.
       ssl: false
-      host: neodemos.nl
+      hosts:
+        - neodemos.nl
+        - www.neodemos.nl
+        - neodemos.eu
+        - www.neodemos.eu
       app_port: 8000
       healthcheck:
         path: /up
@@ -105,10 +110,12 @@ accessories:
     host: 178.104.137.168
     cmd: "python mcp_server_v3.py --http --port 8001"
     # Phase 1: same HTTP-only proxy model as the web service. kamal-proxy will
-    # route mcp.neodemos.nl (via Host header in test) to this accessory.
+    # route both mcp.neodemos.nl and mcp.neodemos.eu to this accessory.
     proxy:
       ssl: false
-      host: mcp.neodemos.nl
+      hosts:
+        - mcp.neodemos.nl
+        - mcp.neodemos.eu
       app_port: 8001
       healthcheck:
         path: /up
