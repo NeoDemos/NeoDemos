@@ -159,8 +159,8 @@ def run_pipeline(
                     if vtt_resp.status_code == 200:
                         metadata.vtt_available = True
                         logger.info("✅ ConnectLive VTT found and enabled!")
-                except:
-                    pass
+                except Exception as e:
+                    logger.debug("VTT availability check failed: %s", e)
 
         # Fetch VTT transcript
         vtt_segments = []
