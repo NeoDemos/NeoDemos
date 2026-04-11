@@ -25,6 +25,11 @@ registry:
   password:
     - KAMAL_REGISTRY_PASSWORD
 
+# The FastAPI app takes ~15s to boot (DB pool init, Gemini AI service, scheduler).
+# Kamal's default 30s is too short for the Docker HEALTHCHECK (interval=30s,
+# start-period=10s) to produce a stable "healthy" readout in time.
+deploy_timeout: 120
+
 env:
   clear:
     NEODEMOS_CITY: rotterdam
