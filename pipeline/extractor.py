@@ -409,8 +409,12 @@ class WhisperTranscriber:
                 "ffmpeg", "-y", "-nostdin", "-ss", str(start), "-t", str(chunk_size),
                 "-i", audio_path, "-ac", "1", "-ar", "16000", str(chunk_file)
             ]
-            subprocess.run(cmd, capture_output=True)
-            
+            try:
+                subprocess.run(cmd, capture_output=True, check=True)
+            except subprocess.CalledProcessError as e:
+                logger.warning(f"ffmpeg failed for chunk starting at {start}s: {e}")
+                continue
+
             if not chunk_file.exists():
                 continue
                 
@@ -452,14 +456,6 @@ class WhisperTranscriber:
             mx.metal.clear_cache()
             
         return all_segments
-        
-        # Explicitly clear result and trigger GC
-        del result
-        gc.collect()
-        import mlx.core as mx
-        mx.metal.clear_cache()
-        
-        return segments
 
 
 # ── Transcript Aligner ────────────────────────────────────────────────
