@@ -144,11 +144,13 @@ except Exception:
         # No local file. No disk-full risk. No partial-file orphan risk.
         # `set -o pipefail` ensures we catch a failure in either curl or
         # rclone — we get it here via the PIPESTATUS array.
+        # Snapshots land flat in 03_Vector_Snapshots/ — the snapshot name
+        # already encodes the collection name, date and ID.
         set +e
         curl -sS -H "api-key: $QDRANT_API_KEY" \
             "$QDRANT_HOST/collections/$COLLECTION/snapshots/$SNAP_NAME" 2>> "$LOG" \
             | rclone rcat \
-                "gdrive:NeoDemos/03_Vector_Snapshots/$COLLECTION/$SNAP_NAME" \
+                "gdrive:NeoDemos/03_Vector_Snapshots/$SNAP_NAME" \
                 --log-file="$LOG" --log-level INFO 2>> "$LOG"
         CURL_RC=${PIPESTATUS[0]}
         RCLONE_RC=${PIPESTATUS[1]}
@@ -164,7 +166,7 @@ except Exception:
             # Verify the upload actually landed — rclone rcat can return 0
             # on a truncated input without error. Size check vs expected.
             REMOTE_SIZE=$(rclone size \
-                "gdrive:NeoDemos/03_Vector_Snapshots/$COLLECTION/$SNAP_NAME" \
+                "gdrive:NeoDemos/03_Vector_Snapshots/$SNAP_NAME" \
                 --json 2>> "$LOG" | python3 -c 'import sys,json;
 try: print(json.load(sys.stdin).get("bytes",0))
 except Exception: print(0)' 2>> "$LOG" || echo "0")
@@ -173,7 +175,7 @@ except Exception: print(0)' 2>> "$LOG" || echo "0")
                 log "  ERROR: size mismatch — expected $SNAP_SIZE, remote has $REMOTE_SIZE"
                 QDRANT_FAIL_COUNT=$((QDRANT_FAIL_COUNT + 1))
             else
-                log "  uploaded to gdrive:NeoDemos/03_Vector_Snapshots/$COLLECTION/ ($REMOTE_SIZE bytes)"
+                log "  uploaded to gdrive:NeoDemos/03_Vector_Snapshots/ ($REMOTE_SIZE bytes)"
                 QDRANT_OK_COUNT=$((QDRANT_OK_COUNT + 1))
             fi
         fi
