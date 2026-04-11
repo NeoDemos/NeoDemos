@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # Backup script for NeoDemos Project
 # Targets: Postgres (SQL), Qdrant (Vectors), Code (Git)
 
@@ -28,7 +29,7 @@ echo "💻 Packaging Code..."
 tar -czf "$BACKUP_DIR/code_backup.tar.gz" --exclude=".venv" --exclude="__pycache__" --exclude="data" --exclude=".git" .
 
 echo "🐙 Pushing to GitHub..."
-git add .
+git add -u
 git commit -m "System restoration, Qdrant migration, and search stability fixes - $TIMESTAMP"
 git push origin main
 
