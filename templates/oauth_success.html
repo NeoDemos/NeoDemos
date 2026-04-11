@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .auth-container {
+        max-width: 460px;
+        margin: 4rem auto;
+        background: #fff;
+        padding: 2.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        text-align: center;
+    }
+    .checkmark {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: #48bb78;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.25rem auto;
+        font-size: 2.5rem;
+        font-weight: bold;
+        animation: pop 0.35s ease-out;
+    }
+    @keyframes pop {
+        0%   { transform: scale(0.5); opacity: 0; }
+        70%  { transform: scale(1.08); opacity: 1; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    .auth-container h2 {
+        color: var(--secondary-color);
+        margin-bottom: 0.5rem;
+    }
+    .subtitle {
+        color: #718096;
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+    }
+    .client-info {
+        background: #f0fff4;
+        border: 1px solid #c6f6d5;
+        border-radius: 6px;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+        color: #22543d;
+    }
+    .redirect-note {
+        font-size: 0.85rem;
+        color: #718096;
+        margin-bottom: 1.5rem;
+    }
+    .btn-row {
+        display: flex;
+        gap: 0.75rem;
+    }
+    .btn-row a {
+        flex: 1;
+        padding: 0.75rem;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        text-decoration: none;
+        text-align: center;
+        display: block;
+    }
+    .btn-primary {
+        background: #2c3e50;
+        color: #fff;
+    }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-secondary {
+        background: #e2e8f0;
+        color: #4a5568;
+    }
+    .btn-secondary:hover { background: #cbd5e0; }
+</style>
+
+<meta http-equiv="refresh" content="2;url={{ redirect_url }}">
+
+<div class="auth-container">
+    <div class="checkmark">&check;</div>
+    <h2>Autorisatie geslaagd</h2>
+    <p class="subtitle">
+        U heeft <strong>{{ client_name }}</strong> toegang verleend tot uw NeoDemos account.
+    </p>
+
+    <div class="client-info">
+        De verbinding is klaar. U wordt automatisch teruggestuurd&hellip;
+    </div>
+
+    <p class="redirect-note">
+        Gebeurt er niets? Klik hieronder.
+    </p>
+
+    <div class="btn-row">
+        <a class="btn-primary" href="{{ redirect_url }}">Terug naar {{ client_name }}</a>
+        <a class="btn-secondary" href="/">NeoDemos home</a>
+    </div>
+</div>
+{% endblock %}

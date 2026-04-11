@@ -483,12 +483,27 @@ async def oauth_consent_submit(
         code_challenge=code_challenge,
     )
 
-    # Redirect back to the MCP client with the auth code
+    # Build the full callback URL with code + state
     params = {"code": code}
     if state:
         params["state"] = state
     separator = "&" if "?" in redirect_uri else "?"
-    return RedirectResponse(url=f"{redirect_uri}{separator}{urlencode(params)}", status_code=303)
+    full_redirect = f"{redirect_uri}{separator}{urlencode(params)}"
+
+    # Look up the client's display name so the success page can name it
+    client = await _oauth_provider.get_client(client_id)
+    client_name = client.client_name if client and client.client_name else client_id
+
+    # Show an interstitial success page instead of redirecting straight away.
+    # The template has a 2-second meta-refresh to `full_redirect`, plus manual
+    # fallback buttons in case the auto-refresh is blocked. This gives the user
+    # explicit visual confirmation that NeoDemos accepted the consent before
+    # handing control back to the MCP client.
+    return templates.TemplateResponse(name="oauth_success.html", request=request, context={
+        "title": "Autorisatie geslaagd",
+        "client_name": client_name,
+        "redirect_url": full_redirect,
+    })
 
 
 # ── MCP Installer (public) ──
