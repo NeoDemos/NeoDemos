@@ -26,7 +26,16 @@ Today we have 57K KG edges, a politician registry, a domain gazetteer, and 3.3M 
 >
 > Your job is to ship phase A (Flair + Gemini enrichment, ~500K KG edges) followed by phase B (graph_retrieval service + 5th retrieval stream + `traceer_motie` + `vergelijk_partijen` MCP tools). The acceptance criteria and eval gate are listed below — all must pass before you mark this workstream `done`. Do not let scope creep into other workstreams; if you find adjacent issues, write them in the `Future work` section instead of fixing them.
 >
-> Honor the project house rules in `docs/handoffs/README.md`. The most important one for you: **never write to Qdrant or PostgreSQL during the Flair/Gemini enrichment run** — coordinate via `pg_advisory_lock(42)` or by waiting for the `pipeline_runs` row to mark `finished`. Memory file `project_embedding_process.md` documents why.
+> Honor the project house rules in `docs/handoffs/README.md`. The most important one for you: **never write to Qdrant or PostgreSQL during the Flair/Gemini enrichment run** — coordinate via `pg_advisory_lock(42)` or by waiting for the latest `staging.pipeline_runs` row to populate `completed_at`. Memory file `project_embedding_process.md` documents why.
+>
+> **Schema corrections (verified against live DB 2026-04-11):** an earlier draft of this handoff referenced several tables/columns that do not match reality. Use these names:
+>
+> - `staging.pipeline_runs` (not `public.pipeline_runs`); status column is `completed_at`, not `finished_at`; there is no `kind` column.
+> - `kg_relationships.relation_type` (not `relationship_type`).
+> - `kg_entities.type` (not `entity_type`).
+> - Chunk table is `document_chunks` (not `chunks`).
+> - Chunk↔entity mentions live in `kg_mentions (id, entity_id, chunk_id, raw_mention, created_at)` — there is **no** `chunk_entities` table.
+> - `document_chunks.key_entities` is `text[]`, not `jsonb`. Use `array_length(key_entities, 1) > 0` for coverage checks, not `jsonb_array_length`.
 
 ## Files to read first
 - [`docs/architecture/PLAN_G_CONTEXTUAL_RETRIEVAL.md`](../architecture/PLAN_G_CONTEXTUAL_RETRIEVAL.md)
@@ -34,7 +43,7 @@ Today we have 57K KG edges, a politician registry, a domain gazetteer, and 3.3M 
 - [`docs/architecture/PLAN_GI_MERGED_STATUS.md`](../architecture/PLAN_GI_MERGED_STATUS.md)
 - [`mcp_server_v3.py`](../../mcp_server_v3.py) — current 13 tools, especially `_format_chunks_v3` and the existing `zoek_moties` tool
 - [`services/rag_service.py`](../../services/rag_service.py) — current 4-stream retrieval architecture (`retrieve_parallel_context`)
-- Postgres schema: `kg_relationships`, `kg_entities`, `chunk_entities`, `politician_registry`, `documents`, `chunks`
+- Postgres schema: `kg_relationships` (column: `relation_type`), `kg_entities` (column: `type`), `kg_mentions` (chunk↔entity link table), `politician_registry`, `documents`, `document_chunks`
 
 ## Build tasks
 
@@ -52,7 +61,7 @@ These were originally scoped as standalone v0.2.0 work; they are now folded in a
   - Output: new ~5.100 nodes + ~5.100 edges in Rotterdam-only mode; rolls forward to ~9,5M addresses + matching edges if/when full Netherlands coverage is enabled in a later release.
 - [ ] **Gemini Flash Lite enrichment pass** for: `answerable_questions`, `section_topic` refinement, semantic relationships (`HEEFT_BUDGET`, `BETREFT_WIJK`, `SPREEKT_OVER`). Budget: ~$90–130. Small-batch (100% retention) per [project_pipeline_hardening.md](../../../.claude/projects/-Users-dennistak-Documents-Final-Frontier-NeoDemos/memory/project_pipeline_hardening.md). Now that BAG-derived `LOCATED_IN` edges exist, `BETREFT_WIJK` should resolve targets to BAG-canonical Location IDs rather than free-text wijk names.
 - [ ] **Materialize new edges** into `kg_relationships`. Target: 57K → ≥500K edges (Flair semantic relationships dominate; BAG hierarchy adds the constant 5K location skeleton).
-- [ ] **Cross-document motie↔notulen vote linking** — populate edges connecting a `motie` document to the `notulen` chunks where it was discussed/voted. Schema: `(motie_id, notulen_chunk_id, relationship='DISCUSSED_IN' | 'VOTED_IN')`. **WS3 depends on this.**
+- [ ] **Cross-document motie↔notulen vote linking** — populate edges connecting a `motie` document to the `notulen` chunks where it was discussed/voted. Write into `kg_relationships` using the canonical shape `(source_entity_id, target_entity_id, relation_type='DISCUSSED_IN' | 'VOTED_IN', document_id, chunk_id, confidence, metadata)`. **WS3 depends on this.**
 - [ ] **Quality audit** — three layers:
   - SQL: row counts per edge type, NULL/orphan checks
   - Deterministic: 100 hand-curated entity→chunk pairs validated
@@ -62,9 +71,9 @@ These were originally scoped as standalone v0.2.0 work; they are now folded in a
 
 - [ ] **`services/graph_retrieval.py`** — new file. Functions:
   - `extract_query_entities(query: str) -> list[Entity]` — Flair NER + gazetteer match + politician alias resolution
-  - `walk(seed_entities: list[Entity], max_hops: int = 2, edge_types: list[str] | None = None) -> list[Path]` — recursive PostgreSQL CTE traversal of `kg_relationships`. **Hard cap at 2 hops in v0.2.**
+  - `walk(seed_entities: list[Entity], max_hops: int = 2, edge_types: list[str] | None = None) -> list[Path]` — recursive PostgreSQL CTE traversal of `kg_relationships` (column name `relation_type`). **Hard cap at 2 hops in v0.2.**
   - `score_paths(paths: list[Path], query_intent: str) -> list[ScoredPath]` — penalize long paths, boost matches against query intent classifier
-  - `hydrate_chunks(entity_ids: list[int], gemeente: str) -> list[Chunk]` — fetch chunks where entities appear via existing `chunk_entities` join
+  - `hydrate_chunks(entity_ids: list[int], gemeente: str) -> list[Chunk]` — fetch chunks where entities appear via the existing `kg_mentions` join (NOT a nonexistent `chunk_entities` table)
 - [ ] **Bug fix first — drop the legacy `%%notule%%` filter in `_retrieve_by_keywords()`** at [`services/rag_service.py:438`](../../services/rag_service.py#L438) *(added 2026-04-11, triaged from TODOS)*. The current BM25 fallback used by `scan_breed` / `zoek_raadshistorie` hard-filters to `WHERE d.name ILIKE '%%notule%%'`, silently excluding every motie / amendement / initiatiefvoorstel / raadsvoorstel from document-level BM25 — a whole class of retrieval failures nobody sees. The vector search has no such filter and doesn't need one. Action: (1) remove the filter entirely; (2) log when the fallback fires so we can tell if this path is still load-bearing; (3) if doc-type scoping is ever needed, make it an explicit parameter, not a hidden default. Must land before the 5th stream is added (below), so the regression baseline is clean.
 - [ ] **Add 5th retrieval stream `graph_walk`** to [`services/rag_service.py:70`](../../services/rag_service.py#L70) `retrieve_parallel_context`. Reuse the existing Jina v3 reranker to merge with the other 4 streams.
 - [ ] **Entity-based Qdrant pre-filtering** — add `entity_ids: int[]` to all Qdrant payloads at promote-time (or via a backfill script). Then a graph walk can prune the dense search to *only* chunks mentioning the resolved entities → big speedup.
