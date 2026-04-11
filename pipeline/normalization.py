@@ -1,7 +1,9 @@
+import os
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import logging
 import re
+from collections import OrderedDict
 from typing import Dict, List, Optional, Any
 from dataclasses import asdict
 
@@ -9,14 +11,23 @@ logger = logging.getLogger(__name__)
 
 class EntityNormalizer:
     """
-    Normalizes speaker names and party affiliations by matching them against 
+    Normalizes speaker names and party affiliations by matching them against
     existing entities in the Knowledge Graph or historic statements.
     """
-    
-    def __init__(self, db_url: str = "postgresql://postgres:postgres@localhost:5432/neodemos"):
-        self.db_url = db_url
+
+    def __init__(self, db_url: Optional[str] = None):
+        self.db_url = db_url or os.getenv(
+            "DATABASE_URL",
+            "postgresql://postgres:postgres@localhost:5432/neodemos",
+        )
         self.connection = None
-        self._entity_cache = {} # Simple cache for the current run
+        self._entity_cache: "OrderedDict[str, Dict[str, Any]]" = OrderedDict()
+        self._entity_cache_max = 10_000
+
+    def _cache_set(self, key: str, value: Dict[str, Any]) -> None:
+        self._entity_cache[key] = value
+        if len(self._entity_cache) > self._entity_cache_max:
+            self._entity_cache.popitem(last=False)
 
     def _get_connection(self):
         if self.connection is None or self.connection.closed:
@@ -105,7 +116,7 @@ class EntityNormalizer:
                         "mapped": True,
                         "source": "kg_entities"
                     }
-                    self._entity_cache[cache_key] = result
+                    self._cache_set(cache_key, result)
                     return result
 
                 # 2. Match in party_statements (historical data)
@@ -121,12 +132,14 @@ class EntityNormalizer:
                         "mapped": True,
                         "source": "party_statements"
                     }
-                    self._entity_cache[cache_key] = result
+                    self._cache_set(cache_key, result)
                     return result
 
                 # 3. Fuzzy match fallback (Placeholder for implementation with fuzzywuzzy or pg_trgm)
                 # For now, we return the raw data but marked as unmapped
-                return {"name": name, "party": party, "mapped": False}
+                unmapped = {"name": name, "party": party, "mapped": False}
+                self._cache_set(cache_key, unmapped)
+                return unmapped
 
         except Exception as e:
             logger.error(f"Error during speaker normalization: {e}")
@@ -166,6 +179,16 @@ class EntityNormalizer:
                 seg.text = self.correct_terms(seg.text)
         return segments
 
-    def __del__(self):
-        if self.connection:
-            self.connection.close()
+    def close(self) -> None:
+        if self.connection is not None:
+            try:
+                self.connection.close()
+            except Exception:
+                pass
+            self.connection = None
+
+    def __enter__(self) -> "EntityNormalizer":
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        self.close()
