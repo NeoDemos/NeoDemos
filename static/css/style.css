@@ -229,3 +229,376 @@ footer {
     color: #999;
     letter-spacing: 0.3px;
 }
+
+/* ── Subpage layout ── */
+
+.subpage {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.subpage-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+}
+
+.subpage-subtitle {
+    font-size: 1.15rem;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.subpage-hero {
+    margin-bottom: 2.5rem;
+}
+
+.subpage-section {
+    margin-bottom: 3rem;
+}
+
+.subpage-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+}
+
+.subpage-section h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.subpage-section p {
+    color: var(--text-color);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+/* Highlight section (tinted background) */
+.subpage-section--highlight {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 2rem;
+    border-left: 4px solid var(--accent-color);
+}
+
+/* ── Founder quote ── */
+
+.founder-section {
+    margin-bottom: 3rem;
+}
+
+.founder-quote blockquote {
+    margin: 0;
+    padding: 2rem;
+    background: #f8f9fa;
+    border-left: 4px solid var(--accent-color);
+    border-radius: 8px;
+}
+
+.founder-quote blockquote p {
+    font-size: 1.25rem;
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--secondary-color);
+    margin-bottom: 0.75rem;
+}
+
+.founder-quote cite {
+    font-style: normal;
+    font-size: 0.95rem;
+    color: #666;
+    font-weight: 500;
+}
+
+/* ── Testimonial ── */
+
+.subpage-section--testimonial {
+    text-align: center;
+    padding: 2.5rem 1rem;
+}
+
+.testimonial {
+    margin: 0 auto;
+    max-width: 500px;
+}
+
+.testimonial p {
+    font-size: 1.3rem;
+    font-style: italic;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.testimonial cite {
+    font-style: normal;
+    font-size: 0.95rem;
+    color: #666;
+}
+
+/* ── Audience / sovereignty / card grids ── */
+
+.audience-grid,
+.sovereignty-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1rem;
+}
+
+.audience-card,
+.sovereignty-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 1.25rem;
+    transition: box-shadow 0.2s ease;
+}
+
+.audience-card:hover,
+.sovereignty-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.audience-card h3,
+.sovereignty-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+    margin: 0 0 0.5rem 0;
+}
+
+.audience-card p,
+.sovereignty-card p {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ── Security checklist ── */
+
+.security-checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.security-checklist li {
+    padding: 0.75rem 0;
+    padding-left: 2rem;
+    position: relative;
+    border-bottom: 1px solid var(--border-color);
+    line-height: 1.5;
+}
+
+.security-checklist li:last-child {
+    border-bottom: none;
+}
+
+.security-checklist li::before {
+    content: "\2713";
+    position: absolute;
+    left: 0;
+    color: #2D7A4F;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* ── Compatibility badges ── */
+
+.compatibility-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1rem 0;
+}
+
+.compatibility-badge {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    background: #f0f2f5;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--secondary-color);
+}
+
+/* ── Architecture / methodology steps ── */
+
+.architecture-steps,
+.methodology-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.architecture-step,
+.methodology-step {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+}
+
+.step-number {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: var(--secondary-color);
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-radius: 50%;
+}
+
+.architecture-step h3,
+.methodology-step h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.architecture-step p,
+.methodology-step p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.5;
+}
+
+/* ── Source stats ── */
+
+.source-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+}
+
+.stat-card {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+}
+
+.stat-number {
+    display: block;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--secondary-color);
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ── Eval grid ── */
+
+.eval-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+}
+
+.eval-card {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+}
+
+.eval-score {
+    display: block;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--accent-color);
+    margin-bottom: 0.25rem;
+}
+
+.eval-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.eval-card p {
+    font-size: 0.85rem;
+    color: #666;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* ── Transparency / limitations lists ── */
+
+.transparency-list,
+.limitations-list {
+    padding-left: 1.25rem;
+    margin: 0.75rem 0 1.5rem;
+}
+
+.transparency-list li,
+.limitations-list li {
+    margin-bottom: 0.6rem;
+    line-height: 1.6;
+    color: #444;
+}
+
+/* ── Responsive: subpages ── */
+
+@media (max-width: 768px) {
+    .subpage-title {
+        font-size: 1.75rem;
+    }
+
+    .subpage-section--highlight {
+        padding: 1.25rem;
+    }
+
+    .founder-quote blockquote {
+        padding: 1.25rem;
+    }
+
+    .founder-quote blockquote p {
+        font-size: 1.1rem;
+    }
+
+    .audience-grid,
+    .sovereignty-grid,
+    .source-stats,
+    .eval-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .architecture-step,
+    .methodology-step {
+        gap: 1rem;
+    }
+
+    .step-number {
+        width: 2rem;
+        height: 2rem;
+        font-size: 0.95rem;
+    }
+}

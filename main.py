@@ -642,6 +642,33 @@ async def kamal_up():
     return PlainTextResponse("ok", status_code=200)
 
 
+# ── Public subpages ──
+
+@app.get("/over")
+async def over_page(request: Request):
+    """About page: founder story, democratic ambition, user quotes."""
+    user = await get_current_user(request)
+    return templates.TemplateResponse(name="over.html", request=request, context={
+        "title": "Over", "user": user,
+    })
+
+@app.get("/technologie")
+async def technologie_page(request: Request):
+    """Technology page: EU sovereignty, local AI, security, model independence."""
+    user = await get_current_user(request)
+    return templates.TemplateResponse(name="technologie.html", request=request, context={
+        "title": "Technologie", "user": user,
+    })
+
+@app.get("/methodologie")
+async def methodologie_page(request: Request):
+    """Methodology page: how it works, data sources, eval scores, limitations."""
+    user = await get_current_user(request)
+    return templates.TemplateResponse(name="methodologie.html", request=request, context={
+        "title": "Methodologie", "user": user,
+    })
+
+
 # ── Protected page routes ──
 
 @app.get("/")
