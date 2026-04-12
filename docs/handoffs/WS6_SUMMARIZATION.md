@@ -167,5 +167,25 @@ This is the heart of the workstream.
 - `vat_dossier_samen` for dossier-scoped Q&A — needs dossier feature, defer
 - ThemeFinder F1 evaluation against hand-labeled debates — **v0.3.0** with public scoreboard
 
+## Pipeline integration (added 2026-04-12)
+
+WS2 established the pattern: each workstream ships its processing as an **APScheduler job in `main.py`**, not a server crontab entry.
+
+**What to wire at ship time:**
+- [ ] Add an APScheduler job for summary computation on new/updated documents. Pattern:
+  ```python
+  scheduler.add_job(scheduled_summarization, IntervalTrigger(hours=12),
+                    id='summarization', max_instances=1, coalesce=True)
+  ```
+- [ ] The job should find documents where `summary_short IS NULL` and compute summaries.
+- [ ] Use advisory lock 42 to serialize with other pipeline writers.
+- [ ] Log to `pipeline_runs` + `document_events` (event_type: `summary_computed`).
+- [ ] The `api_summarize` endpoint already exists in `main.py` for on-demand requests.
+
+**Existing infrastructure to reuse:**
+- `services/document_processor.py` — APScheduler job pattern
+- `scripts/nightly/06b_compute_summaries.py` — existing summarization logic (wrap into the job)
+- `pipeline_runs` table — status constraint: `running/success/failure/skipped`, triggered_by: `cron/manual/smoke_test`
+
 ## Outcome
 *To be filled in when shipped. Include: chosen rerank threshold, strip rate distribution, faithfulness delta, backfill cost.*

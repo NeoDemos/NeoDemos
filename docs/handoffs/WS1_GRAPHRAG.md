@@ -155,5 +155,27 @@ Replay these 6 sessions through the live MCP tools **after Phase 1 enrichment**.
 - Full Netherlands BAG coverage import (only Rotterdam-relevant subset in v0.2.0; the full ~9.5M-address national set lands when WS5b promotes new gemeenten to full mode in v0.3.0+)
 - Geographic/spatial queries via PostGIS (BAG provides coordinates, but spatial radius search is out of scope for v0.2)
 
+## Pipeline integration (added 2026-04-12)
+
+WS2 established the pattern: each workstream ships its processing as an **APScheduler job in `main.py`**, not a server crontab entry. This keeps scheduling in code, version-controlled, and deployed via Kamal.
+
+**What to wire at ship time:**
+- [ ] Add an APScheduler job for KG enrichment (Flair NER on new chunks). Pattern:
+  ```python
+  scheduler.add_job(scheduled_kg_enrichment, IntervalTrigger(hours=6),
+                    id='kg_enrichment', max_instances=1, coalesce=True)
+  ```
+- [ ] The job should find chunks with no `kg_mentions` rows and run Flair NER on them.
+- [ ] Use advisory lock 42 to serialize with other pipeline writers.
+- [ ] Log to `pipeline_runs` (status: `success`/`failure`, triggered_by: `cron`/`manual`).
+- [ ] Log per-document events to `document_events` table (event_type: `kg_enriched`).
+
+**Existing infrastructure to reuse:**
+- `services/document_processor.py` — pattern for APScheduler job + logging
+- `services/financial_sweep.py` — pattern for find-unprocessed + process + log
+- `scripts/nightly/07a_enrich_new_chunks.py` — existing Flair NER logic (wrap into the job)
+- `document_events` table — per-document activity log
+- `pipeline_runs` table — job-level summary (status constraint: `running/success/failure/skipped`, triggered_by: `cron/manual/smoke_test`)
+
 ## Outcome
 *To be filled in when shipped. Include: actual edge count, eval scores, surprises, follow-ups.*

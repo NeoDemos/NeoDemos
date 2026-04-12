@@ -186,5 +186,26 @@ This part is shared with WS5b (UI is in v0.2.1) but the schema work must happen 
 - Real-time ingestion (sub-hour latency) — defer to v0.4+
 - ML-based anomaly detection on pipeline metrics — defer to v0.3+
 
+## Pipeline integration (added 2026-04-12)
+
+**Important context:** WS2 shipped an automated pipeline that partially overlaps with WS5a's scope. The following APScheduler jobs already run in production in `main.py`:
+
+| Job | Interval | What it does |
+|---|---|---|
+| `scheduled_refresh` | 15 min | Poll ORI/iBabs, download documents |
+| `scheduled_document_processor` | 20 min | Chunk → Nebius embed → Qdrant → BM25 tsvector → OCR recovery |
+| `scheduled_financial_sweep` | 1 hr | Extract financial_lines from table_json chunks |
+
+**WS5a should build on this, not replace it.** The 7-step nightly job graph in the build tasks above should:
+- Reuse `document_events` and `pipeline_runs` tables for logging/tracking
+- Use the same APScheduler pattern (jobs in `main.py`, not crontab)
+- Coordinate with existing jobs via advisory lock 42
+- The daily email summary can query `pipeline_runs` + `document_events` for all job statuses
+
+**Tables already available:**
+- `pipeline_runs` — job-level summary (status: `running/success/failure/skipped`, triggered_by: `cron/manual/smoke_test`)
+- `pipeline_failures` — per-item failure log
+- `document_events` — per-document activity timeline
+
 ## Outcome
 *To be filled in when shipped. Include: actual end-to-end latency, hardest failure mode encountered, lock contention observations, smoke test rotation strategy.*

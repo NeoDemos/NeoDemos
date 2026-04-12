@@ -193,5 +193,14 @@ The Dutch municipal decision-making process has formal procedural rules. Buildin
 - Cross-municipality journey comparison — defer to v0.4
 - Automatic detection of "stuck" documents (aangenomen motie with no afdoening after 6+ months) — interesting for civic accountability but out of v0.2 scope
 
+## Pipeline integration (added 2026-04-12)
+
+WS3 may need a periodic job to detect new journey-eligible documents (moties with afdoening, amendementen with besluit, etc.) and build/update journey graphs.
+
+**When shipping, follow the WS2 pattern:**
+- [ ] Add an APScheduler job in `main.py` if journey detection needs to run periodically
+- [ ] Log to `pipeline_runs` + `document_events` (event_type: `journey_updated`)
+- [ ] Use advisory lock 42 for any DB writes that touch shared tables
+
 ## Outcome
 *To be filled in when shipped. Include: edge types finalized, research findings, hand-validation results, edge cases hit, multi-municipality portability assessment.*

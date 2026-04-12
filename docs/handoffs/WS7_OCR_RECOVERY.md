@@ -210,5 +210,20 @@ If WS7 is deferred past WS1 Phase 1, the enrichment will run on garbled source t
 - CER (character error rate) tracking per chunk as a permanent quality signal
 - Post-OCR Dutch spell-checking with hunspell for subtle errors
 
+## Pipeline integration (added 2026-04-12)
+
+**Partially shipped:** `services/document_processor.py` already handles OCR quality for **new** documents:
+- Detects garbled text via `services/scraper._is_garbled_ocr()`
+- Re-OCRs via Docling (Tesseract + RapidOCR now in Docker image)
+- Logs to `document_events` (event_type: `ocr_recovered`)
+
+**What WS7 still needs to ship:**
+- [ ] One-time batch recovery of ~6,200 existing garbled documents (the `scripts/ocr_recovery.py` backfill)
+- [ ] Populate `documents.ocr_quality` column (currently 27/87K)
+- [ ] Log batch recovery to `document_events` + `pipeline_runs`
+- [ ] Consider adding an APScheduler job for periodic OCR quality audit (find degraded docs)
+
+**New docs are handled automatically** — only the backfill of existing garbled docs is manual.
+
 ## Outcome
 *To be filled in when shipped. Include: docs recovered, BM25 improvement, OCR score improvement, surprises, follow-ups.*
