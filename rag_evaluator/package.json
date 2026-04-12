@@ -7,6 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node src/runner/runEvaluation.ts",
     "eval": "ts-node src/runner/runEvaluation.ts",
+    "financial": "ts-node src/financial/runFinancialBenchmark.ts",
+    "hallucination": "ts-node src/financial/hallucinationFloorTest.ts",
     "build": "tsc"
   },
   "keywords": [],

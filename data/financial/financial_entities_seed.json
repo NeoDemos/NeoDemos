@@ -1,0 +1,75 @@
+{
+  "_meta": {
+    "scope": "Rotterdam and associated joint arrangements (gemeenschappelijke regelingen)",
+    "notes": "Seed data for v0.2.0 (Rotterdam-only). WS5b extends this per new host-gemeente."
+  },
+  "entities": [
+    {
+      "id": "rotterdam",
+      "display_name": "Gemeente Rotterdam",
+      "kind": "gemeente",
+      "host_gemeente": null,
+      "member_gemeenten": null,
+      "website": "https://www.rotterdam.nl",
+      "wgr_type": null
+    },
+    {
+      "id": "grjr",
+      "display_name": "Gemeenschappelijke Regeling Jeugdhulp Rijnmond",
+      "kind": "gemeenschappelijke_regeling",
+      "host_gemeente": "rotterdam",
+      "member_gemeenten": [
+        "rotterdam", "barendrecht", "capelle_aan_den_ijssel",
+        "krimpen_aan_den_ijssel", "lansingerland", "maassluis",
+        "nissewaard", "ridderkerk", "albrandswaard"
+      ],
+      "website": "https://www.grfrijnmond.nl",
+      "wgr_type": "openbaar_lichaam"
+    },
+    {
+      "id": "dcmr",
+      "display_name": "DCMR Milieudienst Rijnmond",
+      "kind": "gemeenschappelijke_regeling",
+      "host_gemeente": "schiedam",
+      "member_gemeenten": [
+        "albrandswaard", "barendrecht", "brielle", "capelle_aan_den_ijssel",
+        "goeree_overflakkee", "hellevoetsluis", "krimpen_aan_den_ijssel",
+        "lansingerland", "maassluis", "nissewaard", "ridderkerk",
+        "rotterdam", "schiedam", "vlaardingen", "westvoorne"
+      ],
+      "website": "https://www.dcmr.nl",
+      "wgr_type": "openbaar_lichaam"
+    },
+    {
+      "id": "vrr",
+      "display_name": "Veiligheidsregio Rotterdam-Rijnmond",
+      "kind": "veiligheidsregio",
+      "host_gemeente": "rotterdam",
+      "member_gemeenten": [
+        "albrandswaard", "barendrecht", "brielle", "capelle_aan_den_ijssel",
+        "goeree_overflakkee", "hellevoetsluis", "krimpen_aan_den_ijssel",
+        "lansingerland", "maassluis", "nissewaard", "ridderkerk",
+        "rotterdam", "schiedam", "vlaardingen", "westvoorne"
+      ],
+      "website": "https://www.veiligheidsregiorotterdam.nl",
+      "wgr_type": "openbaar_lichaam"
+    },
+    {
+      "id": "mrdh",
+      "display_name": "Metropoolregio Rotterdam Den Haag",
+      "kind": "gemeenschappelijke_regeling",
+      "host_gemeente": "rotterdam",
+      "member_gemeenten": [
+        "albrandswaard", "barendrecht", "brielle", "capelle_aan_den_ijssel",
+        "delft", "goeree_overflakkee", "hellevoetsluis",
+        "krimpen_aan_den_ijssel", "lansingerland", "leidschendam_voorburg",
+        "maassluis", "midden_delfland", "nissewaard", "pijnacker_nootdorp",
+        "ridderkerk", "rijswijk", "rotterdam", "schiedam",
+        "s_gravenhage", "vlaardingen", "wassenaar", "westland",
+        "westvoorne"
+      ],
+      "website": "https://mrdh.nl",
+      "wgr_type": "openbaar_lichaam"
+    }
+  ]
+}

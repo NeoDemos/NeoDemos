@@ -1,0 +1,86 @@
+{
+  "_meta": {
+    "source": "BBV (Besluit begroting en verantwoording provincies en gemeenten)",
+    "authority": "Ministerie van BZK / Commissie BBV",
+    "version": "2025-1.1",
+    "reference": "https://findo.nl/content/taakvelden-gemeenten",
+    "informatievoorschrift": "https://www.rijksoverheid.nl/binaries/rijksoverheid/documenten/richtlijnen/2015/10/02/iv3-informatievoorschrift-gemeenten-en-gemeenschappelijke-regelingen/iv3-informatievoorschrift-gemeenten-en-gren-2025-1-1.pdf",
+    "notes": "Statutory Dutch standard. All 342 gemeenten + GRen report against these codes. Codes stable since BBV renewal 2017; 6.91/6.92 added 2024 (split from 6.81)."
+  },
+  "hoofdtaakvelden": [
+    {"code": "0", "naam": "Bestuur en ondersteuning"},
+    {"code": "1", "naam": "Veiligheid"},
+    {"code": "2", "naam": "Verkeer, vervoer en waterstaat"},
+    {"code": "3", "naam": "Economie"},
+    {"code": "4", "naam": "Onderwijs"},
+    {"code": "5", "naam": "Sport, cultuur en recreatie"},
+    {"code": "6", "naam": "Sociaal domein"},
+    {"code": "7", "naam": "Volksgezondheid en milieu"},
+    {"code": "8", "naam": "Volkshuisvesting, ruimtelijke ordening en stedelijke vernieuwing"}
+  ],
+  "taakvelden": [
+    {"code": "0.1",  "hoofdtaakveld": "0", "omschrijving": "Bestuur"},
+    {"code": "0.2",  "hoofdtaakveld": "0", "omschrijving": "Burgerzaken"},
+    {"code": "0.3",  "hoofdtaakveld": "0", "omschrijving": "Beheer overige gebouwen en gronden"},
+    {"code": "0.4",  "hoofdtaakveld": "0", "omschrijving": "Overhead"},
+    {"code": "0.5",  "hoofdtaakveld": "0", "omschrijving": "Treasury"},
+    {"code": "0.61", "hoofdtaakveld": "0", "omschrijving": "OZB woningen"},
+    {"code": "0.62", "hoofdtaakveld": "0", "omschrijving": "OZB niet-woningen"},
+    {"code": "0.63", "hoofdtaakveld": "0", "omschrijving": "Parkeerbelasting"},
+    {"code": "0.64", "hoofdtaakveld": "0", "omschrijving": "Belastingen overig"},
+    {"code": "0.7",  "hoofdtaakveld": "0", "omschrijving": "Algemene uitkering en overige uitkeringen gemeentefonds"},
+    {"code": "0.8",  "hoofdtaakveld": "0", "omschrijving": "Overige baten en lasten"},
+    {"code": "0.9",  "hoofdtaakveld": "0", "omschrijving": "Vennootschapsbelasting (VpB)"},
+    {"code": "0.10", "hoofdtaakveld": "0", "omschrijving": "Mutaties reserves"},
+    {"code": "0.11", "hoofdtaakveld": "0", "omschrijving": "Resultaat van de rekening van baten en lasten"},
+
+    {"code": "1.1",  "hoofdtaakveld": "1", "omschrijving": "Crisisbeheersing en brandweer"},
+    {"code": "1.2",  "hoofdtaakveld": "1", "omschrijving": "Openbare orde en veiligheid"},
+
+    {"code": "2.1",  "hoofdtaakveld": "2", "omschrijving": "Verkeer en vervoer"},
+    {"code": "2.2",  "hoofdtaakveld": "2", "omschrijving": "Parkeren"},
+    {"code": "2.3",  "hoofdtaakveld": "2", "omschrijving": "Recreatieve havens"},
+    {"code": "2.4",  "hoofdtaakveld": "2", "omschrijving": "Economische havens en waterwegen"},
+    {"code": "2.5",  "hoofdtaakveld": "2", "omschrijving": "Openbaar vervoer"},
+
+    {"code": "3.1",  "hoofdtaakveld": "3", "omschrijving": "Economische ontwikkeling"},
+    {"code": "3.2",  "hoofdtaakveld": "3", "omschrijving": "Fysieke bedrijfsinfrastructuur"},
+    {"code": "3.3",  "hoofdtaakveld": "3", "omschrijving": "Bedrijvenloket en bedrijfsregelingen"},
+    {"code": "3.4",  "hoofdtaakveld": "3", "omschrijving": "Economische promotie"},
+
+    {"code": "4.1",  "hoofdtaakveld": "4", "omschrijving": "Openbaar basisonderwijs"},
+    {"code": "4.2",  "hoofdtaakveld": "4", "omschrijving": "Onderwijshuisvesting"},
+    {"code": "4.3",  "hoofdtaakveld": "4", "omschrijving": "Onderwijsbeleid en leerlingenzaken"},
+
+    {"code": "5.1",  "hoofdtaakveld": "5", "omschrijving": "Sportbeleid en activering"},
+    {"code": "5.2",  "hoofdtaakveld": "5", "omschrijving": "Sportaccommodaties"},
+    {"code": "5.3",  "hoofdtaakveld": "5", "omschrijving": "Cultuurpresentatie, cultuurproductie en cultuurparticipatie"},
+    {"code": "5.4",  "hoofdtaakveld": "5", "omschrijving": "Musea"},
+    {"code": "5.5",  "hoofdtaakveld": "5", "omschrijving": "Cultureel erfgoed"},
+    {"code": "5.6",  "hoofdtaakveld": "5", "omschrijving": "Media"},
+    {"code": "5.7",  "hoofdtaakveld": "5", "omschrijving": "Openbaar groen en (openlucht) recreatie"},
+
+    {"code": "6.1",  "hoofdtaakveld": "6", "omschrijving": "Samenkracht en burgerparticipatie"},
+    {"code": "6.2",  "hoofdtaakveld": "6", "omschrijving": "Toegang en eerstelijnsvoorzieningen", "alias_pre_2022": "Wijkteams"},
+    {"code": "6.3",  "hoofdtaakveld": "6", "omschrijving": "Inkomensregelingen"},
+    {"code": "6.4",  "hoofdtaakveld": "6", "omschrijving": "WSW en beschut werk"},
+    {"code": "6.5",  "hoofdtaakveld": "6", "omschrijving": "Arbeidsparticipatie"},
+    {"code": "6.6",  "hoofdtaakveld": "6", "omschrijving": "Maatwerkvoorzieningen (WMO)"},
+    {"code": "6.71", "hoofdtaakveld": "6", "omschrijving": "Maatwerkdienstverlening 18+"},
+    {"code": "6.72", "hoofdtaakveld": "6", "omschrijving": "Maatwerkdienstverlening 18-"},
+    {"code": "6.81", "hoofdtaakveld": "6", "omschrijving": "Geëscaleerde zorg 18+"},
+    {"code": "6.82", "hoofdtaakveld": "6", "omschrijving": "Geëscaleerde zorg 18-"},
+    {"code": "6.91", "hoofdtaakveld": "6", "omschrijving": "Beschermd wonen", "added_year": 2024, "split_from": "6.81"},
+    {"code": "6.92", "hoofdtaakveld": "6", "omschrijving": "Maatschappelijke opvang en vrouwenopvang", "added_year": 2024, "split_from": "6.81"},
+
+    {"code": "7.1",  "hoofdtaakveld": "7", "omschrijving": "Volksgezondheid"},
+    {"code": "7.2",  "hoofdtaakveld": "7", "omschrijving": "Riolering"},
+    {"code": "7.3",  "hoofdtaakveld": "7", "omschrijving": "Afval"},
+    {"code": "7.4",  "hoofdtaakveld": "7", "omschrijving": "Milieubeheer"},
+    {"code": "7.5",  "hoofdtaakveld": "7", "omschrijving": "Begraafplaatsen en crematoria"},
+
+    {"code": "8.1",  "hoofdtaakveld": "8", "omschrijving": "Ruimte en leefomgeving"},
+    {"code": "8.2",  "hoofdtaakveld": "8", "omschrijving": "Grondexploitatie (niet-bedrijventerreinen)"},
+    {"code": "8.3",  "hoofdtaakveld": "8", "omschrijving": "Wonen en bouwen"}
+  ]
+}

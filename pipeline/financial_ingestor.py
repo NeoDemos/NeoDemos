@@ -115,11 +115,16 @@ class FinancialDocumentIngestor:
         """
         logger.info(f"[FINANCIAL] Processing: {doc_name} ({pdf_path})")
 
+        # -- 0. Classify entity (regex, no LLM) ---------------------------
+        entity_id, scope = classify_entity(doc_name, doc_url=source_url)
+
         # -- 1. Run Docling ------------------------------------------------
         docling_result = self._run_docling(pdf_path)
         doc_object = docling_result["document"]
         tables_raw = docling_result["tables"]
         page_count = docling_result["page_count"]
+        confidence = docling_result.get("confidence")
+        ocr_pages = docling_result.get("ocr_pages", {})
 
         logger.info(
             f"  Docling extracted {len(tables_raw)} tables, "
@@ -133,7 +138,8 @@ class FinancialDocumentIngestor:
         # -- 3. Build chunks per section -----------------------------------
         #    Tables become chunk_type="table", text blocks become chunk_type="text"
         section_chunks = self._build_section_chunks(
-            doc_object, tables_raw, sections, doc_name
+            doc_object, tables_raw, sections, doc_name,
+            confidence=confidence, ocr_pages=ocr_pages,
         )
 
         # -- 4. Write to staging -------------------------------------------
@@ -168,6 +174,8 @@ class FinancialDocumentIngestor:
                 page_count=page_count,
                 tables_found=len(tables_raw),
                 chunks_created=total_chunks,
+                entity_id=entity_id,
+                scope=scope,
             )
 
             conn.commit()
@@ -271,11 +279,21 @@ class FinancialDocumentIngestor:
             # Deduplicate header values repeated in rows (Docling merged-cell quirk)
             rows = _deduplicate_header_rows(headers, rows)
 
+            # Derive page number(s) from provenance, fall back to direct attr
+            page = getattr(table, "page_no", None)
+            if page is None:
+                try:
+                    prov = getattr(table, "prov", None) or []
+                    if prov:
+                        page = prov[0].page_no
+                except Exception:
+                    pass
+
             tables.append(
                 {
                     "headers": headers,
                     "rows": rows,
-                    "page": getattr(table, "page_no", None),
+                    "page": page,
                 }
             )
 
@@ -286,10 +304,44 @@ class FinancialDocumentIngestor:
         elif hasattr(result, "pages"):
             page_count = len(result.pages) if result.pages else 0
 
+        # Extract confidence report (Docling >= 2.x)
+        confidence = None
+        try:
+            conf = getattr(result, "confidence", None)
+            if conf is not None:
+                confidence = conf
+        except Exception:
+            pass
+
+        # Build per-page OCR fallback map: True if the majority of cells
+        # on that page came from OCR rather than native text extraction.
+        ocr_pages = {}  # page_no -> bool
+        try:
+            for page_obj in getattr(result, "pages", []) or []:
+                pg_no = getattr(page_obj, "page_no", None)
+                if pg_no is None:
+                    continue
+                cells = []
+                try:
+                    cells = page_obj.cells  # TextCell list
+                except Exception:
+                    pass
+                if cells:
+                    ocr_count = sum(
+                        1 for c in cells if getattr(c, "from_ocr", False)
+                    )
+                    ocr_pages[pg_no] = ocr_count > len(cells) / 2
+                else:
+                    ocr_pages[pg_no] = None
+        except Exception:
+            pass
+
         return {
             "document": doc,
             "tables": tables,
             "page_count": page_count,
+            "confidence": confidence,
+            "ocr_pages": ocr_pages,
         }
 
     # ------------------------------------------------------------------
@@ -340,6 +392,8 @@ class FinancialDocumentIngestor:
         tables_raw: List[dict],
         sections: List[Dict],
         doc_name: str,
+        confidence=None,
+        ocr_pages: Optional[Dict] = None,
     ) -> List[tuple]:
         """Build (section_title, [chunk_dicts]) pairs.
 
@@ -349,7 +403,11 @@ class FinancialDocumentIngestor:
           - chunk_type: "table" | "text"
           - table_json: dict | None
           - questions: []
+          - metadata: dict     (OCR confidence + page info)
         """
+        if ocr_pages is None:
+            ocr_pages = {}
+
         # Build table chunks
         table_chunks = []
         for idx, tbl in enumerate(tables_raw):
@@ -366,6 +424,13 @@ class FinancialDocumentIngestor:
                 if candidate:
                     title = candidate[:120] + page_hint
 
+            page_no = tbl.get("page")
+            chunk_meta = _build_chunk_metadata(
+                page_numbers=[page_no] if page_no is not None else [],
+                confidence=confidence,
+                ocr_pages=ocr_pages,
+            )
+
             table_chunks.append(
                 {
                     "title": title,
@@ -373,12 +438,16 @@ class FinancialDocumentIngestor:
                     "chunk_type": "table",
                     "table_json": table_json,
                     "questions": [],
+                    "metadata": chunk_meta,
                 }
             )
 
         # Build text chunks from Docling markdown (excluding tables)
         full_md = doc.export_to_markdown() or ""
-        text_chunks = self._chunk_narrative_text(full_md, doc_name, sections)
+        text_chunks = self._chunk_narrative_text(
+            full_md, doc_name, sections,
+            confidence=confidence, ocr_pages=ocr_pages,
+        )
 
         # If we have sections, try to distribute chunks across sections.
         # For simplicity we group all chunks under their detected section
@@ -400,19 +469,30 @@ class FinancialDocumentIngestor:
         return result if result else [(sections[0]["title"], [])]
 
     def _chunk_narrative_text(
-        self, markdown: str, doc_name: str, sections: List[Dict]
+        self, markdown: str, doc_name: str, sections: List[Dict],
+        confidence=None, ocr_pages: Optional[Dict] = None,
     ) -> List[dict]:
         """Split Docling markdown narrative (non-table) text into chunks.
 
         For text blocks > MAX_TEXT_CHUNK_CHARS, split at paragraph boundaries
         with TEXT_OVERLAP_CHARS overlap.  Preserves section headings.
         """
+        if ocr_pages is None:
+            ocr_pages = {}
+
         # Strip markdown table blocks (they are stored separately as table chunks)
         text = _strip_markdown_tables(markdown)
         text = text.strip()
 
         if not text:
             return []
+
+        # Text chunks don't have a deterministic page number (Docling
+        # markdown export loses per-paragraph provenance).  We attach
+        # document-level confidence instead (page_numbers=[]).
+        doc_level_meta = _build_chunk_metadata(
+            page_numbers=[], confidence=confidence, ocr_pages=ocr_pages,
+        )
 
         # If short enough, return as single chunk
         if len(text) <= MAX_TEXT_CHUNK_CHARS:
@@ -423,6 +503,7 @@ class FinancialDocumentIngestor:
                     "chunk_type": "text",
                     "table_json": None,
                     "questions": [],
+                    "metadata": doc_level_meta,
                 }
             ]
 
@@ -455,6 +536,7 @@ class FinancialDocumentIngestor:
                             "chunk_type": "text",
                             "table_json": None,
                             "questions": [],
+                            "metadata": doc_level_meta,
                         }
                     )
                 # Start new block with overlap from tail of previous block
@@ -475,6 +557,7 @@ class FinancialDocumentIngestor:
                     "chunk_type": "text",
                     "table_json": None,
                     "questions": [],
+                    "metadata": doc_level_meta,
                 }
             )
 
@@ -580,8 +663,14 @@ class FinancialDocumentIngestor:
                 else None
             )
             tokens_est = int(len(text) / 4)
+            metadata_str = (
+                json.dumps(chunk["metadata"], ensure_ascii=False)
+                if chunk.get("metadata")
+                else None
+            )
             pg_data.append(
-                (doc_id, idx, title, text, chunk_type, table_json_str, tokens_est, child_id)
+                (doc_id, idx, title, text, chunk_type, table_json_str,
+                 tokens_est, child_id, metadata_str)
             )
 
         if pg_data:
@@ -590,14 +679,15 @@ class FinancialDocumentIngestor:
                 """
                 INSERT INTO document_chunks
                     (document_id, chunk_index, title, content, chunk_type,
-                     table_json, tokens_estimated, child_id)
+                     table_json, tokens_estimated, child_id, metadata)
                 VALUES %s
                 ON CONFLICT (document_id, chunk_index) DO UPDATE SET
                     content = EXCLUDED.content,
                     title = EXCLUDED.title,
                     chunk_type = EXCLUDED.chunk_type,
                     table_json = EXCLUDED.table_json,
-                    child_id = EXCLUDED.child_id
+                    child_id = EXCLUDED.child_id,
+                    metadata = EXCLUDED.metadata
                 """,
                 pg_data,
             )
@@ -619,6 +709,8 @@ class FinancialDocumentIngestor:
         page_count: int,
         tables_found: int,
         chunks_created: int,
+        entity_id: str = "rotterdam",
+        scope: str = "gemeente",
     ):
         """Upsert a row in staging.financial_documents with extraction stats."""
         cur = conn.cursor()
@@ -627,8 +719,8 @@ class FinancialDocumentIngestor:
             INSERT INTO financial_documents
                 (id, doc_type, fiscal_year, source_url, pdf_path,
                  page_count, docling_tables_found, docling_chunks_created,
-                 review_status)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, 'pending')
+                 review_status, entity_id, scope)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, 'pending', %s, %s)
             ON CONFLICT (id) DO UPDATE SET
                 doc_type = EXCLUDED.doc_type,
                 fiscal_year = EXCLUDED.fiscal_year,
@@ -637,7 +729,9 @@ class FinancialDocumentIngestor:
                 page_count = EXCLUDED.page_count,
                 docling_tables_found = EXCLUDED.docling_tables_found,
                 docling_chunks_created = EXCLUDED.docling_chunks_created,
-                review_status = 'pending'
+                review_status = 'pending',
+                entity_id = EXCLUDED.entity_id,
+                scope = EXCLUDED.scope
             """,
             (
                 doc_id,
@@ -648,9 +742,75 @@ class FinancialDocumentIngestor:
                 page_count,
                 tables_found,
                 chunks_created,
+                entity_id,
+                scope,
             ),
         )
         cur.close()
+
+
+# ======================================================================
+# Entity classification
+# ======================================================================
+
+# Patterns: (compiled_regex, entity_id, scope)
+_ENTITY_PATTERNS: list[tuple[re.Pattern, str, str]] = [
+    (
+        re.compile(r"grjr|jeugdhulp.*rijnmond|gemeenschappelijke.*regeling.*jeugd", re.IGNORECASE),
+        "grjr",
+        "gemeenschappelijke_regeling",
+    ),
+    (
+        re.compile(r"dcmr|milieudienst.*rijnmond", re.IGNORECASE),
+        "dcmr",
+        "gemeenschappelijke_regeling",
+    ),
+    (
+        re.compile(r"vrr|veiligheidsregio.*rotterdam", re.IGNORECASE),
+        "vrr",
+        "gemeenschappelijke_regeling",
+    ),
+    (
+        re.compile(r"mrdh|metropoolregio", re.IGNORECASE),
+        "mrdh",
+        "gemeenschappelijke_regeling",
+    ),
+]
+
+
+def classify_entity(
+    doc_title: str,
+    doc_url: str | None = None,
+    doc_content: str | None = None,
+) -> tuple[str, str]:
+    """Classify a financial document's entity_id and scope.
+
+    Checks title first, then URL, then first 500 chars of content.
+    Returns early on first match.
+
+    Returns:
+        (entity_id, scope) tuple. Defaults to ('rotterdam', 'gemeente').
+    """
+    # Build list of (label, text) to check in priority order
+    candidates: list[tuple[str, str]] = [("title", doc_title or "")]
+    if doc_url:
+        candidates.append(("url", doc_url))
+    if doc_content:
+        candidates.append(("content", doc_content[:500]))
+
+    for source_label, text in candidates:
+        if not text:
+            continue
+        for pattern, entity_id, scope in _ENTITY_PATTERNS:
+            if pattern.search(text):
+                logger.info(
+                    f"[ENTITY] Classified as entity_id={entity_id}, scope={scope} "
+                    f"(matched in {source_label}: {pattern.pattern!r})"
+                )
+                return entity_id, scope
+
+    logger.info("[ENTITY] Classified as entity_id=rotterdam, scope=gemeente (default)")
+    return "rotterdam", "gemeente"
 
 
 # ======================================================================
@@ -761,3 +921,167 @@ def _extract_overlap(text: str, max_chars: int) -> str:
 
     # Hard cut
     return text[-max_chars:].strip()
+
+
+def _safe_score(value) -> Optional[float]:
+    """Convert a Docling score value to a plain float, or None if unavailable.
+
+    Docling uses numpy.nan as the default for missing scores.  We normalise
+    NaN and non-finite values to None so the JSON output is clean.
+    """
+    if value is None:
+        return None
+    try:
+        f = float(value)
+        # math.isnan / math.isinf work on plain floats
+        import math
+        if math.isnan(f) or math.isinf(f):
+            return None
+        return round(f, 4)
+    except (TypeError, ValueError):
+        return None
+
+
+def _build_chunk_metadata(
+    page_numbers: List[int],
+    confidence=None,
+    ocr_pages: Optional[Dict] = None,
+) -> dict:
+    """Build the OCR quality metadata dict for a single chunk.
+
+    Parameters
+    ----------
+    page_numbers : list[int]
+        Page number(s) the chunk originates from.  May be empty for
+        narrative text chunks where per-page provenance is unavailable.
+    confidence : ConfidenceReport | None
+        The ``result.confidence`` object from Docling's ConversionResult.
+    ocr_pages : dict[int, bool | None]
+        Per-page OCR fallback flag derived from TextCell.from_ocr.
+
+    Returns
+    -------
+    dict  suitable for JSON serialisation into document_chunks.metadata.
+    """
+    if ocr_pages is None:
+        ocr_pages = {}
+
+    meta: Dict = {
+        "ocr_confidence": {
+            "ocr_score": None,
+            "table_score": None,
+            "layout_score": None,
+            "parse_score": None,
+        },
+        "is_ocr_fallback": None,
+        "page_number": None,
+    }
+
+    # Determine canonical page number (single page) or None (multi/unknown)
+    if len(page_numbers) == 1:
+        meta["page_number"] = page_numbers[0]
+
+    # ----- Confidence scores -----
+    if confidence is not None and page_numbers:
+        try:
+            page_scores_map = getattr(confidence, "pages", {}) or {}
+            collected_scores = []  # list of PageConfidenceScores
+
+            for pg in page_numbers:
+                if pg in page_scores_map:
+                    collected_scores.append(page_scores_map[pg])
+
+            if collected_scores:
+                # For multi-page chunks, take the minimum across pages
+                # (worst-case quality indicator)
+                meta["ocr_confidence"]["ocr_score"] = min(
+                    s for s in (_safe_score(cs.ocr_score) for cs in collected_scores)
+                    if s is not None
+                ) if any(_safe_score(cs.ocr_score) is not None for cs in collected_scores) else None
+
+                meta["ocr_confidence"]["table_score"] = min(
+                    s for s in (_safe_score(cs.table_score) for cs in collected_scores)
+                    if s is not None
+                ) if any(_safe_score(cs.table_score) is not None for cs in collected_scores) else None
+
+                meta["ocr_confidence"]["layout_score"] = min(
+                    s for s in (_safe_score(cs.layout_score) for cs in collected_scores)
+                    if s is not None
+                ) if any(_safe_score(cs.layout_score) is not None for cs in collected_scores) else None
+
+                meta["ocr_confidence"]["parse_score"] = min(
+                    s for s in (_safe_score(cs.parse_score) for cs in collected_scores)
+                    if s is not None
+                ) if any(_safe_score(cs.parse_score) is not None for cs in collected_scores) else None
+            elif not page_scores_map:
+                # No per-page scores at all — fall back to document-level
+                meta["ocr_confidence"]["ocr_score"] = _safe_score(
+                    getattr(confidence, "ocr_score", None)
+                )
+                meta["ocr_confidence"]["table_score"] = _safe_score(
+                    getattr(confidence, "table_score", None)
+                )
+                meta["ocr_confidence"]["layout_score"] = _safe_score(
+                    getattr(confidence, "layout_score", None)
+                )
+                meta["ocr_confidence"]["parse_score"] = _safe_score(
+                    getattr(confidence, "parse_score", None)
+                )
+        except Exception as e:
+            logger.debug(f"Could not extract confidence scores: {e}")
+
+    elif confidence is not None and not page_numbers:
+        # No page info — use document-level scores
+        try:
+            meta["ocr_confidence"]["ocr_score"] = _safe_score(
+                getattr(confidence, "ocr_score", None)
+            )
+            meta["ocr_confidence"]["table_score"] = _safe_score(
+                getattr(confidence, "table_score", None)
+            )
+            meta["ocr_confidence"]["layout_score"] = _safe_score(
+                getattr(confidence, "layout_score", None)
+            )
+            meta["ocr_confidence"]["parse_score"] = _safe_score(
+                getattr(confidence, "parse_score", None)
+            )
+        except Exception as e:
+            logger.debug(f"Could not extract document-level confidence: {e}")
+
+    # ----- OCR fallback flag -----
+    if page_numbers and ocr_pages:
+        flags = [ocr_pages.get(pg) for pg in page_numbers]
+        non_none = [f for f in flags if f is not None]
+        if non_none:
+            # True if ANY page in the chunk used OCR fallback
+            meta["is_ocr_fallback"] = any(non_none)
+
+    return meta
+
+
+def chunk_quality_warning(metadata: dict) -> Optional[str]:
+    """Return a quality warning string if the chunk has low OCR confidence, else None.
+
+    Intended for downstream consumers (e.g. MCP tools) to flag unreliable
+    chunks in user-facing responses.
+
+    Parameters
+    ----------
+    metadata : dict
+        The parsed metadata dict from document_chunks.metadata (JSON string).
+
+    Returns
+    -------
+    str | None
+        'ocr_artefacten_waarschijnlijk' if OCR score < 0.85
+        'tabelstructuur_onbetrouwbaar' if table structure score < 0.70
+        None if quality is acceptable or metadata is unavailable
+    """
+    ocr = metadata.get("ocr_confidence", {})
+    if not isinstance(ocr, dict):
+        return None
+    if ocr.get("ocr_score") is not None and ocr["ocr_score"] < 0.85:
+        return "ocr_artefacten_waarschijnlijk"
+    if ocr.get("table_score") is not None and ocr["table_score"] < 0.70:
+        return "tabelstructuur_onbetrouwbaar"
+    return None

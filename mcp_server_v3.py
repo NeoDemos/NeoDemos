@@ -601,6 +601,43 @@ def zoek_financieel(
                      Gebruik dit voor "wat is X voor jaar Y"-vragen.
         max_resultaten: Aantal resultaten (standaard 12)
     """
+    # ── WS2 structured routing: if the query mentions a specific programma + jaar,
+    # call vraag_begrotingsregel internally first and prepend structured results. ──
+    structured_block = ""
+    _narrative_keywords = re.compile(
+        r"\b(waarom|toelichting|reden|uitleg|achtergrond|motivatie|context|verklaring)\b",
+        re.IGNORECASE,
+    )
+    if not _narrative_keywords.search(onderwerp):
+        # Try to detect a programma + year combination in the query
+        _year_match = re.search(r"\b(20[12]\d)\b", onderwerp)
+        # Extract potential programma: strip the year and common financial keywords
+        _programma_candidate = re.sub(
+            r"\b(20[12]\d|begroting|budget|lasten|baten|saldo|kosten|subsidie|bezuiniging)\b",
+            "", onderwerp, flags=re.IGNORECASE,
+        ).strip()
+        _programma_candidate = re.sub(r"\s+", " ", _programma_candidate).strip()
+
+        if _year_match and _programma_candidate and len(_programma_candidate) >= 3:
+            try:
+                _structured_raw = vraag_begrotingsregel(
+                    gemeente="rotterdam",
+                    jaar=int(_year_match.group(1)),
+                    programma=_programma_candidate,
+                )
+                _structured_data = json.loads(_structured_raw)
+                if _structured_data.get("total", 0) > 0:
+                    structured_block = (
+                        "### Gestructureerde begrotingsregels (financial_lines)\n"
+                        f"_{_structured_data['total']} exacte match(es) voor "
+                        f"'{_programma_candidate}' in {_year_match.group(1)}_\n\n"
+                        "```json\n"
+                        + json.dumps(_structured_data["matches"][:10], ensure_ascii=False, indent=2)
+                        + "\n```\n\n---\n\n"
+                    )
+            except Exception:
+                pass  # structured routing is best-effort; fall through to text RAG
+
     rag = _get_rag()
     top_k = min(max(1, max_resultaten), 20)
 
@@ -695,13 +732,72 @@ def zoek_financieel(
                     c.content = c.content + "\n\n" + formatted
                 break
 
+    # ── WS2 scope annotation: prefix entity/scope info on financial chunks ──
+    _entities_cache: dict = {}
+    try:
+        entities_path = PROJECT_ROOT / "data" / "financial" / "financial_entities_seed.json"
+        if entities_path.exists():
+            with open(entities_path, encoding="utf-8") as _ef:
+                for ent in json.load(_ef).get("entities", []):
+                    _entities_cache[ent["id"]] = ent
+    except Exception:
+        pass
+
+    scopes_seen: set = set()
+    for c in merged[:top_k]:
+        # Try to resolve scope from financial_lines for this chunk's document
+        try:
+            with get_connection() as _conn:
+                _cur = _conn.cursor()
+                _cur.execute("""
+                    SELECT DISTINCT scope, entity_id
+                    FROM financial_lines
+                    WHERE document_id = %s
+                    LIMIT 5
+                """, (str(c.document_id),))
+                fl_rows = _cur.fetchall()
+                _cur.close()
+
+            for _scope, _eid in fl_rows:
+                scopes_seen.add(_scope)
+                ent_info = _entities_cache.get(_eid)
+                if ent_info and _scope == "gemeenschappelijke_regeling":
+                    members = ent_info.get("member_gemeenten", [])
+                    member_count = len(members) if members else "?"
+                    prefix = (
+                        f"**Bron-entiteit:** {ent_info['display_name']} "
+                        f"({_scope} — {member_count} gemeenten)"
+                    )
+                    c.content = prefix + "\n\n" + (c.content or "")
+                    break
+                elif ent_info and _scope != "gemeente":
+                    c.content = (
+                        f"**Bron-entiteit:** {ent_info['display_name']} (scope: {_scope})"
+                        + "\n\n" + (c.content or "")
+                    )
+                    break
+        except Exception:
+            pass  # scope annotation is best-effort
+
     header = f"## Financiële gegevens: '{onderwerp}'"
     if budget_year is not None:
         header += f"\n_Budgetjaar: {budget_year} ({len(budget_year_doc_ids)} documenten)_"
     if datum_van or datum_tot:
         header += f"\n_Periode: {datum_van or '…'} — {datum_tot or 'heden'}_"
 
-    return header + "\n\n" + _format_chunks_v3(merged[:top_k], max_content=1500, dedup_by_doc=True)
+    text_rag_result = _format_chunks_v3(merged[:top_k], max_content=1500, dedup_by_doc=True)
+
+    # Scope summary when mixed scopes are present
+    scope_summary = ""
+    if len(scopes_seen) > 1:
+        scope_summary = (
+            "\n\n---\n**Scope-samenvatting:** Deze resultaten bevatten data uit "
+            f"meerdere scopes: {', '.join(sorted(scopes_seen))}. "
+            "Let op dat bedragen van gemeenschappelijke regelingen het totaal van de "
+            "regeling weergeven, niet het aandeel van een individuele gemeente."
+        )
+
+    return header + "\n\n" + structured_block + text_rag_result + scope_summary
 
 
 # ---------------------------------------------------------------------------
@@ -2431,6 +2527,354 @@ def vergelijk_partijen(
         })
 
     return json.dumps(result, ensure_ascii=False)
+
+
+# ---------------------------------------------------------------------------
+# Tool 18 — vraag_begrotingsregel (WS2 Trustworthy Financial Analysis)
+# ---------------------------------------------------------------------------
+
+@logged_tool
+def vraag_begrotingsregel(
+    gemeente: str,
+    jaar: int,
+    programma: str,
+    sub_programma: Optional[str] = None,
+    include_gr_derived: bool = False,
+) -> str:
+    """
+    Haalt exacte begrotingsregels op uit de gestructureerde financial_lines tabel.
+
+    Use this when:
+    - De gebruiker vraagt naar een specifiek bedrag, begrotingsregel, of financieel gegeven
+    - De vraag bevat een programma, jaar, en/of gemeente
+
+    Do NOT use when:
+    - De vraag is narratief/kwalitatief ("waarom is het budget gestegen?") → gebruik zoek_financieel
+    - De gebruiker vraagt om een toelichting of context → gebruik zoek_financieel
+
+    Returns: Exacte bedragen met SHA256 verificatietokens. Bedragen zijn byte-identiek aan de bron-PDF.
+
+    Args:
+        gemeente: Gemeentenaam (bijv. "rotterdam")
+        jaar: Begrotingsjaar (bijv. 2025)
+        programma: Programmanaam (fuzzy match via ILIKE, bijv. "Veilig" of "Onderwijs")
+        sub_programma: Optioneel deelprogramma (fuzzy match via ILIKE)
+        include_gr_derived: Als True, bereken afgeleide bijdrage voor gemeenschappelijke regelingen
+    """
+    from decimal import Decimal as _Decimal
+
+    retrieved_at = datetime.utcnow().isoformat() + "Z"
+
+    try:
+        with get_connection() as conn:
+            cur = conn.cursor()
+
+            # Build WHERE clause
+            conditions = [
+                "LOWER(gemeente) = LOWER(%s)",
+                "jaar = %s",
+                "programma ILIKE %s",
+            ]
+            params: list = [gemeente, jaar, f"%{programma}%"]
+
+            if sub_programma:
+                conditions.append("sub_programma ILIKE %s")
+                params.append(f"%{sub_programma}%")
+
+            where = " AND ".join(conditions)
+
+            cur.execute(f"""
+                SELECT programma, sub_programma, jaar, bedrag_eur, bedrag_label,
+                       scope, entity_id, source_pdf_url, page, table_id,
+                       row_idx, col_idx, sha256, document_id
+                FROM financial_lines
+                WHERE {where}
+                ORDER BY programma, sub_programma, bedrag_label, jaar
+            """, params)
+            rows = cur.fetchall()
+
+            matches = []
+            for row in rows:
+                (prog, sub_prog, jr, bedrag, label, scope, entity_id,
+                 source_pdf, page, table_id, row_idx, col_idx, sha, doc_id) = row
+                matches.append({
+                    "programma": prog,
+                    "sub_programma": sub_prog,
+                    "jaar": jr,
+                    "bedrag_eur": str(bedrag),
+                    "label": label,
+                    "scope": scope,
+                    "entity_id": entity_id,
+                    "source_pdf": source_pdf,
+                    "page": page,
+                    "table_cell_ref": f"table_id={table_id},row={row_idx},col={col_idx}",
+                    "document_id": doc_id,
+                    "verification": {
+                        "sha256": sha,
+                        "retrieved_at": retrieved_at,
+                    },
+                })
+
+            # GR derived share: join gr_member_contributions for matching entities
+            if include_gr_derived and matches:
+                gr_matches = [m for m in matches if m["scope"] == "gemeenschappelijke_regeling"]
+                for gm in gr_matches:
+                    try:
+                        cur.execute("""
+                            SELECT bijdrage_eur, aandeel_pct, sha256
+                            FROM gr_member_contributions
+                            WHERE entity_id = %s
+                              AND jaar = %s
+                              AND LOWER(member_gemeente) = LOWER(%s)
+                            LIMIT 1
+                        """, (gm["entity_id"], gm["jaar"], gemeente))
+                        gr_row = cur.fetchone()
+                        if gr_row:
+                            bijdrage, aandeel, gr_sha = gr_row
+                            matches.append({
+                                "programma": gm["programma"],
+                                "sub_programma": gm["sub_programma"],
+                                "jaar": gm["jaar"],
+                                "bedrag_eur": str(bijdrage),
+                                "label": gm["label"],
+                                "scope": "derived_share",
+                                "entity_id": gm["entity_id"],
+                                "source_pdf": gm["source_pdf"],
+                                "page": gm["page"],
+                                "table_cell_ref": gm["table_cell_ref"],
+                                "document_id": gm["document_id"],
+                                "aandeel_pct": str(aandeel) if aandeel else None,
+                                "verification": {
+                                    "sha256": gr_sha,
+                                    "retrieved_at": retrieved_at,
+                                    "method": "derived",
+                                },
+                            })
+                    except Exception:
+                        pass  # GR table may not exist or be empty
+
+            cur.close()
+
+    except Exception as exc:
+        return json.dumps({
+            "matches": [],
+            "total": 0,
+            "error": f"Database fout: {exc}",
+        }, ensure_ascii=False)
+
+    if not matches:
+        return json.dumps({
+            "matches": [],
+            "total": 0,
+            "hint": "Geen resultaten gevonden. Probeer een ander programma of jaar.",
+        }, ensure_ascii=False)
+
+    return json.dumps({
+        "matches": matches,
+        "total": len(matches),
+    }, ensure_ascii=False)
+
+
+# ---------------------------------------------------------------------------
+# Tool 19 — vergelijk_begrotingsjaren (WS2 Trustworthy Financial Analysis)
+# ---------------------------------------------------------------------------
+
+@logged_tool
+def vergelijk_begrotingsjaren(
+    gemeente: str,
+    programma: str,
+    jaren: list,
+) -> str:
+    """
+    Vergelijkt begrotingsregels over meerdere jaren voor een programma.
+
+    Use this when:
+    - De gebruiker vraagt naar trends, ontwikkeling, of vergelijking over jaren
+    - "Hoe is het budget veranderd?", "Wat is de trend?"
+
+    Do NOT use when:
+    - De vraag gaat over een enkel jaar → gebruik vraag_begrotingsregel
+
+    Returns: Tijdreeks met delta_abs en delta_pct, geaggregeerd op IV3 taakveld voor consistentie.
+
+    Args:
+        gemeente: Gemeentenaam (bijv. "rotterdam")
+        programma: Programmanaam (fuzzy match via ILIKE)
+        jaren: Lijst van jaren om te vergelijken (bijv. [2024, 2025, 2026])
+    """
+    from decimal import Decimal as _Decimal, ROUND_HALF_UP as _ROUND
+
+    if not jaren or len(jaren) < 2:
+        return json.dumps({
+            "error": "Geef minimaal 2 jaren op voor een vergelijking.",
+            "programma": programma,
+        }, ensure_ascii=False)
+
+    jaren_sorted = sorted(jaren)
+    retrieved_at = datetime.utcnow().isoformat() + "Z"
+
+    # Load IV3 taakvelden reference for label resolution
+    iv3_lookup: dict = {}
+    try:
+        iv3_path = PROJECT_ROOT / "data" / "financial" / "iv3_taakvelden.json"
+        if iv3_path.exists():
+            with open(iv3_path, encoding="utf-8") as f:
+                iv3_data = json.load(f)
+            for tv in iv3_data.get("taakvelden", []):
+                iv3_lookup[tv["code"]] = tv["omschrijving"]
+    except Exception:
+        pass
+
+    try:
+        with get_connection() as conn:
+            cur = conn.cursor()
+
+            # Step 1: Try to resolve programma to IV3 taakveld via programma_aliases
+            iv3_taakveld = None
+            iv3_omschrijving = None
+            try:
+                cur.execute("""
+                    SELECT iv3_taakveld
+                    FROM programma_aliases
+                    WHERE LOWER(gemeente) = LOWER(%s)
+                      AND programma_label ILIKE %s
+                    ORDER BY confidence DESC NULLS LAST
+                    LIMIT 1
+                """, (gemeente, f"%{programma}%"))
+                alias_row = cur.fetchone()
+                if alias_row:
+                    iv3_taakveld = alias_row[0]
+                    iv3_omschrijving = iv3_lookup.get(iv3_taakveld)
+            except Exception:
+                pass  # programma_aliases table may not exist yet
+
+            # Step 2: Also try direct iv3_taakveld match from financial_lines
+            if not iv3_taakveld:
+                try:
+                    cur.execute("""
+                        SELECT DISTINCT iv3_taakveld
+                        FROM financial_lines
+                        WHERE LOWER(gemeente) = LOWER(%s)
+                          AND programma ILIKE %s
+                          AND iv3_taakveld IS NOT NULL
+                        LIMIT 1
+                    """, (gemeente, f"%{programma}%"))
+                    iv3_row = cur.fetchone()
+                    if iv3_row:
+                        iv3_taakveld = iv3_row[0]
+                        iv3_omschrijving = iv3_lookup.get(iv3_taakveld)
+                except Exception:
+                    pass
+
+            # Step 3: Query financial_lines for all requested years
+            # If IV3 mapping exists, aggregate on iv3_taakveld for cross-year stability
+            if iv3_taakveld:
+                cur.execute("""
+                    SELECT jaar, bedrag_eur, bedrag_label, document_id
+                    FROM financial_lines
+                    WHERE LOWER(gemeente) = LOWER(%s)
+                      AND iv3_taakveld = %s
+                      AND jaar = ANY(%s)
+                    ORDER BY bedrag_label, jaar
+                """, (gemeente, iv3_taakveld, jaren_sorted))
+            else:
+                cur.execute("""
+                    SELECT jaar, bedrag_eur, bedrag_label, document_id
+                    FROM financial_lines
+                    WHERE LOWER(gemeente) = LOWER(%s)
+                      AND programma ILIKE %s
+                      AND jaar = ANY(%s)
+                    ORDER BY bedrag_label, jaar
+                """, (gemeente, f"%{programma}%", jaren_sorted))
+
+            rows = cur.fetchall()
+            cur.close()
+
+    except Exception as exc:
+        return json.dumps({
+            "error": f"Database fout: {exc}",
+            "programma": programma,
+        }, ensure_ascii=False)
+
+    if not rows:
+        return json.dumps({
+            "programma": programma,
+            "iv3_taakveld": iv3_taakveld,
+            "series": [],
+            "hint": "Geen resultaten gevonden. Probeer een ander programma of andere jaren.",
+        }, ensure_ascii=False)
+
+    # Group by bedrag_label, then build time series per label
+    from collections import defaultdict
+    label_buckets: dict = defaultdict(list)
+    source_docs: set = set()
+
+    for jr, bedrag, label, doc_id in rows:
+        label_buckets[label or "Onbekend"].append({
+            "jaar": jr,
+            "bedrag_eur": _Decimal(str(bedrag)),
+            "document_id": doc_id,
+        })
+        if doc_id:
+            source_docs.add(doc_id)
+
+    result_series: dict = {}
+    for label, entries in label_buckets.items():
+        # Aggregate: sum bedrag_eur per jaar (multiple rows per year possible)
+        jaar_totals: dict = {}
+        for e in entries:
+            jr = e["jaar"]
+            if jr not in jaar_totals:
+                jaar_totals[jr] = _Decimal("0")
+            jaar_totals[jr] += e["bedrag_eur"]
+
+        # Build series with deltas
+        series_items = []
+        prev_bedrag = None
+        for jr in jaren_sorted:
+            bedrag = jaar_totals.get(jr)
+            if bedrag is None:
+                series_items.append({
+                    "jaar": jr,
+                    "bedrag_eur": None,
+                    "label": label,
+                    "delta_abs": None,
+                    "delta_pct": None,
+                })
+                prev_bedrag = None
+                continue
+
+            delta_abs = None
+            delta_pct = None
+            if prev_bedrag is not None:
+                delta_abs = str(bedrag - prev_bedrag)
+                if prev_bedrag != _Decimal("0"):
+                    pct = ((bedrag - prev_bedrag) / prev_bedrag * _Decimal("100")).quantize(
+                        _Decimal("0.01"), rounding=_ROUND
+                    )
+                    delta_pct = str(pct)
+
+            series_items.append({
+                "jaar": jr,
+                "bedrag_eur": str(bedrag),
+                "label": label,
+                "delta_abs": delta_abs,
+                "delta_pct": delta_pct,
+            })
+            prev_bedrag = bedrag
+
+        result_series[label] = series_items
+
+    payload = {
+        "programma": programma,
+        "iv3_taakveld": iv3_taakveld,
+        "iv3_omschrijving": iv3_omschrijving,
+        "series": result_series,
+        "source_documents": sorted(source_docs),
+        "verification": {"retrieved_at": retrieved_at},
+    }
+
+    return json.dumps(payload, ensure_ascii=False)
 
 
 # ---------------------------------------------------------------------------

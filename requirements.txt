@@ -13,14 +13,17 @@ psycopg2-binary
 psycopg[binary]
 pgvector
 APScheduler
-mcp[cli]>=1.0.0
+mcp[cli]==1.26.0  # WS4: pinned — WWW-Authenticate + RFC 9728 compliance is load-bearing for Le Chat / Mistral MCP
 anthropic>=0.40.0
 beautifulsoup4
 markupsafe
 bcrypt>=4.0.0
+cachetools>=5.3.0
 itsdangerous>=2.1.0
 numpy
 qdrant-client
 requests
 tqdm
 docling
+nltk>=3.8
+alembic>=1.13.0

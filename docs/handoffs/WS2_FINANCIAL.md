@@ -1,8 +1,8 @@
 # WS2 — Trustworthy Financial Analysis
 
 > **Priority:** 2 (where MAAT is winning sales conversations today)
-> **Status:** `not started`
-> **Owner:** `unassigned`
+> **Status:** `in progress` — code complete, pending DB migration + backfill + benchmark validation
+> **Owner:** `claude-ws2`
 > **Target release:** v0.2.0
 > **Master plan section:** [V0_2_BEAT_MAAT_PLAN.md §4](../architecture/V0_2_BEAT_MAAT_PLAN.md)
 
