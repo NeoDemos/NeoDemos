@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "skills": {
+    "copywriting": {
+      "source": "boraoztunc/skills",
+      "sourceType": "github",
+      "computedHash": "39b7a636c7e254a2f08dee43db6b9f6faf6723de999a6bbce2eb5ac95a130207"
+    },
+    "frontend-design": {
+      "source": "boraoztunc/skills",
+      "sourceType": "github",
+      "computedHash": "063a0e6448123cd359ad0044cc46b0e490cc7964d45ef4bb9fd842bd2ffbca67"
+    },
+    "ogilvy-copywriting": {
+      "source": "boraoztunc/skills",
+      "sourceType": "github",
+      "computedHash": "20167aaa817e131ff6ba93272219d59e6f2ca129f690ab1459fe6344b1afb7a9"
+    },
+    "stop-slop": {
+      "source": "boraoztunc/skills",
+      "sourceType": "github",
+      "computedHash": "15f3de0d837c55a6e994c0932c16acb42f021a7a8405e74715c9892dd437c755"
+    }
+  }
+}

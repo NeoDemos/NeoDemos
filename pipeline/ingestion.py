@@ -121,9 +121,71 @@ class SmartIngestor:
             child_ids = [r[0] for r in cur.fetchall()]
             if child_ids:
                 logger.info(f"  Cleaning up {len(child_ids)} existing child sections and chunks...")
+                # Delete all FK-referencing rows before deleting chunks (FK constraint)
+                cur.execute("""
+                    DELETE FROM kg_mentions
+                    WHERE chunk_id IN (SELECT id FROM document_chunks WHERE child_id = ANY(%s))
+                """, (child_ids,))
+                cur.execute("""
+                    DELETE FROM kg_relationships
+                    WHERE chunk_id IN (SELECT id FROM document_chunks WHERE child_id = ANY(%s))
+                """, (child_ids,))
+                cur.execute("""
+                    DELETE FROM kg_extraction_log
+                    WHERE chunk_id IN (SELECT id FROM document_chunks WHERE child_id = ANY(%s))
+                """, (child_ids,))
+                cur.execute("""
+                    DELETE FROM chunk_questions
+                    WHERE chunk_id IN (SELECT id FROM document_chunks WHERE child_id = ANY(%s))
+                """, (child_ids,))
+                cur.execute("""
+                    DELETE FROM financial_lines
+                    WHERE bron_chunk_id IN (SELECT id FROM document_chunks WHERE child_id = ANY(%s))
+                """, (child_ids,))
+                cur.execute("""
+                    DELETE FROM gr_member_contributions
+                    WHERE bron_chunk_id IN (SELECT id FROM document_chunks WHERE child_id = ANY(%s))
+                """, (child_ids,))
                 cur.execute("DELETE FROM document_chunks WHERE child_id = ANY(%s)", (child_ids,))
                 cur.execute("DELETE FROM document_children WHERE id = ANY(%s)", (child_ids,))
-            
+
+            # Delete all FK-referencing rows for orphan chunks (no child_id) first
+            cur.execute("""
+                DELETE FROM kg_mentions
+                WHERE chunk_id IN (
+                    SELECT id FROM document_chunks WHERE document_id = %s AND child_id IS NULL
+                )
+            """, (doc_id,))
+            cur.execute("""
+                DELETE FROM kg_relationships
+                WHERE chunk_id IN (
+                    SELECT id FROM document_chunks WHERE document_id = %s AND child_id IS NULL
+                )
+            """, (doc_id,))
+            cur.execute("""
+                DELETE FROM kg_extraction_log
+                WHERE chunk_id IN (
+                    SELECT id FROM document_chunks WHERE document_id = %s AND child_id IS NULL
+                )
+            """, (doc_id,))
+            cur.execute("""
+                DELETE FROM chunk_questions
+                WHERE chunk_id IN (
+                    SELECT id FROM document_chunks WHERE document_id = %s AND child_id IS NULL
+                )
+            """, (doc_id,))
+            cur.execute("""
+                DELETE FROM financial_lines
+                WHERE bron_chunk_id IN (
+                    SELECT id FROM document_chunks WHERE document_id = %s AND child_id IS NULL
+                )
+            """, (doc_id,))
+            cur.execute("""
+                DELETE FROM gr_member_contributions
+                WHERE bron_chunk_id IN (
+                    SELECT id FROM document_chunks WHERE document_id = %s AND child_id IS NULL
+                )
+            """, (doc_id,))
             cur.execute("DELETE FROM document_chunks WHERE document_id = %s AND child_id IS NULL", (doc_id,))
             conn.commit()
             cur.close()

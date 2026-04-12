@@ -1,7 +1,43 @@
 import httpx
 import io
+import re
 from pypdf import PdfReader
 from typing import Optional
+
+# Pre-compiled patterns — strip these before measuring space density
+_STRIP_URL_RE      = re.compile(r'https?://\S+', re.I)
+_STRIP_FILENAME_RE = re.compile(r'\S+\.(?:pdf|docx?|xlsx?|txt|xml|json|csv|png|jpg)\b', re.I)
+_STRIP_PATH_RE     = re.compile(r'(?<!\w)/[\w/.\-_]{15,}')
+_STRIP_REFCODE_RE  = re.compile(r'\b(?:[A-Z]{2,}[\-_]){2,}[A-Z0-9]+\b|\b[A-Z0-9]{20,}\b')
+_GARBLED_RUN_RE    = re.compile(r'[^\s]{35,}')
+
+def _is_garbled_ocr(text: str) -> bool:
+    """Detect word-concatenation artifacts from broken PDF text layers.
+
+    Returns True when pypdf faithfully reproduced a corrupted text layer
+    (words merged without spaces, e.g. "DegemeenteraadvanRotterdam...").
+
+    Safe against false positives from URLs, file paths, reference codes,
+    and legitimate Dutch compound words (max ~30 chars).
+    """
+    if not text or len(text.strip()) < 50:
+        return False
+    # Strip non-prose tokens before measuring space density
+    prose = _STRIP_URL_RE.sub(' ', text)
+    prose = _STRIP_FILENAME_RE.sub(' ', prose)
+    prose = _STRIP_PATH_RE.sub(' ', prose)
+    prose = _STRIP_REFCODE_RE.sub(' ', prose)
+    prose = prose.strip()
+    if len(prose) < 20:
+        return False  # Entire text was URLs/refs — can't assess
+    space_ratio   = prose.count(' ') / len(prose)
+    garbled_runs  = _GARBLED_RUN_RE.findall(prose)
+    garbled_frac  = sum(len(r) for r in garbled_runs) / len(prose)
+    return (
+        (space_ratio < 0.06 and garbled_frac > 0.05)
+        or garbled_frac > 0.20
+        or (space_ratio < 0.10 and garbled_frac > 0.10)
+    )
 
 class ScraperService:
     async def extract_text_from_url(self, url: str) -> Optional[str]:
@@ -21,13 +57,14 @@ class ScraperService:
                 
                 full_text = full_text.strip()
                 
-                # If text is very short (likely scanned/graphical), use native macOS OCR
-                if len(full_text) < 200:
+                # Trigger OCR if text is absent OR if the text layer is garbled
+                if len(full_text) < 200 or _is_garbled_ocr(full_text):
                     import subprocess
                     import tempfile
                     import os
-                    
-                    print(f"Low text detected ({len(full_text)} chars), triggering native OCR fallback...")
+
+                    reason = "low text" if len(full_text) < 200 else "garbled text layer"
+                    print(f"{reason} detected ({len(full_text)} chars), triggering native OCR fallback...")
                     
                     with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp:
                         tmp.write(response.content)

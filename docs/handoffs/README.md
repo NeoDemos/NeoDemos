@@ -43,16 +43,21 @@ When a workstream finishes:
 | WS5b | [`WS5b_MULTI_PORTAL.md`](WS5b_MULTI_PORTAL.md) | Multi-portal connectors (search-only) | 6 | **deferred to v0.2.1** | WS5a stable for 14d |
 | WS6 | [`WS6_SUMMARIZATION.md`](WS6_SUMMARIZATION.md) | Source-spans-only summarization | 8 | yes (independent) | none for v0.2.0 minimum; WS1 for `mode='structured'` |
 | WS7 | [`WS7_OCR_RECOVERY.md`](WS7_OCR_RECOVERY.md) | OCR recovery for moties/amendementen | 2.5 | yes (independent) | none; **should run before WS1 Phase 1** |
+| WS8 | [`WS8_FRONTEND_REDESIGN.md`](WS8_FRONTEND_REDESIGN.md) | Frontend redesign: design system, landing page, calendar | 1 (launch blocker) | yes (with WS9; converge at search integration) | WS9 (for demo answer + streaming search) |
+| WS9 | [`WS9_WEB_INTELLIGENCE.md`](WS9_WEB_INTELLIGENCE.md) | Web intelligence: MCP-as-backend, Sonnet tool_use, SSE streaming | 1 (launch blocker) | yes (with WS8) | none (extract from existing MCP tools) |
 
 **Webcast timestamp linking** (priority 7) is split across WS5a (schema + backfill) and WS5b (HLS player UI).
+
+**WS8 + WS9 are the public launch critical path.** They are independent of WS1–WS7 and can run in parallel. They converge when WS8 Phase 2 (landing page) wires up the SSE streaming endpoint delivered by WS9.
 
 ---
 
 ## Parallelism map
 
 ```
-v0.2.0 — sprint plan (Rotterdam-only)
+v0.2.0 — two parallel tracks
 
+  TRACK A: Data quality + retrieval (WS1–WS7)
   ┌─────────────────────────────────────────────────────────────────┐
   │  parallel work — start day 1                                     │
   │                                                                  │
@@ -76,8 +81,38 @@ v0.2.0 — sprint plan (Rotterdam-only)
   │  │  (no UI)    │                                                │
   │  └─────────────┘                                                │
   │                                                                  │
-  │  ► eval gate ◄  → tag v0.2.0                                    │
+  │  ► eval gate A ◄                                                │
   └─────────────────────────────────────────────────────────────────┘
+
+  TRACK B: Public launch (WS8 + WS9) — independent of Track A
+  ┌─────────────────────────────────────────────────────────────────┐
+  │  parallel start — both day 1                                     │
+  │                                                                  │
+  │  ┌──────────────────────┐   ┌──────────────────────────────┐    │
+  │  │        WS9           │   │      WS8 Phase 1             │    │
+  │  │  MCP-as-backend      │   │  Design tokens + CSS         │    │
+  │  │  Sonnet tool_use     │   │  restructure (independent)   │    │
+  │  │  SSE /stream endpoint│   │                              │    │
+  │  └──────────┬───────────┘   └──────────────────────────────┘    │
+  │             │                                                    │
+  │             ▼  (WS9 done → WS8 Phase 2 can wire up)             │
+  │  ┌──────────────────────────────────────────────────────────┐    │
+  │  │  WS8 Phase 2 — Landing page                              │    │
+  │  │  4 elements: demo answer + search + credibility + trust  │    │
+  │  │  Demo question: "Heeft het college haar beloftes         │    │
+  │  │  waargemaakt?" — cached, real citations, non-partisan    │    │
+  │  └──────────┬───────────────────────────────────────────────┘    │
+  │             │                                                    │
+  │             ▼                                                    │
+  │  ┌──────────────────────────────────────────────────────────┐    │
+  │  │  WS8 Phase 3+4 — Calendar redesign + template cleanup    │    │
+  │  └──────────────────────────────────────────────────────────┘    │
+  │                                                                  │
+  │  ► eval gate B ◄  → public launch + press outreach             │
+  └─────────────────────────────────────────────────────────────────┘
+
+  Tracks A and B run concurrently. Track B gates the press moment.
+  Track A gates v0.2.0 eval scores. Both must pass before tag v0.2.0.
 
 v0.2.1 — search-only beyond Rotterdam
   ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
@@ -86,14 +121,16 @@ v0.2.1 — search-only beyond Rotterdam
   └──────────────┘  └──────────────┘  └──────────────┘
 ```
 
-**Critical path:** WS7 OCR recovery → WS1 phase 1 (enrichment) → WS1 phase 2 (graph svc + MCP) → WS3.
-**Earliest blocker if any:** WS7 should run before WS1 Phase 1 so enrichment operates on clean text. WS1 Phase 0 (code) is done and parallelizes with everything.
+**Critical path (Track A):** WS7 OCR recovery → WS1 phase 1 (enrichment) → WS1 phase 2 (graph svc + MCP) → WS3.
+**Critical path (Track B):** WS9 (SSE endpoint) → WS8 Phase 2 (landing page + demo answer) → press outreach.
+**Earliest blocker (Track A):** WS7 should run before WS1 Phase 1 so enrichment operates on clean text.
+**Earliest blocker (Track B):** WS9 must ship before the demo answer can be wired to the live search stream.
 
 ---
 
 ## Eval gate for tagging v0.2.0
 
-All must pass before `git tag v0.2.0` and `./scripts/deploy.sh`:
+### Track A — Data quality (must pass before tag)
 
 | Metric | Source | Target |
 |---|---|---|
@@ -104,6 +141,18 @@ All must pass before `git tag v0.2.0` and `./scripts/deploy.sh`:
 | Source-spans strip test | WS6 verifier | Pass on 50 random docs |
 | Tool-description uniqueness | WS4 startup check | No pair > 0.85 cosine |
 | KG Layer 2 size | WS1 quality audit | ≥ 500K relationship edges |
+
+### Track B — Public launch (must pass before press outreach)
+
+| Metric | Source | Target |
+|---|---|---|
+| Demo answer quality | Manual review by Dennis | Impressive enough to be first thing a journalist sees |
+| Lighthouse Performance | `lighthouse https://neodemos.nl` | ≥ 90 |
+| Lighthouse Accessibility | `lighthouse https://neodemos.nl` | ≥ 95 (WCAG AA) |
+| WS9 MCP quality parity | Side-by-side comparison (web vs MCP) | ≥ 90% answer quality vs direct MCP |
+| Mobile search above fold | Playwright screenshot at 375px | Search bar + CTA visible without scroll |
+| Demo answer cached | `GET /` response time | < 200ms (pre-rendered, no API call) |
+| Landing headline rotation | Config check | `LANDING_HEADLINE` env var wired, weekly swap documented |
 
 ---
 

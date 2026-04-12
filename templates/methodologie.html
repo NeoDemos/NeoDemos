@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="subpage">
+    <h1 class="subpage-title">Methodologie</h1>
+    <p class="subpage-subtitle">Hoe NeoDemos werkt &mdash; en waar de grenzen liggen</p>
+
+    <section class="subpage-section">
+        <h2>Drie stappen</h2>
+        <div class="methodology-steps">
+            <div class="methodology-step">
+                <span class="step-number">1</span>
+                <div>
+                    <h3>Zoeken</h3>
+                    <p>Uw vraag wordt omgezet naar een zoekopdracht over 90.000+ raadsdocumenten. Zowel full-text search als semantische vectorzoekopdrachten worden gecombineerd om de meest relevante fragmenten te vinden.</p>
+                </div>
+            </div>
+            <div class="methodology-step">
+                <span class="step-number">2</span>
+                <div>
+                    <h3>Analyseren</h3>
+                    <p>De gevonden fragmenten worden door een AI-model geanalyseerd. Het model synthetiseert informatie uit meerdere bronnen tot een samenhangend antwoord. Het model mag alleen feiten uit de aangeleverde bronnen gebruiken.</p>
+                </div>
+            </div>
+            <div class="methodology-step">
+                <span class="step-number">3</span>
+                <div>
+                    <h3>Verwijzen</h3>
+                    <p>Elke bewering in het antwoord wordt voorzien van een bronverwijzing. U kunt doorklikken naar het originele document om de context te controleren.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="subpage-section">
+        <h2>Onze bronnen</h2>
+        <p>
+            NeoDemos indexeert publiek beschikbare documenten van de Rotterdamse gemeenteraad via Open Raadsinformatie:
+        </p>
+        <div class="source-stats">
+            <div class="stat-card">
+                <span class="stat-number">90.000+</span>
+                <span class="stat-label">documenten</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">2002&ndash;heden</span>
+                <span class="stat-label">periode</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">24 jaar</span>
+                <span class="stat-label">raadsgeschiedenis</span>
+            </div>
+        </div>
+        <p>Documenttypen: moties, amendementen, notulen, begrotingen, commissieverslagen, jaarstukken, voorjaarsnota's, collegebrieven en raadsinformatiebrieven.</p>
+    </section>
+
+    <section class="subpage-section">
+        <h2>AI-transparantie</h2>
+        <h3>Wat de AI wel doet</h3>
+        <ul class="transparency-list">
+            <li>Relevante documentfragmenten selecteren op basis van uw vraag</li>
+            <li>Informatie uit meerdere bronnen samenvatten tot een coherent antwoord</li>
+            <li>Bronverwijzingen toevoegen bij elke bewering</li>
+            <li>Partijstandpunten en stemgedrag in context plaatsen</li>
+        </ul>
+        <h3>Wat de AI niet doet</h3>
+        <ul class="transparency-list">
+            <li>Eigen meningen of waardeoordelen geven</li>
+            <li>Informatie verzinnen die niet in de brondocumenten staat</li>
+            <li>Documenten wijzigen of interpreteren buiten de feitelijke inhoud</li>
+            <li>Persoonlijke gegevens van gebruikers opslaan of analyseren</li>
+        </ul>
+    </section>
+
+    <section class="subpage-section">
+        <h2>Evaluatie</h2>
+        <p>
+            NeoDemos wordt continu ge&euml;valueerd op drie kernmetrieken, getest tegen een benchmark van 20 representatieve vragen:
+        </p>
+        <div class="eval-grid">
+            <div class="eval-card">
+                <span class="eval-score">0.99</span>
+                <span class="eval-label">Precisie</span>
+                <p>Verwijst het antwoord naar de juiste brondocumenten?</p>
+            </div>
+            <div class="eval-card">
+                <span class="eval-score">4.8 / 5</span>
+                <span class="eval-label">Getrouwheid</span>
+                <p>Komt het antwoord overeen met wat er in de bronnen staat?</p>
+            </div>
+            <div class="eval-card">
+                <span class="eval-score">2.75 / 5</span>
+                <span class="eval-label">Volledigheid</span>
+                <p>Dekt het antwoord alle relevante aspecten van de vraag?</p>
+            </div>
+        </div>
+        <p>
+            Volledigheid is bewust lager &mdash; NeoDemos geeft liever een betrouwbaar deelantwoord dan een volledig maar onzeker antwoord. Verbetering van volledigheid is een actief ontwikkeldoel.
+        </p>
+    </section>
+
+    <section class="subpage-section">
+        <h2>Bekende beperkingen</h2>
+        <ul class="limitations-list">
+            <li><strong>AI kan fouten maken.</strong> Controleer altijd het brondocument via de bronverwijzing. Het AI-model kan fragmenten verkeerd interpreteren of onvolledige context meewegen.</li>
+            <li><strong>Niet alle documenten zijn even goed doorzoekbaar.</strong> Sommige oudere documenten bevatten gescande pagina's waarvan de tekst niet altijd volledig is herkend.</li>
+            <li><strong>OCR-kwaliteit varieert.</strong> Documenten van v&oacute;&oacute;r 2010 hebben soms lagere OCR-kwaliteit, wat invloed kan hebben op de doorzoekbaarheid.</li>
+            <li><strong>Geen real-time data.</strong> Er zit een vertraging van maximaal enkele uren tussen publicatie op de raadsinformatie-portal en beschikbaarheid in NeoDemos.</li>
+            <li><strong>Alleen Rotterdam.</strong> NeoDemos indexeert momenteel uitsluitend documenten van de Rotterdamse gemeenteraad.</li>
+        </ul>
+    </section>
+</div>
+{% endblock %}
