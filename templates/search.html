@@ -4,10 +4,18 @@
 
 <div class="search-container">
 
-    <!-- ── Hero headline ── -->
-    <div class="landing-hero">
-        <h1 class="landing-headline">{{ landing_headline }}</h1>
+    <!-- ── Hero with background image + rotating headline ── -->
+    {% if not user %}
+    <div class="landing-hero-image" style="background-image: url('/static/images/skyline.jpg');">
+        <div class="landing-hero-overlay">
+            <h1 class="landing-hero-heading" id="rotating-headline"></h1>
+        </div>
     </div>
+    {% else %}
+    <div class="landing-hero">
+        <h1 class="landing-headline">Zoek in raadsinformatie</h1>
+    </div>
+    {% endif %}
 
     <!-- ── Search bar (above fold on all viewports) ── -->
     <div class="search-box-wrapper">
@@ -471,6 +479,20 @@
                 performSearch();
             }
         });
+    }
+
+    // ── Rotating headlines (5 variants, switch on each page load) ──
+    const headlineEl = document.getElementById('rotating-headline');
+    if (headlineEl) {
+        const headlines = [
+            'Wat deed de gemeente\nmet uw belastinggeld?',
+            'Eén vraag. 90.000 documenten.\nDirect antwoord.',
+            'Uw gemeenteraad vergaderde 1.200 keer.\nWat besloten ze?',
+            'De raad besloot.\nWist u ervan?',
+            '24 jaar raadsbesluiten.\nDoorzoekbaar in seconden.'
+        ];
+        const idx = Math.floor(Date.now() / (1000 * 60 * 60)) % headlines.length;
+        headlineEl.innerHTML = headlines[idx].replace('\n', '<br>');
     }
 </script>
 {% endblock %}
