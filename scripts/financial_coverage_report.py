@@ -78,7 +78,7 @@ def _year_range(years: list[int]) -> str:
     """Compact representation: [2018,2019,2020,2022] -> '2018-2020, 2022'."""
     if not years:
         return "-"
-    years = sorted(years)
+    years = sorted(y for y in years if y is not None)
     ranges = []
     start = years[0]
     prev = years[0]
