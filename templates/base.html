@@ -20,7 +20,7 @@
         {% endblock %}
     </main>
     {% include 'partials/_footer.html' %}
-    <script src="/static/dist/app.js?v={{ version_label }}"></script>
+    <script type="module" src="/static/dist/app.js?v={{ version_label }}"></script>
     {% block extra_scripts %}
     {% endblock %}
 </body>

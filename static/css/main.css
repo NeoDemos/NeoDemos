@@ -2098,7 +2098,7 @@ input:checked + .slider:before {
 
 .landing-hero {
   text-align: center;
-  padding: var(--space-8) 0 var(--space-6);
+  padding: var(--space-6) 0 var(--space-4);
 }
 
 .landing-headline {
@@ -2874,6 +2874,56 @@ input:checked + .slider:before {
   text-align: center;
   display: block;
 }
+/* ── Subpage hero image ── */
+
+.subpage-hero-image {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    height: 340px;
+    background-size: cover;
+    background-position: center 40%;
+    position: relative;
+    margin-top: calc(-1 * var(--space-12));
+    margin-bottom: var(--space-12);
+}
+
+.subpage-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(4, 40, 37, 0.85) 0%, rgba(4, 40, 37, 0.4) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: var(--space-12) 5%;
+}
+
+.subpage-hero-title {
+    font-family: var(--font-heading);
+    font-size: 2.8rem;
+    font-weight: 400;
+    color: #fff;
+    margin: 0 0 var(--space-2);
+}
+
+.subpage-hero-subtitle {
+    font-size: 1.15rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .subpage-hero-image {
+        height: 240px;
+        margin-top: calc(-1 * var(--space-12));
+    }
+    .subpage-hero-title {
+        font-size: 2rem;
+    }
+    .subpage-hero-overlay {
+        padding: var(--space-8) 5%;
+    }
+}
+
 /* ── Subpage layout ── */
 
 .subpage {

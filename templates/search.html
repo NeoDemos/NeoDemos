@@ -4,48 +4,12 @@
 
 <div class="search-container">
 
-    <!-- ── Element 0: Hero headline ── -->
+    <!-- ── Hero headline ── -->
     <div class="landing-hero">
         <h1 class="landing-headline">{{ landing_headline }}</h1>
     </div>
 
-    <!-- ── Element 1: Pre-rendered demo answer (cached, no API cost) ── -->
-    {% if demo_answer and not user %}
-    <div class="demo-answer-card" id="demo-answer">
-        <div class="demo-answer-desktop">
-            <div class="demo-answer-question">{{ demo_question }}</div>
-            <div class="ai-content">{{ demo_answer | safe }}</div>
-        </div>
-        <details class="demo-answer-mobile">
-            <summary>Bekijk voorbeeld</summary>
-            <div class="demo-answer-question">{{ demo_question }}</div>
-            <div class="ai-content">{{ demo_answer | safe }}</div>
-        </details>
-    </div>
-    {% elif not user %}
-    <!-- Placeholder demo until cached answer is available -->
-    <div class="demo-answer-card" id="demo-answer">
-        <div class="demo-answer-desktop">
-            <div class="demo-answer-question">Heeft het college haar beloftes waargemaakt?</div>
-            <div class="ai-content">
-                <p>Op basis van het coalitieakkoord 2022-2026 en de jaarstukken van 2023 en 2024 zijn er duidelijke verschillen tussen belofte en uitvoering.</p>
-                <p><strong>Woningbouw:</strong> Het college beloofde 18.000 nieuwe woningen. De voortgangsrapportage laat zien dat er 12.400 vergunningen zijn verleend &mdash; op koers, maar de daadwerkelijke oplevering loopt achter.</p>
-                <p><strong>Klimaat:</strong> De ambitie voor 55% CO2-reductie in 2030 is bijgesteld naar 49% na de evaluatie van het Rotterdams Klimaatakkoord.</p>
-                <p>Bekijk de volledige analyse door zelf te zoeken.</p>
-            </div>
-        </div>
-        <details class="demo-answer-mobile">
-            <summary>Bekijk voorbeeld</summary>
-            <div class="demo-answer-question">Heeft het college haar beloftes waargemaakt?</div>
-            <div class="ai-content">
-                <p>Op basis van het coalitieakkoord 2022-2026 en de jaarstukken van 2023 en 2024 zijn er duidelijke verschillen tussen belofte en uitvoering.</p>
-                <p>Bekijk de volledige analyse door zelf te zoeken.</p>
-            </div>
-        </details>
-    </div>
-    {% endif %}
-
-    <!-- ── Element 2: Search bar ── -->
+    <!-- ── Search bar (above fold on all viewports) ── -->
     <div class="search-box-wrapper">
         <textarea id="search-input" class="search-input" placeholder="Stel uw eigen vraag..."
             rows="1"></textarea>
@@ -70,6 +34,37 @@
         <button class="example-query" onclick="runExample(this)">Hoe stemden partijen over woningbouw?</button>
         <button class="example-query" onclick="runExample(this)">Welke moties over klimaat zijn aangenomen sinds 2020?</button>
     </div>
+
+    <!-- ── Demo answer (proof of capability, below search) ── -->
+    {% if not user %}
+    <div class="demo-answer-card" id="demo-answer">
+        <div class="demo-answer-desktop">
+            <div class="demo-answer-question">{{ demo_question or 'Heeft het college haar beloftes waargemaakt?' }}</div>
+            <div class="ai-content">
+                {% if demo_answer %}
+                {{ demo_answer | safe }}
+                {% else %}
+                <p>Op basis van het coalitieakkoord 2022-2026 en de jaarstukken van 2023 en 2024 zijn er duidelijke verschillen tussen belofte en uitvoering.</p>
+                <p><strong>Woningbouw:</strong> Het college beloofde 18.000 nieuwe woningen. De voortgangsrapportage laat zien dat er 12.400 vergunningen zijn verleend &mdash; op koers, maar de daadwerkelijke oplevering loopt achter.</p>
+                <p><strong>Klimaat:</strong> De ambitie voor 55% CO2-reductie in 2030 is bijgesteld naar 49% na de evaluatie van het Rotterdams Klimaatakkoord.</p>
+                <p>Bekijk de volledige analyse door zelf te zoeken.</p>
+                {% endif %}
+            </div>
+        </div>
+        <details class="demo-answer-mobile">
+            <summary>Bekijk voorbeeld</summary>
+            <div class="demo-answer-question">{{ demo_question or 'Heeft het college haar beloftes waargemaakt?' }}</div>
+            <div class="ai-content">
+                {% if demo_answer %}
+                {{ demo_answer | safe }}
+                {% else %}
+                <p>Op basis van het coalitieakkoord 2022-2026 en de jaarstukken zijn er duidelijke verschillen tussen belofte en uitvoering.</p>
+                <p>Bekijk de volledige analyse door zelf te zoeken.</p>
+                {% endif %}
+            </div>
+        </details>
+    </div>
+    {% endif %}
 
     <!-- Search results area -->
     <div id="search-results">
