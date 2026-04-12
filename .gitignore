@@ -44,3 +44,4 @@ tmp_*.txt
 # Binary/office files
 *.xlsx
 eval_notulen/runs/
+.claude/worktrees/
