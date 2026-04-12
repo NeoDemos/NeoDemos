@@ -1,166 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<style>
-    .admin-container {
-        max-width: 1000px;
-        margin: 2rem auto;
-    }
-
-    .admin-section {
-        background: #fff;
-        padding: 2rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        margin-bottom: 2rem;
-    }
-
-    .admin-section h3 {
-        margin-bottom: 1rem;
-        color: var(--secondary-color);
-        border-bottom: 1px solid #e2e8f0;
-        padding-bottom: 0.5rem;
-    }
-
-    .admin-table {
-        width: 100%;
-        border-collapse: collapse;
-        background: var(--card-bg);
-    }
-
-    .admin-table thead {
-        background: #f8f9fa;
-        border-bottom: 2px solid var(--border-color);
-    }
-
-    .admin-table th {
-        padding: 0.75rem 1rem;
-        text-align: left;
-        font-weight: 600;
-        color: var(--secondary-color);
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .admin-table td {
-        padding: 0.75rem 1rem;
-        font-size: 0.9rem;
-        border-bottom: 1px solid var(--border-color);
-        vertical-align: middle;
-    }
-
-    .admin-table tbody tr:hover {
-        background: #f7fafc;
-    }
-
-    .toggle-btn {
-        padding: 0.3rem 0.8rem;
-        border: 1px solid #cbd5e0;
-        border-radius: 4px;
-        background: #fff;
-        cursor: pointer;
-        font-size: 0.8rem;
-        font-family: inherit;
-        transition: all 0.2s;
-    }
-
-    .toggle-btn:hover {
-        background: #f7fafc;
-    }
-
-    .toggle-btn.active {
-        background: #38a169;
-        color: white;
-        border-color: #38a169;
-    }
-
-    .toggle-btn.inactive {
-        background: #e53e3e;
-        color: white;
-        border-color: #e53e3e;
-    }
-
-    .access-select {
-        padding: 0.3rem 0.5rem;
-        border: 1px solid #cbd5e0;
-        border-radius: 4px;
-        font-family: inherit;
-        font-size: 0.85rem;
-    }
-
-    .revoke-btn {
-        padding: 0.3rem 0.8rem;
-        border: 1px solid #e53e3e;
-        border-radius: 4px;
-        background: #fff;
-        color: #e53e3e;
-        cursor: pointer;
-        font-size: 0.8rem;
-        font-family: inherit;
-        transition: all 0.2s;
-    }
-
-    .revoke-btn:hover {
-        background: #e53e3e;
-        color: white;
-    }
-
-    .badge {
-        display: inline-block;
-        padding: 0.15rem 0.5rem;
-        border-radius: 3px;
-        font-size: 0.75rem;
-        font-weight: 600;
-    }
-
-    .badge-admin {
-        background: #ebf4ff;
-        color: #3182ce;
-    }
-
-    .badge-user {
-        background: #f0fff4;
-        color: #38a169;
-    }
-
-    .badge-inactive-token {
-        background: #fff5f5;
-        color: #e53e3e;
-    }
-
-    .token-scopes {
-        font-family: monospace;
-        font-size: 0.8rem;
-        color: #718096;
-    }
-
-    .admin-stats {
-        display: flex;
-        gap: 1.5rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .stat-card {
-        flex: 1;
-        background: #f8f9fa;
-        padding: 1rem 1.5rem;
-        border-radius: 6px;
-        text-align: center;
-    }
-
-    .stat-card .stat-number {
-        font-size: 2rem;
-        font-weight: 700;
-        color: var(--secondary-color);
-    }
-
-    .stat-card .stat-label {
-        font-size: 0.85rem;
-        color: #718096;
-    }
-</style>
-
 <div class="admin-container">
     <h2>Beheer</h2>
 
@@ -181,7 +21,7 @@
 
     <div class="admin-section">
         <h3>Gebruikers</h3>
-        <table class="admin-table">
+        <table class="data-table">
             <thead>
                 <tr>
                     <th>E-mail</th>
@@ -228,7 +68,7 @@
                             <option value="write" {% if u.db_access_level == 'write' %}selected{% endif %}>Schrijven</option>
                         </select>
                     </td>
-                    <td style="font-size:0.8rem;color:#718096;">{{ u.created_at[:10] }}</td>
+                    <td>{{ u.created_at[:10] }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -238,7 +78,7 @@
     <div class="admin-section">
         <h3>API Tokens</h3>
         {% if tokens %}
-        <table class="admin-table">
+        <table class="data-table">
             <thead>
                 <tr>
                     <th>Gebruiker</th>
@@ -260,11 +100,11 @@
                         {% if t.is_active %}
                         <span class="badge badge-user">Actief</span>
                         {% else %}
-                        <span class="badge badge-inactive-token">Ingetrokken</span>
+                        <span class="badge badge-inactive">Ingetrokken</span>
                         {% endif %}
                     </td>
-                    <td style="font-size:0.8rem;color:#718096;">{{ t.last_used_at[:10] if t.last_used_at else 'Nooit' }}</td>
-                    <td style="font-size:0.8rem;color:#718096;">{{ t.created_at[:10] }}</td>
+                    <td>{{ t.last_used_at[:10] if t.last_used_at else 'Nooit' }}</td>
+                    <td>{{ t.created_at[:10] }}</td>
                     <td>
                         {% if t.is_active %}
                         <button class="revoke-btn" onclick="revokeToken({{ t.id }}, this)">Intrekken</button>
@@ -275,7 +115,7 @@
             </tbody>
         </table>
         {% else %}
-        <p style="color:#718096;">Geen API tokens aangemaakt.</p>
+        <p class="text-text-secondary">Geen API tokens aangemaakt.</p>
         {% endif %}
     </div>
 </div>

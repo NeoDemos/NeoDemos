@@ -1,379 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
-<style>
-    .citation-bubble {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: var(--accent-color);
-        color: white;
-        font-size: 0.7rem;
-        font-weight: bold;
-        width: 1.2rem;
-        height: 1.2rem;
-        border-radius: 50%;
-        margin: 0 0.2rem;
-        cursor: pointer;
-        vertical-align: super;
-        text-decoration: none;
-        transition: transform 0.2s, box-shadow 0.2s;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
 
-    .citation-bubble:hover {
-        transform: scale(1.2);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        background: #0056b3;
-    }
-
-    #ai-answer-content h1,
-    #ai-answer-content h2,
-    #ai-answer-content h3 {
-        color: var(--secondary-color);
-        margin-top: 1.5rem;
-    }
-
-    #ai-answer-content p {
-        margin-bottom: 1rem;
-    }
-
-    /* Slider styles */
-    .switch {
-        position: relative;
-        display: inline-block;
-        width: 44px;
-        height: 24px;
-    }
-
-    .switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
-
-    .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        transition: .4s;
-        border-radius: 24px;
-    }
-
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: 16px;
-        width: 16px;
-        left: 4px;
-        bottom: 4px;
-        background-color: white;
-        transition: .4s;
-        border-radius: 50%;
-    }
-
-    input:checked+.slider {
-        background-color: #28a745;
-        /* Green color when active */
-    }
-
-    input:focus+.slider {
-        box-shadow: 0 0 1px #28a745;
-    }
-
-    input:checked+.slider:before {
-        transform: translateX(20px);
-    }
-
-    /* ── Landing content (anonymous only) ── */
-    .landing-section {
-        max-width: 800px;
-        margin: 4rem auto 0;
-        padding: 0 1rem;
-    }
-
-    .about-block {
-        background: #fdfdfd;
-        border-left: 4px solid var(--accent-color);
-        padding: 2rem 2.25rem;
-        border-radius: 0 12px 12px 0;
-        margin-bottom: 4rem;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-    }
-
-    .about-block h2 {
-        margin: 0 0 1rem;
-        color: var(--secondary-color);
-        font-size: 1.5rem;
-        font-weight: 700;
-    }
-
-    .about-block p {
-        font-size: 1.05rem;
-        line-height: 1.7;
-        color: #4a5568;
-        margin: 0 0 1rem;
-    }
-
-    .about-block p:last-child {
-        margin-bottom: 0;
-    }
-
-    /* ── MCP section (FactSet-inspired) ── */
-    .mcp-section {
-        background: #fff;
-        border: 1px solid #e2e8f0;
-        border-radius: 16px;
-        padding: 3rem 2.5rem;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
-        margin-bottom: 3rem;
-    }
-
-    .mcp-eyebrow {
-        display: inline-block;
-        background: rgba(212, 175, 55, 0.12);
-        color: var(--accent-color);
-        font-size: 0.72rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        padding: 0.35rem 0.85rem;
-        border-radius: 12px;
-        margin-bottom: 1rem;
-    }
-
-    .mcp-section h2 {
-        font-size: 1.85rem;
-        margin: 0 0 0.75rem;
-        color: var(--secondary-color);
-        font-weight: 800;
-        line-height: 1.25;
-    }
-
-    .mcp-section .lead {
-        font-size: 1.05rem;
-        line-height: 1.65;
-        color: #4a5568;
-        margin-bottom: 2rem;
-    }
-
-    .mcp-explainer {
-        background: #f7fafc;
-        border-radius: 10px;
-        padding: 1.5rem 1.75rem;
-        margin-bottom: 2rem;
-    }
-
-    .mcp-explainer h3 {
-        font-size: 1rem;
-        margin: 0 0 0.6rem;
-        color: var(--secondary-color);
-        font-weight: 700;
-    }
-
-    .mcp-explainer p {
-        font-size: 0.95rem;
-        line-height: 1.65;
-        color: #4a5568;
-        margin: 0;
-    }
-
-    .mcp-features {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 1.25rem;
-        margin-bottom: 2rem;
-    }
-
-    .mcp-feature {
-        padding: 1.25rem;
-        background: #fafbfc;
-        border-radius: 10px;
-        border: 1px solid #edf2f7;
-    }
-
-    .mcp-feature .icon {
-        font-size: 1.4rem;
-        margin-bottom: 0.5rem;
-        display: block;
-    }
-
-    .mcp-feature h4 {
-        margin: 0 0 0.4rem;
-        font-size: 0.95rem;
-        font-weight: 700;
-        color: var(--secondary-color);
-    }
-
-    .mcp-feature p {
-        margin: 0;
-        font-size: 0.85rem;
-        line-height: 1.5;
-        color: #718096;
-    }
-
-    .mcp-examples {
-        background: #1a202c;
-        color: #e2e8f0;
-        border-radius: 10px;
-        padding: 1.5rem 1.75rem;
-        margin-bottom: 2rem;
-        font-family: 'Inter', sans-serif;
-    }
-
-    .mcp-examples h3 {
-        margin: 0 0 1rem;
-        font-size: 0.85rem;
-        color: #a0aec0;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        font-weight: 700;
-    }
-
-    .mcp-examples ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .mcp-examples li {
-        padding: 0.55rem 0;
-        font-size: 0.92rem;
-        line-height: 1.5;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-        color: #cbd5e0;
-    }
-
-    .mcp-examples li:last-child {
-        border-bottom: none;
-    }
-
-    .mcp-examples li::before {
-        content: '"';
-        color: var(--accent-color);
-        margin-right: 0.25rem;
-    }
-
-    .mcp-examples li::after {
-        content: '"';
-        color: var(--accent-color);
-        margin-left: 0.25rem;
-    }
-
-    .mcp-cta {
-        display: flex;
-        gap: 0.85rem;
-        flex-wrap: wrap;
-        align-items: center;
-    }
-
-    .mcp-cta-primary {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.85rem 1.75rem;
-        background: var(--secondary-color);
-        color: #fff;
-        text-decoration: none;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 0.95rem;
-        transition: opacity 0.2s, transform 0.2s;
-    }
-
-    .mcp-cta-primary:hover {
-        opacity: 0.92;
-        transform: translateY(-1px);
-    }
-
-    .mcp-cta-secondary {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.85rem 1.5rem;
-        color: var(--secondary-color);
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 0.92rem;
-    }
-
-    .mcp-cta-secondary:hover {
-        color: var(--accent-color);
-    }
-
-    .mcp-clients {
-        display: flex;
-        gap: 0.75rem;
-        flex-wrap: wrap;
-        margin-top: 1.5rem;
-        padding-top: 1.5rem;
-        border-top: 1px solid #edf2f7;
-        font-size: 0.82rem;
-        color: #718096;
-        align-items: center;
-    }
-
-    .mcp-clients strong {
-        color: #4a5568;
-        margin-right: 0.5rem;
-    }
-
-    .mcp-client-pill {
-        background: #edf2f7;
-        padding: 0.3rem 0.75rem;
-        border-radius: 12px;
-        color: #4a5568;
-        font-weight: 500;
-    }
-
-    /* Inline search hint */
-    .search-hint {
-        max-width: 800px;
-        margin: -0.5rem auto 1rem;
-        font-size: 0.85rem;
-        color: #c53030;
-        text-align: center;
-        min-height: 1.2em;
-    }
-
-    @media (max-width: 600px) {
-        .mcp-section {
-            padding: 2rem 1.5rem;
-        }
-        .about-block {
-            padding: 1.5rem;
-        }
-        .mcp-section h2 {
-            font-size: 1.5rem;
-        }
-    }
-</style>
-
-<div class="search-container" style="max-width: 800px; margin: 0 auto; padding: 2rem 0;">
-    <h1 style="font-size: 2.2rem; margin-bottom: 1.5rem; text-align: center;">Zoek in Raadsinformatie</h1>
-    <p style="color: #666; text-align: center; margin-bottom: 2rem;">Doorzoek alle agendapunten en documenten van de
+<div class="search-container">
+    <h1 class="search-title">Zoek in Raadsinformatie</h1>
+    <p class="search-subtitle">Doorzoek alle agendapunten en documenten van de
         afgelopen jaren.</p>
 
     <!-- Search Box Wrapper -->
-    <div class="search-box-wrapper"
-        style="position: relative; margin-bottom: 1rem; background: white; border: 2px solid var(--accent-color); border-radius: 32px; padding: 0.4rem 0.4rem 0.4rem 1.5rem; box-shadow: 0 4px 24px rgba(0,0,0,0.06); display: flex; align-items: stretch; min-height: 64px; overflow: visible;">
+    <div class="search-box-wrapper">
 
-        <textarea id="search-input" placeholder="Zoek op thema, persoon of dossier..."
-            style="flex: 1; border: none; outline: none; font-size: 1.1rem; padding: 0.9rem 0; resize: none; min-height: 24px; max-height: 15rem; background: transparent; line-height: 1.5; overflow-y: hidden;"
+        <textarea id="search-input" class="search-input" placeholder="Zoek op thema, persoon of dossier..."
             rows="1"></textarea>
 
-        <button onclick="performSearch()"
-            style="background: var(--accent-color); color: white; border: none; padding: 0 2.2rem; height: 50px; border-radius: 25px; cursor: pointer; font-weight: 700; flex-shrink: 0; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); align-self: center; margin-left: 0.5rem;">Zoek</button>
+        <button onclick="performSearch()" class="search-btn">Zoek</button>
 
         <!-- @mention Suggestion Menu -->
-        <div id="mention-menu"
-            style="display: none; position: absolute; bottom: 100%; left: 0; width: 320px; background: white; border: 1px solid #eef2f6; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.12); z-index: 2000; margin-bottom: 12px; overflow: hidden;">
-            <div
-                style="padding: 1rem; background: #fcfdfe; border-bottom: 1px solid #f0f4f8; font-size: 0.75rem; font-weight: 700; color: #8898aa; letter-spacing: 0.05em;">
+        <div id="mention-menu" class="mention-menu">
+            <div class="mention-menu-header">
                 DIRECTE KOPPELING</div>
             <div id="mention-items">
                 <!-- Items injected by JS -->
@@ -384,44 +28,42 @@
     <div id="search-hint" class="search-hint" aria-live="polite"></div>
 
     <!-- Toggle Below Search Box -->
-    <div style="margin-bottom: 3rem; display: flex; justify-content: center; align-items: center; gap: 1rem; background: #f8fafc; padding: 0.8rem; border-radius: 40px; width: fit-content; margin-left: auto; margin-right: auto; border: 1px solid #e2e8f0;">
-        <span style="font-size: 0.9rem; color: #64748b; font-weight: 600;">🔍 Standaard Zoeken</span>
+    <div class="search-toggle">
+        <span class="search-toggle-label">&#128269; Standaard Zoeken</span>
         <label class="switch">
             <input type="checkbox" id="debate-mode">
             <span class="slider round"></span>
         </label>
-        <span style="font-size: 0.9rem; color: #4b5563; font-weight: 600;">⚔️ Debat Voorbereiding</span>
+        <span class="search-toggle-label">&#9876;&#65039; Debat Voorbereiding</span>
     </div>
 
     <div id="search-results">
         <!-- Unified Loading State -->
-        <div id="search-loading-state" style="display: none; margin-bottom: 2rem; background: #f8f9fa; padding: 1.5rem; border-radius: 12px; border: 1px solid #eee;">
-            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+        <div id="search-loading-state" class="search-loading-state" hidden>
+            <div class="search-loading-flex">
                 <div class="spinner"></div>
-                <span id="search-loading-text" style="color: #666; font-style: italic;">Aan het zoeken...</span>
+                <span id="search-loading-text" class="search-loading-text">Aan het zoeken...</span>
             </div>
-            <ul id="ai-loading-steps" style="display: none; list-style-type: none; padding-left: 0; font-size: 0.85rem; color: #888;">
+            <ul id="ai-loading-steps" class="ai-loading-steps" hidden>
                 <!-- Agent steps appear here -->
             </ul>
         </div>
 
         <!-- AI Deep Research Result -->
-        <div id="ai-deep-research" style="display: none; margin-bottom: 3rem;">
-            <div class="card"
-                style="border: 1px solid var(--accent-color); background: #fdfdfd; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
-                <div style="display: flex; align-items: center; margin-bottom: 1.5rem; justify-content: space-between;">
-                    <div style="display: flex; align-items: center;">
-                        <span id="ai-header-icon" style="font-size: 1.5rem; margin-right: 0.8rem;">🧠</span>
-                        <h2 id="ai-header-title" style="margin: 0; font-size: 1.4rem; color: var(--accent-color);">Deep
+        <div id="ai-deep-research" hidden>
+            <div class="card ai-result-card">
+                <div class="ai-result-header">
+                    <div class="ai-result-title-group">
+                        <span id="ai-header-icon" class="ai-result-icon">&#129504;</span>
+                        <h2 id="ai-header-title" class="ai-result-title">Deep
                             Research Analyse</h2>
                     </div>
-                    <button id="copy-word-btn" onclick="copyToWord()"
-                        style="display: none; background: white; color: var(--secondary-color); border: 1px solid #ddd; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; display: flex; align-items: center; gap: 0.5rem;">
-                        📄 Kopieer voor Word
+                    <button id="copy-word-btn" class="btn-copy-word" onclick="copyToWord()" hidden>
+                        &#128196; Kopieer voor Word
                     </button>
                 </div>
 
-                <div id="ai-answer-content" style="line-height: 1.8; font-size: 1.05rem; color: #2c3e50;">
+                <div id="ai-answer-content" class="ai-content">
                     <!-- AI result markdown rendered here -->
                 </div>
             </div>
@@ -447,7 +89,7 @@
                 eenvoudige wijze inzicht te krijgen in de complexe documentenbrei van
                 gemeentes.
             </p>
-            <p style="font-size:0.92rem;color:#718096;">
+            <p class="about-block-note">
                 90.000+ Rotterdamse raadsdocumenten, doorzoekbaar met AI &mdash;
                 van moties en amendementen tot debatfragmenten en jaarstukken.
             </p>
@@ -558,30 +200,32 @@
         const copyBtn = document.getElementById('copy-word-btn');
 
         resultsDiv.innerHTML = '';
-        aiContainer.style.display = 'none';
+        aiContainer.hidden = true;
         aiContent.innerHTML = '';
-        copyBtn.style.display = 'none';
+        copyBtn.hidden = true;
 
-        loadingState.style.display = 'block';
+        loadingState.hidden = false;
         loadingSteps.innerHTML = '';
-        loadingSteps.style.display = 'none';
+        loadingSteps.hidden = true;
 
         if (isDebateMode) {
             headerTitle.innerText = "Agentic Debatdossier Constructie";
-            headerIcon.innerText = "⚔️";
+            headerIcon.innerText = "\u2694\uFE0F";
             loadingText.innerText = "Deep Research Agent Loop Gestart. Context analyseren...";
-            loadingSteps.style.display = 'block';
+            loadingSteps.hidden = false;
 
             let step = 0;
             const steps = [
-                "Stap 1: Initiële historische bronnen ophalen...",
+                "Stap 1: Initi\u00eble historische bronnen ophalen...",
                 "Stap 2: Gapanalyse uitvoeren op ontbrekende details...",
                 "Stap 3: Secundaire gerichte zoekopdracht lanceren in vector database...",
                 "Stap 4: Diepgaande dossieranalyse schrijven (mutaties & standpunten)..."
             ];
             const interval = setInterval(() => {
                 if (step < steps.length) {
-                    loadingSteps.innerHTML += `<li style="margin-bottom: 0.4rem;">✅ ${steps[step]}</li>`;
+                    const li = document.createElement('li');
+                    li.textContent = '\u2705 ' + steps[step];
+                    loadingSteps.appendChild(li);
                     step++;
                 } else {
                     clearInterval(interval);
@@ -591,22 +235,23 @@
             window._debateInterval = interval;
         } else {
             loadingText.innerText = "Documenten en agendapunten doorzoeken...";
-            loadingSteps.style.display = 'none';
+            loadingSteps.hidden = true;
         }
 
         try {
             const savedParty = localStorage.getItem('neodemos_party') || 'GroenLinks-PvdA';
             const url = `/api/search?q=${encodeURIComponent(query)}${isDebateMode ? '&mode=debate&deep=true' : ''}&party=${encodeURIComponent(savedParty)}`;
+
             const response = await fetch(url);
             const data = await response.json();
 
             if (window._debateInterval) clearInterval(window._debateInterval);
-            loadingState.style.display = 'none';
+            loadingState.hidden = true;
 
             const usedSourceIndices = new Set();
 
             if (data.ai_answer) {
-                aiContainer.style.display = 'block';
+                aiContainer.hidden = false;
                 marked.setOptions({ gfm: true, breaks: true });
 
                 let answerHtml = data.ai_answer;
@@ -620,14 +265,14 @@
                         const nStr = cit.replace('#', '').trim();
                         // Try parsing as simple integer first (standard index)
                         let n = parseInt(nStr, 10);
-                        
+
                         // If it's a valid index mapped to sources
                         if (!isNaN(n) && n > 0 && data.sources && n <= data.sources.length) {
                             usedSourceIndices.add(n);
                             const source = data.sources[n - 1];
                             return `<a href="${source.url || '#'}" target="_blank" class="citation-bubble" title="${source.name || ''}">${n}</a>`;
                         }
-                        
+
                         // Fallback: Check if it's a document ID that matches one of our sources' original IDs
                         if (data.sources) {
                             const sourceIdx = data.sources.findIndex(s => s.id === nStr);
@@ -638,7 +283,7 @@
                                 return `<a href="${source.url || '#'}" target="_blank" class="citation-bubble" title="${source.name || ''}">${nVal}</a>`;
                             }
                         }
-                        
+
                         return cit;
                     }).join('');
                 });
@@ -657,46 +302,46 @@
                 });
 
                 aiContent.innerHTML = renderedHtml;
-                copyBtn.style.display = 'flex';
+                copyBtn.hidden = false;
             }
 
             if (data.results.length === 0 && !data.ai_answer) {
-                resultsDiv.innerHTML = '<div class="card" style="text-align: center; padding: 2rem;"><p>Geen resultaten gevonden voor "' + query + '".</p></div>';
+                resultsDiv.innerHTML = '<div class="card"><p>Geen resultaten gevonden voor "' + query + '".</p></div>';
                 return;
             }
 
-            let html = '<h3 style="margin-bottom: 1.5rem; color: #666; font-size: 0.9rem; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">Gevonden Documenten</h3>';
+            let html = '<h3 class="search-section-header">Gevonden Documenten</h3>';
 
             if (usedSourceIndices.size > 0 && data.sources) {
-                html += '<div class="cited-sources-container" style="background: #f9f9fa; border-left: 4px solid var(--accent-color); padding: 1.5rem; border-radius: 0 8px 8px 0; margin-bottom: 2rem;">';
-                html += '<h4 style="margin-top: 0; margin-bottom: 1rem; color: var(--secondary-color); font-size: 1.05rem;">Bronnen:</h4>';
-                html += '<ul style="list-style-type: none; padding-left: 0; font-size: 0.95rem; margin-bottom: 0;">';
+                html += '<div class="cited-sources-container">';
+                html += '<h4>Bronnen:</h4>';
+                html += '<ul>';
 
                 const sortedIndices = Array.from(usedSourceIndices).sort((a, b) => a - b);
                 sortedIndices.forEach(n => {
                     const source = data.sources[n - 1];
                     const url = source.url || '#';
                     const name = source.name || `Document ${source.id}`;
-                    html += `<li style="margin-bottom: 0.8rem; display: flex; align-items: flex-start;">
-                                    <span class="citation-bubble" style="margin-top: 0.1rem; margin-right: 1rem; flex-shrink: 0; cursor: default; transform: none; box-shadow: none;">${n}</span>
-                                    <a href="${url}" target="_blank" style="color: var(--secondary-color); text-decoration: none; display: inline-block; font-weight: 500; line-height: 1.4;">${name}</a>
+                    html += `<li>
+                                    <span class="citation-bubble cited-source-bubble">${n}</span>
+                                    <a href="${url}" target="_blank">${name}</a>
                                 </li>`;
                 });
                 html += '</ul></div>';
             }
 
             if (data.results.length > 0) {
-                html += '<h4 style="margin-bottom: 1rem; color: #888; font-size: 0.85rem; text-transform: uppercase;">Overige Resultaten:</h4>';
+                html += '<h4 class="search-section-subheader">Overige Resultaten:</h4>';
                 data.results.forEach(result => {
                     html += `
-                    <div class="card search-result-item" style="margin-bottom: 1rem; padding: 1.2rem; cursor: pointer; transition: transform 0.2s;" onclick="location.href='/meeting/${result.meeting_id}'">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                            <h4 style="margin: 0; color: var(--secondary-color); font-size: 1.1rem;">${result.name}</h4>
-                            <span style="font-size: 0.75rem; background: #f0f2f5; padding: 0.2rem 0.5rem; border-radius: 4px; color: #666;">${result.meeting_date}</span>
+                    <div class="card search-result-item" onclick="location.href='/meeting/${result.meeting_id}'">
+                        <div class="search-result-item-header">
+                            <h4 class="search-result-item-title">${result.name}</h4>
+                            <span class="search-result-item-date">${result.meeting_date}</span>
                         </div>
-                        <p style="margin: 0.5rem 0; font-size: 0.85rem; color: #444; line-height: 1.5;">${result.snippet || 'Geen samenvatting beschikbaar'}</p>
-                        <div style="margin-top: 0.8rem; font-size: 0.75rem; color: var(--accent-color); font-weight: 600;">
-                            🏛️ ${result.committee || 'Algemeen'}
+                        <p class="search-result-item-snippet">${result.snippet || 'Geen samenvatting beschikbaar'}</p>
+                        <div class="search-result-item-committee">
+                            &#127963;&#65039; ${result.committee || 'Algemeen'}
                         </div>
                     </div>`;
                 });
@@ -706,9 +351,9 @@
         } catch (error) {
             if (window._debateInterval) clearInterval(window._debateInterval);
             const loadingState = document.getElementById('search-loading-state');
-            if (loadingState) loadingState.style.display = 'none';
+            if (loadingState) loadingState.hidden = true;
             console.error("Search error:", error);
-            resultsDiv.innerHTML = '<p style="color: #d32f2f;">❌ Er is een fout opgetreden bij het zoeken.</p>';
+            resultsDiv.innerHTML = '<p class="search-error">\u274C Er is een fout opgetreden bij het zoeken.</p>';
         }
     }
 
@@ -725,7 +370,7 @@
                 th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
                 th { background-color: #f8f9fa; font-weight: bold; }
                 tr:nth-child(even) { background-color: #f2f2f2; }
-                .citation-bubble { display: none; } /* Don't copy UI bubbles to Word */
+                .citation-bubble { display: none; }
             </style>
         `;
 
@@ -737,18 +382,16 @@
             await navigator.clipboard.write(data);
 
             const originalText = btn.innerHTML;
-            btn.innerHTML = '✅ Gekopieerd!';
-            btn.style.borderColor = '#38a169';
-            btn.style.color = '#38a169';
+            btn.innerHTML = '\u2705 Gekopieerd!';
+            btn.classList.add('copy-success');
 
             setTimeout(() => {
                 btn.innerHTML = originalText;
-                btn.style.borderColor = '#ddd';
-                btn.style.color = 'var(--secondary-color)';
+                btn.classList.remove('copy-success');
             }, 2000);
         } catch (err) {
             console.error('Failed to copy: ', err);
-            alert('Fout bij kopiëren. Probeer de tekst handmatig te selecteren.');
+            alert('Fout bij kopie\u00EBren. Probeer de tekst handmatig te selecteren.');
         }
     }
 
@@ -763,25 +406,25 @@
         const mentionItems = document.getElementById('mention-items');
         const categories = [
             // PARTIJEN
-            { name: 'Leefbaar Rotterdam', icon: '🐾', type: 'Partij' },
-            { name: 'VVD', icon: '💙', type: 'Partij' },
-            { name: 'D66', icon: '💚', type: 'Partij' },
-            { name: 'GroenLinks-PvdA', icon: '❤️', type: 'Partij' },
-            { name: 'DENK', icon: '🛡️', type: 'Partij' },
-            { name: 'Volt', icon: '⚡', type: 'Partij' },
-            { name: 'Partij voor de Dieren', icon: '🌿', type: 'Partij' },
-            { name: 'SP', icon: '🚩', type: 'Partij' },
-            { name: 'CDA', icon: '🍊', type: 'Partij' },
-            { name: 'ChristenUnie', icon: '✝️', type: 'Partij' },
-            { name: '50PLUS', icon: '👵', type: 'Partij' },
+            { name: 'Leefbaar Rotterdam', icon: '\uD83D\uDC3E', type: 'Partij' },
+            { name: 'VVD', icon: '\uD83D\uDC99', type: 'Partij' },
+            { name: 'D66', icon: '\uD83D\uDC9A', type: 'Partij' },
+            { name: 'GroenLinks-PvdA', icon: '\u2764\uFE0F', type: 'Partij' },
+            { name: 'DENK', icon: '\uD83D\uDEE1\uFE0F', type: 'Partij' },
+            { name: 'Volt', icon: '\u26A1', type: 'Partij' },
+            { name: 'Partij voor de Dieren', icon: '\uD83C\uDF3F', type: 'Partij' },
+            { name: 'SP', icon: '\uD83D\uDEA9', type: 'Partij' },
+            { name: 'CDA', icon: '\uD83C\uDF4A', type: 'Partij' },
+            { name: 'ChristenUnie', icon: '\u271D\uFE0F', type: 'Partij' },
+            { name: '50PLUS', icon: '\uD83D\uDC75', type: 'Partij' },
 
             // COMMISSIES (Gevonden in DB)
-            { name: 'Commissie Bestuur, Organisatie, Financiën en Veiligheid', icon: '💰', type: 'Commissie' },
-            { name: 'Commissie Bouwen, Wonen en Buitenruimte', icon: '🏗️', type: 'Commissie' },
-            { name: 'Commissie Mobiliteit, Haven, Economie en Klimaat', icon: '🛳️', type: 'Commissie' },
-            { name: 'Commissie Werk, Inkomen, Onderwijs, Samenleven', icon: '🤝', type: 'Commissie' },
-            { name: 'Commissie Zorg, Welzijn, Cultuur en Sport', icon: '🏥', type: 'Commissie' },
-            { name: 'Gemeenteraad', icon: '🏛️', type: 'Commissie' }
+            { name: 'Commissie Bestuur, Organisatie, Financi\u00EBn en Veiligheid', icon: '\uD83D\uDCB0', type: 'Commissie' },
+            { name: 'Commissie Bouwen, Wonen en Buitenruimte', icon: '\uD83C\uDFD7\uFE0F', type: 'Commissie' },
+            { name: 'Commissie Mobiliteit, Haven, Economie en Klimaat', icon: '\uD83D\uDEF3\uFE0F', type: 'Commissie' },
+            { name: 'Commissie Werk, Inkomen, Onderwijs, Samenleven', icon: '\uD83E\uDD1D', type: 'Commissie' },
+            { name: 'Commissie Zorg, Welzijn, Cultuur en Sport', icon: '\uD83C\uDFE5', type: 'Commissie' },
+            { name: 'Gemeenteraad', icon: '\uD83C\uDFDB\uFE0F', type: 'Commissie' }
         ];
 
         searchInput.addEventListener('input', function (e) {
@@ -809,26 +452,16 @@
                 return;
             }
 
-            filtered.forEach((cat, index) => {
+            filtered.forEach((cat) => {
                 const item = document.createElement('div');
-                item.style.padding = '0.8rem 1.2rem';
-                item.style.cursor = 'pointer';
-                item.style.display = 'flex';
-                item.style.alignItems = 'center';
-                item.style.gap = '0.8rem';
-                item.style.transition = 'background 0.2s';
-                item.style.fontSize = '0.9rem';
-                item.style.borderLeft = index === 0 ? '4px solid var(--accent-color)' : '4px solid transparent';
+                item.classList.add('mention-item');
 
                 item.innerHTML = `
-                    <span style="font-size: 1.1rem;">${cat.icon}</span> 
-                    <div style="display: flex; flex-direction: column;">
-                        <span style="font-weight: 600; color: #333;">${cat.name}</span>
-                        <span style="font-size: 0.7rem; color: #888; text-transform: uppercase;">${cat.type}</span>
+                    <span class="mention-item-icon">${cat.icon}</span>
+                    <div>
+                        <span class="mention-item-name">${cat.name}</span>
+                        <span class="mention-item-type">${cat.type}</span>
                     </div>`;
-
-                item.onmouseover = () => item.style.background = '#f7fafc';
-                item.onmouseout = () => item.style.background = 'transparent';
 
                 item.onclick = () => {
                     const text = searchInput.value;
@@ -842,11 +475,11 @@
                 };
                 mentionItems.appendChild(item);
             });
-            mentionMenu.style.display = 'block';
+            mentionMenu.classList.add('active');
         }
 
         function hideMentionMenu() {
-            mentionMenu.style.display = 'none';
+            mentionMenu.classList.remove('active');
         }
 
         document.addEventListener('click', function (e) {

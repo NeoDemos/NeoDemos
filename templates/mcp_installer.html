@@ -1,368 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<style>
-    .installer-container {
-        max-width: 860px;
-        margin: 2rem auto;
-    }
-
-    .installer-hero {
-        text-align: center;
-        padding: 2rem 0 2.5rem;
-    }
-
-    .installer-hero h1 {
-        font-size: 2rem;
-        margin-bottom: 0.5rem;
-        color: var(--secondary-color);
-    }
-
-    .installer-hero p {
-        font-size: 1.05rem;
-        color: #718096;
-        max-width: 620px;
-        margin: 0 auto;
-    }
-
-    /* ── Method tabs ── */
-    .method-tabs {
-        display: flex;
-        gap: 0;
-        margin-bottom: 0;
-        border-bottom: 2px solid #e2e8f0;
-    }
-
-    .method-tab {
-        padding: 0.75rem 1.5rem;
-        background: none;
-        border: none;
-        font-size: 0.95rem;
-        font-weight: 600;
-        color: #718096;
-        cursor: pointer;
-        border-bottom: 2px solid transparent;
-        margin-bottom: -2px;
-        transition: all 0.2s;
-    }
-
-    .method-tab.active {
-        color: var(--primary-color);
-        border-bottom-color: var(--primary-color);
-    }
-
-    .method-tab:hover:not(.active) {
-        color: #4a5568;
-    }
-
-    .method-panel {
-        display: none;
-        background: #fff;
-        padding: 2rem;
-        border-radius: 0 0 8px 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    }
-
-    .method-panel.active {
-        display: block;
-    }
-
-    .recommended-badge {
-        display: inline-block;
-        background: #c6f6d5;
-        color: #276749;
-        font-size: 0.7rem;
-        font-weight: 700;
-        padding: 0.15rem 0.5rem;
-        border-radius: 8px;
-        margin-left: 0.4rem;
-        vertical-align: middle;
-        text-transform: uppercase;
-    }
-
-    /* ── Sections ── */
-    .install-section {
-        margin-bottom: 2rem;
-    }
-
-    .install-section:last-child {
-        margin-bottom: 0;
-    }
-
-    .install-section h3 {
-        font-size: 1.1rem;
-        color: var(--secondary-color);
-        margin-bottom: 0.75rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .install-section h4 {
-        font-size: 0.95rem;
-        color: #4a5568;
-        margin: 1.25rem 0 0.5rem;
-    }
-
-    .install-section p, .install-section li {
-        color: #4a5568;
-        font-size: 0.92rem;
-        line-height: 1.6;
-    }
-
-    .install-section ol {
-        padding-left: 1.5rem;
-    }
-
-    .install-section li {
-        margin-bottom: 0.5rem;
-    }
-
-    .step-number {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 24px;
-        height: 24px;
-        background: var(--primary-color);
-        color: #fff;
-        border-radius: 50%;
-        font-size: 0.75rem;
-        font-weight: 700;
-        flex-shrink: 0;
-    }
-
-    /* ── Code blocks ── */
-    .code-block {
-        background: #1a202c;
-        color: #e2e8f0;
-        padding: 1rem 1.25rem;
-        border-radius: 6px;
-        overflow-x: auto;
-        font-family: 'Courier New', monospace;
-        font-size: 0.84rem;
-        line-height: 1.5;
-        position: relative;
-        margin: 0.75rem 0;
-    }
-
-    .code-block pre {
-        margin: 0;
-        white-space: pre-wrap;
-        word-break: break-all;
-    }
-
-    .copy-btn {
-        position: absolute;
-        top: 0.5rem;
-        right: 0.5rem;
-        padding: 0.3rem 0.7rem;
-        background: rgba(255, 255, 255, 0.1);
-        color: #a0aec0;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 0.75rem;
-        font-family: inherit;
-        transition: all 0.2s;
-    }
-
-    .copy-btn:hover {
-        background: rgba(255, 255, 255, 0.2);
-        color: #fff;
-    }
-
-    .copy-btn.copied {
-        background: #276749;
-        color: #c6f6d5;
-        border-color: #276749;
-    }
-
-    /* ── Primary action button ── */
-    .action-btn {
-        display: inline-block;
-        padding: 0.75rem 1.75rem;
-        background: var(--primary-color);
-        color: white;
-        border: none;
-        border-radius: 6px;
-        font-size: 0.95rem;
-        font-weight: 600;
-        cursor: pointer;
-        text-decoration: none;
-        transition: opacity 0.2s;
-    }
-
-    .action-btn:hover {
-        opacity: 0.9;
-    }
-
-    .action-btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
-
-    .action-btn-secondary {
-        background: var(--secondary-color);
-    }
-
-    /* ── Token generation area ── */
-    .token-generate-area {
-        background: #f7fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-        padding: 1.5rem;
-        margin: 1rem 0;
-    }
-
-    .token-display {
-        display: none;
-        margin-top: 1rem;
-    }
-
-    .token-display.visible {
-        display: block;
-    }
-
-    .token-warning {
-        background: #fffbeb;
-        border: 1px solid #fbbf24;
-        padding: 0.75rem 1rem;
-        border-radius: 6px;
-        font-size: 0.85rem;
-        color: #92400e;
-        margin-bottom: 1rem;
-    }
-
-    .token-value {
-        background: #1a202c;
-        color: #68d391;
-        padding: 0.75rem 1rem;
-        border-radius: 6px;
-        font-family: 'Courier New', monospace;
-        font-size: 0.82rem;
-        word-break: break-all;
-        position: relative;
-    }
-
-    /* ── Info callout ── */
-    .info-callout {
-        background: #ebf8ff;
-        border: 1px solid #90cdf4;
-        padding: 1rem;
-        border-radius: 6px;
-        font-size: 0.88rem;
-        color: #2a4365;
-        margin: 1rem 0;
-    }
-
-    .info-callout strong {
-        color: #1a365d;
-    }
-
-    /* ── Login prompt ── */
-    .login-prompt {
-        text-align: center;
-        padding: 2rem;
-        background: #f7fafc;
-        border: 1px dashed #cbd5e0;
-        border-radius: 8px;
-        margin: 1rem 0;
-    }
-
-    .login-prompt p {
-        margin-bottom: 1rem;
-        color: #4a5568;
-    }
-
-    /* ── Tool table ── */
-    .tools-section {
-        background: #fff;
-        padding: 2rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        margin-top: 2rem;
-    }
-
-    .tools-section h3 {
-        margin-bottom: 1rem;
-        color: var(--secondary-color);
-        border-bottom: 1px solid #e2e8f0;
-        padding-bottom: 0.5rem;
-    }
-
-    .separator {
-        border: none;
-        border-top: 1px solid #e2e8f0;
-        margin: 1.5rem 0;
-    }
-
-    /* ── Spinner ── */
-    .spinner {
-        display: inline-block;
-        width: 16px;
-        height: 16px;
-        border: 2px solid rgba(255,255,255,0.3);
-        border-top-color: #fff;
-        border-radius: 50%;
-        animation: spin 0.6s linear infinite;
-        margin-right: 0.5rem;
-        vertical-align: middle;
-    }
-
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
-
-    /* ── Tabs within panels ── */
-    .client-tabs {
-        display: flex;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-    }
-
-    .client-tab {
-        padding: 0.4rem 1rem;
-        background: #edf2f7;
-        border: none;
-        border-radius: 6px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: #4a5568;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-
-    .client-tab.active {
-        background: var(--primary-color);
-        color: #fff;
-    }
-
-    .client-panel {
-        display: none;
-    }
-
-    .client-panel.active {
-        display: block;
-    }
-
-    @media (max-width: 600px) {
-        .method-tabs {
-            flex-direction: column;
-        }
-        .method-tab {
-            border-bottom: none;
-            border-left: 2px solid transparent;
-            margin-bottom: 0;
-            margin-left: 0;
-        }
-        .method-tab.active {
-            border-left-color: var(--primary-color);
-            border-bottom-color: transparent;
-        }
-    }
-</style>
-
 <div class="installer-container">
     <div class="installer-hero">
         <h1>NeoDemos MCP Server</h1>
@@ -410,9 +48,7 @@
                     <pre>{{ mcp_url }}</pre>
                 </div>
 
-                <p style="margin-top:0.75rem;font-size:0.88rem;color:#718096;">
-                    Of voeg het handmatig toe aan uw <code>claude_desktop_config.json</code>:
-                </p>
+                <p>Of voeg het handmatig toe aan uw <code>claude_desktop_config.json</code>:</p>
 
                 <div class="code-block" id="oauth-config-block">
                     <button class="copy-btn" onclick="copyCode('oauth-config-block')">Kopieer</button>
@@ -431,7 +67,7 @@
 
                 {% if not user %}
                 <div class="info-callout">
-                    Nog geen account? <a href="/register" style="font-weight:600;">Registreer hier</a> zodat u klaar bent wanneer Claude om inlog vraagt.
+                    Nog geen account? <a href="/register">Registreer hier</a> zodat u klaar bent wanneer Claude om inlog vraagt.
                 </div>
                 {% endif %}
             </div>
@@ -447,7 +83,7 @@
                     <pre>claude mcp add neodemos --url {{ mcp_url }}</pre>
                 </div>
 
-                <p style="margin-top:0.5rem;">Claude Code handelt de OAuth-flow automatisch af bij eerste gebruik.</p>
+                <p>Claude Code handelt de OAuth-flow automatisch af bij eerste gebruik.</p>
             </div>
         </div>
 
@@ -483,11 +119,11 @@
             <h3>API Token Genereren</h3>
 
             {% if existing_tokens %}
-            <p style="margin-bottom:0.75rem;">U heeft al {{ existing_tokens|length }} token(s). U kunt een nieuw token genereren of een bestaand token gebruiken via <a href="/settings" style="font-weight:600;">Instellingen</a>.</p>
+            <p>U heeft al {{ existing_tokens|length }} token(s). U kunt een nieuw token genereren of een bestaand token gebruiken via <a href="/settings">Instellingen</a>.</p>
             {% endif %}
 
             <div class="token-generate-area">
-                <p style="margin-bottom:1rem;">Klik om automatisch een API token aan te maken en configuratie te genereren.</p>
+                <p>Klik om automatisch een API token aan te maken en configuratie te genereren.</p>
                 <button class="action-btn" id="generate-token-btn" onclick="generateToken()">
                     Token Genereren
                 </button>
@@ -497,7 +133,7 @@
                         Kopieer uw token nu — deze wordt maar eenmaal getoond!
                     </div>
                     <div class="token-value" id="token-value-display">
-                        <button class="copy-btn" onclick="copyText(document.getElementById('raw-token').textContent, this)" style="top:0.4rem;right:0.4rem;">Kopieer</button>
+                        <button class="copy-btn" onclick="copyText(document.getElementById('raw-token').textContent, this)">Kopieer</button>
                         <span id="raw-token"></span>
                     </div>
                 </div>
@@ -548,7 +184,7 @@
         <div class="login-prompt">
             <p>Log in of registreer om automatisch een API token te genereren.</p>
             <a href="/login?next=/mcp-installer" class="action-btn">Inloggen</a>
-            <a href="/register" class="action-btn action-btn-secondary" style="margin-left:0.5rem;">Registreren</a>
+            <a href="/register" class="action-btn action-btn-secondary">Registreren</a>
         </div>
         {% endif %}
     </div>
@@ -558,8 +194,8 @@
     <!-- ═══════════════════════════════════════════════════ -->
     <div class="tools-section">
         <h3>Beschikbare Tools (13)</h3>
-        <p style="color:#718096;margin-bottom:1rem;font-size:0.9rem;">Na installatie kan uw AI-assistent de volgende tools gebruiken:</p>
-        <table class="admin-table" style="margin:0;">
+        <p>Na installatie kan uw AI-assistent de volgende tools gebruiken:</p>
+        <table class="data-table">
             <thead>
                 <tr><th>Tool</th><th>Beschrijving</th></tr>
             </thead>

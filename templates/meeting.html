@@ -1,110 +1,49 @@
 {% extends "base.html" %}
 
 {% block content %}
-<style>
-    .citation-bubble {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: var(--accent-color);
-        color: white;
-        font-size: 0.7rem;
-        font-weight: bold;
-        width: 1.2rem;
-        height: 1.2rem;
-        border-radius: 50%;
-        margin: 0 0.2rem;
-        cursor: pointer;
-        vertical-align: super;
-        text-decoration: none;
-        transition: transform 0.2s, box-shadow 0.2s;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .citation-bubble:hover {
-        transform: scale(1.2);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        background: #0056b3;
-    }
-
-    #ai-content h1, #ai-content h2, #ai-content h3 {
-        color: var(--secondary-color);
-        margin-top: 1.5rem;
-        font-size: 1.1rem;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 0.3rem;
-    }
-
-    #ai-content p { margin-bottom: 1rem; }
-    #ai-content ul, #ai-content ol { padding-left: 1.2rem; margin-bottom: 1rem; }
-    #ai-content li { margin-bottom: 0.4rem; }
-    
-    #ai-content table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 0.75rem; }
-    #ai-content th, #ai-content td { border: 1px solid #eee; padding: 0.4rem; text-align: left; }
-    #ai-content th { background: #f8f9fa; font-weight: bold; }
-</style>
-<div class="meeting-header" style="margin-bottom: 1.5rem;">
+<div class="meeting-header">
     {% if meeting.start_date %}
-    <a href="/calendar?year={{ meeting.start_date[:4] }}&month={{ meeting.start_date[5:7]|int - 1 }}" style="text-decoration: none; color: var(--accent-color); font-weight: 600; font-size: 0.9rem;">← Terug naar overzicht</a>
+    <a href="/calendar?year={{ meeting.start_date[:4] }}&month={{ meeting.start_date[5:7]|int - 1 }}" class="back-link">← Terug naar overzicht</a>
     {% else %}
-    <a href="/" style="text-decoration: none; color: var(--accent-color); font-weight: 600; font-size: 0.9rem;">← Terug naar overzicht</a>
+    <a href="/" class="back-link">← Terug naar overzicht</a>
     {% endif %}
-    <h1 style="margin: 0.5rem 0; font-size: 1.8rem;">{{ meeting.name }}</h1>
-    <p style="margin: 0.3rem 0; font-size: 0.85rem; color: #666;">📅 {{ meeting.start_date.split('T')[0] }} | 📍 {{
+    <h1>{{ meeting.name }}</h1>
+    <p class="meeting-meta">📅 {{ meeting.start_date.split('T')[0] }} | 📍 {{
         meeting.location or "Rotterdam" }} | 🏛️ {{ meeting.committee or "Algemeen" }}</p>
 </div>
 
-<div class="grid" style="grid-template-columns: 1fr 1.2fr; gap: 1.5rem;">
+<div class="meeting-layout">
     <div class="agenda-section">
-        <h2 style="font-size: 1.2rem; margin: 0 0 0.8rem 0;">Agendapunten</h2>
+        <h2>Agendapunten</h2>
         {% if meeting.agenda %}
         {% for item in meeting.agenda %}
-        <div class="agenda-item-card" style="
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            margin-bottom: 0.6rem;
-        ">
-            <div onclick="toggleAgendaItem('{{ item.id }}')" style="
-                cursor: pointer;
-                padding: 0.6rem 0.8rem;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                background: #fafafa;
-                transition: background 0.2s ease;
-                border-bottom: 1px solid var(--border-color);
-            " onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='#fafafa'">
-                <div style="flex: 1;">
-                    <span
-                        style="font-weight: 700; color: var(--accent-color); font-size: 0.9rem; margin-right: 0.5rem;">{{
-                        item.number }}</span>
-                    <span style="font-size: 0.9rem; line-height: 1.3;">{{ item.name }}</span>
+        <div class="agenda-item-card">
+            <div class="agenda-item-header" onclick="toggleAgendaItem('{{ item.id }}')">
+                <div class="flex-1">
+                    <span class="agenda-item-number">{{ item.number }}</span>
+                    <span class="agenda-item-name">{{ item.name }}</span>
                 </div>
-                <span style="color: #999; font-size: 1rem; margin-left: 0.5rem; flex-shrink: 0;"
-                    id="toggle-{{ item.id }}">▶</span>
+                <span class="agenda-item-toggle" id="toggle-{{ item.id }}">▶</span>
             </div>
 
-            <div id="details-{{ item.id }}"
-                style="display: none; padding: 0.6rem 0.8rem; background: white; font-size: 0.85rem;">
-                
+            <div id="details-{{ item.id }}" class="agenda-item-details">
+
                 {# Main Item Documents & Analysis #}
-                <div style="margin-bottom: 0.6rem;">
+                <div class="mb-3">
                     {% if item.documents %}
-                    <div style="font-weight: 600; color: #666; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 0.3rem;">Documenten bij hoofditem</div>
-                    <ul style="list-style: none; padding: 0; margin: 0 0 0.5rem 0; display: flex; flex-direction: column; gap: 0.2rem;">
+                    <div class="agenda-docs-label">Documenten bij hoofditem</div>
+                    <ul class="agenda-doc-list">
                         {% for doc in item.documents %}
-                        <li style="display: flex; align-items: flex-start; gap: 0.3rem;">
-                            <span style="flex-shrink: 0; margin-top: 0.05rem; font-size: 0.75rem;">📄</span>
-                            <a href="{{ doc.url }}" target="_blank" style="color: var(--secondary-color); text-decoration: none; line-height: 1.2; font-size: 0.75rem;">{{ doc.name }}</a>
+                        <li class="agenda-doc-item">
+                            <span class="shrink-0 text-xs">📄</span>
+                            <a href="{{ doc.url }}" target="_blank">{{ doc.name }}</a>
                         </li>
                         {% endfor %}
                     </ul>
                     {% endif %}
-                    
+
                     {% if item.is_substantive %}
-                    <button onclick="analyseAgendaItem('{{ item.id }}'); event.stopPropagation();" class="btn"
-                        style="font-size: 0.75rem; padding: 0.3rem 0.6rem; background: var(--secondary-color); width: 100%; text-align: center; border: none; cursor: pointer; color: white; border-radius: 4px; font-weight: 600;">
+                    <button onclick="analyseAgendaItem('{{ item.id }}'); event.stopPropagation();" class="btn-analyse">
                         🤖 NeoDemos analyse (volledig)
                     </button>
                     {% endif %}
@@ -112,26 +51,25 @@
 
                 {# Sub-items Grouping #}
                 {% if item.sub_items %}
-                <div style="margin-top: 1rem; border-top: 1px solid #eee; padding-top: 0.8rem;">
-                    <div style="font-weight: 700; color: var(--accent-color); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.6rem; letter-spacing: 0.5px;">Betrokken documenten & sub-onderwerpen</div>
+                <div class="sub-items-section">
+                    <div class="sub-items-label">Betrokken documenten & sub-onderwerpen</div>
                     {% for sub in item.sub_items %}
-                    <div style="background: #fdfdfd; border: 1px solid #f0f0f0; border-radius: 6px; padding: 0.5rem; margin-bottom: 0.5rem; border-left: 3px solid #eee;">
-                        <div style="font-weight: 600; font-size: 0.8rem; margin-bottom: 0.3rem; color: #444;">{{ sub.name }}</div>
-                        
+                    <div class="sub-item-card">
+                        <div class="sub-item-name">{{ sub.name }}</div>
+
                         {% if sub.documents %}
-                        <ul style="list-style: none; padding: 0; margin: 0 0 0.4rem 0; display: flex; flex-direction: column; gap: 0.15rem;">
+                        <ul class="agenda-doc-list">
                             {% for sdoc in sub.documents %}
-                            <li style="display: flex; align-items: flex-start; gap: 0.3rem;">
-                                <span style="flex-shrink: 0; font-size: 0.7rem;">📎</span>
-                                <a href="{{ sdoc.url }}" target="_blank" style="color: #666; text-decoration: none; font-size: 0.75rem; line-height: 1.2;">{{ sdoc.name }}</a>
+                            <li class="agenda-doc-item">
+                                <span class="shrink-0 text-xs">📎</span>
+                                <a href="{{ sdoc.url }}" target="_blank">{{ sdoc.name }}</a>
                             </li>
                             {% endfor %}
                         </ul>
                         {% endif %}
-                        
+
                         {% if sub.is_substantive %}
-                        <button onclick="analyseAgendaItem('{{ sub.id }}'); event.stopPropagation();" class="btn"
-                            style="font-size: 0.7rem; padding: 0.25rem 0.5rem; background: transparent; border: 1px solid var(--secondary-color); color: var(--secondary-color); width: 100%; border-radius: 4px; font-weight: 600; cursor: pointer;">
+                        <button onclick="analyseAgendaItem('{{ sub.id }}'); event.stopPropagation();" class="btn-analyse btn-analyse--sub">
                             🤖 NeoDemos analyse (onderdeel)
                         </button>
                         {% endif %}
@@ -148,19 +86,16 @@
     </div>
 
     <div class="ai-sidebar">
-        <div class="card"
-            style="position: sticky; top: 120px; background: white; border: 2px solid var(--accent-color); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); max-height: 85vh; overflow-y: auto;">
+        <div class="card">
 
-            <div style="margin-bottom: 1.2rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 0.8rem;">
+            <div class="ai-sidebar-header">
                 <!-- De configuratie voor de party lens gebeurt nu via de Instellingen pagina. -->
             </div>
 
-            <h3
-                style="color: var(--secondary-color); border-bottom: 2px solid var(--accent-color); padding: 0 0 0.8rem 0; margin: 0 0 0.8rem 0; font-size: 1rem;">
-                Analyse</h3>
-            <button id="copy-word-btn" onclick="copyToWord()" class="btn" style="display: none; width: 100%; margin-bottom: 1rem; padding: 0.5rem; background: #eeeff3; color: #333; border: 1px solid #ddd; border-radius: 4px; font-size: 0.75rem;">📄 Kopieer voor Word</button>
-            <div id="ai-content" style="font-size: 0.85rem; line-height: 1.5; padding: 0.5rem;">
-                <p style="color: #888; font-style: italic; margin: 0; font-size: 0.8rem;">Klik op <strong>'🤖 NeoDemos
+            <h3 class="analysis-title">Analyse</h3>
+            <button id="copy-word-btn" onclick="copyToWord()" class="btn-copy-word hidden">📄 Kopieer voor Word</button>
+            <div id="ai-content" class="ai-content">
+                <p class="ai-content-placeholder">Klik op <strong>'🤖 NeoDemos
                         analyse'</strong> bij een agendapunt voor een integrale analyse vanuit zowel het document als
                     jouw politieke profiel.</p>
             </div>
@@ -172,9 +107,9 @@
     function toggleAgendaItem(itemId) {
         const details = document.getElementById(`details-${itemId}`);
         const toggle = document.getElementById(`toggle-${itemId}`);
-        const isVisible = details.style.display !== 'none';
+        const isVisible = details.style.display === 'block';
 
-        details.style.display = isVisible ? 'none' : 'block';
+        details.style.display = isVisible ? '' : 'block';
         toggle.textContent = isVisible ? '▶' : '▼';
     }
 
@@ -230,23 +165,23 @@
         });
 
         if (usedSourceIndices.size > 0 && sources) {
-            renderedHtml += '<div class="cited-sources-container" style="background: #f9f9fa; border-left: 4px solid var(--accent-color); padding: 1rem; border-radius: 0 8px 8px 0; margin-top: 2rem;">';
-            renderedHtml += '<h4 style="margin-top: 0; margin-bottom: 0.8rem; color: var(--secondary-color); font-size: 0.9rem;">Bronnen:</h4>';
-            renderedHtml += '<ul style="list-style-type: none; padding-left: 0; font-size: 0.8rem; margin-bottom: 0;">';
+            renderedHtml += '<div class="cited-sources-container">';
+            renderedHtml += '<h4>Bronnen:</h4>';
+            renderedHtml += '<ul>';
             Array.from(usedSourceIndices).sort((a, b) => a - b).forEach(n => {
                 const source = sources[n - 1];
                 const url = source.url || '#';
                 const name = source.name || `Document ${source.id}`;
-                renderedHtml += `<li style="margin-bottom: 0.5rem; display: flex; align-items: flex-start;">
-                    <span class="citation-bubble" style="margin-top: 0.1rem; margin-right: 0.6rem; flex-shrink: 0; cursor: default; transform: none; box-shadow: none;">${n}</span>
-                    <a href="${url}" target="_blank" style="color: var(--secondary-color); text-decoration: none; display: inline-block; font-weight: 500; line-height: 1.3;">${name}</a>
+                renderedHtml += `<li>
+                    <span class="citation-bubble">${n}</span>
+                    <a href="${url}" target="_blank">${name}</a>
                 </li>`;
             });
             renderedHtml += '</ul></div>';
         }
 
         aiContent.innerHTML = renderedHtml;
-        copyBtn.style.display = 'block';
+        copyBtn.classList.remove('hidden');
         originalAnalysisHtml = aiContent.innerHTML;
     }
 
@@ -256,8 +191,8 @@
         const copyBtn = document.getElementById('copy-word-btn');
         const party = getConfiguredParty();
 
-        aiContent.innerHTML = `<div style="text-align: center; padding: 1.5rem;"><p id="stream-status" style="margin: 0; font-size: 0.85rem;">⏳ Verbinding maken...</p></div>`;
-        copyBtn.style.display = 'none';
+        aiContent.innerHTML = `<div class="text-center py-6"><p id="stream-status" class="text-sm">⏳ Verbinding maken...</p></div>`;
+        copyBtn.classList.add('hidden');
 
         let accumulatedText = '';
 
@@ -274,7 +209,7 @@
                 accumulatedText += event.text;
                 // Progressive markdown render while streaming
                 marked.setOptions({ gfm: true, breaks: true });
-                aiContent.innerHTML = `<div style="opacity: 0.85;">${marked.parse(accumulatedText)}</div>`;
+                aiContent.innerHTML = `<div class="opacity-85">${marked.parse(accumulatedText)}</div>`;
 
             } else if (event.type === 'done') {
                 evtSource.close();
@@ -282,14 +217,14 @@
 
             } else if (event.type === 'error') {
                 evtSource.close();
-                aiContent.innerHTML = `<p style="color: #d32f2f; font-size: 0.8rem;">❌ Fout: ${event.message}</p>`;
+                aiContent.innerHTML = `<p class="text-sm text-red-700">❌ Fout: ${event.message}</p>`;
             }
         };
 
         evtSource.onerror = () => {
             evtSource.close();
             if (!accumulatedText) {
-                aiContent.innerHTML = `<p style="color: #d32f2f; font-size: 0.8rem;">❌ Verbindingsfout. Probeer het opnieuw.</p>`;
+                aiContent.innerHTML = `<p class="text-sm text-red-700">❌ Verbindingsfout. Probeer het opnieuw.</p>`;
             } else {
                 // Stream ended unexpectedly but we have content — render what we have
                 renderFinalAnalysis(accumulatedText, []);
@@ -300,7 +235,7 @@
     async function copyToWord() {
         const content = document.getElementById('ai-content');
         const btn = document.getElementById('copy-word-btn');
-        
+
         const styles = `
             <style>
                 body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; }
@@ -310,14 +245,14 @@
                 th { background-color: #f8f9fa; font-weight: bold; }
             </style>
         `;
-        
+
         const htmlContent = styles + content.innerHTML;
-        
+
         try {
             const blob = new Blob([htmlContent], { type: 'text/html' });
             const data = [new ClipboardItem({ 'text/html': blob })];
             await navigator.clipboard.write(data);
-            
+
             const originalText = btn.innerHTML;
             btn.innerHTML = '✅!';
             setTimeout(() => btn.innerHTML = originalText, 2000);
@@ -337,7 +272,7 @@
     async function generateSpeech(agendaItemId) {
         const aiContent = document.getElementById('ai-content');
         const party = getConfiguredParty();
-        aiContent.innerHTML = `<div style="text-align: center; padding: 1.5rem;"><p style="margin: 0; font-size: 0.85rem;">✍️ Genereert bijdrage voorstel (${party})...</p></div>`;
+        aiContent.innerHTML = `<div class="text-center py-6"><p class="text-sm">✍️ Genereert bijdrage voorstel (${party})...</p></div>`;
 
         try {
             const response = await fetch(`/api/analyse/speech/${agendaItemId}?party=${encodeURIComponent(party)}`);
@@ -345,15 +280,15 @@
             if (data.error) throw new Error(data.error);
 
             aiContent.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">
-                    <h4 style="color: #666; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">Bijdrage voorstel</h4>
-                    <button onclick="restoreAnalysis()" style="background:none; border:none; color:var(--accent-color); font-size:0.7rem; cursor:pointer;">← Terug</button>
+                <div class="ai-sidebar-header flex justify-between items-center">
+                    <h4 class="agenda-docs-label">Bijdrage voorstel</h4>
+                    <button onclick="restoreAnalysis()" class="back-link text-xs cursor-pointer bg-transparent border-none">← Terug</button>
                 </div>
-                <div id="speech-text" style="background: #fdfdfd; padding: 1rem; border: 1px solid #eee; border-radius: 8px; white-space: pre-wrap; font-size: 0.85rem; line-height: 1.6;">${data.speech}</div>
-                <button onclick="copySpeech()" class="btn" style="width: 100%; margin-top: 0.8rem; padding: 0.5rem; background: #eeeff3; color: #333; border: 1px solid #ddd; border-radius: 4px; font-size: 0.75rem;">📋 Kopieer speech</button>
+                <div id="speech-text" class="sub-item-card whitespace-pre-wrap text-sm leading-relaxed">${data.speech}</div>
+                <button onclick="copySpeech()" class="btn-copy-word mt-3">📋 Kopieer speech</button>
             `;
         } catch (error) {
-            aiContent.innerHTML = `<p style="color: #d32f2f; font-size: 0.8rem;">❌ Fout: ${error.message}</p>` + originalAnalysisHtml;
+            aiContent.innerHTML = `<p class="text-sm text-red-700">❌ Fout: ${error.message}</p>` + originalAnalysisHtml;
         }
     }
 

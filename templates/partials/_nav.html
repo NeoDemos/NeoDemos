@@ -1,0 +1,50 @@
+<header class="site-header">
+    <a href="/" class="logo" aria-label="NeoDemos home">Neo<span>Demos</span></a>
+    <nav class="nav-desktop">
+        {% if user %}
+        <a href="/" {% if request.url.path == '/' %}class="active"{% endif %}>Zoeken</a>
+        <a href="/calendar" {% if request.url.path == '/calendar' %}class="active"{% endif %}>Kalender</a>
+        <a href="/overview" {% if request.url.path == '/overview' %}class="active"{% endif %}>Overzicht</a>
+        <a href="/mcp-installer" {% if request.url.path == '/mcp-installer' %}class="active"{% endif %}>MCP</a>
+        <a href="/settings" {% if request.url.path == '/settings' %}class="active"{% endif %}>Instellingen</a>
+        {% if user.role == 'admin' %}
+        <a href="/admin" {% if request.url.path == '/admin' %}class="active"{% endif %}>Beheer</a>
+        {% endif %}
+        <form method="POST" action="/logout" style="display:inline;">
+            <button type="submit" class="nav-link-button">Uitloggen</button>
+        </form>
+        {% else %}
+        <a href="/" {% if request.url.path == '/' %}class="active"{% endif %}>Zoeken</a>
+        <a href="/calendar" {% if request.url.path == '/calendar' %}class="active"{% endif %}>Kalender</a>
+        <a href="/mcp-installer" {% if request.url.path == '/mcp-installer' %}class="active"{% endif %}>MCP</a>
+        <a href="/login">Inloggen</a>
+        {% endif %}
+    </nav>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu openen">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+</header>
+
+<div class="nav-overlay" id="nav-overlay"></div>
+<nav class="nav-mobile" id="nav-mobile">
+    {% if user %}
+    <a href="/">Zoeken</a>
+    <a href="/calendar">Kalender</a>
+    <a href="/overview">Overzicht</a>
+    <a href="/mcp-installer">MCP</a>
+    <a href="/settings">Instellingen</a>
+    {% if user.role == 'admin' %}
+    <a href="/admin">Beheer</a>
+    {% endif %}
+    <form method="POST" action="/logout">
+        <button type="submit" class="nav-link-button">Uitloggen</button>
+    </form>
+    {% else %}
+    <a href="/">Zoeken</a>
+    <a href="/calendar">Kalender</a>
+    <a href="/mcp-installer">MCP</a>
+    <a href="/login">Inloggen</a>
+    {% endif %}
+</nav>

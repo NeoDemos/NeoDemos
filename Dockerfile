@@ -13,7 +13,7 @@ ENV PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
 
-# Install system dependencies (incl. Tesseract OCR for Docling/RapidOCR)
+# Install system dependencies (incl. Tesseract OCR for Docling/RapidOCR + Node.js for Vite)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     postgresql-client \
     curl \
@@ -21,6 +21,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     tesseract-ocr-nld \
     libgl1 \
     libglib2.0-0 \
+    nodejs \
+    npm \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first (for better layer caching)
@@ -30,8 +32,15 @@ COPY requirements.txt .
 RUN pip install --upgrade pip setuptools wheel && \
     pip install -r requirements.txt
 
+# Copy package.json first for npm layer caching
+COPY package.json package-lock.json* ./
+RUN npm ci --ignore-scripts 2>/dev/null || npm install
+
 # Copy application code
 COPY . .
+
+# Build frontend assets (Vite + Tailwind CSS v4)
+RUN npm run build
 
 # Create directories for data, logs, and output
 RUN mkdir -p /app/logs /app/data/pipeline /app/data/profiles /app/output

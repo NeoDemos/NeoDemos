@@ -4,45 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }} | NeoDemos</title>
-    <link rel="stylesheet" href="/static/css/style.css?v={{ version_label }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    {% block meta %}{% endblock %}
+    <title>{% block title %}{{ title }}{% endblock %} | NeoDemos</title>
+    <link rel="icon" type="image/svg+xml" href="/static/images/favicon.svg">
+    <link rel="stylesheet" href="/static/dist/main.css?v={{ version_label }}">
+    {% block styles %}{% endblock %}
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 
 <body>
-    <header>
-        <a href="/" class="logo" aria-label="NeoDemos home">Neo<span>Demos</span></a>
-        <nav>
-            {% if user %}
-            <a href="/">Zoeken</a>
-            <a href="/calendar">Kalender</a>
-            <a href="/overview">Overzicht</a>
-            <a href="/mcp-installer">MCP</a>
-            <a href="/settings">Instellingen</a>
-            {% if user.role == 'admin' %}
-            <a href="/admin">Beheer</a>
-            {% endif %}
-            <form method="POST" action="/logout" style="display:inline;">
-                <button type="submit" class="nav-link-button">Uitloggen</button>
-            </form>
-            {% else %}
-            <a href="/">Zoeken</a>
-            <a href="/mcp-installer">MCP</a>
-            <a href="/login">Inloggen</a>
-            {% endif %}
-        </nav>
-    </header>
+    {% include 'partials/_nav.html' %}
+    {% block hero %}{% endblock %}
     <main>
         {% block content %}
         {% endblock %}
     </main>
-    <footer>
-        <span class="version-badge">{{ display_name }} {{ version_label }}</span>
-    </footer>
-    <script src="/static/js/app.js?v={{ version_label }}"></script>
+    {% include 'partials/_footer.html' %}
+    <script src="/static/dist/app.js?v={{ version_label }}"></script>
     {% block extra_scripts %}
     {% endblock %}
 </body>

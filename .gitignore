@@ -24,6 +24,10 @@ qdrant
 *.wav
 *.mp4
 
+# Node.js / Vite
+node_modules/
+static/dist/
+
 # Docker
 docker-desktop
 
