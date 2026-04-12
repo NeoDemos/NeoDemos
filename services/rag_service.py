@@ -1,14 +1,22 @@
 import asyncio
+import logging
 import threading
 from typing import List, Dict, Any, Optional, Union
 from dataclasses import dataclass
 
 from services.db_pool import get_connection
 
+logger = logging.getLogger(__name__)
+
 # Shared class-level resources to avoid redundant loading and locking issues
 _qdrant_client = None
 _reranker = None        # services.reranker.Reranker instance (Jina v3 API)
 _init_lock = threading.Lock()
+
+# WS4 2026-04-11: defense-in-depth — pin method to the known-safe set before
+# interpolating into the f-string SQL template. A future refactor that reads
+# `method` from a request parameter would otherwise introduce SQL injection.
+_ALLOWED_TS_METHODS = {"to_tsquery", "plainto_tsquery", "websearch_to_tsquery"}
 
 @dataclass
 class RetrievedChunk:
@@ -78,17 +86,25 @@ class RAGService:
         self,
         query_text: str,
         query_embedding: Optional[List[float]] = None,
-        distribution: Dict[str, int] = {"financial": 3, "debate": 3, "fact": 2, "vision": 2},
+        distribution: Dict[str, int] = {"financial": 3, "debate": 3, "fact": 2, "vision": 2, "graph": 2},
         overrides: Optional[Dict[str, str]] = None,
         date_from: Optional[str] = None,
         date_to: Optional[str] = None,
         fast_mode: bool = False,
+        query_intent: str = "",
+        gemeente: Optional[str] = None,
     ) -> List[RetrievedChunk]:
         """
         Executes parallel searches for different dimensions of the query.
         Accepts optional 'overrides' dict with keys 'financial', 'debate', 'fact' for LLM-rewritten queries.
         date_from/date_to (ISO strings) are forwarded to all stream searches.
         fast_mode=True skips Jina reranking in each stream (saves latency for interactive queries).
+
+        WS1 v0.2.0: a fifth 'graph_walk' stream runs alongside the four dense/BM25
+        streams, pulling chunks via ``services.graph_retrieval``. The stream is
+        gated on ``GRAPH_WALK_ENABLED`` + ``GRAPH_WALK_MIN_EDGES`` (see
+        services/graph_retrieval.py) so Phase 0 is safe to ship with an empty KG
+        — until enrichment lands, the stream returns an empty list cleanly.
         """
         tasks = []
 
@@ -107,10 +123,16 @@ class RAGService:
         # Fact Stream
         fact_query = overrides.get("fact") if overrides else f"{query_text} beleid regels technische details definities"
         tasks.append(self._async_retrieve(fact_query or f"{query_text} beleid", query_embedding, distribution.get("fact", 2), "fact", date_from, date_to, fast_mode))
-        
+
+        # Graph-walk Stream (WS1). Returns [] when the KG is not yet populated
+        # (GRAPH_WALK_ENABLED unset OR kg_relationships < GRAPH_WALK_MIN_EDGES).
+        tasks.append(self._async_retrieve_graph(
+            query_text, distribution.get("graph", 2), query_intent, gemeente,
+        ))
+
         # Gather all results
         results_lists = await asyncio.gather(*tasks)
-        
+
         # Flatten and deduplicate
         all_chunks = []
         seen_chunk_ids = set()
@@ -119,8 +141,42 @@ class RAGService:
                 if chunk.chunk_id not in seen_chunk_ids:
                     all_chunks.append(chunk)
                     seen_chunk_ids.add(chunk.chunk_id)
-        
+
         return all_chunks
+
+    async def _async_retrieve_graph(
+        self, query: str, k: int, query_intent: str, gemeente: Optional[str],
+    ) -> List[RetrievedChunk]:
+        """
+        Graph-walk stream helper. Runs services.graph_retrieval.retrieve_via_graph
+        in a thread and adapts the returned GraphChunk instances to
+        RetrievedChunk so they merge cleanly with the other 4 streams.
+        Returns an empty list on any failure — never raises into the gather.
+        """
+        def _run() -> List[RetrievedChunk]:
+            try:
+                from services import graph_retrieval
+                graph_chunks = graph_retrieval.retrieve_via_graph(
+                    query, k=k, query_intent=query_intent, gemeente=gemeente,
+                )
+            except Exception:
+                logger.exception("[rag] graph_walk stream failed")
+                return []
+            out: List[RetrievedChunk] = []
+            for g in graph_chunks:
+                out.append(RetrievedChunk(
+                    chunk_id=g.chunk_id,
+                    document_id=g.document_id,
+                    title=g.title,
+                    content=g.content,
+                    similarity_score=g.similarity_score,
+                    questions=g.questions or [],
+                    child_id=g.child_id,
+                    stream_type="graph",
+                    start_date=g.start_date,
+                ))
+            return out
+        return await asyncio.to_thread(_run)
 
     async def _async_retrieve(
         self, query: str, embedding: Optional[List[float]], k: int, stream_type: str,
@@ -252,8 +308,8 @@ class RAGService:
 
                     # Filter out low-relevance results (Jina v3: positive = relevant)
                     fused_chunks = [c for c in fused_chunks if c.similarity_score > -0.1]
-            except Exception as e:
-                print(f"Reranking failed: {e}")
+            except Exception:
+                logger.exception("Reranking failed")
 
         return fused_chunks[:top_k]
     
@@ -423,7 +479,20 @@ class RAGService:
     ) -> List[RetrievedChunk]:
         """
         Keyword-based search on full notulen documents using BM25.
+
+        Document-level BM25 fallback, invoked only when chunk-level BM25 returns
+        nothing. Previously hard-filtered to ``d.name ILIKE '%%notule%%'`` which
+        silently excluded moties, amendementen, initiatiefvoorstellen, and
+        raadsvoorstellen — a class of retrieval failures nobody could see. The
+        filter is removed; if doc-type scoping is ever needed, it should be an
+        explicit parameter, not a hidden default.
+
+        Logs when this fallback fires so we can tell if it is still load-bearing.
         """
+        logger.info(
+            "[rag._retrieve_by_keywords] doc-level BM25 fallback fired (query=%r, top_k=%d)",
+            query_text[:120], top_k,
+        )
         try:
             with get_connection() as conn:
                 with conn.cursor() as cursor:
@@ -435,9 +504,8 @@ class RAGService:
                             d.content,
                             ts_rank(text_search, websearch_to_tsquery('dutch', %s)) as similarity_score
                         FROM documents d
-                        WHERE d.name ILIKE '%%notule%%'
-                        AND d.content IS NOT NULL
-                        AND text_search @@ websearch_to_tsquery('dutch', %s)
+                        WHERE d.content IS NOT NULL
+                          AND text_search @@ websearch_to_tsquery('dutch', %s)
                         ORDER BY similarity_score DESC
                         LIMIT %s
                     """, [query_text, query_text, top_k])
@@ -498,6 +566,10 @@ class RAGService:
                 params.append(date_to)
             params.append(top_k)
 
+            assert method in _ALLOWED_TS_METHODS, (
+                f"SECURITY: ts-query method '{method}' not in allowed whitelist {_ALLOWED_TS_METHODS}"
+            )
+
             with get_connection() as conn:
                 with conn.cursor() as cursor:
                     cursor.execute(f"""
@@ -526,8 +598,8 @@ class RAGService:
                     stream_type=c_type
                 ))
             return results
-        except Exception as e:
-            print(f"Chunk keyword search failed: {e}")
+        except Exception:
+            logger.exception("Chunk keyword search failed")
             return []
     
     def _get_chunk_questions(self, chunk_id: int) -> List[str]:
@@ -547,6 +619,7 @@ class RAGService:
             return questions
 
         except Exception:
+            logger.exception("_get_chunk_questions failed")
             return []
             
     def get_parent_context(self, child_id: int, cursor=None) -> Optional[str]:

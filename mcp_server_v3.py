@@ -39,6 +39,30 @@ sys.path.insert(0, str(PROJECT_ROOT))
 from dotenv import load_dotenv
 load_dotenv(PROJECT_ROOT / ".env")
 
+# ---------------------------------------------------------------------------
+# Retrieval quality constants (WS4 2026-04-11)
+# ---------------------------------------------------------------------------
+# MIN_SIMILARITY: drop chunks below this score before rendering. Generalises
+# the existing `>= 0.25` filter in zoek_financieel. 0.06-scoring chunks observed
+# in scan_breed (haven/duurzaamheid 2026-04-11) were noise; 0.15 cuts the noise
+# without dropping borderline-but-useful hits.
+MIN_SIMILARITY = 0.15
+MIN_SIMILARITY_RELAXED = 0.10  # fallback if strict floor leaves < 3 chunks
+MIN_CHUNKS_BEFORE_RELAX = 3
+
+# MIN_CONTENT_CHARS: chunks whose stripped content is shorter than this are
+# "empty slots" — "Geen stukken ontvangen", bare section headers, empty table
+# cells. Filter before rendering.
+MIN_CONTENT_CHARS = 80
+
+# Corpus coverage footer for zero-result responses (WS4 — no WS5a dep).
+# Update when year-ranges are re-ingested.
+ZERO_RESULT_FOOTER = (
+    "_Corpus: Rotterdam raadsdocumenten 2002–heden. 0 resultaten betekent niet "
+    "dat het beleid niet bestaat — probeer een bredere zoekvraag of controleer "
+    "de datumfilter._"
+)
+
 from neodemos_version import DISPLAY_NAME, VERSION_LABEL
 from mcp.server.fastmcp import FastMCP
 from mcp.server.auth.settings import AuthSettings, ClientRegistrationOptions
@@ -132,7 +156,11 @@ def _log_query(tool_name: str, params: dict, result: str, latency_ms: int) -> No
 
 
 def logged_tool(func):
-    """Drop-in for @logged_tool — registers with FastMCP and logs to mcp_queries.jsonl."""
+    """Drop-in for @mcp.tool() — registers with FastMCP, logs to mcp_queries.jsonl,
+    writes one row per call to mcp_audit_log (never logs raw params — only sha256),
+    and pulls the FastMCP tool description from `services.mcp_tool_registry.REGISTRY`
+    when an entry exists (WS4 2026-04-11). Falls back to the function docstring when
+    the tool is not yet registered."""
     import inspect
     import functools
 
@@ -148,11 +176,44 @@ def logged_tool(func):
             log_params = kwargs
 
         t0 = time.monotonic()
-        result = func(*args, **kwargs)
-        latency_ms = int((time.monotonic() - t0) * 1000)
-        _log_query(func.__name__, log_params, result, latency_ms)
-        return result
+        error: Optional[Exception] = None
+        result = None
+        try:
+            result = func(*args, **kwargs)
+            return result
+        except Exception as exc:
+            error = exc
+            raise
+        finally:
+            latency_ms = int((time.monotonic() - t0) * 1000)
+            # Legacy JSONL trail (result is None on error — _log_query handles len() safely)
+            _log_query(func.__name__, log_params, result if result is not None else "", latency_ms)
+            # WS4 audit log — hash-only params, never raw values
+            try:
+                from services.audit_logger import audit_log_sync
+                audit_log_sync(
+                    tool_name=func.__name__,
+                    params=log_params,
+                    result=result,
+                    latency_ms=latency_ms,
+                    error=error,
+                )
+            except Exception:
+                pass  # audit log must never crash a tool
 
+    # Pull AI-consumption description from the registry if registered (WS4 single source of truth)
+    description = None
+    try:
+        from services.mcp_tool_registry import REGISTRY as _TOOL_REGISTRY
+        _spec = _TOOL_REGISTRY.get(func.__name__)
+        if _spec is not None:
+            description = _spec.ai_description
+    except Exception:
+        # Registry not available (e.g. during bootstrap) — fall back to docstring
+        description = None
+
+    if description is not None:
+        return mcp.tool(description=description)(wrapper)
     return mcp.tool()(wrapper)
 
 
@@ -253,6 +314,30 @@ def _format_table_json(table_json_str: str) -> str:
         return str(table_json_str)
 
 
+def _batch_fetch_document_urls(document_ids: list) -> dict:
+    """
+    Batch-fetch source URLs for a list of document IDs in a single query.
+    Returns {document_id: url} for docs that have a non-NULL url (97% coverage).
+    Never raises — returns {} on any DB error so URL rendering degrades gracefully.
+    """
+    if not document_ids:
+        return {}
+    # Deduplicate while preserving order for the IN clause
+    unique_ids = list({str(d): None for d in document_ids}.keys())
+    try:
+        with get_connection() as conn:
+            cur = conn.cursor()
+            cur.execute(
+                "SELECT id, url FROM documents WHERE id = ANY(%s) AND url IS NOT NULL",
+                (unique_ids,),
+            )
+            result = {str(row[0]): row[1] for row in cur.fetchall() if row[1]}
+            cur.close()
+            return result
+    except Exception:
+        return {}
+
+
 def _format_chunks_v3(chunks, max_content: int = 800, dedup_by_doc: bool = False, show_followup: bool = True) -> str:
     """
     Format retrieved chunks with enriched v3 metadata.
@@ -262,8 +347,17 @@ def _format_chunks_v3(chunks, max_content: int = 800, dedup_by_doc: bool = False
         dedup_by_doc: If True, keep only the first (highest-ranked) chunk per document_id.
         show_followup: If True, append a lees_fragment hint for the top 3 results.
     """
+    # Filter content-empty chunks (WS4 2026-04-11): "Geen stukken ontvangen",
+    # bare section headers, empty table cells. Drop before rendering so they
+    # never burn a slot or leak noise into LLM context.
+    if chunks:
+        chunks = [
+            c for c in chunks
+            if c.content and len((c.content or "").strip()) >= MIN_CONTENT_CHARS
+        ]
+
     if not chunks:
-        return "_Geen resultaten gevonden._"
+        return f"_Geen resultaten gevonden._\n\n{ZERO_RESULT_FOOTER}"
 
     # Deduplicate by document_id when requested
     if dedup_by_doc:
@@ -274,6 +368,9 @@ def _format_chunks_v3(chunks, max_content: int = 800, dedup_by_doc: bool = False
                 seen_docs.add(chunk.document_id)
                 deduped.append(chunk)
         chunks = deduped
+
+    # Batch-fetch source URLs (97% coverage — chunks without URL render without link)
+    url_map = _batch_fetch_document_urls([c.document_id for c in chunks])
 
     lines = []
     followup_ids = []
@@ -289,7 +386,13 @@ def _format_chunks_v3(chunks, max_content: int = 800, dedup_by_doc: bool = False
 
         content = chunk.content[:max_content]
         lines.append(content)
-        lines.append(f"_document_id: {chunk.document_id}_\n")
+        lines.append(f"_document_id: {chunk.document_id}_")
+
+        # Source URL link (if present in 97% of corpus)
+        url = url_map.get(str(chunk.document_id))
+        if url:
+            lines.append(f"[Brondocument ↗]({url})")
+        lines.append("")
 
         if show_followup and i <= 3:
             followup_ids.append(chunk.document_id)
@@ -303,19 +406,70 @@ def _format_chunks_v3(chunks, max_content: int = 800, dedup_by_doc: bool = False
     return "\n".join(lines)
 
 
+def _apply_quality_filters(chunks: list, top_k: int, dedup_by_document: bool = True) -> list:
+    """
+    Apply WS4 retrieval-quality filters in order:
+      1. Min-similarity floor (drop 0.06-scoring noise); relax if < MIN_CHUNKS_BEFORE_RELAX survive.
+      2. Dedup by document_id — keep only the highest-scoring chunk per document so that
+         max_resultaten=8 returns 8 unique documents, not 8 chunks from 2 documents.
+         (Upstream failure mode observed 2026-04-11 in zoek_uitspraken/scan_breed.)
+      3. Slice to top_k.
+    """
+    if not chunks:
+        return chunks
+
+    # Step 1: min-similarity floor with relaxation fallback.
+    # IMPORTANT: chunks from BM25-only streams or merge paths may have
+    # similarity_score = None. These are NOT low-quality — they simply weren't
+    # scored by the vector retrieval. Always pass them through.
+    def _has_score(c):
+        return getattr(c, "similarity_score", None) is not None
+
+    scored = [c for c in chunks if _has_score(c)]
+    unscored = [c for c in chunks if not _has_score(c)]
+
+    strict = [c for c in scored if c.similarity_score >= MIN_SIMILARITY]
+    if len(strict) >= MIN_CHUNKS_BEFORE_RELAX:
+        scored = strict
+    else:
+        # Relax floor rather than return nothing on borderline queries
+        scored = [c for c in scored if c.similarity_score >= MIN_SIMILARITY_RELAXED]
+
+    # Recombine: scored chunks first (rank-ordered), unscored chunks after
+    chunks = scored + unscored
+
+    # Step 2: keep the highest-scoring chunk per document_id (assumes input is already score-sorted)
+    if dedup_by_document:
+        seen_docs = set()
+        deduped = []
+        for c in chunks:
+            if c.document_id not in seen_docs:
+                seen_docs.add(c.document_id)
+                deduped.append(c)
+        chunks = deduped
+
+    return chunks[:top_k]
+
+
 def _retrieve_with_reranking(
     query: str,
     top_k: int = 10,
     date_from: Optional[str] = None,
     date_to: Optional[str] = None,
     party: Optional[str] = None,
+    dedup_by_document: bool = True,
 ) -> list:
     """
     Core v3 retrieval: hybrid search + Jina reranking (not fast_mode).
     Expands Dutch compound words for better BM25 coverage.
     Optionally filters by party via Qdrant payload.
+
+    Applies WS4 retrieval quality filters: min-similarity floor and
+    dedup-by-document_id so that top_k returns unique documents.
+    Over-fetches by 3x to give quality filtering headroom before the final slice.
     """
     rag = _get_rag()
+    over_fetch = max(top_k * 3, top_k + 5)
 
     if party:
         # Party-filtered retrieval via Qdrant payload
@@ -327,7 +481,7 @@ def _retrieve_with_reranking(
         query_embedding = rag.embedder.embed(query)
         party_chunks = rag._retrieve_by_vector_similarity_with_filter(
             query_embedding,
-            top_k=top_k,
+            top_k=over_fetch,
             qdrant_filter=party_filter,
             date_from=date_from,
             date_to=date_to,
@@ -336,13 +490,13 @@ def _retrieve_with_reranking(
         # Also get standard retrieval to supplement
         standard_chunks = rag.retrieve_relevant_context(
             query_text=query,
-            top_k=top_k,
+            top_k=over_fetch,
             date_from=date_from,
             date_to=date_to,
             fast_mode=False,  # v3: always rerank
         )
 
-        # Merge and deduplicate, party chunks first
+        # Merge and deduplicate by chunk_id, party chunks first
         # Note: compound words are handled by decomposed_terms in the tsvector
         seen = set()
         merged = []
@@ -350,20 +504,19 @@ def _retrieve_with_reranking(
             if c.chunk_id not in seen:
                 seen.add(c.chunk_id)
                 merged.append(c)
-        return merged[:top_k]
+        return _apply_quality_filters(merged, top_k, dedup_by_document=dedup_by_document)
 
     # Standard retrieval with reranking
     chunks = rag.retrieve_relevant_context(
         query_text=query,
-        top_k=top_k,
+        top_k=over_fetch,
         date_from=date_from,
         date_to=date_to,
         fast_mode=False,  # v3: always rerank
     )
 
     # Compound words handled by decomposed_terms in the tsvector
-
-    return chunks[:top_k]
+    return _apply_quality_filters(chunks, top_k, dedup_by_document=dedup_by_document)
 
 
 # ---------------------------------------------------------------------------
@@ -431,13 +584,21 @@ def zoek_financieel(
     (bijv. deelgemeente-begrotingen van vóór 2014). Geef bij vragen over
     recente financiën altijd een datum_van mee.
 
+    BUDGET_YEAR vs DATUM_VAN — wanneer gebruiken?
+    De Begroting 2025 wordt in oktober 2024 ingediend (publicatiedatum) maar
+    beschrijft fiscaal jaar 2025 (budget_year). Kies op basis van intentie:
+      - "Wat is de begrotingsruimte voor 2025?"           → budget_year=2025
+      - "Welke begrotingsdocumenten werden in oktober 2024 gepubliceerd?"
+                                                          → datum_van='2024-10-01'
+    budget_year is autoritatief via staging.financial_documents.budget_years;
+    datum_van filtert op publicatiedatum van de meeting waarin het stuk behandeld werd.
+
     Args:
         onderwerp: Financieel onderwerp (bijv. "jeugdzorg begroting 2023")
-        datum_van: Startdatum filter, ISO formaat (aanbevolen voor recente vragen)
-        datum_tot: Einddatum filter, ISO formaat
-        budget_year: Doeljaar van het budget (bijv. 2025 voor de Begroting 2025 die
-                     in 2024 werd ingediend). Gebruik dit voor begrotingsvragen op een
-                     specifiek jaar — nauwkeuriger dan datum_van/datum_tot.
+        datum_van: Startdatum filter, ISO formaat — filtert op publicatiedatum
+        datum_tot: Einddatum filter, ISO formaat — filtert op publicatiedatum
+        budget_year: Doeljaar van het budget (het fiscaal jaar dat het document beschrijft).
+                     Gebruik dit voor "wat is X voor jaar Y"-vragen.
         max_resultaten: Aantal resultaten (standaard 12)
     """
     rag = _get_rag()
@@ -993,17 +1154,27 @@ def zoek_moties(
     params = []
 
     if search_terms:
-        name_clauses = []
+        # WS4 2026-04-11: always search both name AND content so initiatiefvoorstellen
+        # with generic titles ("Initiatiefvoorstel Engberts & Vogelaar over wonen")
+        # are discoverable by topic keyword (e.g. "leegstand"). Previous behavior
+        # only looked in content when len(search_terms) >= 3, which missed the
+        # Engberts/Vogelaar case for single-word topic queries.
+        or_clauses = []
         for term in search_terms:
-            name_clauses.append("LOWER(d.name) LIKE %s")
+            or_clauses.append("LOWER(d.name) LIKE %s")
+            or_clauses.append("LOWER(d.content) LIKE %s")
             params.append(f"%{term}%")
-        conditions.append(f"({' OR '.join(name_clauses)})")
+            params.append(f"%{term}%")
+        conditions.append(f"({' OR '.join(or_clauses)})")
 
-        if len(search_terms) >= 3:
+        # Multi-word precision guard: for 2+ terms, require at least 2 terms to
+        # match in (name OR content) — prevents a single common word from flooding
+        # results. Single-word queries skip this guard.
+        if len(search_terms) >= 2:
             count_expr_parts = []
             for term in search_terms:
                 count_expr_parts.append(
-                    f"CASE WHEN LOWER(d.name) LIKE %s OR LOWER(d.content) LIKE %s THEN 1 ELSE 0 END"
+                    "CASE WHEN LOWER(d.name) LIKE %s OR LOWER(d.content) LIKE %s THEN 1 ELSE 0 END"
                 )
                 params.append(f"%{term}%")
                 params.append(f"%{term}%")
@@ -1039,8 +1210,12 @@ def zoek_moties(
 
     with get_connection() as conn:
         cur = conn.cursor()
+        # WS4 2026-04-11: bump content preview 400 → 1600 chars so the host LLM
+        # rarely needs to follow up with lees_fragment on overview queries.
+        # Preview shown to user is sliced to 1500 below — 1600 gives a small buffer
+        # for newline-stripping.
         cur.execute(f"""
-            SELECT d.id, d.name, m.start_date, LEFT(d.content, 400),
+            SELECT d.id, d.name, m.start_date, LEFT(d.content, 1600), d.url,
                    dc_enrich.indieners, dc_enrich.vote_outcome, dc_enrich.vote_counts
             FROM documents d
             LEFT JOIN meetings m ON d.meeting_id = m.id
@@ -1059,7 +1234,10 @@ def zoek_moties(
         cur.close()
 
     if not rows:
-        return f"Geen moties/amendementen gevonden voor '{onderwerp}'."
+        return (
+            f"Geen moties/amendementen gevonden voor '{onderwerp}'.\n\n"
+            f"{ZERO_RESULT_FOOTER}"
+        )
 
     lines = [
         f"## Moties & amendementen: '{onderwerp}'",
@@ -1075,11 +1253,11 @@ def zoek_moties(
         lines.append(f"_Indiener: {indiener}_")
     lines.append("")
 
-    for i, (doc_id, name, start_date, content, indieners, vote_outcome, vote_counts) in enumerate(rows, 1):
+    for i, (doc_id, name, start_date, content, url, indieners, vote_outcome, vote_counts) in enumerate(rows, 1):
         d = str(start_date)[:10] if start_date else "?"
         # Prefer enriched vote_outcome over regex-parsed from title
         parsed_uitkomst = vote_outcome or _parse_uitkomst(name or "")
-        content_clean = (content or "").replace("\n", " ")[:300]
+        content_clean = (content or "").replace("\n", " ")[:1500]
         lines.append(f"### [{i}] {d} — {name[:100]}")
         lines.append(f"**Uitkomst:** {parsed_uitkomst}")
         if vote_counts:
@@ -1090,7 +1268,10 @@ def zoek_moties(
             indiener_str = ", ".join(indieners) if isinstance(indieners, list) else str(indieners)
             lines.append(f"**Indieners:** {indiener_str}")
         lines.append(f"_{content_clean}_")
-        lines.append(f"_document_id: {doc_id}_\n")
+        lines.append(f"_document_id: {doc_id}_")
+        if url:
+            lines.append(f"[Brondocument ↗]({url})")
+        lines.append("")
 
     return "\n".join(lines)
 
@@ -1166,46 +1347,93 @@ def scan_breed(
 def lees_fragment(
     document_id: str,
     max_fragmenten: int = 5,
+    query: Optional[str] = None,
 ) -> str:
     """
     Lees de volledige tekst van fragmenten uit een specifiek document.
     Gebruik dit na scan_breed om de volledige inhoud te lezen van
     documenten die relevant lijken.
 
+    ALTIJD query meegeven als je dit document via een topic-zoektocht vond:
+    dan worden de fragmenten ge-reranked op relevantie voor het onderwerp.
+    Zonder query worden fragmenten in opslag-volgorde teruggegeven — dat
+    kan betekenen dat het fragment dat zoek_raadshistorie vond begraven
+    wordt onder samenvattingsparagrafen.
+
     Args:
         document_id: Document ID (uit scan_breed of andere zoekresultaten)
         max_fragmenten: Maximaal aantal fragmenten uit dit document (standaard 5)
+        query: Optioneel. Als je dit document via een topic-zoektocht vond,
+               geef dezelfde query mee. Fragmenten worden dan via Jina v3
+               ge-reranked op relevantie voor de query.
     """
+    # Fetch ALL fragments for the document when a query is provided, so the
+    # reranker sees the full candidate set before slicing. Without a query,
+    # respect max_fragmenten at the SQL level (current behavior).
+    fetch_limit = 200 if query else max_fragmenten
     with get_connection() as conn:
         cur = conn.cursor()
         cur.execute("""
             SELECT dc.title, dc.content, dc.chunk_type, d.name as doc_name,
-                   m.start_date, m.name as meeting_name, dc.table_json
+                   m.start_date, m.name as meeting_name, dc.table_json, d.url
             FROM document_chunks dc
             JOIN documents d ON dc.document_id = d.id
             LEFT JOIN meetings m ON d.meeting_id = m.id
             WHERE dc.document_id = %s
             ORDER BY dc.chunk_index
             LIMIT %s
-        """, (document_id, max_fragmenten))
+        """, (document_id, fetch_limit))
         rows = cur.fetchall()
         cur.close()
 
     if not rows:
-        return f"Geen fragmenten gevonden voor document '{document_id}'."
+        return (
+            f"Geen fragmenten gevonden voor document '{document_id}'.\n\n"
+            f"{ZERO_RESULT_FOOTER}"
+        )
+
+    # Optional in-document reranking against a query (WS4 2026-04-11).
+    # Failure case: zoek_raadshistorie found the Middelland venstertijden paragraph
+    # in fin_jaarstukken_2019 but lees_fragment returned financial-summary tables
+    # in chunk_index order. Jina v3 re-rank fixes this when the caller passes
+    # the original query.
+    if query and len(rows) > max_fragmenten:
+        try:
+            _get_rag()  # ensures services.rag_service._reranker is initialized
+            from services import rag_service as _rag_svc_mod
+            reranker = _rag_svc_mod._reranker  # Jina v3 API reranker singleton
+            if reranker is None:
+                raise RuntimeError("reranker unavailable")
+            fragment_texts = [(r[1] or "") for r in rows]
+            scores = reranker.score_pairs(query, fragment_texts)
+            # Pair original rows with scores, sort desc, take top max_fragmenten
+            scored = sorted(
+                zip(rows, scores), key=lambda p: (p[1] if p[1] is not None else 0), reverse=True
+            )[:max_fragmenten]
+            rows = [pair[0] for pair in scored]
+        except Exception:
+            # Non-critical: fall back to chunk_index order
+            rows = rows[:max_fragmenten]
+    elif len(rows) > max_fragmenten:
+        rows = rows[:max_fragmenten]
 
     doc_name = rows[0][3] or "Onbekend document"
     meeting_date = (str(rows[0][4] or ""))[:10]
     meeting_name = rows[0][5] or ""
+    doc_url = rows[0][7]
 
     lines = [
         f"## {doc_name}",
         f"_Datum: {meeting_date} | Vergadering: {meeting_name}_",
         f"_Document ID: {document_id} | {len(rows)} fragmenten_",
-        "",
     ]
+    if doc_url:
+        lines.append(f"[Brondocument ↗]({doc_url})")
+    if query:
+        lines.append(f"_Re-ranked op: '{query}'_")
+    lines.append("")
 
-    for i, (title, content, chunk_type, _, _, _, table_json) in enumerate(rows, 1):
+    for i, (title, content, chunk_type, _, _, _, table_json, _) in enumerate(rows, 1):
         type_tag = f" [{chunk_type}]" if chunk_type else ""
         lines.append(f"### Fragment {i}{type_tag}: {title or 'Ongetiteld'}")
         lines.append(content or "_Geen inhoud._")
@@ -1217,6 +1445,125 @@ def lees_fragment(
         lines.append("")
 
     return "\n".join(lines)
+
+
+# ---------------------------------------------------------------------------
+# Tool 12a — vat_document_samen (WS6 Source-Spans-Only Summarization)
+# ---------------------------------------------------------------------------
+
+@logged_tool
+def vat_document_samen(
+    document_id: str,
+    mode: str = "short",
+) -> str:
+    """
+    Geef een gecontroleerde samenvatting van één specifiek document.
+
+    Gebruik dit wanneer de gebruiker vraagt om een korte samenvatting, TL;DR
+    of overzicht van één document (ID bekend uit zoek_raadshistorie, scan_breed,
+    of lees_fragment). Gebruik dit NIET voor synthese over meerdere documenten
+    — gebruik dan eerst zoek_raadshistorie en laat de host-LLM zelf synthese doen.
+
+    De samenvatting is post-hoc geverifieerd tegen de brontfragmenten: elke zin
+    moet via de Jina v3 reranker boven een drempelwaarde scoren op minstens
+    één fragment van dit document, anders wordt de zin verwijderd. Een
+    'Geverifieerd'-badge betekent dat elke zin in de uitvoer herleidbaar is
+    tot een fragment. 'Gedeeltelijk' betekent dat > 30% van de zinnen is
+    verwijderd — de resterende samenvatting kan dan incompleet zijn.
+
+    Args:
+        document_id: Document ID (uit scan_breed of andere zoekresultaten).
+        mode: 'short' (2-3 zinnen exec summary, standaard) of 'long'
+              (uitgebreide structureel-samenvatting via Map-Reduce).
+
+    Returns:
+        JSON-string met: document_id, mode, text, verified, stripped_count,
+        total_sentences, citations (chunk_ids), computed_at, cached.
+    """
+    import asyncio as _asyncio
+    from types import SimpleNamespace as _SNS
+
+    if mode not in ("short", "long"):
+        return json.dumps({
+            "error": f"Ongeldige mode '{mode}'. Kies 'short' of 'long'.",
+            "document_id": document_id,
+        }, ensure_ascii=False)
+
+    storage = _get_storage()
+
+    # 1. Try the cached column first (mode='short' only — 'long' is always
+    #    recomputed for now since we haven't cached it yet at the column level).
+    if mode == "short":
+        cached = storage.get_document_summary_cache(document_id)
+        if cached and cached.get("summary_short"):
+            return json.dumps({
+                "document_id": document_id,
+                "mode": "short",
+                "text": cached["summary_short"],
+                "verified": bool(cached.get("summary_verified")),
+                "cached": True,
+                "computed_at": cached.get("summary_computed_at"),
+            }, ensure_ascii=False)
+
+    # 2. Compute on demand: gather chunks and run the Summarizer.
+    chunk_rows = storage.get_all_chunks_for_document(document_id)
+    if not chunk_rows:
+        return json.dumps({
+            "error": f"Geen fragmenten gevonden voor document '{document_id}'.",
+            "document_id": document_id,
+        }, ensure_ascii=False)
+
+    chunks = [
+        _SNS(
+            chunk_id=r["chunk_id"],
+            document_id=r["document_id"],
+            title=r.get("title") or "",
+            content=r.get("content") or "",
+        )
+        for r in chunk_rows
+    ]
+
+    from services.summarizer import Summarizer
+    summarizer = Summarizer()
+    try:
+        result = _asyncio.run(summarizer.summarize_async(chunks, mode=mode))
+    except Exception as e:
+        return json.dumps({
+            "error": f"Samenvatten mislukt: {e}",
+            "document_id": document_id,
+        }, ensure_ascii=False)
+
+    if not result.text:
+        return json.dumps({
+            "error": "Samenvatter leverde lege uitvoer op — waarschijnlijk een LLM-fout.",
+            "document_id": document_id,
+        }, ensure_ascii=False)
+
+    # Best-effort write-through: only for mode='short', and only if the new
+    # columns exist. Failures here are non-fatal — the caller still gets the
+    # computed summary.
+    if mode == "short":
+        try:
+            storage.update_document_summary_columns(
+                document_id,
+                summary_short=result.text,
+                summary_verified=result.verified,
+            )
+        except Exception:
+            pass
+
+    payload = {
+        "document_id": document_id,
+        "mode": mode,
+        "text": result.text,
+        "verified": result.verified,
+        "stripped_count": result.stripped_count,
+        "total_sentences": result.total_sentences,
+        "citations": [c.chunk_id for c in result.sources],
+        "cached": False,
+        "latency_ms": result.latency_ms,
+    }
+    return json.dumps(payload, ensure_ascii=False)
 
 
 # ---------------------------------------------------------------------------
@@ -1464,6 +1811,629 @@ def zoek_uitspraken_op_rol(
 
 
 # ---------------------------------------------------------------------------
+# Tool 14 — Context primer (WS4 2026-04-11)
+# ---------------------------------------------------------------------------
+# Figma's `create_design_system_rules` analogue. Zero-arg tool returning a
+# structured primer the host LLM reads on first connect. The `wethouders`
+# array is the fix for LLM role-date hallucination — rather than telling the
+# model "call zoek_uitspraken_op_rol proactively", we give it the facts.
+# `coalition_history` is the same-class fix for historical vote interpretation
+# (GroenLinks/PvdA in 2018 = coalitie, not oppositie).
+# Generated from the raadslid_rollen table at call time — never hardcoded.
+
+
+def _compute_rotterdam_coalition_history() -> list:
+    """
+    Build a coarse coalition timeline from raadslid_rollen wethouder rows.
+    Each entry is a college-periode: {"start": ..., "end": ..., "parties": [...]}.
+    Grouping heuristic: a "college" runs between successive periode_van dates
+    that are at least 3 years apart (the 4-year electoral cycle). Between two
+    boundaries, a party is counted as coalition if ANY of its members held a
+    wethouder role during that window.
+    """
+    try:
+        with get_connection() as conn:
+            cur = conn.cursor()
+            cur.execute(
+                """
+                SELECT DISTINCT partij, periode_van, periode_tot
+                FROM raadslid_rollen
+                WHERE LOWER(rol) = 'wethouder' AND partij IS NOT NULL
+                ORDER BY periode_van
+                """
+            )
+            rows = cur.fetchall()
+            cur.close()
+    except Exception:
+        return []
+
+    if not rows:
+        return []
+
+    # Identify college-periode boundaries: election years 2002, 2006, 2010, 2014,
+    # 2018, 2022, 2026. We group by which election window the period started in.
+    def _window(d):
+        if d is None:
+            return None
+        try:
+            y = d.year if hasattr(d, "year") else int(str(d)[:4])
+        except Exception:
+            return None
+        for boundary in (2026, 2022, 2018, 2014, 2010, 2006, 2002):
+            if y >= boundary:
+                return boundary
+        return 2002
+
+    buckets: dict = {}
+    for partij, van, tot in rows:
+        w = _window(van)
+        if w is None:
+            continue
+        entry = buckets.setdefault(
+            w, {"start": f"{w}-03-29", "end": None, "parties": set()}
+        )
+        entry["parties"].add(partij)
+        # Determine the end-of-college as max(tot) seen within the window, None if any current
+        if tot is None:
+            entry["_any_current"] = True
+        elif not entry.get("_any_current"):
+            cur_end = entry["end"]
+            tot_str = str(tot)[:10]
+            if cur_end is None or tot_str > cur_end:
+                entry["end"] = tot_str
+
+    timeline = []
+    for w in sorted(buckets.keys()):
+        b = buckets[w]
+        timeline.append({
+            "start": b["start"],
+            "end": None if b.get("_any_current") else b["end"],
+            "parties": sorted(b["parties"]),
+        })
+    return timeline
+
+
+def _compute_rotterdam_wethouders() -> list:
+    """
+    Current wethouders: rows where rol='wethouder' AND periode_tot IS NULL.
+    Returns [{"naam", "volledige_naam", "partij", "since"}, ...].
+    """
+    try:
+        with get_connection() as conn:
+            cur = conn.cursor()
+            cur.execute(
+                """
+                SELECT naam, volledige_naam, partij, periode_van, notities
+                FROM raadslid_rollen
+                WHERE LOWER(rol) = 'wethouder' AND periode_tot IS NULL
+                ORDER BY periode_van DESC
+                """
+            )
+            rows = cur.fetchall()
+            cur.close()
+    except Exception:
+        return []
+
+    result = []
+    for naam, volledige_naam, partij, van, notities in rows:
+        result.append({
+            "naam": naam,
+            "volledige_naam": volledige_naam or naam,
+            "partij": partij or "",
+            "since": str(van)[:10] if van else None,
+            "notes": notities or "",
+        })
+    return result
+
+
+def _compute_rotterdam_current_coalition() -> list:
+    """Current coalition = distinct parties of currently-sitting wethouders."""
+    wethouders = _compute_rotterdam_wethouders()
+    return sorted({w["partij"] for w in wethouders if w["partij"]})
+
+
+def _corpus_coverage_stats() -> dict:
+    """Best-effort document count per Rotterdam. Never raises."""
+    try:
+        with get_connection() as conn:
+            cur = conn.cursor()
+            cur.execute("SELECT COUNT(*), MIN(m.start_date), MAX(m.start_date) "
+                        "FROM documents d LEFT JOIN meetings m ON d.meeting_id = m.id")
+            count, min_date, max_date = cur.fetchone()
+            cur.close()
+            return {
+                "documents": int(count or 0),
+                "date_from": str(min_date)[:10] if min_date else None,
+                "date_to": str(max_date)[:10] if max_date else None,
+            }
+    except Exception:
+        return {"documents": 0, "date_from": None, "date_to": None}
+
+
+@logged_tool
+def get_neodemos_context() -> str:
+    """
+    Roep dit FIRST aan wanneer je verbinding maakt met NeoDemos. Retourneert
+    een structured primer met de beschikbare gemeenten, document-types,
+    current council composition (incl. zittende wethouders + coalition history),
+    known limitations, en recommended tool sequences. Cheap to call (<50ms).
+
+    Het `wethouders` veld en `coalition_history` timeline worden bij elke call
+    uit de `raadslid_rollen` tabel gegenereerd — nooit hardcoded. Vertrouw op
+    deze data voor rol/tenure-vragen in plaats van training-data te gokken.
+    """
+    wethouders = _compute_rotterdam_wethouders()
+    coalition = _compute_rotterdam_current_coalition()
+    coalition_history = _compute_rotterdam_coalition_history()
+    coverage = _corpus_coverage_stats()
+
+    context = {
+        "version": VERSION_LABEL,
+        "today": date.today().isoformat(),
+        "gemeenten": [
+            {
+                "name": "rotterdam",
+                "mode": "full",
+                "documents": coverage["documents"],
+                "date_from": coverage["date_from"] or "2002-01-01",
+                "date_to": coverage["date_to"] or date.today().isoformat(),
+            }
+        ],
+        "document_types": [
+            "notulen",
+            "motie",
+            "amendement",
+            "initiatiefvoorstel",
+            "raadsvoorstel",
+            "raadsbrief",
+            "jaarstukken",
+            "voorjaarsnota",
+            "begroting",
+            "10-maandsrapportage",
+            "agendapunt",
+            "afdoeningsvoorstel",
+        ],
+        "council_composition": {
+            "rotterdam": {
+                "total_seats": 45,
+                "current_coalition": coalition,
+                "wethouders": wethouders,
+                "coalition_history": coalition_history,
+            }
+        },
+        "limitations": [
+            "Financiële line-items alleen voor 2018+ (Rotterdam)",
+            "Volledige transcripts alleen beschikbaar voor commissievergaderingen — raadsvergaderingen hebben notulen",
+            "Straat- of sector-indexering ontbreekt: locatiespecifieke vragen ('Heemraadssingel') "
+            "vallen terug op tekstuele matches en kunnen gemist worden",
+            "Zero-result betekent NIET dat beleid niet bestaat — probeer een bredere zoekvraag "
+            "of controleer de datumfilter",
+        ],
+        "recommended_tool_sequences": [
+            {
+                "intent": "begrotingsvragen met specifiek jaar",
+                "sequence": ["zoek_financieel (budget_year=YYYY)", "lees_fragment (query=onderwerp)"],
+            },
+            {
+                "intent": "motie traceren",
+                "sequence": ["zoek_moties", "zoek_gerelateerd", "lees_fragment"],
+            },
+            {
+                "intent": "dossier-reconstructie",
+                "sequence": ["scan_breed", "zoek_raadshistorie", "zoek_gerelateerd", "lees_fragment (query=onderwerp)"],
+            },
+            {
+                "intent": "partijstandpunt",
+                "sequence": ["haal_partijstandpunt_op", "zoek_uitspraken (partij_of_raadslid=X)"],
+            },
+            {
+                "intent": "historisch stemgedrag (context-aware)",
+                "sequence": [
+                    "get_neodemos_context (check coalition_history voor de stemming-datum!)",
+                    "zoek_moties",
+                    "zoek_raadshistorie",
+                ],
+                "notes": "Belangrijk: interpreteer stemmingen ALTIJD tegen de coalitiesamenstelling van dát moment, niet tegen het huidige college.",
+            },
+            {
+                "intent": "rol-gefilterde uitspraken",
+                "sequence": ["zoek_uitspraken_op_rol (rol='raadslid' of 'wethouder')"],
+            },
+        ],
+        "notes": {
+            "temporal": "Bij tijdsgebonden vragen ('vorig jaar', 'sinds 2023'): vertaal ALTIJD naar concrete datum_van/datum_tot parameters. Filteren werkt via metadata, niet via vector similarity.",
+            "citations": "Elke resultaatregel bevat een `[Brondocument ↗](url)` link naar het originele PDF wanneer beschikbaar (97% coverage).",
+            "dedup": "Alle retrieval tools dedupliceren op document_id: max_resultaten=8 levert 8 unieke documenten, niet 8 chunks uit 2 documenten.",
+        },
+    }
+
+    # Render as a human-readable markdown block (LLMs prefer structured text over raw JSON)
+    lines = [
+        f"# NeoDemos context — {VERSION_LABEL}",
+        f"_Vandaag: {context['today']}_",
+        "",
+        "## Gemeenten",
+    ]
+    for g in context["gemeenten"]:
+        lines.append(
+            f"- **{g['name']}** ({g['mode']}): {g['documents']:,} documenten, "
+            f"{g['date_from']} → {g['date_to']}"
+        )
+    lines.append("")
+
+    lines.append("## Document types")
+    lines.append(", ".join(context["document_types"]))
+    lines.append("")
+
+    rot = context["council_composition"]["rotterdam"]
+    lines.append("## Rotterdamse raad (45 zetels)")
+    lines.append("")
+    lines.append(f"**Huidige coalitie:** {', '.join(rot['current_coalition']) or '— (onbekend)'}")
+    lines.append("")
+    lines.append("**Zittende wethouders (uit raadslid_rollen):**")
+    if rot["wethouders"]:
+        for w in rot["wethouders"]:
+            since = f" — sinds {w['since']}" if w["since"] else ""
+            notes = f" · {w['notes']}" if w["notes"] else ""
+            lines.append(f"- {w['volledige_naam']} ({w['partij']}){since}{notes}")
+    else:
+        lines.append("- _(geen data — raadslid_rollen tabel leeg)_")
+    lines.append("")
+
+    lines.append("**College-history (voor historische stemming-context):**")
+    if rot["coalition_history"]:
+        for c in rot["coalition_history"]:
+            end = c["end"] or "heden"
+            lines.append(f"- {c['start']} → {end}: {', '.join(c['parties'])}")
+    else:
+        lines.append("- _(geen historische data)_")
+    lines.append("")
+
+    lines.append("## Known limitations")
+    for lim in context["limitations"]:
+        lines.append(f"- {lim}")
+    lines.append("")
+
+    lines.append("## Recommended tool sequences")
+    for seq in context["recommended_tool_sequences"]:
+        lines.append(f"- **{seq['intent']}** — `{' → '.join(seq['sequence'])}`")
+        if seq.get("notes"):
+            lines.append(f"  - ⚠️ {seq['notes']}")
+    lines.append("")
+
+    lines.append("## Notes")
+    for k, v in context["notes"].items():
+        lines.append(f"- **{k}**: {v}")
+
+    return "\n".join(lines)
+
+
+# ---------------------------------------------------------------------------
+# Tool 16 — traceer_motie (WS1 GraphRAG flagship)
+# ---------------------------------------------------------------------------
+
+@logged_tool
+def traceer_motie(
+    motie_id: str,
+    include_notulen: bool = True,
+    max_notulen_chunks: int = 8,
+) -> str:
+    """
+    Reconstruct the complete traceability of a single motie/amendement:
+    indieners → partijen → stemgedrag → uitkomst → gekoppelde notulen-fragmenten.
+
+    Use this when the user asks to "trace", "volg", or "reconstrueer" a specific
+    motie and already has a motie document_id in hand (from zoek_moties,
+    scan_breed, or a previous call). Use this NOT for topic search — use
+    zoek_moties for that.
+
+    The tool walks the knowledge graph from the motie entity via DIENT_IN
+    (indieners), LID_VAN (party membership), STEMT_VOOR/STEMT_TEGEN
+    (voting), AANGENOMEN/VERWORPEN (uitkomst), and DISCUSSED_IN/VOTED_IN
+    (cross-document links to notulen chunks where the motie was debated).
+
+    Returns a structured JSON string with:
+        {
+          "motie":           {id, name, date, content_preview, meeting_id},
+          "indieners":       [{name, partij, canonical_name}],
+          "vote":            {voor: int|null, tegen: int|null, uitkomst: str},
+          "related_documents": [{id, name, type, date}],
+          "notulen_fragments": [{chunk_id, title, content, date}],
+          "trace_available": bool,
+          "citation_chain":  [entity_id, ...],
+          "motie_id":        "<input>"
+        }
+
+    When ``trace_available`` is False, the graph walk returned no paths —
+    most likely because WS1 Phase 1 enrichment has not yet populated
+    DISCUSSED_IN/VOTED_IN edges. In that state the tool still returns the
+    motie header, indieners (from rule-based enrichment), and vote counts,
+    so it degrades gracefully instead of failing.
+
+    Args:
+        motie_id: document_id of the motie/amendement (string).
+        include_notulen: if True (default), walk to linked notulen chunks.
+        max_notulen_chunks: cap on notulen fragments returned.
+    """
+    result: dict = {
+        "motie_id": motie_id,
+        "motie": None,
+        "indieners": [],
+        "vote": {"voor": None, "tegen": None, "uitkomst": "onbekend"},
+        "related_documents": [],
+        "notulen_fragments": [],
+        "trace_available": False,
+        "citation_chain": [],
+    }
+
+    with get_connection() as conn:
+        cur = conn.cursor()
+        # 1. Motie header + already-enriched rule-based metadata
+        cur.execute("""
+            SELECT d.id, d.name, m.start_date, LEFT(d.content, 800), d.meeting_id,
+                   dc_enrich.indieners, dc_enrich.vote_outcome, dc_enrich.vote_counts,
+                   dc_enrich.motion_number
+            FROM documents d
+            LEFT JOIN meetings m ON d.meeting_id = m.id
+            LEFT JOIN LATERAL (
+                SELECT indieners, vote_outcome, vote_counts, motion_number
+                FROM document_chunks
+                WHERE document_id = d.id
+                  AND (indieners IS NOT NULL
+                       OR vote_outcome IS NOT NULL
+                       OR motion_number IS NOT NULL)
+                LIMIT 1
+            ) dc_enrich ON TRUE
+            WHERE d.id = %s
+        """, (motie_id,))
+        row = cur.fetchone()
+        cur.close()
+
+    if not row:
+        result["error"] = f"motie_id '{motie_id}' niet gevonden"
+        return json.dumps(result, ensure_ascii=False)
+
+    doc_id, name, start_date, content, meeting_id, indieners_raw, vote_outcome, vote_counts, motion_number = row
+    result["motie"] = {
+        "id": str(doc_id),
+        "name": name,
+        "date": str(start_date)[:10] if start_date else None,
+        "motion_number": motion_number,
+        "content_preview": (content or "").replace("\n", " ")[:600],
+        "meeting_id": str(meeting_id) if meeting_id else None,
+    }
+    parsed_uitkomst = vote_outcome or _parse_uitkomst(name or "")
+    result["vote"]["uitkomst"] = parsed_uitkomst
+    if vote_counts:
+        counts = vote_counts if isinstance(vote_counts, dict) else {}
+        result["vote"]["voor"] = counts.get("voor")
+        result["vote"]["tegen"] = counts.get("tegen")
+
+    # 2. Indieners — resolve each to politician_registry for canonical party
+    if indieners_raw:
+        indiener_list = list(indieners_raw) if isinstance(indieners_raw, list) else [str(indieners_raw)]
+        if indiener_list:
+            with get_connection() as conn:
+                cur = conn.cursor()
+                for ind_name in indiener_list:
+                    clean = (ind_name or "").strip()
+                    if not clean:
+                        continue
+                    cur.execute("""
+                        SELECT canonical_name, partij, surname
+                        FROM politician_registry
+                        WHERE LOWER(canonical_name) = LOWER(%s)
+                           OR LOWER(surname) = LOWER(%s)
+                           OR %s = ANY(aliases)
+                        ORDER BY periode_tot DESC NULLS FIRST
+                        LIMIT 1
+                    """, (clean, clean, clean))
+                    pol = cur.fetchone()
+                    if pol:
+                        result["indieners"].append({
+                            "name": clean,
+                            "canonical_name": pol[0],
+                            "partij": pol[1],
+                        })
+                    else:
+                        result["indieners"].append({
+                            "name": clean,
+                            "canonical_name": None,
+                            "partij": None,
+                        })
+                cur.close()
+
+    # 3. Graph walk — only runs when Phase 1 enrichment is live.
+    try:
+        from services import graph_retrieval
+        if graph_retrieval.is_graph_walk_ready():
+            name_for_match = motion_number or name or ""
+            seed_hits = graph_retrieval._resolve_entity_id_by_name(
+                name_for_match, preferred_type="Motie"
+            )
+            if seed_hits:
+                seed_id = seed_hits[0]
+                paths = graph_retrieval.walk([seed_id], max_hops=2)
+                scored = graph_retrieval.score_paths(paths, query_intent="motie_trace")
+                if scored:
+                    result["trace_available"] = True
+                    tail_ids: list = []
+                    for sp in scored[:20]:
+                        for nid in sp.path.node_ids:
+                            if nid not in tail_ids:
+                                tail_ids.append(nid)
+                    result["citation_chain"] = tail_ids[:20]
+                    if include_notulen and tail_ids:
+                        notulen = graph_retrieval.hydrate_chunks(
+                            tail_ids, limit=max_notulen_chunks
+                        )
+                        for gc in notulen:
+                            result["notulen_fragments"].append({
+                                "chunk_id": gc.chunk_id,
+                                "title": gc.title,
+                                "content": (gc.content or "")[:500],
+                                "date": gc.start_date,
+                                "document_id": gc.document_id,
+                            })
+    except Exception:
+        # Never fail the tool on graph-walk errors — we always have the
+        # rule-based header + indieners + votes as a baseline.
+        pass
+
+    # 4. Related documents by same meeting (deterministic, no KG dependency)
+    if meeting_id:
+        with get_connection() as conn:
+            cur = conn.cursor()
+            cur.execute("""
+                SELECT id, name, document_type, (SELECT start_date FROM meetings WHERE id = meeting_id)
+                FROM documents
+                WHERE meeting_id = %s AND id <> %s
+                ORDER BY name
+                LIMIT 12
+            """, (meeting_id, doc_id))
+            for rid, rname, rtype, rdate in cur.fetchall():
+                result["related_documents"].append({
+                    "id": str(rid),
+                    "name": rname,
+                    "type": rtype,
+                    "date": str(rdate)[:10] if rdate else None,
+                })
+            cur.close()
+
+    return json.dumps(result, ensure_ascii=False)
+
+
+# ---------------------------------------------------------------------------
+# Tool 17 — vergelijk_partijen (WS1 GraphRAG flagship)
+# ---------------------------------------------------------------------------
+
+@logged_tool
+def vergelijk_partijen(
+    onderwerp: str,
+    partijen: list,
+    datum_van: Optional[str] = None,
+    datum_tot: Optional[str] = None,
+    max_fragmenten_per_partij: int = 5,
+) -> str:
+    """
+    Plaats twee of meer partijen naast elkaar op één onderwerp en retourneer
+    hun standpunten als gerankte fragmentenlijsten.
+
+    Gebruik dit wanneer de gebruiker letterlijk vraagt partijen te vergelijken
+    op een specifiek onderwerp (bijv. "hoe denken VVD, PvdA en GroenLinks over
+    warmtenetten?"). Gebruik dit NIET voor single-party vragen — gebruik dan
+    haal_partijstandpunt_op of zoek_uitspraken.
+
+    Werkwijze: voor elke opgegeven partij zoeken we via de bestaande
+    vector+BM25 stack naar de top-N fragmenten waar die partij zich uitspreekt
+    over het onderwerp. De Jina v3 reranker bepaalt welke fragmenten het
+    best aansluiten. Wanneer de WS1 GraphRAG stream live is, wordt de
+    zoekruimte aanvullend beperkt tot chunks die via LID_VAN ∩
+    SPREEKT_OVER(onderwerp) aan de partij gekoppeld zijn.
+
+    Args:
+        onderwerp: concrete term, bijvoorbeeld "warmtenetten" of
+                   "Feyenoord stadion". GEEN hele zinnen.
+        partijen: list van partijnamen (minimaal 2). Accepteerde spellingen
+                  worden via services.party_utils.PARTY_ALIASES genormaliseerd.
+        datum_van, datum_tot: optionele ISO-datumfilters.
+        max_fragmenten_per_partij: cap op terugkomende fragmenten per partij
+                                   (standaard 5, maximum 10).
+
+    Returns:
+        JSON string:
+        {
+          "onderwerp": "...",
+          "datum_van": "...",
+          "datum_tot": "...",
+          "partijen": [
+              {"partij": "VVD", "fragmenten": [{chunk_id, title, content,
+                date, similarity_score, document_id}, ...]},
+              ...
+          ],
+          "graph_walk_used": bool
+        }
+    """
+    if not partijen or len(partijen) < 2:
+        return json.dumps({
+            "error": "Geef minimaal 2 partijen op voor een vergelijking.",
+            "onderwerp": onderwerp,
+        }, ensure_ascii=False)
+
+    from services.party_utils import PARTY_ALIASES
+
+    k = max(1, min(int(max_fragmenten_per_partij), 10))
+
+    canonicalized: list = []
+    for raw in partijen:
+        key = (raw or "").strip().lower()
+        canonical = PARTY_ALIASES.get(key, raw)
+        if canonical and canonical not in canonicalized:
+            canonicalized.append(canonical)
+
+    graph_walk_used = False
+    try:
+        from services import graph_retrieval
+        graph_walk_used = graph_retrieval.is_graph_walk_ready()
+    except Exception:
+        graph_walk_used = False
+
+    result: dict = {
+        "onderwerp": onderwerp,
+        "datum_van": datum_van,
+        "datum_tot": datum_tot,
+        "partijen": [],
+        "graph_walk_used": graph_walk_used,
+    }
+
+    rag = _get_rag()
+
+    for partij in canonicalized:
+        # Query the existing retrieval stack with a party-augmented query
+        augmented_query = f"{onderwerp} {partij}"
+        try:
+            import asyncio as _asyncio
+            chunks = _asyncio.run(
+                rag.retrieve_parallel_context(
+                    query_text=augmented_query,
+                    distribution={"debate": 4, "vision": 3, "fact": 2, "financial": 1, "graph": 2},
+                    date_from=datum_van,
+                    date_to=datum_tot,
+                    fast_mode=False,
+                    query_intent="party_comparison",
+                )
+            )
+        except Exception:
+            chunks = []
+
+        # Prefer chunks whose content mentions the party token — this filters
+        # generic topic chunks out of the per-party bucket.
+        partij_lc = partij.lower()
+        filtered = [c for c in chunks if partij_lc in (c.content or "").lower()]
+        if not filtered:
+            filtered = chunks  # fall back rather than return empty
+
+        party_fragments: list = []
+        for c in filtered[:k]:
+            party_fragments.append({
+                "chunk_id": c.chunk_id,
+                "title": c.title,
+                "content": (c.content or "")[:600],
+                "date": c.start_date,
+                "similarity_score": c.similarity_score,
+                "document_id": c.document_id,
+                "stream": getattr(c, "stream_type", None),
+            })
+        result["partijen"].append({
+            "partij": partij,
+            "fragmenten": party_fragments,
+            "n_hits": len(filtered),
+        })
+
+    return json.dumps(result, ensure_ascii=False)
+
+
+# ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
 
@@ -1488,6 +2458,19 @@ if __name__ == "__main__":
     if transport != "stdio":
         mcp.settings.host = args.host
         mcp.settings.port = args.port
+
+    # WS4 startup check: tool-description collision detection.
+    # FactSet pattern: two tools with > 0.85 cosine confuse the host LLM.
+    # Non-fatal in dev (no NEBIUS_API_KEY) — see services/mcp_tool_uniqueness.py.
+    try:
+        from services.mcp_tool_uniqueness import check_tool_uniqueness
+        check_tool_uniqueness()
+    except RuntimeError as _e:
+        # FAIL_THRESHOLD breach — refuse to boot with a clear message
+        print(f"MCP STARTUP ABORTED: {_e}", flush=True)
+        sys.exit(2)
+    except Exception as _e:
+        print(f"[mcp_tool_uniqueness] skipped: {_e}", flush=True)
 
     print(f"{DISPLAY_NAME} {VERSION_LABEL} — transport={transport} port={args.port}", flush=True)
     mcp.run(transport=transport)
