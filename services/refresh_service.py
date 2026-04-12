@@ -4,6 +4,7 @@ Checks for new meetings and downloads documents automatically
 """
 
 import asyncio
+import json
 import logging
 import os
 import subprocess
@@ -18,6 +19,7 @@ from services.open_raad import OpenRaadService
 from services.ibabs_service import IBabsService
 from services.ai_service import AIService
 from services.email_service import EmailService
+from services.financial_sweep import detect_financial_signals
 
 OCR_TOOL = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "scripts", "ocr_pdf")
 MIN_CONTENT_CHARS = 500  # below this, attempt OCR before storing
@@ -77,6 +79,7 @@ class RefreshService:
                                     if not self.storage.document_exists(doc['id']):
                                         await self._insert_doc_with_content(doc)
                                         documents_downloaded += 1
+                                        self._log_document_event(doc)
                                         # Only analyze if substantive
                                         if self.storage.is_substantive_item(agenda_item):
                                             try:
@@ -111,6 +114,7 @@ class RefreshService:
                                         if not self.storage.document_exists(doc['id']):
                                             await self._insert_doc_with_content(doc)
                                             documents_downloaded += 1
+                                            self._log_document_event(doc)
                                             logger.info(f"Watchdog found new document: {doc['name']} for meeting {meeting['id']}")
                 except Exception as e:
                     errors.append(f"Error in future meeting {meeting.get('id')}: {e}")
@@ -252,3 +256,40 @@ class RefreshService:
             
         except Exception as e:
             logger.warning(f"Failed to analyze item: {e}")
+
+    def _log_document_event(self, doc: dict):
+        """Log a document_downloaded event + check for financial signals."""
+        try:
+            doc_id = doc.get("id", "unknown")
+            content = doc.get("content", "")
+            signals = detect_financial_signals(content)
+
+            details = {
+                "name": doc.get("name", ""),
+                "url": doc.get("url", ""),
+                "content_length": len(content),
+                "financial_detected": signals["is_financial"],
+            }
+            if signals["is_financial"]:
+                details["keyword_hits"] = signals["keyword_hits"]
+                details["matched_keywords"] = signals["matched_keywords"]
+                logger.info(
+                    "Financial doc detected: %s (%d keyword hits)",
+                    doc_id, signals["keyword_hits"],
+                )
+
+            with self.storage._get_connection() as conn:
+                cur = conn.cursor()
+                cur.execute(
+                    """INSERT INTO document_events
+                           (document_id, event_type, details, triggered_by)
+                       VALUES (%s, %s, %s, %s)""",
+                    (doc_id, "document_downloaded",
+                     json.dumps(details, ensure_ascii=False, default=str),
+                     "refresh_service"),
+                )
+                conn.commit()
+                cur.close()
+        except Exception as e:
+            # Non-fatal — never block document ingestion for logging failures
+            logger.debug(f"Failed to log document event: {e}")

@@ -76,6 +76,29 @@ scheduler.add_job(
     misfire_grace_time=300,
 )
 
+def scheduled_financial_sweep():
+    """Hourly sweep: extract financial_lines from any doc with table_json chunks."""
+    try:
+        from services.financial_sweep import run_sweep
+        result = run_sweep(triggered_by="apscheduler")
+        if result["discovered"]:
+            logger.info(
+                "Financial sweep: %d discovered, %d processed, %d failed",
+                result["discovered"], result["processed"], result["failed"],
+            )
+    except Exception as e:
+        logger.error(f"Financial sweep failed: {e}")
+
+scheduler.add_job(
+    scheduled_financial_sweep,
+    IntervalTrigger(hours=1),
+    id='financial_sweep',
+    name='Extract financial_lines from unprocessed table docs',
+    max_instances=1,
+    coalesce=True,
+    misfire_grace_time=600,
+)
+
 def cleanup_sessions():
     """Purge expired sessions from the database."""
     try:
@@ -825,18 +848,71 @@ async def read_meeting(request: Request, meeting_id: str, user: dict = Depends(r
     })
 
 @app.get("/api/summarize/{doc_id}")
-async def api_summarize(request: Request, doc_id: str, user: dict = Depends(get_api_user)):
-    # Fetch doc from storage
-    from psycopg2.extras import RealDictCursor
-    with storage._get_connection() as conn:
-        with conn.cursor(cursor_factory=RealDictCursor) as cur:
-            cur.execute("SELECT content FROM documents WHERE id = %s", (doc_id,))
-            row = cur.fetchone()
-            content = row['content'] if row else "Document content not available."
+async def api_summarize(
+    request: Request,
+    doc_id: str,
+    mode: str = "short",
+    user: dict = Depends(get_api_user),
+):
+    """WS6 — Source-spans-verified per-document summary."""
+    from types import SimpleNamespace
+    from services.summarizer import Summarizer
+    from services.storage_ws6 import (
+        get_all_chunks_for_document,
+        get_document_summary_cache,
+        update_document_summary_columns,
+    )
 
-    party_vision = "Wij staan voor een groen en autoluw Rotterdam met focus op sociale cohesie."
-    summary = await ai_service.summarize_document(content, party_vision)
-    return summary
+    if mode not in ("short", "long"):
+        return JSONResponse({"error": f"Ongeldige mode '{mode}'."}, status_code=400)
+
+    # Cache fast-path for mode='short'.
+    if mode == "short":
+        cached = get_document_summary_cache(doc_id)
+        if cached and cached.get("summary_short"):
+            return {
+                "document_id": doc_id, "mode": "short",
+                "text": cached["summary_short"],
+                "verified": bool(cached.get("summary_verified")),
+                "cached": True, "computed_at": cached.get("summary_computed_at"),
+            }
+
+    # Compute on demand via WS6 Summarizer.
+    chunk_rows = get_all_chunks_for_document(doc_id)
+    if not chunk_rows:
+        return JSONResponse({"error": f"Geen fragmenten voor '{doc_id}'."}, status_code=404)
+
+    chunks = [
+        SimpleNamespace(chunk_id=r["chunk_id"], document_id=r["document_id"],
+                        title=r.get("title") or "", content=r.get("content") or "")
+        for r in chunk_rows
+    ]
+
+    summarizer = Summarizer()
+    try:
+        result = await summarizer.summarize_async(chunks, mode=mode)
+    except Exception as e:
+        logger.exception(f"Summarizer failed for {doc_id}: {e}")
+        return JSONResponse({"error": f"Samenvatten mislukt: {e}"}, status_code=500)
+
+    if not result.text:
+        return JSONResponse({"error": "Lege samenvatting."}, status_code=502)
+
+    # Write-through for mode='short'.
+    if mode == "short":
+        try:
+            update_document_summary_columns(
+                doc_id, summary_short=result.text, summary_verified=result.verified)
+        except Exception:
+            pass
+
+    return {
+        "document_id": doc_id, "mode": mode, "text": result.text,
+        "verified": result.verified, "stripped_count": result.stripped_count,
+        "total_sentences": result.total_sentences,
+        "citations": [c.chunk_id for c in result.sources],
+        "cached": False, "latency_ms": result.latency_ms,
+    }
 
 @app.get("/api/analyse/agenda/{agenda_item_id}")
 async def api_analyse_agenda_item(request: Request, agenda_item_id: str, user: dict = Depends(get_api_user)):
