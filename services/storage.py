@@ -512,6 +512,105 @@ class StorageService:
             print(f"Error retrieving document metadata: {e}")
             return []
 
+    def get_meetings_filtered(
+        self,
+        year: Optional[int] = None,
+        committee: Optional[str] = None,
+        search: Optional[str] = None,
+        limit: int = 500,
+    ) -> List[Dict[str, Any]]:
+        """Get meetings with agenda_item_count and doc_count, with optional filters.
+
+        Returns meetings ordered by start_date DESC.  Each row includes:
+        - agenda_item_count  (int)
+        - doc_count          (int)
+        - first 5 agenda-item names as ``agenda_preview`` (list[str])
+        """
+        with self._get_connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                conditions: list[str] = []
+                params: list = []
+
+                if year:
+                    conditions.append("EXTRACT(YEAR FROM m.start_date) = %s")
+                    params.append(year)
+
+                if committee:
+                    conditions.append("m.committee ILIKE %s")
+                    params.append(f"%{committee}%")
+
+                if search:
+                    conditions.append("(m.name ILIKE %s OR m.committee ILIKE %s)")
+                    params.extend([f"%{search}%", f"%{search}%"])
+
+                where = ("WHERE " + " AND ".join(conditions)) if conditions else ""
+                params.append(limit)
+
+                cur.execute(f"""
+                    SELECT
+                        m.id,
+                        m.name,
+                        m.start_date,
+                        m.committee,
+                        m.location,
+                        COUNT(DISTINCT ai.id)  AS agenda_item_count,
+                        COUNT(DISTINCT da.document_id) AS doc_count
+                    FROM meetings m
+                    LEFT JOIN agenda_items ai ON ai.meeting_id = m.id
+                    LEFT JOIN document_assignments da ON da.meeting_id = m.id
+                    {where}
+                    GROUP BY m.id, m.name, m.start_date, m.committee, m.location
+                    ORDER BY m.start_date DESC
+                    LIMIT %s
+                """, params)
+
+                meetings = []
+                meeting_ids = []
+                for row in cur.fetchall():
+                    meeting = dict(row)
+                    meeting['name'] = self._clean_name(meeting.get('name'))
+                    meeting['committee'] = self._clean_name(meeting.get('committee'))
+                    if meeting.get('start_date') and hasattr(meeting['start_date'], 'isoformat'):
+                        meeting['start_date'] = meeting['start_date'].isoformat()
+                    meeting['agenda_preview'] = []
+                    meetings.append(meeting)
+                    meeting_ids.append(meeting['id'])
+
+                # Fetch first 5 agenda items per meeting for preview
+                if meeting_ids:
+                    cur.execute("""
+                        SELECT meeting_id, name
+                        FROM (
+                            SELECT meeting_id, name,
+                                   ROW_NUMBER() OVER (PARTITION BY meeting_id ORDER BY id) AS rn
+                            FROM agenda_items
+                            WHERE meeting_id = ANY(%s) AND name IS NOT NULL
+                        ) sub
+                        WHERE rn <= 5
+                        ORDER BY meeting_id, rn
+                    """, (meeting_ids,))
+                    previews: Dict[str, list] = {}
+                    for row in cur.fetchall():
+                        mid = row['meeting_id']
+                        previews.setdefault(mid, []).append(row['name'])
+                    for meeting in meetings:
+                        meeting['agenda_preview'] = previews.get(meeting['id'], [])
+
+                return meetings
+
+    def get_distinct_committees(self) -> List[str]:
+        """Return all distinct committee names, sorted alphabetically."""
+        with self._get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    SELECT DISTINCT committee
+                    FROM meetings
+                    WHERE committee IS NOT NULL AND committee != ''
+                    ORDER BY committee
+                """)
+                raw = [row[0] for row in cur.fetchall()]
+                return [self._clean_name(c) for c in raw if c]
+
     def get_document_full_content(self, doc_id: str) -> Optional[str]:
         """Fetch the raw text content of a document by its ID."""
         try:

@@ -229,3 +229,345 @@ footer {
     color: #999;
     letter-spacing: 0.3px;
 }
+
+/* ── Calendar ────────────────────────────────────────────── */
+
+/* Top bar: year select + search + view toggle */
+.cal-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.cal-toolbar select,
+.cal-toolbar input {
+    font-family: var(--font-main);
+    font-size: 0.9rem;
+    padding: 0.45rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--card-bg);
+    color: var(--text-color);
+}
+
+.cal-toolbar select:focus,
+.cal-toolbar input:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: -1px;
+}
+
+.cal-search {
+    flex: 1;
+    min-width: 180px;
+    max-width: 360px;
+}
+
+.cal-view-toggle {
+    display: inline-flex;
+    gap: 0.25rem;
+    margin-left: auto;
+}
+
+.cal-view-toggle button {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--secondary-color);
+    transition: background 0.15s;
+}
+
+.cal-view-toggle button:hover {
+    background: #f0f2f5;
+}
+
+.cal-view-toggle button.active {
+    background: var(--secondary-color);
+    color: white;
+    border-color: var(--secondary-color);
+}
+
+/* Filter chips */
+.cal-chips {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+    margin-bottom: 1.25rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+.cal-chip {
+    flex-shrink: 0;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    background: var(--card-bg);
+    color: var(--secondary-color);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    font-family: var(--font-main);
+}
+
+.cal-chip:hover {
+    background: #f0f2f5;
+}
+
+.cal-chip.active {
+    background: var(--secondary-color);
+    color: white;
+    border-color: var(--secondary-color);
+}
+
+/* Date group headers */
+.cal-date-group {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg-color);
+    padding: 0.6rem 0;
+    border-bottom: 2px solid var(--accent-color);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.cal-date-group:first-child {
+    margin-top: 0;
+}
+
+.cal-date-group h3 {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--secondary-color);
+}
+
+/* Meeting list rows */
+.cal-meeting {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--card-bg);
+    margin-bottom: 0.5rem;
+    transition: box-shadow 0.15s;
+}
+
+.cal-meeting:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.cal-meeting summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    list-style: none;
+    font-size: 0.92rem;
+}
+
+.cal-meeting summary::-webkit-details-marker {
+    display: none;
+}
+
+.cal-meeting summary::before {
+    content: "\25B6";
+    font-size: 0.55rem;
+    color: #999;
+    transition: transform 0.15s;
+    flex-shrink: 0;
+}
+
+.cal-meeting[open] summary::before {
+    transform: rotate(90deg);
+}
+
+.cal-meeting-date {
+    font-weight: 600;
+    color: var(--secondary-color);
+    min-width: 90px;
+    font-size: 0.85rem;
+}
+
+.cal-meeting-name {
+    font-weight: 500;
+    flex: 1;
+    min-width: 0;
+}
+
+.cal-meeting-name a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.cal-meeting-name a:hover {
+    color: var(--accent-color);
+}
+
+.cal-meeting-committee {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--accent-color);
+    white-space: nowrap;
+}
+
+.cal-meeting-meta {
+    font-size: 0.75rem;
+    color: #888;
+    white-space: nowrap;
+}
+
+.cal-meeting-body {
+    padding: 0 1rem 0.75rem 2rem;
+    font-size: 0.85rem;
+    color: #555;
+}
+
+.cal-meeting-body ul {
+    margin: 0.25rem 0 0;
+    padding-left: 1.2rem;
+    list-style: disc;
+}
+
+.cal-meeting-body li {
+    margin-bottom: 0.2rem;
+    line-height: 1.5;
+}
+
+.cal-meeting-body .cal-more {
+    font-style: italic;
+    color: #999;
+    margin-top: 0.2rem;
+}
+
+/* Empty state */
+.cal-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #999;
+    font-size: 0.95rem;
+}
+
+/* Mobile: stacked rows */
+@media (max-width: 640px) {
+    .cal-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cal-search {
+        max-width: 100%;
+    }
+
+    .cal-view-toggle {
+        margin-left: 0;
+    }
+
+    .cal-meeting summary {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.3rem;
+    }
+
+    .cal-meeting-date {
+        min-width: auto;
+    }
+
+    .cal-meeting-body {
+        padding-left: 1rem;
+    }
+}
+
+/* Grid view (legacy, hidden by default) */
+.cal-grid-container {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background: var(--border-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    min-height: 450px;
+    overflow: hidden;
+}
+
+.cal-grid-header {
+    background: #f8f9fa;
+    padding: 0.4rem;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--border-color);
+    color: #999;
+}
+
+.cal-grid-header.busy {
+    color: #333;
+}
+
+.cal-grid-day {
+    background: #fafafa;
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s;
+    color: #ccc;
+}
+
+.cal-grid-day.has-meetings {
+    background: white;
+    color: var(--text-color);
+}
+
+.cal-grid-day.today {
+    background: #fffbeb;
+    box-shadow: inset 0 0 0 2px var(--accent-color);
+}
+
+.cal-grid-day-number {
+    font-weight: 700;
+    font-size: 0.8rem;
+    margin-bottom: 0.4rem;
+    padding-bottom: 0.2rem;
+}
+
+.cal-grid-day.has-meetings .cal-grid-day-number {
+    color: #333;
+    border-bottom: 1px solid #eee;
+}
+
+.cal-grid-day-empty {
+    background: #f0f0f0;
+    padding: 0.3rem;
+    border: 1px solid #e5e5e5;
+    opacity: 0.3;
+}
+
+.cal-grid-meeting-link {
+    font-size: 0.65rem;
+    font-weight: 500;
+    padding: 3px 5px;
+    border-radius: 4px;
+    background: #fff3cd;
+    color: #856404;
+    margin-bottom: 3px;
+    border: 1px solid #ffeeba;
+    cursor: pointer;
+    text-decoration: none;
+    line-height: 1.3;
+    word-break: break-word;
+    display: block;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
