@@ -10,12 +10,13 @@
         {% if user.role == 'admin' %}
         <a href="/admin" {% if request.url.path == '/admin' %}class="active"{% endif %}>Beheer</a>
         {% endif %}
-        <form method="POST" action="/logout" style="display:inline;">
+        <form method="POST" action="/logout" class="inline">
             <button type="submit" class="nav-link-button">Uitloggen</button>
         </form>
         {% else %}
         <a href="/" {% if request.url.path == '/' %}class="active"{% endif %}>Zoeken</a>
         <a href="/calendar" {% if request.url.path == '/calendar' %}class="active"{% endif %}>Kalender</a>
+        <a href="/over" {% if request.url.path == '/over' %}class="active"{% endif %}>Over</a>
         <a href="/mcp-installer" {% if request.url.path == '/mcp-installer' %}class="active"{% endif %}>MCP</a>
         <a href="/login">Inloggen</a>
         {% endif %}

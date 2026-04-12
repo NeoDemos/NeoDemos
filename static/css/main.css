@@ -2874,3 +2874,717 @@ input:checked + .slider:before {
   text-align: center;
   display: block;
 }
+/* ── Subpage layout ── */
+
+.subpage {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.subpage-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+}
+
+.subpage-subtitle {
+    font-size: 1.15rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 2rem;
+}
+
+.subpage-hero {
+    margin-bottom: 2.5rem;
+}
+
+.subpage-section {
+    margin-bottom: 3rem;
+}
+
+.subpage-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+}
+
+.subpage-section h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.subpage-section p {
+    color: var(--color-text);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+/* Highlight section (tinted background) */
+.subpage-section--highlight {
+    background: var(--color-surface-sunken);
+    border-radius: 12px;
+    padding: 2rem;
+    border-left: 4px solid var(--color-accent);
+}
+
+/* ── Founder quote ── */
+
+.founder-section {
+    margin-bottom: 3rem;
+}
+
+.founder-quote blockquote {
+    margin: 0;
+    padding: 2rem;
+    background: var(--color-surface-sunken);
+    border-left: 4px solid var(--color-accent);
+    border-radius: 8px;
+}
+
+.founder-quote blockquote p {
+    font-size: 1.25rem;
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--color-primary);
+    margin-bottom: 0.75rem;
+}
+
+.founder-quote cite {
+    font-style: normal;
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+/* ── Testimonial ── */
+
+.subpage-section--testimonial {
+    text-align: center;
+    padding: 2.5rem 1rem;
+}
+
+.testimonial {
+    margin: 0 auto;
+    max-width: 500px;
+}
+
+.testimonial p {
+    font-size: 1.3rem;
+    font-style: italic;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+}
+
+.testimonial cite {
+    font-style: normal;
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+}
+
+/* ── Audience / sovereignty / card grids ── */
+
+.audience-grid,
+.sovereignty-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1rem;
+}
+
+.audience-card,
+.sovereignty-card {
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    transition: box-shadow 0.2s ease;
+}
+
+.audience-card:hover,
+.sovereignty-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.audience-card h3,
+.sovereignty-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin: 0 0 0.5rem 0;
+}
+
+.audience-card p,
+.sovereignty-card p {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ── Security checklist ── */
+
+.security-checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.security-checklist li {
+    padding: 0.75rem 0;
+    padding-left: 2rem;
+    position: relative;
+    border-bottom: 1px solid var(--color-border);
+    line-height: 1.5;
+}
+
+.security-checklist li:last-child {
+    border-bottom: none;
+}
+
+.security-checklist li::before {
+    content: "\2713";
+    position: absolute;
+    left: 0;
+    color: var(--color-success);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* ── Compatibility badges ── */
+
+.compatibility-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1rem 0;
+}
+
+.compatibility-badge {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    background: var(--color-surface-sunken);
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-primary);
+}
+
+/* ── Architecture / methodology steps ── */
+
+.architecture-steps,
+.methodology-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.architecture-step,
+.methodology-step {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+}
+
+.step-number {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: var(--color-primary);
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-radius: 50%;
+}
+
+.architecture-step h3,
+.methodology-step h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+.architecture-step p,
+.methodology-step p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+}
+
+/* ── Source stats ── */
+
+.source-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+}
+
+.stat-card {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    background: var(--color-surface-sunken);
+    border-radius: 10px;
+    border: 1px solid var(--color-border);
+}
+
+.stat-number {
+    display: block;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ── Eval grid ── */
+
+.eval-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+}
+
+.eval-card {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+}
+
+.eval-score {
+    display: block;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--color-accent);
+    margin-bottom: 0.25rem;
+}
+
+.eval-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+}
+
+.eval-card p {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* ── Transparency / limitations lists ── */
+
+.transparency-list,
+.limitations-list {
+    padding-left: 1.25rem;
+    margin: 0.75rem 0 1.5rem;
+}
+
+.transparency-list li,
+.limitations-list li {
+    margin-bottom: 0.6rem;
+    line-height: 1.6;
+    color: var(--color-text);
+}
+
+/* ── Responsive: subpages ── */
+
+@media (max-width: 768px) {
+    .subpage-title {
+        font-size: 1.75rem;
+    }
+
+    .subpage-section--highlight {
+        padding: 1.25rem;
+    }
+
+    .founder-quote blockquote {
+        padding: 1.25rem;
+    }
+
+    .founder-quote blockquote p {
+        font-size: 1.1rem;
+    }
+
+    .audience-grid,
+    .sovereignty-grid,
+    .source-stats,
+    .eval-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .architecture-step,
+    .methodology-step {
+        gap: 1rem;
+    }
+
+    .step-number {
+        width: 2rem;
+        height: 2rem;
+        font-size: 0.95rem;
+    }
+}
+
+/* ── Calendar ────────────────────────────────────────────── */
+
+/* Top bar: year select + search + view toggle */
+.cal-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.cal-toolbar select,
+.cal-toolbar input {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    padding: 0.45rem 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background: var(--color-surface-raised);
+    color: var(--color-text);
+}
+
+.cal-toolbar select:focus,
+.cal-toolbar input:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -1px;
+}
+
+.cal-search {
+    flex: 1;
+    min-width: 180px;
+    max-width: 360px;
+}
+
+.cal-view-toggle {
+    display: inline-flex;
+    gap: 0.25rem;
+    margin-left: auto;
+}
+
+.cal-view-toggle button {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface-raised);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--color-primary);
+    transition: background 0.15s;
+}
+
+.cal-view-toggle button:hover {
+    background: var(--color-surface-sunken);
+}
+
+.cal-view-toggle button.active {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+/* Filter chips */
+.cal-chips {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+    margin-bottom: 1.25rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+.cal-chip {
+    flex-shrink: 0;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-surface-raised);
+    color: var(--color-primary);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    font-family: var(--font-body);
+}
+
+.cal-chip:hover {
+    background: var(--color-surface-sunken);
+}
+
+.cal-chip.active {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+/* Date group headers */
+.cal-date-group {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--color-surface);
+    padding: 0.6rem 0;
+    border-bottom: 2px solid var(--color-accent);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.cal-date-group:first-child {
+    margin-top: 0;
+}
+
+.cal-date-group h3 {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-primary);
+}
+
+/* Meeting list rows */
+.cal-meeting {
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: var(--color-surface-raised);
+    margin-bottom: 0.5rem;
+    transition: box-shadow 0.15s;
+}
+
+.cal-meeting:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.cal-meeting summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    list-style: none;
+    font-size: 0.92rem;
+}
+
+.cal-meeting summary::-webkit-details-marker {
+    display: none;
+}
+
+.cal-meeting summary::before {
+    content: "\25B6";
+    font-size: 0.55rem;
+    color: var(--color-text-tertiary);
+    transition: transform 0.15s;
+    flex-shrink: 0;
+}
+
+.cal-meeting[open] summary::before {
+    transform: rotate(90deg);
+}
+
+.cal-meeting-date {
+    font-weight: 600;
+    color: var(--color-primary);
+    min-width: 90px;
+    font-size: 0.85rem;
+}
+
+.cal-meeting-name {
+    font-weight: 500;
+    flex: 1;
+    min-width: 0;
+}
+
+.cal-meeting-name a {
+    color: var(--color-text);
+    text-decoration: none;
+}
+
+.cal-meeting-name a:hover {
+    color: var(--color-accent);
+}
+
+.cal-meeting-committee {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--color-accent);
+    white-space: nowrap;
+}
+
+.cal-meeting-meta {
+    font-size: 0.75rem;
+    color: var(--color-text-tertiary);
+    white-space: nowrap;
+}
+
+.cal-meeting-body {
+    padding: 0 1rem 0.75rem 2rem;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+.cal-meeting-body ul {
+    margin: 0.25rem 0 0;
+    padding-left: 1.2rem;
+    list-style: disc;
+}
+
+.cal-meeting-body li {
+    margin-bottom: 0.2rem;
+    line-height: 1.5;
+}
+
+.cal-meeting-body .cal-more {
+    font-style: italic;
+    color: var(--color-text-tertiary);
+    margin-top: 0.2rem;
+}
+
+/* Empty state */
+.cal-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--color-text-tertiary);
+    font-size: 0.95rem;
+}
+
+/* Mobile: stacked rows */
+@media (max-width: 640px) {
+    .cal-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cal-search {
+        max-width: 100%;
+    }
+
+    .cal-view-toggle {
+        margin-left: 0;
+    }
+
+    .cal-meeting summary {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.3rem;
+    }
+
+    .cal-meeting-date {
+        min-width: auto;
+    }
+
+    .cal-meeting-body {
+        padding-left: 1rem;
+    }
+}
+
+/* Grid view (legacy, hidden by default) */
+.cal-grid-container {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background: var(--color-border);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    min-height: 450px;
+    overflow: hidden;
+}
+
+.cal-grid-header {
+    background: var(--color-surface-sunken);
+    padding: 0.4rem;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--color-border);
+    color: var(--color-text-tertiary);
+}
+
+.cal-grid-header.busy {
+    color: var(--color-text);
+}
+
+.cal-grid-day {
+    background: #fafafa;
+    padding: 0.5rem;
+    border: 1px solid var(--color-border);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s;
+    color: #ccc;
+}
+
+.cal-grid-day.has-meetings {
+    background: white;
+    color: var(--color-text);
+}
+
+.cal-grid-day.today {
+    background: #fffbeb;
+    box-shadow: inset 0 0 0 2px var(--color-accent);
+}
+
+.cal-grid-day-number {
+    font-weight: 700;
+    font-size: 0.8rem;
+    margin-bottom: 0.4rem;
+    padding-bottom: 0.2rem;
+}
+
+.cal-grid-day.has-meetings .cal-grid-day-number {
+    color: var(--color-text);
+    border-bottom: 1px solid #eee;
+}
+
+.cal-grid-day-empty {
+    background: #f0f0f0;
+    padding: 0.3rem;
+    border: 1px solid #e5e5e5;
+    opacity: 0.3;
+}
+
+.cal-grid-meeting-link {
+    font-size: 0.65rem;
+    font-weight: 500;
+    padding: 3px 5px;
+    border-radius: 4px;
+    background: #fff3cd;
+    color: #856404;
+    margin-bottom: 3px;
+    border: 1px solid #ffeeba;
+    cursor: pointer;
+    text-decoration: none;
+    line-height: 1.3;
+    word-break: break-word;
+    display: block;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
