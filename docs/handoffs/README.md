@@ -42,6 +42,7 @@ When a workstream finishes:
 | WS5a | [`WS5a_NIGHTLY_PIPELINE.md`](WS5a_NIGHTLY_PIPELINE.md) | 100% reliable nightly ingest | 5 | yes (independent) | none |
 | WS5b | [`WS5b_MULTI_PORTAL.md`](WS5b_MULTI_PORTAL.md) | Multi-portal connectors (search-only) | 6 | **deferred to v0.2.1** | WS5a stable for 14d |
 | WS6 | [`WS6_SUMMARIZATION.md`](WS6_SUMMARIZATION.md) | Source-spans-only summarization | 8 | yes (independent) | none for v0.2.0 minimum; WS1 for `mode='structured'` |
+| WS7 | [`WS7_OCR_RECOVERY.md`](WS7_OCR_RECOVERY.md) | OCR recovery for moties/amendementen | 2.5 | yes (independent) | none; **should run before WS1 Phase 1** |
 
 **Webcast timestamp linking** (priority 7) is split across WS5a (schema + backfill) and WS5b (HLS player UI).
 
@@ -56,16 +57,16 @@ v0.2.0 — sprint plan (Rotterdam-only)
   │  parallel work — start day 1                                     │
   │                                                                  │
   │  ┌─────────────┐  ┌──────────────┐  ┌────────────┐  ┌────────┐  │
-  │  │ WS1 phase A │  │     WS2      │  │    WS4     │  │  WS6   │  │
-  │  │ Flair+Gemini│  │  Financial   │  │  MCP disc. │  │ Summary│  │
-  │  │  enrichment │  │              │  │            │  │        │  │
+  │  │ WS1 phase 0 │  │     WS2      │  │    WS4     │  │  WS6   │  │
+  │  │ (code only) │  │  Financial   │  │  MCP disc. │  │ Summary│  │
+  │  │  + WS7 OCR  │  │              │  │            │  │        │  │
   │  └──────┬──────┘  └──────────────┘  └────────────┘  └────────┘  │
   │         │                                                        │
   │         ▼                                                        │
   │  ┌─────────────┐  ┌──────────────┐                              │
-  │  │ WS1 phase B │  │     WS5a     │                              │
-  │  │  Graph svc  │  │ Nightly pipe │                              │
-  │  │  + new MCP  │  │              │                              │
+  │  │  WS7 → WS1  │  │     WS5a     │                              │
+  │  │ OCR → enrich│  │ Nightly pipe │                              │
+  │  │  → graph svc│  │              │                              │
   │  └──────┬──────┘  └──────────────┘                              │
   │         │                                                        │
   │         ▼                                                        │
@@ -85,8 +86,8 @@ v0.2.1 — search-only beyond Rotterdam
   └──────────────┘  └──────────────┘  └──────────────┘
 ```
 
-**Critical path:** WS1 phase A → WS1 phase B → WS3. Everything else floats.
-**Earliest blocker if any:** WS1 phase A (Flair NER + Gemini enrichment) gates WS1 phase B which gates WS3.
+**Critical path:** WS7 OCR recovery → WS1 phase 1 (enrichment) → WS1 phase 2 (graph svc + MCP) → WS3.
+**Earliest blocker if any:** WS7 should run before WS1 Phase 1 so enrichment operates on clean text. WS1 Phase 0 (code) is done and parallelizes with everything.
 
 ---
 
