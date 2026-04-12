@@ -279,7 +279,9 @@ def process_documents(limit: int = 200, triggered_by: str = "apscheduler",
 
             embedder = create_embedder()  # auto: NEBIUS_API_KEY → API, else local
             qdrant_url = os.getenv("QDRANT_URL", "http://localhost:6333")
-            qdrant = QdrantClient(url=qdrant_url)
+            qdrant_key = os.getenv("QDRANT_API_KEY", "")
+            qdrant = QdrantClient(url=qdrant_url,
+                                  api_key=qdrant_key if qdrant_key else None)
 
             # Find chunks that have no embedding yet (not in Qdrant)
             # We check for chunks created recently that likely need embedding
@@ -287,7 +289,8 @@ def process_documents(limit: int = 200, triggered_by: str = "apscheduler",
             embed_cur.execute("""
                 SELECT dc.id, dc.document_id, dc.title, dc.content,
                        dc.chunk_index, dc.child_id, dc.chunk_type,
-                       d.name AS doc_name, d.meeting_id
+                       dc.section_topic, dc.key_entities,
+                       d.name AS doc_name, d.meeting_id, d.category
                 FROM document_chunks dc
                 JOIN documents d ON d.id = dc.document_id
                 WHERE dc.embedding IS NULL
@@ -321,20 +324,23 @@ def process_documents(limit: int = 200, triggered_by: str = "apscheduler",
                         f"{row['document_id']}_{row['child_id']}_{row['chunk_index']}".encode()
                     ).hexdigest()
                     point_id = int(hash_str[:15], 16)
+                    payload = {
+                        "document_id": row["document_id"],
+                        "doc_name": row["doc_name"] or "",
+                        "doc_type": row.get("category") or "municipal_doc",
+                        "meeting_id": row.get("meeting_id") or "",
+                        "child_id": row["child_id"],
+                        "chunk_index": row["chunk_index"],
+                        "chunk_type": row["chunk_type"] or "quote",
+                        "title": row["title"] or "",
+                        "content": row["content"],
+                    }
+                    if row.get("section_topic"):
+                        payload["section_topic"] = row["section_topic"]
+                    if row.get("key_entities"):
+                        payload["key_entities"] = row["key_entities"]
                     points.append(PointStruct(
-                        id=point_id,
-                        vector=vec,
-                        payload={
-                            "document_id": row["document_id"],
-                            "doc_name": row["doc_name"] or "",
-                            "doc_type": "municipal_doc",
-                            "meeting_id": row.get("meeting_id") or "",
-                            "child_id": row["child_id"],
-                            "chunk_index": row["chunk_index"],
-                            "chunk_type": row["chunk_type"] or "quote",
-                            "title": row["title"] or "",
-                            "content": row["content"],
-                        },
+                        id=point_id, vector=vec, payload=payload,
                     ))
                     pg_updates.append((vec, row["id"]))
 
