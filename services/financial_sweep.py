@@ -118,8 +118,9 @@ def _log_pipeline_run(conn, job_name: str, discovered: int, processed: int,
                 items_discovered, items_processed, items_failed, triggered_by)
            VALUES (%s, NOW(), NOW(), %s, %s, %s, %s, %s)""",
         (job_name,
-         "ok" if failed == 0 else "partial",
-         discovered, processed, failed, triggered_by),
+         "success" if failed == 0 else "failure",
+         discovered, processed, failed,
+         "cron" if triggered_by == "apscheduler" else "manual"),
     )
     cur.close()
     conn.commit()
