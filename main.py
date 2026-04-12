@@ -831,19 +831,34 @@ async def api_search(request: Request, q: str, deep: bool = False, mode: str = N
     }
 
 @app.get("/calendar")
-async def read_calendar(request: Request, year: int = None, month: int = None, user: dict = Depends(require_login)):
-    if isinstance(user, RedirectResponse):
-        return user
+async def read_calendar(
+    request: Request,
+    year: int = None,
+    month: int = None,
+    committee: str = None,
+    search: str = None,
+    view: str = "list",
+):
+    """Public calendar page -- no login required."""
+    user = await get_current_user(request)
     available_years = storage.get_meeting_years()
+    committees = storage.get_distinct_committees()
     if year is None and available_years:
         year = available_years[0]
-    meetings = storage.get_meetings(limit=2000, year=year)
+    # Use filtered query with agenda/doc counts for list view
+    meetings = storage.get_meetings_filtered(
+        year=year, committee=committee, search=search, limit=2000,
+    )
     return templates.TemplateResponse(name="calendar.html", request=request, context={
         "title": "Raadskalender",
         "meetings": meetings,
         "selected_year": year,
         "selected_month": month,
         "available_years": available_years,
+        "committees": committees,
+        "selected_committee": committee or "",
+        "search_query": search or "",
+        "view": view,
         "user": user,
     })
 

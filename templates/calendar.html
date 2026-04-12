@@ -1,10 +1,42 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="calendar-container">
-    <div class="calendar-controls">
-        <div class="calendar-controls-left">
-            <select id="select-month" class="calendar-select">
+<!-- Toolbar: year, search, view toggle -->
+<div class="cal-toolbar">
+    <select id="select-year" aria-label="Jaar">
+        {% for y in available_years %}
+        <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>{{ y }}</option>
+        {% endfor %}
+    </select>
+    <input id="cal-search" class="cal-search" type="search"
+           placeholder="Zoek vergadering..." value="{{ search_query }}"
+           aria-label="Zoek vergaderingen">
+    <div class="cal-view-toggle">
+        <button id="btn-view-list" class="{{ 'active' if view != 'grid' }}" title="Lijstweergave" aria-label="Lijstweergave">&#9776;</button>
+        <button id="btn-view-grid" class="{{ 'active' if view == 'grid' }}" title="Kalenderweergave" aria-label="Kalenderweergave">&#9638;</button>
+    </div>
+</div>
+
+<!-- Committee filter chips -->
+<div class="cal-chips" id="cal-chips">
+    <button class="cal-chip {{ 'active' if not selected_committee }}" data-committee="">Alle</button>
+    {% for c in committees %}
+    <button class="cal-chip {{ 'active' if selected_committee == c }}" data-committee="{{ c }}">{{ c }}</button>
+    {% endfor %}
+</div>
+
+<!-- ======= LIST VIEW (default) ======= -->
+<div id="cal-list-view" style="{{ 'display:none' if view == 'grid' else '' }}">
+    {% if not meetings %}
+    <div class="cal-empty">Geen vergaderingen gevonden.</div>
+    {% endif %}
+</div>
+
+<!-- ======= GRID VIEW (toggle) ======= -->
+<div id="cal-grid-view" style="{{ '' if view == 'grid' else 'display:none' }}">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+        <div style="display:flex;align-items:center;gap:0.5rem;">
+            <select id="select-month-grid" aria-label="Maand">
                 <option value="0">Januari</option>
                 <option value="1">Februari</option>
                 <option value="2">Maart</option>
@@ -18,187 +50,366 @@
                 <option value="10">November</option>
                 <option value="11">December</option>
             </select>
-            <select id="select-year" class="calendar-select">
-                {% for y in available_years %}
-                <option value="{{ y }}" {% if y==selected_year %}selected{% endif %}>{{ y }}</option>
-                {% endfor %}
-            </select>
-            <button id="btn-today" class="btn-today">
-                <span>&#x1F3E0;</span> Vandaag
-            </button>
+            <button id="btn-today" class="btn-secondary btn" style="padding:0.2rem 0.6rem;font-size:0.8rem;border-radius:4px;">Vandaag</button>
         </div>
         <div>
-            <button id="btn-prev" class="btn-secondary btn-sm">&larr;</button>
-            <button id="btn-next" class="btn-secondary btn-sm">&rarr;</button>
+            <button id="btn-prev" class="btn-secondary btn" style="padding:0.3rem 0.8rem;font-size:0.85rem;">&larr;</button>
+            <button id="btn-next" class="btn-secondary btn" style="padding:0.3rem 0.8rem;font-size:0.85rem;">&rarr;</button>
         </div>
     </div>
-
-    <div id="calendar-grid-container" class="calendar-grid">
-    </div>
+    <div id="calendar-grid-container" class="cal-grid-container"></div>
 </div>
 
-    <script type="application/json" id="meetings-data">{{ meetings | tojson | safe }}</script>
+<script type="application/json" id="meetings-data">{{ meetings | tojson | safe }}</script>
 
 <script>
-    // Data from server
-    const meetings = JSON.parse(document.getElementById('meetings-data').textContent);
-    const selectedYear = Number('{{ selected_year | default(2025)}}');
-    const selectedMonthParam = '{{ selected_month }}';
+(function() {
+    'use strict';
 
+    /* ── Data ────────────────────────────────────── */
+    const meetings = JSON.parse(document.getElementById('meetings-data').textContent);
+    const selectedYear = Number('{{ selected_year | default(2026) }}');
+    const selectedMonthParam = '{{ selected_month }}';
     const now = new Date();
 
-    // Initialize to selected year and month
+    /* ── Dutch month names & helpers ──────────────── */
+    const MONTHS_NL = ['januari','februari','maart','april','mei','juni',
+                       'juli','augustus','september','oktober','november','december'];
+    const DAYS_SHORT = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
+
+    function fmtDateNL(isoStr) {
+        if (!isoStr) return '';
+        const d = new Date(isoStr);
+        const day = d.getDate();
+        const month = MONTHS_NL[d.getMonth()];
+        return day + ' ' + month;
+    }
+
+    function fmtDateFull(isoStr) {
+        if (!isoStr) return '';
+        const d = new Date(isoStr);
+        return d.getDate() + ' ' + MONTHS_NL[d.getMonth()] + ' ' + d.getFullYear();
+    }
+
+    /* ── URL state ──────────────────────────────── */
+    function getParams() {
+        return new URLSearchParams(window.location.search);
+    }
+
+    function setParam(key, value) {
+        const p = getParams();
+        if (value) p.set(key, value);
+        else p.delete(key);
+        history.replaceState(null, '', '/calendar' + (p.toString() ? '?' + p.toString() : ''));
+    }
+
+    /* ── Date grouping ──────────────────────────── */
+    function dateGroupLabel(isoStr) {
+        if (!isoStr) return 'Onbekend';
+        const d = new Date(isoStr);
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const meetDate = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        const diff = (meetDate - today) / 86400000;
+
+        if (diff === 0) return 'Vandaag';
+        if (diff === 1) return 'Morgen';
+        if (diff === -1) return 'Gisteren';
+        if (diff > 1 && diff <= 7) return 'Deze week';
+        if (diff > 7 && diff <= 14) return 'Volgende week';
+        if (diff < -1 && diff >= -7) return 'Vorige week';
+
+        return MONTHS_NL[d.getMonth()].charAt(0).toUpperCase()
+             + MONTHS_NL[d.getMonth()].slice(1) + ' ' + d.getFullYear();
+    }
+
+    /* ── List view rendering ──────────────────── */
+    const listView = document.getElementById('cal-list-view');
+
+    function renderList(data) {
+        listView.innerHTML = '';
+        if (!data || data.length === 0) {
+            listView.innerHTML = '<div class="cal-empty">Geen vergaderingen gevonden.</div>';
+            return;
+        }
+
+        let currentGroup = null;
+
+        data.forEach(function(m) {
+            const group = dateGroupLabel(m.start_date);
+            if (group !== currentGroup) {
+                currentGroup = group;
+                const header = document.createElement('div');
+                header.className = 'cal-date-group';
+                const h3 = document.createElement('h3');
+                h3.textContent = group;
+                header.appendChild(h3);
+                listView.appendChild(header);
+            }
+
+            const details = document.createElement('details');
+            details.className = 'cal-meeting';
+
+            const summary = document.createElement('summary');
+
+            const dateSpan = document.createElement('span');
+            dateSpan.className = 'cal-meeting-date';
+            dateSpan.textContent = fmtDateNL(m.start_date);
+            summary.appendChild(dateSpan);
+
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'cal-meeting-name';
+            const nameLink = document.createElement('a');
+            nameLink.href = '/meeting/' + m.id;
+            nameLink.textContent = m.name || 'Vergadering';
+            nameSpan.appendChild(nameLink);
+            summary.appendChild(nameSpan);
+
+            if (m.committee) {
+                const commSpan = document.createElement('span');
+                commSpan.className = 'cal-meeting-committee';
+                commSpan.textContent = m.committee;
+                summary.appendChild(commSpan);
+            }
+
+            const metaParts = [];
+            if (m.agenda_item_count) metaParts.push(m.agenda_item_count + ' agendapunten');
+            if (m.doc_count) metaParts.push(m.doc_count + ' documenten');
+            if (metaParts.length) {
+                const metaSpan = document.createElement('span');
+                metaSpan.className = 'cal-meeting-meta';
+                metaSpan.textContent = metaParts.join(' \u00B7 ');
+                summary.appendChild(metaSpan);
+            }
+
+            details.appendChild(summary);
+
+            // Expandable body
+            const body = document.createElement('div');
+            body.className = 'cal-meeting-body';
+            if (m.agenda_preview && m.agenda_preview.length > 0) {
+                const ul = document.createElement('ul');
+                m.agenda_preview.forEach(function(title) {
+                    const li = document.createElement('li');
+                    li.textContent = title;
+                    ul.appendChild(li);
+                });
+                body.appendChild(ul);
+                if (m.agenda_item_count > 5) {
+                    const more = document.createElement('div');
+                    more.className = 'cal-more';
+                    more.textContent = '... en nog ' + (m.agenda_item_count - 5) + ' agendapunten';
+                    body.appendChild(more);
+                }
+            } else {
+                const p = document.createElement('p');
+                p.style.margin = '0';
+                p.style.color = '#999';
+                p.textContent = 'Geen agendapunten beschikbaar.';
+                body.appendChild(p);
+            }
+            details.appendChild(body);
+            listView.appendChild(details);
+        });
+    }
+
+    /* ── Client-side filtering ────────────────── */
+    let activeCommittee = '{{ selected_committee }}';
+    let searchTerm = '{{ search_query }}';
+    let debounceTimer = null;
+
+    function filteredMeetings() {
+        return meetings.filter(function(m) {
+            if (activeCommittee && m.committee) {
+                if (m.committee.toLowerCase().indexOf(activeCommittee.toLowerCase()) === -1) return false;
+            } else if (activeCommittee && !m.committee) {
+                return false;
+            }
+            if (searchTerm) {
+                const q = searchTerm.toLowerCase();
+                const haystack = ((m.name || '') + ' ' + (m.committee || '')).toLowerCase();
+                if (haystack.indexOf(q) === -1) return false;
+            }
+            return true;
+        });
+    }
+
+    function applyFilters() {
+        setParam('committee', activeCommittee);
+        setParam('search', searchTerm);
+        renderList(filteredMeetings());
+    }
+
+    /* Filter chips */
+    document.getElementById('cal-chips').addEventListener('click', function(e) {
+        const chip = e.target.closest('.cal-chip');
+        if (!chip) return;
+        activeCommittee = chip.dataset.committee;
+        document.querySelectorAll('.cal-chip').forEach(function(c) { c.classList.remove('active'); });
+        chip.classList.add('active');
+        applyFilters();
+    });
+
+    /* Search with 250ms debounce */
+    document.getElementById('cal-search').addEventListener('input', function(e) {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(function() {
+            searchTerm = e.target.value.trim();
+            applyFilters();
+        }, 250);
+    });
+
+    /* Year select */
+    document.getElementById('select-year').addEventListener('change', function(e) {
+        const p = getParams();
+        p.set('year', e.target.value);
+        p.delete('month');
+        window.location.href = '/calendar?' + p.toString();
+    });
+
+    /* ── View toggle ─────────────────────────── */
+    const btnList = document.getElementById('btn-view-list');
+    const btnGrid = document.getElementById('btn-view-grid');
+    const gridView = document.getElementById('cal-grid-view');
+
+    function showView(view) {
+        if (view === 'grid') {
+            listView.style.display = 'none';
+            gridView.style.display = '';
+            btnGrid.classList.add('active');
+            btnList.classList.remove('active');
+            setParam('view', 'grid');
+            renderCalendarGrid();
+        } else {
+            gridView.style.display = 'none';
+            listView.style.display = '';
+            btnList.classList.add('active');
+            btnGrid.classList.remove('active');
+            setParam('view', '');
+        }
+    }
+
+    btnList.addEventListener('click', function() { showView('list'); });
+    btnGrid.addEventListener('click', function() { showView('grid'); });
+
+    /* ── Grid view (legacy) ──────────────────── */
     let initialMonth;
     if (selectedMonthParam && selectedMonthParam !== 'None') {
         initialMonth = Number(selectedMonthParam);
     } else {
-        // Fallback: Use current month if in selected year, else Jan (0)
         initialMonth = (now.getFullYear() === selectedYear) ? now.getMonth() : 0;
     }
-
     let currentDate = new Date(selectedYear, initialMonth, 1);
 
-    const selectMonth = document.getElementById('select-month');
-    const selectYear = document.getElementById('select-year');
+    const selectMonthGrid = document.getElementById('select-month-grid');
 
-    function updateSelects() {
-        selectMonth.value = currentDate.getMonth();
-        selectYear.value = currentDate.getFullYear();
+    function updateGridSelects() {
+        selectMonthGrid.value = currentDate.getMonth();
     }
 
-    function renderCalendar() {
-        const gridContainer = document.getElementById('calendar-grid-container');
-        if (!gridContainer) return;
-
-        gridContainer.innerHTML = '';
+    function renderCalendarGrid() {
+        const gc = document.getElementById('calendar-grid-container');
+        if (!gc) return;
+        gc.innerHTML = '';
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth();
-        updateSelects();
+        updateGridSelects();
 
-        const dayNames = ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'];
-        const firstDay = new Date(year, month, 1).getDay(); // 0 (Sun) to 6 (Sat)
-        const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1; // Convert to Mon-Sun
+        const firstDay = new Date(year, month, 1).getDay();
+        const adjustedFirst = firstDay === 0 ? 6 : firstDay - 1;
         const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-        // 1. Calculate which weekdays have meetings to adjust column widths
-        const dayOccupancy = new Array(7).fill(false);
-        for (let day = 1; day <= daysInMonth; day++) {
-            const dayStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            const hasMeeting = Array.isArray(meetings) && meetings.some(m => m.start_date && m.start_date.startsWith(dayStr));
-            if (hasMeeting) {
-                const dayOfWeek = (adjustedFirstDay + day - 1) % 7;
-                dayOccupancy[dayOfWeek] = true;
+        const dayOcc = new Array(7).fill(false);
+        for (let d = 1; d <= daysInMonth; d++) {
+            const ds = year + '-' + String(month+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+            if (Array.isArray(meetings) && meetings.some(function(mm){return mm.start_date && mm.start_date.startsWith(ds);})) {
+                dayOcc[(adjustedFirst + d - 1) % 7] = true;
             }
         }
 
-        // Apply dynamic grid template (genuinely dynamic — must stay in JS)
-        const gridTemplate = dayOccupancy.map(busy => busy ? '1.8fr' : '0.6fr').join(' ');
-        gridContainer.style.gridTemplateColumns = gridTemplate;
-        gridContainer.style.minHeight = 'calc(100vh - 280px)';
+        gc.style.gridTemplateColumns = dayOcc.map(function(b){return b?'1.8fr':'0.6fr';}).join(' ');
 
-        // Add day headers
-        dayNames.forEach((day, idx) => {
-            const dayHeader = document.createElement('div');
-            dayHeader.classList.add('calendar-day-header', dayOccupancy[idx] ? 'calendar-day-header--busy' : 'calendar-day-header--quiet');
-            dayHeader.textContent = day;
-            gridContainer.appendChild(dayHeader);
+        DAYS_SHORT.forEach(function(dn, idx) {
+            const dh = document.createElement('div');
+            dh.className = 'cal-grid-header' + (dayOcc[idx] ? ' busy' : '');
+            dh.textContent = dn;
+            gc.appendChild(dh);
         });
 
-        // Empty slots for previous month
-        for (let i = 0; i < adjustedFirstDay; i++) {
-            const emptyDiv = document.createElement('div');
-            emptyDiv.classList.add('calendar-day', 'calendar-day--outside');
-            gridContainer.appendChild(emptyDiv);
+        for (let i = 0; i < adjustedFirst; i++) {
+            const e = document.createElement('div');
+            e.className = 'cal-grid-day-empty';
+            gc.appendChild(e);
         }
 
-        // Days of current month
-        for (let day = 1; day <= daysInMonth; day++) {
+        for (let d = 1; d <= daysInMonth; d++) {
             const dayDiv = document.createElement('div');
-            const dayStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            const filteredMeetings = Array.isArray(meetings) ? meetings.filter(m => m.start_date && m.start_date.startsWith(dayStr)) : [];
-            const hasMeetings = filteredMeetings.length > 0;
+            const ds = year + '-' + String(month+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+            const fm = Array.isArray(meetings) ? meetings.filter(function(mm){return mm.start_date && mm.start_date.startsWith(ds);}) : [];
+            const hasMeetings = fm.length > 0;
 
-            dayDiv.classList.add('calendar-day', hasMeetings ? 'calendar-day--has-meetings' : 'calendar-day--empty');
+            dayDiv.className = 'cal-grid-day' + (hasMeetings ? ' has-meetings' : '');
+            const isToday = now.getFullYear()===year && now.getMonth()===month && now.getDate()===d;
+            if (isToday) dayDiv.classList.add('today');
 
-            // Highlight today
-            const isToday = now.getFullYear() === year && now.getMonth() === month && now.getDate() === day;
-            if (isToday) {
-                dayDiv.classList.add('calendar-day--today');
-            }
+            const dayNum = document.createElement('div');
+            dayNum.className = 'cal-grid-day-number';
+            dayNum.textContent = d;
+            dayDiv.appendChild(dayNum);
 
-            // Day number
-            const dayNumber = document.createElement('div');
-            dayNumber.classList.add('calendar-day-number');
-            dayNumber.textContent = day;
-            dayDiv.appendChild(dayNumber);
-
-            // Add meeting links
-            filteredMeetings.forEach(m => {
+            fm.forEach(function(mm) {
                 const link = document.createElement('a');
-                link.href = `/meeting/${m.id}`;
-                link.textContent = m.name;
-                link.title = m.name;
-                link.classList.add('calendar-meeting-link');
+                link.href = '/meeting/' + mm.id;
+                link.textContent = mm.name;
+                link.title = mm.name;
+                link.className = 'cal-grid-meeting-link';
                 dayDiv.appendChild(link);
             });
 
-            gridContainer.appendChild(dayDiv);
+            gc.appendChild(dayDiv);
         }
 
-        // Pad remaining days
-        const totalCells = adjustedFirstDay + daysInMonth;
-        const cellsToAdd = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
-        for (let i = 0; i < cellsToAdd; i++) {
-            const emptyDiv = document.createElement('div');
-            emptyDiv.classList.add('calendar-day', 'calendar-day--outside');
-            gridContainer.appendChild(emptyDiv);
+        var totalCells = adjustedFirst + daysInMonth;
+        var pad = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+        for (var p = 0; p < pad; p++) {
+            var emp = document.createElement('div');
+            emp.className = 'cal-grid-day-empty';
+            gc.appendChild(emp);
         }
     }
 
     function changeMonth(delta) {
         currentDate.setMonth(currentDate.getMonth() + delta);
-
-        // If we crossed into a different year, reload to get new data
         if (currentDate.getFullYear() !== selectedYear) {
-            window.location.href = `/calendar?year=${currentDate.getFullYear()}&month=${currentDate.getMonth()}`;
+            window.location.href = '/calendar?year=' + currentDate.getFullYear() + '&month=' + currentDate.getMonth() + '&view=grid';
         } else {
-            renderCalendar();
+            renderCalendarGrid();
         }
     }
 
-    document.getElementById('btn-prev').addEventListener('click', () => changeMonth(-1));
-    document.getElementById('btn-next').addEventListener('click', () => changeMonth(1));
-
-    document.getElementById('btn-today').addEventListener('click', () => {
-        const todayYear = now.getFullYear();
-        const todayMonth = now.getMonth();
-
-        if (todayYear !== selectedYear) {
-            // Switch year via reload
-            window.location.href = `/calendar?year=${todayYear}&month=${todayMonth}`;
+    document.getElementById('btn-prev').addEventListener('click', function(){changeMonth(-1);});
+    document.getElementById('btn-next').addEventListener('click', function(){changeMonth(1);});
+    document.getElementById('btn-today').addEventListener('click', function() {
+        var ty = now.getFullYear(), tm = now.getMonth();
+        if (ty !== selectedYear) {
+            window.location.href = '/calendar?year=' + ty + '&month=' + tm + '&view=grid';
         } else {
-            // Same year, just jump in JS
-            currentDate = new Date(todayYear, todayMonth, 1);
-            renderCalendar();
+            currentDate = new Date(ty, tm, 1);
+            renderCalendarGrid();
         }
     });
-
-    selectMonth.addEventListener('change', (e) => {
-        const newMonth = parseInt(e.target.value);
-        currentDate.setMonth(newMonth);
-        // Month dropdown is always in the current year, but keep logic for safety
+    selectMonthGrid.addEventListener('change', function(e) {
+        var nm = parseInt(e.target.value);
+        currentDate.setMonth(nm);
         if (currentDate.getFullYear() !== selectedYear) {
-            window.location.href = `/calendar?year=${currentDate.getFullYear()}&month=${newMonth}`;
+            window.location.href = '/calendar?year=' + currentDate.getFullYear() + '&month=' + nm + '&view=grid';
         } else {
-            renderCalendar();
+            renderCalendarGrid();
         }
     });
 
-    selectYear.addEventListener('change', (e) => {
-        // When year changes via dropdown, reload page to fetch that year's data
-        window.location.href='/calendar?year=' + e.target.value;
-    });
-
-    renderCalendar();
+    /* ── Init ─────────────────────────────────── */
+    renderList(filteredMeetings());
+    if ('{{ view }}' === 'grid') renderCalendarGrid();
+})();
 </script>
 {% endblock %}
