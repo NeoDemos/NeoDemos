@@ -2092,6 +2092,203 @@ input:checked + .slider:before {
   font-weight: 600;
 }
 
+/* ================================================================
+   Page: Landing (WS8b)
+   ================================================================ */
+
+.landing-hero {
+  text-align: center;
+  padding: var(--space-8) 0 var(--space-6);
+}
+
+.landing-headline {
+  font-family: var(--font-heading);
+  font-size: 2.4rem;
+  font-weight: 400;
+  color: var(--color-primary);
+  line-height: 1.3;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Demo answer card */
+.demo-answer-card {
+  background: var(--color-surface-raised);
+  border-left: 4px solid var(--color-accent);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  padding: var(--space-6) var(--space-8);
+  margin-bottom: var(--space-8);
+  box-shadow: var(--shadow-md);
+}
+
+.demo-answer-question {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  color: var(--color-primary);
+  margin-bottom: var(--space-4);
+  font-style: italic;
+}
+
+.demo-answer-question::before {
+  content: '\201C';
+  color: var(--color-accent);
+  margin-right: 0.15rem;
+}
+
+.demo-answer-question::after {
+  content: '\201D';
+  color: var(--color-accent);
+  margin-left: 0.15rem;
+}
+
+.demo-answer-desktop {
+  display: block;
+}
+
+.demo-answer-mobile {
+  display: none;
+}
+
+.demo-answer-mobile summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--color-accent);
+  padding: var(--space-2) 0;
+}
+
+@media (max-width: 768px) {
+  .demo-answer-desktop {
+    display: none;
+  }
+  .demo-answer-mobile {
+    display: block;
+  }
+  .landing-headline {
+    font-size: 1.6rem;
+    padding: 0 var(--space-2);
+  }
+  .demo-answer-card {
+    padding: var(--space-4) var(--space-5);
+    margin-bottom: var(--space-6);
+  }
+}
+
+/* Example queries */
+.example-queries {
+  text-align: center;
+  margin-bottom: var(--space-8);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.example-queries-label {
+  font-size: 0.88rem;
+  color: var(--color-text-tertiary);
+  margin-right: var(--space-1);
+}
+
+.example-query {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: var(--space-1) var(--space-4);
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.example-query:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+/* Credibility line */
+.credibility-line {
+  text-align: center;
+  padding: var(--space-6) 0 var(--space-3);
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.credibility-separator {
+  margin: 0 var(--space-3);
+  color: var(--color-border-strong);
+}
+
+/* Trust line */
+.trust-line {
+  text-align: center;
+  padding: 0 0 var(--space-8);
+  font-size: 0.85rem;
+  color: var(--color-text-tertiary);
+}
+
+.trust-separator {
+  margin: 0 var(--space-2);
+  color: var(--color-border);
+}
+
+/* Nudge banners */
+.nudge-banner {
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-top: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+
+.nudge-mcp {
+  border-color: var(--color-accent);
+  border-left-width: 4px;
+}
+
+.nudge-title {
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: var(--space-2);
+  font-size: 1rem;
+}
+
+.nudge-text {
+  color: var(--color-text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin-bottom: var(--space-4);
+}
+
+.nudge-actions {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .credibility-line {
+    font-size: 0.85rem;
+  }
+  .credibility-separator,
+  .trust-separator {
+    margin: 0 var(--space-1);
+  }
+  .example-queries {
+    flex-direction: column;
+    align-items: center;
+  }
+  .nudge-banner {
+    padding: var(--space-4);
+  }
+}
+
 .separator {
   border: none;
   border-top: 1px solid var(--color-border);

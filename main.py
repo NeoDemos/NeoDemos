@@ -26,6 +26,15 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 from neodemos_version import VERSION_LABEL, DISPLAY_NAME, STAGE
+
+# Landing page headline — rotate weekly via env var, no redeploy needed
+# Supports literal \n in .env files (converted to real newlines)
+_raw_headline = os.getenv(
+    "LANDING_HEADLINE",
+    "De raadsvergadering was altijd openbaar.\nNu is ze ook begrijpelijk."
+)
+LANDING_HEADLINE = _raw_headline.replace("\\n", "\n")
+
 from services.db_pool import close_pool
 from services.open_raad import OpenRaadService
 from services.storage import StorageService
@@ -673,14 +682,18 @@ async def methodologie_page(request: Request):
 
 @app.get("/")
 async def search_page(request: Request):
-    """Public landing page: search box + about + MCP section.
+    """Public landing page: 4-element design (demo, search, credibility, trust).
 
-    Anonymous users see the explainer + MCP teaser below the search.
+    Anonymous users see the pre-rendered demo answer and credibility lines.
     Logged-in users see a clean search-only experience.
     """
     user = await get_current_user(request)
     return templates.TemplateResponse(name="search.html", request=request, context={
-        "title": "Zoeken", "user": user,
+        "title": "Zoeken",
+        "user": user,
+        "landing_headline": Markup(LANDING_HEADLINE.replace("\n", "<br>")),
+        "demo_question": "Heeft het college haar beloftes waargemaakt?",
+        "demo_answer": None,  # TODO: cache a pre-rendered AI answer here
     })
 
 @app.get("/overview")

@@ -3,22 +3,58 @@
 {% block content %}
 
 <div class="search-container">
-    <h1 class="search-title">Zoek in Raadsinformatie</h1>
-    <p class="search-subtitle">Doorzoek alle agendapunten en documenten van de
-        afgelopen jaren.</p>
 
-    <!-- Search Box Wrapper -->
+    <!-- ── Element 0: Hero headline ── -->
+    <div class="landing-hero">
+        <h1 class="landing-headline">{{ landing_headline }}</h1>
+    </div>
+
+    <!-- ── Element 1: Pre-rendered demo answer (cached, no API cost) ── -->
+    {% if demo_answer and not user %}
+    <div class="demo-answer-card" id="demo-answer">
+        <div class="demo-answer-desktop">
+            <div class="demo-answer-question">{{ demo_question }}</div>
+            <div class="ai-content">{{ demo_answer | safe }}</div>
+        </div>
+        <details class="demo-answer-mobile">
+            <summary>Bekijk voorbeeld</summary>
+            <div class="demo-answer-question">{{ demo_question }}</div>
+            <div class="ai-content">{{ demo_answer | safe }}</div>
+        </details>
+    </div>
+    {% elif not user %}
+    <!-- Placeholder demo until cached answer is available -->
+    <div class="demo-answer-card" id="demo-answer">
+        <div class="demo-answer-desktop">
+            <div class="demo-answer-question">Heeft het college haar beloftes waargemaakt?</div>
+            <div class="ai-content">
+                <p>Op basis van het coalitieakkoord 2022-2026 en de jaarstukken van 2023 en 2024 zijn er duidelijke verschillen tussen belofte en uitvoering.</p>
+                <p><strong>Woningbouw:</strong> Het college beloofde 18.000 nieuwe woningen. De voortgangsrapportage laat zien dat er 12.400 vergunningen zijn verleend &mdash; op koers, maar de daadwerkelijke oplevering loopt achter.</p>
+                <p><strong>Klimaat:</strong> De ambitie voor 55% CO2-reductie in 2030 is bijgesteld naar 49% na de evaluatie van het Rotterdams Klimaatakkoord.</p>
+                <p>Bekijk de volledige analyse door zelf te zoeken.</p>
+            </div>
+        </div>
+        <details class="demo-answer-mobile">
+            <summary>Bekijk voorbeeld</summary>
+            <div class="demo-answer-question">Heeft het college haar beloftes waargemaakt?</div>
+            <div class="ai-content">
+                <p>Op basis van het coalitieakkoord 2022-2026 en de jaarstukken van 2023 en 2024 zijn er duidelijke verschillen tussen belofte en uitvoering.</p>
+                <p>Bekijk de volledige analyse door zelf te zoeken.</p>
+            </div>
+        </details>
+    </div>
+    {% endif %}
+
+    <!-- ── Element 2: Search bar ── -->
     <div class="search-box-wrapper">
-
-        <textarea id="search-input" class="search-input" placeholder="Zoek op thema, persoon of dossier..."
+        <textarea id="search-input" class="search-input" placeholder="Stel uw eigen vraag..."
             rows="1"></textarea>
 
         <button onclick="performSearch()" class="search-btn">Zoek</button>
 
         <!-- @mention Suggestion Menu -->
         <div id="mention-menu" class="mention-menu">
-            <div class="mention-menu-header">
-                DIRECTE KOPPELING</div>
+            <div class="mention-menu-header">DIRECTE KOPPELING</div>
             <div id="mention-items">
                 <!-- Items injected by JS -->
             </div>
@@ -27,16 +63,15 @@
 
     <div id="search-hint" class="search-hint" aria-live="polite"></div>
 
-    <!-- Toggle Below Search Box -->
-    <div class="search-toggle">
-        <span class="search-toggle-label">&#128269; Standaard Zoeken</span>
-        <label class="switch">
-            <input type="checkbox" id="debate-mode">
-            <span class="slider round"></span>
-        </label>
-        <span class="search-toggle-label">&#9876;&#65039; Debat Voorbereiding</span>
+    <!-- Clickable example queries -->
+    <div class="example-queries">
+        <span class="example-queries-label">Of probeer:</span>
+        <button class="example-query" onclick="runExample(this)">Heeft het college haar beloftes waargemaakt?</button>
+        <button class="example-query" onclick="runExample(this)">Hoe stemden partijen over woningbouw?</button>
+        <button class="example-query" onclick="runExample(this)">Welke moties over klimaat zijn aangenomen sinds 2020?</button>
     </div>
 
+    <!-- Search results area -->
     <div id="search-results">
         <!-- Unified Loading State -->
         <div id="search-loading-state" class="search-loading-state" hidden>
@@ -55,8 +90,7 @@
                 <div class="ai-result-header">
                     <div class="ai-result-title-group">
                         <span id="ai-header-icon" class="ai-result-icon">&#129504;</span>
-                        <h2 id="ai-header-title" class="ai-result-title">Deep
-                            Research Analyse</h2>
+                        <h2 id="ai-header-title" class="ai-result-title">Analyse</h2>
                     </div>
                     <button id="copy-word-btn" class="btn-copy-word" onclick="copyToWord()" hidden>
                         &#128196; Kopieer voor Word
@@ -74,106 +108,84 @@
         </div>
     </div>
 
-    {% if not user %}
-    <!-- ─────────────────────────────────────────────── -->
-    <!-- Landing content (anonymous visitors only)        -->
-    <!-- ─────────────────────────────────────────────── -->
-    <section id="landing-content" class="landing-section">
+    <!-- ── Element 3: Credibility line ── -->
+    <div class="credibility-line">
+        <span>90.000+ documenten</span>
+        <span class="credibility-separator">&middot;</span>
+        <span>24 jaar</span>
+        <span class="credibility-separator">&middot;</span>
+        <span>Rotterdam</span>
+        <span class="credibility-separator">&middot;</span>
+        <span>Open brondata</span>
+    </div>
 
-        <!-- About NeoDemos -->
-        <div class="about-block">
-            <h2>Wat is NeoDemos?</h2>
-            <p>
-                Onze democratie is te kwetsbaar om aan oude technologie over te laten.
-                NeoDemos geeft burgers, politici, ambtenaren en media de mogelijkheid om op
-                eenvoudige wijze inzicht te krijgen in de complexe documentenbrei van
-                gemeentes.
-            </p>
-            <p class="about-block-note">
-                90.000+ Rotterdamse raadsdocumenten, doorzoekbaar met AI &mdash;
-                van moties en amendementen tot debatfragmenten en jaarstukken.
-            </p>
-        </div>
+    <!-- ── Element 4: Trust line ── -->
+    <div class="trust-line">
+        <span>Europees gehost</span>
+        <span class="trust-separator">&middot;</span>
+        <span>Elke bewering herleidbaar naar het brondocument</span>
+    </div>
 
-        <!-- MCP section (FactSet-inspired) -->
-        <div class="mcp-section">
-            <span class="mcp-eyebrow">Voor ontwikkelaars &amp; analisten</span>
-            <h2>Gebruik NeoDemos in je eigen AI-assistent</h2>
-            <p class="lead">
-                Je kan NeoDemos vandaag al testen in je eigen AI-toepassing. Verbind Claude,
-                ChatGPT of een andere AI-assistent direct met de Rotterdamse raadsinformatie
-                via het Model Context Protocol &mdash; zonder kopieer- en plakwerk.
-            </p>
-
-            <div class="mcp-explainer">
-                <h3>Wat is MCP, in gewone taal?</h3>
-                <p>
-                    Het <strong>Model Context Protocol (MCP)</strong> is een open standaard
-                    waarmee AI-assistenten rechtstreeks kunnen praten met externe databronnen.
-                    In plaats van losse PDF&rsquo;s te uploaden naar je AI, vraagt jouw
-                    AI-assistent rechtstreeks aan NeoDemos: <em>&ldquo;Wat heeft de
-                    gemeenteraad sinds 2023 gezegd over de Maastunnel?&rdquo;</em> &mdash; en
-                    krijgt direct antwoord met bronvermelding, citaten en stemuitslagen uit
-                    onze database van 90.000+ documenten.
-                </p>
-            </div>
-
-            <div class="mcp-features">
-                <div class="mcp-feature">
-                    <span class="icon">&#128279;</span>
-                    <h4>Directe toegang</h4>
-                    <p>13 Nederlandstalige tools voor moties, vergaderingen, partijstandpunten en meer.</p>
-                </div>
-                <div class="mcp-feature">
-                    <span class="icon">&#128269;</span>
-                    <h4>Hybride zoek</h4>
-                    <p>BM25 + vector search + AI reranking voor scherpe resultaten in elke vraag.</p>
-                </div>
-                <div class="mcp-feature">
-                    <span class="icon">&#128737;</span>
-                    <h4>Veilig &amp; transparant</h4>
-                    <p>OAuth 2.1 authenticatie. Pure retrieval &mdash; jouw AI doet de redenering.</p>
-                </div>
-                <div class="mcp-feature">
-                    <span class="icon">&#9889;</span>
-                    <h4>In 1 minuut klaar</h4>
-                    <p>Plak &eacute;&eacute;n URL in Claude Desktop &mdash; klaar. Geen tokens beheren.</p>
-                </div>
-            </div>
-
-            <div class="mcp-examples">
-                <h3>Voorbeeldvragen voor jouw AI-assistent</h3>
-                <ul>
-                    <li>Welke moties heeft GroenLinks-PvdA ingediend over woningbouw in 2025?</li>
-                    <li>Wat zei wethouder Achbar over de Maastunnel-renovatie?</li>
-                    <li>Geef me een tijdlijn van de besluitvorming rond de NPRZ-uitbreiding.</li>
-                    <li>Hoeveel heeft de gemeente in 2024 begroot voor jeugdzorg?</li>
-                </ul>
-            </div>
-
-            <div class="mcp-cta">
-                <a href="/mcp-installer" class="mcp-cta-primary">
-                    Installeer voor Claude &rarr;
-                </a>
-                <a href="/register" class="mcp-cta-secondary">
-                    Maak gratis account aan
-                </a>
-            </div>
-
-            <div class="mcp-clients">
-                <strong>Werkt met:</strong>
-                <span class="mcp-client-pill">Claude Desktop</span>
-                <span class="mcp-client-pill">Claude Code</span>
-                <span class="mcp-client-pill">ChatGPT</span>
-                <span class="mcp-client-pill">Cursor</span>
-                <span class="mcp-client-pill">Elke MCP-compatibele client</span>
+    <!-- Account nudge (hidden, shown after 3rd search for anonymous users) -->
+    <div id="account-nudge" class="nudge-banner" hidden>
+        <div class="nudge-content">
+            <p class="nudge-title">Wist u dat u uw zoekopdrachten kunt bewaren?</p>
+            <p class="nudge-text">Maak een gratis account en bewaar uw zoekgeschiedenis, stel uw partijlens in, en exporteer analyses naar Word.</p>
+            <div class="nudge-actions">
+                <a href="/register" class="btn btn-accent">Gratis account aanmaken</a>
+                <button class="btn btn-ghost" onclick="dismissNudge('account')">Niet nu</button>
             </div>
         </div>
-    </section>
-    {% endif %}
+    </div>
+
+    <!-- MCP nudge (hidden, shown after 5th search for all users) -->
+    <div id="mcp-nudge" class="nudge-banner nudge-mcp" hidden>
+        <div class="nudge-content">
+            <p class="nudge-text">Tip: gebruik NeoDemos rechtstreeks in Claude, ChatGPT of Cursor voor diepere analyses. Werkt ook met Ollama.</p>
+            <div class="nudge-actions">
+                <a href="/mcp-installer" class="btn btn-secondary btn-sm">Meer info</a>
+                <button class="btn btn-ghost btn-sm" onclick="dismissNudge('mcp')">Sluiten</button>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script>
+    // ── Example query click handler ──
+    function runExample(el) {
+        const input = document.getElementById('search-input');
+        input.value = el.textContent;
+        input.dispatchEvent(new Event('input'));
+        performSearch();
+    }
+
+    // ── Search counter + nudge logic (sessionStorage, GDPR-safe) ──
+    function incrementSearchCount() {
+        const count = parseInt(sessionStorage.getItem('neodemos_searches') || '0') + 1;
+        sessionStorage.setItem('neodemos_searches', count.toString());
+        return count;
+    }
+
+    function dismissNudge(type) {
+        sessionStorage.setItem('neodemos_' + type + '_nudge_dismissed', '1');
+        var el = document.getElementById(type + '-nudge');
+        if (el) el.hidden = true;
+    }
+
+    function checkNudges(count) {
+        var isAnon = {{ 'false' if user else 'true' }};
+        if (count >= 3 && isAnon && !sessionStorage.getItem('neodemos_account_nudge_dismissed')) {
+            var el = document.getElementById('account-nudge');
+            if (el) el.hidden = false;
+        }
+        if (count >= 5 && !sessionStorage.getItem('neodemos_mcp_nudge_dismissed')) {
+            var el = document.getElementById('mcp-nudge');
+            if (el) el.hidden = false;
+        }
+    }
+
+    // ── Main search function ──
     async function performSearch() {
         const query = document.getElementById('search-input').value.trim();
         const hint = document.getElementById('search-hint');
@@ -187,7 +199,9 @@
             return;
         }
 
-        const isDebateMode = document.getElementById('debate-mode').checked;
+        // Hide landing elements once search starts
+        var demoEl = document.getElementById('demo-answer');
+        if (demoEl) demoEl.hidden = true;
 
         const resultsDiv = document.getElementById('document-results');
         const aiContainer = document.getElementById('ai-deep-research');
@@ -208,45 +222,20 @@
         loadingSteps.innerHTML = '';
         loadingSteps.hidden = true;
 
-        if (isDebateMode) {
-            headerTitle.innerText = "Agentic Debatdossier Constructie";
-            headerIcon.innerText = "\u2694\uFE0F";
-            loadingText.innerText = "Deep Research Agent Loop Gestart. Context analyseren...";
-            loadingSteps.hidden = false;
-
-            let step = 0;
-            const steps = [
-                "Stap 1: Initi\u00eble historische bronnen ophalen...",
-                "Stap 2: Gapanalyse uitvoeren op ontbrekende details...",
-                "Stap 3: Secundaire gerichte zoekopdracht lanceren in vector database...",
-                "Stap 4: Diepgaande dossieranalyse schrijven (mutaties & standpunten)..."
-            ];
-            const interval = setInterval(() => {
-                if (step < steps.length) {
-                    const li = document.createElement('li');
-                    li.textContent = '\u2705 ' + steps[step];
-                    loadingSteps.appendChild(li);
-                    step++;
-                } else {
-                    clearInterval(interval);
-                }
-            }, 3500);
-
-            window._debateInterval = interval;
-        } else {
-            loadingText.innerText = "Documenten en agendapunten doorzoeken...";
-            loadingSteps.hidden = true;
-        }
+        loadingText.innerText = "Documenten en agendapunten doorzoeken...";
 
         try {
             const savedParty = localStorage.getItem('neodemos_party') || 'GroenLinks-PvdA';
-            const url = `/api/search?q=${encodeURIComponent(query)}${isDebateMode ? '&mode=debate&deep=true' : ''}&party=${encodeURIComponent(savedParty)}`;
+            const url = `/api/search?q=${encodeURIComponent(query)}&party=${encodeURIComponent(savedParty)}`;
 
             const response = await fetch(url);
             const data = await response.json();
 
-            if (window._debateInterval) clearInterval(window._debateInterval);
             loadingState.hidden = true;
+
+            // Increment search counter and check nudges
+            var searchCount = incrementSearchCount();
+            checkNudges(searchCount);
 
             const usedSourceIndices = new Set();
 
@@ -263,17 +252,14 @@
                     const citations = content.split(/,\s*/);
                     return citations.map(cit => {
                         const nStr = cit.replace('#', '').trim();
-                        // Try parsing as simple integer first (standard index)
                         let n = parseInt(nStr, 10);
 
-                        // If it's a valid index mapped to sources
                         if (!isNaN(n) && n > 0 && data.sources && n <= data.sources.length) {
                             usedSourceIndices.add(n);
                             const source = data.sources[n - 1];
                             return `<a href="${source.url || '#'}" target="_blank" class="citation-bubble" title="${source.name || ''}">${n}</a>`;
                         }
 
-                        // Fallback: Check if it's a document ID that matches one of our sources' original IDs
                         if (data.sources) {
                             const sourceIdx = data.sources.findIndex(s => s.id === nStr);
                             if (sourceIdx !== -1) {
@@ -288,8 +274,7 @@
                     }).join('');
                 });
 
-                // Pattern 2: Fallback for isolated numbers (e.g. "tekst 3.")
-                // IMPROVED: Added negative lookahead (?!\.\d) to avoid matching version numbers (like 2.0)
+                // Pattern 2: Fallback for isolated numbers
                 renderedHtml = renderedHtml.replace(/(?:^|\s)(\d+)(?!\.\d)([\.\s,;]|$)/g, (match, nStr, tail) => {
                     const n = parseInt(nStr, 10);
                     if (!isNaN(n) && n > 0 && data.sources && n <= data.sources.length) {
@@ -349,19 +334,18 @@
 
             resultsDiv.innerHTML = html;
         } catch (error) {
-            if (window._debateInterval) clearInterval(window._debateInterval);
             const loadingState = document.getElementById('search-loading-state');
             if (loadingState) loadingState.hidden = true;
             console.error("Search error:", error);
-            resultsDiv.innerHTML = '<p class="search-error">\u274C Er is een fout opgetreden bij het zoeken.</p>';
+            resultsDiv.innerHTML = '<p class="search-error">Er is een fout opgetreden bij het zoeken.</p>';
         }
     }
 
+    // ── Copy to Word ──
     async function copyToWord() {
         const content = document.getElementById('ai-answer-content');
         const btn = document.getElementById('copy-word-btn');
 
-        // Create a style block to ensure Word/GDocs preserve formatting
         const styles = `
             <style>
                 body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; }
@@ -395,6 +379,7 @@
         }
     }
 
+    // ── @mention autocomplete ──
     const searchInput = document.getElementById('search-input');
     if (searchInput) {
         searchInput.addEventListener('input', function () {
@@ -405,7 +390,6 @@
         const mentionMenu = document.getElementById('mention-menu');
         const mentionItems = document.getElementById('mention-items');
         const categories = [
-            // PARTIJEN
             { name: 'Leefbaar Rotterdam', icon: '\uD83D\uDC3E', type: 'Partij' },
             { name: 'VVD', icon: '\uD83D\uDC99', type: 'Partij' },
             { name: 'D66', icon: '\uD83D\uDC9A', type: 'Partij' },
@@ -417,8 +401,6 @@
             { name: 'CDA', icon: '\uD83C\uDF4A', type: 'Partij' },
             { name: 'ChristenUnie', icon: '\u271D\uFE0F', type: 'Partij' },
             { name: '50PLUS', icon: '\uD83D\uDC75', type: 'Partij' },
-
-            // COMMISSIES (Gevonden in DB)
             { name: 'Commissie Bestuur, Organisatie, Financi\u00EBn en Veiligheid', icon: '\uD83D\uDCB0', type: 'Commissie' },
             { name: 'Commissie Bouwen, Wonen en Buitenruimte', icon: '\uD83C\uDFD7\uFE0F', type: 'Commissie' },
             { name: 'Commissie Mobiliteit, Haven, Economie en Klimaat', icon: '\uD83D\uDEF3\uFE0F', type: 'Commissie' },
@@ -440,7 +422,7 @@
             }
         });
 
-        function showMentionMenu(query = '') {
+        function showMentionMenu(query) {
             mentionItems.innerHTML = '';
             const filtered = categories.filter(cat =>
                 cat.name.toLowerCase().includes(query) ||
