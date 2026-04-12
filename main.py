@@ -76,6 +76,29 @@ scheduler.add_job(
     misfire_grace_time=300,
 )
 
+def scheduled_document_processor():
+    """Process unchunked documents: chunk + build BM25 tsvector."""
+    try:
+        from services.document_processor import process_documents
+        result = process_documents(limit=50, triggered_by="apscheduler")
+        if result["chunked"] or result["tsvectors_built"]:
+            logger.info(
+                "Document processor: %d chunked, %d errors, %d tsvectors",
+                result["chunked"], result["chunk_errors"], result["tsvectors_built"],
+            )
+    except Exception as e:
+        logger.error(f"Document processor failed: {e}")
+
+scheduler.add_job(
+    scheduled_document_processor,
+    IntervalTrigger(minutes=20),
+    id='document_processor',
+    name='Chunk new documents and build BM25 tsvectors',
+    max_instances=1,
+    coalesce=True,
+    misfire_grace_time=300,
+)
+
 def scheduled_financial_sweep():
     """Hourly sweep: extract financial_lines from any doc with table_json chunks."""
     try:
