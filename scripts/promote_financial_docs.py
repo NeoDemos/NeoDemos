@@ -480,6 +480,22 @@ def promote_financial_doc(doc_id: str) -> bool:
         p_cur.close()
 
         print(f"  Promoted: {doc_id}")
+
+        # 9. Extract financial_lines from promoted table_json chunks (WS2)
+        #    This populates the structured financial_lines table and assigns
+        #    iv3_taakveld codes from programma_aliases.
+        try:
+            from pipeline.financial_lines_extractor import FinancialLinesExtractor
+            fle_conn = psycopg2.connect(_build_db_url())
+            extractor = FinancialLinesExtractor(fle_conn)
+            result = extractor.extract_from_document(doc_id)
+            print(f"  + financial_lines: {result.lines_extracted} rows"
+                  f" ({len(result.failures)} failures)")
+            fle_conn.close()
+        except Exception as fle_err:
+            # Non-fatal: promotion succeeded, extraction can be retried manually
+            print(f"  WARN financial_lines extraction failed: {fle_err}")
+
         return True
 
     except Exception as e:
