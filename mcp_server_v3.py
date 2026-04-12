@@ -1585,12 +1585,16 @@ def vat_document_samen(
             "document_id": document_id,
         }, ensure_ascii=False)
 
-    storage = _get_storage()
+    from services.storage_ws6 import (
+        get_all_chunks_for_document as _ws6_get_chunks,
+        get_document_summary_cache as _ws6_get_cache,
+        update_document_summary_columns as _ws6_update,
+    )
 
     # 1. Try the cached column first (mode='short' only — 'long' is always
     #    recomputed for now since we haven't cached it yet at the column level).
     if mode == "short":
-        cached = storage.get_document_summary_cache(document_id)
+        cached = _ws6_get_cache(document_id)
         if cached and cached.get("summary_short"):
             return json.dumps({
                 "document_id": document_id,
@@ -1602,7 +1606,7 @@ def vat_document_samen(
             }, ensure_ascii=False)
 
     # 2. Compute on demand: gather chunks and run the Summarizer.
-    chunk_rows = storage.get_all_chunks_for_document(document_id)
+    chunk_rows = _ws6_get_chunks(document_id)
     if not chunk_rows:
         return json.dumps({
             "error": f"Geen fragmenten gevonden voor document '{document_id}'.",
@@ -1640,7 +1644,7 @@ def vat_document_samen(
     # computed summary.
     if mode == "short":
         try:
-            storage.update_document_summary_columns(
+            _ws6_update(
                 document_id,
                 summary_short=result.text,
                 summary_verified=result.verified,
@@ -2569,13 +2573,17 @@ def vraag_begrotingsregel(
         with get_connection() as conn:
             cur = conn.cursor()
 
-            # Build WHERE clause
+            # Build WHERE clause — try exact match first, fall back to ILIKE
+            # with word-boundary awareness to avoid "Veilig" matching "veiligheid"
             conditions = [
                 "LOWER(gemeente) = LOWER(%s)",
                 "jaar = %s",
-                "programma ILIKE %s",
             ]
-            params: list = [gemeente, jaar, f"%{programma}%"]
+            params: list = [gemeente, jaar]
+
+            # Exact match on programma (case-insensitive)
+            conditions.append("LOWER(programma) = LOWER(%s)")
+            params.append(programma)
 
             if sub_programma:
                 conditions.append("sub_programma ILIKE %s")
@@ -2592,6 +2600,28 @@ def vraag_begrotingsregel(
                 ORDER BY programma, sub_programma, bedrag_label, jaar
             """, params)
             rows = cur.fetchall()
+
+            # Fallback: if exact match found nothing, try ILIKE substring match
+            if not rows:
+                conditions_fuzzy = [
+                    "LOWER(gemeente) = LOWER(%s)",
+                    "jaar = %s",
+                    "programma ILIKE %s",
+                ]
+                params_fuzzy: list = [gemeente, jaar, f"%{programma}%"]
+                if sub_programma:
+                    conditions_fuzzy.append("sub_programma ILIKE %s")
+                    params_fuzzy.append(f"%{sub_programma}%")
+                where_fuzzy = " AND ".join(conditions_fuzzy)
+                cur.execute(f"""
+                    SELECT programma, sub_programma, jaar, bedrag_eur, bedrag_label,
+                           scope, entity_id, source_pdf_url, page, table_id,
+                           row_idx, col_idx, sha256, document_id
+                    FROM financial_lines
+                    WHERE {where_fuzzy}
+                    ORDER BY programma, sub_programma, bedrag_label, jaar
+                """, params_fuzzy)
+                rows = cur.fetchall()
 
             matches = []
             for row in rows:
@@ -2614,6 +2644,34 @@ def vraag_begrotingsregel(
                         "retrieved_at": retrieved_at,
                     },
                 })
+
+            # Deduplicate cross-document: when the same programma+label appears
+            # in multiple source documents for the same jaar, keep only rows
+            # from the primary document (the one whose year best matches the
+            # queried jaar). This avoids mixing begroting_2025 and begroting_2026
+            # data for the same programma.
+            if matches:
+                doc_ids = {m["document_id"] for m in matches}
+                if len(doc_ids) > 1:
+                    # Prefer the document whose name contains the queried year
+                    primary = None
+                    for did in sorted(doc_ids):
+                        if str(jaar) in did:
+                            primary = did
+                            break
+                    if primary:
+                        # Keep rows from primary doc; also keep rows from other
+                        # docs whose (programma, label) is NOT in the primary.
+                        primary_keys = {
+                            (m["programma"], m["sub_programma"], m["label"])
+                            for m in matches if m["document_id"] == primary
+                        }
+                        matches = [
+                            m for m in matches
+                            if m["document_id"] == primary
+                            or (m["programma"], m["sub_programma"], m["label"])
+                               not in primary_keys
+                        ]
 
             # GR derived share: join gr_member_contributions for matching entities
             if include_gr_derived and matches:

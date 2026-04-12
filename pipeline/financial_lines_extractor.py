@@ -621,6 +621,32 @@ class FinancialLinesExtractor:
                 "[FLE] Inserted %d financial_lines for %s",
                 len(pg_data), document_id,
             )
+
+            # Backfill iv3_taakveld from programma_aliases (best-confidence match)
+            gem = lines[0].gemeente if lines else "rotterdam"
+            cur.execute(
+                """
+                UPDATE financial_lines fl
+                SET iv3_taakveld = pa.iv3_taakveld
+                FROM (
+                    SELECT DISTINCT ON (programma_label)
+                           programma_label, iv3_taakveld
+                    FROM programma_aliases
+                    WHERE gemeente = %s
+                    ORDER BY programma_label, confidence DESC
+                ) pa
+                WHERE fl.document_id = %s
+                  AND fl.iv3_taakveld IS NULL
+                  AND LOWER(fl.programma) = LOWER(pa.programma_label)
+                """,
+                (gem, document_id),
+            )
+            iv3_count = cur.rowcount
+            if iv3_count:
+                logger.info(
+                    "[FLE] Assigned iv3_taakveld to %d rows for %s",
+                    iv3_count, document_id,
+                )
             cur.close()
 
         self._with_advisory_lock(self.conn, _do_write)

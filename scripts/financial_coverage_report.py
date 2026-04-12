@@ -277,7 +277,7 @@ def query_extraction_quality(cur, gemeente: str, year: int | None) -> dict:
         SELECT count(*) AS total_table_chunks
         FROM document_chunks dc
         WHERE dc.chunk_type = 'table'
-            AND dc.metadata::text LIKE '%%table_json%%'
+            AND dc.table_json IS NOT NULL
             {year_filter_dc}
         """,
         params_dc,
