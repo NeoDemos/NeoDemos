@@ -62,10 +62,10 @@ These were originally scoped as standalone v0.2.0 work; they are now folded in a
 - [ ] **Gemini Flash Lite enrichment pass** for: `answerable_questions`, `section_topic` refinement, semantic relationships (`HEEFT_BUDGET`, `BETREFT_WIJK`, `SPREEKT_OVER`). Budget: ~$90–130. Small-batch (100% retention) per [project_pipeline_hardening.md](../../../.claude/projects/-Users-dennistak-Documents-Final-Frontier-NeoDemos/memory/project_pipeline_hardening.md). Now that BAG-derived `LOCATED_IN` edges exist, `BETREFT_WIJK` should resolve targets to BAG-canonical Location IDs rather than free-text wijk names.
 - [ ] **Materialize new edges** into `kg_relationships`. Target: 57K → ≥500K edges (Flair semantic relationships dominate; BAG hierarchy adds the constant 5K location skeleton).
 - [ ] **Cross-document motie↔notulen vote linking** — populate edges connecting a `motie` document to the `notulen` chunks where it was discussed/voted. Write into `kg_relationships` using the canonical shape `(source_entity_id, target_entity_id, relation_type='DISCUSSED_IN' | 'VOTED_IN', document_id, chunk_id, confidence, metadata)`. **WS3 depends on this.**
-- [ ] **Quality audit** — three layers:
-  - SQL: row counts per edge type, NULL/orphan checks
+- [ ] **Quality audit** — two layers for Phase A (the full eval gate including MCP chat replay runs after Phase B):
+  - SQL: row counts per edge type, NULL/orphan checks, coverage % on `key_entities`
   - Deterministic: 100 hand-curated entity→chunk pairs validated
-  - LLM judge: 200 random edges scored 1–5 by Gemini Flash, mean ≥ 4.0
+  - *(Optional diagnostic, not a gate)* LLM judge: 200 random edges scored 1–5 by Gemini Flash. If mean < 3.5, iterate the Gemini prompt before proceeding to Phase B. This catches obviously bad edges but cannot catch politically misleading interpretation — the MCP chat replay in the Eval gate (Layer 2) tests that.
 
 ### Phase B — Graph retrieval service + MCP tools (~5–7 days)
 
@@ -104,15 +104,37 @@ These were originally scoped as standalone v0.2.0 work; they are now folded in a
 
 ## Eval gate
 
+### Layer 1 — Automated metrics (necessary but not sufficient)
+
 | Metric | Target |
 |---|---|
-| Completeness on rag_evaluator benchmark | ≥ 3.5 (was 2.75) |
+| Completeness on rag_evaluator benchmark (30 questions) | ≥ 3.5 (was 2.75) |
 | Faithfulness (no regression) | ≥ 4.5 |
-| KG quality LLM-judge (200 random edges) | mean ≥ 4.0 |
 | `traceer_motie` precision (10 hand-validated moties) | 10/10 correct vote outcome |
 | Graph walk latency p95 | < 1.5s |
 
 Add 10 multi-hop questions to [`eval/data/questions.json`](../../eval/data/questions.json) before measuring completeness. **At least 1 of the 10 must test coalition-status-at-time during historical vote interpretation** *(added 2026-04-11)* — e.g. *"In 2018 stemde de raad over de sloop in de Tweebosbuurt. Welke partijen stemden voor, en waren zij op dat moment coalitie- of oppositiepartij?"* Gold answer requires the system to (a) find the stemming, (b) recognize the date, (c) resolve coalition-at-time via the WS4 `coalition_history` primer field — not guess party roles from training data. Rationale: 2026-04-11 woningbouw session produced exactly this class of framing error (GL/PvdA labelled as opposition on a 2018 vote while they were coalitiepartij). See [FEEDBACK_LOG.md 2026-04-11 "Full session audit"](../../brain/FEEDBACK_LOG.md). The failure mode is data-shaped, not instruction-shaped — this benchmark question proves the WS4 primer extension actually works end-to-end.
+
+### Layer 2 — MCP chat replay (the real quality gate)
+
+*(Added 2026-04-12)* The v2 formal eval (completeness 2.75, faithfulness 4.8) measured whether chunks came back and whether text was supported — but it **missed** every failure that actually mattered in production: coalition-at-time framing errors, slot efficiency, scope confusion, missing follow-up depth. Real MCP chat sessions in [FEEDBACK_LOG.md](../../brain/FEEDBACK_LOG.md) surfaced those failures far more effectively than any automated metric.
+
+**Principle:** the true quality gate is whether the specific MCP sessions that previously exposed failures now produce qualitatively better results. Abstract LLM-judge scores on random samples do not catch politically misleading output.
+
+Replay these 6 sessions through the live MCP tools **after Phase 1 enrichment**. Each must pass its specific condition. Failure on any red item blocks the WS1 `done` status.
+
+| # | Session | MCP tool sequence | Pass condition | Sev |
+|---|---|---|---|---|
+| R1 | **Tweebosbuurt 2018 stemming** | `traceer_motie` on the sloop motie | Returns correct vote parties AND identifies GL/PvdA as **coalitiepartij** at time of vote (not opposition). Must use `coalition_history` from `get_neodemos_context`, not guess from training data. | RED |
+| R2 | **Warmtebedrijf motie trace** | `traceer_motie` on ≥3 Warmtebedrijf moties (2019-2022) | Returns complete indieners + vote counts + at least 1 DISCUSSED_IN notulen chunk per motie. `trace_available: true`. | RED |
+| R3 | **Heemraadssingel parkeren** | `zoek_raadshistorie("Heemraadssingel parkeren")` | Returns ≥1 chunk (was 0 hits pre-enrichment — the chunk-text gazetteer quick-win closes this). | RED |
+| R4 | **Partijvergelijking warmtenetten** | `vergelijk_partijen(onderwerp="warmtenetten", partijen=["Leefbaar Rotterdam","GroenLinks-PvdA","VVD"])` | Returns **differentiated** per-party fragments — not the same generic warmtenetten chunks for all three. At least 3 of the 5 fragments per party must mention that party by name. | RED |
+| R5 | **Woningbouw 10-jaar research** | Full multi-tool session: `scan_breed` → `zoek_raadshistorie` → `zoek_moties` → `traceer_motie` → `lees_fragment` | Qualitative: graph_walk stream contributes at least 2 chunks that would NOT have appeared via the 4-stream retrieval alone (visible via `stream_type='graph'` tag). | YELLOW |
+| R6 | **Haven verduurzaming dossier** | `scan_breed("verduurzaming haven Rotterdam")` → `zoek_uitspraken` | Slot efficiency: ≤2 duplicate `document_id` values in first 8 results (was 4/8 pre-fix). Score floor: no result with `similarity_score < 0.15`. | YELLOW |
+
+**How to run:** use Claude Desktop (or any MCP host) connected to the production NeoDemos MCP server after Phase 1 enrichment + `GRAPH_WALK_ENABLED=1` deploy. Each session is a natural-language conversation that exercises the tool sequence shown. Score pass/fail manually against the condition column. Record results in the **Outcome** section at the bottom of this file.
+
+**Why this replaces the abstract LLM-judge:** The original handoff prescribed "200 random edges scored 1-5 by Gemini Flash, mean ≥ 4.0." That gate catches obviously bad edges but cannot catch the Tweebosbuurt-class failure (politically misleading interpretation of structurally correct data). The 6 replay sessions test end-to-end correctness including the host LLM's interpretation of retrieved context — which is where the actual user trust lives. The edge-quality LLM-judge can still be run as a diagnostic during Phase A enrichment iteration (if the mean drops below 3.5, iterate the Gemini prompt before proceeding to Phase B), but it is **not** a gate for marking WS1 `done`.
 
 ## Risks specific to this workstream
 
@@ -122,7 +144,8 @@ Add 10 multi-hop questions to [`eval/data/questions.json`](../../eval/data/quest
 | Graph-walk explosion (combinatorial paths) | Hard 2-hop cap + path scoring + benchmark with 100 queries before promoting to retrieve_parallel_context |
 | Entity resolution false positives (e.g., common Dutch surnames matching multiple politicians) | Politician registry alias disambiguation; fall back to "no entity" rather than wrong entity |
 | Gemini cost overrun | Small-batch flags from `project_pipeline_hardening.md`; estimate at $90–130 max |
-| KG quality below 4.0 | Iterate prompt + chunk size + add SQL post-filters; do not promote phase A until audit passes |
+| KG quality below 3.5 on edge LLM-judge | Iterate Gemini prompt + chunk size + add SQL post-filters; do not promote to Phase B until diagnostic passes. The *real* gate is the MCP chat replay (Eval gate Layer 2), not this score. |
+| MCP chat replay failures (Tweebosbuurt-class) | Root-cause whether the failure is in enrichment (Phase A), graph traversal (Phase B), or host-LLM interpretation (WS4 primer). Fix in the responsible workstream before marking WS1 done. |
 
 ## Future work (do NOT do in this workstream)
 - Per-municipality KG isolation (out of v0.2 scope; multi-portal deferred to v0.2.1)
