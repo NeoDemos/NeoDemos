@@ -1,114 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<style>
-    .auth-container {
-        max-width: 420px;
-        margin: 4rem auto;
-        background: #fff;
-        padding: 2.5rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    }
-
-    .auth-container h2 {
-        margin-bottom: 0.5rem;
-        color: var(--secondary-color);
-    }
-
-    .auth-container .subtitle {
-        color: #718096;
-        margin-bottom: 2rem;
-        font-size: 0.95rem;
-    }
-
-    .auth-form .form-group {
-        margin-bottom: 1.25rem;
-    }
-
-    .auth-form label {
-        display: block;
-        margin-bottom: 0.4rem;
-        font-weight: 500;
-        color: #4a5568;
-        font-size: 0.9rem;
-    }
-
-    .auth-form input[type="email"],
-    .auth-form input[type="password"],
-    .auth-form input[type="text"] {
-        width: 100%;
-        padding: 0.75rem;
-        border: 1px solid #cbd5e0;
-        border-radius: 4px;
-        font-family: inherit;
-        font-size: 1rem;
-        box-sizing: border-box;
-        transition: border-color 0.2s;
-    }
-
-    .auth-form input:focus {
-        outline: none;
-        border-color: var(--accent-color);
-        box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.15);
-    }
-
-    .auth-submit {
-        background-color: var(--secondary-color);
-        color: white;
-        border: none;
-        padding: 0.75rem 1.5rem;
-        border-radius: 4px;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        width: 100%;
-        transition: background-color 0.2s;
-        margin-top: 0.5rem;
-    }
-
-    .auth-submit:hover {
-        background-color: #1a252f;
-    }
-
-    .auth-link {
-        text-align: center;
-        margin-top: 1.5rem;
-        font-size: 0.9rem;
-        color: #718096;
-    }
-
-    .auth-link a {
-        color: var(--accent-color);
-        text-decoration: none;
-        font-weight: 500;
-    }
-
-    .auth-link a:hover {
-        text-decoration: underline;
-    }
-
-    .auth-error {
-        background: #fff5f5;
-        color: #c53030;
-        border: 1px solid #feb2b2;
-        padding: 0.75rem 1rem;
-        border-radius: 4px;
-        margin-bottom: 1.25rem;
-        font-size: 0.9rem;
-    }
-
-    .auth-success {
-        background: #f0fff4;
-        color: #276749;
-        border: 1px solid #9ae6b4;
-        padding: 0.75rem 1rem;
-        border-radius: 4px;
-        margin-bottom: 1.25rem;
-        font-size: 0.9rem;
-    }
-</style>
-
 <div class="auth-container">
     <h2>Inloggen</h2>
     <p class="subtitle">Log in om toegang te krijgen tot NeoDemos.</p>
@@ -133,7 +25,7 @@
             <input type="password" id="password" name="password" required autocomplete="current-password"
                    placeholder="Uw wachtwoord">
         </div>
-        <button type="submit" class="auth-submit">Inloggen</button>
+        <button type="submit" class="btn btn-primary auth-submit">Inloggen</button>
     </form>
 
     <div class="auth-link">

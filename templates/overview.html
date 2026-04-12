@@ -20,8 +20,7 @@
         </thead>
         <tbody>
             {% for meeting in meetings %}
-            <tr class="meeting-row" data-meeting-id="{{ meeting.id }}"
-                style="{% if loop.index % 2 == 1 %}background-color: #ffffff;{% else %}background-color: #f5f7fa;{% endif %}">
+            <tr class="meeting-row" data-meeting-id="{{ meeting.id }}">
                 <td class="meeting-date"
                     data-date="{{ meeting.start_date.split('T')[0] if meeting.start_date else '' }}">{{
                     meeting.start_date.split('T')[0] if meeting.start_date else 'Onbekend' }}</td>
@@ -34,7 +33,7 @@
         </tbody>
     </table>
     {% else %}
-    <div class="card" style="text-align: center;">
+    <div class="card text-center">
         <h3>Geen komende vergaderingen gevonden.</h3>
         <p>Probeer het later opnieuw of controleer de data bron.</p>
     </div>
@@ -64,22 +63,12 @@
 
         document.querySelectorAll('tr.meeting-row').forEach(row => {
             const meetingId = row.getAttribute('data-meeting-id');
-            row.style.cursor = 'pointer';
 
             row.addEventListener('click', function (e) {
                 if (window.getSelection().toString()) return;
                 if (meetingId) {
                     window.location.href = `/meeting/${meetingId}`;
                 }
-            });
-
-            row.addEventListener('mouseover', function () {
-                this.style.backgroundColor = '#f0f2f5';
-            });
-
-            row.addEventListener('mouseout', function () {
-                const index = Array.from(this.parentNode.children).indexOf(this);
-                this.style.backgroundColor = index % 2 === 0 ? '#ffffff' : '#f5f7fa';
             });
         });
     });

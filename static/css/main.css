@@ -495,6 +495,68 @@ main {
 }
 
 /* ================================================================
+   Component: Meetings Table (overview + legacy index)
+   ================================================================ */
+
+.meetings-table-container {
+  margin-top: var(--space-8);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-xs);
+}
+
+.meetings-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-surface-raised);
+}
+
+.meetings-table thead {
+  background: var(--color-surface-sunken);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.meetings-table th {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-primary);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.meetings-table tbody tr {
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+}
+
+.meetings-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.meetings-table tbody tr:nth-child(even) {
+  background-color: var(--color-surface);
+}
+
+.meetings-table tbody tr:hover {
+  background-color: var(--color-surface-sunken);
+}
+
+.meetings-table td {
+  padding: var(--space-3) var(--space-4);
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+.meeting-row .meeting-date {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+/* ================================================================
    Component: Citation Bubble
    ================================================================ */
 
@@ -2352,4 +2414,266 @@ input:checked + .slider:before {
   font-family: var(--font-mono);
   font-size: 0.8rem;
   color: var(--color-text-secondary);
+}
+
+/* ================================================================
+   Auth Pages (login, register)
+   ================================================================ */
+
+.auth-container {
+  max-width: 420px;
+  margin: var(--space-16) auto;
+  background: var(--color-surface-raised);
+  padding: var(--space-10);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.auth-container h2 {
+  margin-bottom: var(--space-2);
+  color: var(--color-primary);
+}
+
+.auth-container .subtitle {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-8);
+  font-size: 0.95rem;
+}
+
+.auth-form .form-group {
+  margin-bottom: var(--space-5);
+}
+
+.auth-form label {
+  display: block;
+  margin-bottom: var(--space-1);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.auth-form input[type="email"],
+.auth-form input[type="password"],
+.auth-form input[type="text"] {
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 1rem;
+  box-sizing: border-box;
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  transition: border-color 0.2s ease;
+}
+
+.auth-form input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(255, 117, 31, 0.15);
+}
+
+.auth-submit {
+  width: 100%;
+  margin-top: var(--space-2);
+}
+
+.auth-link {
+  text-align: center;
+  margin-top: var(--space-6);
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+.auth-link a {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-link a:hover {
+  text-decoration: underline;
+  color: var(--color-accent-hover);
+}
+
+.auth-error {
+  background: var(--color-error-light);
+  color: var(--color-error);
+  border: 1px solid var(--color-error);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-5);
+  font-size: 0.9rem;
+}
+
+.auth-success {
+  background: var(--color-success-light);
+  color: var(--color-success);
+  border: 1px solid var(--color-success);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-5);
+  font-size: 0.9rem;
+}
+
+.password-hint {
+  font-size: 0.8rem;
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-1);
+}
+
+/* ================================================================
+   OAuth Pages (consent, login, error, success)
+   ================================================================ */
+
+.auth-container--wide {
+  max-width: 460px;
+}
+
+.auth-container--center {
+  text-align: center;
+}
+
+.mcp-badge {
+  display: inline-block;
+  background: var(--color-surface-sunken);
+  color: var(--color-text-secondary);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  margin-bottom: var(--space-4);
+}
+
+/* Consent: user info banner */
+.oauth-user-info {
+  background: var(--color-primary-light);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-6);
+  font-size: 0.9rem;
+  color: var(--color-primary);
+}
+
+/* Consent: scope checklist */
+.scope-list {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-6);
+  list-style: none;
+}
+
+.scope-list li {
+  padding: var(--space-1) 0;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.scope-list li::before {
+  content: "\2713";
+  color: var(--color-success);
+  margin-right: var(--space-2);
+  font-weight: bold;
+}
+
+.oauth-scope-intro {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+/* Consent + Success: button row */
+.oauth-btn-row {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.oauth-btn-row form {
+  flex: 1;
+  display: flex;
+}
+
+.oauth-btn-row .btn {
+  flex: 1;
+}
+
+.btn-deny {
+  background: var(--color-surface-sunken);
+  color: var(--color-text-secondary);
+  border: none;
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s ease;
+}
+
+.btn-deny:hover {
+  background: var(--color-border);
+}
+
+/* Error: error box */
+.oauth-error-box {
+  background: var(--color-error-light);
+  color: var(--color-error);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-4);
+  font-size: 0.95rem;
+}
+
+/* Error: back link */
+.oauth-back-link {
+  margin-top: var(--space-6);
+  font-size: 0.9rem;
+  color: var(--color-text-tertiary);
+}
+
+/* Success: animated checkmark */
+.oauth-checkmark {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--color-success);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-5);
+  font-size: 2.5rem;
+  font-weight: bold;
+  animation: oauth-pop 0.35s ease-out;
+}
+
+@keyframes oauth-pop {
+  0%   { transform: scale(0.5); opacity: 0; }
+  70%  { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Success: client connection info */
+.oauth-client-info {
+  background: var(--color-success-light);
+  border: 1px solid #c6f6d5;
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-6);
+  font-size: 0.9rem;
+  color: var(--color-success);
+}
+
+/* Success: redirect note */
+.oauth-redirect-note {
+  font-size: 0.85rem;
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-6);
+}
+
+/* Success: button row links */
+.oauth-btn-row a {
+  flex: 1;
+  text-decoration: none;
+  text-align: center;
+  display: block;
 }

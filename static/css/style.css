@@ -175,6 +175,14 @@ main {
     cursor: pointer;
 }
 
+.meetings-table tbody tr:nth-child(even) {
+    background-color: #f5f7fa;
+}
+
+.meetings-table tbody tr:hover {
+    background-color: #f0f2f5;
+}
+
 .meetings-table tbody tr:last-child {
     border-bottom: none;
 }
@@ -229,3 +237,7 @@ footer {
     color: #999;
     letter-spacing: 0.3px;
 }
+
+/* Utility classes */
+.mt-8 { margin-top: 2rem; }
+.text-center { text-align: center; }

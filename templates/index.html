@@ -26,7 +26,7 @@
         <section class="hero">
             <h1>De toekomst van raadsinformatie.</h1>
             <p>Efficiënt vergaderingen voorbereiden met de kracht van AI. Speciaal voor Rotterdamse raadsleden.</p>
-            <div style="margin-top: 2rem;">
+            <div class="mt-8">
                 <a href="/calendar" class="btn">Bekijk Kalender 2025</a>
             </div>
         </section>
@@ -45,8 +45,7 @@
                 </thead>
                 <tbody>
                     {% for meeting in meetings %}
-                    <tr class="meeting-row" data-meeting-id="{{ meeting.id }}"
-                        style="{% if loop.index % 2 == 1 %}background-color: #ffffff;{% else %}background-color: #f5f7fa;{% endif %}">
+                    <tr class="meeting-row" data-meeting-id="{{ meeting.id }}">
                         <td class="meeting-date" data-date="{{ meeting.start_date.split('T')[0] }}">{{
                             meeting.start_date.split('T')[0] }}</td>
                         <td class="meeting-name">{{ meeting.name }}</td>
@@ -58,7 +57,7 @@
                 </tbody>
             </table>
             {% else %}
-            <div class="card" style="text-align: center;">
+            <div class="card text-center">
                 <h3>Geen komende vergaderingen gevonden.</h3>
                 <p>Probeer het later opnieuw of controleer de data bron.</p>
             </div>
@@ -99,31 +98,12 @@
             // Add click handlers to table rows
             document.querySelectorAll('tr.meeting-row').forEach(row => {
                 const meetingId = row.getAttribute('data-meeting-id');
-                row.style.cursor = 'pointer';
 
                 row.addEventListener('click', function (e) {
                     // Don't navigate if user is selecting text
                     if (window.getSelection().toString()) return;
                     if (meetingId) {
                         window.location.href = `/meeting/${meetingId}`;
-                    }
-                });
-
-                row.addEventListener('mouseover', function () {
-                    if (this.style.backgroundColor === 'rgb(245, 247, 250)') {
-                        this.style.backgroundColor = '#e8ecf1';
-                    } else {
-                        this.style.backgroundColor = '#f0f2f5';
-                    }
-                });
-
-                row.addEventListener('mouseout', function () {
-                    // Get the original background color
-                    const isOdd = this.parentNode.children[Array.from(this.parentNode.children).indexOf(this)] % 2 === 0;
-                    if (isOdd) {
-                        this.style.backgroundColor = '#ffffff';
-                    } else {
-                        this.style.backgroundColor = '#f5f7fa';
                     }
                 });
             });

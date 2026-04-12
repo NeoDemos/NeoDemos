@@ -1,23 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-<style>
-    .auth-container {
-        max-width: 420px;
-        margin: 4rem auto;
-        background: #fff;
-        padding: 2.5rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    }
-    .error-box { background: #fed7d7; color: #c53030; padding: 1rem; border-radius: 6px;
-        margin-top: 1rem; font-size: 0.95rem; }
-</style>
-
 <div class="auth-container">
     <h2>{{ title }}</h2>
-    <div class="error-box">{{ error }}</div>
-    <p style="margin-top: 1.5rem; font-size: 0.9rem; color: #718096;">
+    <div class="oauth-error-box">{{ error }}</div>
+    <p class="oauth-back-link">
         <a href="/login">Terug naar inloggen</a>
     </p>
 </div>

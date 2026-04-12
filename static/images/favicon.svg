@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <rect width="32" height="32" rx="6" fill="#042825"/>
+  <!-- N lettermark: three strokes -->
+  <!-- Left vertical stroke (white) -->
+  <rect x="7" y="6" width="3.5" height="20" fill="#ffffff"/>
+  <!-- Right vertical stroke (white) -->
+  <rect x="21.5" y="6" width="3.5" height="20" fill="#ffffff"/>
+  <!-- Diagonal stroke (orange accent) — connects bottom-left to top-right -->
+  <polygon points="7,26 7,20 21.5,6 21.5,12" fill="#ff751f"/>
+</svg>
