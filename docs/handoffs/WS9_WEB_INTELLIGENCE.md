@@ -1,6 +1,6 @@
 # WS9 — Web Search Intelligence: MCP-as-Backend via Sonnet + Tool Use
 
-> **Status:** `in progress — local implementation done (2026-04-12), needs production deploy`
+> **Status:** `done — deployed to production 2026-04-13 (commit b3104c3)`
 > **Owner:** `dennis + claude`
 > **Priority:** 2 (critical for search quality; landing page works with current search as fallback)
 > **Parallelizable:** yes (with WS8; converges at frontend search integration)
@@ -212,10 +212,10 @@ From `mcp_server_v3.py`:
    ```
 
 **Acceptance criteria:**
-- [ ] All 13 MCP tools callable as Python async functions
-- [ ] `mcp_server_v3.py` refactored to use internal functions (no logic duplication)
-- [ ] Tool schemas defined in Anthropic format
-- [ ] Existing MCP transport (stdio/SSE) still works after refactor
+- [x] All 13 MCP tools callable as Python async functions (18 total — traceer_motie + vergelijk_partijen + 3 financial tools added)
+- [x] `mcp_server_v3.py` not refactored — safe import bridge used instead (no logic duplication, no MCP breakage risk)
+- [x] Tool schemas defined in Anthropic format
+- [x] Existing MCP transport (stdio/SSE) still works after refactor
 
 ### Phase 2 — Sonnet conversation loop (Day 1-2)
 
@@ -465,12 +465,12 @@ From `mcp_server_v3.py`:
    ```
 
 **Acceptance criteria:**
-- [ ] Sonnet calls MCP tools via API tool_use
-- [ ] Multi-turn tool loops work (Sonnet calls tool → gets result → calls another tool or synthesizes)
-- [ ] Max 5 rounds per query (cost safety)
-- [ ] Tool execution status streamed to frontend
-- [ ] Final answer streamed via SSE
-- [ ] Token/cost logged per query
+- [x] Sonnet calls MCP tools via API tool_use
+- [x] Multi-turn tool loops work (Sonnet calls tool → gets result → calls another tool or synthesizes)
+- [x] Max 5 rounds per query (cost safety)
+- [x] Tool execution status streamed to frontend
+- [x] Final answer streamed via SSE
+- [x] Token/cost logged per query
 
 ### Phase 3 — Frontend integration (Day 2-3)
 
@@ -525,12 +525,12 @@ From `mcp_server_v3.py`:
    - Keyword results always shown (never gated)
 
 **Acceptance criteria:**
-- [ ] Keyword results appear within 500ms
-- [ ] AI answer streams progressively with status updates
-- [ ] Tool calls visible as status messages ("📡 Moties doorzoeken...")
-- [ ] Auto-detect correctly identifies questions vs keyword searches
-- [ ] Rate limit UI shows remaining searches
-- [ ] Rate limit hit shows keyword results + upgrade CTA
+- [x] Keyword results appear within 500ms
+- [x] AI answer streams progressively with status updates
+- [x] Tool calls visible as status messages (Dutch display names, no emoji)
+- [x] Auto-detect: all queries >= 5 chars trigger AI (simpler + open platform strategy)
+- [x] Rate limit UI shows remaining searches
+- [x] Rate limit hit shows keyword results + upgrade CTA
 
 ### Phase 4 — System prompt tuning & eval (Day 3-4)
 
@@ -561,11 +561,11 @@ From `mcp_server_v3.py`:
    ```
 
 **Acceptance criteria:**
-- [ ] 20 MCP-replay queries produce comparable output
-- [ ] System prompt produces well-cited Dutch output
-- [ ] Prompt caching enabled for system prompt
-- [ ] Fallback to Gemini pipeline if Anthropic unavailable
-- [ ] Per-query cost tracking in logs
+- [ ] 20 MCP-replay queries produce comparable output (pending manual eval by Dennis)
+- [x] System prompt produces well-cited Dutch output (verified locally)
+- [x] Prompt caching enabled for system prompt + tool list (both marked `cache_control: ephemeral`)
+- [x] Fallback to Gemini pipeline if Anthropic unavailable (first-round error triggers Gemini stream)
+- [x] Per-query cost tracking in logs (tokens + USD per query)
 
 ---
 
@@ -610,3 +610,33 @@ The rate limiting from WS8 makes the higher per-query cost manageable. At realis
 | Tool results too large for context | Medium | Truncate tool output to 8K chars; tools already return condensed text |
 | Refactoring mcp_server_v3.py breaks MCP | Medium | Run MCP test suite after refactor; keep MCP as thin wrapper |
 | SSE blocked by kamal-proxy buffering | Low | Set `X-Accel-Buffering: no` header; test in staging |
+
+---
+
+## Outcome
+
+**Shipped 2026-04-13 — commit `b3104c3`**
+
+### What shipped
+
+- `services/mcp_tools_internal.py` — safe import bridge over all 18 MCP tools; `TOOL_DISPATCH` dict; sync tools wrapped in `asyncio.to_thread()`
+- `services/tool_schemas.py` — Anthropic `tool_use` schemas for all 18 tools; `partij` defaults removed (neutral by default)
+- `services/web_intelligence.py` — `WebIntelligenceService`; `stream()` yields SSE events; `query()` non-streaming; max 5 tool rounds; `get_neodemos_context()` injected into system prompt; `temperature=0`; prompt caching on system block + last tool schema; Gemini Flash fallback on first-round API error
+- `main.py` — `/api/search/stream` SSE endpoint; `/api/search/limit` rate-limit check; IP-based rate limiting via `ai_search_rate_limits` table (created at startup); demo answer cache (`_load_demo_cache`)
+- `config/deploy.yml` — `ANTHROPIC_API_KEY` added to production secrets (was the deploy blocker)
+- `templates/search.html` + `static/css/main.css` — SSE consumer; teaser+expand UX (first paragraph visible, "Bekijk volledige analyse" button for rest); rate-limit CTA
+
+### Diffs from the original plan
+
+| Plan | Reality |
+|---|---|
+| 13 MCP tools | 18 tools (traceer_motie, vergelijk_partijen, + 3 financial tools added) |
+| Refactor mcp_server_v3.py | Safe import bridge instead — zero MCP regression risk |
+| Question auto-detect (Dutch question words) | Any query >= 5 chars triggers AI — simpler, fits open platform strategy |
+| Rate limit: 3/month anonymous | Shipped as planned |
+| Cost target: ~$0.025/query | Observed: ~$0.085/query (2 tool rounds avg) — still within budget at 3/month anon cap |
+
+### Remaining
+
+- Phase 4 manual eval: 20 MCP-replay queries side-by-side (needs Dennis to run)
+- `services/storage.py` + `alembic/versions/0005_document_events.py` revision rename held back pending WS11 migration 0006 on prod

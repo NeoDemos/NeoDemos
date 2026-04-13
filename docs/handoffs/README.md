@@ -50,7 +50,7 @@ When a workstream finishes:
 | WS8f | [`WS8f_ADMIN_CMS.md`](WS8f_ADMIN_CMS.md) | Admin panel + content management + GrapeJS editor | 2 (launch enhancer) | not started | WS8a-e complete ✅ |
 | WS9 | [`WS9_WEB_INTELLIGENCE.md`](WS9_WEB_INTELLIGENCE.md) | Web intelligence: MCP-as-backend, Sonnet tool_use, SSE streaming | 1 (launch blocker) | **done** — deployed 2026-04-13 (b3104c3) | none (extract from existing MCP tools) |
 | WS10 | [`WS10_TABLE_RICH_EXTRACTION.md`](WS10_TABLE_RICH_EXTRACTION.md) | Table-rich document extraction (Docling layout pass) | 6 | **paused** — infrastructure done, full backfill deferred; curated 20-doc run only | none |
-| WS11 | [`WS11_CORPUS_COMPLETENESS.md`](WS11_CORPUS_COMPLETENESS.md) | Corpus completeness 2018–2026 (ORI gap + metadata backfill) | 1 | **in progress** — Dennis running | none |
+| WS11 | [`WS11_CORPUS_COMPLETENESS.md`](WS11_CORPUS_COMPLETENESS.md) | Corpus completeness 2018–2026 (ORI gap + metadata backfill) | 1 | **in progress** — P1 ORI ingest running; WS11a complete (62,627 docs classified, 30 types) | none |
 | WS12 | [`WS12_VIRTUAL_NOTULEN_BACKFILL.md`](WS12_VIRTUAL_NOTULEN_BACKFILL.md) | Virtual notulen backfill & production hardening | 1 | **in progress** — Dennis running | none |
 | WS13 | [`WS13_MULTI_GEMEENTE_PIPELINE.md`](WS13_MULTI_GEMEENTE_PIPELINE.md) | Multi-gemeente pipeline: tenant-aware ingestion | 1 (v0.2.1) | not started | WS5a stable | 
 
@@ -64,7 +64,7 @@ When a workstream finishes:
 
 **WS10 is paused.** Infrastructure is fully built (classifier, converters, backfill script, MPS GPU, parallel writes, dedup). Full backfill of 655 unique PDFs was assessed as poor ROI: ~44% pass rate on large docs but the large docs dominate runtime (~70 min each), making a full run multi-day. Decision: do a targeted 20-doc run on the highest-ROI candidates (confirmed dry-run passes >500K chars), then defer full backfill to post-v0.2 when compute budget is available. WS10 is no longer a WS1 blocker.
 
-**Middelburg** is the v0.2.1 press-moment city — Dennis has a contact there. Portal: Notubiz via ORI. **Verified 2026-04-13:** 319K docs in ORI, 1,049 financial doc hits, PDFs publicly downloadable from `api.notubiz.nl` (no auth needed). Financial extraction is **v0.2.1 scope** — no native Notubiz adapter required. Waalwijk remains a quiet MAAT counter-demo.
+**Middelburg** is the v0.2.1 press-moment city — Dennis has a contact there. Portal: Notubiz via ORI. **Verified 2026-04-13:** **28,434 MediaObject docs** in ORI (raw index count 45,835 includes deleted Lucene segments), 1,049 financial doc hits, PDFs publicly downloadable from `api.notubiz.nl` (no auth needed). Financial extraction is **v0.2.1 scope** — no native Notubiz adapter required. **Apeldoorn and Maastricht are Parlaeus, not iBabs** — ORI-only in v0.2.1, native adapter in v0.3.0. Full municipalities registry: `data/municipalities_index.json` (309 municipalities, Phase 1/2/3 roadmap, backend detected from ORI `original_url`). Waalwijk remains a quiet MAAT counter-demo.
 
 ---
 
@@ -162,9 +162,9 @@ v0.2.1 — search-only beyond Rotterdam
 |---|---|---|---|
 | OCR recovery | WS7 BM25 re-test | BM25 hit rate ≥ 95% (from 77.5%) | ⏳ running |
 | Table-rich extraction | WS10 targeted run | ~20 high-ROI docs re-processed, quality gate passed | ⏳ paused — targeted run pending |
-| Corpus completeness | WS11 ORI audit | schriftelijke_vragen gap < 5% (from 96%) | ⏳ running |
+| Corpus completeness | WS11 ORI audit | schriftelijke_vragen gap < 5% (from 96%) | ✅ 0 gap (3,851 in DB); P1 types ingest running |
 | Virtual notulen | WS12 promotion | 2025 promoted, 2018-2024 backfill complete | ⏳ running |
-| Metadata backfill | WS11a | 0 docs with `doc_classification = NULL` | ⏳ running |
+| Metadata backfill | WS11a | All 30 named types labelled; NULL = unidentifiable only | ✅ 62,627 classified; ~26,754 NULL (genuinely unidentifiable) |
 
 ### Track A — Data quality (must pass before tag)
 

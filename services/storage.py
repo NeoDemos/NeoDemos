@@ -22,11 +22,14 @@ class StorageService:
             raise RuntimeError(f"Failed to connect to PostgreSQL: {e}")
 
     def _clean_name(self, name: Optional[str]) -> Optional[str]:
-        """Remove legacy artifacts like 'zzz ' from names."""
+        """Remove legacy artifacts like 'zzz ' prefix and raw numeric IDs."""
         if not name:
             return name
         if name.startswith('zzz '):
-            return name[4:]
+            name = name[4:]
+        # Suppress raw numeric IDs from Open Raadsinformatie (e.g. "6065857")
+        if name.strip().isdigit():
+            return None
         return name
 
     @contextmanager
@@ -346,7 +349,14 @@ class StorageService:
             return False
     
     def insert_document(self, document_data: Dict[str, Any]) -> bool:
-        """Insert or update a document"""
+        """Insert or update a document.
+
+        Accepts optional fields added in migration 0006:
+          - municipality (str, default 'rotterdam')
+          - source       (str, e.g. 'ori', 'ibabs', 'scraper', 'manual')
+          - doc_classification (str, civic type e.g. 'schriftelijke_vraag')
+          - category     (str, e.g. 'municipal_doc', 'meeting')
+        """
         try:
             with self._get_connection() as conn:
                 with conn.cursor() as cur:
@@ -354,14 +364,21 @@ class StorageService:
                     content = document_data.get('content', '')
                     if content:
                         content = content.replace('\x00', '')
-                    
+
                     summary_json = document_data.get('summary_json', '')
                     if summary_json:
                         summary_json = summary_json.replace('\x00', '')
-                    
+
+                    municipality = document_data.get('municipality', 'rotterdam') or 'rotterdam'
+                    source = document_data.get('source')
+                    doc_classification = document_data.get('doc_classification')
+                    category = document_data.get('category')
+
                     cur.execute("""
-                        INSERT INTO documents (id, name, meeting_id, content, summary_json, url)
-                        VALUES (%s, %s, %s, %s, %s, %s)
+                        INSERT INTO documents
+                            (id, name, meeting_id, content, summary_json, url,
+                             municipality, source, doc_classification, category)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                         ON CONFLICT (id) DO UPDATE SET
                             name = EXCLUDED.name,
                             url = COALESCE(EXCLUDED.url, documents.url),
@@ -370,16 +387,24 @@ class StorageService:
                                 THEN EXCLUDED.content
                                 ELSE COALESCE(documents.content, EXCLUDED.content)
                             END,
-                            summary_json = COALESCE(EXCLUDED.summary_json, documents.summary_json)
+                            summary_json = COALESCE(EXCLUDED.summary_json, documents.summary_json),
+                            municipality = COALESCE(EXCLUDED.municipality, documents.municipality),
+                            source = COALESCE(EXCLUDED.source, documents.source),
+                            doc_classification = COALESCE(EXCLUDED.doc_classification, documents.doc_classification),
+                            category = COALESCE(EXCLUDED.category, documents.category)
                     """, (
                         document_data['id'],
                         document_data.get('name'),
-                        document_data.get('meeting_id'), # Keep for legacy but assignments is primary
+                        document_data.get('meeting_id'),  # Keep for legacy; assignments is primary
                         content,
                         summary_json,
-                        document_data.get('url')
+                        document_data.get('url'),
+                        municipality,
+                        source,
+                        doc_classification,
+                        category,
                     ))
-                    
+
                     # Ensure assignment exists
                     if document_data.get('meeting_id') or document_data.get('agenda_item_id'):
                         cur.execute("""
@@ -517,6 +542,7 @@ class StorageService:
         year: Optional[int] = None,
         committee: Optional[str] = None,
         search: Optional[str] = None,
+        has_docs: Optional[bool] = None,
         limit: int = 500,
     ) -> List[Dict[str, Any]]:
         """Get meetings with agenda_item_count and doc_count, with optional filters.
@@ -525,6 +551,11 @@ class StorageService:
         - agenda_item_count  (int)
         - doc_count          (int)
         - first 5 agenda-item names as ``agenda_preview`` (list[str])
+
+        Args:
+            has_docs: if True, only return meetings that have at least one document.
+                      if None (default), return all meetings.
+            search: matches against meeting name, committee AND agenda item names.
         """
         with self._get_connection() as conn:
             with conn.cursor(cursor_factory=RealDictCursor) as cur:
@@ -540,10 +571,23 @@ class StorageService:
                     params.append(f"%{committee}%")
 
                 if search:
-                    conditions.append("(m.name ILIKE %s OR m.committee ILIKE %s)")
-                    params.extend([f"%{search}%", f"%{search}%"])
+                    # Search meeting name, committee, AND agenda item names
+                    conditions.append("""(
+                        m.name ILIKE %s
+                        OR m.committee ILIKE %s
+                        OR EXISTS (
+                            SELECT 1 FROM agenda_items ai2
+                            WHERE ai2.meeting_id = m.id
+                            AND ai2.name ILIKE %s
+                        )
+                    )""")
+                    params.extend([f"%{search}%", f"%{search}%", f"%{search}%"])
 
                 where = ("WHERE " + " AND ".join(conditions)) if conditions else ""
+
+                # has_docs filter applied as HAVING clause after aggregation
+                having = "HAVING COUNT(DISTINCT da.document_id) > 0" if has_docs else ""
+
                 params.append(limit)
 
                 cur.execute(f"""
@@ -560,6 +604,7 @@ class StorageService:
                     LEFT JOIN document_assignments da ON da.meeting_id = m.id
                     {where}
                     GROUP BY m.id, m.name, m.start_date, m.committee, m.location
+                    {having}
                     ORDER BY m.start_date DESC
                     LIMIT %s
                 """, params)

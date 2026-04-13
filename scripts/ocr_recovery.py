@@ -1394,52 +1394,67 @@ def run(
 
             else:
                 # ── Parallel prefetch mode ──────────────────────────────────
-                # N threads download + OCR simultaneously; main thread writes serially.
-                # Bounded window: submit workers*4 docs at a time, not all at once.
-                # This caps memory at ~window_size results instead of unbounded growth
-                # (Docling C++ allocations + completed OCR text held in futures).
-                window_size = workers * 4
-                logger.info(f"  Parallel prefetch: {workers} workers, window={window_size}")
+                # Streaming pool: always keep exactly `workers` prefetch threads
+                # in flight. As soon as one finishes, the next candidate is
+                # submitted immediately — pool is never idle waiting for a batch.
+                # Memory bounded: at most `workers` OCR results in memory at once.
+                # GC runs every batch_size docs to reclaim Docling/Tesseract memory.
+                logger.info(f"  Parallel prefetch: {workers} workers (streaming)")
                 idx = 0
-                for win_start in range(0, len(candidates), window_size):
-                    window = candidates[win_start:win_start + window_size]
-                    with ThreadPoolExecutor(max_workers=workers) as pool:
-                        future_to_doc = {
-                            pool.submit(prefetch_doc, doc, temp_dir, engine): doc
-                            for doc in window
-                        }
-                        for future in as_completed(future_to_doc):
-                            idx += 1
-                            doc = future_to_doc[future]
-                            doc_id = doc["document_id"]
-                            try:
-                                _, fetched_text, prefetch_err = future.result()
-                            except Exception as e:
-                                _handle_result(idx, doc, "error", f"prefetch exception: {e}")
-                                continue
 
-                            if prefetch_err:
-                                _handle_result(idx, doc, prefetch_err[0], prefetch_err[1])
-                                continue
+                with ThreadPoolExecutor(max_workers=workers) as pool:
+                    future_to_doc: Dict = {}
 
-                            # Write phase is serial (advisory lock serialises anyway)
+                    # Prime the pool with the first `workers` docs
+                    for doc in candidates[:workers]:
+                        future_to_doc[pool.submit(prefetch_doc, doc, temp_dir, engine)] = doc
+                    remaining_iter = iter(candidates[workers:])
+
+                    while future_to_doc:
+                        # Wait for the next completed future (any order)
+                        done_future = next(as_completed(future_to_doc))
+                        doc = future_to_doc.pop(done_future)
+                        doc_id = doc["document_id"]
+                        idx += 1
+
+                        # Immediately submit next candidate to keep pool full
+                        try:
+                            next_doc = next(remaining_iter)
+                            future_to_doc[pool.submit(prefetch_doc, next_doc, temp_dir, engine)] = next_doc
+                        except StopIteration:
+                            pass  # No more candidates — drain remaining futures
+
+                        # Handle the completed prefetch
+                        try:
+                            _, fetched_text, prefetch_err = done_future.result()
+                        except Exception as e:
+                            _handle_result(idx, doc, "error", f"prefetch exception: {e}")
+                            continue
+
+                        if prefetch_err:
+                            _handle_result(idx, doc, prefetch_err[0], prefetch_err[1])
+                            continue
+
+                        # Write phase is serial (advisory lock serialises anyway)
+                        try:
+                            status, detail = process_single_document(
+                                conn=conn, doc=doc, temp_dir=temp_dir,
+                                dry_run=dry_run, skip_re_embed=skip_re_embed,
+                                wait_for_lock=wait_for_lock, engine=engine,
+                                prefetched_text=fetched_text,
+                            )
+                        except Exception as e:
+                            status, detail = "error", f"unexpected: {e}"
+                            logger.exception(f"  Unexpected error writing {doc_id}")
                             try:
-                                status, detail = process_single_document(
-                                    conn=conn, doc=doc, temp_dir=temp_dir,
-                                    dry_run=dry_run, skip_re_embed=skip_re_embed,
-                                    wait_for_lock=wait_for_lock, engine=engine,
-                                    prefetched_text=fetched_text,
-                                )
-                            except Exception as e:
-                                status, detail = "error", f"unexpected: {e}"
-                                logger.exception(f"  Unexpected error writing {doc_id}")
-                                try:
-                                    conn.rollback()
-                                except Exception:
-                                    pass
-                            _handle_result(idx, doc, status, detail)
-                    # Between windows: force GC to reclaim Docling/Tesseract memory
-                    gc.collect()
+                                conn.rollback()
+                            except Exception:
+                                pass
+                        _handle_result(idx, doc, status, detail)
+
+                        # Periodic GC to reclaim Docling C++ memory
+                        if idx % (batch_size * 5) == 0:
+                            gc.collect()
 
         # Final checkpoint
         save_checkpoint(list(completed_ids), stats)

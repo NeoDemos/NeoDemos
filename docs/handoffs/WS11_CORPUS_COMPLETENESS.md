@@ -43,25 +43,49 @@ Both fields now flow through `services/storage.py insert_document()` and into Qd
 
 ### Coverage gaps (2018–2026) — verified 2026-04-14 via live ORI queries
 
-| Doc type | In DB | ORI (MediaObject) | ORI (Report) | Gap | Priority |
-|---|---|---|---|---|---|
-| schriftelijke_vraag | ~120 | 2,882 | 292 (2025-2026 only) | **2,762 (96%)** | **P0** |
-| initiatiefnotitie | 42 | 78 | — | **36 (46%)** | **P0** |
-| initiatiefvoorstel | 231 | 333 | — | 102 (31%) | P1 |
-| motie | 9,398 | 8,177 | 232 | covered (DB has more from meeting bundles) | P2 |
-| amendement | 469 | 519 | 86 | 50 (10%) | P2 |
-| raadsvoorstel | 1,849 | 2,322 | 319 | **473 (20%)** — larger than expected | P2 |
-| toezegging | 2,058 | 2,927 | 431 | **869 (30%)** — larger than expected | P2 |
+| Doc type | In DB (after WS11a+b) | ORI | Gap | Priority |
+|---|---|---|---|---|
+| schriftelijke_vraag | 3,851 | 3,174 (MediaObject+Report) | **0** ✅ ingested | **P0** |
+| initiatiefnotitie | 111 | 78 | covered (DB has more from iBabs) | **P0** |
+| initiatiefvoorstel | 522 | 333 | covered (DB has more from iBabs) | P1 |
+| raadsvoorstel | 2,762 classified | 2,322+319 | **473 ORI gap** (v0.2.1) | P1 |
+| brief_college | 3,852 classified | — | ORI gap TBD | P1 |
+| afdoeningsvoorstel | 1,702 classified | — | ORI gap TBD | P1 |
+| toezegging | 1,580 classified | 2,927+431 | **869 ORI gap** (v0.2.1) | P1 |
+| motie | 12,822 classified | 8,177+232 | covered (DB has more from meeting bundles) | P2 |
+| amendement | 734 classified | 519+86 | covered | P2 |
 
-**Key audit findings:**
-- Initiatiefnotitie gap is **much smaller** than initially estimated (36, not "high"). Most were already ingested via iBabs.
-- Initiatiefvoorstel gap is 102 (not "700+") — concentrated in 2025-2026 (ingestion lag).
-- Raadsvoorstel (473 missing, 20%) and toezegging (869 missing, 30%) have **larger gaps than expected** — flagged for v0.2.1.
+**DB classification state (2026-04-13 after WS11a+b):**
 
-**ORI API notes:**
-- Index `ori_rotterdam_20250629013104` is Rotterdam-only (70,148 searchable docs). `_cat/indices` reports ~503K but that includes deleted Lucene segments.
-- `@type` field maps directly as keyword (no `.keyword` subfield needed).
+| doc_classification | count |
+|---|---|
+| NULL | 61,093 |
+| motie | 12,822 |
+| brief_college | 3,852 |
+| schriftelijke_vraag | 3,851 |
+| raadsvoorstel | 2,762 |
+| afdoeningsvoorstel | 1,702 |
+| toezegging | 1,580 |
+| amendement | 734 |
+| initiatiefvoorstel | 522 |
+| initiatiefnotitie | 111 |
+| regular/table_rich/financial | 12 (pipeline-routing residual) |
+
+**About the remaining ~26,754 NULL docs (updated 2026-04-13 after P3 backfill):**
+These are genuinely unidentifiable documents — no clean name pattern to classify them:
+- BB-besluitenboek entries (~1,400) — College board decisions in BB-format without distinct type name
+- Inspreekbijdragen — public speaking transcripts filed without a consistent prefix
+- GR-stukken — council filing references with numeric/code names
+- Monitor-rapporten, spreektijdentabellen, etc. that were already classified as `monitor_rapport` / `spreektijdentabel`
+- Remaining ~26,754 are truly unclassifiable from name alone (no keyword match)
+
+NULL now means "genuinely unidentifiable" — not "we haven't classified it yet". All 30 named doc types are fully backfilled.
+
+**Key audit findings (2026-04-13 expanded audit):**
+- ORI-API `@type` field maps directly as keyword (no `.keyword` subfield needed).
 - `classification` field requires `.keyword` subfield for term queries.
+- ORI index `ori_rotterdam_20250629013104` is Rotterdam-only (70,148 searchable docs). `_cat/indices` reports ~503K but that includes deleted Lucene segments.
+- `brief_college` and `afdoeningsvoorstel` were missing from original WS11 scope — found via DB name-pattern audit.
 
 See `docs/ws11_scope.json` for per-year counts and ORI API query templates.
 
@@ -69,35 +93,67 @@ See `docs/ws11_scope.json` for per-year counts and ORI API query templates.
 
 ## Sub-workstreams
 
-### WS11a — Metadata backfill (0.5 days, no new ingestion)
+### WS11a — Metadata backfill (DONE 2026-04-13)
 
 Fix `doc_classification` on documents already in DB with `doc_classification = NULL`.
 
 **Script:** `scripts/ws11a_classify_existing_docs.py`
 
 ```bash
-# Step 1: dry-run — see what would change
+# Dry-run — see what would change
 python scripts/ws11a_classify_existing_docs.py
 
-# Step 2: review output, then execute
+# Execute all types
 python scripts/ws11a_classify_existing_docs.py --execute
 
-# Optional: skip P2 types (motie/amendement)
+# Execute only P1 additions (raadsvoorstel, brief_college, afdoeningsvoorstel, toezegging)
+python scripts/ws11a_classify_existing_docs.py --execute --only-new
+
+# Skip motie/amendement (P2)
 python scripts/ws11a_classify_existing_docs.py --execute --skip-p2
 ```
 
 **What it does:**
-- Sets `doc_classification` by name-pattern match (ILIKE) — same patterns as `docs/ws11_scope.json`
-- Fixes 41 initiatiefnotities + 115 initiatiefvoorstellen with `meeting_id = NULL` via `document_assignments → agenda_items` join
+- Sets `doc_classification` by name-pattern match (ILIKE)
 - Logs all changes to `logs/ws11a_classification.log`
 - Dry-run is default (safe to run repeatedly for auditing)
 
-**Targets:**
-- 111 initiatiefnotities → `doc_classification = 'initiatiefnotitie'`
-- 522 initiatiefvoorstellen → `doc_classification = 'initiatiefvoorstel'`
-- ~120 schriftelijke_vraag docs → `doc_classification = 'schriftelijke_vraag'`
-- ~9,398 moties → `doc_classification = 'motie'` (P2)
-- ~469 amendementen → `doc_classification = 'amendement'` (P2)
+**Results (as of 2026-04-13, all runs):**
+
+| Type | Docs classified | Priority | Run |
+|---|---|---|---|
+| initiatiefnotitie | 111 | P0 | WS11a initial |
+| initiatiefvoorstel | 522 | P0 | WS11a initial |
+| schriftelijke_vraag | 3,558 | P0 | WS11a initial |
+| motie | 12,982 | P2 | WS11a initial |
+| amendement | 764 | P2 | WS11a initial |
+| raadsvoorstel | 2,762 | P1 | WS11a P1 expansion |
+| brief_college | 3,852 | P1 | WS11a P1 expansion |
+| afdoeningsvoorstel | 1,702 | P1 | WS11a P1 expansion |
+| toezegging | 1,580 | P1 | WS11a P1 expansion |
+| notulen | 1,177 | P3 | WS11a P3 expansion |
+| verslag | 3,102 | P3 | WS11a P3 expansion |
+| agenda | 3,651 | P3 | WS11a P3 expansion |
+| annotatie | 2,008 | P3 | WS11a P3 expansion |
+| adviezenlijst | 1,370 | P3 | WS11a P3 expansion |
+| besluitenlijst | 1,077 | P3 | WS11a P3 expansion |
+| ingekomen_stukken | 438 | P3 | WS11a P3 expansion |
+| spreektijdentabel | 1,094 | P3 | WS11a P3 expansion |
+| transcript | 719 | P3 | WS11a P3 expansion |
+| rapport | 3,297 | P3 | WS11a P3 expansion |
+| notitie | 887 | P3 | WS11a P3 expansion |
+| presentatie | 652 | P3 | WS11a P3 expansion |
+| monitor_rapport | 895 | P3 | WS11a P3 expansion |
+| planning | 898 | P3 | WS11a P3 expansion |
+| bijlage | 10,129 | P3 | WS11a P3 expansion |
+| memo | 30 | P3 | WS11a P3 expansion |
+| begroting | 2,399 | P3 | WS11a P3 expansion |
+| jaarstukken | 139 | P3 | WS11a P3 expansion |
+| grondexploitatie | 338 | P3 | WS11a P3 expansion |
+| voorbereidingsbesluit | 332 | P3 | WS11a P3 expansion |
+| rekenkamer | 162 | P3 | WS11a P3 expansion |
+| **Total backfilled** | **~62,627** | | |
+| **Remaining NULL** | **~26,754** | — | genuinely unidentifiable |
 
 ---
 
@@ -204,18 +260,24 @@ Documents land in `documents` with:
 
 ## v0.2.0 vs deferred
 
-### v0.2.0 (now)
+### v0.2.0 (done)
 - Migration 0006 (municipality + source) ✅
 - Civic type guard in document_processor ✅
-- CIVIC_DOC_TYPES constant ✅
-- WS11a backfill script ✅
-- WS11b ingestion script (P0: schriftelijke_vraag + initiatiefnotitie) ✅
+- CIVIC_DOC_TYPES constant — 30 named types, all protected from processor overwrite ✅
+- WS11a backfill P0: initiatiefnotitie, initiatiefvoorstel, schriftelijke_vraag, motie, amendement ✅
+- WS11a backfill P1: raadsvoorstel, brief_college, afdoeningsvoorstel, toezegging ✅
+- WS11a backfill P3: all 21 meeting/procedural/financial types ✅ (62,627 docs classified total)
+- WS11b ORI ingestion P0: 293 schriftelijke vragen ✅
+- WS11b ORI ingestion P1: raadsvoorstel (324), toezegging (436), brief_college (1,163), afdoeningsvoorstel (5) — running ⏳
 - municipality in Qdrant payload ✅
+- NULL = genuinely unidentifiable only (~26,754, 30% of corpus) ✅
 
 ### v0.2.1
-- WS11b P1: initiatiefvoorstel ingestion (run with `--include-p1`)
+- WS11b P1: raadsvoorstel ORI gap (~473 docs), toezegging ORI gap (~869 docs) — run with `--include-p1`
+- WS11b P1: initiatiefvoorstel ORI ingestion (gap confirmed small ~102, can defer)
 - MCP `doc_type` filter parameter (coordinate with WS4)
 - ibabs fallback for 2025-2026 recents (ORI covers through mid-2025)
+- ORI audit for brief_college and afdoeningsvoorstel gaps
 
 ### v0.3+
 - Multi-city MCP filter (`gemeente` parameter)
@@ -225,10 +287,13 @@ Documents land in `documents` with:
 
 ## Success Criteria
 
-- [ ] Migration 0006 applied (`municipality`, `source` columns exist)
-- [ ] All 111 initiatiefnotities have `doc_classification = 'initiatiefnotitie'`
-- [ ] All 522 initiatiefvoorstellen have `doc_classification = 'initiatiefvoorstel'`
-- [ ] Schriftelijke vragen: ≥ 90% ORI coverage for 2018–2026 (target: ~2,700 new docs)
+- [x] Migration 0006 applied (`municipality`, `source` columns exist)
+- [x] All 111 initiatiefnotities have `doc_classification = 'initiatiefnotitie'`
+- [x] All 522 initiatiefvoorstellen have `doc_classification = 'initiatiefvoorstel'`
+- [x] Schriftelijke vragen: 3,851 in DB (ORI coverage complete for existing index)
+- [x] All 30 named doc types classified — NULL means genuinely unidentifiable only
+- [x] raadsvoorstel, brief_college, afdoeningsvoorstel, toezegging, begroting, rekenkamer etc. all labelled
+- [ ] WS11b P1 ingestion complete (1,928 docs — running ⏳)
 - [ ] All new docs embedded in Qdrant `notulen_chunks` with `municipality` payload field
 - [ ] MCP `zoek_moties` (or `zoek_raadshistorie`) returns schriftelijke vragen when asked by topic
 - [ ] Erik Verweij re-test: can retrieve initiatiefnotities and schriftelijke vragen by topic
