@@ -57,8 +57,7 @@ class LocalJinaReranker:
 
         # Use Apple GPU (MPS) if available, else CPU
         device = "mps" if torch.backends.mps.is_available() else "cpu"
-        logger.info(f"Loading Jina Reranker v3 locally on {device} ({self.MODEL_ID})...")
-        print(f"Loading Jina Reranker v3 locally on {device} ({self.MODEL_ID})...")
+        logger.info("Loading Jina Reranker v3 locally on %s (%s)...", device, self.MODEL_ID)
 
         # float16 halves memory (~1.2GB vs ~2.4GB) with negligible quality loss
         _local_model = AutoModel.from_pretrained(
@@ -69,7 +68,6 @@ class LocalJinaReranker:
         _local_model = _local_model.to(device)
         _local_model.eval()
         logger.info("Jina Reranker v3 loaded.")
-        print("Jina Reranker v3 loaded.")
 
     # Small batches + explicit MPS cache flush prevent memory accumulation.
     # MPS doesn't release intermediate attention buffers between calls unless asked.
@@ -162,7 +160,7 @@ class JinaAPIReranker:
             except requests.HTTPError as e:
                 if e.response is not None and e.response.status_code == 429:
                     wait = 2 ** attempt  # 1s, 2s, 4s, 8s
-                    print(f"  [reranker] Rate limited, retrying in {wait}s...")
+                    logger.info("[reranker] Rate limited, retrying in %ss...", wait)
                     _time.sleep(wait)
                 else:
                     raise

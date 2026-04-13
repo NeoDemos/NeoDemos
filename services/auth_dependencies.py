@@ -13,8 +13,7 @@ import os
 import logging
 from typing import Optional
 
-from fastapi import Request, Depends
-from fastapi.responses import RedirectResponse
+from fastapi import Request, Depends, HTTPException
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 
 from services.auth_service import AuthService, SESSION_MAX_AGE
@@ -65,20 +64,17 @@ async def require_login(request: Request) -> dict:
     """Dependency that redirects to /login if not authenticated."""
     user = await get_current_user(request)
     if not user:
-        return RedirectResponse(url="/login", status_code=303)
+        raise HTTPException(status_code=303, headers={"Location": "/login"})
     if not user["is_active"]:
-        return RedirectResponse(url="/login", status_code=303)
+        raise HTTPException(status_code=303, headers={"Location": "/login"})
     return user
 
 
 async def require_admin(request: Request) -> dict:
     """Dependency that requires admin role."""
     user = await require_login(request)
-    # If require_login returned a redirect, propagate it
-    if isinstance(user, RedirectResponse):
-        return user
     if user["role"] != "admin":
-        return RedirectResponse(url="/", status_code=303)
+        raise HTTPException(status_code=303, headers={"Location": "/"})
     return user
 
 

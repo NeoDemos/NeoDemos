@@ -40,6 +40,27 @@ Make the NeoDemos MCP server the *reference implementation for govtech MCP* by a
   - [Figma MCP Tools and Prompts](https://developers.figma.com/docs/figma-mcp-server/tools-and-prompts/)
   - [Anthropic Code Execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp) (read for v0.3.0 prep, do not implement now)
 
+## v0.2.0 Blockers — fix before eval gate
+
+> These 8 bugs are verified failures from the 2026-04-10/11 feedback log. They make the MCP surface unreliable in ways that distort the eval baseline. **Do not run the v0.2.0 eval gate before all 8 are shipped.** Each has a full description in the relevant build-tasks section below — this list is the quick-reference and sequencing guide.
+>
+> Agent: start here, then proceed to Build tasks.
+
+| # | Bug | Location in build tasks | Effort |
+|---|---|---|---|
+| B1 | `zoek_moties` misses initiatiefvoorstellen on single-word queries | §MCP tool bug fixes | 2h |
+| B2 | Overview queries take 15–25s (sequential lees_fragment calls) | §MCP tool bug fixes | 2h |
+| B3 | `lees_fragment` returns chunks in stored order, not query-relevant order | §Tool API improvements | 2h |
+| B4 | `zoek_financieel` description gives no example of `budget_year` vs `datum_van` divergence | §Tool API improvements | 30m |
+| B5 | Dedup-by-document_id only at render time — same doc consumes multiple top_k slots | §Retrieval quality fixes | 1h |
+| B6 | No minimum score floor — 0.06-similarity noise chunks reach LLM context | §Retrieval quality fixes | 30m |
+| B7 | Content-empty chunks (< 80 chars) not filtered before returning | §Retrieval quality fixes | 30m |
+| B8 | `require_login` returns `RedirectResponse` instead of raising — handlers run with wrong user type | §Defense-in-depth (Layer 1) | 2h |
+
+**Order of operations:** B5, B6, B7 first (retrieval quality — unblocks accurate eval baseline). Then B1, B2, B3 (UX bugs). Then B4 (description fix, cheap). B8 last (auth refactor — needs careful call-site audit).
+
+---
+
 ## Build tasks
 
 ### Tool registry (~2 days)

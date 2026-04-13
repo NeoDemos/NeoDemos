@@ -88,9 +88,9 @@ storage = StorageService()
 # Initialize services
 try:
     ai_service = AIService()
-    print(f"DEBUG: AIService init complete. GEMINI_AVAILABLE={GEMINI_AVAILABLE}, use_llm={ai_service.use_llm}, has_key={bool(ai_service.api_key)}")
+    logger.info("AIService init complete. GEMINI_AVAILABLE=%s use_llm=%s has_key=%s", GEMINI_AVAILABLE, ai_service.use_llm, bool(ai_service.api_key))
 except Exception as e:
-    print(f"DEBUG: AIService init FAILED: {e}")
+    logger.warning("AIService init FAILED: %s", e)
     ai_service = None
 refresh_service = RefreshService(storage, raad_service, ai_service)
 
@@ -108,8 +108,13 @@ except Exception as e:
 
 # Initialize party profile and lens evaluation services
 # These are lazy-loaded since they're only used for party lens analysis
-_party_profile_cache = {}
-_party_lens_cache = {}
+try:
+    from cachetools import TTLCache
+    _party_profile_cache: dict = TTLCache(maxsize=500, ttl=3600)
+    _party_lens_cache: dict = TTLCache(maxsize=500, ttl=3600)
+except ImportError:
+    _party_profile_cache = {}  # fallback if cachetools not installed
+    _party_lens_cache = {}
 
 # Initialize scheduler for daily auto-refresh at 8 AM
 scheduler = BackgroundScheduler()
@@ -190,6 +195,21 @@ def cleanup_sessions():
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Manage app lifecycle - start scheduler on startup, shutdown on exit"""
+    # WS4: Fail fast in production if insecure defaults are still in place
+    if os.getenv("ENVIRONMENT") == "production":
+        _secret_key = os.getenv("SECRET_KEY", "")
+        _db_password = os.getenv("DB_PASSWORD", "")
+        if _secret_key in ("", "change-me-in-production"):
+            raise RuntimeError(
+                "STARTUP ABORTED: SECRET_KEY is unset or equals the insecure default. "
+                "Set SECRET_KEY in production environment."
+            )
+        if _db_password in ("", "postgres"):
+            raise RuntimeError(
+                "STARTUP ABORTED: DB_PASSWORD is unset or equals the insecure default. "
+                "Set DB_PASSWORD in production environment."
+            )
+
     # Seed admin user from environment
     admin_email = os.getenv("ADMIN_EMAIL")
     admin_password = os.getenv("ADMIN_PASSWORD")
@@ -202,6 +222,14 @@ async def lifespan(app: FastAPI):
                 logger.info(f"Admin user seeded: {admin_email}")
         except Exception as e:
             logger.error(f"Failed to seed admin user: {e}")
+
+    # Warn on weak admin password (minimum 12 chars)
+    _admin_pw = os.getenv("ADMIN_PASSWORD", "")
+    if _admin_pw and len(_admin_pw) < 12:
+        logger.warning(
+            "SECURITY: ADMIN_PASSWORD is shorter than 12 characters. "
+            "Use a stronger password in production."
+        )
 
     # Startup
     try:
@@ -749,8 +777,6 @@ async def search_page(request: Request):
 
 @app.get("/overview")
 async def overview_page(request: Request, user: dict = Depends(require_login)):
-    if isinstance(user, RedirectResponse):
-        return user
     meetings = storage.get_meetings(limit=500)
     return templates.TemplateResponse(name="overview.html", request=request, context={
         "title": "Overzicht",
@@ -1071,8 +1097,6 @@ async def read_calendar(
 
 @app.get("/settings")
 async def read_settings(request: Request, user: dict = Depends(require_login)):
-    if isinstance(user, RedirectResponse):
-        return user
     tokens = auth_service.list_user_tokens(user["id"])
     return templates.TemplateResponse(name="settings.html", request=request, context={
         "title": "Instellingen",
@@ -1082,8 +1106,6 @@ async def read_settings(request: Request, user: dict = Depends(require_login)):
 
 @app.get("/meeting/{meeting_id}")
 async def read_meeting(request: Request, meeting_id: str, user: dict = Depends(require_login)):
-    if isinstance(user, RedirectResponse):
-        return user
     # Pre-2018 meetings have rotterdam_raad_ prefix — serve from Postgres only
     if meeting_id.startswith("rotterdam_raad_"):
         meeting = storage.get_meeting_details(meeting_id)
@@ -1411,8 +1433,6 @@ async def api_analyse_speech(request: Request, agenda_item_id: str, party: str =
 
 @app.get("/admin")
 async def admin_page(request: Request, user: dict = Depends(require_admin)):
-    if isinstance(user, RedirectResponse):
-        return user
     users = auth_service.list_users()
     tokens = auth_service.list_all_tokens()
     return templates.TemplateResponse(name="admin.html", request=request, context={
@@ -1421,15 +1441,11 @@ async def admin_page(request: Request, user: dict = Depends(require_admin)):
 
 @app.get("/admin/api/users")
 async def admin_list_users(request: Request, user: dict = Depends(require_admin)):
-    if isinstance(user, RedirectResponse):
-        return user
     users = auth_service.list_users()
     return JSONResponse(users)
 
 @app.post("/admin/api/users/{user_id}/update")
 async def admin_update_user(request: Request, user_id: int, user: dict = Depends(require_admin)):
-    if isinstance(user, RedirectResponse):
-        return user
     body = await request.json()
     allowed = {"is_active", "mcp_access", "db_access_level", "role"}
     updates = {k: v for k, v in body.items() if k in allowed}
@@ -1444,8 +1460,6 @@ async def admin_update_user(request: Request, user_id: int, user: dict = Depends
 
 @app.post("/admin/api/users/{user_id}/toggle-active")
 async def admin_toggle_active(request: Request, user_id: int, user: dict = Depends(require_admin)):
-    if isinstance(user, RedirectResponse):
-        return user
     if user_id == user["id"]:
         return JSONResponse({"error": "Kan eigen account niet deactiveren"}, status_code=400)
     target = auth_service.get_user_by_id(user_id)
@@ -1457,8 +1471,6 @@ async def admin_toggle_active(request: Request, user_id: int, user: dict = Depen
 
 @app.delete("/admin/api/tokens/{token_id}")
 async def admin_revoke_token(request: Request, token_id: int, user: dict = Depends(require_admin)):
-    if isinstance(user, RedirectResponse):
-        return user
     revoked = auth_service.revoke_api_token(token_id)
     if not revoked:
         return JSONResponse({"error": "Token niet gevonden"}, status_code=404)
@@ -1470,15 +1482,11 @@ async def admin_revoke_token(request: Request, token_id: int, user: dict = Depen
 
 @app.get("/api/tokens")
 async def list_tokens(request: Request, user: dict = Depends(require_login)):
-    if isinstance(user, RedirectResponse):
-        return user
     tokens = auth_service.list_user_tokens(user["id"])
     return JSONResponse(tokens)
 
 @app.post("/api/tokens")
 async def create_token(request: Request, user: dict = Depends(require_login)):
-    if isinstance(user, RedirectResponse):
-        return user
     body = await request.json()
     name = body.get("name", "Default")[:50]
     scopes = body.get("scopes", "search,mcp")
@@ -1487,8 +1495,6 @@ async def create_token(request: Request, user: dict = Depends(require_login)):
 
 @app.delete("/api/tokens/{token_id}")
 async def revoke_token(request: Request, token_id: int, user: dict = Depends(require_login)):
-    if isinstance(user, RedirectResponse):
-        return user
     # Verify the token belongs to this user
     tokens = auth_service.list_user_tokens(user["id"])
     if not any(t["id"] == token_id for t in tokens):

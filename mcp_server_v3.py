@@ -29,6 +29,7 @@ import glob
 import time
 import threading
 from services.db_pool import get_connection
+from services.temporal_parser import parse as _temporal_parse, has_temporal_signal
 from datetime import date, datetime
 from typing import Optional
 from pathlib import Path
@@ -115,6 +116,23 @@ mcp = FastMCP(
     ),
 )
 
+# Public MCP server — no auth, eligible tools only, per-IP rate limited
+# (see all_public_tools() in services/mcp_tool_registry.py and rate limiting middleware)
+_public_mcp: "FastMCP | None" = None
+if _transport in ("sse", "streamable-http", "--http"):
+    _public_mcp = FastMCP(
+        f"{DISPLAY_NAME} (Public)",
+        auth=None,
+        auth_server_provider=None,
+        host=_host,
+        port=_port,
+        instructions=(
+            f"Je bent verbonden met {DISPLAY_NAME} {VERSION_LABEL} — publiek toegankelijk, geen login vereist. "
+            "Beschikbaar voor alle Rotterdam-gerelateerde raadsinformatie (90.000+ documenten, 2002-heden). "
+            "Gebruik de beschikbare tools om relevante raadsinformatie op te halen."
+        ),
+    )
+
 # ---------------------------------------------------------------------------
 # Liveness probe — consumed by kamal-proxy during deploy health checks.
 # Returns 200 OK without touching DB/Qdrant so it stays fast and unauthenticated.
@@ -175,11 +193,37 @@ def logged_tool(func):
         except Exception:
             log_params = kwargs
 
+        # Layer 2 parameter validation (WS4 2026-04-13)
+        try:
+            from services.mcp_validation import validate_tool_params as _validate
+            _validate(func.__name__, log_params)
+        except ValueError as _ve:
+            return f"_Validatiefout: {_ve}_"
+        except Exception:
+            pass  # validation failure must never block a tool
+
+        # Rate limiting (WS4 2026-04-13): global per-tool sliding window
+        try:
+            from services.mcp_rate_limiter import check_tool_rate_limit as _rl_check
+            if not _rl_check(func.__name__):
+                return (
+                    f"_Te veel verzoeken voor tool '{func.__name__}'. "
+                    f"Probeer het over een minuut opnieuw._"
+                )
+        except Exception:
+            pass  # rate limit failure must never block a tool
+
         t0 = time.monotonic()
         error: Optional[Exception] = None
         result = None
         try:
             result = func(*args, **kwargs)
+            # Layer 4 output filter — context bomb prevention + PII stripping (WS4 2026-04-13)
+            try:
+                from services.output_filter import filter_output as _filter_output
+                result = _filter_output(result)
+            except Exception:
+                pass  # Layer 4 must never block a tool
             return result
         except Exception as exc:
             error = exc
@@ -213,8 +257,26 @@ def logged_tool(func):
         description = None
 
     if description is not None:
-        return mcp.tool(description=description)(wrapper)
-    return mcp.tool()(wrapper)
+        registered = mcp.tool(description=description)(wrapper)
+        # Also register on public server if tool is public-eligible (WS4)
+        if _public_mcp is not None:
+            try:
+                _public_spec = _TOOL_REGISTRY.get(func.__name__)
+                if _public_spec is not None and _public_spec.public:
+                    _public_mcp.tool(description=description)(wrapper)
+            except Exception:
+                pass  # dual-registration failure must never abort the primary registration
+        return registered
+
+    registered = mcp.tool()(wrapper)
+    if _public_mcp is not None:
+        try:
+            _public_spec = _TOOL_REGISTRY.get(func.__name__)
+            if _public_spec is not None and _public_spec.public:
+                _public_mcp.tool()(wrapper)
+        except Exception:
+            pass
+    return registered
 
 
 # ---------------------------------------------------------------------------
@@ -543,6 +605,17 @@ def zoek_raadshistorie(
         partij: Filter op partijnaam (bijv. "VVD", "PvdA", "Leefbaar Rotterdam")
         max_resultaten: Aantal resultaten (max 20, standaard 10)
     """
+    # Temporal fallback (WS4 2026-04-13): when weaker models (Mistral/Le Chat)
+    # fail to extract datum_van/datum_tot from Dutch temporal phrases, apply
+    # server-side regex+LLM parser as safety net.
+    if datum_van is None and datum_tot is None:
+        try:
+            _tparsed = _temporal_parse(vraag)
+            datum_van = _tparsed.get("date_from")
+            datum_tot = _tparsed.get("date_to")
+        except Exception:
+            pass
+
     top_k = min(max(1, max_resultaten), 20)
 
     chunks = _retrieve_with_reranking(
@@ -601,6 +674,17 @@ def zoek_financieel(
                      Gebruik dit voor "wat is X voor jaar Y"-vragen.
         max_resultaten: Aantal resultaten (standaard 12)
     """
+    # Temporal fallback (WS4 2026-04-13): when weaker models (Mistral/Le Chat)
+    # fail to extract datum_van/datum_tot from Dutch temporal phrases, apply
+    # server-side regex+LLM parser as safety net.
+    if datum_van is None and datum_tot is None:
+        try:
+            _tparsed = _temporal_parse(onderwerp)
+            datum_van = _tparsed.get("date_from")
+            datum_tot = _tparsed.get("date_to")
+        except Exception:
+            pass
+
     # ── WS2 structured routing: if the query mentions a specific programma + jaar,
     # call vraag_begrotingsregel internally first and prepend structured results. ──
     structured_block = ""
@@ -826,6 +910,17 @@ def zoek_uitspraken(
         datum_tot: Einddatum filter, ISO formaat
         max_resultaten: Aantal resultaten (standaard 10)
     """
+    # Temporal fallback (WS4 2026-04-13): when weaker models (Mistral/Le Chat)
+    # fail to extract datum_van/datum_tot from Dutch temporal phrases, apply
+    # server-side regex+LLM parser as safety net.
+    if datum_van is None and datum_tot is None:
+        try:
+            _tparsed = _temporal_parse(onderwerp)
+            datum_van = _tparsed.get("date_from")
+            datum_tot = _tparsed.get("date_to")
+        except Exception:
+            pass
+
     top_k = min(max(1, max_resultaten), 20)
     query = f"{onderwerp} debat standpunten uitspraken"
 
@@ -1399,6 +1494,17 @@ def scan_breed(
         partij: Filter op partijnaam
         max_resultaten: Aantal resultaten (max 80, standaard 40)
     """
+    # Temporal fallback (WS4 2026-04-13): when weaker models (Mistral/Le Chat)
+    # fail to extract datum_van/datum_tot from Dutch temporal phrases, apply
+    # server-side regex+LLM parser as safety net.
+    if datum_van is None and datum_tot is None:
+        try:
+            _tparsed = _temporal_parse(vraag)
+            datum_van = _tparsed.get("date_from")
+            datum_tot = _tparsed.get("date_to")
+        except Exception:
+            pass
+
     top_k = min(max(1, max_resultaten), 80)
 
     chunks = _retrieve_with_reranking(
@@ -1541,6 +1647,75 @@ def lees_fragment(
         lines.append("")
 
     return "\n".join(lines)
+
+
+# ---------------------------------------------------------------------------
+# Tool 10b — Lees meerdere fragmenten in één call (batch)
+# ---------------------------------------------------------------------------
+
+@logged_tool
+def lees_fragmenten_batch(
+    document_ids: list,
+    max_fragmenten_per_doc: int = 3,
+) -> str:
+    """
+    Lees de eerste fragmenten van meerdere documenten in één tool-call.
+    Gebruik dit in plaats van meerdere lees_fragment calls om latency te verminderen
+    (overview queries duurden 15-25s door sequentieel lees_fragment gebruik).
+
+    Zonder query-parameter retourneert elk document de eerste max_fragmenten_per_doc
+    fragmenten in opslag-volgorde. Voor in-document reranking gebruik lees_fragment
+    met query=... op het specifieke document.
+
+    Args:
+        document_ids: Lijst van document IDs (max 10).
+        max_fragmenten_per_doc: Maximaal aantal fragmenten per document (standaard 3, max 5).
+    """
+    if not document_ids:
+        return "_Geen document IDs opgegeven._"
+
+    # Cap inputs to prevent abuse
+    doc_ids = [str(d) for d in document_ids[:10]]
+    per_doc = min(max(1, max_fragmenten_per_doc), 5)
+
+    results = []
+    url_map = _batch_fetch_document_urls(doc_ids)
+
+    for doc_id in doc_ids:
+        with get_connection() as conn:
+            cur = conn.cursor()
+            cur.execute("""
+                SELECT dc.title, dc.content, dc.chunk_type, d.name as doc_name,
+                       m.start_date, m.name as meeting_name
+                FROM document_chunks dc
+                JOIN documents d ON dc.document_id = d.id
+                LEFT JOIN meetings m ON d.meeting_id = m.id
+                WHERE dc.document_id = %s
+                ORDER BY dc.chunk_index
+                LIMIT %s
+            """, (doc_id, per_doc))
+            rows = cur.fetchall()
+            cur.close()
+
+        if not rows:
+            results.append(f"### Document {doc_id}\n_Geen fragmenten gevonden._\n")
+            continue
+
+        doc_name = rows[0][3] or doc_id
+        meeting_date = (str(rows[0][4] or ""))[:10]
+        url = url_map.get(doc_id)
+        url_line = f"[Brondocument ↗]({url})\n" if url else ""
+
+        lines = [f"### {doc_name}", f"_Datum: {meeting_date}_", url_line]
+        for row in rows:
+            title, content, chunk_type = row[0], row[1], row[2]
+            if title:
+                lines.append(f"**{title}**")
+            if content and len(content.strip()) >= MIN_CONTENT_CHARS:
+                lines.append(content[:800])
+        results.append("\n".join(lines))
+
+    return "\n\n---\n\n".join(results)
 
 
 # ---------------------------------------------------------------------------
@@ -2974,5 +3149,33 @@ if __name__ == "__main__":
     except Exception as _e:
         print(f"[mcp_tool_uniqueness] skipped: {_e}", flush=True)
 
-    print(f"{DISPLAY_NAME} {VERSION_LABEL} — transport={transport} port={args.port}", flush=True)
-    mcp.run(transport=transport)
+    # For HTTP transports: serve both authenticated /mcp and public /public/mcp
+    # on the same port via Starlette routing (WS4 2026-04-13).
+    if transport in ("streamable-http", "--http") and _public_mcp is not None:
+        import uvicorn
+        from starlette.applications import Starlette as _Starlette
+        from starlette.routing import Mount as _Mount
+        from starlette.middleware.cors import CORSMiddleware as _CORSMiddleware
+
+        _auth_asgi = mcp.streamable_http_app()
+        _pub_asgi = _public_mcp.streamable_http_app()
+
+        # CORS on public endpoint: allow chat.mistral.ai + *
+        from services.mcp_rate_limiter import RateLimitMiddleware as _RateLimitMiddleware
+        _pub_asgi_rate_limited = _RateLimitMiddleware(app=_pub_asgi)
+        _pub_asgi_with_cors = _CORSMiddleware(
+            app=_pub_asgi_rate_limited,
+            allow_origins=["https://chat.mistral.ai", "*"],
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
+
+        _root_app = _Starlette(routes=[
+            _Mount("/public/mcp", app=_pub_asgi_with_cors),
+            _Mount("/mcp", app=_auth_asgi),
+        ])
+        print(f"{DISPLAY_NAME} {VERSION_LABEL} — transport={transport} port={mcp.settings.port} (authenticated /mcp + public /public/mcp)", flush=True)
+        uvicorn.run(_root_app, host=mcp.settings.host, port=mcp.settings.port, log_level="info")
+    else:
+        print(f"{DISPLAY_NAME} {VERSION_LABEL} — transport={transport} port={args.port}", flush=True)
+        mcp.run(transport=transport)

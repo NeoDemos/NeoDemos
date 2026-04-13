@@ -4,6 +4,7 @@ Authentication service: users, sessions, API tokens.
 Uses the shared db_pool and passlib for password hashing.
 """
 
+import hashlib
 import os
 import secrets
 import logging
@@ -17,6 +18,11 @@ from services.db_pool import get_connection
 logger = logging.getLogger(__name__)
 
 SESSION_MAX_AGE = int(os.getenv("SESSION_MAX_AGE", "604800"))  # 7 days
+
+
+def _hash_token(raw: str) -> str:
+    """sha256 of raw token — these are already cryptographically random strings."""
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
 def _hash_password(password: str) -> str:
@@ -192,7 +198,7 @@ class AuthService:
                     "INSERT INTO api_tokens (user_id, token, name, scopes) "
                     "VALUES (%s, %s, %s, %s) "
                     "RETURNING id, name, scopes, created_at",
-                    (user_id, raw_token, name, scopes),
+                    (user_id, _hash_token(raw_token), name, scopes),
                 )
                 row = cur.fetchone()
         return {
@@ -214,7 +220,7 @@ class AuthService:
                     "u.mcp_access, u.db_access_level, u.created_at "
                     "FROM api_tokens t JOIN users u ON t.user_id = u.id "
                     "WHERE t.token = %s",
-                    (token,),
+                    (_hash_token(token),),
                 )
                 row = cur.fetchone()
         if not row:

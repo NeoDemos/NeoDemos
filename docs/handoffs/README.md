@@ -37,7 +37,7 @@ When a workstream finishes:
 
 | # | File | Title | Priority | Status | Depends on |
 |---|---|---|---|---|---|
-| WS1 | [`WS1_GRAPHRAG.md`](WS1_GRAPHRAG.md) | GraphRAG retrieval | 1 | **blocked** — waiting on WS7, WS10, WS11, WS12 | WS7 + WS10 + WS11 + WS12 (clean, complete corpus before enrichment) |
+| WS1 | [`WS1_GRAPHRAG.md`](WS1_GRAPHRAG.md) | GraphRAG retrieval | 1 | **blocked** — waiting on WS7, WS11, WS12 | WS7 + WS11 + WS12 (clean, complete corpus before enrichment) |
 | WS2 | [`WS2_FINANCIAL.md`](WS2_FINANCIAL.md) | Trustworthy financial analysis | 2 | **done** — shipped 2026-04-12 | none |
 | WS2b | [`WS2b_IV3_TAAKVELD.md`](WS2b_IV3_TAAKVELD.md) | IV3 taakveld FK backfill | 2 | not started | WS2 done ✅ |
 | WS3 | [`WS3_JOURNEY.md`](WS3_JOURNEY.md) | Document journey timelines | 3 | not started | WS1 Phase A (motie↔notulen linking) |
@@ -48,20 +48,23 @@ When a workstream finishes:
 | WS7 | [`WS7_OCR_RECOVERY.md`](WS7_OCR_RECOVERY.md) | OCR recovery for moties/amendementen | 2.5 | **in progress** — Dennis running | none; **must finish before WS1 Phase A** |
 | WS8 | [`WS8_FRONTEND_REDESIGN.md`](WS8_FRONTEND_REDESIGN.md) | Frontend redesign: design system, landing page, calendar | 1 (launch blocker) | **done** — WS8a-e shipped 2026-04-12 | WS9 (soft — for demo answer + streaming search) |
 | WS8f | [`WS8f_ADMIN_CMS.md`](WS8f_ADMIN_CMS.md) | Admin panel + content management + GrapeJS editor | 2 (launch enhancer) | not started | WS8a-e complete ✅ |
-| WS9 | [`WS9_WEB_INTELLIGENCE.md`](WS9_WEB_INTELLIGENCE.md) | Web intelligence: MCP-as-backend, Sonnet tool_use, SSE streaming | 1 (launch blocker) | **partial** — local done 2026-04-12, needs deploy | none (extract from existing MCP tools) |
-| WS10 | [`WS10_TABLE_RICH_EXTRACTION.md`](WS10_TABLE_RICH_EXTRACTION.md) | Table-rich document extraction (Docling layout pass) | 3 | **in progress** — classifier done, 1,335 backfill pending | none |
+| WS9 | [`WS9_WEB_INTELLIGENCE.md`](WS9_WEB_INTELLIGENCE.md) | Web intelligence: MCP-as-backend, Sonnet tool_use, SSE streaming | 1 (launch blocker) | **done** — deployed 2026-04-13 (b3104c3) | none (extract from existing MCP tools) |
+| WS10 | [`WS10_TABLE_RICH_EXTRACTION.md`](WS10_TABLE_RICH_EXTRACTION.md) | Table-rich document extraction (Docling layout pass) | 6 | **paused** — infrastructure done, full backfill deferred; curated 20-doc run only | none |
 | WS11 | [`WS11_CORPUS_COMPLETENESS.md`](WS11_CORPUS_COMPLETENESS.md) | Corpus completeness 2018–2026 (ORI gap + metadata backfill) | 1 | **in progress** — Dennis running | none |
 | WS12 | [`WS12_VIRTUAL_NOTULEN_BACKFILL.md`](WS12_VIRTUAL_NOTULEN_BACKFILL.md) | Virtual notulen backfill & production hardening | 1 | **in progress** — Dennis running | none |
+| WS13 | [`WS13_MULTI_GEMEENTE_PIPELINE.md`](WS13_MULTI_GEMEENTE_PIPELINE.md) | Multi-gemeente pipeline: tenant-aware ingestion | 1 (v0.2.1) | not started | WS5a stable | 
 
 **Webcast timestamp linking** (priority 7) is split across WS5a (schema + backfill) and WS5b (HLS player UI).
 
 **WS8a-e shipped 2026-04-12.** WS8f (admin CMS) is next but does not block the press moment.
 
-**WS9 local implementation done 2026-04-12.** Production deploy blocked on rate limiting (WS8 Phase 0B). Landing page works with current search as fallback.
+**WS9 shipped 2026-04-13.** 18 tools via Sonnet + tool_use, SSE stream, IP rate limiting (3/month anon), teaser+expand UX, Gemini fallback. Live at `/api/search/stream`. Phase 4 manual eval (20 MCP-replay queries) pending.
 
-**WS7 + WS10 + WS11 + WS12 are the current active track.** All four must complete before WS1 Phase A (enrichment) starts — enriching garbled text or an incomplete corpus wastes Gemini spend and produces lower-quality KG edges.
+**WS7 + WS11 + WS12 are the current active track.** All three must complete before WS1 Phase A (enrichment) starts — enriching garbled text or an incomplete corpus wastes Gemini spend and produces lower-quality KG edges.
 
-**Waalwijk counter-demo** is scoped in the master plan (V0_2_BEAT_MAAT_PLAN.md §4) as a v0.2.0 deliverable, but has no handoff file and was not part of WS2's shipped scope. Needs decision: create a WS or defer to v0.2.1.
+**WS10 is paused.** Infrastructure is fully built (classifier, converters, backfill script, MPS GPU, parallel writes, dedup). Full backfill of 655 unique PDFs was assessed as poor ROI: ~44% pass rate on large docs but the large docs dominate runtime (~70 min each), making a full run multi-day. Decision: do a targeted 20-doc run on the highest-ROI candidates (confirmed dry-run passes >500K chars), then defer full backfill to post-v0.2 when compute budget is available. WS10 is no longer a WS1 blocker.
+
+**Middelburg** is the v0.2.1 press-moment city — Dennis has a contact there. Portal: Notubiz via ORI. **Verified 2026-04-13:** 319K docs in ORI, 1,049 financial doc hits, PDFs publicly downloadable from `api.notubiz.nl` (no auth needed). Financial extraction is **v0.2.1 scope** — no native Notubiz adapter required. Waalwijk remains a quiet MAAT counter-demo.
 
 ---
 
@@ -72,17 +75,18 @@ When a workstream finishes:
 ```
 v0.2.0 — three parallel tracks
 
-  TRACK A (ACTIVE NOW): Corpus quality — WS7, WS10, WS11, WS12
+  TRACK A (ACTIVE NOW): Corpus quality — WS7, WS11, WS12
   ┌─────────────────────────────────────────────────────────────────┐
-  │  All four run in parallel NOW. All must finish before WS1.       │
+  │  All three run in parallel NOW. All must finish before WS1.      │
+  │  WS10 is paused (targeted 20-doc run only, not a blocker).       │
   │                                                                  │
-  │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ ┌────────┐  │
-  │  │  WS7  (run)  │ │ WS10  (run)  │ │ WS11  (run)  │ │WS12(run│  │
-  │  │ OCR recovery │ │ Table-rich   │ │ Corpus gaps  │ │Virtual │  │
-  │  │ 2,700 docs   │ │ 1,336 docs   │ │ ORI backfill │ │Notulen │  │
-  │  └──────┬───────┘ └──────┬───────┘ └──────┬───────┘ └───┬────┘  │
-  │         │                │                │              │       │
-  │         └────────────────┴────────────────┴──────────────┘       │
+  │  ┌──────────────┐  ┌──────────────┐  ┌───────────────────────┐  │
+  │  │  WS7  (run)  │  │ WS11  (run)  │  │     WS12  (run)       │  │
+  │  │ OCR recovery │  │ Corpus gaps  │  │   Virtual Notulen     │  │
+  │  │ 2,700 docs   │  │ ORI backfill │  │   backfill + harden   │  │
+  │  └──────┬───────┘  └──────┬───────┘  └──────────┬────────────┘  │
+  │         │                 │                      │               │
+  │         └─────────────────┴──────────────────────┘               │
   │                          │                                       │
   │                          ▼                                       │
   │  ┌──────────────────────────────────────────────────────────┐    │
@@ -127,9 +131,9 @@ v0.2.0 — three parallel tracks
   │  └──────────────────────────────────────────────────────────┘    │
   │                                                                  │
   │  ┌──────────────────────┐   ┌──────────────────────────────┐    │
-  │  │  WS9 — deploy to     │   │  WS8f — Admin CMS            │    │
-  │  │  production (pending) │   │  (not started, not blocking) │    │
-  │  │  + rate limiting      │   │                              │    │
+  │  │  WS9 ✅ DONE         │   │  WS8f — Admin CMS            │    │
+  │  │  Sonnet+tool_use     │   │  (not started, not blocking) │    │
+  │  │  deployed 2026-04-13 │   │                              │    │
   │  └──────────────────────┘   └──────────────────────────────┘    │
   │                                                                  │
   │  ► eval gate C ◄  → public launch + press outreach             │
@@ -142,9 +146,10 @@ v0.2.1 — search-only beyond Rotterdam
   └──────────────┘  └──────────────┘  └──────────────┘
 ```
 
-**Critical path (Track A):** WS7 + WS10 + WS11 + WS12 (parallel, NOW) → WS1 Phase A (enrichment) → WS1 Phase B (graph svc + MCP) → WS3.
-**Critical path (Track C):** WS9 deploy (+ rate limiting) → press outreach. WS8a-e already done.
-**Active blockers:** WS1 is explicitly held until WS7/10/11/12 finish — enriching on garbled or incomplete text wastes Gemini spend ($90-130) and requires costly re-run.
+**Critical path (Track A):** WS7 + WS11 + WS12 (parallel, NOW) → WS1 Phase A (enrichment) → WS1 Phase B (graph svc + MCP) → WS3.
+**Critical path (Track C):** WS9 ✅ done. Track C unblocked — press outreach can begin once Dennis validates demo answer quality.
+**Active blockers:** WS1 is explicitly held until WS7/11/12 finish — enriching on garbled or incomplete text wastes Gemini spend ($90-130) and requires costly re-run.
+**WS10 removed from critical path** — infrastructure done, targeted run only, not a WS1 dependency.
 **No blockers for:** WS4, WS5a, WS6 — these can start independently when agent capacity allows.
 
 ---
@@ -156,7 +161,7 @@ v0.2.1 — search-only beyond Rotterdam
 | Metric | Source | Target | Status |
 |---|---|---|---|
 | OCR recovery | WS7 BM25 re-test | BM25 hit rate ≥ 95% (from 77.5%) | ⏳ running |
-| Table-rich extraction | WS10 backfill | 1,336 docs re-processed, quality gate passed | ⏳ running |
+| Table-rich extraction | WS10 targeted run | ~20 high-ROI docs re-processed, quality gate passed | ⏳ paused — targeted run pending |
 | Corpus completeness | WS11 ORI audit | schriftelijke_vragen gap < 5% (from 96%) | ⏳ running |
 | Virtual notulen | WS12 promotion | 2025 promoted, 2018-2024 backfill complete | ⏳ running |
 | Metadata backfill | WS11a | 0 docs with `doc_classification = NULL` | ⏳ running |
@@ -168,6 +173,8 @@ v0.2.1 — search-only beyond Rotterdam
 | Completeness | [rag_evaluator/](../../rag_evaluator/) | ≥ 3.5 (from 2.75) | ❌ blocked on WS1 |
 | Faithfulness | [rag_evaluator/](../../rag_evaluator/) | ≥ 4.5 (no regression) | ❌ blocked on WS1 |
 | Numeric accuracy | WS2 financial benchmark | **100%** on 30 questions | ✅ shipped |
+| IV3 taakveld coverage | WS2b backfill | ≥ 80% of financial_lines | ❌ not started |
+| MCP bug backlog cleared | WS4 blockers B1–B8 | All 8 bugs fixed before eval run | ❌ not started |
 | Nightly reliability | WS5a smoke test logs | 14 consecutive clean days | ❌ not started |
 | Source-spans strip test | WS6 verifier | Pass on 50 random docs | ❌ not started |
 | Tool-description uniqueness | WS4 startup check | No pair > 0.85 cosine | ❌ not started |
@@ -177,12 +184,12 @@ v0.2.1 — search-only beyond Rotterdam
 
 | Metric | Source | Target | Status |
 |---|---|---|---|
-| Demo answer quality | Manual review by Dennis | Impressive enough to be first thing a journalist sees | ❌ needs WS9 deploy |
+| Demo answer quality | Manual review by Dennis | Impressive enough to be first thing a journalist sees | ⏳ WS9 live — needs Dennis review |
 | Lighthouse Performance | `lighthouse https://neodemos.nl` | ≥ 90 | ✅ WS8 shipped |
 | Lighthouse Accessibility | `lighthouse https://neodemos.nl` | ≥ 95 (WCAG AA) | ✅ WS8 shipped |
-| WS9 MCP quality parity | Side-by-side comparison (web vs MCP) | ≥ 90% answer quality vs direct MCP | ❌ needs WS9 deploy |
+| WS9 MCP quality parity | Side-by-side comparison (web vs MCP) | ≥ 90% answer quality vs direct MCP | ⏳ WS9 live — 20-query eval pending |
 | Mobile search above fold | Playwright screenshot at 375px | Search bar + CTA visible without scroll | ✅ WS8 shipped |
-| Demo answer cached | `GET /` response time | < 200ms (pre-rendered, no API call) | ❌ needs WS9 deploy |
+| Demo answer cached | `GET /` response time | < 200ms (pre-rendered, no API call) | ⏳ demo cache wired — verify in prod |
 | Landing headline rotation | Config check | `LANDING_HEADLINE` env var wired, weekly swap documented | ✅ WS8 shipped |
 
 ---

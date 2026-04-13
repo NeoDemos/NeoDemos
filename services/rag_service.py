@@ -454,7 +454,7 @@ class RAGService:
             return results
             
         except Exception as e:
-            print(f"Vector similarity search failed: {e}")
+            logger.exception("Vector similarity search failed")
             return []
 
     def _format_json_table(self, table_data: Union[str, Dict, List]) -> str:
@@ -542,7 +542,7 @@ class RAGService:
                 ))
             return results
         except Exception as e:
-            print(f"Keyword search failed: {e}")
+            logger.exception("Keyword search failed")
             return []
 
     def _retrieve_chunks_by_keywords(

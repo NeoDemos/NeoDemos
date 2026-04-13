@@ -1044,6 +1044,134 @@ REGISTRY: dict[str, ToolSpec] = {
             ),
         ],
     ),
+    "traceer_motie": ToolSpec(
+        name="traceer_motie",
+        summary="GraphRAG: reconstrueer de volledige traceerbaarheid van een motie (indieners → stemgedrag → uitkomst → notulen).",
+        ai_description=(
+            "Loopt de kennisgraaf van een specifieke motie/amendement door: van indieners (DIENT_IN) "
+            "naar partijen (LID_VAN) naar stemgedrag (STEMT_VOOR/STEMT_TEGEN) naar uitkomst "
+            "(AANGENOMEN/VERWORPEN) naar gekoppelde notulen-fragmenten.\n\n"
+            "Gebruik deze tool wanneer:\n"
+            "- Je een specifiek motie document_id hebt (verkregen via zoek_moties of scan_breed) en "
+            "  de volledige trace wilt: wie diende in, hoe stemde elke partij, wat was de uitkomst, "
+            "  welke debatten hingen ermee samen.\n"
+            "- De gebruiker vraagt 'volg deze motie', 'traceer het besluitvormingstraject', of "
+            "  'wat is er gebeurd met motie X'.\n\n"
+            "Gebruik deze tool NIET wanneer:\n"
+            "- Je ZOEKT naar moties op onderwerp — gebruik zoek_moties voor topic-search.\n"
+            "- Je een tijdlijn over meerdere moties wilt — gebruik tijdlijn_besluitvorming.\n\n"
+            "Retourneert: JSON string met motie-header, indieners, stemgedrag, gerelateerde documenten, "
+            "en notulen-fragmenten. trace_available=False wanneer WS1 GraphRAG-edges nog niet zijn "
+            "ingested — het veld degradeert graceful naar regel-gebaseerde indieners+steminformatie."
+        ),
+        stability="experimental",
+        added_in_version="0.2.0",
+        input_schema={
+            "type": "object",
+            "required": ["motie_id"],
+            "properties": {
+                "motie_id": {"type": "string", "description": "document_id van de motie/amendement."},
+                "include_notulen": {"type": "boolean", "default": True},
+                "max_notulen_chunks": {"type": "integer", "default": 8, "maximum": 20},
+            },
+        },
+        output_schema={"type": "string", "description": "JSON string"},
+        examples=[
+            ToolExample(
+                description="Positief: trace een specifieke motie met bekende ID.",
+                input={"motie_id": "12345678", "include_notulen": True},
+                expected_output_shape='{"motie": {...}, "indieners": [...], "vote": {...}, "notulen_fragments": [...]}',
+            ),
+            ToolExample(
+                description="Negatief: zoeken op onderwerp → gebruik zoek_moties.",
+                input={"motie_id": "leegstand"},
+                expected_output_shape="Gebruik zoek_moties('leegstand') om document_ids te vinden.",
+            ),
+        ],
+    ),
+    "vergelijk_partijen": ToolSpec(
+        name="vergelijk_partijen",
+        summary="Vergelijk twee of meer partijen naast elkaar op één onderwerp via vector+BM25 retrieval.",
+        ai_description=(
+            "Retrievet voor elk van de opgegeven partijen de top-N fragmenten over een onderwerp "
+            "via hybrid search (BM25+vector+Jina reranker) en geeft ze naast elkaar terug. "
+            "Wanneer WS1 GraphRAG live is, wordt de zoekruimte verrijkt via LID_VAN ∩ SPREEKT_OVER.\n\n"
+            "Gebruik deze tool wanneer:\n"
+            "- De gebruiker EXPLICIET twee of meer partijen vraagt te vergelijken op één onderwerp, "
+            "  bijv. 'hoe denken VVD, PvdA en GroenLinks over warmtenetten?'\n"
+            "- Je een side-by-side overzicht wilt van partijstandpunten.\n\n"
+            "Gebruik deze tool NIET wanneer:\n"
+            "- Je één partij wilt opzoeken → gebruik haal_partijstandpunt_op of zoek_uitspraken.\n"
+            "- Je stemmingen en uitkomsten wilt vergelijken → gebruik zoek_moties met partij-filter.\n"
+            "- Je de rol-tijdlijn van één persoon nodig hebt → gebruik zoek_uitspraken_op_rol.\n\n"
+            "Retourneert: JSON string met per-partij fragmentenlijsten (chunk_id, title, content, "
+            "date, similarity_score, document_id) en graph_walk_used boolean."
+        ),
+        stability="experimental",
+        added_in_version="0.2.0",
+        input_schema={
+            "type": "object",
+            "required": ["onderwerp", "partijen"],
+            "properties": {
+                "onderwerp": {"type": "string", "description": "Concreet onderwerp, geen hele zinnen."},
+                "partijen": {"type": "array", "items": {"type": "string"}, "minItems": 2, "description": "Minimaal 2 partijnamen."},
+                "datum_van": {"type": ["string", "null"]},
+                "datum_tot": {"type": ["string", "null"]},
+                "max_fragmenten_per_partij": {"type": "integer", "default": 5, "maximum": 10},
+            },
+        },
+        output_schema={"type": "string", "description": "JSON string"},
+        examples=[
+            ToolExample(
+                description="Positief: vergelijk 3 partijen op warmtenetten.",
+                input={"onderwerp": "warmtenetten", "partijen": ["VVD", "PvdA", "GroenLinks"]},
+                expected_output_shape='{"onderwerp": "warmtenetten", "partijen": [{"partij": "VVD", "fragmenten": [...]}, ...]}',
+            ),
+            ToolExample(
+                description="Negatief: één partij → gebruik haal_partijstandpunt_op.",
+                input={"onderwerp": "veiligheid", "partijen": ["SP"]},
+                expected_output_shape="Minimaal 2 partijen vereist — gebruik haal_partijstandpunt_op voor één partij.",
+            ),
+        ],
+    ),
+    "lees_fragmenten_batch": ToolSpec(
+        name="lees_fragmenten_batch",
+        summary="Lees eerste fragmenten van meerdere documenten in één call (latency-optimalisatie).",
+        ai_description=(
+            "Fetcht de eerste N fragmenten van elk van de opgegeven document_ids in één tool-call. "
+            "Vervangt meerdere sequentiële lees_fragment calls die overview queries 15–25s lang maakten.\n\n"
+            "Gebruik deze tool wanneer:\n"
+            "- Je na een zoek_moties of scan_breed 3–10 documenten wilt inkijken.\n"
+            "- Snelheid belangrijker is dan in-document reranking.\n\n"
+            "Gebruik deze tool NIET wanneer:\n"
+            "- Je één specifiek document wilt lezen met query-reranking → gebruik lees_fragment met query=...\n"
+            "- Je meer dan 10 documenten tegelijk wilt ophalen — trim de lijst eerst.\n\n"
+            "Retourneert: markdown met per document een header, datum, bronlink, en de eerste "
+            "max_fragmenten_per_doc tekstfragmenten."
+        ),
+        added_in_version="0.2.0",
+        input_schema={
+            "type": "object",
+            "required": ["document_ids"],
+            "properties": {
+                "document_ids": {"type": "array", "items": {"type": "string"}, "maxItems": 10},
+                "max_fragmenten_per_doc": {"type": "integer", "default": 3, "maximum": 5},
+            },
+        },
+        output_schema=_MARKDOWN_OUTPUT,
+        examples=[
+            ToolExample(
+                description="Positief: snel 4 moties doornemen na zoek_moties.",
+                input={"document_ids": ["12345", "67890", "11111", "22222"], "max_fragmenten_per_doc": 2},
+                expected_output_shape="Markdown met 4 secties, elk met doc-naam, datum, bronlink, en 2 fragmenten.",
+            ),
+            ToolExample(
+                description="Negatief: in-document reranking nodig → gebruik lees_fragment met query.",
+                input={"document_ids": ["12345"], "max_fragmenten_per_doc": 5},
+                expected_output_shape="Gebruik lees_fragment(document_id='12345', query='je_onderwerp') voor betere reranking.",
+            ),
+        ],
+    ),
 }
 
 
