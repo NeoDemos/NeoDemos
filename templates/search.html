@@ -43,6 +43,43 @@
                     <span class="hero-stats-sep">&middot;</span>
                     <span>Open brondata</span>
                 </div>
+
+                <!-- Loading state + AI result live inside the hero so skyline shows behind them -->
+                <div id="search-loading-state" class="search-loading-state" hidden>
+                    <div class="search-loading-flex">
+                        <div class="spinner"></div>
+                        <span id="search-loading-text" class="search-loading-text">Aan het zoeken...</span>
+                    </div>
+                    <ul id="ai-loading-steps" class="ai-loading-steps" hidden>
+                        <!-- Agent steps appear here -->
+                    </ul>
+                </div>
+
+                <!-- AI Deep Research Result -->
+                <div id="ai-deep-research" hidden>
+                    <div class="card ai-result-card">
+                        <div class="ai-result-header">
+                            <div class="ai-result-title-group">
+                                <span id="ai-header-icon" class="ai-result-icon">&#129504;</span>
+                                <h2 id="ai-header-title" class="ai-result-title">Analyse</h2>
+                            </div>
+                            <button id="copy-word-btn" class="btn-copy-word" onclick="copyToWord()" hidden>
+                                &#128196; Kopieer voor Word
+                            </button>
+                        </div>
+
+                        <!-- Teaser: first paragraph only, always visible -->
+                        <div id="ai-answer-teaser" class="ai-content ai-answer-teaser"></div>
+
+                        <!-- Full answer: hidden until expanded -->
+                        <div id="ai-answer-content" class="ai-content ai-answer-full" hidden></div>
+
+                        <!-- Expand/collapse toggle -->
+                        <button id="ai-expand-btn" class="ai-expand-btn" onclick="toggleAIExpand()" hidden>
+                            Bekijk volledige analyse &darr;
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -137,49 +174,8 @@
     {% endif %}
     {% endif %}
 
-    <!-- Search results area -->
-    <div id="search-results">
-        <!-- Unified Loading State -->
-        <div id="search-loading-state" class="search-loading-state" hidden>
-            <div class="search-loading-flex">
-                <div class="spinner"></div>
-                <span id="search-loading-text" class="search-loading-text">Aan het zoeken...</span>
-            </div>
-            <ul id="ai-loading-steps" class="ai-loading-steps" hidden>
-                <!-- Agent steps appear here -->
-            </ul>
-        </div>
-
-        <!-- AI Deep Research Result -->
-        <div id="ai-deep-research" hidden>
-            <div class="card ai-result-card">
-                <div class="ai-result-header">
-                    <div class="ai-result-title-group">
-                        <span id="ai-header-icon" class="ai-result-icon">&#129504;</span>
-                        <h2 id="ai-header-title" class="ai-result-title">Analyse</h2>
-                    </div>
-                    <button id="copy-word-btn" class="btn-copy-word" onclick="copyToWord()" hidden>
-                        &#128196; Kopieer voor Word
-                    </button>
-                </div>
-
-                <!-- Teaser: first paragraph only, always visible -->
-                <div id="ai-answer-teaser" class="ai-content ai-answer-teaser"></div>
-
-                <!-- Full answer: hidden until expanded -->
-                <div id="ai-answer-content" class="ai-content ai-answer-full" hidden></div>
-
-                <!-- Expand/collapse toggle -->
-                <button id="ai-expand-btn" class="ai-expand-btn" onclick="toggleAIExpand()" hidden>
-                    Bekijk volledige analyse &darr;
-                </button>
-            </div>
-        </div>
-
-        <div id="document-results">
-            <!-- Keyword results appear here -->
-        </div>
-    </div>
+    <!-- Keyword results (below hero) -->
+    <div id="document-results"></div>
 
 
     <!-- Account nudge (hidden, shown after 3rd search for anonymous users) -->

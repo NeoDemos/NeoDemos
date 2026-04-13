@@ -2355,6 +2355,36 @@ body.search-active .landing-hero-content {
   transition: padding-top 0.3s ease;
 }
 
+/* Search-active: anchor hero content to top so AI card shows just below search bar */
+body.search-active .landing-hero-overlay {
+  align-items: flex-start;
+  padding-top: calc(var(--space-16) + 60px);
+  min-height: auto;
+}
+
+/* AI card + loading state inside the hero: readable on dark background */
+.landing-hero-content .search-loading-state {
+  width: 100%;
+}
+
+.landing-hero-content .search-loading-text,
+.landing-hero-content .ai-loading-steps li {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.landing-hero-content .spinner {
+  border-color: rgba(255, 255, 255, 0.25);
+  border-top-color: var(--color-accent);
+}
+
+/* AI result card inside hero: white card, full width */
+.landing-hero-content .ai-result-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
 @media (max-width: 768px) {
   .landing-hero-overlay {
     min-height: 100vh;
