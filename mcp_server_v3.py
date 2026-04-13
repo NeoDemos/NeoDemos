@@ -3170,7 +3170,14 @@ if __name__ == "__main__":
             allow_headers=["*"],
         )
 
+        from starlette.routing import Route as _Route
+        from starlette.responses import PlainTextResponse as _RootPlainText
+
+        async def _root_up(_request):  # pragma: no cover
+            return _RootPlainText("ok", status_code=200)
+
         _root_app = _Starlette(routes=[
+            _Route("/up", endpoint=_root_up, methods=["GET"]),
             _Mount("/public/mcp", app=_pub_asgi_with_cors),
             _Mount("/mcp", app=_auth_asgi),
         ])
