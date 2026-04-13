@@ -1,0 +1,357 @@
+{
+  "_meta": {
+    "workstream": "WS11",
+    "title": "Corpus Completeness 2018-2026",
+    "created": "2026-04-13",
+    "purpose": "Agent handoff helper: document types, ORI counts, DB state, API queries, and ingestion priority for the Rotterdam 2018-2026 completeness sprint.",
+    "ori_index": "ori_rotterdam_20250629013104",
+    "ori_base_url": "https://api.openraadsinformatie.nl/v1/elastic",
+    "ibabs_base_url": "https://rotterdam.raadsinformatie.nl",
+    "ibabs_api_base": "https://api1.ibabs.eu"
+  },
+
+  "sub_workstreams": {
+    "WS11a": {
+      "name": "Metadata backfill",
+      "description": "Set doc_classification on documents already in DB. No new ingestion.",
+      "script": "scripts/ws11a_classify_existing_docs.py",
+      "effort_days": 0.5,
+      "targets": [
+        {
+          "doc_classification": "initiatiefnotitie",
+          "name_patterns": ["%initiatiefnoti%"],
+          "current_db_count": 111,
+          "docs_without_meeting_link": 41,
+          "docs_with_content": 106
+        },
+        {
+          "doc_classification": "initiatiefvoorstel",
+          "name_patterns": ["%initiatiefvoorstel%"],
+          "current_db_count": 522,
+          "docs_without_meeting_link": 115,
+          "docs_with_content": 506
+        },
+        {
+          "doc_classification": "schriftelijke_vraag",
+          "name_patterns": ["%schriftelijke%vraag%", "%schriftelijke%vragen%", "%raadsvraag%"],
+          "current_db_count": 120,
+          "docs_without_meeting_link": 0,
+          "docs_with_content": 120
+        }
+      ]
+    },
+    "WS11b": {
+      "name": "ORI ingestion of missing documents",
+      "description": "Fetch missing doc types from ORI API, upsert, embed, index in Qdrant.",
+      "script": "scripts/ws11b_ori_ingestion.py",
+      "effort_days": 3,
+      "pipeline": "services/document_processor.py + DocumentClassifier",
+      "checkpoint_key": "ori_@id",
+      "checkpoint_path": "logs/ws11b_checkpoint.json"
+    }
+  },
+
+  "document_types": [
+    {
+      "id": "schriftelijke_vraag",
+      "label": "Schriftelijke vragen",
+      "description": "Written questions filed by council members to the B&W executive board. Includes both the questions and B&W answers.",
+      "db_classification": "schriftelijke_vraag",
+      "db_category": "municipal_doc",
+      "priority": "P0",
+      "db_counts_by_year": {
+        "2018": 6, "2019": 22, "2020": 28, "2021": 38,
+        "2022": 17, "2023": 6, "2024": 3, "2025": 0, "2026": 0
+      },
+      "ori_counts_by_year": {
+        "2018": 158, "2019": 388, "2020": 347, "2021": 358,
+        "2022": 345, "2023": 397, "2024": 477, "2025": 306, "2026": 100
+      },
+      "gap_by_year": {
+        "2018": 152, "2019": 366, "2020": 319, "2021": 320,
+        "2022": 328, "2023": 391, "2024": 474, "2025": 306, "2026": 100
+      },
+      "total_ori": 2876,
+      "total_db": 120,
+      "total_gap": 2756,
+      "coverage_pct": 4,
+      "ori_type": ["MediaObject", "Report"],
+      "ori_classification_field": "Raadsvragen",
+      "ori_name_patterns": ["schriftelijke vraag", "schriftelijke vragen", "raadsvraag", "SV "],
+      "ibabs_module": "/modules/4/schriftelijke_vragen/view",
+      "date_field": "last_discussed_at",
+      "api_queries": {
+        "by_year_mediaobject": {
+          "method": "POST",
+          "url": "https://api.openraadsinformatie.nl/v1/elastic/ori_rotterdam_20250629013104/_search",
+          "body": {
+            "size": 500,
+            "query": {
+              "bool": {
+                "must": [
+                  {"term": {"@type.keyword": "MediaObject"}},
+                  {"range": {"last_discussed_at": {"gte": "YEAR-01-01", "lte": "YEAR-12-31"}}}
+                ],
+                "should": [
+                  {"match": {"name": "schriftelijke vraag"}},
+                  {"match": {"name": "schriftelijke vragen"}},
+                  {"match": {"name": "raadsvraag"}}
+                ],
+                "minimum_should_match": 1
+              }
+            },
+            "_source": ["@id", "name", "url", "original_url", "last_discussed_at", "text", "content_type", "size_in_bytes"]
+          },
+          "note": "Replace YEAR with target year. Paginate using 'from' param."
+        },
+        "by_classification_report": {
+          "method": "POST",
+          "url": "https://api.openraadsinformatie.nl/v1/elastic/ori_rotterdam_20250629013104/_search",
+          "body": {
+            "size": 500,
+            "query": {"term": {"classification.keyword": "Raadsvragen"}},
+            "sort": [{"start_date": {"order": "asc"}}],
+            "_source": ["@id", "name", "classification", "start_date", "description", "attachment", "has_organization_name"]
+          }
+        },
+        "count_by_year_agg": {
+          "method": "POST",
+          "url": "https://api.openraadsinformatie.nl/v1/elastic/ori_rotterdam_20250629013104/_search",
+          "body": {
+            "size": 0,
+            "query": {
+              "bool": {
+                "should": [
+                  {"match": {"name": "schriftelijke vraag"}},
+                  {"match": {"name": "raadsvraag"}}
+                ],
+                "minimum_should_match": 1
+              }
+            },
+            "aggs": {
+              "by_year": {
+                "date_histogram": {
+                  "field": "last_discussed_at",
+                  "calendar_interval": "year"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "initiatiefnotitie",
+      "label": "Initiatiefnotities",
+      "description": "Initiative notes filed by council members proposing policy investigation or debate. Precursor to initiatiefvoorstellen.",
+      "db_classification": "initiatiefnotitie",
+      "db_category": "municipal_doc",
+      "priority": "P0",
+      "db_counts_by_year": {
+        "2018": 2, "2019": 13, "2020": 1, "2021": 8,
+        "2022": 5, "2023": 3, "2024": 4, "2025": 4, "2026": 2
+      },
+      "total_db": 42,
+      "ori_counts_by_year": "TBD — run audit query below",
+      "ori_type": ["MediaObject"],
+      "ori_name_patterns": ["initiatiefnotitie", "initiatiefnoti"],
+      "date_field": "last_discussed_at",
+      "api_queries": {
+        "by_name_pattern": {
+          "method": "POST",
+          "url": "https://api.openraadsinformatie.nl/v1/elastic/ori_rotterdam_20250629013104/_search",
+          "body": {
+            "size": 500,
+            "query": {
+              "bool": {
+                "must": [{"term": {"@type.keyword": "MediaObject"}}],
+                "should": [
+                  {"match": {"name": "initiatiefnotitie"}},
+                  {"match": {"name": "initiatiefnoti"}}
+                ],
+                "minimum_should_match": 1
+              }
+            },
+            "_source": ["@id", "name", "url", "original_url", "last_discussed_at", "text", "content_type"]
+          }
+        },
+        "count_by_year_agg": {
+          "method": "POST",
+          "url": "https://api.openraadsinformatie.nl/v1/elastic/ori_rotterdam_20250629013104/_search",
+          "body": {
+            "size": 0,
+            "query": {"match": {"name": "initiatiefnotitie"}},
+            "aggs": {
+              "by_year": {
+                "date_histogram": {
+                  "field": "last_discussed_at",
+                  "calendar_interval": "year"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "initiatiefvoorstel",
+      "label": "Initiatiefvoorstellen",
+      "description": "Private member bills / council initiative proposals. Full legislative documents.",
+      "db_classification": "initiatiefvoorstel",
+      "db_category": "municipal_doc",
+      "priority": "P1",
+      "db_counts_by_year": {
+        "2018": 13, "2019": 60, "2020": 27, "2021": 40,
+        "2022": 17, "2023": 34, "2024": 26, "2025": 12, "2026": 2
+      },
+      "total_db": 231,
+      "ori_counts_by_year": "TBD — run audit query below",
+      "ori_type": ["MediaObject"],
+      "ori_name_patterns": ["initiatiefvoorstel"],
+      "date_field": "last_discussed_at",
+      "api_queries": {
+        "by_name_pattern": {
+          "method": "POST",
+          "url": "https://api.openraadsinformatie.nl/v1/elastic/ori_rotterdam_20250629013104/_search",
+          "body": {
+            "size": 500,
+            "query": {
+              "bool": {
+                "must": [{"term": {"@type.keyword": "MediaObject"}}],
+                "should": [{"match": {"name": "initiatiefvoorstel"}}],
+                "minimum_should_match": 1
+              }
+            },
+            "_source": ["@id", "name", "url", "original_url", "last_discussed_at", "text", "content_type"]
+          }
+        }
+      }
+    },
+    {
+      "id": "motie",
+      "label": "Moties",
+      "description": "Council motions. Largely covered via meeting document bundles. ORI Report type has 232 formally classified moties (mostly 2025-2026).",
+      "db_classification": "motie",
+      "db_category": "meeting",
+      "priority": "P2",
+      "db_counts_by_year": {
+        "2018": 563, "2019": 1500, "2020": 1748, "2021": 1603,
+        "2022": 1119, "2023": 1381, "2024": 853, "2025": 106, "2026": 25
+      },
+      "total_db": 9398,
+      "note": "Well covered as parts of meeting doc bundles. WS11a should set doc_classification where name matches motie.",
+      "ori_type": ["Report"],
+      "ori_classification_field": "Moties",
+      "ori_formal_count": 232
+    },
+    {
+      "id": "amendement",
+      "label": "Amendementen",
+      "description": "Amendments to council proposals. Largely covered via meeting document bundles.",
+      "db_classification": "amendement",
+      "db_category": "meeting",
+      "priority": "P2",
+      "db_counts_by_year": {
+        "2018": 31, "2019": 53, "2020": 74, "2021": 89,
+        "2022": 53, "2023": 113, "2024": 54, "2025": 2, "2026": 0
+      },
+      "total_db": 469,
+      "note": "Coverage appears reasonable. Verify 2025 (only 2 — suspiciously low).",
+      "ori_type": ["Report"],
+      "ori_classification_field": "Amendementen",
+      "ori_formal_count": 86
+    },
+    {
+      "id": "raadsvoorstel",
+      "label": "Raadsvoorstellen",
+      "description": "Formal council proposals submitted by B&W or council committees.",
+      "db_classification": "raadsvoorstel",
+      "db_category": "meeting",
+      "priority": "P2",
+      "db_counts_by_year": {
+        "2018": 180, "2019": 289, "2020": 198, "2021": 194,
+        "2022": 287, "2023": 436, "2024": 253, "2025": 9, "2026": 3
+      },
+      "total_db": 1849,
+      "note": "Well covered. 2025 drop (9 docs) needs investigation — may be ingestion lag.",
+      "ori_type": ["Report"],
+      "ori_classification_field": "Raadsvoorstellen",
+      "ori_formal_count": 319
+    },
+    {
+      "id": "toezegging",
+      "label": "Toezeggingen",
+      "description": "Formal commitments made by B&W to the council.",
+      "db_classification": "toezegging",
+      "db_category": "meeting",
+      "priority": "P2",
+      "db_counts_by_year": {
+        "2018": 190, "2019": 372, "2020": 200, "2021": 255,
+        "2022": 283, "2023": 336, "2024": 263, "2025": 135, "2026": 24
+      },
+      "total_db": 2058,
+      "note": "Coverage looks good.",
+      "ori_type": ["Report"],
+      "ori_classification_field": "Toezeggingen",
+      "ori_formal_count": 431
+    }
+  ],
+
+  "ori_index_summary": {
+    "last_updated": "2025-06-29",
+    "total_documents": 70148,
+    "by_type": {
+      "MediaObject": 49724,
+      "AgendaItem": 13859,
+      "Report": 3859,
+      "Meeting": 1933,
+      "Membership": 308,
+      "Person": 296,
+      "ImageObject": 87,
+      "Organization": 82
+    },
+    "mediaobject_by_year": {
+      "2018": 3848, "2019": 6912, "2020": 5762, "2021": 5970,
+      "2022": 6074, "2023": 8224, "2024": 6600, "2025": 4507, "2026": 1684
+    }
+  },
+
+  "db_state_as_of": "2026-04-13",
+  "db_categories": {
+    "meeting": {
+      "2018": 3215, "2019": 6127, "2020": 5319, "2021": 5747,
+      "2022": 5522, "2023": 7463, "2024": 5039, "2025": 1779, "2026": 302
+    },
+    "financial": {
+      "2018": 283, "2019": 335, "2020": 276, "2021": 192,
+      "2022": 446, "2023": 620, "2024": 441, "2025": 101, "2026": 6
+    },
+    "municipal_doc": {
+      "2018": 223, "2019": 393, "2020": 144
+    }
+  },
+
+  "ingestion_pipeline": {
+    "entry_point": "services/document_processor.py",
+    "classifier": "pipeline/document_classifier.py",
+    "qdrant_collection": "notulen_chunks",
+    "embedding_model": "Qwen3-Embedding-8B via Nebius API",
+    "batch_size": 50,
+    "notes": [
+      "ORI text[] field contains pre-extracted text — use directly when available, skip OCR",
+      "Set doc_classification at upsert time, not post-process",
+      "Use ORI @id as stable external key to avoid re-ingestion",
+      "Checkpoint by ORI @id for resume — same pattern as WS7 ocr_recovery.py"
+    ]
+  },
+
+  "success_criteria": [
+    "schriftelijke_vraag: >= 90% ORI coverage for 2018-2026 (target ~2,900 docs added)",
+    "initiatiefnotitie: >= 90% ORI coverage",
+    "initiatiefvoorstel: >= 90% ORI coverage",
+    "All new docs embedded in Qdrant notulen_chunks",
+    "doc_classification set on all 111+522+120 existing docs (WS11a)",
+    "MCP tool zoek_moties returns schriftelijke vragen when queried by topic",
+    "Erik Verweij re-test passes"
+  ]
+}
