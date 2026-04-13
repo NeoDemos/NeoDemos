@@ -1,77 +1,140 @@
 {% extends "base.html" %}
 
+{% block body_class %}has-hero{% endblock %}
+
 {% block content %}
 
 <div class="search-container">
 
-    <!-- ── Hero with background image + rotating headline ── -->
-    {% if not user %}
+    <!-- ── Full-viewport hero: image + headline + search + examples ── -->
     <div class="landing-hero-image" style="background-image: -webkit-image-set(url('/static/images/skyline.jpg') 1x, url('/static/images/skyline@2x.jpg') 2x); background-image: image-set(url('/static/images/skyline.jpg') 1x, url('/static/images/skyline@2x.jpg') 2x);">
         <div class="landing-hero-overlay">
-            <h1 class="landing-hero-heading" id="rotating-headline"></h1>
-        </div>
-    </div>
-    {% else %}
-    <div class="landing-hero">
-        <h1 class="landing-headline">Zoek in raadsinformatie</h1>
-    </div>
-    {% endif %}
+            <div class="landing-hero-content">
+                <h1 class="landing-hero-heading" id="rotating-headline"></h1>
 
-    <!-- ── Search bar (above fold on all viewports) ── -->
-    <div class="search-box-wrapper">
-        <textarea id="search-input" class="search-input" placeholder="Stel uw eigen vraag..."
-            rows="1"></textarea>
+                <!-- Search bar ON the hero -->
+                <div class="search-box-wrapper">
+                    <textarea id="search-input" class="search-input" placeholder="Stel uw eigen vraag..."
+                        rows="1"></textarea>
+                    <button type="button" onclick="performSearch()" class="search-btn">Zoek</button>
+                    <div id="mention-menu" class="mention-menu">
+                        <div class="mention-menu-header">DIRECTE KOPPELING</div>
+                        <div id="mention-items"></div>
+                    </div>
+                </div>
 
-        <button onclick="performSearch()" class="search-btn">Zoek</button>
+                <div id="search-hint" class="search-hint" aria-live="polite"></div>
 
-        <!-- @mention Suggestion Menu -->
-        <div id="mention-menu" class="mention-menu">
-            <div class="mention-menu-header">DIRECTE KOPPELING</div>
-            <div id="mention-items">
-                <!-- Items injected by JS -->
+                <!-- Example queries ON the hero -->
+                <div class="example-queries">
+                    <span class="example-queries-label">Of probeer:</span>
+                    <button type="button" class="example-query" onclick="runExample(this)">Heeft het college haar beloftes waargemaakt?</button>
+                    <button type="button" class="example-query" onclick="runExample(this)">Hoe stemden partijen over woningbouw?</button>
+                    <button type="button" class="example-query" onclick="runExample(this)">Welke moties over klimaat zijn aangenomen sinds 2020?</button>
+                </div>
+
+                <!-- Credibility + trust ON the hero -->
+                <div class="hero-stats">
+                    <span>90.000+ documenten</span>
+                    <span class="hero-stats-sep">&middot;</span>
+                    <span>24 jaar</span>
+                    <span class="hero-stats-sep">&middot;</span>
+                    <span>Rotterdam</span>
+                    <span class="hero-stats-sep">&middot;</span>
+                    <span>Open brondata</span>
+                </div>
             </div>
         </div>
     </div>
 
-    <div id="search-hint" class="search-hint" aria-live="polite"></div>
-
-    <!-- Clickable example queries -->
-    <div class="example-queries">
-        <span class="example-queries-label">Of probeer:</span>
-        <button class="example-query" onclick="runExample(this)">Heeft het college haar beloftes waargemaakt?</button>
-        <button class="example-query" onclick="runExample(this)">Hoe stemden partijen over woningbouw?</button>
-        <button class="example-query" onclick="runExample(this)">Welke moties over klimaat zijn aangenomen sinds 2020?</button>
-    </div>
-
-    <!-- ── Demo answer (proof of capability, below search) ── -->
+    <!-- Demo answer (below hero, proof of capability) -->
     {% if not user %}
     <div class="demo-answer-card" id="demo-answer">
+        {% if demo_label %}
+        <div class="demo-answer-label">{{ demo_label }}</div>
+        {% endif %}
+
+        <!-- Desktop: always visible -->
         <div class="demo-answer-desktop">
-            <div class="demo-answer-question">{{ demo_question or 'Heeft het college haar beloftes waargemaakt?' }}</div>
-            <div class="ai-content">
-                {% if demo_answer %}
-                {{ demo_answer | safe }}
-                {% else %}
+            <div class="demo-answer-question">{{ demo_question }}</div>
+            <div class="ai-content" id="demo-answer-content">
+                {% if not demo_answer_markdown %}
                 <p>Op basis van het coalitieakkoord 2022-2026 en de jaarstukken van 2023 en 2024 zijn er duidelijke verschillen tussen belofte en uitvoering.</p>
                 <p><strong>Woningbouw:</strong> Het college beloofde 18.000 nieuwe woningen. De voortgangsrapportage laat zien dat er 12.400 vergunningen zijn verleend &mdash; op koers, maar de daadwerkelijke oplevering loopt achter.</p>
                 <p><strong>Klimaat:</strong> De ambitie voor 55% CO2-reductie in 2030 is bijgesteld naar 49% na de evaluatie van het Rotterdams Klimaatakkoord.</p>
                 <p>Bekijk de volledige analyse door zelf te zoeken.</p>
                 {% endif %}
             </div>
+            {% if demo_sources %}
+            <div class="demo-answer-sources" id="demo-sources-desktop"></div>
+            {% endif %}
         </div>
+
+        <!-- Mobile: collapsed behind tap target -->
         <details class="demo-answer-mobile">
             <summary>Bekijk voorbeeld</summary>
-            <div class="demo-answer-question">{{ demo_question or 'Heeft het college haar beloftes waargemaakt?' }}</div>
-            <div class="ai-content">
-                {% if demo_answer %}
-                {{ demo_answer | safe }}
-                {% else %}
+            <div class="demo-answer-question">{{ demo_question }}</div>
+            <div class="ai-content" id="demo-answer-content-mobile">
+                {% if not demo_answer_markdown %}
                 <p>Op basis van het coalitieakkoord 2022-2026 en de jaarstukken zijn er duidelijke verschillen tussen belofte en uitvoering.</p>
                 <p>Bekijk de volledige analyse door zelf te zoeken.</p>
                 {% endif %}
             </div>
         </details>
     </div>
+
+    {% if demo_answer_markdown %}
+    <script>
+    // Render the pre-cached demo answer using marked.js + citation bubbles
+    // Runs after marked.js is loaded (it's in <head> via CDN)
+    (function renderDemoAnswer() {
+        var rawMarkdown = {{ demo_answer_markdown | tojson }};
+        var sources = {{ demo_sources | tojson }};
+
+        if (!rawMarkdown || typeof marked === 'undefined') return;
+
+        marked.setOptions({ gfm: true, breaks: true });
+        var html = marked.parse(rawMarkdown);
+
+        // Inject citation bubbles (same logic as live search)
+        html = html.replace(/\[(#?[a-zA-Z0-9]+(?:,\s*#?[a-zA-Z0-9]+)*)\]/g, function(match, content) {
+            var citations = content.split(/,\s*/);
+            return citations.map(function(cit) {
+                var nStr = cit.replace('#', '').trim();
+                var n = parseInt(nStr, 10);
+                if (!isNaN(n) && n > 0 && sources && n <= sources.length) {
+                    var src = sources[n - 1];
+                    return '<a href="' + (src.url || '#') + '" target="_blank" class="citation-bubble" title="' + (src.name || '') + '">' + n + '</a>';
+                }
+                return cit;
+            }).join('');
+        });
+
+        // Inject into desktop content div
+        var desktopEl = document.getElementById('demo-answer-content');
+        if (desktopEl) desktopEl.innerHTML = html;
+
+        // Inject into mobile content div (same HTML)
+        var mobileEl = document.getElementById('demo-answer-content-mobile');
+        if (mobileEl) mobileEl.innerHTML = html;
+
+        // Render source list (desktop only)
+        if (sources && sources.length > 0) {
+            var srcEl = document.getElementById('demo-sources-desktop');
+            if (srcEl) {
+                var srcHtml = '<details class="demo-sources-details"><summary>Bronnen (' + sources.length + ')</summary><ul class="demo-sources-list">';
+                sources.forEach(function(src, i) {
+                    srcHtml += '<li><a href="' + (src.url || '#') + '" target="_blank">'
+                        + '<span class="citation-bubble">' + (i + 1) + '</span> '
+                        + (src.name || 'Document') + '</a></li>';
+                });
+                srcHtml += '</ul></details>';
+                srcEl.innerHTML = srcHtml;
+            }
+        }
+    })();
+    </script>
+    {% endif %}
     {% endif %}
 
     <!-- Search results area -->
@@ -100,9 +163,16 @@
                     </button>
                 </div>
 
-                <div id="ai-answer-content" class="ai-content">
-                    <!-- AI result markdown rendered here -->
-                </div>
+                <!-- Teaser: first paragraph only, always visible -->
+                <div id="ai-answer-teaser" class="ai-content ai-answer-teaser"></div>
+
+                <!-- Full answer: hidden until expanded -->
+                <div id="ai-answer-content" class="ai-content ai-answer-full" hidden></div>
+
+                <!-- Expand/collapse toggle -->
+                <button id="ai-expand-btn" class="ai-expand-btn" onclick="toggleAIExpand()" hidden>
+                    Bekijk volledige analyse &darr;
+                </button>
             </div>
         </div>
 
@@ -111,23 +181,6 @@
         </div>
     </div>
 
-    <!-- ── Element 3: Credibility line ── -->
-    <div class="credibility-line">
-        <span>90.000+ documenten</span>
-        <span class="credibility-separator">&middot;</span>
-        <span>24 jaar</span>
-        <span class="credibility-separator">&middot;</span>
-        <span>Rotterdam</span>
-        <span class="credibility-separator">&middot;</span>
-        <span>Open brondata</span>
-    </div>
-
-    <!-- ── Element 4: Trust line ── -->
-    <div class="trust-line">
-        <span>Europees gehost</span>
-        <span class="trust-separator">&middot;</span>
-        <span>Elke bewering herleidbaar naar het brondocument</span>
-    </div>
 
     <!-- Account nudge (hidden, shown after 3rd search for anonymous users) -->
     <div id="account-nudge" class="nudge-banner" hidden>
@@ -188,6 +241,163 @@
         }
     }
 
+    // ── AI search: always run for any query >= 5 chars ──
+    function shouldTriggerAI(query) {
+        return query.trim().length >= 5;
+    }
+
+    // Active SSE connection (so we can abort on new search)
+    let activeEventSource = null;
+    let aiExpandedState = false;
+
+    function toggleAIExpand() {
+        const full = document.getElementById('ai-answer-content');
+        const btn = document.getElementById('ai-expand-btn');
+        aiExpandedState = !aiExpandedState;
+        full.hidden = !aiExpandedState;
+        btn.innerHTML = aiExpandedState
+            ? 'Verberg volledige analyse &uarr;'
+            : 'Bekijk volledige analyse &darr;';
+        if (aiExpandedState) {
+            // Scroll document results into view after expand
+            document.getElementById('document-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    // ── AI Search via SSE ──
+    async function performAISearch(query) {
+        const aiContainer = document.getElementById('ai-deep-research');
+        const aiTeaser = document.getElementById('ai-answer-teaser');
+        const aiContent = document.getElementById('ai-answer-content');
+        const expandBtn = document.getElementById('ai-expand-btn');
+        const loadingSteps = document.getElementById('ai-loading-steps');
+        const headerTitle = document.getElementById('ai-header-title');
+        const copyBtn = document.getElementById('copy-word-btn');
+
+        // Check rate limit first
+        try {
+            const limitResp = await fetch('/api/search/limit');
+            const limitData = await limitResp.json();
+            if (!limitData.unlimited && limitData.remaining <= 0) {
+                aiContainer.hidden = false;
+                aiContent.innerHTML = `
+                    <div class="ai-rate-limit-notice">
+                        <p>U heeft uw maandelijkse AI-zoeklimiet bereikt (${limitData.total} zoekopdrachten).</p>
+                        <p>Maak een gratis account aan voor onbeperkt AI-zoeken.</p>
+                        <a href="/register" class="btn btn-accent">Gratis account aanmaken</a>
+                    </div>`;
+                headerTitle.textContent = 'AI-zoeklimiet bereikt';
+                return;
+            }
+        } catch (e) {
+            console.warn('Rate limit check failed:', e);
+        }
+
+        // Show AI loading state
+        aiContainer.hidden = false;
+        aiTeaser.innerHTML = '';
+        aiContent.innerHTML = '';
+        aiContent.hidden = true;
+        expandBtn.hidden = true;
+        aiExpandedState = false;
+        loadingSteps.innerHTML = '';
+        loadingSteps.hidden = false;
+        headerTitle.textContent = 'Analyse';
+        copyBtn.hidden = true;
+
+        // Close any existing SSE connection
+        if (activeEventSource) {
+            activeEventSource.close();
+            activeEventSource = null;
+        }
+
+        let answerBuffer = '';
+
+        const eventSource = new EventSource(`/api/search/stream?q=${encodeURIComponent(query)}`);
+        activeEventSource = eventSource;
+
+        eventSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+
+            switch (data.type) {
+                case 'status':
+                    // Add step to loading indicator
+                    const stepEl = document.createElement('li');
+                    stepEl.textContent = data.message;
+                    stepEl.classList.add('ai-step-active');
+                    // Mark previous steps as done
+                    loadingSteps.querySelectorAll('.ai-step-active').forEach(el => {
+                        el.classList.remove('ai-step-active');
+                        el.classList.add('ai-step-done');
+                    });
+                    stepEl.classList.add('ai-step-active');
+                    loadingSteps.appendChild(stepEl);
+                    break;
+
+                case 'chunk':
+                    // First chunk: hide loading steps, show teaser
+                    if (!answerBuffer) {
+                        loadingSteps.hidden = true;
+                    }
+                    answerBuffer += data.text;
+                    // While streaming: show raw text in teaser as a live preview
+                    marked.setOptions({ gfm: true, breaks: true });
+                    aiTeaser.innerHTML = marked.parse(answerBuffer);
+                    break;
+
+                case 'done':
+                    eventSource.close();
+                    activeEventSource = null;
+                    loadingSteps.hidden = true;
+
+                    if (data.error) {
+                        aiTeaser.innerHTML = `<p class="ai-error">${data.error}</p>`;
+                        break;
+                    }
+
+                    // Render full answer
+                    marked.setOptions({ gfm: true, breaks: true });
+                    const fullHtml = marked.parse(answerBuffer);
+                    aiContent.innerHTML = fullHtml;
+
+                    // Extract teaser: first paragraph only (up to first </p> tag)
+                    const firstParaEnd = fullHtml.indexOf('</p>');
+                    const teaserHtml = firstParaEnd > -1
+                        ? fullHtml.substring(0, firstParaEnd + 4)
+                        : fullHtml.substring(0, 400);
+                    aiTeaser.innerHTML = teaserHtml;
+
+                    // Show expand button if full answer is longer than the teaser
+                    if (fullHtml.length > teaserHtml.length + 50) {
+                        expandBtn.hidden = false;
+                    }
+                    copyBtn.hidden = false;
+
+                    // Log metadata
+                    if (data.tools_called) {
+                        console.log(`WS9: ${data.tools_called.length} tools, ${data.rounds} rounds, ${data.latency_ms}ms, $${data.cost_usd?.toFixed(4)}`);
+                    }
+                    break;
+
+                case 'error':
+                    eventSource.close();
+                    activeEventSource = null;
+                    loadingSteps.hidden = true;
+                    aiContent.innerHTML = `<p class="ai-error">${data.message}</p>`;
+                    break;
+            }
+        };
+
+        eventSource.onerror = function() {
+            eventSource.close();
+            activeEventSource = null;
+            loadingSteps.hidden = true;
+            if (!answerBuffer) {
+                aiContent.innerHTML = '<p class="ai-error">Verbinding verloren. De zoekresultaten hieronder zijn nog beschikbaar.</p>';
+            }
+        };
+    }
+
     // ── Main search function ──
     async function performSearch() {
         const query = document.getElementById('search-input').value.trim();
@@ -202,6 +412,12 @@
             return;
         }
 
+        // Close any existing SSE connection
+        if (activeEventSource) {
+            activeEventSource.close();
+            activeEventSource = null;
+        }
+
         // Hide landing elements once search starts
         var demoEl = document.getElementById('demo-answer');
         if (demoEl) demoEl.hidden = true;
@@ -212,8 +428,6 @@
         const loadingState = document.getElementById('search-loading-state');
         const loadingText = document.getElementById('search-loading-text');
         const loadingSteps = document.getElementById('ai-loading-steps');
-        const headerTitle = document.getElementById('ai-header-title');
-        const headerIcon = document.getElementById('ai-header-icon');
         const copyBtn = document.getElementById('copy-word-btn');
 
         resultsDiv.innerHTML = '';
@@ -225,8 +439,17 @@
         loadingSteps.innerHTML = '';
         loadingSteps.hidden = true;
 
-        loadingText.innerText = "Documenten en agendapunten doorzoeken...";
+        loadingText.innerText = "Documenten doorzoeken...";
 
+        // Determine if AI search should run in parallel
+        const triggerAI = shouldTriggerAI(query);
+
+        // Fire AI search in parallel (non-blocking) if detected
+        if (triggerAI) {
+            performAISearch(query);
+        }
+
+        // Run keyword search
         try {
             const savedParty = localStorage.getItem('neodemos_party') || 'GroenLinks-PvdA';
             const url = `/api/search?q=${encodeURIComponent(query)}&party=${encodeURIComponent(savedParty)}`;
@@ -240,86 +463,14 @@
             var searchCount = incrementSearchCount();
             checkNudges(searchCount);
 
-            const usedSourceIndices = new Set();
-
-            if (data.ai_answer) {
-                aiContainer.hidden = false;
-                marked.setOptions({ gfm: true, breaks: true });
-
-                let answerHtml = data.ai_answer;
-                let renderedHtml = marked.parse(answerHtml);
-
-                // Citation replacement logic - handles [1, 2] AND isolated numbers like "item 3."
-                // Pattern 1: [1, 2] or [#1] or [26bb000120]
-                renderedHtml = renderedHtml.replace(/\[(#?[a-zA-Z0-9]+(?:,\s*#?[a-zA-Z0-9]+)*)\]/g, (match, content) => {
-                    const citations = content.split(/,\s*/);
-                    return citations.map(cit => {
-                        const nStr = cit.replace('#', '').trim();
-                        let n = parseInt(nStr, 10);
-
-                        if (!isNaN(n) && n > 0 && data.sources && n <= data.sources.length) {
-                            usedSourceIndices.add(n);
-                            const source = data.sources[n - 1];
-                            return `<a href="${source.url || '#'}" target="_blank" class="citation-bubble" title="${source.name || ''}">${n}</a>`;
-                        }
-
-                        if (data.sources) {
-                            const sourceIdx = data.sources.findIndex(s => s.id === nStr);
-                            if (sourceIdx !== -1) {
-                                const nVal = sourceIdx + 1;
-                                usedSourceIndices.add(nVal);
-                                const source = data.sources[sourceIdx];
-                                return `<a href="${source.url || '#'}" target="_blank" class="citation-bubble" title="${source.name || ''}">${nVal}</a>`;
-                            }
-                        }
-
-                        return cit;
-                    }).join('');
-                });
-
-                // Pattern 2: Fallback for isolated numbers
-                renderedHtml = renderedHtml.replace(/(?:^|\s)(\d+)(?!\.\d)([\.\s,;]|$)/g, (match, nStr, tail) => {
-                    const n = parseInt(nStr, 10);
-                    if (!isNaN(n) && n > 0 && data.sources && n <= data.sources.length) {
-                        usedSourceIndices.add(n);
-                        const source = data.sources[n - 1];
-                        const leadingSpace = match.startsWith(' ') ? ' ' : '';
-                        return `${leadingSpace}<a href="${source.url || '#'}" target="_blank" class="citation-bubble" title="${source.name || ''}">${n}</a>${tail}`;
-                    }
-                    return match;
-                });
-
-                aiContent.innerHTML = renderedHtml;
-                copyBtn.hidden = false;
-            }
-
-            if (data.results.length === 0 && !data.ai_answer) {
+            if (data.results.length === 0 && !triggerAI) {
                 resultsDiv.innerHTML = '<div class="card"><p>Geen resultaten gevonden voor "' + query + '".</p></div>';
                 return;
             }
 
-            let html = '<h3 class="search-section-header">Gevonden Documenten</h3>';
-
-            if (usedSourceIndices.size > 0 && data.sources) {
-                html += '<div class="cited-sources-container">';
-                html += '<h4>Bronnen:</h4>';
-                html += '<ul>';
-
-                const sortedIndices = Array.from(usedSourceIndices).sort((a, b) => a - b);
-                sortedIndices.forEach(n => {
-                    const source = data.sources[n - 1];
-                    const url = source.url || '#';
-                    const name = source.name || `Document ${source.id}`;
-                    html += `<li>
-                                    <span class="citation-bubble cited-source-bubble">${n}</span>
-                                    <a href="${url}" target="_blank">${name}</a>
-                                </li>`;
-                });
-                html += '</ul></div>';
-            }
-
+            let html = '';
             if (data.results.length > 0) {
-                html += '<h4 class="search-section-subheader">Overige Resultaten:</h4>';
+                html += '<h3 class="search-section-header">Gevonden Documenten</h3>';
                 data.results.forEach(result => {
                     html += `
                     <div class="card search-result-item" onclick="location.href='/meeting/${result.meeting_id}'">
@@ -337,8 +488,7 @@
 
             resultsDiv.innerHTML = html;
         } catch (error) {
-            const loadingState = document.getElementById('search-loading-state');
-            if (loadingState) loadingState.hidden = true;
+            loadingState.hidden = true;
             console.error("Search error:", error);
             resultsDiv.innerHTML = '<p class="search-error">Er is een fout opgetreden bij het zoeken.</p>';
         }
