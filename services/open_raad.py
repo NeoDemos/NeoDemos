@@ -220,6 +220,137 @@ class OpenRaadService:
         except Exception as e:
             print(f"Error in get_documents_by_type: {e}")
             return []
+    async def fetch_docs_by_name_pattern(
+        self,
+        name_patterns: list[str],
+        year: int | None = None,
+        from_offset: int = 0,
+        page_size: int = 500,
+    ) -> tuple[list[Dict[str, Any]], int]:
+        """Paginated fetch of MediaObject docs matching one or more name patterns.
+
+        Used by WS11b to ingest schriftelijke vragen, initiatiefnotities, etc.
+
+        Returns (docs, total_hits) — caller paginates by incrementing from_offset
+        by page_size until len(docs) < page_size or from_offset >= total_hits.
+        """
+        index = await self.ensure_index()
+
+        should_clauses = [{"match": {"name": p}} for p in name_patterns]
+        must_clauses: list[dict] = [{"term": {"@type": "MediaObject"}}]
+        if year:
+            must_clauses.append({
+                "range": {
+                    "last_discussed_at": {
+                        "gte": f"{year}-01-01",
+                        "lte": f"{year}-12-31",
+                    }
+                }
+            })
+
+        query = {
+            "size": page_size,
+            "from": from_offset,
+            "query": {
+                "bool": {
+                    "must": must_clauses,
+                    "should": should_clauses,
+                    "minimum_should_match": 1,
+                }
+            },
+            "_source": [
+                "@id", "name", "url", "original_url",
+                "last_discussed_at", "text", "content_type",
+                "size_in_bytes", "was_generated_by",
+            ],
+        }
+
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                resp = await client.post(
+                    f"{self.BASE_URL}/{index}/_search", json=query
+                )
+                resp.raise_for_status()
+                data = resp.json()
+                total = data.get("hits", {}).get("total", {})
+                total_hits = total.get("value", 0) if isinstance(total, dict) else int(total)
+                docs = []
+                for hit in data.get("hits", {}).get("hits", []):
+                    src = hit.get("_source", {})
+                    text_parts = src.get("text", [])
+                    if isinstance(text_parts, list):
+                        full_text = "\n\n".join(t for t in text_parts if t)
+                    else:
+                        full_text = text_parts or ""
+                    docs.append({
+                        "ori_id": src.get("@id") or hit.get("_id"),
+                        "name": src.get("name") or "",
+                        "url": src.get("original_url") or src.get("url") or "",
+                        "last_discussed_at": src.get("last_discussed_at"),
+                        "text": full_text,
+                        "content_type": src.get("content_type") or "",
+                        "was_generated_by": src.get("was_generated_by"),
+                    })
+                return docs, total_hits
+        except Exception as e:
+            print(f"Error in fetch_docs_by_name_pattern (year={year}, offset={from_offset}): {e}")
+            return [], 0
+
+    async def fetch_docs_by_classification(
+        self,
+        classification_value: str,
+        from_offset: int = 0,
+        page_size: int = 500,
+    ) -> tuple[list[Dict[str, Any]], int]:
+        """Paginated fetch of Report-type docs by ORI classification field.
+
+        E.g. classification_value='Raadsvragen' fetches formally classified
+        schriftelijke vragen reports.  Complements fetch_docs_by_name_pattern.
+
+        Returns (docs, total_hits).
+        """
+        index = await self.ensure_index()
+
+        query = {
+            "size": page_size,
+            "from": from_offset,
+            "query": {"term": {"classification.keyword": classification_value}},
+            "sort": [{"start_date": {"order": "asc"}}],
+            "_source": [
+                "@id", "name", "classification", "start_date",
+                "description", "attachment", "has_organization_name",
+                "was_generated_by",
+            ],
+        }
+
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                resp = await client.post(
+                    f"{self.BASE_URL}/{index}/_search", json=query
+                )
+                resp.raise_for_status()
+                data = resp.json()
+                total = data.get("hits", {}).get("total", {})
+                total_hits = total.get("value", 0) if isinstance(total, dict) else int(total)
+                docs = []
+                for hit in data.get("hits", {}).get("hits", []):
+                    src = hit.get("_source", {})
+                    docs.append({
+                        "ori_id": src.get("@id") or hit.get("_id"),
+                        "name": src.get("name") or "",
+                        "url": "",
+                        "last_discussed_at": src.get("start_date"),
+                        "text": src.get("description") or "",
+                        "content_type": "application/pdf",
+                        "was_generated_by": src.get("was_generated_by"),
+                        "attachment_ids": src.get("attachment") or [],
+                        "classification": src.get("classification"),
+                    })
+                return docs, total_hits
+        except Exception as e:
+            print(f"Error in fetch_docs_by_classification ({classification_value}, offset={from_offset}): {e}")
+            return [], 0
+
     async def get_document_by_identifier(self, identifier: str) -> Optional[Dict[str, Any]]:
         """Search for a specific document by its municipal identifier (e.g. BB-number)"""
         index = await self.ensure_index()

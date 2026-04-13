@@ -13,12 +13,14 @@ Runs as an APScheduler job (every 15 min, after refresh) or manually:
     python -m services.document_processor --dry-run
 """
 
+import gc
 import hashlib
 import json
 import logging
 import os
 import sys
 import time
+from pathlib import Path
 
 import psycopg2
 from psycopg2.extras import RealDictCursor
@@ -111,14 +113,17 @@ def find_chunks_missing_tsvector(conn, limit: int = 5000) -> int:
 
 
 # ---------------------------------------------------------------------------
-# OCR recovery via Docling
+# Document recovery via Docling (classifier-routed)
 # ---------------------------------------------------------------------------
 
-def _attempt_ocr_recovery(conn, doc: dict) -> str | None:
-    """Re-OCR a garbled document using Docling. Returns clean text or None."""
+def _attempt_unified_recovery(conn, doc: dict, classification) -> str | None:
+    """Re-OCR a garbled document using Docling. Returns clean text or None.
+
+    Used for GARBLED_OCR and GARBLED_TABLE_RICH doc types.
+    """
     doc_id = doc["id"]
+    tmp_path = None
     try:
-        # Check if the source PDF URL is available
         cur = conn.cursor()
         cur.execute("SELECT url FROM documents WHERE id = %s", (doc_id,))
         row = cur.fetchone()
@@ -127,13 +132,19 @@ def _attempt_ocr_recovery(conn, doc: dict) -> str | None:
             return None
 
         url = row[0]
-        logger.info("[doc_processor] OCR recovery via Docling for %s", doc_id[:40])
+        logger.info("[doc_processor] Unified OCR recovery (mode=%s) for %s",
+                    classification.docling_mode, doc_id[:40])
 
         import tempfile
         import httpx
-        from docling.document_converter import DocumentConverter
 
-        # Download PDF
+        # Lazy imports from ocr_recovery (heavy module)
+        sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+        from scripts.ocr_recovery import (
+            normalize_text, quality_gate, backup_original, ensure_backup_table,
+        )
+        from pipeline.docling_converters import get_ocr_converter
+
         resp = httpx.get(url, follow_redirects=True, timeout=60,
                          headers={"User-Agent": "NeoDemos/1.0"}, verify=False)
         if resp.status_code != 200:
@@ -143,29 +154,139 @@ def _attempt_ocr_recovery(conn, doc: dict) -> str | None:
             tmp.write(resp.content)
             tmp_path = tmp.name
 
-        try:
-            converter = DocumentConverter()
-            result = converter.convert(tmp_path)
-            text = result.document.export_to_markdown()
-            if text and len(text) > len(doc.get("content", "")) * 0.5:
-                # Update the documents table with recovered text
-                cur = conn.cursor()
-                cur.execute(
-                    "UPDATE documents SET content = %s WHERE id = %s",
-                    (text, doc_id),
-                )
-                conn.commit()
-                cur.close()
-                logger.info("[doc_processor] OCR recovered %s: %d → %d chars",
-                            doc_id[:40], len(doc.get("content", "")), len(text))
-                return text
-        finally:
-            os.remove(tmp_path)
+        # Pick the right converter based on classification
+        if classification.docling_mode == "ocr":
+            converter = get_ocr_converter()
+        else:
+            from pipeline.docling_converters import get_layout_converter
+            converter = get_layout_converter()
+
+        result = converter.convert(tmp_path)
+        text = result.document.export_to_text()
+        if not text:
+            return None
+
+        text = normalize_text(text)
+        accepted, reason = quality_gate(doc.get("content", ""), text)
+        if not accepted:
+            logger.info("[doc_processor] Quality gate rejected recovery for %s: %s",
+                        doc_id[:40], reason)
+            return None
+
+        # Backup original, then update
+        ensure_backup_table(conn)
+        from scripts.ocr_recovery import compute_clean_pct
+        old_clean_pct = compute_clean_pct(doc.get("content", ""))
+        backup_original(conn, doc_id, doc.get("content", ""), old_clean_pct)
+
+        cur = conn.cursor()
+        cur.execute(
+            "UPDATE documents SET content = %s, ocr_quality = 'good' WHERE id = %s",
+            (text, doc_id),
+        )
+        conn.commit()
+        cur.close()
+        logger.info("[doc_processor] OCR recovered %s: %d → %d chars",
+                    doc_id[:40], len(doc.get("content", "")), len(text))
+        return text
 
     except Exception as e:
-        logger.warning("[doc_processor] OCR recovery failed for %s: %s", doc_id[:40], e)
+        logger.warning("[doc_processor] Unified recovery failed for %s: %s", doc_id[:40], e)
         conn.rollback()
-    return None
+        return None
+    finally:
+        if tmp_path:
+            try:
+                os.remove(tmp_path)
+            except OSError:
+                pass
+        gc.collect()
+
+
+def _attempt_layout_extraction(conn, doc: dict) -> str | None:
+    """Re-extract a table-rich document using Docling layout mode.
+
+    Used for TABLE_RICH doc types (not garbled, but may benefit from
+    better structure extraction).
+    """
+    doc_id = doc["id"]
+    tmp_path = None
+    try:
+        cur = conn.cursor()
+        cur.execute("SELECT url FROM documents WHERE id = %s", (doc_id,))
+        row = cur.fetchone()
+        cur.close()
+        if not row or not row[0]:
+            return None
+
+        url = row[0]
+        logger.info("[doc_processor] Layout extraction for %s", doc_id[:40])
+
+        import tempfile
+        import httpx
+
+        sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+        from scripts.ocr_recovery import (
+            compute_clean_pct, backup_original, ensure_backup_table,
+        )
+        from pipeline.docling_converters import get_layout_converter
+
+        resp = httpx.get(url, follow_redirects=True, timeout=60,
+                         headers={"User-Agent": "NeoDemos/1.0"}, verify=False)
+        if resp.status_code != 200:
+            return None
+
+        with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp:
+            tmp.write(resp.content)
+            tmp_path = tmp.name
+
+        converter = get_layout_converter()
+        result = converter.convert(tmp_path)
+        text = result.document.export_to_text()
+        if not text:
+            return None
+
+        old_content = doc.get("content", "")
+        old_clean_pct = compute_clean_pct(old_content)
+        new_clean_pct = compute_clean_pct(text)
+
+        # Quality gate: new text >= 110% length AND clean_pct doesn't decrease
+        if len(text) < len(old_content) * 1.1:
+            logger.info("[doc_processor] Layout extraction rejected for %s: "
+                        "new text too short (%d vs %d)", doc_id[:40], len(text), len(old_content))
+            return None
+        if new_clean_pct < old_clean_pct:
+            logger.info("[doc_processor] Layout extraction rejected for %s: "
+                        "clean_pct decreased (%.1f%% → %.1f%%)",
+                        doc_id[:40], old_clean_pct * 100, new_clean_pct * 100)
+            return None
+
+        # Backup original, then update
+        ensure_backup_table(conn)
+        backup_original(conn, doc_id, old_content, old_clean_pct)
+
+        cur = conn.cursor()
+        cur.execute(
+            "UPDATE documents SET content = %s WHERE id = %s",
+            (text, doc_id),
+        )
+        conn.commit()
+        cur.close()
+        logger.info("[doc_processor] Layout extracted %s: %d → %d chars",
+                    doc_id[:40], len(old_content), len(text))
+        return text
+
+    except Exception as e:
+        logger.warning("[doc_processor] Layout extraction failed for %s: %s", doc_id[:40], e)
+        conn.rollback()
+        return None
+    finally:
+        if tmp_path:
+            try:
+                os.remove(tmp_path)
+            except OSError:
+                pass
+        gc.collect()
 
 
 # ---------------------------------------------------------------------------
@@ -197,37 +318,31 @@ def process_documents(limit: int = 200, triggered_by: str = "apscheduler",
         conn.commit()
         cur.close()
 
-        # --- Phase 0: Detect garbled OCR in unchunked docs ---
-        #     If garbled, attempt Docling re-OCR to get clean text before chunking.
-        from services.scraper import _is_garbled_ocr
-        summary["ocr_recovered"] = 0
+        # --- Phase 0+1: Classify, recover/extract, and chunk ---
+        from pipeline.document_classifier import DocumentClassifier, DocType, CIVIC_DOC_TYPES
 
-        # --- Phase 1: Chunk unchunked documents ---
+        classifier = DocumentClassifier()
+        summary["ocr_recovered"] = 0
+        summary["layout_extracted"] = 0
+        summary["financial_skipped"] = 0
+
         docs = find_unchunked_documents(conn, limit=limit)
         if docs:
             logger.info("[doc_processor] Found %d unchunked documents", len(docs))
 
             if dry_run:
                 for d in docs:
-                    garbled = _is_garbled_ocr(d["content"][:5000])
-                    flag = " [GARBLED]" if garbled else ""
-                    print(f"  [DRY] {d['id'][:45]:<45} | {d['content_length']:>7} chars | {d['name'][:50]}{flag}")
+                    cur = conn.cursor()
+                    cur.execute("SELECT url FROM documents WHERE id = %s", (d["id"],))
+                    url_row = cur.fetchone()
+                    cur.close()
+                    doc_url = url_row[0] if url_row else None
+                    c = classifier.classify(d["id"], d["name"], d["content"], doc_url)
+                    print(f"  [DRY] {d['id'][:45]:<45} | {d['content_length']:>7} chars "
+                          f"| {c.doc_type.value:<20s} | {d['name'][:40]}")
                 summary["details"] = [{"id": d["id"], "chars": d["content_length"]} for d in docs]
                 return summary
 
-            # Check each doc for garbled OCR and attempt recovery
-            for doc in docs:
-                if _is_garbled_ocr(doc["content"][:5000]):
-                    recovered = _attempt_ocr_recovery(conn, doc)
-                    if recovered:
-                        doc["content"] = recovered
-                        summary["ocr_recovered"] += 1
-                        _log_event(conn, doc["id"], "ocr_recovered",
-                                   {"method": "docling", "old_len": doc["content_length"],
-                                    "new_len": len(recovered)},
-                                   triggered_by)
-
-            # Import SmartIngestor lazily (heavy deps)
             from pipeline.ingestion import SmartIngestor
             ingestor = SmartIngestor(db_url=_build_db_url(), chunk_only=True)
 
@@ -237,15 +352,72 @@ def process_documents(limit: int = 200, triggered_by: str = "apscheduler",
                 content = doc["content"]
                 meeting_id = doc.get("meeting_id")
                 category = doc.get("category") or "municipal_doc"
+
+                # Fetch URL for classification
+                cur = conn.cursor()
+                cur.execute("SELECT url FROM documents WHERE id = %s", (doc_id,))
+                url_row = cur.fetchone()
+                cur.close()
+                doc_url = url_row[0] if url_row else None
+
+                classification = classifier.classify(doc_id, doc_name, content, doc_url)
+                _log_event(conn, doc_id, "classified",
+                           {"type": classification.doc_type.value,
+                            "reason": classification.reason},
+                           triggered_by)
+
+                # Store pipeline classification — but never overwrite a civic type
+                # (e.g. schriftelijke_vraag) that was pre-set by WS11a/b.
+                cur = conn.cursor()
+                cur.execute("SELECT doc_classification FROM documents WHERE id = %s", (doc_id,))
+                existing_row = cur.fetchone()
+                existing_cls = existing_row[0] if existing_row else None
+                if existing_cls not in CIVIC_DOC_TYPES:
+                    cur.execute("UPDATE documents SET doc_classification = %s WHERE id = %s",
+                                (classification.doc_type.value, doc_id))
+                    conn.commit()
+                cur.close()
+
                 start = time.time()
 
+                if classification.doc_type in (DocType.FINANCIAL, DocType.FINANCIAL_TABLE_RICH):
+                    # Financial docs handled by WS2 dedicated pipeline — skip chunking
+                    summary["financial_skipped"] += 1
+                    _log_event(conn, doc_id, "financial_skipped",
+                               {"reason": "routed to WS2 financial pipeline"}, triggered_by)
+                    logger.info("[doc_processor] Skipped financial doc %s (WS2 pipeline)",
+                                doc_id[:40])
+                    continue
+
+                if classification.doc_type in (DocType.GARBLED_OCR, DocType.GARBLED_TABLE_RICH):
+                    recovered = _attempt_unified_recovery(conn, doc, classification)
+                    if recovered:
+                        content = recovered
+                        doc["content"] = recovered
+                        summary["ocr_recovered"] += 1
+                        _log_event(conn, doc_id, "ocr_recovered",
+                                   {"method": "docling",
+                                    "mode": classification.docling_mode,
+                                    "old_len": doc["content_length"],
+                                    "new_len": len(recovered)},
+                                   triggered_by)
+
+                elif classification.doc_type == DocType.TABLE_RICH:
+                    recovered = _attempt_layout_extraction(conn, doc)
+                    if recovered:
+                        content = recovered
+                        doc["content"] = recovered
+                        summary["layout_extracted"] += 1
+                        _log_event(conn, doc_id, "layout_extracted",
+                                   {"old_len": doc["content_length"],
+                                    "new_len": len(recovered)},
+                                   triggered_by)
+
+                # Chunk the document (all types except financial)
                 try:
                     ingestor.ingest_document(
-                        doc_id=doc_id,
-                        doc_name=doc_name,
-                        content=content,
-                        meeting_id=meeting_id,
-                        category=category,
+                        doc_id=doc_id, doc_name=doc_name, content=content,
+                        meeting_id=meeting_id, category=category,
                     )
                     elapsed = time.time() - start
                     detail = {
@@ -253,14 +425,14 @@ def process_documents(limit: int = 200, triggered_by: str = "apscheduler",
                         "name": doc_name[:100],
                         "content_length": len(content),
                         "elapsed_s": round(elapsed, 1),
+                        "classification": classification.doc_type.value,
                     }
                     summary["chunked"] += 1
                     summary["details"].append(detail)
                     _log_event(conn, doc_id, "document_chunked", detail, triggered_by)
-                    logger.info(
-                        "[doc_processor] Chunked %s (%d chars, %.1fs)",
-                        doc_id[:40], len(content), elapsed,
-                    )
+                    logger.info("[doc_processor] Chunked %s (%d chars, %.1fs, %s)",
+                                doc_id[:40], len(content), elapsed,
+                                classification.doc_type.value)
                 except Exception as e:
                     summary["chunk_errors"] += 1
                     _log_event(conn, doc_id, "chunk_failed",
@@ -290,7 +462,8 @@ def process_documents(limit: int = 200, triggered_by: str = "apscheduler",
                 SELECT dc.id, dc.document_id, dc.title, dc.content,
                        dc.chunk_index, dc.child_id, dc.chunk_type,
                        dc.section_topic, dc.key_entities,
-                       d.name AS doc_name, d.meeting_id, d.category
+                       d.name AS doc_name, d.meeting_id, d.category,
+                       d.municipality, d.doc_classification
                 FROM document_chunks dc
                 JOIN documents d ON d.id = dc.document_id
                 WHERE dc.embedding IS NULL
@@ -334,7 +507,10 @@ def process_documents(limit: int = 200, triggered_by: str = "apscheduler",
                         "chunk_type": row["chunk_type"] or "quote",
                         "title": row["title"] or "",
                         "content": row["content"],
+                        "municipality": row.get("municipality") or "rotterdam",
                     }
+                    if row.get("doc_classification"):
+                        payload["doc_classification"] = row["doc_classification"]
                     if row.get("section_topic"):
                         payload["section_topic"] = row["section_topic"]
                     if row.get("key_entities"):
@@ -416,6 +592,8 @@ if __name__ == "__main__":
           f"{result['chunk_errors']} errors, "
           f"{result.get('embedded', 0)} embedded, "
           f"{result.get('ocr_recovered', 0)} OCR recovered, "
+          f"{result.get('layout_extracted', 0)} layout extracted, "
+          f"{result.get('financial_skipped', 0)} financial skipped, "
           f"{result['tsvectors_built']} tsvectors built")
     if result["details"]:
         for d in result["details"][:20]:

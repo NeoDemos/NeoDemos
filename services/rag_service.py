@@ -1,10 +1,15 @@
 import asyncio
 import logging
+import os
 import threading
 from typing import List, Dict, Any, Optional, Union
 from dataclasses import dataclass
 
 from services.db_pool import get_connection
+
+# Virtual notulen killswitch — set to "false" to exclude AI-generated transcripts
+# from RAG results without deleting any data.
+INCLUDE_VIRTUAL_NOTULEN = os.getenv("INCLUDE_VIRTUAL_NOTULEN", "true").lower() in ("true", "1", "yes")
 
 logger = logging.getLogger(__name__)
 
@@ -343,6 +348,9 @@ class RAGService:
         # Merge filters
         combined_must = list(qdrant_filter.must or []) if qdrant_filter and hasattr(qdrant_filter, 'must') and qdrant_filter.must else []
         combined_must.extend(date_conditions)
+        if not INCLUDE_VIRTUAL_NOTULEN:
+            from qdrant_client.models import MatchValue
+            combined_must.append(FieldCondition(key="is_virtual_notulen", match=MatchValue(value=False)))
         merged_filter = Filter(must=combined_must) if combined_must else None
 
         results = self._retrieve_by_vector_similarity(
@@ -385,14 +393,24 @@ class RAGService:
             from qdrant_client.models import Filter, FieldCondition, DatetimeRange, SearchParams, QuantizationSearchParams
 
             query_filter = _override_filter
-            if query_filter is None and (date_from or date_to):
-                query_filter = Filter(must=[FieldCondition(
-                    key="start_date",
-                    range=DatetimeRange(
-                        gte=datetime.fromisoformat(date_from) if date_from else None,
-                        lte=datetime.fromisoformat(date_to) if date_to else None,
-                    )
-                )])
+            if query_filter is None:
+                must_conditions = []
+                if date_from or date_to:
+                    must_conditions.append(FieldCondition(
+                        key="start_date",
+                        range=DatetimeRange(
+                            gte=datetime.fromisoformat(date_from) if date_from else None,
+                            lte=datetime.fromisoformat(date_to) if date_to else None,
+                        )
+                    ))
+                if not INCLUDE_VIRTUAL_NOTULEN:
+                    from qdrant_client.models import MatchValue
+                    must_conditions.append(FieldCondition(
+                        key="is_virtual_notulen",
+                        match=MatchValue(value=False),
+                    ))
+                if must_conditions:
+                    query_filter = Filter(must=must_conditions)
 
             # Search in Qdrant collection with precision-tuned HNSW + quantization rescoring
             results_qdrant = _qdrant_client.query_points(
@@ -546,6 +564,12 @@ class RAGService:
 
             # Build optional filters
             type_filter = "AND dc.chunk_type = %s" if chunk_type else ""
+            # Virtual notulen killswitch — exclude AI-generated transcripts when disabled
+            vn_join = ""
+            vn_filter = ""
+            if not INCLUDE_VIRTUAL_NOTULEN:
+                vn_join = "JOIN documents vn_doc ON dc.document_id = vn_doc.id"
+                vn_filter = "AND vn_doc.category <> 'committee_transcript'"
             date_join = ""
             date_filter = ""
             if date_from or date_to:
@@ -577,9 +601,11 @@ class RAGService:
                                ts_rank(dc.text_search_enriched, {method}('dutch', %s) || {method}('simple', %s)) as similarity_score,
                                dc.child_id, dc.chunk_type
                         FROM document_chunks dc
+                        {vn_join}
                         {date_join}
                         WHERE dc.text_search_enriched @@ ({method}('dutch', %s) || {method}('simple', %s))
                         {type_filter}
+                        {vn_filter}
                         {date_filter}
                         ORDER BY similarity_score DESC
                         LIMIT %s

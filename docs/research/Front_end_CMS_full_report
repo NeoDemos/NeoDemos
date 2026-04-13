@@ -1,0 +1,753 @@
+# Visual CMS and design tools for a self-hosted Next.js stack
+
+**The short answer to your core question:** No single Mac desktop app lets you visually drag-and-drop edit a Next.js + Tailwind + shadcn/ui site and push changes live. Your best workflow is **Cursor (Mac app) + Claude Code (terminal) + your browser side-by-side** — describe changes to Claude Code in plain English, watch them appear on your live site via hot reload. For structured content editing (blog posts, council documents, motions), **Payload CMS v3's admin panel at `/admin`** is your visual interface. Below is the complete guide for both topics.
+
+---
+
+## Topic 1: Migrating to Payload CMS v3 — complete step-by-step
+
+### Installing Payload into an existing Next.js 15 project
+
+Payload CMS v3 is now at **version 3.82.1** (April 2026). Figma acquired Payload in June 2025, but development continues with weekly releases. Payload v3 runs embedded inside Next.js — it is not a separate server. Your Next.js app and CMS share one process, one deployment, one URL.
+
+**Step 1 — Install packages:**
+
+```bash
+pnpm add payload @payloadcms/next @payloadcms/richtext-lexical @payloadcms/db-postgres sharp graphql
+```
+
+All `@payloadcms/*` packages must be the same version. The PostgreSQL adapter (`@payloadcms/db-postgres`) uses Drizzle ORM internally — you do not install Drizzle separately.
+
+**Step 2 — Environment variables** (add to `.env`):
+
+```env
+DATABASE_URI="postgres://user:password@localhost:5432/your_database"
+PAYLOAD_SECRET="generate-with-openssl-rand-base64-32"
+NEXT_PUBLIC_SERVER_URL="https://yourdomain.com"
+```
+
+**Step 3 — Create `payload.config.ts`** at your project root (or `src/payload.config.ts`):
+
+```typescript
+import sharp from 'sharp'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { postgresAdapter } from '@payloadcms/db-postgres'
+import { buildConfig } from 'payload'
+import { Users } from './src/collections/Users'
+import { Pages } from './src/collections/Pages'
+import { Media } from './src/collections/Media'
+
+export default buildConfig({
+  editor: lexicalEditor(),
+  collections: [Users, Pages, Media],
+  secret: process.env.PAYLOAD_SECRET || '',
+  db: postgresAdapter({
+    pool: { connectionString: process.env.DATABASE_URI || '' },
+  }),
+  sharp,
+  admin: {
+    user: 'users',
+    meta: { titleSuffix: '- Civic Tech CMS' },
+  },
+  typescript: {
+    outputFile: 'src/payload-types.ts',
+  },
+})
+```
+
+**Step 4 — Add path alias** to `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "paths": {
+      "@payload-config": ["./payload.config.ts"]
+    }
+  }
+}
+```
+
+**Step 5 — Wrap your Next.js config** (`next.config.mjs`):
+
+```javascript
+import { withPayload } from '@payloadcms/next/withPayload'
+
+const nextConfig = {
+  // your existing config
+  output: 'standalone', // required for Docker
+}
+
+export default withPayload(nextConfig)
+```
+
+Your config file must use ESM format (`.mjs` extension or `"type": "module"` in `package.json`).
+
+**Step 6 — Create the (payload) route group.** This is the critical step. Copy the route group structure from [Payload's blank template](https://github.com/payloadcms/payload/tree/main/templates/blank/src/app/(payload)) into your `app/` directory:
+
+```
+app/
+├── (payload)/                      ← Payload admin + API
+│   ├── admin/
+│   │   └── [[...segments]]/
+│   │       ├── page.tsx            ← Admin panel pages
+│   │       └── not-found.tsx
+│   ├── api/
+│   │   └── [...slug]/
+│   │       └── route.ts           ← REST API
+│   ├── graphql/
+│   │   └── route.ts
+│   ├── custom.scss
+│   └── layout.tsx                 ← Payload root layout
+├── (frontend)/                     ← YOUR existing app (renamed)
+│   ├── layout.tsx                 ← Your original root layout
+│   ├── page.tsx
+│   └── ...all your existing routes
+```
+
+Move all your existing app files into a `(frontend)` route group. Parenthesized folder names don't appear in URLs — your pages keep their existing paths.
+
+The key files inside `(payload)` import from `@payloadcms/next` and should not be modified. Here is the admin page file:
+
+```tsx
+// app/(payload)/admin/[[...segments]]/page.tsx
+import config from '@payload-config'
+import { RootPage, generatePageMetadata } from '@payloadcms/next/views'
+import { importMap } from '../importMap'
+
+type Args = {
+  params: Promise<{ segments: string[] }>
+  searchParams: Promise<{ [key: string]: string | string[] }>
+}
+
+export const generateMetadata = ({ params, searchParams }: Args) =>
+  generatePageMetadata({ config, params, searchParams })
+
+const Page = ({ params, searchParams }: Args) =>
+  RootPage({ config, importMap, params, searchParams })
+
+export default Page
+```
+
+**Step 7 — Start dev and create your first user:**
+
+```bash
+pnpm dev
+```
+
+Navigate to `http://localhost:3000/admin`. Payload prompts you to create the first admin user. The admin panel, REST API (`/api/[collection]`), and your frontend all run on the same Next.js server.
+
+### PostgreSQL and Drizzle ORM configuration
+
+The adapter handles everything. In development, **push mode** is enabled by default — Payload auto-syncs your schema changes to the database using Drizzle's `db push`. For production, use migrations:
+
+```bash
+pnpm payload migrate:create --name initial_schema  # generates migration file
+pnpm payload migrate                                # runs pending migrations
+```
+
+You can access the underlying Drizzle client directly for custom queries:
+
+```typescript
+const payload = await getPayload({ config })
+const db = payload.db.drizzle        // full Drizzle client
+const tables = payload.db.tables     // all table definitions
+```
+
+Import Drizzle utilities from the adapter:
+
+```typescript
+import { eq, and } from '@payloadcms/db-postgres/drizzle'
+```
+
+### Collection definitions for civic tech content
+
+Here are production-ready collection configs for your use case. Each file goes in `src/collections/`.
+
+**Users (with authentication):**
+
+```typescript
+// src/collections/Users.ts
+import type { CollectionConfig } from 'payload'
+
+export const Users: CollectionConfig = {
+  slug: 'users',
+  auth: {
+    tokenExpiration: 7200,
+    maxLoginAttempts: 5,
+    lockTime: 600 * 1000,
+  },
+  admin: { useAsTitle: 'email', group: 'Admin' },
+  fields: [
+    {
+      name: 'role',
+      type: 'select',
+      required: true,
+      defaultValue: 'editor',
+      options: [
+        { label: 'Admin', value: 'admin' },
+        { label: 'Editor', value: 'editor' },
+        { label: 'Council Member', value: 'council_member' },
+      ],
+    },
+    { name: 'displayName', type: 'text' },
+  ],
+}
+```
+
+**Media (upload collection):**
+
+```typescript
+// src/collections/Media.ts
+export const Media: CollectionConfig = {
+  slug: 'media',
+  upload: {
+    staticDir: 'public/media',
+    mimeTypes: ['image/*', 'application/pdf'],
+    imageSizes: [
+      { name: 'thumbnail', width: 400, height: 300, crop: 'center' },
+      { name: 'card', width: 768, height: 1024, crop: 'center' },
+      { name: 'desktop', width: 1920, height: undefined },
+    ],
+    adminThumbnail: 'thumbnail',
+    focalPoint: true,
+  },
+  fields: [{ name: 'alt', type: 'text', required: true }],
+}
+```
+
+**Pages (with block-based layout builder):**
+
+```typescript
+// src/collections/Pages.ts
+import { Hero } from '../blocks/Hero'
+import { Content } from '../blocks/Content'
+import { CallToAction } from '../blocks/CallToAction'
+
+export const Pages: CollectionConfig = {
+  slug: 'pages',
+  admin: { useAsTitle: 'title', group: 'Content' },
+  versions: { drafts: { autosave: true }, maxPerDoc: 25 },
+  fields: [
+    { name: 'title', type: 'text', required: true },
+    { name: 'slug', type: 'text', required: true, unique: true,
+      admin: { position: 'sidebar' } },
+    {
+      name: 'layout',
+      type: 'blocks',
+      blocks: [Hero, Content, CallToAction],
+      required: true,
+    },
+  ],
+}
+```
+
+**Council Documents:**
+
+```typescript
+// src/collections/CouncilDocuments.ts
+export const CouncilDocuments: CollectionConfig = {
+  slug: 'council-documents',
+  admin: { useAsTitle: 'title', group: 'Civic Data' },
+  versions: true,
+  fields: [
+    { name: 'title', type: 'text', required: true },
+    {
+      name: 'documentType', type: 'select', required: true,
+      options: [
+        { label: 'Meeting Minutes', value: 'minutes' },
+        { label: 'Agenda', value: 'agenda' },
+        { label: 'Resolution', value: 'resolution' },
+        { label: 'Ordinance', value: 'ordinance' },
+        { label: 'Report', value: 'report' },
+      ],
+    },
+    { name: 'meetingDate', type: 'date', required: true },
+    { name: 'body', type: 'richText' },
+    { name: 'relatedMotions', type: 'relationship', relationTo: 'motions', hasMany: true },
+    {
+      name: 'attachments', type: 'array',
+      fields: [
+        { name: 'file', type: 'upload', relationTo: 'media' },
+        { name: 'description', type: 'text' },
+      ],
+    },
+    { name: 'sourceUrl', type: 'text',
+      admin: { description: 'Original URL if scraped' } },
+  ],
+}
+```
+
+**Motions:**
+
+```typescript
+// src/collections/Motions.ts
+export const Motions: CollectionConfig = {
+  slug: 'motions',
+  admin: { useAsTitle: 'title', group: 'Civic Data' },
+  fields: [
+    { name: 'title', type: 'text', required: true },
+    { name: 'motionNumber', type: 'text', unique: true },
+    {
+      name: 'status', type: 'select', required: true,
+      options: ['proposed', 'discussion', 'passed', 'rejected', 'tabled', 'withdrawn'],
+    },
+    { name: 'description', type: 'richText' },
+    { name: 'proposedBy', type: 'text' },
+    { name: 'dateProposed', type: 'date' },
+    { name: 'dateDecided', type: 'date' },
+    { name: 'councilDocument', type: 'relationship', relationTo: 'council-documents' },
+    {
+      name: 'votes', type: 'group',
+      fields: [
+        { name: 'yea', type: 'number', defaultValue: 0 },
+        { name: 'nay', type: 'number', defaultValue: 0 },
+        { name: 'abstain', type: 'number', defaultValue: 0 },
+      ],
+    },
+  ],
+}
+```
+
+**Investigations:**
+
+```typescript
+// src/collections/Investigations.ts
+export const Investigations: CollectionConfig = {
+  slug: 'investigations',
+  admin: { useAsTitle: 'title', group: 'Civic Data' },
+  versions: { drafts: true },
+  fields: [
+    { name: 'title', type: 'text', required: true },
+    { name: 'slug', type: 'text', required: true, unique: true },
+    { name: 'summary', type: 'textarea' },
+    { name: 'content', type: 'richText' },
+    {
+      name: 'investigationStatus', type: 'select',
+      options: ['in_progress', 'published', 'archived'],
+      defaultValue: 'in_progress',
+    },
+    { name: 'author', type: 'relationship', relationTo: 'users' },
+    { name: 'relatedMotions', type: 'relationship', relationTo: 'motions', hasMany: true },
+    { name: 'relatedDocuments', type: 'relationship', relationTo: 'council-documents', hasMany: true },
+    { name: 'publishedDate', type: 'date' },
+  ],
+}
+```
+
+### Block-based page builder for non-developers
+
+Blocks are the page builder primitive. Each block is a reusable content type that editors can add, reorder, and configure in the admin panel without touching code.
+
+```typescript
+// src/blocks/Hero.ts
+import { Block } from 'payload'
+
+export const Hero: Block = {
+  slug: 'hero',
+  labels: { singular: 'Hero Section', plural: 'Hero Sections' },
+  fields: [
+    { name: 'heading', type: 'text', required: true },
+    { name: 'subheading', type: 'text' },
+    { name: 'backgroundImage', type: 'upload', relationTo: 'media' },
+    {
+      name: 'cta', type: 'group',
+      fields: [
+        { name: 'label', type: 'text' },
+        { name: 'href', type: 'text' },
+      ],
+    },
+  ],
+}
+
+// src/blocks/Content.ts
+export const Content: Block = {
+  slug: 'content',
+  fields: [
+    { name: 'richText', type: 'richText' },
+    {
+      name: 'columns', type: 'select',
+      options: [
+        { label: 'One Column', value: 'one' },
+        { label: 'Two Columns', value: 'two' },
+      ],
+    },
+  ],
+}
+
+// src/blocks/CallToAction.ts
+export const CallToAction: Block = {
+  slug: 'cta',
+  fields: [
+    { name: 'heading', type: 'text', required: true },
+    { name: 'description', type: 'textarea' },
+    { name: 'buttonText', type: 'text' },
+    { name: 'buttonLink', type: 'text' },
+    { name: 'style', type: 'select', options: ['primary', 'secondary', 'outline'] },
+  ],
+}
+```
+
+On the frontend, map blocks to shadcn/ui components:
+
+```tsx
+// app/(frontend)/[slug]/page.tsx
+import { getPayload } from 'payload'
+import config from '@payload-config'
+import { HeroBlock } from '@/components/blocks/HeroBlock'
+import { ContentBlock } from '@/components/blocks/ContentBlock'
+import { CTABlock } from '@/components/blocks/CTABlock'
+
+const blockComponents = {
+  hero: HeroBlock,
+  content: ContentBlock,
+  cta: CTABlock,
+}
+
+export default async function Page({ params }: { params: { slug: string } }) {
+  const payload = await getPayload({ config })
+  const result = await payload.find({
+    collection: 'pages',
+    where: { slug: { equals: params.slug } },
+  })
+  const page = result.docs[0]
+
+  return (
+    <>
+      {page.layout.map((block, i) => {
+        const Component = blockComponents[block.blockType]
+        return Component ? <Component key={i} {...block} /> : null
+      })}
+    </>
+  )
+}
+```
+
+Each block component uses shadcn/ui:
+
+```tsx
+// src/components/blocks/HeroBlock.tsx
+import { Button } from '@/components/ui/button'
+
+export function HeroBlock({ heading, subheading, cta, backgroundImage }) {
+  return (
+    <section className="relative py-24 text-center">
+      <h1 className="text-5xl font-bold">{heading}</h1>
+      <p className="text-xl mt-4 text-muted-foreground">{subheading}</p>
+      {cta?.label && (
+        <Button asChild size="lg" className="mt-8">
+          <a href={cta.href}>{cta.label}</a>
+        </Button>
+      )}
+    </section>
+  )
+}
+```
+
+**shadcn/ui integrates seamlessly** with Payload's block system because blocks define *data* and your React components define *presentation*. The community project **shadcnblocks.com/payload-cms** offers dozens of pre-built shadcn blocks upgraded to Payload CMS-ready configurations. Payload also published an official guide for setting up Tailwind CSS and shadcn/ui alongside Payload — the key is adjusting the dark mode selector to `[data-theme='dark']` (which Payload's admin panel uses) in your Tailwind config.
+
+### Live preview, drafts, and versioning
+
+Enable drafts on any collection with `versions: { drafts: { autosave: true } }`. This adds a `_status` field (`draft` or `published`). Editors can save incomplete work without publishing.
+
+Configure live preview in `payload.config.ts`:
+
+```typescript
+admin: {
+  livePreview: {
+    url: ({ data }) => `${process.env.NEXT_PUBLIC_SERVER_URL}/${data.slug}`,
+    collections: ['pages', 'posts'],
+    breakpoints: [
+      { label: 'Mobile', width: 375, height: 667 },
+      { label: 'Tablet', width: 768, height: 1024 },
+      { label: 'Desktop', width: 1440, height: 900 },
+    ],
+  },
+},
+```
+
+Live preview renders an iframe in the admin panel showing your frontend. Every edit triggers a `window.postMessage` event that refreshes the preview in real time.
+
+### Hooks for integrating with your FastAPI backend
+
+Payload hooks let you pull or push data to external systems on every CRUD operation:
+
+```typescript
+// Example: enrich council documents with RAG data from FastAPI
+hooks: {
+  beforeChange: [
+    async ({ data, req }) => {
+      if (data.sourceUrl) {
+        const res = await fetch(
+          `${process.env.FASTAPI_URL}/api/enrich`,
+          { method: 'POST', body: JSON.stringify({ url: data.sourceUrl }),
+            headers: { 'Content-Type': 'application/json' } }
+        )
+        const enriched = await res.json()
+        data.summary = enriched.summary
+        data.tags = enriched.tags
+      }
+      return data
+    },
+  ],
+  afterChange: [
+    async ({ doc, req, context }) => {
+      if (context.skipSync) return doc
+      // Push to FastAPI RAG indexer
+      await fetch(`${process.env.FASTAPI_URL}/api/index`, {
+        method: 'POST',
+        body: JSON.stringify({ id: doc.id, content: doc.body }),
+        headers: { 'Content-Type': 'application/json' },
+      })
+      return doc
+    },
+  ],
+},
+```
+
+For querying your external RAG PostgreSQL database, create a separate connection pool:
+
+```typescript
+import { Pool } from 'pg'
+const ragPool = new Pool({ connectionString: process.env.RAG_DATABASE_URL })
+// Use in hooks or custom endpoints
+const result = await ragPool.query('SELECT * FROM embeddings WHERE ...')
+```
+
+### SEO plugin and Dutch language support
+
+```bash
+pnpm add @payloadcms/plugin-seo
+```
+
+```typescript
+import { seoPlugin } from '@payloadcms/plugin-seo'
+import { nl } from '@payloadcms/translations/languages/nl'
+import { en } from '@payloadcms/translations/languages/en'
+
+export default buildConfig({
+  plugins: [
+    seoPlugin({
+      collections: ['pages', 'posts', 'investigations'],
+      tabbedUI: true,
+      generateTitle: ({ doc }) => `${doc.title} | YourSite`,
+      generateURL: ({ doc }) => `${process.env.NEXT_PUBLIC_SERVER_URL}/${doc.slug}`,
+    }),
+  ],
+  // Admin UI in Dutch
+  i18n: {
+    supportedLanguages: { en, nl },
+    fallbackLanguage: 'nl',
+  },
+  // Content localization (field-level translations)
+  localization: {
+    locales: [
+      { label: 'Nederlands', code: 'nl' },
+      { label: 'English', code: 'en' },
+    ],
+    defaultLocale: 'nl',
+    fallback: true,
+  },
+})
+```
+
+Mark individual fields as `localized: true` to enable per-language content. Payload's admin panel ships with **30+ languages** including Dutch out of the box.
+
+For sitemaps, use Next.js native `app/sitemap.ts`:
+
+```typescript
+import { getPayload } from 'payload'
+import config from '@payload-config'
+
+export default async function sitemap() {
+  const payload = await getPayload({ config })
+  const pages = await payload.find({ collection: 'pages', limit: 0 })
+  const url = process.env.NEXT_PUBLIC_SERVER_URL
+
+  return [
+    { url: `${url}/`, lastModified: new Date(), priority: 1.0 },
+    ...pages.docs.map(({ slug, updatedAt }) => ({
+      url: `${url}/${slug}`,
+      lastModified: new Date(updatedAt),
+    })),
+  ]
+}
+```
+
+### Docker setup for Hetzner CCX33
+
+**Dockerfile (multi-stage, production-ready):**
+
+```dockerfile
+FROM node:20-alpine AS deps
+WORKDIR /app
+COPY package.json pnpm-lock.yaml ./
+RUN corepack enable && pnpm install --frozen-lockfile
+
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
+RUN corepack enable && pnpm run build
+
+FROM node:20-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 payload
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+RUN mkdir -p /app/public/media && chown -R payload:nodejs /app/public/media
+USER payload
+EXPOSE 3000
+CMD ["node", "server.js"]
+```
+
+**Docker Compose:**
+
+```yaml
+version: "3.8"
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - media:/app/public/media
+    environment:
+      DATABASE_URI: postgres://payload:${POSTGRES_PASSWORD}@postgres:5432/payload
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+      NEXT_PUBLIC_SERVER_URL: https://yourdomain.com
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: payload
+      POSTGRES_USER: payload
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U payload"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  media:
+  pgdata:
+```
+
+Your **CCX33 (8 vCPU, 32 GB RAM)** is more than sufficient — Payload needs roughly 1 GB RAM. Add Nginx or Traefik as a reverse proxy with Let's Encrypt for HTTPS.
+
+### How Payload compares to WordPress for content management
+
+Payload's admin panel is **clean, fast, and structured** — field-based forms with clear relationships between content types. A non-developer can create pages using the block builder, manage drafts, upload media, and handle multilingual content without touching code. However, **WordPress is easier to start with independently** because it has 60,000+ plugins, a visual Gutenberg editor, and decades of tutorials. Payload requires a developer (or Claude Code) for initial setup and customization, but once configured, the editing experience is more structured and less prone to the plugin bloat and security vulnerabilities that plague WordPress. Payload's admin loads in under a second versus WordPress's typical 180-250ms+ TTFB with caching. The trade-off: Payload has a smaller plugin ecosystem (~hundreds vs. tens of thousands) and fewer visual themes.
+
+### Common migration pitfalls
+
+- **All `@payloadcms/*` packages must be the exact same version** — mixing causes runtime errors
+- **Build requires database access** by default; set `PAYLOAD_SKIP_DB_CONNECT=true` for Docker builds without DB access
+- **`output: 'standalone'` is required** in `next.config.mjs` for Docker deployments
+- **`afterRead` hooks run on every read** — avoid expensive API calls there; prefer `afterChange` hooks for syncing
+- **Use the Local API** (`payload.find()`) in server components — it has zero HTTP overhead compared to the REST API
+- **Custom components are Server Components by default** in v3; add `'use client'` for interactive components
+
+---
+
+## Topic 2: Mac desktop apps for visual web design
+
+### The honest answer to your core question
+
+**"Which Mac application do I open when I want to visually design and edit my website's pages, and have those changes appear on my live self-hosted site?"**
+
+Unlike WordPress or Squarespace, a Next.js + Payload CMS + Tailwind + shadcn/ui stack is a **code-first architecture**. No single Mac desktop app provides a Squarespace-like visual editor that directly edits and deploys a Next.js project. Your visual editing interface is a combination of: **Payload CMS admin panel** (for content), **Claude Code** (for layout and design changes via natural language), and **your browser** (for seeing the result). Below is the detailed analysis of every tool you asked about.
+
+### Tools that can directly edit Next.js project files
+
+Only a handful of tools can open and meaningfully edit `.tsx` files in a Next.js project:
+
+**Cursor** ($20/month Pro) is the strongest recommendation for your workflow. It is a VS Code fork with deep AI integration that complements Claude Code perfectly. Connect to your Hetzner server via Remote SSH, edit files with full Tailwind CSS IntelliSense, and use Cursor's AI for quick inline fixes while using Claude Code for larger architectural changes. **Both tools can work on the same project simultaneously.** Cursor sees code, not rendered pages — you still view your site in a browser. The free Hobby tier provides 2,000 completions/month and 50 slow premium requests.
+
+**VS Code** (free) provides the same core file-editing capabilities as Cursor, with the official Tailwind CSS IntelliSense extension for autocomplete and hover previews. Remote SSH editing works excellently. Cursor is recommended over VS Code for this use case because it includes all VS Code functionality plus AI assistance, but if cost is a concern, VS Code is a strong free alternative.
+
+**Nova by Panic** ($99 first year, $49/year renewal) is a Mac-native code editor with **best-in-class built-in SSH/SFTP** support — you can browse, edit, and auto-upload files to your Hetzner server on save. It has native JSX/TSX syntax support and a Tailwind CSS extension for completions. However, it is purely a code editor with a preview pane — no visual design capabilities, no AI coding assistance, and a much smaller extension ecosystem than VS Code. Choose Nova only if you strongly value native Mac design and built-in SFTP over AI features.
+
+**WebStorm** (free for non-commercial use, $149/year commercial) offers excellent built-in Tailwind CSS v4 support and remote development via JetBrains Gateway. It provides zero visual/WYSIWYG editing. Its advanced refactoring tools are largely redundant when Claude Code handles your development. Not recommended for this use case.
+
+### Tools that produce separate output requiring manual integration
+
+**Figma** (free tier available, Pro at $12/month) is the industry-standard design tool. It cannot edit your codebase — it produces visual mockups that must be converted to code. The Figma-to-code pipeline has improved significantly:
+
+- **Anima** ($24/seat/month) generates React + Tailwind CSS code from Figma designs with clean, readable output
+- **Locofy** ($33-100/month) outputs Next.js components with Tailwind and file-based routing
+- **Builder.io Visual Copilot** converts Figma designs to React/Next.js code in one click
+- **Figma Dev Mode** provides CSS inspection, measurements, and now integrates with AI coding agents via MCP server
+
+For a solo non-developer using Claude Code, the Figma workflow adds complexity: design → export → paste into project → refine. A more efficient approach is describing what you want directly to Claude Code. Figma is useful if you think visually and want to mock up layouts before building, but it is an extra step, not a direct pipeline.
+
+**Sketch** ($120 one-time Mac license) has limited code export capabilities compared to Figma — only a theme-token-to-Tailwind-config plugin exists. No direct React code generation. Figma has comprehensively won the design tool market for developer workflows, and Sketch's smaller plugin ecosystem makes it the inferior choice for this stack. Not recommended.
+
+### Tools that cannot work with Next.js at all
+
+**Pinegrow Web Editor** ($12/month desktop app) has excellent Tailwind CSS visual editing — but only for static HTML files. It cannot open or understand React/JSX/TSX files. However, **Piny**, Pinegrow's newer VS Code/Cursor extension (launched 2025, free tier available), can visually edit Tailwind classes directly in JSX/TSX files within your IDE. This is the closest thing to a visual Tailwind editor that works with actual React code. It is still new and maturing but worth watching.
+
+**RapidWeaver Elements** (~$119) builds standalone websites using Tailwind CSS internally and publishes via FTP/SFTP. It produces its own HTML structure and cannot open, read, or interact with an existing Next.js project in any way. Not suitable.
+
+**Blocs** ($113-$180 one-time) produces static Bootstrap-based HTML websites. Uses Bootstrap, not Tailwind. Cannot work with existing codebases. Wrong framework, wrong output format. Not suitable.
+
+**Whisk** (inexpensive, by Tumult) is a minimally maintained lightweight HTML editor with live preview. No JSX/TSX awareness, no Tailwind support, no remote connectivity. Vastly inferior to VS Code. Not suitable.
+
+**Tumult Hype** ($50-$100 one-time) creates HTML5 animations with a timeline editor. Its output is standalone HTML/CSS/JS bundles that have no relationship to React components, Tailwind CSS, or modern frameworks. Only useful if you need a specific standalone animation embedded via iframe. Not suitable for page design.
+
+### Builder.io as a visual page editor alongside Payload CMS
+
+**Builder.io** (free tier, paid from ~$19/month) is the only tool that genuinely answers your core question — it provides a **drag-and-drop visual page builder** on top of your existing Next.js project. You register your React/shadcn components with Builder.io, and then anyone can compose pages visually in a browser-based editor. Published changes appear on your live site automatically.
+
+It can coexist with Payload CMS: **Payload manages structured data** (council documents, motions, blog posts) while **Builder.io manages visual page layouts** (homepage, landing pages, marketing content). However, running two CMSs adds significant complexity — two systems to learn, two content sources to manage, and an external dependency for page content. For a solo operator, this is likely overkill when Payload's block-based page builder already provides substantial flexibility for page composition.
+
+Builder.io is entirely web-based — there is no Mac desktop app. You access it through your browser.
+
+### Comparison matrix
+
+| Tool | Edits Next.js files | Tailwind CSS | Remote server | Visual design | Pricing | Recommended |
+|---|---|---|---|---|---|---|
+| **Cursor** | ✅ Direct JSX/TSX | ✅ Excellent | ✅ SSH | ❌ Code only | Free–$20/mo | **✅ Yes** |
+| **VS Code** | ✅ Direct JSX/TSX | ✅ Excellent | ✅ SSH | ❌ Code only | Free | ✅ Yes (free alternative) |
+| **Payload CMS admin** | N/A (content API) | N/A | ✅ Built-in | ✅ Block builder | Free (included) | **✅ Yes** |
+| **Builder.io** | ❌ External content | Indirect | N/A (web-based) | ✅ Drag-and-drop | Free–$19+/mo | ⚠️ Maybe (adds complexity) |
+| **Figma** | ❌ Design only | Via plugins | N/A | ✅ Full visual | Free–$15/mo | ⚠️ Maybe (for mockups) |
+| **Piny** (VS Code ext) | ✅ Direct JSX/TSX | ✅ Visual controls | ⚠️ Via Remote-SSH | ⚠️ Tailwind only | Free–paid | ⚠️ Promising, still new |
+| **Nova** | ✅ Direct JSX/TSX | ✅ Via extension | ✅ Best-in-class SFTP | ❌ Code only | $99/yr | ⚠️ Only if you prefer Mac-native |
+| **Pinegrow desktop** | ❌ HTML only | ✅ Excellent | ❌ No SSH/FTP | ✅ Visual HTML | $12/mo | ❌ No |
+| **WebStorm** | ✅ Direct JSX/TSX | ✅ Built-in | ✅ Gateway/SSH | ❌ Code only | Free–$149/yr | ❌ Redundant with Claude Code |
+| **Sketch** | ❌ Design only | ⚠️ Theme export only | ❌ None | ✅ Full visual | $120 one-time | ❌ Figma is better |
+| **RapidWeaver** | ❌ Own format | Internal only | ✅ FTP/SFTP | ✅ Full visual | ~$119 | ❌ No |
+| **Blocs** | ❌ Own format | ❌ Bootstrap | ⚠️ Basic | ✅ Full visual | $113–$180 | ❌ No |
+| **Hype** | ❌ Animations only | ❌ None | ❌ None | ✅ Animation | $50–$100 | ❌ No |
+| **Whisk** | ⚠️ No JSX awareness | ❌ None | ❌ None | ❌ Code only | Low cost | ❌ No |
+
+### The definitive recommendation for your setup
+
+Your daily workflow should involve **three windows**:
+
+1. **Your browser** open to `https://yourdomain.com/admin` — this is Payload CMS's admin panel where you create and edit content (pages, posts, council documents, motions, investigations) using the block-based page builder with live preview. This is your primary "visual" content editing tool. No code required.
+
+2. **Your browser** open to `https://yourdomain.com` — your live site, showing the result of your changes in real time via hot module replacement during development.
+
+3. **Cursor** (Mac app, $20/month) connected via SSH to your Hetzner server, with **Claude Code running in its integrated terminal**. When you want to change how something *looks* (layout, design, components, styling), describe it to Claude Code: *"Make the hero section background a gradient from blue to purple, increase the heading font size, and add a shadow to the CTA button."* Claude Code edits the actual Tailwind/shadcn/React files. Your browser refreshes automatically.
+
+This three-window setup gives you: structured content management without code (Payload admin), natural-language design changes (Claude Code), visual code review and small tweaks (Cursor), and instant visual feedback (browser). **No additional Mac desktop application is needed.** The traditional visual web design tools (Pinegrow, RapidWeaver, Blocs) were built for a pre-React, pre-component world and cannot meaningfully interact with a modern Next.js stack. The AI-powered workflow of Claude Code + Payload CMS replaces what those tools used to provide — and does it better for your specific setup.
+
+## Conclusion
+
+Payload CMS v3 embedded in Next.js transforms your server into a full content management platform with a clean admin panel, block-based page building, draft/publish workflow, and live preview — all running in a single Docker container on your Hetzner CCX33. The civic tech collections (council documents, motions, investigations) map naturally to Payload's relational collection model, and hooks provide seamless integration with your FastAPI backend for RAG enrichment and data syncing.
+
+The Mac desktop visual design tool landscape reveals a fundamental truth: **the era of visual-editor-to-live-site tools ended with the shift to component-based frameworks**. No desktop app in 2026 provides a Squarespace-like experience for a Next.js codebase. The modern equivalent is your CMS admin panel (Payload) for content, plus an AI coding assistant (Claude Code) for design — which is actually more powerful, since you can describe any visual change in words rather than being constrained by a drag-and-drop interface's built-in options. Piny (Pinegrow's VS Code extension for visual Tailwind editing in JSX) is the most promising emerging tool to watch for bridging this gap, but the Claude Code + Cursor + Payload admin workflow is the most practical and capable approach available today.

@@ -1,7 +1,7 @@
 # WS8c — Calendar Redesign
 
-> **Status:** `not started`
-> **Owner:** `unassigned`
+> **Status:** `done` — shipped 2026-04-12
+> **Owner:** `dennis + claude`
 > **Priority:** 2
 > **Depends on:** WS8a (CSS architecture must be complete)
 > **Parallelizable:** yes (with WS8b, WS8d)

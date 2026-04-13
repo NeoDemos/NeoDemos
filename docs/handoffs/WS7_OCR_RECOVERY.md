@@ -1,8 +1,8 @@
 # WS7 — OCR Recovery for Moties & Amendementen
 
 > **Priority:** 2.5 (between WS2 and WS3 — blocks WS1 quality ceiling)
-> **Status:** `not started`
-> **Owner:** `unassigned`
+> **Status:** `in progress` — Dennis running as of 2026-04-13
+> **Owner:** `dennis`
 > **Target release:** v0.2.0 (pre eval-gate — improves WS1 baseline scores)
 > **Master plan section:** N/A — spun off from WS1 pre-enrichment baseline audit 2026-04-12
 

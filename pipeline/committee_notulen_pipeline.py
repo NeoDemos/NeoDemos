@@ -375,6 +375,9 @@ class CommitteeNotulenPipeline:
                 committee=committee,
                 transcript_source=source,
             )
+            # Attach ibabs_url for fragment linking (not always in the transcript JSON)
+            if "ibabs_url" not in transcript:
+                transcript["ibabs_url"] = meeting.get("url")
             self.ingestor.ingest_transcript(transcript, heuristic=True, category="committee_transcript")
             self.ingestor.update_quality_score(m_id, quality["score"], quality["status"])
 

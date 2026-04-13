@@ -12,7 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 
-<body>
+<body class="{% block body_class %}{% endblock %}">
     {% include 'partials/_nav.html' %}
     {% block hero %}{% endblock %}
     <main>

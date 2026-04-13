@@ -67,6 +67,7 @@ env:
   secret:
     - DB_PASSWORD
     - GEMINI_API_KEY
+    - ANTHROPIC_API_KEY
     - NEBIUS_API_KEY
     - QDRANT_API_KEY
     - SECRET_KEY

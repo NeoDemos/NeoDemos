@@ -33,48 +33,71 @@ When a workstream finishes:
 
 ## Workstream index
 
-| # | File | Title | Priority | Parallelizable | Depends on |
+> **Last updated:** 2026-04-13
+
+| # | File | Title | Priority | Status | Depends on |
 |---|---|---|---|---|---|
-| WS1 | [`WS1_GRAPHRAG.md`](WS1_GRAPHRAG.md) | GraphRAG retrieval | 1 | yes (with WS2/4/5/6) | Flair/Gemini enrichment (WS1 phase A) |
-| WS2 | [`WS2_FINANCIAL.md`](WS2_FINANCIAL.md) | Trustworthy financial analysis | 2 | yes (independent) | none |
-| WS3 | [`WS3_JOURNEY.md`](WS3_JOURNEY.md) | Document journey timelines | 3 | partially (UI defers) | WS1 (motie↔notulen linking) |
-| WS4 | [`WS4_MCP_DISCIPLINE.md`](WS4_MCP_DISCIPLINE.md) | Best-in-class MCP surface | 4 | yes (independent) | none |
-| WS5a | [`WS5a_NIGHTLY_PIPELINE.md`](WS5a_NIGHTLY_PIPELINE.md) | 100% reliable nightly ingest | 5 | yes (independent) | none |
+| WS1 | [`WS1_GRAPHRAG.md`](WS1_GRAPHRAG.md) | GraphRAG retrieval | 1 | **blocked** — waiting on WS7, WS10, WS11, WS12 | WS7 + WS10 + WS11 + WS12 (clean, complete corpus before enrichment) |
+| WS2 | [`WS2_FINANCIAL.md`](WS2_FINANCIAL.md) | Trustworthy financial analysis | 2 | **done** — shipped 2026-04-12 | none |
+| WS2b | [`WS2b_IV3_TAAKVELD.md`](WS2b_IV3_TAAKVELD.md) | IV3 taakveld FK backfill | 2 | not started | WS2 done ✅ |
+| WS3 | [`WS3_JOURNEY.md`](WS3_JOURNEY.md) | Document journey timelines | 3 | not started | WS1 Phase A (motie↔notulen linking) |
+| WS4 | [`WS4_MCP_DISCIPLINE.md`](WS4_MCP_DISCIPLINE.md) | Best-in-class MCP surface | 4 | not started | none |
+| WS5a | [`WS5a_NIGHTLY_PIPELINE.md`](WS5a_NIGHTLY_PIPELINE.md) | 100% reliable nightly ingest | 5 | not started | none |
 | WS5b | [`WS5b_MULTI_PORTAL.md`](WS5b_MULTI_PORTAL.md) | Multi-portal connectors (search-only) | 6 | **deferred to v0.2.1** | WS5a stable for 14d |
-| WS6 | [`WS6_SUMMARIZATION.md`](WS6_SUMMARIZATION.md) | Source-spans-only summarization | 8 | yes (independent) | none for v0.2.0 minimum; WS1 for `mode='structured'` |
-| WS7 | [`WS7_OCR_RECOVERY.md`](WS7_OCR_RECOVERY.md) | OCR recovery for moties/amendementen | 2.5 | yes (independent) | none; **should run before WS1 Phase 1** |
-| WS8 | [`WS8_FRONTEND_REDESIGN.md`](WS8_FRONTEND_REDESIGN.md) | Frontend redesign: design system, landing page, calendar | 1 (launch blocker) | yes (with WS9; converge at search integration) | WS9 (for demo answer + streaming search) |
-| WS9 | [`WS9_WEB_INTELLIGENCE.md`](WS9_WEB_INTELLIGENCE.md) | Web intelligence: MCP-as-backend, Sonnet tool_use, SSE streaming | 1 (launch blocker) | yes (with WS8) | none (extract from existing MCP tools) |
+| WS6 | [`WS6_SUMMARIZATION.md`](WS6_SUMMARIZATION.md) | Source-spans-only summarization | 8 | not started | none for v0.2.0 minimum; WS1 for `mode='structured'` |
+| WS7 | [`WS7_OCR_RECOVERY.md`](WS7_OCR_RECOVERY.md) | OCR recovery for moties/amendementen | 2.5 | **in progress** — Dennis running | none; **must finish before WS1 Phase A** |
+| WS8 | [`WS8_FRONTEND_REDESIGN.md`](WS8_FRONTEND_REDESIGN.md) | Frontend redesign: design system, landing page, calendar | 1 (launch blocker) | **done** — WS8a-e shipped 2026-04-12 | WS9 (soft — for demo answer + streaming search) |
+| WS8f | [`WS8f_ADMIN_CMS.md`](WS8f_ADMIN_CMS.md) | Admin panel + content management + GrapeJS editor | 2 (launch enhancer) | not started | WS8a-e complete ✅ |
+| WS9 | [`WS9_WEB_INTELLIGENCE.md`](WS9_WEB_INTELLIGENCE.md) | Web intelligence: MCP-as-backend, Sonnet tool_use, SSE streaming | 1 (launch blocker) | **partial** — local done 2026-04-12, needs deploy | none (extract from existing MCP tools) |
+| WS10 | [`WS10_TABLE_RICH_EXTRACTION.md`](WS10_TABLE_RICH_EXTRACTION.md) | Table-rich document extraction (Docling layout pass) | 3 | **in progress** — classifier done, 1,335 backfill pending | none |
+| WS11 | [`WS11_CORPUS_COMPLETENESS.md`](WS11_CORPUS_COMPLETENESS.md) | Corpus completeness 2018–2026 (ORI gap + metadata backfill) | 1 | **in progress** — Dennis running | none |
+| WS12 | [`WS12_VIRTUAL_NOTULEN_BACKFILL.md`](WS12_VIRTUAL_NOTULEN_BACKFILL.md) | Virtual notulen backfill & production hardening | 1 | **in progress** — Dennis running | none |
 
 **Webcast timestamp linking** (priority 7) is split across WS5a (schema + backfill) and WS5b (HLS player UI).
 
-**WS8 + WS9 are the public launch critical path.** They are independent of WS1–WS7 and can run in parallel. They converge when WS8 Phase 2 (landing page) wires up the SSE streaming endpoint delivered by WS9.
+**WS8a-e shipped 2026-04-12.** WS8f (admin CMS) is next but does not block the press moment.
+
+**WS9 local implementation done 2026-04-12.** Production deploy blocked on rate limiting (WS8 Phase 0B). Landing page works with current search as fallback.
+
+**WS7 + WS10 + WS11 + WS12 are the current active track.** All four must complete before WS1 Phase A (enrichment) starts — enriching garbled text or an incomplete corpus wastes Gemini spend and produces lower-quality KG edges.
+
+**Waalwijk counter-demo** is scoped in the master plan (V0_2_BEAT_MAAT_PLAN.md §4) as a v0.2.0 deliverable, but has no handoff file and was not part of WS2's shipped scope. Needs decision: create a WS or defer to v0.2.1.
 
 ---
 
 ## Parallelism map
 
-```
-v0.2.0 — two parallel tracks
+> **Updated 2026-04-13** — reflects WS2 shipped, WS8a-e shipped, WS7/10/11/12 active.
 
-  TRACK A: Data quality + retrieval (WS1–WS7)
+```
+v0.2.0 — three parallel tracks
+
+  TRACK A (ACTIVE NOW): Corpus quality — WS7, WS10, WS11, WS12
   ┌─────────────────────────────────────────────────────────────────┐
-  │  parallel work — start day 1                                     │
+  │  All four run in parallel NOW. All must finish before WS1.       │
   │                                                                  │
-  │  ┌─────────────┐  ┌──────────────┐  ┌────────────┐  ┌────────┐  │
-  │  │ WS1 phase 0 │  │     WS2      │  │    WS4     │  │  WS6   │  │
-  │  │ (code only) │  │  Financial   │  │  MCP disc. │  │ Summary│  │
-  │  │  + WS7 OCR  │  │              │  │            │  │        │  │
-  │  └──────┬──────┘  └──────────────┘  └────────────┘  └────────┘  │
-  │         │                                                        │
-  │         ▼                                                        │
-  │  ┌─────────────┐  ┌──────────────┐                              │
-  │  │  WS7 → WS1  │  │     WS5a     │                              │
-  │  │ OCR → enrich│  │ Nightly pipe │                              │
-  │  │  → graph svc│  │              │                              │
-  │  └──────┬──────┘  └──────────────┘                              │
-  │         │                                                        │
-  │         ▼                                                        │
+  │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ ┌────────┐  │
+  │  │  WS7  (run)  │ │ WS10  (run)  │ │ WS11  (run)  │ │WS12(run│  │
+  │  │ OCR recovery │ │ Table-rich   │ │ Corpus gaps  │ │Virtual │  │
+  │  │ 2,700 docs   │ │ 1,336 docs   │ │ ORI backfill │ │Notulen │  │
+  │  └──────┬───────┘ └──────┬───────┘ └──────┬───────┘ └───┬────┘  │
+  │         │                │                │              │       │
+  │         └────────────────┴────────────────┴──────────────┘       │
+  │                          │                                       │
+  │                          ▼                                       │
+  │  ┌──────────────────────────────────────────────────────────┐    │
+  │  │  WS1 Phase A — Flair NER + Gemini enrichment             │    │
+  │  │  ~500K KG edges, motie↔notulen linking                   │    │
+  │  │  (blocked until Track A corpus work completes)            │    │
+  │  └──────────┬───────────────────────────────────────────────┘    │
+  │             │                                                    │
+  │             ▼                                                    │
+  │  ┌──────────────────────────────────────────────────────────┐    │
+  │  │  WS1 Phase B — graph_retrieval.py + MCP tools             │    │
+  │  │  traceer_motie, vergelijk_partijen                        │    │
+  │  └──────────┬───────────────────────────────────────────────┘    │
+  │             │                                                    │
+  │             ▼                                                    │
   │  ┌─────────────┐                                                │
   │  │     WS3     │                                                │
   │  │  Journey    │                                                │
@@ -84,35 +107,33 @@ v0.2.0 — two parallel tracks
   │  ► eval gate A ◄                                                │
   └─────────────────────────────────────────────────────────────────┘
 
-  TRACK B: Public launch (WS8 + WS9) — independent of Track A
+  TRACK B: Independent workstreams (can start anytime)
   ┌─────────────────────────────────────────────────────────────────┐
-  │  parallel start — both day 1                                     │
+  │  No dependencies on Track A. Start when capacity allows.         │
   │                                                                  │
-  │  ┌──────────────────────┐   ┌──────────────────────────────┐    │
-  │  │        WS9           │   │      WS8 Phase 1             │    │
-  │  │  MCP-as-backend      │   │  Design tokens + CSS         │    │
-  │  │  Sonnet tool_use     │   │  restructure (independent)   │    │
-  │  │  SSE /stream endpoint│   │                              │    │
-  │  └──────────┬───────────┘   └──────────────────────────────┘    │
-  │             │                                                    │
-  │             ▼  (WS9 done → WS8 Phase 2 can wire up)             │
-  │  ┌──────────────────────────────────────────────────────────┐    │
-  │  │  WS8 Phase 2 — Landing page                              │    │
-  │  │  4 elements: demo answer + search + credibility + trust  │    │
-  │  │  Demo question: "Heeft het college haar beloftes         │    │
-  │  │  waargemaakt?" — cached, real citations, non-partisan    │    │
-  │  └──────────┬───────────────────────────────────────────────┘    │
-  │             │                                                    │
-  │             ▼                                                    │
-  │  ┌──────────────────────────────────────────────────────────┐    │
-  │  │  WS8 Phase 3+4 — Calendar redesign + template cleanup    │    │
-  │  └──────────────────────────────────────────────────────────┘    │
-  │                                                                  │
-  │  ► eval gate B ◄  → public launch + press outreach             │
+  │  ┌──────────────┐  ┌────────────┐  ┌────────┐  ┌────────────┐  │
+  │  │ WS2 ✅ DONE  │  │    WS4     │  │  WS6   │  │    WS5a    │  │
+  │  │  Financial   │  │  MCP disc. │  │ Summary│  │  Nightly   │  │
+  │  │ (2026-04-12) │  │            │  │        │  │  pipeline  │  │
+  │  └──────────────┘  └────────────┘  └────────┘  └────────────┘  │
   └─────────────────────────────────────────────────────────────────┘
 
-  Tracks A and B run concurrently. Track B gates the press moment.
-  Track A gates v0.2.0 eval scores. Both must pass before tag v0.2.0.
+  TRACK C: Public launch (WS8 + WS9) — independent of Tracks A & B
+  ┌─────────────────────────────────────────────────────────────────┐
+  │                                                                  │
+  │  ┌──────────────────────────────────────────────────────────┐    │
+  │  │  WS8a-e ✅ DONE (2026-04-12)                              │    │
+  │  │  Design tokens, landing page, calendar, subpages, polish  │    │
+  │  └──────────────────────────────────────────────────────────┘    │
+  │                                                                  │
+  │  ┌──────────────────────┐   ┌──────────────────────────────┐    │
+  │  │  WS9 — deploy to     │   │  WS8f — Admin CMS            │    │
+  │  │  production (pending) │   │  (not started, not blocking) │    │
+  │  │  + rate limiting      │   │                              │    │
+  │  └──────────────────────┘   └──────────────────────────────┘    │
+  │                                                                  │
+  │  ► eval gate C ◄  → public launch + press outreach             │
+  └─────────────────────────────────────────────────────────────────┘
 
 v0.2.1 — search-only beyond Rotterdam
   ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
@@ -121,38 +142,48 @@ v0.2.1 — search-only beyond Rotterdam
   └──────────────┘  └──────────────┘  └──────────────┘
 ```
 
-**Critical path (Track A):** WS7 OCR recovery → WS1 phase 1 (enrichment) → WS1 phase 2 (graph svc + MCP) → WS3.
-**Critical path (Track B):** WS9 (SSE endpoint) → WS8 Phase 2 (landing page + demo answer) → press outreach.
-**Earliest blocker (Track A):** WS7 should run before WS1 Phase 1 so enrichment operates on clean text.
-**Earliest blocker (Track B):** WS9 must ship before the demo answer can be wired to the live search stream.
+**Critical path (Track A):** WS7 + WS10 + WS11 + WS12 (parallel, NOW) → WS1 Phase A (enrichment) → WS1 Phase B (graph svc + MCP) → WS3.
+**Critical path (Track C):** WS9 deploy (+ rate limiting) → press outreach. WS8a-e already done.
+**Active blockers:** WS1 is explicitly held until WS7/10/11/12 finish — enriching on garbled or incomplete text wastes Gemini spend ($90-130) and requires costly re-run.
+**No blockers for:** WS4, WS5a, WS6 — these can start independently when agent capacity allows.
 
 ---
 
 ## Eval gate for tagging v0.2.0
 
+### Track A — Corpus quality (must complete before WS1 enrichment)
+
+| Metric | Source | Target | Status |
+|---|---|---|---|
+| OCR recovery | WS7 BM25 re-test | BM25 hit rate ≥ 95% (from 77.5%) | ⏳ running |
+| Table-rich extraction | WS10 backfill | 1,336 docs re-processed, quality gate passed | ⏳ running |
+| Corpus completeness | WS11 ORI audit | schriftelijke_vragen gap < 5% (from 96%) | ⏳ running |
+| Virtual notulen | WS12 promotion | 2025 promoted, 2018-2024 backfill complete | ⏳ running |
+| Metadata backfill | WS11a | 0 docs with `doc_classification = NULL` | ⏳ running |
+
 ### Track A — Data quality (must pass before tag)
 
-| Metric | Source | Target |
-|---|---|---|
-| Completeness | [rag_evaluator/](../../rag_evaluator/) | ≥ 3.5 (from 2.75) |
-| Faithfulness | [rag_evaluator/](../../rag_evaluator/) | ≥ 4.5 (no regression) |
-| Numeric accuracy | WS2 financial benchmark | **100%** on 30 questions |
-| Nightly reliability | WS5a smoke test logs | 14 consecutive clean days |
-| Source-spans strip test | WS6 verifier | Pass on 50 random docs |
-| Tool-description uniqueness | WS4 startup check | No pair > 0.85 cosine |
-| KG Layer 2 size | WS1 quality audit | ≥ 500K relationship edges |
+| Metric | Source | Target | Status |
+|---|---|---|---|
+| Completeness | [rag_evaluator/](../../rag_evaluator/) | ≥ 3.5 (from 2.75) | ❌ blocked on WS1 |
+| Faithfulness | [rag_evaluator/](../../rag_evaluator/) | ≥ 4.5 (no regression) | ❌ blocked on WS1 |
+| Numeric accuracy | WS2 financial benchmark | **100%** on 30 questions | ✅ shipped |
+| Nightly reliability | WS5a smoke test logs | 14 consecutive clean days | ❌ not started |
+| Source-spans strip test | WS6 verifier | Pass on 50 random docs | ❌ not started |
+| Tool-description uniqueness | WS4 startup check | No pair > 0.85 cosine | ❌ not started |
+| KG Layer 2 size | WS1 quality audit | ≥ 500K relationship edges | ❌ blocked on WS1 |
 
-### Track B — Public launch (must pass before press outreach)
+### Track C — Public launch (must pass before press outreach)
 
-| Metric | Source | Target |
-|---|---|---|
-| Demo answer quality | Manual review by Dennis | Impressive enough to be first thing a journalist sees |
-| Lighthouse Performance | `lighthouse https://neodemos.nl` | ≥ 90 |
-| Lighthouse Accessibility | `lighthouse https://neodemos.nl` | ≥ 95 (WCAG AA) |
-| WS9 MCP quality parity | Side-by-side comparison (web vs MCP) | ≥ 90% answer quality vs direct MCP |
-| Mobile search above fold | Playwright screenshot at 375px | Search bar + CTA visible without scroll |
-| Demo answer cached | `GET /` response time | < 200ms (pre-rendered, no API call) |
-| Landing headline rotation | Config check | `LANDING_HEADLINE` env var wired, weekly swap documented |
+| Metric | Source | Target | Status |
+|---|---|---|---|
+| Demo answer quality | Manual review by Dennis | Impressive enough to be first thing a journalist sees | ❌ needs WS9 deploy |
+| Lighthouse Performance | `lighthouse https://neodemos.nl` | ≥ 90 | ✅ WS8 shipped |
+| Lighthouse Accessibility | `lighthouse https://neodemos.nl` | ≥ 95 (WCAG AA) | ✅ WS8 shipped |
+| WS9 MCP quality parity | Side-by-side comparison (web vs MCP) | ≥ 90% answer quality vs direct MCP | ❌ needs WS9 deploy |
+| Mobile search above fold | Playwright screenshot at 375px | Search bar + CTA visible without scroll | ✅ WS8 shipped |
+| Demo answer cached | `GET /` response time | < 200ms (pre-rendered, no API call) | ❌ needs WS9 deploy |
+| Landing headline rotation | Config check | `LANDING_HEADLINE` env var wired, weekly swap documented | ✅ WS8 shipped |
 
 ---
 

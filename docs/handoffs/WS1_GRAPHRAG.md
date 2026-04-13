@@ -1,7 +1,7 @@
 # WS1 — GraphRAG Retrieval
 
 > **Priority:** 1 (highest impact, MAAT cannot match)
-> **Status:** `not started`
+> **Status:** `blocked` — waiting on WS7 (OCR), WS10 (table-rich), WS11 (corpus gaps), WS12 (virtual notulen) to finish before Phase A enrichment starts
 > **Owner:** `unassigned`
 > **Target release:** v0.2.0
 > **Master plan section:** [V0_2_BEAT_MAAT_PLAN.md §3](../architecture/V0_2_BEAT_MAAT_PLAN.md)

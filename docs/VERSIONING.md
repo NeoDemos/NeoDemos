@@ -61,13 +61,21 @@ _Target: 2026-04-24 (2 weeks from 2026-04-10 kickoff)_
 
 **Full plan:** [`docs/architecture/V0_2_BEAT_MAAT_PLAN.md`](architecture/V0_2_BEAT_MAAT_PLAN.md)
 
-**Workstreams in v0.2.0:**
-- [ ] **WS1 GraphRAG** — Flair NER + Gemini enrichment + ~500K KG edges + `services/graph_retrieval.py` + 5th retrieval stream + `traceer_motie` + `vergelijk_partijen` MCP tools
-- [ ] **WS2 Trustworthy financial** — `financial_lines` Postgres table + `vraag_begrotingsregel` + `vergelijk_begrotingsjaren` + verification token (zero-paraphrase contract on euros). **Includes Waalwijk** financial docs (begroting 2025 + jaarstukken 2024): Waalwijk is on iBabs (`waalwijk.bestuurlijkeinformatie.nl`), same scraper as Rotterdam, one tenant config entry. They are currently running a MAAT pilot on exactly this use case — we already have it in production. Counter-demo planned at pilot evaluation release.
-- [ ] **WS3 Document journey** — `document_journeys` view + `traceer_document` MCP tool (UI deferred to v0.2.1)
+**Workstreams in v0.2.0:** *(updated 2026-04-13)*
+- [ ] **WS1 GraphRAG** — Flair NER + Gemini enrichment + ~500K KG edges + `services/graph_retrieval.py` + 5th retrieval stream + `traceer_motie` + `vergelijk_partijen` MCP tools. **Blocked** — waiting on WS7, WS10, WS11, WS12 to finish (enriching garbled/incomplete corpus wastes Gemini spend).
+- [x] **WS2 Trustworthy financial** — `financial_lines` Postgres table + `vraag_begrotingsregel` + `vergelijk_begrotingsjaren` + verification token (zero-paraphrase contract on euros). *(shipped 2026-04-12: 61,182 financial_lines, 100% benchmark accuracy)*
+- [ ] **WS2b IV3 taakveld FK backfill** — wire `programma_aliases` lookup into extractor's `_assign_iv3` step; backfill `financial_lines.iv3_taakveld` for all 61K rows. See [`WS2b_IV3_TAAKVELD.md`](../handoffs/WS2b_IV3_TAAKVELD.md).
+- [ ] **WS3 Document journey** — `document_journeys` view + `traceer_document` MCP tool (UI deferred to v0.2.1). Blocked on WS1 Phase A.
 - [ ] **WS4 Best-in-class MCP** — tool registry + `get_neodemos_context` primer + tool-collision detection + scoped OAuth + audit log + parameter/output filters (FactSet defense-in-depth)
 - [ ] **WS5 Reliable nightly ingest** — 7-step idempotent job graph + advisory locks + smoke test + admin dashboard (Rotterdam only)
 - [ ] **WS6 Source-spans-only summarization** — `services/summarizer.py` + verification badges + cached per-document summaries
+- [ ] **WS7 OCR recovery** — Re-OCR 2,700 garbled moties/amendementen via Docling, BM25 hit rate 77.5% → ≥95%. *(in progress — Dennis running)*. **Must finish before WS1 Phase A.**
+- [x] **WS8 Frontend redesign** — Design tokens (Tailwind v4), landing page, calendar list view, subpages (over/technologie/methodologie), polish *(WS8a-e done 2026-04-12)*
+- [ ] **WS8f Admin panel + content management** — `site_content` + `site_pages` tables, structured form editor at `/admin/content` (68 editable items), GrapeJS visual page builder at `/admin/editor/<slug>`, CSS restructure (Tailwind v4 `@layer` modules), `main.py` router split (→ 4 modules), subscription tier scaffolding (`free_beta`)
+- [ ] **WS9 Web intelligence** — Sonnet + tool_use orchestrator, SSE streaming, auto-detect AI vs keyword search *(local implementation done 2026-04-12, needs production deploy + rate limiting)*
+- [ ] **WS10 Table-rich extraction** — Docling layout pass for 1,336 table-rich documents *(in progress — classifier + converters done, backfill pending)*
+- [ ] **WS11 Corpus completeness** — ORI gap backfill (~2,756 schriftelijke vragen) + metadata backfill (753 docs with NULL doc_classification) + municipality/source columns *(in progress — Dennis running)*
+- [ ] **WS12 Virtual notulen backfill** — Promote 2025 virtual notulen to production, backfill 2018-2024 (661 meetings), Whisper API migration *(in progress — Dennis running)*
 
 **Eval gate (must pass before tag):**
 - Completeness ≥ 3.5 (from 2.75 baseline)
@@ -83,6 +91,7 @@ _Renamed from "Search Beyond Rotterdam" on 2026-04-11 after Archibot competitive
 
 - [ ] Multi-portal connectors in `pipeline/sources/`: `ibabs.py` (refactored), `notubiz.py`, `go.py`, `ori_fallback.py` — ORI-fallback only
 - [ ] **Search-only mode** for 5 ORI-fallback gemeenten (Apeldoorn, Zoetermeer, Maastricht, Enschede, Bodegraven) — BM25 + vector search over ORI document text; no KG, financial lines, or journeys
+- [ ] **Waalwijk counter-demo** *(deferred from v0.2.0)* — ingest Waalwijk begroting 2025 + jaarstukken 2024 from `waalwijk.bestuurlijkeinformatie.nl` (same iBabs scraper as Rotterdam, zero new code). Publish demo: NeoDemos answers the exact financial questions that Waalwijk is paying MAAT to pilot-evaluate. Time to MAAT's next public knowledge event. Full brief in master plan §4.
 - [ ] Document journey UI: `/journey/{id}` route + `templates/journey.html` with vertical timeline (backend `traceer_document` from v0.2.0 powers this)
 - [ ] HLS webcast player (`templates/meeting_player.html`) accepting `?t=<seconds>`
 - [ ] Citation upgrade: every transcript-derived chunk gets `[▶ MM:SS]` deep-link in `_format_chunks_v3`
@@ -161,11 +170,11 @@ _Target: TBD_
 ### Hetzner deployment
 
 - Server: Hetzner VPS
-- Stack: docker-compose (postgres + qdrant + web + mcp + caddy)
+- Stack: docker-compose (postgres + qdrant + web + mcp) via **Kamal** (migrated from Caddy to kamal-proxy 2026-04)
 - Domain: `neodemos.nl` (primary), `neodemos.eu` (redirect)
-- MCP endpoint: `neodemos.nl/mcp/*` (Caddy reverse proxy → port 8001)
+- MCP endpoint: `neodemos.nl/mcp/*` (kamal-proxy → port 8001)
 - Config: `docker-compose.prod.yml` — MCP container runs `mcp_server_v3.py`
-- TLS: Auto via Caddy + Let's Encrypt
+- TLS: Auto via kamal-proxy + Let's Encrypt
 
 ### To deploy a new version to Hetzner
 

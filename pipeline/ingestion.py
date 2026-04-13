@@ -264,12 +264,17 @@ class SmartIngestor:
     def ingest_transcript(self, transcript_data: Dict[str, Any], heuristic: bool = False, category: str = "committee_transcript"):
         """
         Specialized transcript ingestion that preserve speaker context.
+        Stores per-chunk timestamp ranges and video page URL for fragment linking.
         """
         self.heuristic = heuristic
         meeting_id = transcript_data.get("meeting_id")
         meeting_name = transcript_data.get("meeting_name", "Unknown Meeting")
         doc_id = f"transcript_{meeting_id}"
-        
+
+        # Build video page URL from ibabs_url if available
+        ibabs_url = transcript_data.get("ibabs_url") or ""
+        webcast_code = transcript_data.get("webcast_code") or ""
+
         # Flatten transcript into items
         agenda_items = transcript_data.get("agenda_items", [])
         for item in agenda_items:
@@ -277,7 +282,17 @@ class SmartIngestor:
             
             full_text_blocks = []
             segments = item.get("segments", [])
-            
+
+            # Track timestamp range across segments in this agenda item
+            item_start_seconds = item.get("start_time")
+            item_end_seconds = item.get("end_time")
+            seg_start_secs = [s.get("start_seconds") for s in segments if s.get("start_seconds") is not None]
+            seg_end_secs = [s.get("end_seconds") for s in segments if s.get("end_seconds") is not None]
+            if seg_start_secs and item_start_seconds is None:
+                item_start_seconds = min(seg_start_secs)
+            if seg_end_secs and item_end_seconds is None:
+                item_end_seconds = max(seg_end_secs)
+
             # Calculate average confidence for the agenda item to determine its overall tier
             segment_confidences = [s.get("confidence", 1.0) for s in segments if s.get("text")]
             avg_conf = sum(segment_confidences) / len(segment_confidences) if segment_confidences else 1.0
@@ -341,10 +356,15 @@ class SmartIngestor:
                     content=total_text,
                     meeting_id=meeting_id,
                     metadata={
-                        "agenda_item": item_title, 
+                        "agenda_item": item_title,
                         "type": "transcript_segment",
+                        "doc_type": "virtual_notulen",
                         "audio_tier": audio_tier,
-                        "avg_confidence": f"{avg_conf:.2f}"
+                        "avg_confidence": f"{avg_conf:.2f}",
+                        "start_seconds": item_start_seconds,
+                        "end_seconds": item_end_seconds,
+                        "video_url": ibabs_url or None,
+                        "webcast_code": webcast_code or None,
                     },
                     category=category
                 )
@@ -476,12 +496,47 @@ class SmartIngestor:
 
     # ── Structural section detection (Gemini, for 50K+ docs only) ────
 
+    # Disk cache for Gemini section-detection results.
+    # Key: md5(title + first 500 chars of content) — stable across restarts.
+    # Avoids re-calling Gemini when a process restarts mid-run or during WS10 reruns.
+    _GEMINI_CACHE_DIR = Path(__file__).resolve().parent.parent / "data" / "pipeline_state" / "gemini_section_cache"
+
+    def _gemini_cache_key(self, content: str, title: str) -> str:
+        fingerprint = f"{title}:{content[:500]}"
+        return hashlib.md5(fingerprint.encode()).hexdigest()
+
+    def _gemini_cache_get(self, key: str) -> Optional[List[Dict]]:
+        path = self._GEMINI_CACHE_DIR / f"{key}.json"
+        if path.exists():
+            try:
+                return json.loads(path.read_text())
+            except Exception:
+                pass
+        return None
+
+    def _gemini_cache_set(self, key: str, sections: List[Dict]):
+        self._GEMINI_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        path = self._GEMINI_CACHE_DIR / f"{key}.json"
+        tmp = str(path) + ".tmp"
+        with open(tmp, "w") as f:
+            json.dump(sections, f)
+        Path(tmp).replace(path)
+
     def _detect_sections_via_gemini(self, content: str, title: str) -> List[Dict]:
         """
         Uses one Gemini call to identify logical section boundaries in a large document.
         Returns a list of {"title": str, "text": str} sections.
         Does NOT ask Gemini to chunk — only to identify where sections start.
+
+        Results are cached to disk (data/pipeline_state/gemini_section_cache/) keyed by
+        md5(title + content[:500]). Re-runs and process restarts are free.
         """
+        cache_key = self._gemini_cache_key(content, title)
+        cached = self._gemini_cache_get(cache_key)
+        if cached is not None:
+            logger.info(f"  Gemini cache hit ({len(cached)} sections)")
+            return cached
+
         # Send first + last 3K chars as context, plus sampled section headers
         preview = content[:3000] + "\n\n[...]\n\n" + content[-3000:]
         # Also extract any lines that look like headers
@@ -556,6 +611,7 @@ Return ONLY the JSON array."""
                 if preamble:
                     sections.insert(0, {"title": f"Inleiding — {title}", "text": preamble})
 
+            self._gemini_cache_set(cache_key, sections)
             return sections
 
         except Exception as e:

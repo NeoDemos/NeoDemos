@@ -1,21 +1,21 @@
 <footer class="site-footer">
-    <div>
-        <span>{{ display_name }} {{ version_label }}</span>
-        <span class="footer-separator">&middot;</span>
-        <span>Brondata: Open Raadsinformatie</span>
-    </div>
-    <div>
+    <nav class="footer-links">
         <a href="/over">Over</a>
         <span class="footer-separator">&middot;</span>
         <a href="/technologie">Technologie</a>
         <span class="footer-separator">&middot;</span>
         <a href="/methodologie">Methodologie</a>
         <span class="footer-separator">&middot;</span>
-        <a href="/mcp-installer">MCP</a>
-    </div>
-    <div>
+        <a href="/mcp-installer">AI-koppeling</a>
+    </nav>
+    <div class="footer-meta">
         <span>Analyse door AI (Anthropic)</span>
         <span class="footer-separator">&middot;</span>
         <span>Europees gehost</span>
+        <span class="footer-separator">&middot;</span>
+        <span>Brondata: Open Raadsinformatie</span>
+    </div>
+    <div class="footer-version">
+        {{ display_name }} {{ version_label }}
     </div>
 </footer>

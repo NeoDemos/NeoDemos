@@ -35,6 +35,40 @@ _raw_headline = os.getenv(
 )
 LANDING_HEADLINE = _raw_headline.replace("\\n", "\n")
 
+# ── Demo answer cache ──────────────────────────────────────────────────────
+# Pre-rendered AI answers loaded from data/demo_cache.json at startup.
+# Generate with: python scripts/cache_demo_answers.py
+# Each entry: {id, question, label, answer (markdown), sources, cached_at}
+_DEMO_CACHE_PATH = os.path.join(os.path.dirname(__file__), "data", "demo_cache.json")
+
+def _load_demo_cache() -> list:
+    try:
+        with open(_DEMO_CACHE_PATH) as f:
+            entries = json.load(f)
+            if entries:
+                logger.info(f"Demo cache loaded: {len(entries)} answers")
+            return entries
+    except FileNotFoundError:
+        logger.info("Demo cache not found — run scripts/cache_demo_answers.py")
+        return []
+    except Exception as e:
+        logger.warning(f"Demo cache load failed: {e}")
+        return []
+
+DEMO_CACHE: list = _load_demo_cache()
+
+def _get_demo_entry() -> dict | None:
+    """Return the primary demo entry (first in cache), or None if cache empty."""
+    if not DEMO_CACHE:
+        return None
+    # DEMO_ANSWER_ID env var lets you pin a specific demo by id without redeploy
+    pinned_id = os.getenv("DEMO_ANSWER_ID")
+    if pinned_id:
+        for entry in DEMO_CACHE:
+            if entry.get("id") == pinned_id:
+                return entry
+    return DEMO_CACHE[0]
+
 from services.db_pool import close_pool
 from services.open_raad import OpenRaadService
 from services.storage import StorageService
@@ -47,6 +81,7 @@ from services.auth_dependencies import (
     get_current_user, sign_session_id, unsign_session_id,
     generate_csrf_token,
 )
+from services.web_intelligence import WebIntelligenceService
 
 raad_service = OpenRaadService()
 storage = StorageService()
@@ -58,6 +93,18 @@ except Exception as e:
     print(f"DEBUG: AIService init FAILED: {e}")
     ai_service = None
 refresh_service = RefreshService(storage, raad_service, ai_service)
+
+# WS9 — Web Intelligence Service (Sonnet + MCP tool_use)
+# Pass ai_service as Gemini fallback when Anthropic is unavailable or errors
+try:
+    web_intel = WebIntelligenceService(ai_service=ai_service)
+    if web_intel.available:
+        logger.info(f"WebIntelligenceService ready (model={web_intel.model})")
+    else:
+        logger.warning("WebIntelligenceService unavailable — ANTHROPIC_API_KEY not set, Gemini fallback active")
+except Exception as e:
+    logger.error(f"WebIntelligenceService init failed: {e}")
+    web_intel = None
 
 # Initialize party profile and lens evaluation services
 # These are lazy-loaded since they're only used for party lens analysis
@@ -393,7 +440,7 @@ async def logout(request: Request):
         session_id = unsign_session_id(signed)
         if session_id:
             auth_service.delete_session(session_id)
-    response = RedirectResponse(url="/login", status_code=303)
+    response = RedirectResponse(url="/", status_code=303)
     response.delete_cookie("session_id", path="/")
     return response
 
@@ -688,12 +735,16 @@ async def search_page(request: Request):
     Logged-in users see a clean search-only experience.
     """
     user = await get_current_user(request)
+    demo = _get_demo_entry()
     return templates.TemplateResponse(name="search.html", request=request, context={
         "title": "Zoeken",
         "user": user,
         "landing_headline": Markup(LANDING_HEADLINE.replace("\n", "<br>")),
-        "demo_question": "Heeft het college haar beloftes waargemaakt?",
-        "demo_answer": None,  # TODO: cache a pre-rendered AI answer here
+        "demo_question": demo["question"] if demo else "Heeft het college haar beloftes waargemaakt?",
+        "demo_answer_markdown": demo["answer"] if demo else None,
+        "demo_sources": demo["sources"] if demo else [],
+        "demo_label": demo["label"] if demo else None,
+        "demo_cached_at": demo["cached_at"] if demo else None,
     })
 
 @app.get("/overview")
@@ -838,10 +889,147 @@ async def api_search(request: Request, q: str, deep: bool = False, mode: str = N
         })
         
     return {
-        "results": results, 
+        "results": results,
         "ai_answer": ai_result.get("answer"),
         "sources": ai_result.get("sources", [])
     }
+
+
+# ---------------------------------------------------------------------------
+# WS9 — AI Search via Sonnet + MCP tool_use (SSE streaming)
+# ---------------------------------------------------------------------------
+
+_AI_SEARCH_MONTHLY_LIMIT_ANON = 3  # anonymous users: 3 AI searches per month
+
+
+def _get_client_ip(request: Request) -> str:
+    """Extract client IP, respecting X-Forwarded-For from kamal-proxy."""
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
+
+
+def _check_ai_rate_limit(ip: str) -> dict:
+    """
+    Check IP-based rate limit for anonymous AI searches.
+    Uses PostgreSQL for persistence across restarts.
+    Returns {"allowed": bool, "remaining": int, "total": int}.
+    """
+    from services.db_pool import get_connection
+    try:
+        with get_connection() as conn:
+            cur = conn.cursor()
+            # Ensure table exists (idempotent)
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS ai_search_rate_limits (
+                    ip TEXT NOT NULL,
+                    month TEXT NOT NULL,
+                    count INTEGER NOT NULL DEFAULT 0,
+                    PRIMARY KEY (ip, month)
+                )
+            """)
+            month_key = date.today().strftime("%Y-%m")
+            cur.execute(
+                "SELECT count FROM ai_search_rate_limits WHERE ip = %s AND month = %s",
+                (ip, month_key),
+            )
+            row = cur.fetchone()
+            current = row[0] if row else 0
+            conn.commit()
+            cur.close()
+            remaining = max(0, _AI_SEARCH_MONTHLY_LIMIT_ANON - current)
+            return {
+                "allowed": current < _AI_SEARCH_MONTHLY_LIMIT_ANON,
+                "remaining": remaining,
+                "total": _AI_SEARCH_MONTHLY_LIMIT_ANON,
+            }
+    except Exception as e:
+        logger.error(f"Rate limit check failed: {e}")
+        return {"allowed": True, "remaining": 1, "total": _AI_SEARCH_MONTHLY_LIMIT_ANON}
+
+
+def _increment_ai_rate_limit(ip: str) -> None:
+    """Increment the AI search counter for an IP."""
+    from services.db_pool import get_connection
+    try:
+        with get_connection() as conn:
+            cur = conn.cursor()
+            month_key = date.today().strftime("%Y-%m")
+            cur.execute("""
+                INSERT INTO ai_search_rate_limits (ip, month, count)
+                VALUES (%s, %s, 1)
+                ON CONFLICT (ip, month) DO UPDATE SET count = ai_search_rate_limits.count + 1
+            """, (ip, month_key))
+            conn.commit()
+            cur.close()
+    except Exception as e:
+        logger.error(f"Rate limit increment failed: {e}")
+
+
+@app.get("/api/search/limit")
+async def api_search_limit(request: Request):
+    """Check remaining AI search quota. Logged-in users have unlimited."""
+    user = await get_current_user(request)
+    if user and user.get("is_active"):
+        return {"remaining": -1, "total": -1, "unlimited": True}
+    ip = _get_client_ip(request)
+    limit = _check_ai_rate_limit(ip)
+    return {"remaining": limit["remaining"], "total": limit["total"], "unlimited": False}
+
+
+@app.get("/api/search/stream")
+async def api_search_stream(request: Request, q: str):
+    """
+    SSE endpoint for AI-powered search with Sonnet + MCP tool_use.
+    Anonymous: rate-limited to 3/month. Logged-in: unlimited.
+    """
+    if not q or len(q) < 3:
+        return JSONResponse({"error": "Zoekvraag te kort (minimaal 3 tekens)"}, status_code=400)
+
+    if not web_intel or not web_intel.available:
+        return JSONResponse({"error": "AI-zoekservice niet beschikbaar"}, status_code=503)
+
+    # Auth + rate limiting
+    user = await get_current_user(request)
+    is_authenticated = user and user.get("is_active")
+    partij = None
+
+    if not is_authenticated:
+        ip = _get_client_ip(request)
+        limit = _check_ai_rate_limit(ip)
+        if not limit["allowed"]:
+            return JSONResponse({
+                "error": "Maandelijkse AI-zoeklimiet bereikt",
+                "remaining": 0,
+                "total": _AI_SEARCH_MONTHLY_LIMIT_ANON,
+                "action": "create_account",
+            }, status_code=429)
+    else:
+        ip = None
+        # If user has a party preference, pass it to Sonnet
+        partij = user.get("party")
+
+    async def event_generator():
+        # Increment rate limit for anonymous users at start
+        if not is_authenticated and ip:
+            _increment_ai_rate_limit(ip)
+
+        async for event in web_intel.stream(q, partij=partij):
+            if await request.is_disconnected():
+                break
+            yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "X-Accel-Buffering": "no",
+            "Connection": "keep-alive",
+        },
+    )
+
 
 @app.get("/calendar")
 async def read_calendar(
@@ -851,14 +1039,19 @@ async def read_calendar(
     committee: str = None,
     search: str = None,
     view: str = "list",
+    show_empty: bool = False,
 ):
-    """Public calendar page -- no login required."""
+    """Public calendar page -- no login required.
+
+    By default (show_empty=False), future meetings without documents are hidden.
+    The template exposes a toggle so users can reveal them.
+    """
     user = await get_current_user(request)
     available_years = storage.get_meeting_years()
-    committees = storage.get_distinct_committees()
+    # Filter out numeric-only committee IDs before rendering chips
+    committees = [c for c in storage.get_distinct_committees() if c and not c.strip().isdigit()]
     if year is None and available_years:
         year = available_years[0]
-    # Use filtered query with agenda/doc counts for list view
     meetings = storage.get_meetings_filtered(
         year=year, committee=committee, search=search, limit=2000,
     )
@@ -872,6 +1065,7 @@ async def read_calendar(
         "selected_committee": committee or "",
         "search_query": search or "",
         "view": view,
+        "show_empty": show_empty,
         "user": user,
     })
 

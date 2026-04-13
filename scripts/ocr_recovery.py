@@ -38,7 +38,9 @@ import os
 import re
 import sys
 import tempfile
+import threading
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
@@ -315,33 +317,48 @@ def get_candidates(
 # 2. DOWNLOAD
 # ═══════════════════════════════════════════════════════════════════════
 
+# Thread-local httpx client — reuses connections (TLS, HTTP/2) across downloads.
+# Each worker thread gets its own client with persistent connection pooling.
+_thread_local = threading.local()
+
+
+def _get_http_client() -> httpx.Client:
+    """Return a thread-local httpx.Client, creating one if needed."""
+    if not hasattr(_thread_local, "http_client"):
+        _thread_local.http_client = httpx.Client(
+            headers=DOWNLOAD_HEADERS,
+            follow_redirects=True,
+            timeout=DOWNLOAD_TIMEOUT,
+        )
+    return _thread_local.http_client
+
+
 def download_pdf(url: str, temp_dir: str) -> Optional[str]:
     """Download a PDF from ``url`` to ``temp_dir``.
+
+    Uses a thread-local httpx.Client for connection reuse (skips TLS handshake
+    after first request per thread).
 
     Returns the local file path, or None on failure.
     """
     if not url:
         return None
 
+    client = _get_http_client()
     for attempt in range(1, DOWNLOAD_RETRIES + 1):
         try:
-            with httpx.Client(
-                headers=DOWNLOAD_HEADERS,
-                follow_redirects=True,
-                timeout=DOWNLOAD_TIMEOUT,
-            ) as client:
-                resp = client.get(url)
-                resp.raise_for_status()
+            resp = client.get(url)
+            resp.raise_for_status()
 
-                # Verify it looks like a PDF
-                if not resp.content[:5].startswith(b"%PDF"):
-                    logger.warning(f"  URL did not return a PDF (first bytes: {resp.content[:20]!r})")
-                    return None
+            # Verify it looks like a PDF
+            if not resp.content[:5].startswith(b"%PDF"):
+                logger.warning(f"  URL did not return a PDF (first bytes: {resp.content[:20]!r})")
+                return None
 
-                fd, path = tempfile.mkstemp(suffix=".pdf", dir=temp_dir)
-                with os.fdopen(fd, "wb") as f:
-                    f.write(resp.content)
-                return path
+            fd, path = tempfile.mkstemp(suffix=".pdf", dir=temp_dir)
+            with os.fdopen(fd, "wb") as f:
+                f.write(resp.content)
+            return path
         except Exception as e:
             if attempt < DOWNLOAD_RETRIES:
                 wait = attempt * 2
@@ -359,19 +376,30 @@ def download_pdf(url: str, temp_dir: str) -> Optional[str]:
 
 # Lazy-cached converter (heavy model loading, reuse across documents)
 _docling_converter = None
+_docling_use_count = 0
+_DOCLING_RESET_EVERY = 500  # Reset converter to reclaim C++ memory (Tesseract/MPS)
 
 
 def _get_docling_converter():
     """Lazy-initialise and cache the Docling DocumentConverter with
     TesseractCliOcrOptions for Dutch + English, full-page OCR.
 
+    Automatically resets every 500 uses to reclaim C++ memory from
+    Tesseract/MPS that gc.collect() cannot reach (~10-30s re-init penalty).
+
     NOTE: The WS7 handoff originally specified OcrAutoOptions which
     falls back to RapidOCR (no Dutch support).  The correct approach
     is TesseractCliOcrOptions.  Requires: ``brew install tesseract tesseract-lang``
     """
-    global _docling_converter
-    if _docling_converter is not None:
+    global _docling_converter, _docling_use_count
+    _docling_use_count += 1
+    if _docling_converter is not None and _docling_use_count < _DOCLING_RESET_EVERY:
         return _docling_converter
+    if _docling_converter is not None:
+        logger.info(f"  Resetting Docling converter after {_docling_use_count} uses (memory reclaim)")
+        _docling_converter = None
+        _docling_use_count = 0
+        gc.collect()
 
     from docling.document_converter import DocumentConverter, PdfFormatOption
     from docling.datamodel.pipeline_options import (
@@ -397,21 +425,39 @@ def _get_docling_converter():
     return _docling_converter
 
 
+DOCLING_TIMEOUT = 300  # 5 min — aggressive; if it can't finish in 5 min, skip it
+
+
 def run_docling_ocr(pdf_path: str) -> Optional[str]:
     """Process a PDF through Docling and return the extracted text.
 
-    Returns None on failure.
+    Enforces a 15-minute timeout via a thread future. A 500-page full-page-OCR
+    job takes ~15–20 min at most; anything beyond that is a stuck/malformed PDF.
+
+    Returns None on failure or timeout.
     """
-    try:
-        converter = _get_docling_converter()
-        result = converter.convert(pdf_path)
-        text = result.document.export_to_text()
-        return text.strip() if text else None
-    except Exception as e:
-        logger.error(f"  Docling OCR failed: {e}")
-        return None
-    finally:
-        gc.collect()
+    from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
+
+    def _convert():
+        try:
+            converter = _get_docling_converter()
+            result = converter.convert(pdf_path)
+            text = result.document.export_to_text()
+            return text.strip() if text else None
+        except Exception as e:
+            logger.error(f"  Docling OCR failed: {e}")
+            return None
+        finally:
+            gc.collect()
+
+    with ThreadPoolExecutor(max_workers=1) as ex:
+        future = ex.submit(_convert)
+        try:
+            return future.result(timeout=DOCLING_TIMEOUT)
+        except FuturesTimeoutError:
+            logger.error(f"  Docling OCR timed out ({DOCLING_TIMEOUT}s) — skipping")
+            future.cancel()
+            return None
 
 
 def run_apple_vision_ocr(pdf_path: str) -> Optional[str]:
@@ -445,10 +491,67 @@ def run_apple_vision_ocr(pdf_path: str) -> Optional[str]:
         return None
 
 
-def run_ocr(pdf_path: str, engine: str) -> Optional[str]:
-    """Dispatch to the configured OCR engine."""
+def run_docling_layout_only(pdf_path: str) -> Optional[str]:
+    """Extract text using Docling layout analysis without OCR.
+
+    Uses the shared layout converter from docling_converters.py (do_ocr=False).
+    Fast (~3s any doc size) because it uses the PDF's existing text layer with
+    visual layout coordinates for proper word segmentation. Ideal for
+    garbled_spacing docs where the text IS there but words are smashed together.
+
+    Returns None on failure or timeout.
+    """
+    from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
+
+    def _convert():
+        try:
+            from pipeline.docling_converters import get_layout_converter
+            converter = get_layout_converter()
+            result = converter.convert(pdf_path)
+            text = result.document.export_to_text()
+            return text.strip() if text else None
+        except Exception as e:
+            logger.error(f"  Docling layout-only failed: {e}")
+            return None
+        finally:
+            gc.collect()
+
+    with ThreadPoolExecutor(max_workers=1) as ex:
+        future = ex.submit(_convert)
+        try:
+            return future.result(timeout=60)  # 60s — layout-only should be fast
+        except FuturesTimeoutError:
+            logger.error("  Docling layout-only timed out (60s) — skipping")
+            future.cancel()
+            return None
+
+
+def run_ocr(pdf_path: str, engine: str, damage_type: str = "") -> Optional[str]:
+    """Dispatch to the configured OCR engine with damage-type-aware routing.
+
+    For garbled_spacing: tries layout-only first (~3s any size, no Tesseract).
+    Text IS in the PDF text layer, just needs re-extraction with proper spacing.
+    Falls back to full OCR only if layout-only fails.
+
+    For ligature/low_clean_ratio: full OCR (text layer is actually broken).
+
+    When engine is 'apple_vision' and it fails, falls back to Docling+Tesseract.
+    """
+    # garbled_spacing: layout-only first (text is there, just badly spaced)
+    if damage_type == "garbled_spacing":
+        logger.info("  Trying layout-only extraction (garbled_spacing)...")
+        result = run_docling_layout_only(pdf_path)
+        if result:
+            return result
+        logger.info("  Layout-only insufficient — falling back to full OCR")
+
+    # Full OCR path
     if engine == "apple_vision":
-        return run_apple_vision_ocr(pdf_path)
+        result = run_apple_vision_ocr(pdf_path)
+        if result is None:
+            logger.info("  Apple Vision failed — falling back to Docling+Tesseract")
+            return run_docling_ocr(pdf_path)
+        return result
     return run_docling_ocr(pdf_path)
 
 
@@ -940,6 +1043,40 @@ def save_checkpoint(completed_ids: List[str], stats: Dict):
 # 8. MAIN PIPELINE
 # ═══════════════════════════════════════════════════════════════════════
 
+def prefetch_doc(
+    doc: Dict,
+    temp_dir: str,
+    engine: str,
+) -> Tuple[str, Optional[str], Optional[Tuple[str, str]]]:
+    """Download, OCR, and normalize a single document. Thread-safe — no DB access.
+
+    Returns:
+        (doc_id, new_text, error)
+        where error is (status, detail) if something went wrong, else None.
+    """
+    doc_id = doc["document_id"]
+    url = doc.get("url")
+    damage = doc.get("damage_type", "")
+
+    if not url:
+        return doc_id, None, ("no_source", "no URL available")
+
+    pdf_path = download_pdf(url, temp_dir)
+    if not pdf_path:
+        return doc_id, None, ("no_source", f"download failed for {url}")
+
+    try:
+        new_text = run_ocr(pdf_path, engine, damage_type=damage)
+        if not new_text:
+            return doc_id, None, ("error", f"{engine} returned empty text")
+        return doc_id, normalize_text(new_text), None
+    except Exception as e:
+        return doc_id, None, ("error", str(e))
+    finally:
+        if pdf_path and os.path.exists(pdf_path):
+            os.remove(pdf_path)
+
+
 def process_single_document(
     conn,
     doc: Dict,
@@ -948,8 +1085,12 @@ def process_single_document(
     skip_re_embed: bool = False,
     wait_for_lock: bool = True,
     engine: str = "apple_vision",
+    prefetched_text: Optional[str] = None,
 ) -> Tuple[str, str]:
     """Process a single document through the full recovery pipeline.
+
+    If ``prefetched_text`` is provided (from a parallel prefetch worker),
+    the download + OCR phase is skipped.
 
     Returns:
         (status, detail) where status is one of:
@@ -957,35 +1098,32 @@ def process_single_document(
     """
     doc_id = doc["document_id"]
     doc_name = doc.get("name", "Unknown")
-    url = doc.get("url")
 
-    # Step 1: Download the source PDF
-    if not url:
-        return "no_source", "no URL available"
+    if prefetched_text is not None:
+        new_text = prefetched_text
+    else:
+        # Step 1: Download the source PDF
+        url = doc.get("url")
+        if not url:
+            return "no_source", "no URL available"
 
-    pdf_path = download_pdf(url, temp_dir)
-    if not pdf_path:
-        return "no_source", f"download failed for {url}"
+        pdf_path = download_pdf(url, temp_dir)
+        if not pdf_path:
+            return "no_source", f"download failed for {url}"
 
-    # Mark as bad now that we confirmed a source PDF exists and will attempt OCR.
-    # This is deferred from startup to avoid bulk-marking false positives.
-    if not dry_run:
-        cur = conn.cursor()
-        cur.execute(
-            "UPDATE documents SET ocr_quality = 'bad' WHERE id = %s AND ocr_quality IS NULL",
-            (doc_id,),
-        )
-        conn.commit()
-        cur.close()
+        try:
+            # Step 2: Re-OCR via selected engine
+            damage = doc.get("damage_type", "")
+            new_text = run_ocr(pdf_path, engine, damage_type=damage)
+            if not new_text:
+                return "error", f"{engine} returned empty text"
+            # Step 3: Post-OCR normalization
+            new_text = normalize_text(new_text)
+        finally:
+            if os.path.exists(pdf_path):
+                os.remove(pdf_path)
 
     try:
-        # Step 2: Re-OCR via selected engine
-        new_text = run_ocr(pdf_path, engine)
-        if not new_text:
-            return "error", f"{engine} returned empty text"
-
-        # Step 3: Post-OCR normalization
-        new_text = normalize_text(new_text)
 
         # Step 4: Get current content for comparison
         cur = conn.cursor()
@@ -1067,10 +1205,8 @@ def process_single_document(
             f"deleted {deleted} old chunks"
         )
 
-    finally:
-        # Clean up the downloaded PDF
-        if pdf_path and os.path.exists(pdf_path):
-            os.remove(pdf_path)
+    except Exception:
+        raise
 
 
 def run(
@@ -1081,9 +1217,12 @@ def run(
     year: Optional[int] = None,
     doc_type: Optional[str] = None,
     damage_type: Optional[str] = None,
+    skip_damage_types: Optional[List[str]] = None,
     skip_re_embed: bool = False,
     wait_for_lock: bool = True,
     engine: str = "apple_vision",
+    workers: int = 1,
+    max_content_len: Optional[int] = None,
 ):
     """Main entry point for the OCR recovery pipeline."""
     logger.info("=" * 70)
@@ -1091,6 +1230,7 @@ def run(
     logger.info("=" * 70)
     logger.info(f"  dry_run={dry_run}, limit={limit}, resume={resume}")
     logger.info(f"  batch_size={batch_size}, year={year}, doc_type={doc_type}, damage_type={damage_type}")
+    logger.info(f"  skip_damage_types={skip_damage_types}, workers={workers}")
     logger.info(f"  skip_re_embed={skip_re_embed}, wait_for_lock={wait_for_lock}, engine={engine}")
 
     # Load checkpoint for resume mode
@@ -1127,12 +1267,45 @@ def run(
             candidates = [c for c in candidates if c["document_id"] not in completed_ids]
             logger.info(f"  Filtered: {before} -> {len(candidates)} after resume exclusion")
 
+        # Skip specified damage types (e.g. bm25_miss has near-zero recovery rate)
+        if skip_damage_types:
+            before = len(candidates)
+            candidates = [c for c in candidates if c.get("damage_type") not in skip_damage_types]
+            skipped_n = before - len(candidates)
+            if skipped_n:
+                logger.info(f"  Skipped {skipped_n} docs with damage types: {skip_damage_types}")
+
+        # Filter by content length (focus on quick wins, skip heavy docs)
+        if max_content_len:
+            before = len(candidates)
+            candidates = [c for c in candidates if c.get("content_len", 0) <= max_content_len]
+            skipped_n = before - len(candidates)
+            if skipped_n:
+                logger.info(f"  Skipped {skipped_n} docs > {max_content_len} chars (--max-content-len)")
+
+        # Descope low-yield candidates (data-driven from 3,500-doc run):
+        #   - ligature at 99.9%+ clean: only 17% recovery rate
+        #   - garbled_spacing at 99.9%+ clean: 45% — borderline, keep for now
+        before = len(candidates)
+        candidates = [
+            c for c in candidates
+            if not (c.get("damage_type") == "ligature" and c.get("clean_pct", 0) >= 99.9)
+        ]
+        descoped = before - len(candidates)
+        if descoped:
+            logger.info(f"  Descoped {descoped} ligature docs at >=99.9% clean (17% recovery rate)")
+
+        # Sort by recovery potential: lowest clean_pct first (92-99% recovery
+        # for clean<99% vs 35% for clean>99.9%). This ensures the best shots
+        # get processed first even if the run is interrupted.
+        candidates.sort(key=lambda c: c.get("clean_pct", 100))
+
         # Apply limit
         if limit:
             candidates = candidates[:limit]
 
         total = len(candidates)
-        logger.info(f"Processing {total} documents")
+        logger.info(f"Processing {total} documents (sorted by recovery potential)")
 
         # NOTE: we do NOT bulk-mark ocr_quality='bad' upfront. Each document
         # is marked individually only after successfully downloading + OCR'ing,
@@ -1157,83 +1330,115 @@ def run(
             "dry_run_pass": 0,
         }
 
+        STATUS_SYMBOL = {
+            "recovered": "OK", "dry_run_pass": "DRY", "quality_fail": "QFAIL",
+            "no_source": "NOSRC", "skipped": "SKIP", "review_needed": "REVIEW",
+            "error": "ERR",
+        }
+
+        def _handle_result(idx: int, doc: Dict, status: str, detail: str):
+            """Log result, update queue/stats, checkpoint. Called serially from main thread."""
+            doc_id = doc["document_id"]
+            doc_name = (doc.get("name") or "Unknown")[:60]
+            damage = doc.get("damage_type", "?")
+            clean = doc.get("clean_pct", 0)
+            sym = STATUS_SYMBOL.get(status, "?")
+            logger.info(f"[{idx}/{total}] {doc_name} (damage={damage}, clean={clean}%)")
+            logger.info(f"  [{sym}] {detail}")
+
+            stats[status] = stats.get(status, 0) + 1
+
+            if not dry_run and status in ("no_source", "quality_fail", "error"):
+                try:
+                    update_queue_status(
+                        conn, doc_id,
+                        "review_needed" if status == "quality_fail" else status,
+                        error_message=detail[:500],
+                    )
+                    if status == "quality_fail":
+                        cur = conn.cursor()
+                        cur.execute(
+                            "UPDATE documents SET ocr_quality = 'degraded' WHERE id = %s",
+                            (doc_id,),
+                        )
+                        cur.close()
+                    conn.commit()
+                except Exception:
+                    conn.rollback()
+
+            completed_ids.add(doc_id)
+            if idx % batch_size == 0:
+                save_checkpoint(list(completed_ids), stats)
+                logger.info(f"  Checkpoint saved ({idx}/{total})")
+                gc.collect()
+
         # Create temp dir for PDF downloads
         with tempfile.TemporaryDirectory(prefix="ocr_recovery_") as temp_dir:
-            for idx, doc in enumerate(candidates, 1):
-                doc_id = doc["document_id"]
-                doc_name = (doc.get("name") or "Unknown")[:60]
-                damage = doc.get("damage_type", "?")
-                clean = doc.get("clean_pct", 0)
-
-                logger.info(
-                    f"[{idx}/{total}] {doc_name} "
-                    f"(damage={damage}, clean={clean}%)"
-                )
-
-                try:
-                    status, detail = process_single_document(
-                        conn=conn,
-                        doc=doc,
-                        temp_dir=temp_dir,
-                        dry_run=dry_run,
-                        skip_re_embed=skip_re_embed,
-                        wait_for_lock=wait_for_lock,
-                        engine=engine,
-                    )
-                except Exception as e:
-                    status = "error"
-                    detail = f"unexpected: {e}"
-                    logger.exception(f"  Unexpected error processing {doc_id}")
-                    # Roll back any partial transaction
+            if workers <= 1:
+                # ── Sequential mode (default) ──────────────────────────────
+                for idx, doc in enumerate(candidates, 1):
                     try:
-                        conn.rollback()
-                    except Exception:
-                        pass
-
-                # Log result
-                status_symbol = {
-                    "recovered": "OK",
-                    "dry_run_pass": "DRY",
-                    "quality_fail": "QFAIL",
-                    "no_source": "NOSRC",
-                    "skipped": "SKIP",
-                    "review_needed": "REVIEW",
-                    "error": "ERR",
-                }.get(status, "?")
-                logger.info(f"  [{status_symbol}] {detail}")
-
-                # Update stats
-                stats[status] = stats.get(status, 0) + 1
-
-                # Update queue if not dry-run and not already done in process_single_document
-                if not dry_run and status in ("no_source", "quality_fail", "error"):
-                    try:
-                        update_queue_status(
-                            conn, doc_id,
-                            "review_needed" if status == "quality_fail" else status,
-                            error_message=detail[:500],
+                        status, detail = process_single_document(
+                            conn=conn, doc=doc, temp_dir=temp_dir,
+                            dry_run=dry_run, skip_re_embed=skip_re_embed,
+                            wait_for_lock=wait_for_lock, engine=engine,
                         )
-                        # quality_fail -> degraded (OCR ran but output didn't pass gate)
-                        if status == "quality_fail":
-                            cur = conn.cursor()
-                            cur.execute(
-                                "UPDATE documents SET ocr_quality = 'degraded' WHERE id = %s",
-                                (doc_id,),
-                            )
-                            cur.close()
-                        conn.commit()
-                    except Exception:
-                        conn.rollback()
+                    except Exception as e:
+                        status, detail = "error", f"unexpected: {e}"
+                        logger.exception(f"  Unexpected error processing {doc['document_id']}")
+                        try:
+                            conn.rollback()
+                        except Exception:
+                            pass
+                    _handle_result(idx, doc, status, detail)
 
-                # Track completion for checkpoint
-                completed_ids.add(doc_id)
+            else:
+                # ── Parallel prefetch mode ──────────────────────────────────
+                # N threads download + OCR simultaneously; main thread writes serially.
+                # Bounded window: submit workers*4 docs at a time, not all at once.
+                # This caps memory at ~window_size results instead of unbounded growth
+                # (Docling C++ allocations + completed OCR text held in futures).
+                window_size = workers * 4
+                logger.info(f"  Parallel prefetch: {workers} workers, window={window_size}")
+                idx = 0
+                for win_start in range(0, len(candidates), window_size):
+                    window = candidates[win_start:win_start + window_size]
+                    with ThreadPoolExecutor(max_workers=workers) as pool:
+                        future_to_doc = {
+                            pool.submit(prefetch_doc, doc, temp_dir, engine): doc
+                            for doc in window
+                        }
+                        for future in as_completed(future_to_doc):
+                            idx += 1
+                            doc = future_to_doc[future]
+                            doc_id = doc["document_id"]
+                            try:
+                                _, fetched_text, prefetch_err = future.result()
+                            except Exception as e:
+                                _handle_result(idx, doc, "error", f"prefetch exception: {e}")
+                                continue
 
-                # Checkpoint every batch_size documents
-                if idx % batch_size == 0:
-                    save_checkpoint(list(completed_ids), stats)
-                    logger.info(f"  Checkpoint saved ({idx}/{total})")
+                            if prefetch_err:
+                                _handle_result(idx, doc, prefetch_err[0], prefetch_err[1])
+                                continue
 
-                    # Force garbage collection between batches
+                            # Write phase is serial (advisory lock serialises anyway)
+                            try:
+                                status, detail = process_single_document(
+                                    conn=conn, doc=doc, temp_dir=temp_dir,
+                                    dry_run=dry_run, skip_re_embed=skip_re_embed,
+                                    wait_for_lock=wait_for_lock, engine=engine,
+                                    prefetched_text=fetched_text,
+                                )
+                            except Exception as e:
+                                status, detail = "error", f"unexpected: {e}"
+                                logger.exception(f"  Unexpected error writing {doc_id}")
+                                try:
+                                    conn.rollback()
+                                except Exception:
+                                    pass
+                            _handle_result(idx, doc, status, detail)
+                    # Between windows: force GC to reclaim Docling/Tesseract memory
                     gc.collect()
 
         # Final checkpoint
@@ -1366,6 +1571,41 @@ See: docs/handoffs/WS7_OCR_RECOVERY.md
         dest="wait_for_lock",
         help="Skip documents if advisory lock 42 is held by another process",
     )
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        metavar="N",
+        help=(
+            "Number of parallel download+OCR workers (default: 1). "
+            "Writes remain serial under advisory lock. "
+            "Recommended: 3-4 on a fast connection."
+        ),
+    )
+    parser.add_argument(
+        "--skip-damage-type",
+        action="append",
+        dest="skip_damage_types",
+        default=[],
+        choices=["garbled_spacing", "ligature", "bm25_miss", "low_clean_ratio"],
+        metavar="TYPE",
+        help=(
+            "Skip documents with this damage type. "
+            "Can be repeated. E.g. --skip-damage-type bm25_miss "
+            "(bm25_miss has ~0%% recovery rate and wastes OCR cycles)."
+        ),
+    )
+    parser.add_argument(
+        "--max-content-len",
+        type=int,
+        default=None,
+        metavar="CHARS",
+        help=(
+            "Skip documents longer than this (in chars). "
+            "Use to focus on quick wins first: --max-content-len 50000 "
+            "processes <50K docs (~2-5s each), skipping heavy 200K+ docs."
+        ),
+    )
 
     args = parser.parse_args()
 
@@ -1377,9 +1617,12 @@ See: docs/handoffs/WS7_OCR_RECOVERY.md
         year=args.year,
         doc_type=args.doc_type,
         damage_type=args.damage_type,
+        skip_damage_types=args.skip_damage_types or [],
         skip_re_embed=args.skip_re_embed,
         wait_for_lock=args.wait_for_lock,
         engine=args.engine,
+        workers=args.workers,
+        max_content_len=args.max_content_len,
     )
 
 

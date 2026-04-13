@@ -1,7 +1,7 @@
 # WS8e — Template Polish, Responsive & Convergence
 
-> **Status:** `not started`
-> **Owner:** `unassigned`
+> **Status:** `done` — shipped 2026-04-12
+> **Owner:** `dennis + claude`
 > **Priority:** 3
 > **Depends on:** WS8b, WS8c, WS8d (all must be complete)
 > **Parallelizable:** no (convergence workstream)

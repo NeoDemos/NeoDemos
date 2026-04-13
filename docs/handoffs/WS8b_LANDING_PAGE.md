@@ -1,7 +1,7 @@
 # WS8b — Landing Page Redesign
 
-> **Status:** `not started`
-> **Owner:** `unassigned`
+> **Status:** `done` — shipped 2026-04-12
+> **Owner:** `dennis + claude`
 > **Priority:** 1 (critical path to public launch)
 > **Depends on:** WS8a (CSS architecture must be complete)
 > **Parallelizable:** yes (with WS8c, WS8d)

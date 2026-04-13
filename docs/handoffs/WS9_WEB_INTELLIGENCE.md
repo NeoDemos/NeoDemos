@@ -1,7 +1,7 @@
 # WS9 — Web Search Intelligence: MCP-as-Backend via Sonnet + Tool Use
 
-> **Status:** `not started`
-> **Owner:** `unassigned`
+> **Status:** `in progress — local implementation done (2026-04-12), needs production deploy`
+> **Owner:** `dennis + claude`
 > **Priority:** 2 (critical for search quality; landing page works with current search as fallback)
 > **Parallelizable:** yes (with WS8; converges at frontend search integration)
 

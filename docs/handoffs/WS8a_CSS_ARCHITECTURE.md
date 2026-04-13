@@ -1,7 +1,7 @@
 # WS8a — CSS Architecture: Vite + Tailwind + Design Tokens
 
-> **Status:** `not started`
-> **Owner:** `unassigned`
+> **Status:** `done` — shipped 2026-04-12
+> **Owner:** `dennis + claude`
 > **Priority:** 0 (prerequisite for WS8b, WS8c, WS8d)
 > **Parallelizable:** no (must complete before other WS8 workstreams)
 

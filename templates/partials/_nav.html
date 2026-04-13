@@ -4,7 +4,7 @@
         {% if user %}
         <a href="/calendar" {% if request.url.path == '/calendar' %}class="active"{% endif %}>Kalender</a>
         <a href="/overview" {% if request.url.path == '/overview' %}class="active"{% endif %}>Overzicht</a>
-        <a href="/mcp-installer" {% if request.url.path == '/mcp-installer' %}class="active"{% endif %}>MCP</a>
+        <a href="/mcp-installer" {% if request.url.path == '/mcp-installer' %}class="active"{% endif %}>AI-koppeling</a>
         <a href="/settings" {% if request.url.path == '/settings' %}class="active"{% endif %}>Instellingen</a>
         {% if user.role == 'admin' %}
         <a href="/admin" {% if request.url.path == '/admin' %}class="active"{% endif %}>Beheer</a>
@@ -15,7 +15,7 @@
         </form>
         {% else %}
         <a href="/calendar" {% if request.url.path == '/calendar' %}class="active"{% endif %}>Kalender</a>
-        <a href="/mcp-installer" {% if request.url.path == '/mcp-installer' %}class="active"{% endif %}>MCP</a>
+        <a href="/mcp-installer" {% if request.url.path == '/mcp-installer' %}class="active"{% endif %}>AI-koppeling</a>
         <a href="/over" {% if request.url.path == '/over' %}class="active"{% endif %}>Over</a>
         <a href="/login">Inloggen</a>
         {% endif %}
@@ -32,7 +32,7 @@
     {% if user %}
     <a href="/calendar">Kalender</a>
     <a href="/overview">Overzicht</a>
-    <a href="/mcp-installer">MCP</a>
+    <a href="/mcp-installer">AI-koppeling</a>
     <a href="/settings">Instellingen</a>
     {% if user.role == 'admin' %}
     <a href="/admin">Beheer</a>
@@ -43,7 +43,7 @@
     </form>
     {% else %}
     <a href="/calendar">Kalender</a>
-    <a href="/mcp-installer">MCP</a>
+    <a href="/mcp-installer">AI-koppeling</a>
     <a href="/over">Over</a>
     <a href="/login">Inloggen</a>
     {% endif %}

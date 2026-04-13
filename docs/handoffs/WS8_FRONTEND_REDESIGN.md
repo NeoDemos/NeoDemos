@@ -1,9 +1,10 @@
 # WS8 — Frontend Redesign: Design System, Landing Page & Calendar
 
-> **Status:** `not started`
-> **Owner:** `unassigned`
+> **Status:** `in progress — WS8a/b/c/d/e done, WS8f planned`
+> **Owner:** `dennis + claude`
 > **Priority:** 1 (critical path to public launch)
 > **Parallelizable:** yes (with WS9; converges at search integration)
+> **Last updated:** 2026-04-13
 
 ---
 
@@ -182,6 +183,79 @@ than the API bill. At pre-launch volumes, unlimited Sonnet costs <$5/day.
 - [ ] Cost alert configured at $10/day threshold
 - [ ] Rate limiting code exists but is dormant (feature flag off)
 - [ ] All users get unlimited AI searches at launch
+
+---
+
+---
+
+## Implementation Status (2026-04-12)
+
+### WS8a — CSS Architecture ✅ DONE
+- Vite + Tailwind v4 build (`static/css/main.css` → `static/dist/main.css`)
+- Design tokens in `@theme {}` block: dark green #042825 + beige #f4efe5 + orange #ff751f
+- Instrument Serif + Inter variable fonts self-hosted at `static/fonts/`
+- All component CSS in single `main.css` (no per-page files — simpler with Tailwind v4)
+
+### WS8b — Landing Page ✅ DONE
+- Full-viewport hero (skyline image + overlay gradient + search on hero)
+- Rotating headlines (5 variants, hourly rotation via JS)
+- Demo answer card with desktop/mobile split (`<details>` for mobile)
+- **Demo answer cache**: `scripts/cache_demo_answers.py` → `data/demo_cache.json`
+  - 5 queries pre-rendered: beloftes, klimaat, woningbouw, partijen, armoede
+  - Loaded at startup in `main.py`, served as `demo_answer_markdown` + `demo_sources`
+  - Rendered client-side via `marked.js` + citation bubbles (same as live search)
+  - `DEMO_ANSWER_ID` env var pins a specific demo without redeploy
+- Hero stats: pill treatment (glass blur, orange separators, uppercase)
+- Example queries with `type="button"` (was causing page reload without it)
+- Account nudge after 3rd search, MCP nudge after 5th
+
+### WS8c — Calendar ✅ DONE (WS8c agent)
+- Filterable list view as default
+- Committee filter chips with `aria-pressed`
+- `<details>`/`<summary>` row expansion
+- Sticky date group headers
+- Grid view preserved as toggle
+- URL state sync (`history.replaceState`)
+
+### WS8d — Subpages ✅ DONE
+- `/over`: founder quote, democratic ambition, audience grid
+- `/technologie`: EU sovereignty, security checklist, local AI options, MCP explanation
+- `/methodologie`: 3-step methodology, sources stats, eval scores (0.99 / 4.8 / 2.75)
+- All three have full-viewport hero images with blend fade (`::after` gradient)
+- Consistent `has-hero` body class on all subpage templates
+
+### WS8e — Polish ✅ DONE (2026-04-12)
+- Logout → `/` (was redirecting to `/login`)
+- "MCP" renamed to "AI-koppeling" everywhere (nav desktop + mobile + footer)
+- Footer restructured: nav links → meta (AI + EU + brondata) → dimmed version number
+- Hero image `::after` blend fade into page background (80px gradient)
+- Stats pill eye-catching treatment on landing hero
+- `DB_HOST` fixed: `localhost` → `127.0.0.1` (SSH tunnel IPv6 issue)
+
+### WS8f — Admin Panel, Content Management & Architecture Hardening (planned 2026-04-13)
+
+**Full spec:** [`WS8f_ADMIN_CMS.md`](WS8f_ADMIN_CMS.md)
+
+**Scope:**
+- `site_content` + `site_pages` PostgreSQL tables for CMS-managed content
+- Structured form editor at `/admin/content` (68 editable items across 7 sections)
+- GrapeJS visual page builder at `/admin/editor/<slug>` (over, technologie, methodologie, landing)
+- CSS restructure: split 3,981-line monolith into Tailwind v4 `@layer`-based modules
+- Router split: `main.py` (~1,500 lines) → 4 route modules + ~200-line app shell
+- Subscription tier scaffolding (`free_beta` → `free` → `pro`)
+- Delete dead `static/css/style.css` + `templates/index.html`
+
+**Key architecture decisions:**
+- Payload CMS / Next.js evaluated and rejected (6-8 week rewrite, blocks press moment)
+- Dual editing: form fields for structured data + GrapeJS for visual layout
+- GrapeJS loaded from CDN, stores HTML+CSS+JSON in `site_pages` table
+- Templates fall back to hardcoded content if DB is empty
+
+**Estimated effort:** ~5.5 days (6 phases, each independently deployable)
+
+### Remaining (blocked on WS9)
+- AI answers in live search (currently keyword-only)
+- Demo answer quality depends on WS9 orchestrator quality
 
 ---
 

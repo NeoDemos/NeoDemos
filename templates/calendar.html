@@ -9,17 +9,23 @@
         {% endfor %}
     </select>
     <input id="cal-search" class="cal-search" type="search"
-           placeholder="Zoek vergadering..." value="{{ search_query }}"
+           placeholder="Zoek op onderwerp, commissie of agendapunt..." value="{{ search_query }}"
            aria-label="Zoek vergaderingen">
-    <div class="cal-view-toggle">
-        <button id="btn-view-list" class="{{ 'active' if view != 'grid' }}" title="Lijstweergave" aria-label="Lijstweergave">&#9776;</button>
-        <button id="btn-view-grid" class="{{ 'active' if view == 'grid' }}" title="Kalenderweergave" aria-label="Kalenderweergave">&#9638;</button>
+    <div class="cal-toolbar-right">
+        <label class="cal-toggle-label" title="Toon ook vergaderingen zonder documenten">
+            <input type="checkbox" id="toggle-show-empty" {% if show_empty %}checked{% endif %}>
+            <span>Incl. zonder stukken</span>
+        </label>
+        <div class="cal-view-toggle">
+            <button id="btn-view-list" class="{{ 'active' if view != 'grid' }}" title="Lijstweergave" aria-label="Lijstweergave">&#9776;</button>
+            <button id="btn-view-grid" class="{{ 'active' if view == 'grid' }}" title="Kalenderweergave" aria-label="Kalenderweergave">&#9638;</button>
+        </div>
     </div>
 </div>
 
-<!-- Committee filter chips -->
+<!-- Committee filter chips — only meaningful names (no numeric IDs) -->
 <div class="cal-chips" id="cal-chips">
-    <button class="cal-chip {{ 'active' if not selected_committee }}" data-committee="">Alle</button>
+    <button class="cal-chip {{ 'active' if not selected_committee }}" data-committee="">Alle vergaderingen</button>
     {% for c in committees %}
     <button class="cal-chip {{ 'active' if selected_committee == c }}" data-committee="{{ c }}">{{ c }}</button>
     {% endfor %}
@@ -215,20 +221,42 @@
     /* ── Client-side filtering ────────────────── */
     let activeCommittee = '{{ selected_committee }}';
     let searchTerm = '{{ search_query }}';
+    let showEmpty = {{ 'true' if show_empty else 'false' }};
     let debounceTimer = null;
+
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    function isFuture(isoStr) {
+        if (!isoStr) return false;
+        const d = new Date(isoStr);
+        return new Date(d.getFullYear(), d.getMonth(), d.getDate()) >= today;
+    }
 
     function filteredMeetings() {
         return meetings.filter(function(m) {
-            if (activeCommittee && m.committee) {
-                if (m.committee.toLowerCase().indexOf(activeCommittee.toLowerCase()) === -1) return false;
-            } else if (activeCommittee && !m.committee) {
+            // Committee filter
+            if (activeCommittee) {
+                const comm = (m.committee || '').toLowerCase();
+                if (comm.indexOf(activeCommittee.toLowerCase()) === -1) return false;
+            }
+
+            // Hide future meetings without documents unless toggle is on
+            if (!showEmpty && isFuture(m.start_date) && (!m.doc_count || m.doc_count === 0)) {
                 return false;
             }
+
+            // Search: meeting name + committee + agenda item previews
             if (searchTerm) {
                 const q = searchTerm.toLowerCase();
-                const haystack = ((m.name || '') + ' ' + (m.committee || '')).toLowerCase();
+                const agendaText = (m.agenda_preview || []).join(' ').toLowerCase();
+                const haystack = [
+                    (m.name || ''),
+                    (m.committee || ''),
+                    agendaText
+                ].join(' ').toLowerCase();
                 if (haystack.indexOf(q) === -1) return false;
             }
+
             return true;
         });
     }
@@ -236,7 +264,24 @@
     function applyFilters() {
         setParam('committee', activeCommittee);
         setParam('search', searchTerm);
+        if (showEmpty) setParam('show_empty', '1');
+        else { const p = getParams(); p.delete('show_empty'); history.replaceState(null, '', '/calendar' + (p.toString() ? '?' + p.toString() : '')); }
         renderList(filteredMeetings());
+        updateEmptyCount();
+    }
+
+    /* Show count of hidden future meetings in the toggle label */
+    function updateEmptyCount() {
+        const hiddenCount = meetings.filter(function(m) {
+            if (!isFuture(m.start_date)) return false;
+            return (!m.doc_count || m.doc_count === 0);
+        }).length;
+        const label = document.querySelector('.cal-toggle-label span');
+        if (label) {
+            label.textContent = hiddenCount > 0
+                ? 'Incl. zonder stukken (' + hiddenCount + ')'
+                : 'Incl. zonder stukken';
+        }
     }
 
     /* Filter chips */
@@ -249,7 +294,13 @@
         applyFilters();
     });
 
-    /* Search with 250ms debounce */
+    /* Show-empty toggle */
+    document.getElementById('toggle-show-empty').addEventListener('change', function(e) {
+        showEmpty = e.target.checked;
+        applyFilters();
+    });
+
+    /* Search with 250ms debounce — covers name, committee, agenda items */
     document.getElementById('cal-search').addEventListener('input', function(e) {
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(function() {
@@ -409,6 +460,7 @@
 
     /* ── Init ─────────────────────────────────── */
     renderList(filteredMeetings());
+    updateEmptyCount();
     if ('{{ view }}' === 'grid') renderCalendarGrid();
 })();
 </script>

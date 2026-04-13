@@ -12,7 +12,8 @@ Tiered summarization with Gemini Batch API (50% cost discount):
 
 Excerpt results are written immediately. Direct + extract prompts are
 collected and submitted as a Gemini batch. After the batch completes,
-each result is verified via the source-span verifier and cached.
+raw results are checkpointed to a local JSONL file, then verified via the
+source-span verifier and cached in Postgres.
 
 Performance:
   • Bulk chunk fetching: one DB query per PREFETCH_BATCH docs (default 200)
@@ -20,6 +21,14 @@ Performance:
   • Phase 1 parallel: ThreadPoolExecutor (--workers, default 8) for Jina
     reranker calls and excerpt writes.
   • Phase 3 parallel: same pool for post-batch verification + DB writes.
+
+Resilience:
+  • After Phase 2 (Gemini batch), all raw results are written to
+    logs/ws6_results_YYYYMMDD-HHMM.jsonl BEFORE any DB writes.
+  • If Phase 3 fails (e.g. DB outage), re-run with:
+      --replay-from logs/ws6_results_YYYYMMDD-HHMM.jsonl
+    to skip Phase 1+2 and replay only Phase 3 from the saved file,
+    re-fetching chunks from DB per doc.
 
 Safety:
   • Postgres advisory lock (WS6_SUMMARIES_LOCK_KEY) — only one instance.
@@ -29,11 +38,11 @@ Safety:
 
 Usage:
     python scripts/nightly/06b_compute_summaries.py \\
-        --max-docs 500 \\
-        [--dry-run] [--workers 8] [--log-level DEBUG]
+        --max-docs 86100 [--dry-run] [--workers 8] [--log-level DEBUG]
 
-    # Backfill is the same script with a higher cap:
-    python scripts/nightly/06b_compute_summaries.py --max-docs 86100
+    # Replay failed Phase 3 from checkpoint:
+    python scripts/nightly/06b_compute_summaries.py \\
+        --replay-from logs/ws6_results_20260413-1931.jsonl [--workers 8]
 
 Handoff: docs/handoffs/WS6_SUMMARIZATION.md
 """
@@ -41,6 +50,7 @@ Handoff: docs/handoffs/WS6_SUMMARIZATION.md
 from __future__ import annotations
 
 import argparse
+import json
 import logging
 import os
 import subprocess
@@ -64,6 +74,7 @@ from services.db_pool import get_connection  # noqa: E402
 from services.summarizer import Summarizer  # noqa: E402
 from services.storage_ws6 import (  # noqa: E402
     get_chunks_bulk,
+    get_all_chunks_for_document,
     list_documents_needing_summary,
     update_document_summary_columns,
 )
@@ -72,6 +83,7 @@ log = logging.getLogger("ws6.06b_compute_summaries")
 
 WS6_SUMMARIES_LOCK_KEY: int = 7_640_601
 PREFETCH_BATCH: int = 200  # docs per bulk chunk-fetch query
+RESULTS_DIR: str = "logs"  # where JSONL checkpoints are written
 
 CONFLICTING_PROCESSES = (
     "committee_notulen_pipeline",
@@ -102,6 +114,8 @@ def _parse_args() -> argparse.Namespace:
     p.add_argument("--dry-run", action="store_true")
     p.add_argument("--force", action="store_true",
                    help="Skip conflicting-pipeline check.")
+    p.add_argument("--replay-from", metavar="JSONL_FILE",
+                   help="Skip Phase 1+2. Replay Phase 3 from a saved results JSONL checkpoint.")
     p.add_argument("--log-level", default="INFO",
                    choices=("DEBUG", "INFO", "WARNING", "ERROR"))
     return p.parse_args()
@@ -188,6 +202,34 @@ def _wrap_chunks(rows: List[dict]) -> List[SimpleNamespace]:
     ]
 
 
+def _checkpoint_path() -> str:
+    """Return a timestamped path for the results JSONL checkpoint."""
+    os.makedirs(RESULTS_DIR, exist_ok=True)
+    return os.path.join(RESULTS_DIR, f"ws6_results_{time.strftime('%Y%m%d-%H%M')}.jsonl")
+
+
+def _write_checkpoint(results: Dict[str, str], path: str) -> None:
+    """Write raw Gemini results to a JSONL file before any DB writes."""
+    with open(path, "w", encoding="utf-8") as f:
+        for doc_id, raw_text in results.items():
+            f.write(json.dumps({"doc_id": doc_id, "raw_text": raw_text}, ensure_ascii=False) + "\n")
+    log.info("Checkpoint written: %s (%d results)", path, len(results))
+
+
+def _read_checkpoint(path: str) -> Dict[str, str]:
+    """Read a JSONL checkpoint back into {doc_id: raw_text}."""
+    results: Dict[str, str] = {}
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            obj = json.loads(line)
+            results[obj["doc_id"]] = obj["raw_text"]
+    log.info("Loaded checkpoint: %s (%d results)", path, len(results))
+    return results
+
+
 # ── Per-document worker (Phase 1) ────────────────────────────────────────
 
 def _process_doc(
@@ -263,7 +305,21 @@ def _verify_and_write(
     stats: RunStats,
     stats_lock: threading.Lock,
 ) -> None:
-    """Verify a batch result and write to DB. Runs in a worker thread."""
+    """Verify a batch result and write to DB. Runs in a worker thread.
+
+    If verify_chunks is empty (replay mode), chunks are fetched from DB.
+    """
+    # Replay mode: re-fetch chunks from DB
+    if not verify_chunks:
+        chunk_rows = get_all_chunks_for_document(doc_id)
+        verify_chunks = _wrap_chunks(chunk_rows)
+
+    if not verify_chunks:
+        log.warning(f"{doc_id}: no chunks found for verification, skipping")
+        with stats_lock:
+            stats.errors += 1
+        return
+
     summarizer = _get_summarizer()
     try:
         result = summarizer.verify_and_build_result(
@@ -305,11 +361,81 @@ def _verify_and_write(
     )
 
 
+def _run_phase3(
+    results: Dict[str, str],
+    verify_map: Dict[str, List],
+    stats: RunStats,
+    stats_lock: threading.Lock,
+    workers: int,
+) -> None:
+    """Parallel Phase 3: verify + write all batch results."""
+    log.info(f"Phase3: verifying and writing {len(results)} results...")
+    phase3_start = time.monotonic()
+
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        futures = {
+            pool.submit(
+                _verify_and_write,
+                doc_id,
+                raw_text,
+                verify_map.get(doc_id, []),
+                stats,
+                stats_lock,
+            ): doc_id
+            for doc_id, raw_text in results.items()
+        }
+        for future in as_completed(futures):
+            try:
+                future.result()
+            except Exception as e:
+                log.exception(f"{futures[future]}: phase3 worker raised: {e}")
+                with stats_lock:
+                    stats.errors += 1
+
+    phase3_elapsed = round(time.monotonic() - phase3_start, 1)
+    log.info(f"Phase3 done in {phase3_elapsed}s.")
+
+
 # ── Main ────────────────────────────────────────────────────────────────
 
 def main() -> int:
     args = _parse_args()
     _setup_logging(args.log_level)
+
+    # ── Replay mode: skip Phase 1+2, run Phase 3 from JSONL checkpoint ──
+    if args.replay_from:
+        log.info(f"REPLAY MODE: loading results from {args.replay_from}")
+        if not os.path.exists(args.replay_from):
+            log.error(f"Checkpoint file not found: {args.replay_from}")
+            return 1
+
+        # Advisory lock still required to prevent concurrent replays
+        try:
+            got = _try_advisory_lock()
+        except Exception as e:
+            log.exception(f"Advisory-lock acquisition failed: {e}")
+            return 1
+        if not got:
+            log.error(f"Another 06b run holds advisory lock {WS6_SUMMARIES_LOCK_KEY}.")
+            return 1
+
+        stats = RunStats()
+        stats_lock = threading.Lock()
+        try:
+            results = _read_checkpoint(args.replay_from)
+            stats.batch_submitted = len(results)
+            # verify_map is empty — _verify_and_write will re-fetch chunks from DB
+            _run_phase3(results, {}, stats, stats_lock, args.workers)
+        finally:
+            try:
+                _release_advisory_lock()
+            except Exception as e:
+                log.warning(f"Failed to release advisory lock: {e}")
+
+        log.info(f"Replay summary: {stats.summary()}")
+        return 0
+
+    # ── Normal mode ─────────────────────────────────────────────────────
 
     # 1. Conflict check
     if not args.force:
@@ -348,8 +474,6 @@ def main() -> int:
             return 0
 
         # 4. Phase 1 — classify, excerpt, collect batch prompts
-        #    Bulk-fetch chunks PREFETCH_BATCH docs at a time, then
-        #    process each batch in parallel via ThreadPoolExecutor.
         batch_items: List[Tuple[str, str, List]] = []  # (doc_id, prompt, verify_chunks)
 
         phase1_start = time.monotonic()
@@ -359,7 +483,6 @@ def main() -> int:
                 doc_ids = [r["id"] for r in prefetch_slice]
                 doc_names = {r["id"]: (r.get("name") or "") for r in prefetch_slice}
 
-                # One DB round-trip for PREFETCH_BATCH docs
                 chunks_map = get_chunks_bulk(doc_ids)
 
                 futures = {
@@ -386,7 +509,6 @@ def main() -> int:
                     if result is not None:
                         batch_items.append(result)
 
-                # Progress log every prefetch batch
                 done_so_far = prefetch_start + len(prefetch_slice)
                 log.info(
                     f"Phase1 progress: {done_so_far}/{stats.considered} scanned | "
@@ -424,32 +546,15 @@ def main() -> int:
             log.info(f"Summary: {stats.summary()}")
             return 1
 
+        # 5b. Checkpoint raw results to JSONL before any DB writes
+        checkpoint_path = _checkpoint_path()
+        try:
+            _write_checkpoint(results, checkpoint_path)
+        except Exception as e:
+            log.error(f"Failed to write checkpoint: {e}. Continuing without checkpoint.")
+
         # 6. Phase 3 — parallel verify + write
-        log.info(f"Phase3: verifying and writing {len(results)} results...")
-        phase3_start = time.monotonic()
-
-        with ThreadPoolExecutor(max_workers=args.workers) as pool:
-            futures = {
-                pool.submit(
-                    _verify_and_write,
-                    doc_id,
-                    raw_text,
-                    verify_map.get(doc_id, []),
-                    stats,
-                    stats_lock,
-                ): doc_id
-                for doc_id, raw_text in results.items()
-            }
-            for future in as_completed(futures):
-                try:
-                    future.result()
-                except Exception as e:
-                    log.exception(f"{futures[future]}: phase3 worker raised: {e}")
-                    with stats_lock:
-                        stats.errors += 1
-
-        phase3_elapsed = round(time.monotonic() - phase3_start, 1)
-        log.info(f"Phase3 done in {phase3_elapsed}s.")
+        _run_phase3(results, verify_map, stats, stats_lock, args.workers)
 
         # 7. Report missing results
         missing = set(prompts_map.keys()) - set(results.keys())

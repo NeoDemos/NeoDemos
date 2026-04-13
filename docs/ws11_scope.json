@@ -64,17 +64,20 @@
         "2022": 17, "2023": 6, "2024": 3, "2025": 0, "2026": 0
       },
       "ori_counts_by_year": {
-        "2018": 158, "2019": 388, "2020": 347, "2021": 358,
-        "2022": 345, "2023": 397, "2024": 477, "2025": 306, "2026": 100
+        "2018": 158, "2019": 390, "2020": 347, "2021": 358,
+        "2022": 345, "2023": 397, "2024": 477, "2025": 306, "2026": 102
       },
+      "ori_counts_verified": "2026-04-14 live ORI query",
       "gap_by_year": {
-        "2018": 152, "2019": 366, "2020": 319, "2021": 320,
-        "2022": 328, "2023": 391, "2024": 474, "2025": 306, "2026": 100
+        "2018": 152, "2019": 368, "2020": 319, "2021": 320,
+        "2022": 328, "2023": 391, "2024": 474, "2025": 306, "2026": 102
       },
-      "total_ori": 2876,
+      "total_ori": 2882,
       "total_db": 120,
-      "total_gap": 2756,
+      "total_gap": 2762,
       "coverage_pct": 4,
+      "ori_report_type_count": 292,
+      "ori_report_note": "Report classification=Raadsvragen covers 2025-2026 only (192+100). Complementary to MediaObject name-match.",
       "ori_type": ["MediaObject", "Report"],
       "ori_classification_field": "Raadsvragen",
       "ori_name_patterns": ["schriftelijke vraag", "schriftelijke vragen", "raadsvraag", "SV "],
@@ -89,7 +92,7 @@
             "query": {
               "bool": {
                 "must": [
-                  {"term": {"@type.keyword": "MediaObject"}},
+                  {"term": {"@type": "MediaObject"}},
                   {"range": {"last_discussed_at": {"gte": "YEAR-01-01", "lte": "YEAR-12-31"}}}
                 ],
                 "should": [
@@ -152,7 +155,15 @@
         "2022": 5, "2023": 3, "2024": 4, "2025": 4, "2026": 2
       },
       "total_db": 42,
-      "ori_counts_by_year": "TBD — run audit query below",
+      "ori_counts_by_year": {
+        "2018": 2, "2019": 13, "2020": 1, "2021": 8,
+        "2022": 5, "2023": 3, "2024": 7, "2025": 21, "2026": 18
+      },
+      "ori_counts_verified": "2026-04-14 live ORI query",
+      "total_ori": 78,
+      "total_gap": 36,
+      "coverage_pct": 54,
+      "gap_note": "Gap is smaller than initially estimated. 78 ORI MediaObjects vs 42 in DB. Many DB docs may have come from iBabs scraper directly.",
       "ori_type": ["MediaObject"],
       "ori_name_patterns": ["initiatiefnotitie", "initiatiefnoti"],
       "date_field": "last_discussed_at",
@@ -164,7 +175,7 @@
             "size": 500,
             "query": {
               "bool": {
-                "must": [{"term": {"@type.keyword": "MediaObject"}}],
+                "must": [{"term": {"@type": "MediaObject"}}],
                 "should": [
                   {"match": {"name": "initiatiefnotitie"}},
                   {"match": {"name": "initiatiefnoti"}}
@@ -205,7 +216,15 @@
         "2022": 17, "2023": 34, "2024": 26, "2025": 12, "2026": 2
       },
       "total_db": 231,
-      "ori_counts_by_year": "TBD — run audit query below",
+      "ori_counts_by_year": {
+        "2018": 13, "2019": 61, "2020": 31, "2021": 41,
+        "2022": 17, "2023": 34, "2024": 30, "2025": 78, "2026": 28
+      },
+      "ori_counts_verified": "2026-04-14 live ORI query",
+      "total_ori": 333,
+      "total_gap": 102,
+      "coverage_pct": 69,
+      "gap_note": "Gap is 102 docs (31%), concentrated in 2025 (78 ORI vs 12 DB) and 2026 (28 vs 2). Pre-2024 appears well-covered via iBabs.",
       "ori_type": ["MediaObject"],
       "ori_name_patterns": ["initiatiefvoorstel"],
       "date_field": "last_discussed_at",
@@ -217,7 +236,7 @@
             "size": 500,
             "query": {
               "bool": {
-                "must": [{"term": {"@type.keyword": "MediaObject"}}],
+                "must": [{"term": {"@type": "MediaObject"}}],
                 "should": [{"match": {"name": "initiatiefvoorstel"}}],
                 "minimum_should_match": 1
               }
@@ -239,7 +258,9 @@
         "2022": 1119, "2023": 1381, "2024": 853, "2025": 106, "2026": 25
       },
       "total_db": 9398,
-      "note": "Well covered as parts of meeting doc bundles. WS11a should set doc_classification where name matches motie.",
+      "total_ori_mediaobject": 8177,
+      "total_ori_report": 232,
+      "gap_note": "DB has MORE moties (9,398) than ORI MediaObjects (8,177) — most come from meeting document bundles via iBabs. Covered. WS11a should set doc_classification where name matches motie.",
       "ori_type": ["Report"],
       "ori_classification_field": "Moties",
       "ori_formal_count": 232
@@ -256,7 +277,11 @@
         "2022": 53, "2023": 113, "2024": 54, "2025": 2, "2026": 0
       },
       "total_db": 469,
-      "note": "Coverage appears reasonable. Verify 2025 (only 2 — suspiciously low).",
+      "total_ori_mediaobject": 519,
+      "total_ori_report": 86,
+      "total_gap": 50,
+      "coverage_pct": 90,
+      "gap_note": "Small gap (50 docs, 10%). 2025 drop (2 in DB vs likely more in ORI) confirms ingestion lag for recent docs.",
       "ori_type": ["Report"],
       "ori_classification_field": "Amendementen",
       "ori_formal_count": 86
@@ -273,7 +298,11 @@
         "2022": 287, "2023": 436, "2024": 253, "2025": 9, "2026": 3
       },
       "total_db": 1849,
-      "note": "Well covered. 2025 drop (9 docs) needs investigation — may be ingestion lag.",
+      "total_ori_mediaobject": 2322,
+      "total_ori_report": 319,
+      "total_gap": 473,
+      "coverage_pct": 80,
+      "gap_note": "Larger gap than expected: 473 docs (20%). 2025 drop (9 DB vs likely ~200+ ORI) confirms ingestion lag. Worth ingesting in v0.2.1.",
       "ori_type": ["Report"],
       "ori_classification_field": "Raadsvoorstellen",
       "ori_formal_count": 319
@@ -290,12 +319,39 @@
         "2022": 283, "2023": 336, "2024": 263, "2025": 135, "2026": 24
       },
       "total_db": 2058,
-      "note": "Coverage looks good.",
+      "total_ori_mediaobject": 2927,
+      "total_ori_report": 431,
+      "total_gap": 869,
+      "coverage_pct": 70,
+      "gap_note": "Larger gap than expected: 869 docs (30%). This was previously marked 'looks good' but ORI has significantly more. Worth ingesting in v0.2.1.",
       "ori_type": ["Report"],
       "ori_classification_field": "Toezeggingen",
       "ori_formal_count": 431
     }
   ],
+
+  "ori_report_classifications_verified_20260414": {
+    "Brieven B&W": 1151,
+    "RIS": 483,
+    "Toezeggingen": 431,
+    "Raadsvoorstellen": 319,
+    "Raadsvragen": 292,
+    "Moties": 232,
+    "Burgerbrieven": 222,
+    "Wijkraadadviezen": 201,
+    "Besluiten": 190,
+    "Actualiteiten": 163,
+    "Amendementen": 86,
+    "Themadossiers": 48,
+    "IBO": 41
+  },
+
+  "ori_api_field_notes": {
+    "@type": "Already a keyword field — use term query directly, NOT @type.keyword",
+    "classification": "Text field — use classification.keyword for term queries and aggregations",
+    "last_discussed_at": "Key date field for MediaObject. NOT date_modified (ORI indexes 1-3 months late)",
+    "start_date": "Key date field for Report type"
+  },
 
   "ori_index_summary": {
     "last_updated": "2025-06-29",
@@ -337,11 +393,16 @@
     "qdrant_collection": "notulen_chunks",
     "embedding_model": "Qwen3-Embedding-8B via Nebius API",
     "batch_size": 50,
+    "new_fields_migration": "alembic/versions/20260414_0006_add_municipality_and_source.py",
+    "civic_doc_types_guard": "pipeline/document_classifier.py::CIVIC_DOC_TYPES",
     "notes": [
       "ORI text[] field contains pre-extracted text — use directly when available, skip OCR",
-      "Set doc_classification at upsert time, not post-process",
-      "Use ORI @id as stable external key to avoid re-ingestion",
-      "Checkpoint by ORI @id for resume — same pattern as WS7 ocr_recovery.py"
+      "Set doc_classification at upsert time (WS11b), not post-process",
+      "Use ORI @id as stable external key (ON CONFLICT DO UPDATE in storage.insert_document)",
+      "Checkpoint by ORI @id for resume — data/pipeline_state/ws11b_checkpoint.json",
+      "municipality field (default 'rotterdam') added in migration 0006 — flows to Qdrant payload",
+      "source field ('ori', 'ibabs', 'scraper', 'manual') added in migration 0006",
+      "document_processor civic type guard: will NOT overwrite schriftelijke_vraag etc. with 'regular'"
     ]
   },
 
