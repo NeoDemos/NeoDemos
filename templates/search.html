@@ -280,7 +280,7 @@
             const limitData = await limitResp.json();
             if (!limitData.unlimited && limitData.remaining <= 0) {
                 aiContainer.hidden = false;
-                aiContent.innerHTML = `
+                aiTeaser.innerHTML = `
                     <div class="ai-rate-limit-notice">
                         <p>U heeft uw maandelijkse AI-zoeklimiet bereikt (${limitData.total} zoekopdrachten).</p>
                         <p>Maak een gratis account aan voor onbeperkt AI-zoeken.</p>
@@ -383,7 +383,7 @@
                     eventSource.close();
                     activeEventSource = null;
                     loadingSteps.hidden = true;
-                    aiContent.innerHTML = `<p class="ai-error">${data.message}</p>`;
+                    aiTeaser.innerHTML = `<p class="ai-error">${data.message}</p>`;
                     break;
             }
         };
@@ -393,7 +393,7 @@
             activeEventSource = null;
             loadingSteps.hidden = true;
             if (!answerBuffer) {
-                aiContent.innerHTML = '<p class="ai-error">Verbinding verloren. De zoekresultaten hieronder zijn nog beschikbaar.</p>';
+                aiTeaser.innerHTML = '<p class="ai-error">Verbinding verloren. De zoekresultaten hieronder zijn nog beschikbaar.</p>';
             }
         };
     }
@@ -411,6 +411,7 @@
             if (hint) hint.textContent = 'Minimaal 3 tekens om te zoeken.';
             return;
         }
+        document.body.classList.add('search-active');
 
         // Close any existing SSE connection
         if (activeEventSource) {

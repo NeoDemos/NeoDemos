@@ -1540,6 +1540,10 @@ input:checked + .slider:before {
   font-weight: 600;
 }
 
+#document-results {
+  margin-top: var(--space-8);
+}
+
 .search-section-header {
   margin-bottom: var(--space-6);
   color: var(--color-text-secondary);
@@ -2256,7 +2260,7 @@ input:checked + .slider:before {
   flex-direction: column;
   align-items: center;
   gap: var(--space-6);
-  max-width: 720px;
+  max-width: 900px;
   width: 100%;
   padding-top: var(--space-16);
 }
@@ -2327,6 +2331,28 @@ input:checked + .slider:before {
 .hero-stats-sep {
   margin: 0 var(--space-3);
   color: var(--color-accent);
+}
+
+/* Default transitions so collapse animation works */
+.example-queries,
+.hero-stats {
+  transition: opacity 0.25s ease, max-height 0.3s ease, margin 0.3s ease, padding 0.3s ease;
+}
+
+/* Search-active: collapse marketing elements so Analyse answer pulls up */
+body.search-active .example-queries,
+body.search-active .hero-stats {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  margin: 0 !important;
+  padding: 0 !important;
+  pointer-events: none;
+}
+
+body.search-active .landing-hero-content {
+  padding-top: var(--space-8);
+  transition: padding-top 0.3s ease;
 }
 
 @media (max-width: 768px) {

@@ -424,6 +424,10 @@ class WebIntelligenceService:
                     if hasattr(block, "text")
                 )
 
+                if not answer.strip():
+                    yield {"type": "error", "message": "Geen antwoord ontvangen. Probeer een specifiekere vraag."}
+                    return
+
                 # Yield answer in chunks for progressive rendering
                 chunk_size = 80
                 for i in range(0, len(answer), chunk_size):
