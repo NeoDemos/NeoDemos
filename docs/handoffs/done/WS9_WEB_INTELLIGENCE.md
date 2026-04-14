@@ -69,7 +69,7 @@ You are picking up WS9_WEB_INTELLIGENCE for the NeoDemos project — a civic int
 platform for the Rotterdam municipal council (90,000+ documents, 2002-present).
 
 Read these files first:
-- docs/handoffs/WS9_WEB_INTELLIGENCE.md (this file — full spec)
+- docs/handoffs/done/WS9_WEB_INTELLIGENCE.md (this file — full spec)
 - mcp_server_v3.py (all 13 MCP tool definitions — you'll extract these as Python functions)
 - services/ai_service.py (current 3-stage Gemini pipeline — to be replaced)
 - main.py (search endpoint at /api/search — wire the new approach here)

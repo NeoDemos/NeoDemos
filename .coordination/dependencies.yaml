@@ -121,3 +121,24 @@ WS14:
   priority: 1
   initial_status: not_started
   notes: "Plan approved 2026-04-14; C1 hotfix ships standalone; cross-refs WS11 B3, WS5a B6, WS13 E"
+
+WS15:
+  title: "Per-party voting data (motie_stemmen + zoek_stemgedrag)"
+  depends_on: []
+  priority: 1.5
+  initial_status: not_started
+  notes: "Press-moment defensive query layer; promoted from v0.3.0 on 2026-04-14"
+
+WS16:
+  title: "MCP monitoring & observability"
+  depends_on: [WS4]
+  priority: 2
+  initial_status: in_progress
+  notes: "Phase 1 (watch/stats/alert scripts + launchd) shipped 2026-04-14; Phase 2 deferred v0.2.1"
+
+WS17:
+  title: "Production feedback loop (detect → digest → close-the-loop)"
+  depends_on: [WS4]
+  priority: 4
+  initial_status: not_started
+  notes: "v0.2.1 scope; approved 2026-04-14; explicitly no LLM-as-judge"

@@ -1,7 +1,7 @@
 # NeoDemos Project State
 
 > Auto-generated from `.coordination/events.jsonl` — do not edit manually.
-> Last rebuilt: 2026-04-14T19:20:01Z
+> Last rebuilt: 2026-04-14T19:26:34Z
 
 ## Active Now
 
@@ -26,9 +26,12 @@
 
 ## Available (unclaimed, no blockers)
 
-| WS   | Title                    | Dependencies |
-|------|--------------------------|--------------|
-| WS2b | IV3 taakveld FK backfill | WS2          |
+| WS   | Title                                                       | Dependencies |
+|------|-------------------------------------------------------------|--------------|
+| WS15 | Per-party voting data (motie_stemmen + zoek_stemgedrag)     | none         |
+| WS16 | MCP monitoring & observability                              | WS4          |
+| WS2b | IV3 taakveld FK backfill                                    | WS2          |
+| WS17 | Production feedback loop (detect → digest → close-the-loop) | WS4          |
 
 ## Paused
 
