@@ -113,21 +113,27 @@ class RAGService:
         """
         tasks = []
 
+        # Each stream skips its own rerank (stream_fast_mode=True). We rerank
+        # ONCE across the deduplicated union below — cuts Jina calls 5× and
+        # scores all candidates against the user's actual query rather than
+        # the per-stream augmented retrieval prompts. (WS10 mitigation.)
+        stream_fast_mode = True
+
         # Vision Stream (Ideology) - High priority to capture vision chunks before deduplication
         vision_query = overrides.get("vision") if overrides else f"{query_text} standpunt visie ideaal ideologie programma"
-        tasks.append(self._async_retrieve(vision_query or f"{query_text} visie", query_embedding, distribution.get("vision", 2), "vision", date_from, date_to, fast_mode))
+        tasks.append(self._async_retrieve(vision_query or f"{query_text} visie", query_embedding, distribution.get("vision", 2), "vision", date_from, date_to, stream_fast_mode))
 
         # Financial Stream
         financial_query = overrides.get("financial") if overrides else f"{query_text} begroting budget kosten cijfers"
-        tasks.append(self._async_retrieve(financial_query or f"{query_text} begroting", query_embedding, distribution.get("financial", 3), "financial", date_from, date_to, fast_mode))
+        tasks.append(self._async_retrieve(financial_query or f"{query_text} begroting", query_embedding, distribution.get("financial", 3), "financial", date_from, date_to, stream_fast_mode))
 
         # Debate Stream
         debate_query = overrides.get("debate") if overrides else f"{query_text} debat standpunten raadsleden uitspraken"
-        tasks.append(self._async_retrieve(debate_query or f"{query_text} debat", query_embedding, distribution.get("debate", 3), "debate", date_from, date_to, fast_mode))
+        tasks.append(self._async_retrieve(debate_query or f"{query_text} debat", query_embedding, distribution.get("debate", 3), "debate", date_from, date_to, stream_fast_mode))
 
         # Fact Stream
         fact_query = overrides.get("fact") if overrides else f"{query_text} beleid regels technische details definities"
-        tasks.append(self._async_retrieve(fact_query or f"{query_text} beleid", query_embedding, distribution.get("fact", 2), "fact", date_from, date_to, fast_mode))
+        tasks.append(self._async_retrieve(fact_query or f"{query_text} beleid", query_embedding, distribution.get("fact", 2), "fact", date_from, date_to, stream_fast_mode))
 
         # Graph-walk Stream (WS1). Returns [] when the KG is not yet populated
         # (GRAPH_WALK_ENABLED unset OR kg_relationships < GRAPH_WALK_MIN_EDGES).
@@ -146,6 +152,19 @@ class RAGService:
                 if chunk.chunk_id not in seen_chunk_ids:
                     all_chunks.append(chunk)
                     seen_chunk_ids.add(chunk.chunk_id)
+
+        # Single cross-stream rerank against the original user query.
+        # Skipped when caller asked for fast_mode or when reranker is unavailable.
+        if not fast_mode and _reranker is not None and all_chunks:
+            try:
+                documents = [c.content for c in all_chunks]
+                scores = await asyncio.to_thread(_reranker.score_pairs, query_text, documents)
+                for chunk, score in zip(all_chunks, scores):
+                    chunk.similarity_score = float(score)
+                all_chunks.sort(key=lambda c: c.similarity_score, reverse=True)
+                all_chunks = [c for c in all_chunks if c.similarity_score > -0.1]
+            except Exception:
+                logger.exception("[rag] cross-stream rerank failed; returning fused order")
 
         return all_chunks
 

@@ -11,11 +11,127 @@ Usage:
 
 from __future__ import annotations
 
+import hashlib
 import os
 import logging
+import threading
+import time as _time
+from collections import deque
 from typing import List, Optional, Protocol
 
 logger = logging.getLogger(__name__)
+
+# Module-level TTL cache for Jina rerank results.
+# Key: sha256(query + \x00 + doc_1 + \x00 + doc_2 + ...) — order-preserving so
+# scores map back to input positions correctly.
+# Hits are common because: (a) WS6 batch jobs replay similar queries, (b) MCP
+# users ask overlapping questions within minutes, (c) `vergelijk_partijen`
+# repeats the same {topic} + {party} pattern across N parties.
+_RERANK_CACHE: dict = {}
+_RERANK_CACHE_LOCK = threading.Lock()
+_RERANK_CACHE_TTL = int(os.getenv("JINA_CACHE_TTL_SEC", "300"))
+_RERANK_CACHE_MAX = int(os.getenv("JINA_CACHE_MAX_ENTRIES", "1024"))
+
+
+def _rerank_cache_key(query: str, documents: List[str]) -> str:
+    h = hashlib.sha256()
+    h.update(query.encode("utf-8"))
+    h.update(b"\x00")
+    for d in documents:
+        h.update(d.encode("utf-8"))
+        h.update(b"\x00")
+    return h.hexdigest()
+
+
+def _rerank_cache_get(key: str) -> Optional[List[float]]:
+    with _RERANK_CACHE_LOCK:
+        entry = _RERANK_CACHE.get(key)
+        if entry is None:
+            return None
+        scores, ts = entry
+        if _time.time() - ts > _RERANK_CACHE_TTL:
+            _RERANK_CACHE.pop(key, None)
+            return None
+        return list(scores)
+
+
+def _rerank_cache_set(key: str, scores: List[float]) -> None:
+    with _RERANK_CACHE_LOCK:
+        if len(_RERANK_CACHE) >= _RERANK_CACHE_MAX:
+            now = _time.time()
+            for k in [k for k, (_, ts) in _RERANK_CACHE.items() if now - ts > _RERANK_CACHE_TTL]:
+                _RERANK_CACHE.pop(k, None)
+            if len(_RERANK_CACHE) >= _RERANK_CACHE_MAX:
+                # Drop oldest 10% as a hard cap fallback
+                victims = sorted(_RERANK_CACHE.items(), key=lambda kv: kv[1][1])[: max(1, _RERANK_CACHE_MAX // 10)]
+                for k, _ in victims:
+                    _RERANK_CACHE.pop(k, None)
+        _RERANK_CACHE[key] = (list(scores), _time.time())
+
+
+# ---------------------------------------------------------------------------
+# Token-bucket throttle for Jina TPM (paid tier ceiling: 2M tokens/min).
+# Sliding 60s window — preventive, self-regulating, no fixed concurrency cap.
+# Default budget = 90% of plafond to leave headroom for token-estimate error
+# (Dutch text via Jina BPE is roughly len/4 ± 20%).
+# ---------------------------------------------------------------------------
+
+_JINA_TPM_BUDGET = int(os.getenv("JINA_TPM_BUDGET", "1800000"))
+_JINA_WINDOW_SEC = 60.0
+
+
+class _TokenBucket:
+    """Sliding-window token-rate limiter. Thread-safe."""
+
+    def __init__(self, budget_per_window: int, window_sec: float = _JINA_WINDOW_SEC) -> None:
+        self.budget = budget_per_window
+        self.window_sec = window_sec
+        self._entries: deque = deque()  # (timestamp, tokens)
+        self._spent = 0
+        self._lock = threading.Lock()
+
+    def acquire(self, tokens: int) -> None:
+        """Block until `tokens` fits within the rolling window."""
+        if tokens <= 0:
+            return
+        # If a single request exceeds the whole budget, log and let it pass —
+        # blocking forever would be worse than a 429.
+        if tokens > self.budget:
+            logger.warning(
+                "[reranker] single call estimate %d tokens exceeds budget %d — sending anyway",
+                tokens, self.budget,
+            )
+            with self._lock:
+                self._entries.append((_time.time(), tokens))
+                self._spent += tokens
+            return
+
+        warned = False
+        while True:
+            with self._lock:
+                now = _time.time()
+                while self._entries and now - self._entries[0][0] > self.window_sec:
+                    _, t = self._entries.popleft()
+                    self._spent -= t
+                if self._spent + tokens <= self.budget:
+                    self._entries.append((now, tokens))
+                    self._spent += tokens
+                    return
+                wait = self.window_sec - (now - self._entries[0][0]) + 0.05
+            if not warned:
+                logger.info("[reranker] TPM budget reached, throttling ~%.2fs", wait)
+                warned = True
+            _time.sleep(min(max(wait, 0.05), 1.0))
+
+
+_jina_token_bucket = _TokenBucket(_JINA_TPM_BUDGET)
+
+
+def _estimate_tokens(query: str, documents: List[str]) -> int:
+    """Conservative BPE estimate for Dutch text: ~4 chars/token."""
+    total_chars = len(query) + sum(len(d) for d in documents)
+    return max(1, total_chars // 4)
+
 
 # ---------------------------------------------------------------------------
 # Protocol: any reranker must implement score_pairs
@@ -129,16 +245,25 @@ class JinaAPIReranker:
     MAX_BATCH_CHARS = 80_000
 
     def score_pairs(self, query: str, documents: List[str]) -> List[float]:
-        """Score query-document pairs via Jina API, batching by payload size."""
-        import time as _time
+        """Score query-document pairs via Jina API, batching by payload size.
 
+        Wrapped in a TTL cache (see _RERANK_CACHE) — identical (query, docs)
+        calls within the TTL window skip the API entirely.
+        """
         if not documents:
             return []
+
+        cache_key = _rerank_cache_key(query, documents)
+        cached = _rerank_cache_get(cache_key)
+        if cached is not None and len(cached) == len(documents):
+            return cached
 
         batches = self._make_batches(documents)
 
         if len(batches) == 1:
-            return self._api_call_with_retry(query, batches[0][1])
+            scores = self._api_call_with_retry(query, batches[0][1])
+            _rerank_cache_set(cache_key, scores)
+            return scores
 
         # Multiple batches: 0.2s gap (paid tier: 2M TPM, 500 RPM — plenty of headroom)
         all_scores: dict = {}
@@ -147,14 +272,23 @@ class JinaAPIReranker:
                 _time.sleep(0.2)
             batch_scores = self._api_call_with_retry(query, batch_docs)
             all_scores.update(zip(indices, batch_scores))
-        return [all_scores.get(i, 0.0) for i in range(len(documents))]
+        scores = [all_scores.get(i, 0.0) for i in range(len(documents))]
+        _rerank_cache_set(cache_key, scores)
+        return scores
 
     def _api_call_with_retry(self, query: str, documents: List[str]) -> List[float]:
-        """Retry with exponential backoff on 429 rate limit — never fall back to local."""
-        import time as _time
+        """Retry with exponential backoff on 429 rate limit — never fall back to local.
+
+        Each attempt first acquires from the module-level TPM token bucket so we
+        preventively stay under Jina's 2M tokens/min ceiling. Retries also
+        re-acquire because failed calls still count toward Jina's TPM.
+        """
         import requests
 
+        estimated = _estimate_tokens(query, documents)
+
         for attempt in range(4):
+            _jina_token_bucket.acquire(estimated)
             try:
                 return self._api_call(query, documents)
             except requests.HTTPError as e:
@@ -164,6 +298,7 @@ class JinaAPIReranker:
                     _time.sleep(wait)
                 else:
                     raise
+        _jina_token_bucket.acquire(estimated)
         return self._api_call(query, documents)  # final attempt, raises if still failing
 
     def _make_batches(self, documents: List[str]):
