@@ -29,7 +29,7 @@
     <array>
         <string>/bin/bash</string>
         <string>-lc</string>
-        <string>cd "/Users/dennistak/Documents/Final Frontier/NeoDemos" &amp;&amp; /usr/bin/python3 scripts/coord/rebuild_state.py</string>
+        <string>cd "/Users/dennistak/Documents/Final Frontier/NeoDemos" &amp;&amp; set -a; source .env 2&gt;/dev/null; set +a; ./.venv/bin/python3 scripts/coord/rebuild_state.py</string>
     </array>
 
     <key>StartCalendarInterval</key>

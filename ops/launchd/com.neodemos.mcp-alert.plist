@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  MCP health anomaly detector — press-moment safety net.
+
+  Runs scripts/mcp/alert.py every 5 minutes. Queries mcp_audit_log through the
+  SSH tunnel (started separately with ./scripts/dev_tunnel.sh --bg). Fires
+  macOS notifications (osascript) when any of the 4 anomaly rules trip.
+  Appends every fire to .coordination/events.jsonl as an `alert` event.
+
+  Rules (see alert.py docstring for details):
+    1. error_rate    — >10% errors in last 5min (with >=5 calls)
+    2. latency       — p95 latency > 10s in last 5min
+    3. traffic_spike — 3x baseline traffic in last 5min
+    4. silent        — 0 calls in last 15min when prior hour had >=10
+
+  Each rule has a 30-minute cooldown to prevent notification spam.
+
+  Install:
+    cp ops/launchd/com.neodemos.mcp-alert.plist ~/Library/LaunchAgents/
+    launchctl load ~/Library/LaunchAgents/com.neodemos.mcp-alert.plist
+
+  Inspect:
+    launchctl list | grep mcp-alert
+    tail -f /tmp/neodemos-mcp-alert.out
+
+  Uninstall:
+    launchctl unload ~/Library/LaunchAgents/com.neodemos.mcp-alert.plist
+    rm ~/Library/LaunchAgents/com.neodemos.mcp-alert.plist
+
+  Tunnel requirement: if the SSH tunnel is down when this runs, alert.py
+  exits code 1 silently; launchd retries next tick. No spam notifications
+  about tunnel state.
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.neodemos.mcp-alert</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>-lc</string>
+        <string>cd "/Users/dennistak/Documents/Final Frontier/NeoDemos" &amp;&amp; set -a; source .env 2&gt;/dev/null; set +a; ./.venv/bin/python3 scripts/mcp/alert.py</string>
+    </array>
+
+    <key>StartInterval</key>
+    <integer>300</integer>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/dennistak/Documents/Final Frontier/NeoDemos</string>
+
+    <key>StandardOutPath</key>
+    <string>/tmp/neodemos-mcp-alert.out</string>
+
+    <key>StandardErrorPath</key>
+    <string>/tmp/neodemos-mcp-alert.err</string>
+</dict>
+</plist>
