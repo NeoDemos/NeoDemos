@@ -35,26 +35,30 @@ When a workstream finishes:
 
 > **Last updated:** 2026-04-14
 
+<!-- STATE-AUTO-START -->
 | # | File | Title | Priority | Status | Depends on |
 |---|---|---|---|---|---|
-| WS1 | [`WS1_GRAPHRAG.md`](WS1_GRAPHRAG.md) | GraphRAG retrieval (incl. VN provenance + Phase 1 execution runbook) | 1 | **blocked on execution** — all code shipped (Phase 0 + A bis + Phase 1 prep); waiting on WS7/WS11/WS12 to unblock the 10-step execution runbook | WS7 + WS11 + WS12 (clean, complete corpus + VN `quality_score` populated before enrichment) |
-| WS2 | [`done/WS2_FINANCIAL.md`](done/WS2_FINANCIAL.md) | Trustworthy financial analysis | 2 | **done** — shipped 2026-04-12 | none |
-| WS2b | [`WS2b_IV3_TAAKVELD.md`](WS2b_IV3_TAAKVELD.md) | IV3 taakveld FK backfill | 2 | not started | WS2 done ✅ |
-| WS3 | [`WS3_JOURNEY.md`](WS3_JOURNEY.md) | Document journey timelines | 3 | not started | WS1 Phase A (motie↔notulen linking) |
-| WS4 | [`done/WS4_MCP_DISCIPLINE.md`](done/WS4_MCP_DISCIPLINE.md) | Best-in-class MCP surface | 4 | **shipped 2026-04-13** (v0.2.0-alpha.2); 2 reliability follow-ups opened 2026-04-14 | none |
-| WS5a | [`WS5a_NIGHTLY_PIPELINE.md`](WS5a_NIGHTLY_PIPELINE.md) | 100% reliable nightly ingest | 5 | not started | none |
-| WS5b | [`WS5b_MULTI_PORTAL.md`](WS5b_MULTI_PORTAL.md) | Multi-portal connectors (search-only) | 6 | **deferred to v0.2.1** | WS5a stable for 14d |
-| WS6 | [`WS6_SUMMARIZATION.md`](WS6_SUMMARIZATION.md) | Source-spans-only summarization | 8 | **in progress** — Phase 3 DB write running (~4K of 25.5K); code complete; MCP tool + UI badges pending | none for v0.2.0 minimum; WS1 for `mode='structured'` |
-| WS7 | [`WS7_OCR_RECOVERY.md`](WS7_OCR_RECOVERY.md) | OCR recovery for moties/amendementen | 2.5 | **in progress** — Dennis running | none; **must finish before WS1 Phase A** |
-| WS8 | [`done/WS8_FRONTEND_REDESIGN.md`](done/WS8_FRONTEND_REDESIGN.md) | Frontend redesign: design system, landing page, calendar | 1 (launch blocker) | **done** — WS8a-e shipped 2026-04-12 | WS9 (soft — for demo answer + streaming search) |
-| WS8f | [`WS8f_ADMIN_CMS.md`](WS8f_ADMIN_CMS.md) | Admin panel + content management + GrapeJS editor | 2 (launch enhancer) | **review** — shipped 2026-04-13, pending Dennis QA — **must finish QA before WS14 Phase D** | WS8a-e complete ✅ |
-| WS9 | [`done/WS9_WEB_INTELLIGENCE.md`](done/WS9_WEB_INTELLIGENCE.md) | Web intelligence: MCP-as-backend, Sonnet tool_use, SSE streaming | 1 (launch blocker) | **done** — deployed 2026-04-13 (b3104c3) | none (extract from existing MCP tools) |
-| WS10 | [`WS10_TABLE_RICH_EXTRACTION.md`](WS10_TABLE_RICH_EXTRACTION.md) | Table-rich document extraction (Docling layout pass) | 6 | **paused** — infrastructure done, full backfill deferred; curated 20-doc run only | none |
-| WS11 | [`WS11_CORPUS_COMPLETENESS.md`](WS11_CORPUS_COMPLETENESS.md) | Corpus completeness 2018–2026 (ORI gap + metadata backfill) | 1 | **in progress** — P1 ORI ingest running; WS11a complete (62,627 docs classified, 30 types) | none |
-| WS12 | [`WS12_VIRTUAL_NOTULEN_BACKFILL.md`](WS12_VIRTUAL_NOTULEN_BACKFILL.md) | Virtual notulen backfill & production hardening | 1 | **in progress** — Dennis running | none |
-| WS13 | [`WS13_MULTI_GEMEENTE_PIPELINE.md`](WS13_MULTI_GEMEENTE_PIPELINE.md) | Multi-gemeente pipeline: tenant-aware ingestion | 1 (v0.2.1) | not started | WS5a stable |
-| WS14 | [`WS14_CALENDAR_QUALITY.md`](WS14_CALENDAR_QUALITY.md) | Calendar quality & bijlage reconciliation | 1 (launch blocker) | **not started** — plan approved 2026-04-14; C1 hotfix ships standalone | WS8f `done` (sequencing); cross-refs WS11 (B3), WS5a (B6), WS13 (E) |
-| WS15 | [`WS15_MOTIE_STEMMEN.md`](WS15_MOTIE_STEMMEN.md) | Per-party voting data (`motie_stemmen` + `zoek_stemgedrag` MCP tool) | 1.5 | **not started** — promoted from v0.3.0 on 2026-04-14 | WS11 ✅, WS4 ✅; independent of WS1 |
+| WS1 | [`WS1_GRAPHRAG.md`](WS1_GRAPHRAG.md) | GraphRAG retrieval (Flair NER + Gemini enrichment + VN provenance) | 1 | **blocked** — waiting on WS7, WS11, WS12 | WS7, WS11, WS12 |
+| WS8 | [`done/WS8_FRONTEND_REDESIGN.md`](done/WS8_FRONTEND_REDESIGN.md) | Frontend redesign: design system, landing, calendar | 1 | **done** — shipped 2026-04-12 | — |
+| WS9 | [`done/WS9_WEB_INTELLIGENCE.md`](done/WS9_WEB_INTELLIGENCE.md) | Web intelligence: MCP-as-backend, Sonnet tool_use, SSE | 1 | **done** — shipped 2026-04-13 | — |
+| WS11 | [`WS11_CORPUS_COMPLETENESS.md`](WS11_CORPUS_COMPLETENESS.md) | Corpus completeness 2018-2026 (ORI gap + metadata) | 1 | **in progress** | — |
+| WS12 | [`WS12_VIRTUAL_NOTULEN_BACKFILL.md`](WS12_VIRTUAL_NOTULEN_BACKFILL.md) | Virtual notulen backfill & production hardening | 1 | **in progress** | — |
+| WS13 | [`WS13_MULTI_GEMEENTE_PIPELINE.md`](WS13_MULTI_GEMEENTE_PIPELINE.md) | Multi-gemeente pipeline: tenant-aware ingestion | 1 | **blocked** — waiting on WS5a | WS5a |
+| WS14 | [`WS14_CALENDAR_QUALITY.md`](WS14_CALENDAR_QUALITY.md) | Calendar quality & bijlage reconciliation | 1 | **blocked** — waiting on WS8f | WS8f |
+| WS15 | [`WS15_MOTIE_STEMMEN.md`](WS15_MOTIE_STEMMEN.md) | Per-party voting data (motie_stemmen + zoek_stemgedrag) | 1.5 | **available** — Initial seed: not_started | — |
+| WS2 | [`done/WS2_FINANCIAL.md`](done/WS2_FINANCIAL.md) | Trustworthy financial analysis | 2 | **done** — shipped 2026-04-12 | — |
+| WS2b | [`WS2b_IV3_TAAKVELD.md`](WS2b_IV3_TAAKVELD.md) | IV3 taakveld FK backfill | 2 | **available** | WS2 |
+| WS8f | [`WS8f_ADMIN_CMS.md`](WS8f_ADMIN_CMS.md) | Admin panel + CMS + GrapeJS editor | 2 | **in progress** — Shipped 2026-04-13, pending Dennis QA via /ws-complete | WS8 |
+| WS16 | [`WS16_MCP_MONITORING.md`](WS16_MCP_MONITORING.md) | MCP monitoring & observability | 2 | **in progress** — Initial seed: Phase 1 shipped 2026-04-14 | WS4 |
+| WS7 | [`WS7_OCR_RECOVERY.md`](WS7_OCR_RECOVERY.md) | OCR recovery for moties/amendementen | 2.5 | **in progress** | — |
+| WS3 | [`WS3_JOURNEY.md`](WS3_JOURNEY.md) | Document journey timelines | 3 | **blocked** — waiting on WS1 | WS1 |
+| WS4 | [`done/WS4_MCP_DISCIPLINE.md`](done/WS4_MCP_DISCIPLINE.md) | Best-in-class MCP surface | 4 | **done** — shipped 2026-04-13 | — |
+| WS17 | [`WS17_FEEDBACK_LOOP.md`](WS17_FEEDBACK_LOOP.md) | Production feedback loop (detect → digest → close-the-loop) | 4 | **available** — Initial seed: not_started, v0.2.1 scope | WS4 |
+| WS5a | [`WS5a_NIGHTLY_PIPELINE.md`](WS5a_NIGHTLY_PIPELINE.md) | 100% reliable nightly ingest | 5 | **in progress** — claimed via /ws-claim | — |
+| WS5b | [`WS5b_MULTI_PORTAL.md`](WS5b_MULTI_PORTAL.md) | Multi-portal connectors (search-only) | 6 | **blocked** — waiting on WS5a | WS5a |
+| WS10 | [`WS10_TABLE_RICH_EXTRACTION.md`](WS10_TABLE_RICH_EXTRACTION.md) | Table-rich document extraction (Docling layout) | 6 | **paused** — Infrastructure done; targeted 20-doc run only | — |
+| WS6 | [`WS6_SUMMARIZATION.md`](WS6_SUMMARIZATION.md) | Source-spans-only summarization | 8 | **in progress** — Phase 3 DB write running; mode='structured' needs WS1 | — |
+<!-- STATE-AUTO-END -->
 
 **Webcast timestamp linking** (priority 7) is split across WS5a (schema + backfill) and WS5b (HLS player UI).
 

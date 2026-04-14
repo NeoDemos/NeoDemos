@@ -22,3 +22,7 @@
 {"agent": "mcp_alert", "detail": "20 calls (20.0x baseline)", "event": "alert", "metrics": {"baseline_5m": 1.0, "calls_5m": 20, "ratio": 20.0}, "rule": "traffic_spike", "ts": "2026-04-14T18:48:32Z"}
 {"agent": "Dennis", "commit": "58caebc", "detail": "Statement timeout + T1-T10 tool quality fixes + MCP service-role migration + requirements pin", "event": "completed", "ts": "2026-04-14T19:14:27Z", "ws": "WS4"}
 {"agent": "dennistak", "detail": "claimed via /ws-claim", "event": "claimed", "ts": "2026-04-14T19:20:01Z", "ws": "WS5a"}
+{"agent": "seed", "detail": "Initial seed: not_started", "event": "note", "ts": "2026-04-14T19:27:49Z", "ws": "WS15"}
+{"agent": "Dennis", "detail": "Initial seed: Phase 1 shipped 2026-04-14", "event": "claimed", "ts": "2026-04-14T19:27:49Z", "ws": "WS16"}
+{"agent": "seed", "detail": "Initial seed: not_started, v0.2.1 scope", "event": "note", "ts": "2026-04-14T19:27:49Z", "ws": "WS17"}
+{"agent": "mcp_alert", "detail": "0 calls in 15min (was averaging 65/hr)", "event": "alert", "metrics": {"calls_15m": 0, "prior_60m_calls": 65}, "rule": "silent", "ts": "2026-04-14T19:28:49Z"}

@@ -1,7 +1,7 @@
 # NeoDemos Project State
 
 > Auto-generated from `.coordination/events.jsonl` — do not edit manually.
-> Last rebuilt: 2026-04-14T19:26:34Z
+> Last rebuilt: 2026-04-14T19:27:55Z
 
 ## Active Now
 
@@ -9,6 +9,7 @@
 |------|----------------------------------------------------|------------|------------|--------------------------------------------------------|
 | WS11 | Corpus completeness 2018-2026 (ORI gap + metadata) | seed       | 2026-04-14 |                                                        |
 | WS12 | Virtual notulen backfill & production hardening    | seed       | 2026-04-14 |                                                        |
+| WS16 | MCP monitoring & observability                     | Dennis     | 2026-04-14 | Initial seed: Phase 1 shipped 2026-04-14               |
 | WS8f | Admin panel + CMS + GrapeJS editor                 | seed       | 2026-04-14 | Shipped 2026-04-13, pending Dennis QA via /ws-complete |
 | WS7  | OCR recovery for moties/amendementen               | seed       | 2026-04-14 |                                                        |
 | WS5a | 100% reliable nightly ingest                       | dennistak  | 2026-04-14 | claimed via /ws-claim                                  |
@@ -29,7 +30,6 @@
 | WS   | Title                                                       | Dependencies |
 |------|-------------------------------------------------------------|--------------|
 | WS15 | Per-party voting data (motie_stemmen + zoek_stemgedrag)     | none         |
-| WS16 | MCP monitoring & observability                              | WS4          |
 | WS2b | IV3 taakveld FK backfill                                    | WS2          |
 | WS17 | Production feedback loop (detect → digest → close-the-loop) | WS4          |
 
@@ -57,9 +57,6 @@
 ## Recent events (last 15)
 
 ```jsonl
-{"agent": "seed", "detail": "Infrastructure done; targeted 20-doc run only", "event": "claimed", "ts": "2026-04-14T15:31:44Z", "ws": "WS10"}
-{"agent": "seed", "detail": "Infrastructure done; targeted 20-doc run only", "event": "paused", "ts": "2026-04-14T15:31:44Z", "ws": "WS10"}
-{"agent": "seed", "event": "claimed", "ts": "2026-04-14T15:31:44Z", "ws": "WS11"}
 {"agent": "seed", "event": "claimed", "ts": "2026-04-14T15:31:44Z", "ws": "WS12"}
 {"agent": "seed", "detail": "status=deferred. Deferred to v0.2.1", "event": "note", "ts": "2026-04-14T15:31:44Z", "ws": "WS5b"}
 {"agent": "seed", "detail": "Phase 3 DB write running; mode='structured' needs WS1", "event": "claimed", "ts": "2026-04-14T15:31:44Z", "ws": "WS6"}
@@ -72,4 +69,7 @@
 {"agent": "mcp_alert", "detail": "20 calls (20.0x baseline)", "event": "alert", "metrics": {"baseline_5m": 1.0, "calls_5m": 20, "ratio": 20.0}, "rule": "traffic_spike", "ts": "2026-04-14T18:48:32Z"}
 {"agent": "Dennis", "commit": "58caebc", "detail": "Statement timeout + T1-T10 tool quality fixes + MCP service-role migration + requirements pin", "event": "completed", "ts": "2026-04-14T19:14:27Z", "ws": "WS4"}
 {"agent": "dennistak", "detail": "claimed via /ws-claim", "event": "claimed", "ts": "2026-04-14T19:20:01Z", "ws": "WS5a"}
+{"agent": "seed", "detail": "Initial seed: not_started", "event": "note", "ts": "2026-04-14T19:27:49Z", "ws": "WS15"}
+{"agent": "Dennis", "detail": "Initial seed: Phase 1 shipped 2026-04-14", "event": "claimed", "ts": "2026-04-14T19:27:49Z", "ws": "WS16"}
+{"agent": "seed", "detail": "Initial seed: not_started, v0.2.1 scope", "event": "note", "ts": "2026-04-14T19:27:49Z", "ws": "WS17"}
 ```
