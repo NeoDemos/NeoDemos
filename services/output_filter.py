@@ -25,7 +25,7 @@ The filter never raises. On unexpected input shapes it logs a warning and
 returns the input unchanged. This is intentional: a broken Layer 4 must
 not block legitimate traffic — every other layer is still in place.
 
-See ``docs/handoffs/WS4_MCP_DISCIPLINE.md`` §Defense-in-depth.
+See ``docs/handoffs/done/WS4_MCP_DISCIPLINE.md`` §Defense-in-depth.
 """
 
 from __future__ import annotations

@@ -70,7 +70,7 @@ Two consecutive testing sessions via Claude.ai iOS app against the live MCP surf
 **Severity:** mixed — HIGH for BUG-002, BUG-005, BUG-006; MEDIUM for BUG-003, BUG-004, BUG-007; LOW for IMP-*
 
 **Triaged:** 2026-04-14 → multiple destinations:
-- **[WS4 §(4) Tool quality fixes from 2026-04-14](../docs/handoffs/WS4_MCP_DISCIPLINE.md#4-tool-quality-fixes-from-2026-04-14-systematic-testing-added-2026-04-14)** (10 items T1–T10: BUG-002, BUG-003, BUG-005, BUG-006, BUG-003 s2, IMP-003, IMP-004, IMP-005 + broad-query demotion). Ship before v0.2.0 eval gate.
+- **[WS4 §(4) Tool quality fixes from 2026-04-14](../docs/handoffs/done/WS4_MCP_DISCIPLINE.md#4-tool-quality-fixes-from-2026-04-14-systematic-testing-added-2026-04-14)** (10 items T1–T10: BUG-002, BUG-003, BUG-005, BUG-006, BUG-003 s2, IMP-003, IMP-004, IMP-005 + broad-query demotion). Ship before v0.2.0 eval gate.
 - **[WS14 B5 (meeting dedup)](../docs/handoffs/WS14_CALENDAR_QUALITY.md)** — BUG-007 confirmed, direction set (prefer record with populated `commissie` code; surface both IDs in response).
 - **[WS2b IV-1 + IV-2](../docs/handoffs/WS2b_IV3_TAAKVELD.md#appended-2026-04-14-from-mcp-testing-feedback)** — IMP-001 (unit field) + IMP-002 (iv3_omschrijving JOIN). Ships with main WS2b backfill.
 - **[WS1 Future work](../docs/handoffs/WS1_GRAPHRAG.md#future-work-do-not-do-in-this-workstream)** — BUG-001 is expected pre-Phase A (no action); full `haal_partijstandpunt_op` programme-based profile seeding deferred past v0.4; `vergelijk_partijen` retrieval-based flavour stays in v0.2.0.
@@ -139,7 +139,7 @@ Twee raadslid-periodes: 29-03-2018 → 16-06-2022 **en** 16-03-2022 → 18-03-20
 
 **2. LLM hallucineert politieke rol-data — data-fix, geen instructie-fix**
 Het "Karremans tot 2026"-antwoord laat zien dat LLMs politieke personeelsdata schatten op basis van training data. Dit is een ontbrekende-data-probleem: de LLM had de huidige bezetting niet in context.
-- **Actie (WS4):** `wethouders`-array toevoegen aan `get_neodemos_context()` primer (huidig bezetting per portefeuille, gegenereerd uit `persons_roles` bij server boot). De LLM krijgt de juiste facts bij sessiestart — geen "roep dit proactief aan"-instructie in de tool-description nodig. Zie [WS4_MCP_DISCIPLINE.md §Context primer](../docs/handoffs/WS4_MCP_DISCIPLINE.md).
+- **Actie (WS4):** `wethouders`-array toevoegen aan `get_neodemos_context()` primer (huidig bezetting per portefeuille, gegenereerd uit `persons_roles` bij server boot). De LLM krijgt de juiste facts bij sessiestart — geen "roep dit proactief aan"-instructie in de tool-description nodig. Zie [WS4_MCP_DISCIPLINE.md §Context primer](../docs/handoffs/done/WS4_MCP_DISCIPLINE.md).
 
 **Severity:** low — tool werkt correct. Twee kleine aandachtspunten: data-kwaliteitscheck op overlappende entries, en tool-description preventieve-aanroep instructie.
 
@@ -186,7 +186,7 @@ Relevantiescore-bereik was 0.06–0.77 bij één query. Scores <0.15 zijn in de 
 
 **Severity:** medium — correctheid OK, maar slot-inefficiëntie schaalt slecht: bij `max_resultaten=20` kan een veelgevraagd document effectief het hele resultatenvenster innemen.
 
-**Triaged:** 2026-04-11 → [WS4_MCP_DISCIPLINE.md §Retrieval quality fixes](../docs/handoffs/WS4_MCP_DISCIPLINE.md) (alle drie bugs: dedup retrieval-laag, score-floor, lege-chunk-filter).
+**Triaged:** 2026-04-11 → [WS4_MCP_DISCIPLINE.md §Retrieval quality fixes](../docs/handoffs/done/WS4_MCP_DISCIPLINE.md) (alle drie bugs: dedup retrieval-laag, score-floor, lege-chunk-filter).
 
 ---
 
@@ -267,11 +267,11 @@ De tool-description in [mcp_server_v3.py:438-440](../mcp_server_v3.py#L438-L440)
 
 4. **[WS2] Finer-grained table chunking bij financiële docs** — al impliciet gedekt door `financial_lines` structured extractie (één rij per cel); na go-live hoort `zoek_financieel` voor exacte getallen een router te zijn die doorroutet naar `vraag_begrotingsregel`. Het tekst-pad verdwijnt niet maar is alleen nog voor narratieve vragen. Reeds in [WS2_FINANCIAL.md §MCP tools](../docs/handoffs/done/WS2_FINANCIAL.md) opgenomen.
 
-5. **[WS4] `budget_year` vs `datum_van` documentatie herschrijven naar AI-consumptie template** — opgenomen in de tool-description-rewrite van de bestaande 13 tools. Concreet voorbeeld dat de divergentie illustreert: "Begroting 2025 wordt ingediend in oktober 2024 (publicatiedatum) maar beschrijft fiscaal jaar 2025 (budget_year). Gebruik `budget_year=2025` wanneer je vraagt 'wat is de begrotingsruimte voor 2025' en `datum_van='2024-10-01'` wanneer je vraagt 'welke begrotingsdocumenten werden gepubliceerd in oktober 2024'." Ingewerkt in [WS4_MCP_DISCIPLINE.md §Tool API improvements](../docs/handoffs/WS4_MCP_DISCIPLINE.md).
+5. **[WS4] `budget_year` vs `datum_van` documentatie herschrijven naar AI-consumptie template** — opgenomen in de tool-description-rewrite van de bestaande 13 tools. Concreet voorbeeld dat de divergentie illustreert: "Begroting 2025 wordt ingediend in oktober 2024 (publicatiedatum) maar beschrijft fiscaal jaar 2025 (budget_year). Gebruik `budget_year=2025` wanneer je vraagt 'wat is de begrotingsruimte voor 2025' en `datum_van='2024-10-01'` wanneer je vraagt 'welke begrotingsdocumenten werden gepubliceerd in oktober 2024'." Ingewerkt in [WS4_MCP_DISCIPLINE.md §Tool API improvements](../docs/handoffs/done/WS4_MCP_DISCIPLINE.md).
 
-6. **[WS4] `exclude_ids` parameter op alle retrieval-tools** — goedkope server-side dedup voor multi-call sessies. LLM stuurt de document_ids die al geconsumeerd zijn mee; de tool filtert ze uit. Ingewerkt in [WS4_MCP_DISCIPLINE.md §Tool API improvements](../docs/handoffs/WS4_MCP_DISCIPLINE.md).
+6. **[WS4] `exclude_ids` parameter op alle retrieval-tools** — goedkope server-side dedup voor multi-call sessies. LLM stuurt de document_ids die al geconsumeerd zijn mee; de tool filtert ze uit. Ingewerkt in [WS4_MCP_DISCIPLINE.md §Tool API improvements](../docs/handoffs/done/WS4_MCP_DISCIPLINE.md).
 
-**Triaged:** 2026-04-11 → [WS2_FINANCIAL.md §Joint-arrangement (GRJR) & scope handling](../docs/handoffs/done/WS2_FINANCIAL.md) (primary, items 1–4) + [WS4_MCP_DISCIPLINE.md §Tool API improvements](../docs/handoffs/WS4_MCP_DISCIPLINE.md) (item 5: `budget_year` docs + scope metadata passthrough). Item 6 (duplicaat doc_ids): token-waste, geen infra fix — adres via tool-description "do NOT use when"-clausule in WS4. Issue 7 (`lees_fragment` ID-compatibiliteit) reeds gedekt door bestaande WS4 MCP bug fixes.
+**Triaged:** 2026-04-11 → [WS2_FINANCIAL.md §Joint-arrangement (GRJR) & scope handling](../docs/handoffs/done/WS2_FINANCIAL.md) (primary, items 1–4) + [WS4_MCP_DISCIPLINE.md §Tool API improvements](../docs/handoffs/done/WS4_MCP_DISCIPLINE.md) (item 5: `budget_year` docs + scope metadata passthrough). Item 6 (duplicaat doc_ids): token-waste, geen infra fix — adres via tool-description "do NOT use when"-clausule in WS4. Issue 7 (`lees_fragment` ID-compatibiliteit) reeds gedekt door bestaande WS4 MCP bug fixes.
 
 ---
 

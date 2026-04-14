@@ -74,4 +74,4 @@ Before filing a bug with Mistral support, run `npx @modelcontextprotocol/inspect
 
 - [Mistral MCP Connectors help](https://help.mistral.ai/en/articles/393572-configuring-a-custom-connector)
 - [MCP spec](https://modelcontextprotocol.io/specification)
-- [NeoDemos WS4 handoff](../handoffs/WS4_MCP_DISCIPLINE.md)
+- [NeoDemos WS4 handoff](../handoffs/done/WS4_MCP_DISCIPLINE.md)

@@ -565,7 +565,7 @@ Expected impact: 2-hop walk latency from ~7s → ~150ms at 500K edges.
 | WS1 | [`WS1_GRAPHRAG.md`](../handoffs/WS1_GRAPHRAG.md) | GraphRAG retrieval (57K → 500K edges) | in progress |
 | WS2 | [`WS2_FINANCIAL.md`](../handoffs/done/WS2_FINANCIAL.md) | Trustworthy financial analysis | in progress |
 | WS3 | [`WS3_JOURNEY.md`](../handoffs/WS3_JOURNEY.md) | Document journey timelines | blocked on WS1 |
-| WS4 | [`WS4_MCP_DISCIPLINE.md`](../handoffs/WS4_MCP_DISCIPLINE.md) | Best-in-class MCP surface | in progress |
+| WS4 | [`WS4_MCP_DISCIPLINE.md`](../handoffs/done/WS4_MCP_DISCIPLINE.md) | Best-in-class MCP surface | in progress |
 | WS5a | [`WS5a_NIGHTLY_PIPELINE.md`](../handoffs/WS5a_NIGHTLY_PIPELINE.md) | Nightly ingest pipeline | pending |
 | WS6 | [`WS6_SUMMARIZATION.md`](../handoffs/WS6_SUMMARIZATION.md) | Source-spans summarization | in progress |
 

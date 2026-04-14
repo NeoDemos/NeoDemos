@@ -32,7 +32,7 @@ _(empty — last cleaned 2026-04-11)_
 
 ### MCP reliability follow-ups (from 2026-04-14 outages)
 
-Full context + file paths in [WS4 §Post-ship reliability follow-ups](docs/handoffs/WS4_MCP_DISCIPLINE.md#post-ship-reliability-follow-ups-opened-2026-04-14). Memory: [feedback_mcp_uptime.md](.claude/projects/-Users-dennistak-Documents-Final-Frontier-NeoDemos/memory/feedback_mcp_uptime.md).
+Full context + file paths in [WS4 §Post-ship reliability follow-ups](docs/handoffs/done/WS4_MCP_DISCIPLINE.md#post-ship-reliability-follow-ups-opened-2026-04-14). Memory: [feedback_mcp_uptime.md](.claude/projects/-Users-dennistak-Documents-Final-Frontier-NeoDemos/memory/feedback_mcp_uptime.md).
 
 - [ ] **(1) Statement timeout on auth path** — add `SET LOCAL statement_timeout = '3s'` to `validate_api_token` / `validate_session` in [services/auth_service.py](services/auth_service.py). Pure code change; ship via `kamal deploy` (zero-downtime). Do this first — it's the safety net that limits future auth-table-lock blast radius.
 - [ ] **(2) Promote MCP from accessory to Kamal service role** — config already staged in [config/deploy.yml](config/deploy.yml). Run `kamal deploy -r mcp`, verify `curl -sI https://mcp.neodemos.nl/mcp` returns HTTP/2 401, then SSH-remove the orphaned `neodemos-mcp` accessory container. After this, MCP deploys are blue-green zero-downtime (matches web service).
@@ -48,7 +48,7 @@ Full context + file paths in [WS4 §Post-ship reliability follow-ups](docs/hando
 | WS1 | GraphRAG retrieval | [WS1_GRAPHRAG.md](docs/handoffs/WS1_GRAPHRAG.md) | not started |
 | WS2 | Trustworthy financial analysis | [WS2_FINANCIAL.md](docs/handoffs/done/WS2_FINANCIAL.md) | not started |
 | WS3 | Document journey timelines | [WS3_JOURNEY.md](docs/handoffs/WS3_JOURNEY.md) | not started |
-| WS4 | Best-in-class MCP surface | [WS4_MCP_DISCIPLINE.md](docs/handoffs/WS4_MCP_DISCIPLINE.md) | not started |
+| WS4 | Best-in-class MCP surface | [WS4_MCP_DISCIPLINE.md](docs/handoffs/done/WS4_MCP_DISCIPLINE.md) | not started |
 | WS5a | Nightly pipeline | [WS5a_NIGHTLY_PIPELINE.md](docs/handoffs/WS5a_NIGHTLY_PIPELINE.md) | not started |
 | WS6 | Source-spans summarization | [WS6_SUMMARIZATION.md](docs/handoffs/WS6_SUMMARIZATION.md) | not started |
 
@@ -67,14 +67,14 @@ Full context + file paths in [WS4 §Post-ship reliability follow-ups](docs/hando
 
 | Date | Item | Moved to | Reason |
 |---|---|---|---|
-| 2026-04-11 | `zoek_moties` title-only bug for single-word queries | [WS4 §MCP tool bug fixes](docs/handoffs/WS4_MCP_DISCIPLINE.md) | MCP tool quality fix — natural WS4 home |
+| 2026-04-11 | `zoek_moties` title-only bug for single-word queries | [WS4 §MCP tool bug fixes](docs/handoffs/done/WS4_MCP_DISCIPLINE.md) | MCP tool quality fix — natural WS4 home |
 | 2026-04-11 | RAG BM25 `%notule%` fallback filter | [WS1 §Phase B](docs/handoffs/WS1_GRAPHRAG.md) | `services/rag_service.py` bug; WS1 already edits that file |
-| 2026-04-11 | Overview query latency (`zoek_moties` → `lees_fragment` sequential) | [WS4 §MCP tool bug fixes](docs/handoffs/WS4_MCP_DISCIPLINE.md) | Tool API design (preview chars, batch tool) |
+| 2026-04-11 | Overview query latency (`zoek_moties` → `lees_fragment` sequential) | [WS4 §MCP tool bug fixes](docs/handoffs/done/WS4_MCP_DISCIPLINE.md) | Tool API design (preview chars, batch tool) |
 | 2026-04-11 | IV3 / taakvelden canonical aggregation layer | [WS2 §IV3 canonical aggregation](docs/handoffs/done/WS2_FINANCIAL.md) | Explicit WS2 prerequisite — financial schema concern |
 | 2026-04-11 | Chunk → `document_id` attribution audit (from FEEDBACK_LOG) | [WS5a §Data integrity audit](docs/handoffs/WS5a_NIGHTLY_PIPELINE.md) | Ingest integrity — pipeline reliability concern |
-| 2026-04-11 | `lees_fragment(query=...)` re-ranking (from FEEDBACK_LOG) | [WS4 §Tool API improvements](docs/handoffs/WS4_MCP_DISCIPLINE.md) | MCP tool API change |
-| 2026-04-11 | `corpus_coverage` metadata on search tool responses (from FEEDBACK_LOG) | [WS4 §Tool API improvements](docs/handoffs/WS4_MCP_DISCIPLINE.md) | Output schema change (depends on WS5a coverage data) |
-| 2026-04-11 | Snippet provenance verification (from FEEDBACK_LOG) | [WS4 §Defense-in-depth Layer 4](docs/handoffs/WS4_MCP_DISCIPLINE.md) | Fits naturally in the output filter |
+| 2026-04-11 | `lees_fragment(query=...)` re-ranking (from FEEDBACK_LOG) | [WS4 §Tool API improvements](docs/handoffs/done/WS4_MCP_DISCIPLINE.md) | MCP tool API change |
+| 2026-04-11 | `corpus_coverage` metadata on search tool responses (from FEEDBACK_LOG) | [WS4 §Tool API improvements](docs/handoffs/done/WS4_MCP_DISCIPLINE.md) | Output schema change (depends on WS5a coverage data) |
+| 2026-04-11 | Snippet provenance verification (from FEEDBACK_LOG) | [WS4 §Defense-in-depth Layer 4](docs/handoffs/done/WS4_MCP_DISCIPLINE.md) | Fits naturally in the output filter |
 
 ---
 

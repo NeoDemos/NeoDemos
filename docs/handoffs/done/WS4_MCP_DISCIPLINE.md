@@ -17,7 +17,7 @@ Make the NeoDemos MCP server the *reference implementation for govtech MCP* by a
 
 ## Cold-start prompt
 
-> You are picking up Workstream 4 (Best-in-Class MCP Surface) of NeoDemos v0.2.0. Self-contained handoff at `docs/handoffs/WS4_MCP_DISCIPLINE.md`.
+> You are picking up Workstream 4 (Best-in-Class MCP Surface) of NeoDemos v0.2.0. Self-contained handoff at `docs/handoffs/done/WS4_MCP_DISCIPLINE.md`.
 >
 > Read in order: (1) this handoff, (2) `mcp_server_v3.py` (current 13 tools), (3) `services/mcp_oauth_provider.py` (current OAuth scopes), (4) the FactSet enterprise MCP articles linked below, (5) the Figma tools-and-prompts page linked below.
 >

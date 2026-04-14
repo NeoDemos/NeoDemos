@@ -39,7 +39,7 @@ press-moment run-up.
 
 Read these files first:
 - docs/handoffs/WS16_MCP_MONITORING.md (this file)
-- docs/handoffs/WS4_MCP_DISCIPLINE.md (provider contract — what gets written to the audit log)
+- docs/handoffs/done/WS4_MCP_DISCIPLINE.md (provider contract — what gets written to the audit log)
 - alembic/versions/20260413_0007_mcp_audit_log.py (exact schema)
 - services/db_pool.py (reuse this pool — do NOT open new connections)
 - services/audit_logger.py (the writer side — read-only reference, never modify)
@@ -77,7 +77,7 @@ v0.2.1 (admin page, session reconstruction, log rotation).
 | [`services/audit_logger.py`](../../services/audit_logger.py) | The writer side. Read-only reference — WS16 scripts never touch this file, but need to know what columns get filled vs NULL. |
 | [`scripts/mcp/watch.py`](../../scripts/mcp/watch.py) | Scaffold already in tree. Harden per Phase 1 acceptance. |
 | [`scripts/mcp/stats.py`](../../scripts/mcp/stats.py) | Scaffold already in tree. Harden per Phase 1 acceptance. |
-| [`docs/handoffs/WS4_MCP_DISCIPLINE.md`](WS4_MCP_DISCIPLINE.md) | Provider contract for the audit log — what every field means, what `error_class` values exist, what `params_hash` does NOT contain (secrets — never). |
+| [`docs/handoffs/done/WS4_MCP_DISCIPLINE.md`](done/WS4_MCP_DISCIPLINE.md) | Provider contract for the audit log — what every field means, what `error_class` values exist, what `params_hash` does NOT contain (secrets — never). |
 | [`logs/mcp_queries.jsonl`](../../logs/) | Secondary mirror of MCP calls (JSONL); rotation is a Phase 2 concern. |
 | Memory: [`feedback_mcp_uptime.md`](../../.claude/projects/-Users-dennistak-Documents-Final-Frontier-NeoDemos/memory/feedback_mcp_uptime.md) | 2026-04-14 double-outage lessons — why fast-feedback matters. |
 

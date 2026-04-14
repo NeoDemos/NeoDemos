@@ -20,3 +20,4 @@
 {"agent": "dennistak", "detail": "alembic 0005b rename done; Phase 4 eval deferred to Dennis", "event": "completed", "ts": "2026-04-14T18:35:34Z", "ws": "WS9"}
 {"agent": "mcp_alert", "detail": "p95 61.1s last 5min", "event": "alert", "metrics": {"p95_latency_ms": 61144.5}, "rule": "latency", "ts": "2026-04-14T18:43:30Z"}
 {"agent": "mcp_alert", "detail": "20 calls (20.0x baseline)", "event": "alert", "metrics": {"baseline_5m": 1.0, "calls_5m": 20, "ratio": 20.0}, "rule": "traffic_spike", "ts": "2026-04-14T18:48:32Z"}
+{"agent": "Dennis", "commit": "58caebc", "detail": "Statement timeout + T1-T10 tool quality fixes + MCP service-role migration + requirements pin", "event": "completed", "ts": "2026-04-14T19:14:27Z", "ws": "WS4"}

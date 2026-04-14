@@ -4,7 +4,7 @@ MCP audit logger — write-through INSERT into mcp_audit_log.
 Used by the MCP server's logged_tool decorator (see mcp_server_v3.py)
 to record every tool invocation. Belongs to WS4 MCP discipline.
 
-CRITICAL RULES (see docs/handoffs/WS4_MCP_DISCIPLINE.md §Audit log):
+CRITICAL RULES (see docs/handoffs/done/WS4_MCP_DISCIPLINE.md §Audit log):
   * NEVER log raw param values — only a sha256 hash via _hash_params.
   * NEVER log raw results — only the byte size of the stringified result.
   * NEVER crash the tool — audit failure must fall back to logger.exception

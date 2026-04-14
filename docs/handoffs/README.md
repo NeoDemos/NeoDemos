@@ -41,7 +41,7 @@ When a workstream finishes:
 | WS2 | [`done/WS2_FINANCIAL.md`](done/WS2_FINANCIAL.md) | Trustworthy financial analysis | 2 | **done** — shipped 2026-04-12 | none |
 | WS2b | [`WS2b_IV3_TAAKVELD.md`](WS2b_IV3_TAAKVELD.md) | IV3 taakveld FK backfill | 2 | not started | WS2 done ✅ |
 | WS3 | [`WS3_JOURNEY.md`](WS3_JOURNEY.md) | Document journey timelines | 3 | not started | WS1 Phase A (motie↔notulen linking) |
-| WS4 | [`WS4_MCP_DISCIPLINE.md`](WS4_MCP_DISCIPLINE.md) | Best-in-class MCP surface | 4 | **shipped 2026-04-13** (v0.2.0-alpha.2); 2 reliability follow-ups opened 2026-04-14 | none |
+| WS4 | [`done/WS4_MCP_DISCIPLINE.md`](done/WS4_MCP_DISCIPLINE.md) | Best-in-class MCP surface | 4 | **shipped 2026-04-13** (v0.2.0-alpha.2); 2 reliability follow-ups opened 2026-04-14 | none |
 | WS5a | [`WS5a_NIGHTLY_PIPELINE.md`](WS5a_NIGHTLY_PIPELINE.md) | 100% reliable nightly ingest | 5 | not started | none |
 | WS5b | [`WS5b_MULTI_PORTAL.md`](WS5b_MULTI_PORTAL.md) | Multi-portal connectors (search-only) | 6 | **deferred to v0.2.1** | WS5a stable for 14d |
 | WS6 | [`WS6_SUMMARIZATION.md`](WS6_SUMMARIZATION.md) | Source-spans-only summarization | 8 | **in progress** — Phase 3 DB write running (~4K of 25.5K); code complete; MCP tool + UI badges pending | none for v0.2.0 minimum; WS1 for `mode='structured'` |
@@ -62,7 +62,7 @@ When a workstream finishes:
 
 **WS9 shipped 2026-04-13.** 18 tools via Sonnet + tool_use, SSE stream, IP rate limiting (3/month anon), teaser+expand UX, Gemini fallback. Live at `/api/search/stream`. Phase 4 manual eval (20 MCP-replay queries) pending.
 
-**WS4 reliability follow-ups opened 2026-04-14** after two same-day MCP outages (routing double-mount bug + `ALTER TABLE users` holding an exclusive lock that stalled every `validate_api_token` call). Two items now queued in [WS4 §Post-ship reliability follow-ups](WS4_MCP_DISCIPLINE.md#post-ship-reliability-follow-ups-opened-2026-04-14): (1) 3 s `statement_timeout` on the auth path so blocked queries fail fast, (2) promote MCP from Kamal accessory to service role so every MCP deploy is blue-green zero-downtime (config already staged in `config/deploy.yml`). Rules distilled into [`feedback_mcp_uptime.md`](../../.claude/projects/-Users-dennistak-Documents-Final-Frontier-NeoDemos/memory/feedback_mcp_uptime.md).
+**WS4 reliability follow-ups opened 2026-04-14** after two same-day MCP outages (routing double-mount bug + `ALTER TABLE users` holding an exclusive lock that stalled every `validate_api_token` call). Two items now queued in [WS4 §Post-ship reliability follow-ups](done/WS4_MCP_DISCIPLINE.md#post-ship-reliability-follow-ups-opened-2026-04-14): (1) 3 s `statement_timeout` on the auth path so blocked queries fail fast, (2) promote MCP from Kamal accessory to service role so every MCP deploy is blue-green zero-downtime (config already staged in `config/deploy.yml`). Rules distilled into [`feedback_mcp_uptime.md`](../../.claude/projects/-Users-dennistak-Documents-Final-Frontier-NeoDemos/memory/feedback_mcp_uptime.md).
 
 **WS7 + WS11 + WS12 are the current active track.** All three must complete before WS1 Phase A (enrichment) starts — enriching garbled text or an incomplete corpus wastes Gemini spend and produces lower-quality KG edges. **WS12 specifically:** `staging.meetings.quality_score` must be populated for every VN meeting (WS1's new provenance layer multiplies edge confidence by `source_quality`; missing scores default to 0.5 conservative).
 

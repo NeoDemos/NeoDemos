@@ -68,7 +68,7 @@ Additional non-negotiable constraints:
 
 Read these files first:
   - docs/handoffs/WS17_FEEDBACK_LOOP.md (this file)
-  - docs/handoffs/WS4_MCP_DISCIPLINE.md (audit log owner)
+  - docs/handoffs/done/WS4_MCP_DISCIPLINE.md (audit log owner)
   - .coordination/FEEDBACK_LOG.md (post-Phase 0 move from brain/)
   - services/audit_logger.py (current schema + write path)
   - scripts/coord/append_event.py (extend, don't fork)
@@ -91,7 +91,7 @@ Coordinate DB writes via pg_advisory_lock(42).
 
 | File | Why |
 |---|---|
-| [docs/handoffs/WS4_MCP_DISCIPLINE.md](WS4_MCP_DISCIPLINE.md) | Audit log schema owner; WS4 §Post-ship is the pattern for add-on instrumentation |
+| [docs/handoffs/done/WS4_MCP_DISCIPLINE.md](done/WS4_MCP_DISCIPLINE.md) | Audit log schema owner; WS4 §Post-ship is the pattern for add-on instrumentation |
 | `.coordination/FEEDBACK_LOG.md` (post-move) | Current triage inbox; canonical format for entries the digest consumes |
 | [services/audit_logger.py](../../services/audit_logger.py) | Current `mcp_audit_log` writer — add new columns here |
 | [scripts/coord/append_event.py](../../scripts/coord/append_event.py) | Reuse helper; extend `--event` enum with `feedback` |

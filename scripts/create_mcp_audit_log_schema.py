@@ -7,7 +7,7 @@ status, error class) for the WS4 MCP discipline workstream. Raw params
 are NEVER stored — only a sha256 hash. Raw results are NEVER stored —
 only byte size.
 
-See docs/handoffs/WS4_MCP_DISCIPLINE.md §Audit log for the canonical
+See docs/handoffs/done/WS4_MCP_DISCIPLINE.md §Audit log for the canonical
 schema definition and rules.
 
 Usage:

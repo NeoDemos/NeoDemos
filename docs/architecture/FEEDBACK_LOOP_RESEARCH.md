@@ -130,5 +130,5 @@ If NeoDemos ever has a team of 5+ and query volume >10K/day, revisit.
 - Execution plan: [`docs/handoffs/WS17_FEEDBACK_LOOP.md`](../handoffs/WS17_FEEDBACK_LOOP.md)
 - Monitoring (separate concern, shares `mcp_audit_log`): [`docs/handoffs/WS16_MCP_MONITORING.md`](../handoffs/WS16_MCP_MONITORING.md)
 - Coordination layer (foundation): [`../../.coordination/`](../../.coordination/)
-- Original audit log: [`docs/handoffs/WS4_MCP_DISCIPLINE.md`](../handoffs/WS4_MCP_DISCIPLINE.md)
+- Original audit log: [`docs/handoffs/done/WS4_MCP_DISCIPLINE.md`](../handoffs/done/WS4_MCP_DISCIPLINE.md)
 - Memory grounding the "no LLM-judge" rule: `.claude/projects/.../memory/feedback_eval_quality_audit.md`
