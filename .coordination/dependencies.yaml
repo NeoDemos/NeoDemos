@@ -1,0 +1,123 @@
+# Workstream dependency graph.
+# Maintained by hand. Source of truth for rebuild_state.py unblock detection.
+# Format: each key is a workstream; `depends_on` lists workstreams that must be
+# in status `done` before this one can start.
+#
+# Status values: not_started | available | in_progress | review | done |
+#                blocked | paused | deferred
+#
+# `status` field here is the *initial seed* — live status lives in events.jsonl.
+# Edit this file only when the dependency graph itself changes.
+
+WS1:
+  title: "GraphRAG retrieval (Flair NER + Gemini enrichment + VN provenance)"
+  depends_on: [WS7, WS11, WS12]
+  priority: 1
+  initial_status: blocked
+
+WS2:
+  title: "Trustworthy financial analysis"
+  depends_on: []
+  priority: 2
+  initial_status: done
+  shipped: 2026-04-12
+
+WS2b:
+  title: "IV3 taakveld FK backfill"
+  depends_on: [WS2]
+  priority: 2
+  initial_status: not_started
+
+WS3:
+  title: "Document journey timelines"
+  depends_on: [WS1]
+  priority: 3
+  initial_status: not_started
+
+WS4:
+  title: "Best-in-class MCP surface"
+  depends_on: []
+  priority: 4
+  initial_status: done
+  shipped: 2026-04-13
+  notes: "2 reliability follow-ups opened 2026-04-14"
+
+WS5a:
+  title: "100% reliable nightly ingest"
+  depends_on: []
+  priority: 5
+  initial_status: not_started
+
+WS5b:
+  title: "Multi-portal connectors (search-only)"
+  depends_on: [WS5a]
+  priority: 6
+  initial_status: deferred
+  notes: "Deferred to v0.2.1"
+
+WS6:
+  title: "Source-spans-only summarization"
+  depends_on: []
+  priority: 8
+  initial_status: in_progress
+  notes: "Phase 3 DB write running; mode='structured' needs WS1"
+
+WS7:
+  title: "OCR recovery for moties/amendementen"
+  depends_on: []
+  priority: 2.5
+  initial_status: in_progress
+
+WS8:
+  title: "Frontend redesign: design system, landing, calendar"
+  depends_on: []
+  priority: 1
+  initial_status: done
+  shipped: 2026-04-12
+
+WS8f:
+  title: "Admin panel + CMS + GrapeJS editor"
+  depends_on: [WS8]
+  priority: 2
+  initial_status: in_progress
+  notes: "Shipped 2026-04-13, pending Dennis QA via /ws-complete"
+
+WS9:
+  title: "Web intelligence: MCP-as-backend, Sonnet tool_use, SSE"
+  depends_on: []
+  priority: 1
+  initial_status: done
+  shipped: 2026-04-13
+
+WS10:
+  title: "Table-rich document extraction (Docling layout)"
+  depends_on: []
+  priority: 6
+  initial_status: paused
+  notes: "Infrastructure done; targeted 20-doc run only"
+
+WS11:
+  title: "Corpus completeness 2018-2026 (ORI gap + metadata)"
+  depends_on: []
+  priority: 1
+  initial_status: in_progress
+
+WS12:
+  title: "Virtual notulen backfill & production hardening"
+  depends_on: []
+  priority: 1
+  initial_status: in_progress
+
+WS13:
+  title: "Multi-gemeente pipeline: tenant-aware ingestion"
+  depends_on: [WS5a]
+  priority: 1
+  initial_status: not_started
+  notes: "v0.2.1 scope; needs WS5a stable"
+
+WS14:
+  title: "Calendar quality & bijlage reconciliation"
+  depends_on: [WS8f]
+  priority: 1
+  initial_status: not_started
+  notes: "Plan approved 2026-04-14; C1 hotfix ships standalone; cross-refs WS11 B3, WS5a B6, WS13 E"

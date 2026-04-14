@@ -1,0 +1,17 @@
+{"agent": "seed", "event": "claimed", "ts": "2026-04-12T00:00:00Z", "ws": "WS2"}
+{"agent": "seed", "event": "completed", "ts": "2026-04-12T00:00:00Z", "ws": "WS2"}
+{"agent": "seed", "event": "claimed", "ts": "2026-04-12T00:00:00Z", "ws": "WS8"}
+{"agent": "seed", "event": "completed", "ts": "2026-04-12T00:00:00Z", "ws": "WS8"}
+{"agent": "seed", "detail": "2 reliability follow-ups opened 2026-04-14", "event": "claimed", "ts": "2026-04-13T00:00:00Z", "ws": "WS4"}
+{"agent": "seed", "detail": "2 reliability follow-ups opened 2026-04-14", "event": "completed", "ts": "2026-04-13T00:00:00Z", "ws": "WS4"}
+{"agent": "seed", "event": "claimed", "ts": "2026-04-13T00:00:00Z", "ws": "WS9"}
+{"agent": "seed", "event": "completed", "ts": "2026-04-13T00:00:00Z", "ws": "WS9"}
+{"agent": "seed", "blocker": ["WS7", "WS11", "WS12"], "event": "blocked", "ts": "2026-04-14T15:31:44Z", "ws": "WS1"}
+{"agent": "seed", "detail": "Infrastructure done; targeted 20-doc run only", "event": "claimed", "ts": "2026-04-14T15:31:44Z", "ws": "WS10"}
+{"agent": "seed", "detail": "Infrastructure done; targeted 20-doc run only", "event": "paused", "ts": "2026-04-14T15:31:44Z", "ws": "WS10"}
+{"agent": "seed", "event": "claimed", "ts": "2026-04-14T15:31:44Z", "ws": "WS11"}
+{"agent": "seed", "event": "claimed", "ts": "2026-04-14T15:31:44Z", "ws": "WS12"}
+{"agent": "seed", "detail": "status=deferred. Deferred to v0.2.1", "event": "note", "ts": "2026-04-14T15:31:44Z", "ws": "WS5b"}
+{"agent": "seed", "detail": "Phase 3 DB write running; mode='structured' needs WS1", "event": "claimed", "ts": "2026-04-14T15:31:44Z", "ws": "WS6"}
+{"agent": "seed", "event": "claimed", "ts": "2026-04-14T15:31:44Z", "ws": "WS7"}
+{"agent": "seed", "detail": "Shipped 2026-04-13, pending Dennis QA via /ws-complete", "event": "claimed", "ts": "2026-04-14T15:31:44Z", "ws": "WS8f"}
