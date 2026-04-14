@@ -31,7 +31,7 @@ Usage:
     python scripts/nightly/07a_enrich_new_chunks.py --dry-run
     python scripts/nightly/07a_enrich_new_chunks.py --max-chunks 500 --log-level DEBUG
 
-Handoff: docs/handoffs/WS7_OCR_RECOVERY.md
+Handoff: docs/handoffs/done/WS7_OCR_RECOVERY.md
 """
 
 from __future__ import annotations

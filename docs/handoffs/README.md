@@ -50,7 +50,7 @@ When a workstream finishes:
 | WS2b | [`WS2b_IV3_TAAKVELD.md`](WS2b_IV3_TAAKVELD.md) | IV3 taakveld FK backfill | 2 | **available** | WS2 |
 | WS8f | [`WS8f_ADMIN_CMS.md`](WS8f_ADMIN_CMS.md) | Admin panel + CMS + GrapeJS editor | 2 | **in progress** — Shipped 2026-04-13, pending Dennis QA via /ws-complete | WS8 |
 | WS16 | [`WS16_MCP_MONITORING.md`](WS16_MCP_MONITORING.md) | MCP monitoring & observability | 2 | **in progress** — Initial seed: Phase 1 shipped 2026-04-14 | WS4 |
-| WS7 | [`WS7_OCR_RECOVERY.md`](WS7_OCR_RECOVERY.md) | OCR recovery for moties/amendementen | 2.5 | **in progress** | — |
+| WS7 | [`done/WS7_OCR_RECOVERY.md`](done/WS7_OCR_RECOVERY.md) | OCR recovery for moties/amendementen | 2.5 | **in progress** | — |
 | WS3 | [`WS3_JOURNEY.md`](WS3_JOURNEY.md) | Document journey timelines | 3 | **blocked** — waiting on WS1 | WS1 |
 | WS4 | [`done/WS4_MCP_DISCIPLINE.md`](done/WS4_MCP_DISCIPLINE.md) | Best-in-class MCP surface | 4 | **done** — shipped 2026-04-13 | — |
 | WS17 | [`WS17_FEEDBACK_LOOP.md`](WS17_FEEDBACK_LOOP.md) | Production feedback loop (detect → digest → close-the-loop) | 4 | **available** — Initial seed: not_started, v0.2.1 scope | WS4 |

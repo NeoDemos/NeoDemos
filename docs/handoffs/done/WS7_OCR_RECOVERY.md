@@ -19,7 +19,7 @@
 
 ## Cold-start prompt
 
-> You are picking up Workstream 7 (OCR Recovery) of NeoDemos v0.2.0. This workstream was created after a pre-enrichment audit found that 20% of moties have garbled text that breaks BM25 search. The full diagnosis is at `docs/handoffs/WS7_OCR_RECOVERY.md`.
+> You are picking up Workstream 7 (OCR Recovery) of NeoDemos v0.2.0. This workstream was created after a pre-enrichment audit found that 20% of moties have garbled text that breaks BM25 search. The full diagnosis is at `docs/handoffs/done/WS7_OCR_RECOVERY.md`.
 >
 > Read in order: (1) this handoff top-to-bottom, (2) `eval/baselines/ws1_pre_enrichment_baseline.md` (the baseline that surfaced the problem), (3) `pipeline/financial_ingestor.py` (the only existing Docling integration — your model), (4) `pipeline/ingestion.py` (the current SmartIngestor that moties go through), (5) `services/scraper.py` (the pypdf-based extraction that causes the damage), (6) `scripts/ocr_reingest.py` (existing OCR recovery attempt using macOS native OCR — incomplete).
 >

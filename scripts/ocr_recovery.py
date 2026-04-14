@@ -27,7 +27,7 @@ Usage:
   python scripts/ocr_recovery.py --resume
   python scripts/ocr_recovery.py --skip-re-embed --limit 100
 
-See: docs/handoffs/WS7_OCR_RECOVERY.md
+See: docs/handoffs/done/WS7_OCR_RECOVERY.md
 """
 
 import argparse
@@ -1565,7 +1565,7 @@ Examples:
   # Recovery without re-embedding (batch embedding later)
   python scripts/ocr_recovery.py --skip-re-embed
 
-See: docs/handoffs/WS7_OCR_RECOVERY.md
+See: docs/handoffs/done/WS7_OCR_RECOVERY.md
         """,
     )
     parser.add_argument(
