@@ -219,6 +219,21 @@ The `neodemos-mcp` accessory has crashed or is stopped. Check `$KAMAL accessory 
 
 ## Incident log (keep this section honest — newest on top)
 
+### 2026-04-14 — MCP server /mcp 307→404 loop, /public/mcp 500 (fixed)
+
+**Symptom:** `https://mcp.neodemos.nl/mcp` looped on 307→404. `/.well-known/oauth-protected-resource` was unreachable so clients (Claude.ai, Le Chat) could not negotiate auth. `/public/mcp` returned 500 `RuntimeError: Task group is not initialized`.
+
+**Root causes (two bugs in [mcp_server_v3.py](mcp_server_v3.py#L3179)):**
+1. Double-mount: `_Mount("/mcp", app=_auth_asgi)` stripped `/mcp` before forwarding, but the inner FastMCP app itself has `Route("/mcp", ...)` — it received `/` and 404'd.
+2. Starlette does not propagate ASGI lifespan events to sub-apps wrapped in raw ASGI middleware (CORS, rate limiter), so the public MCP `session_manager` never initialized.
+
+**Fix:** Mount at the correct prefix (`_Mount("/public", ...)` and `_Mount("/", ...)` catch-all), and explicit `_root_lifespan` context manager that runs both `mcp.session_manager.run()` and `_public_mcp.session_manager.run()` at startup. Commits `bad7d5d` + `97f2fb5`.
+
+**Emergency override used:** This was fixed during business hours because MCP was already down — see the emergency override rule above.
+
+**Lesson baked into the hard rules:**
+- Business-hours deploy freeze (rule 6) added to protect growing user traffic.
+
 ### 2026-04-11 — Caddy → kamal-proxy migration (completed)
 
 **What happened:** The previous commit `392213b "Fix Kamal deploy: remove kamal-proxy, use Caddy as sole reverse proxy"` left the stack in a broken hybrid state. Caddy held 80/443, kamal-proxy ran in a degraded no-port state, and Kamal's deploy flow still tried to register with kamal-proxy over Docker DNS that couldn't resolve across networks. Result: **every web service deploy silently failed for 11+ hours** — the running `neodemos-web` container was from the pre-Kamal era with image ID `7c186fdad945` (no git-SHA tag).
