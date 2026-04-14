@@ -3172,23 +3172,37 @@ if __name__ == "__main__":
 
         from starlette.routing import Route as _Route
         from starlette.responses import PlainTextResponse as _RootPlainText
+        from contextlib import asynccontextmanager as _asynccontextmanager
 
         async def _root_up(_request):  # pragma: no cover
             return _RootPlainText("ok", status_code=200)
 
-        # IMPORTANT: FastMCP's streamable_http_app() already contains Route("/mcp", ...)
-        # and Route("/.well-known/...", ...) internally. If we wrap it in _Mount("/mcp", ...),
-        # Starlette strips "/mcp" from the path before forwarding, so the inner app receives
-        # "/" and never matches its own "/mcp" route → 307 loop then 404.
+        # IMPORTANT — two subtleties when composing FastMCP apps in a parent Starlette app:
         #
-        # Fix: mount at the correct prefix that leaves the right path for the inner app:
-        # - _Mount("/public", ...) strips "/public" → inner app receives "/mcp" ✓
-        # - _Mount("/", ...) catch-all strips nothing → inner app receives "/mcp", "/.well-known/..." ✓
-        _root_app = _Starlette(routes=[
-            _Route("/up", endpoint=_root_up, methods=["GET"]),
-            _Mount("/public", app=_pub_asgi_with_cors),
-            _Mount("/", app=_auth_asgi),
-        ])
+        # 1. Mount prefix: FastMCP's streamable_http_app() already contains Route("/mcp", ...)
+        #    internally. Wrapping in _Mount("/mcp", ...) would strip "/mcp" before forwarding,
+        #    so the inner app receives "/" and never matches → 307 loop then 404.
+        #    Fix: _Mount("/public", ...) strips "/public" → inner app receives "/mcp" ✓
+        #         _Mount("/", ...) catch-all → inner app receives "/mcp", "/.well-known/..." ✓
+        #
+        # 2. Session-manager lifespan: Starlette does NOT propagate ASGI lifespan events to
+        #    sub-apps mounted via _Mount when those sub-apps are wrapped in raw ASGI middleware
+        #    (CORS, rate limiter). The FastMCP session manager never initializes → RuntimeError.
+        #    Fix: run both session managers explicitly in the root app's lifespan.
+        @_asynccontextmanager
+        async def _root_lifespan(_app):
+            async with mcp.session_manager.run():
+                async with _public_mcp.session_manager.run():
+                    yield
+
+        _root_app = _Starlette(
+            lifespan=_root_lifespan,
+            routes=[
+                _Route("/up", endpoint=_root_up, methods=["GET"]),
+                _Mount("/public", app=_pub_asgi_with_cors),
+                _Mount("/", app=_auth_asgi),
+            ],
+        )
         print(f"{DISPLAY_NAME} {VERSION_LABEL} — transport={transport} port={mcp.settings.port} (authenticated /mcp + public /public/mcp)", flush=True)
         uvicorn.run(_root_app, host=mcp.settings.host, port=mcp.settings.port, log_level="info")
     else:
