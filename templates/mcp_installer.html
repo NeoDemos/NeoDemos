@@ -32,6 +32,7 @@
             <button class="client-tab active" data-target="oauth-claude-desktop">Claude Desktop</button>
             <button class="client-tab" data-target="oauth-claude-code">Claude Code (CLI)</button>
             <button class="client-tab" data-target="oauth-chatgpt">ChatGPT</button>
+            <button class="client-tab" data-target="oauth-le-chat">Le Chat</button>
         </div>
 
         <!-- Claude Desktop -->
@@ -102,6 +103,47 @@
                 </div>
             </div>
         </div>
+
+        <!-- Le Chat -->
+        <div id="oauth-le-chat" class="client-panel">
+            <div class="install-section">
+                <div class="info-callout">
+                    <strong>Le Chat (Mistral)</strong> is de enige grote AI-assistent met MCP-ondersteuning in het <strong>gratis abonnement</strong>.
+                    Beschikbaar op desktop, iOS en Android. Volledig EU-gehost.
+                </div>
+
+                <h4><span class="step-number">1</span> Open Le Chat</h4>
+                <p>Ga naar <a href="https://chat.mistral.ai" target="_blank" rel="noopener">chat.mistral.ai</a> en log in.</p>
+
+                <h4><span class="step-number">2</span> Navigeer naar Connectors</h4>
+                <p>Klik op het <strong>Intelligence</strong>-icoon (bol) in de linkerzijbalk &rarr; <strong>Connectors</strong> &rarr; <strong>+ Add Connector</strong> &rarr; <strong>Custom MCP Connector</strong>.</p>
+
+                <h4><span class="step-number">3</span> Voer de URL in</h4>
+                {% if user %}
+                <p>Gebruik de authenticatie-URL (volledige toegang, 20 tools):</p>
+                <div class="code-block" id="oauth-le-chat-block">
+                    <button class="copy-btn" onclick="copyText('{{ mcp_url }}', this)">Kopieer</button>
+                    <pre>{{ mcp_url }}</pre>
+                </div>
+                {% else %}
+                <p>Zonder account — gebruik de publieke URL (gratis, geen login, 20 tools, snelheidslimiet):</p>
+                <div class="code-block" id="oauth-le-chat-public-block">
+                    <button class="copy-btn" onclick="copyText('{{ public_mcp_url }}', this)">Kopieer</button>
+                    <pre>{{ public_mcp_url }}</pre>
+                </div>
+                <p>Of <a href="/register">maak een account aan</a> voor de authenticatie-URL met hogere limieten.</p>
+                {% endif %}
+
+                <h4><span class="step-number">4</span> Autoriseer de verbinding</h4>
+                {% if user %}
+                <p>Klik op <strong>Connect</strong>. Le Chat opent een browservenster voor de OAuth-inlog op neodemos.nl. Na toestemming verschijnen de NeoDemos-tools in Le Chat.</p>
+                {% else %}
+                <p>Klik op <strong>Connect</strong>. De publieke URL heeft geen login nodig — de tools zijn direct beschikbaar.</p>
+                {% endif %}
+
+                <p style="margin-top:1rem">Problemen? Zie de <a href="/docs/integrations/le-chat">installatiegids</a> voor troubleshooting.</p>
+            </div>
+        </div>
     </div>
 
     <!-- ═══════════════════════════════════════════════════ -->
@@ -149,6 +191,7 @@
                 <button class="client-tab active" data-target="token-claude-desktop">Claude Desktop</button>
                 <button class="client-tab" data-target="token-claude-code">Claude Code (CLI)</button>
                 <button class="client-tab" data-target="token-chatgpt">ChatGPT</button>
+                <button class="client-tab" data-target="token-le-chat">Le Chat</button>
             </div>
 
             <!-- Claude Desktop -->
@@ -177,6 +220,18 @@
                     <pre id="token-chatgpt-pre"></pre>
                 </div>
             </div>
+
+            <!-- Le Chat -->
+            <div id="token-le-chat" class="client-panel">
+                <p>Le Chat ondersteunt Bearer token via de connector-URL. Voeg uw token toe als query parameter:</p>
+                <div class="code-block" id="token-le-chat-config">
+                    <button class="copy-btn" onclick="copyCode('token-le-chat-config')">Kopieer</button>
+                    <pre id="token-le-chat-pre"></pre>
+                </div>
+                <p style="margin-top:0.5rem;font-size:0.85rem;opacity:0.7">
+                    Tip: de OAuth-methode (tabblad links) werkt ook voor Le Chat en vereist geen handmatig token.
+                </p>
+            </div>
         </div>
 
         {% else %}
@@ -193,7 +248,7 @@
     <!-- Tools overview                                      -->
     <!-- ═══════════════════════════════════════════════════ -->
     <div class="tools-section">
-        <h3>Beschikbare Tools (13)</h3>
+        <h3>Beschikbare Tools (20)</h3>
         <p>Na installatie kan uw AI-assistent de volgende tools gebruiken:</p>
         <table class="data-table">
             <thead>
@@ -213,6 +268,12 @@
                 <tr><td><code>haal_partijstandpunt_op</code></td><td>Partijstandpunt op een specifiek onderwerp</td></tr>
                 <tr><td><code>tijdlijn_besluitvorming</code></td><td>Tijdlijn van besluitvorming rond een thema</td></tr>
                 <tr><td><code>lees_fragment</code></td><td>Lees een volledig document op basis van ID</td></tr>
+                <tr><td><code>lees_fragmenten_batch</code></td><td>Haal meerdere documenten op in één aanroep</td></tr>
+                <tr><td><code>traceer_motie</code></td><td>Volledige traceerbaarheid van een motie (stemmen, context, gerelateerde notulen)</td></tr>
+                <tr><td><code>vergelijk_partijen</code></td><td>Vergelijk twee of meer partijen op hetzelfde onderwerp</td></tr>
+                <tr><td><code>vraag_begrotingsregel</code></td><td>Zoek specifieke begrotingsregels (IV3-taakveld, bedrag, jaar)</td></tr>
+                <tr><td><code>vergelijk_begrotingsjaren</code></td><td>Vergelijk begroting of jaarstukken over meerdere jaren</td></tr>
+                <tr><td><code>get_neodemos_context</code></td><td>Context-primer: beschikbare gemeenten, documenttypen en aanbevolen toolsequenties</td></tr>
             </tbody>
         </table>
     </div>
@@ -295,6 +356,9 @@
 
             document.getElementById('token-chatgpt-pre').textContent =
                 'Server URL: ' + mcp_url + '\nAuthorization: Bearer ' + token;
+
+            document.getElementById('token-le-chat-pre').textContent =
+                mcp_url + '?token=' + token;
 
             // Show the config section
             document.getElementById('token-config-section').style.display = '';

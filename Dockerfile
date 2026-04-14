@@ -2,7 +2,7 @@
 # Production-ready Docker image for NeoDemos
 # Supports: Rotterdam, Amsterdam, Den Haag, and extensible to other Dutch cities
 
-FROM python:3.12-slim
+FROM python:3.12.13-slim-bookworm
 
 # Set working directory
 WORKDIR /app
@@ -51,6 +51,10 @@ RUN mkdir -p /app/logs /app/data/pipeline /app/data/profiles /app/output
 # config/deploy.yml.
 HEALTHCHECK --interval=30s --timeout=30s --start-period=10s --retries=3 \
     CMD curl -f http://localhost:${PORT:-8000}/up || exit 1
+
+# Run as non-root (WS4 Dockerfile hardening)
+RUN useradd -m -u 1000 app && chown -R app:app /app
+USER app
 
 # Expose port
 EXPOSE ${PORT:-8000}

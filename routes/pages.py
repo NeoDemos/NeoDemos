@@ -27,7 +27,9 @@ router = APIRouter()
 
 # ── MCP Installer (public) ──
 
-_MCP_SERVER_URL = os.getenv("MCP_BASE_URL", "https://mcp.neodemos.nl") + "/mcp"
+_MCP_BASE = os.getenv("MCP_BASE_URL", "https://mcp.neodemos.nl")
+_MCP_SERVER_URL = _MCP_BASE + "/mcp"
+_MCP_PUBLIC_URL = _MCP_BASE + "/public/mcp"
 
 
 @router.get("/mcp-installer")
@@ -41,6 +43,7 @@ async def mcp_installer_page(request: Request):
         "title": "MCP Installer",
         "user": user,
         "mcp_url": _MCP_SERVER_URL,
+        "public_mcp_url": _MCP_PUBLIC_URL,
         "token_data": token_data,
         "existing_tokens": existing_tokens,
     })

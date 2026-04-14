@@ -68,6 +68,16 @@ def check_tool_uniqueness(skip_if_no_embedder: bool = True) -> dict:
         logger.info("mcp_tool_uniqueness: registry empty, skipping check")
         return {}
 
+    # Soft tool-budget cap — LLMs degrade with too many tools in context.
+    # Le Chat / Cursor hard-cap at 40; keep NeoDemos <= 25 through v0.2.
+    _TOOL_BUDGET_WARN = 25
+    if len(REGISTRY) > _TOOL_BUDGET_WARN:
+        logger.warning(
+            "mcp_tool_uniqueness: registry has %d tools (> %d soft cap). "
+            "Each tool eats 550-1400 context tokens. Merge or deprecate before adding more.",
+            len(REGISTRY), _TOOL_BUDGET_WARN,
+        )
+
     try:
         from services.embedding import create_embedder
         embedder = create_embedder()
