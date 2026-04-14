@@ -49,7 +49,7 @@ RUN mkdir -p /app/logs /app/data/pipeline /app/data/profiles /app/output
 # accessory (port 8001). Both expose a /up liveness endpoint that returns
 # 200 OK without touching DB/Qdrant. The PORT env var is set per service in
 # config/deploy.yml.
-HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=30s --start-period=10s --retries=3 \
     CMD curl -f http://localhost:${PORT:-8000}/up || exit 1
 
 # Expose port

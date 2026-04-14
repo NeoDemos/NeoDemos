@@ -26,7 +26,7 @@ from services.auth_service import AuthService
 
 logger = logging.getLogger(__name__)
 
-ACCESS_TOKEN_TTL = 3600          # 1 hour
+ACCESS_TOKEN_TTL = 7 * 86400     # 7 days — Claude Desktop doesn't auto-refresh; 1h caused hourly outages
 REFRESH_TOKEN_TTL = 30 * 86400   # 30 days
 AUTH_CODE_TTL = 600              # 10 minutes
 
