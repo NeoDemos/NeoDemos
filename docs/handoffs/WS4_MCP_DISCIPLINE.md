@@ -377,3 +377,40 @@ The Mistral models behind Le Chat (Mistral Medium 3.1, Magistral Medium 1.2, Sma
 - Dockerfile hardening (USER directive + base image digest pin)
 
 **Eval delta:** not yet measured — run `rag_evaluator` benchmark before/after to quantify description rewrite impact on completeness scores.
+
+---
+
+## Post-ship reliability follow-ups (opened 2026-04-14)
+
+Two items added after today's MCP outages — one caused by a `/mcp` routing bug, one caused by an `ALTER TABLE users` holding a lock that blocked every `validate_api_token` call. Background in memory `feedback_mcp_uptime.md` and in the deploy runbook incident log.
+
+Recommended execution order: ship (1) first (pure code change, zero-risk), then (2). Both are individually zero-downtime once deployed.
+
+### (1) Statement timeout on the auth path
+
+**Why:** When a schema change or long-running query locks the `users` table, every MCP request hangs instead of failing fast. Today that took kamal-proxy from healthy to 504 within minutes because the uvicorn event loop stalled on the blocked `validate_api_token` queries. A 3 s `statement_timeout` turns that into a handful of 500s to individual callers, instead of a service-wide outage.
+
+- [ ] Add `SET LOCAL statement_timeout = '3s'` (or equivalent psycopg `options`) to the DB connection path used by `services/auth_service.py::AuthService.validate_api_token` and `validate_session`. Keep the rest of the app on its current default.
+- [ ] Confirm no legitimate auth query exceeds 3 s under normal load (check `logs/mcp_queries.jsonl` p99 latency for auth-gated tools; indexed PK lookup on `api_tokens.token_hash` should be single-digit ms).
+- [ ] Add a regression note in the file referencing `feedback_mcp_uptime.md` so the next editor knows why it's there.
+- [ ] Ship via `kamal deploy` — blue-green, zero downtime.
+
+**Files:** `services/auth_service.py` (primary), possibly `services/db_pool.py` if the timeout is applied per-pool rather than per-query.
+
+### (2) MCP service-role migration (accessory → service role in Kamal)
+
+**Why:** Today the MCP server is a Kamal **accessory**. `kamal accessory reboot mcp` is stop-then-start — ~10–15 s of user-visible downtime on every MCP deploy. Web has zero-downtime blue-green because it's a Kamal **service** with a `proxy:` block. Promoting MCP to a second service role gives it the same treatment: new container boots alongside old, kamal-proxy atomically swaps traffic when `/up` passes, old drains. Rationale in memory `feedback_deploy_window.md` and `feedback_mcp_uptime.md`.
+
+**Config is already staged** in `config/deploy.yml` (edited 2026-04-14, not yet deployed). Deploy runbook in `.claude/commands/deploy.md` has already been rewritten to describe MCP-as-service. Nothing more to edit before shipping.
+
+- [ ] Run `kamal deploy -r mcp` from the project root (after Colima is up). Kamal builds the image (cached unless code changed), boots `neodemos-mcp-<sha>` as a service role, waits for `/up`, then registers `mcp.neodemos.nl` + `mcp.neodemos.eu` against the new target via kamal-proxy.
+- [ ] Verify kamal-proxy handled the hostname hand-off cleanly:
+      `curl -sI https://mcp.neodemos.nl/mcp` → expect `HTTP/2 401` within a second (the OAuth challenge).
+- [ ] Clean up the orphaned old accessory container — a one-time violation of the "no manual docker on host" rule, justified because Kamal no longer tracks it:
+      `ssh -i ~/.ssh/neodemos_ed25519 deploy@178.104.137.168 'sudo docker stop neodemos-mcp && sudo docker rm neodemos-mcp'`.
+- [ ] Confirm docker ps no longer lists the accessory: only `neodemos-mcp-<sha>` should remain.
+- [ ] If the hostname swap does NOT go zero-downtime (brief 502s from kamal-proxy while re-registering), log the observed outage in the deploy runbook incident section so we know what the actual transition cost is for future reference.
+
+**Risk:** low. Both hostnames are already TLS-issued; kamal-proxy just rebinds the target. In the worst case, a brief 5–10 s blip during re-registration — still strictly better than the 10–15 s that every `accessory reboot` costs today.
+
+**Rollback:** put `mcp:` back in the `accessories:` block, run `kamal accessory boot mcp`. The old accessory config is preserved in git history (commit range around `bad7d5d`…`97f2fb5`).

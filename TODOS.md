@@ -30,6 +30,13 @@ _(empty — last cleaned 2026-04-11)_
 - [ ] Write a quick analysis script: `scripts/analyze_query_log.py` — top tools, slow calls, popular queries
 - [ ] After ~50 real MCP queries logged: review and seed [rag_evaluator/data/questions.json](rag_evaluator/data/questions.json) with real user questions
 
+### MCP reliability follow-ups (from 2026-04-14 outages)
+
+Full context + file paths in [WS4 §Post-ship reliability follow-ups](docs/handoffs/WS4_MCP_DISCIPLINE.md#post-ship-reliability-follow-ups-opened-2026-04-14). Memory: [feedback_mcp_uptime.md](.claude/projects/-Users-dennistak-Documents-Final-Frontier-NeoDemos/memory/feedback_mcp_uptime.md).
+
+- [ ] **(1) Statement timeout on auth path** — add `SET LOCAL statement_timeout = '3s'` to `validate_api_token` / `validate_session` in [services/auth_service.py](services/auth_service.py). Pure code change; ship via `kamal deploy` (zero-downtime). Do this first — it's the safety net that limits future auth-table-lock blast radius.
+- [ ] **(2) Promote MCP from accessory to Kamal service role** — config already staged in [config/deploy.yml](config/deploy.yml). Run `kamal deploy -r mcp`, verify `curl -sI https://mcp.neodemos.nl/mcp` returns HTTP/2 401, then SSH-remove the orphaned `neodemos-mcp` accessory container. After this, MCP deploys are blue-green zero-downtime (matches web service).
+
 ---
 
 ## v0.2.0 workstreams (target 2026-04-24)

@@ -43,6 +43,12 @@ def _get_pool():
                     minconn=pool_size,
                     maxconn=pool_size + max_overflow,
                     dsn=db_url,
+                    connect_timeout=10,
+                    keepalives=1,
+                    keepalives_idle=30,
+                    keepalives_interval=10,
+                    keepalives_count=3,
+                    options="-c statement_timeout=60000",
                 )
                 logger.info(
                     f"PostgreSQL pool initialized (min={pool_size}, max={pool_size + max_overflow})"

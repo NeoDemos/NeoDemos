@@ -93,25 +93,32 @@ $KAMAL deploy
 
 This builds + pushes + blue-green-deploys the `neodemos` web service. kamal-proxy waits for the new container to pass its `/up` healthcheck, then atomically swaps traffic from the old container to the new one. Old container is stopped after drain (default 30s). Does **not** touch accessories.
 
-### Deploy an MCP code change
+### Deploy an MCP-only code change
 
-The MCP accessory shares the same Docker image as the web service. Steps:
+MCP is a service role (not an accessory) and is blue-green via kamal-proxy:
 
 ```bash
 colima status >/dev/null 2>&1 || colima start
 git commit -am "fix mcp thing"
 git push
-$KAMAL build push                # builds + pushes new :latest
-$KAMAL accessory reboot mcp      # recreates neodemos-mcp with new image
+$KAMAL deploy -r mcp             # builds + pushes + blue-green-deploys only the mcp role
 ```
 
-Or if you also changed web code, `$KAMAL deploy` handles the web side; then `$KAMAL accessory reboot mcp` for MCP.
-
-### Restart a single accessory without rebuilding
+### Deploy both roles together
 
 ```bash
-$KAMAL accessory reboot <name>   # mcp | postgres | qdrant
+$KAMAL deploy                    # deploys web and mcp, both blue-green
 ```
+
+Order is not critical — each role's kamal-proxy handover is independent.
+
+### Restart a single accessory (data services only — MCP is a service now)
+
+```bash
+$KAMAL accessory reboot <name>   # postgres | qdrant (has downtime — announce first)
+```
+
+**Do not** use `accessory reboot mcp` — there is no MCP accessory anymore. For MCP, use `kamal deploy -r mcp` (zero-downtime) or `kamal app stop -r mcp && kamal app start -r mcp` only if you specifically need to restart without rebuilding.
 
 ### Inspect logs
 

@@ -173,15 +173,10 @@ This is the heart of the workstream.
 WS2 established the pattern: each workstream ships its processing as an **APScheduler job in `main.py`**, not a server crontab entry.
 
 **What to wire at ship time:**
-- [ ] Add an APScheduler job for summary computation on new/updated documents. Pattern:
-  ```python
-  scheduler.add_job(scheduled_summarization, IntervalTrigger(hours=12),
-                    id='summarization', max_instances=1, coalesce=True)
-  ```
-- [ ] The job should find documents where `summary_short IS NULL` and compute summaries.
-- [ ] Use advisory lock 42 to serialize with other pipeline writers.
-- [ ] Log to `pipeline_runs` + `document_events` (event_type: `summary_computed`).
-- [ ] The `api_summarize` endpoint already exists in `main.py` for on-demand requests.
+- [x] APScheduler job `scheduled_summarization` in [`main.py`](../../main.py) — 12h interval, processes up to 20 `summary_short IS NULL` docs per firing via real-time `Summarizer.summarize(mode='short')`.
+- [x] Advisory lock `7_640_601` (shared with `06b_compute_summaries.py`) on a dedicated connection — scheduled job skips cleanly while a manual backfill is running.
+- [x] The `api_summarize` endpoint already exists in [`routes/api.py:367`](../../routes/api.py#L367) for on-demand requests.
+- [ ] Optional: log to `pipeline_runs` + `document_events` (event_type: `summary_computed`) — deferred to WS5a wrap.
 
 **Existing infrastructure to reuse:**
 - `services/document_processor.py` — APScheduler job pattern

@@ -25,6 +25,45 @@ def _hash_token(raw: str) -> str:
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
+# ── Schema-compat: subscription columns are added by migration 0009. ──
+# If the migration hasn't been applied yet (e.g. on a staging DB behind a
+# locked window), we gracefully fall back to not SELECTing those columns.
+_USER_CORE_COLS = "id, email, password_hash, display_name, role, is_active, mcp_access, db_access_level, created_at"
+_USER_SUB_COLS = "subscription_tier, beta_expires_at, stripe_customer_id"
+
+_subscription_cols_checked = False
+_subscription_cols_present = False
+
+
+def _has_subscription_cols() -> bool:
+    """Cached check: does the users table have subscription_tier columns?"""
+    global _subscription_cols_checked, _subscription_cols_present
+    if _subscription_cols_checked:
+        return _subscription_cols_present
+    try:
+        with get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "SELECT 1 FROM information_schema.columns "
+                    "WHERE table_name = 'users' AND column_name = 'subscription_tier'"
+                )
+                _subscription_cols_present = cur.fetchone() is not None
+        _subscription_cols_checked = True
+    except Exception:
+        _subscription_cols_present = False
+    return _subscription_cols_present
+
+
+def _user_cols(prefix: str = "") -> str:
+    """Return the SELECT column list for users, with optional table alias prefix."""
+    core = _USER_CORE_COLS
+    sub = _USER_SUB_COLS
+    if prefix:
+        core = ", ".join(f"{prefix}{c.strip()}" for c in core.split(","))
+        sub = ", ".join(f"{prefix}{c.strip()}" for c in sub.split(","))
+    return core + (", " + sub if _has_subscription_cols() else "")
+
+
 def _hash_password(password: str) -> str:
     return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
@@ -48,11 +87,9 @@ class AuthService:
         with get_connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(
-                    """INSERT INTO users (email, password_hash, display_name, role, mcp_access)
+                    f"""INSERT INTO users (email, password_hash, display_name, role, mcp_access)
                        VALUES (%s, %s, %s, %s, %s)
-                       RETURNING id, email, password_hash, display_name, role, is_active,
-                                 mcp_access, db_access_level, created_at,
-                                 subscription_tier, beta_expires_at, stripe_customer_id""",
+                       RETURNING {_user_cols()}""",
                     (email.lower().strip(), hashed, display_name, role, mcp_access),
                 )
                 row = cur.fetchone()
@@ -62,10 +99,7 @@ class AuthService:
         with get_connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(
-                    "SELECT id, email, password_hash, display_name, role, is_active, "
-                    "mcp_access, db_access_level, created_at, "
-                    "subscription_tier, beta_expires_at, stripe_customer_id "
-                    "FROM users WHERE email = %s",
+                    f"SELECT {_user_cols()} FROM users WHERE email = %s",
                     (email.lower().strip(),),
                 )
                 row = cur.fetchone()
@@ -81,10 +115,7 @@ class AuthService:
         with get_connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(
-                    "SELECT id, email, password_hash, display_name, role, is_active, "
-                    "mcp_access, db_access_level, created_at, "
-                    "subscription_tier, beta_expires_at, stripe_customer_id "
-                    "FROM users WHERE id = %s",
+                    f"SELECT {_user_cols()} FROM users WHERE id = %s",
                     (user_id,),
                 )
                 row = cur.fetchone()
@@ -94,10 +125,7 @@ class AuthService:
         with get_connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(
-                    "SELECT id, email, password_hash, display_name, role, is_active, "
-                    "mcp_access, db_access_level, created_at, "
-                    "subscription_tier, beta_expires_at, stripe_customer_id "
-                    "FROM users WHERE email = %s",
+                    f"SELECT {_user_cols()} FROM users WHERE email = %s",
                     (email.lower().strip(),),
                 )
                 row = cur.fetchone()
@@ -107,16 +135,15 @@ class AuthService:
         with get_connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(
-                    "SELECT id, email, password_hash, display_name, role, is_active, "
-                    "mcp_access, db_access_level, created_at, "
-                    "subscription_tier, beta_expires_at, stripe_customer_id "
-                    "FROM users ORDER BY created_at"
+                    f"SELECT {_user_cols()} FROM users ORDER BY created_at"
                 )
                 rows = cur.fetchall()
         return [self._user_row_to_dict(r) for r in rows]
 
     def update_user(self, user_id: int, **fields) -> Optional[dict]:
-        allowed = {"display_name", "role", "is_active", "mcp_access", "db_access_level", "subscription_tier"}
+        allowed = {"display_name", "role", "is_active", "mcp_access", "db_access_level"}
+        if _has_subscription_cols():
+            allowed.add("subscription_tier")
         updates = {k: v for k, v in fields.items() if k in allowed}
         if not updates:
             return self.get_user_by_id(user_id)
@@ -127,9 +154,7 @@ class AuthService:
                 cur.execute(
                     f"UPDATE users SET {set_clause}, updated_at = CURRENT_TIMESTAMP "
                     f"WHERE id = %s "
-                    f"RETURNING id, email, password_hash, display_name, role, is_active, "
-                    f"mcp_access, db_access_level, created_at, "
-                    f"subscription_tier, beta_expires_at, stripe_customer_id",
+                    f"RETURNING {_user_cols()}",
                     values,
                 )
                 row = cur.fetchone()
@@ -165,10 +190,7 @@ class AuthService:
         with get_connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(
-                    "SELECT s.user_id, s.expires_at, "
-                    "u.id, u.email, u.password_hash, u.display_name, u.role, u.is_active, "
-                    "u.mcp_access, u.db_access_level, u.created_at, "
-                    "u.subscription_tier, u.beta_expires_at, u.stripe_customer_id "
+                    f"SELECT s.user_id, s.expires_at, {_user_cols('u.')} "
                     "FROM sessions s JOIN users u ON s.user_id = u.id "
                     "WHERE s.id = %s",
                     (session_id,),
@@ -226,12 +248,10 @@ class AuthService:
         with get_connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(
-                    "SELECT t.id, t.user_id, t.scopes, t.is_active, t.expires_at, "
-                    "u.id, u.email, u.password_hash, u.display_name, u.role, u.is_active, "
-                    "u.mcp_access, u.db_access_level, u.created_at, "
-                    "u.subscription_tier, u.beta_expires_at, u.stripe_customer_id "
-                    "FROM api_tokens t JOIN users u ON t.user_id = u.id "
-                    "WHERE t.token = %s",
+                    f"SELECT t.id, t.user_id, t.scopes, t.is_active, t.expires_at, "
+                    f"{_user_cols('u.')} "
+                    f"FROM api_tokens t JOIN users u ON t.user_id = u.id "
+                    f"WHERE t.token = %s",
                     (_hash_token(token),),
                 )
                 row = cur.fetchone()
@@ -352,7 +372,7 @@ class AuthService:
 
     @staticmethod
     def _user_row_to_dict(row) -> dict:
-        return {
+        d = {
             "id": row[0],
             "email": row[1],
             # row[2] = password_hash, never exposed
@@ -361,8 +381,15 @@ class AuthService:
             "is_active": row[5],
             "mcp_access": row[6],
             "db_access_level": row[7],
-            "created_at": str(row[8]),
-            "subscription_tier": row[9],
-            "beta_expires_at": str(row[10]) if row[10] else None,
-            "stripe_customer_id": row[11],
+            "created_at": str(row[8]) if row[8] else None,
         }
+        # Subscription columns only present after migration 0009 applied.
+        if len(row) >= 12:
+            d["subscription_tier"] = row[9]
+            d["beta_expires_at"] = str(row[10]) if row[10] else None
+            d["stripe_customer_id"] = row[11]
+        else:
+            d["subscription_tier"] = None
+            d["beta_expires_at"] = None
+            d["stripe_customer_id"] = None
+        return d

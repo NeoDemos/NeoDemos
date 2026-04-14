@@ -55,6 +55,8 @@ class NebiusEmbedder:
         self.client = OpenAI(
             base_url="https://api.tokenfactory.nebius.com/v1/",
             api_key=api_key,
+            timeout=30.0,
+            max_retries=2,
         )
         self.model = EMBEDDING_MODEL
 
