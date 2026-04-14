@@ -1,11 +1,12 @@
 # WS1 — GraphRAG Retrieval
 
 > **Priority:** 1 (highest impact, MAAT cannot match)
-> **Status:** Phase 0 `done` (2026-04-12) · Phase A `blocked` — waiting on WS7 (OCR), WS11 (corpus gaps), WS12 (virtual notulen + `staging.meetings.quality_score`). WS10 (table-rich) is no longer a WS1 blocker per README 2026-04-13 decision.
+> **Status (2026-04-14):** Phase 0 `done` · Phase A bis (VN provenance) `done` · Phase 1 prep `done` (scripts hardened, commits `d6e1d58` + `44c87d5`) · Phase 1 execution `blocked` — waiting on WS7 (OCR), WS11 (corpus gaps), WS12 (virtual notulen + `staging.meetings.quality_score`). WS10 (table-rich) is no longer a blocker.
 > **Owner:** `unassigned`
 > **Target release:** v0.2.0
 > **Master plan section:** [V0_2_BEAT_MAAT_PLAN.md §3](../architecture/V0_2_BEAT_MAAT_PLAN.md)
 > **Phase naming:** "Phase A" (build tasks) == "Phase 1" (eval gate text). Same thing — Phase A is the build label; Phase 1 is the execution-stage label used in the eval gate.
+> **Next-agent quick-start:** jump to [§Phase 1 Execution Runbook](#phase-1-execution-runbook-agent-pickup-point). All code is ready; the runbook is a 10-step command sequence.
 
 ## TL;DR
 Today we have 57K KG edges, a politician registry, a domain gazetteer, and 3.3M entity-mentions — and we never query any of it at retrieval time. This workstream lights up the graph: enriches it to ~500K edges via Flair NER + Gemini, exposes it via [`services/graph_retrieval.py`](../../services/graph_retrieval.py) (built in Phase 0, 2026-04-12), wires graph traversal as the 5th retrieval stream, and ships two flagship MCP tools (`traceer_motie`, `vergelijk_partijen`) that no Dutch competitor can match. Phase A bis (added 2026-04-14) tags every edge with provenance metadata so virtual notulen (WS12) can be included in the KG without compromising production-grade output quality.
@@ -185,6 +186,106 @@ Effective `confidence` column = `base_confidence * source_quality`. A Gemini edg
 - [x] **MCP tool `vergelijk_partijen(onderwerp, partijen, datum_van, datum_tot, max_fragmenten_per_partij)`** ✅ scaffold shipped 2026-04-12. For each party: existing 5-stream retrieval + post-filter on party-name-in-content + top-N. When `is_graph_walk_ready()` is true, the graph_walk stream contributes LID_VAN ∩ SPREEKT_OVER paths.
   - [ ] **Test post-Phase A**: `vergelijk_partijen(onderwerp="warmtenetten", partijen=["Leefbaar Rotterdam","GroenLinks-PvdA","VVD"])` returns differentiated per-party fragments.
 - [x] **AI-consumption tool descriptions** ✅ both new tools have "use this when / do NOT use this when" descriptions per WS4 convention. WS4 is `done` per [README](README.md).
+
+## Phase 1 Execution Runbook (agent pickup point)
+
+**Last updated 2026-04-14.** This section is the canonical command sequence for executing WS1 Phase 1. A fresh agent can follow it top-to-bottom once the blockers below clear. All scripts are hardened (exponential backoff, pre-flight checks, advisory lock 42, `--resume` on long runs). No ad-hoc SQL needed — every step is a single CLI invocation.
+
+### Before starting — unblocking conditions
+
+All three must be `done` per [README](README.md) before firing step 1:
+
+- **WS7** — OCR recovery complete (moties/amendementen clean; otherwise Gemini enriches garbled text and produces garbage edges)
+- **WS11** — corpus completeness done (no point enriching a partial corpus)
+- **WS12** — virtual notulen ingested AND `staging.meetings.quality_score` populated for every VN meeting (the Phase A bis provenance layer multiplies edge confidence by this score; missing defaults to 0.5 conservative)
+
+The script's `preflight_checks()` will hard-fail if upstream state is wrong, so you cannot accidentally fire on a half-baked corpus.
+
+### Execution order (10 steps, ~24 hours wall clock)
+
+| # | Command | Est. time | Cost | Decision point? |
+|---|---|---|---|---|
+| 1 | `python scripts/enrich_chunks_gazetteer.py --dry-run --limit 1000` | 1 min | $0 | No |
+| 2 | `python scripts/enrich_chunks_gazetteer.py` | ~30 min | $0 | No |
+| 3 | `python scripts/import_bag_locations.py --gemeente rotterdam` | ~30 min | $0 | Possibly needs `--cbs-url` override on first run (CBS rotates URLs annually) |
+| 4 | `python scripts/run_flair_ner.py` | **6–12 hours** | $0 (local GPU) | Start overnight; checkpoint-resumable |
+| 5 | `python scripts/gemini_semantic_enrichment.py --init-schema` | 2 sec | $0 | No |
+| 6 | `python scripts/gemini_semantic_enrichment.py --dry-run --limit 10` | 30 sec | $0 | No |
+| 7 | `python scripts/gemini_semantic_enrichment.py --limit 100 --no-skip-enriched` | ~1 min | ~$0.50 | **YES — STOP for Dennis approval** on output JSON quality + cost/chunk trajectory |
+| 8 | `python scripts/gemini_semantic_enrichment.py --scope p1_p2 --cost-cap 150` | ~60 min @ Tier 3 | **~$125** | Auto-halts on cost cap |
+| 9 | `python scripts/link_motie_to_notulen.py` | ~1 hour | $0 | No |
+| 10 | `python scripts/backfill_qdrant_entity_ids.py` | 3–4 hours | $0 | Run overnight; last step before deploy |
+
+After step 10, run the quality audit:
+
+```bash
+python -c "import psycopg2, os; from dotenv import load_dotenv; load_dotenv(); \
+  c = psycopg2.connect(os.getenv('DATABASE_URL')); \
+  cur = c.cursor(); \
+  cur.execute(open('eval/scripts/ws1_quality_audit.sql').read()); \
+  print('check eval/scripts/ws1_quality_audit.sql for expected values')"
+```
+
+Or simpler: `psql $DATABASE_URL -f eval/scripts/ws1_quality_audit.sql` if psql is on PATH.
+
+### Known-good gates between steps
+
+Don't skip these — they catch the predictable failure modes:
+
+- **After step 2**: `SELECT COUNT(*) FROM document_chunks WHERE 'Heemraadssingel' = ANY(key_entities)` must return ≥1. That's the R3 eval-gate prerequisite.
+- **After step 3**: `SELECT COUNT(*) FROM kg_entities WHERE type='Location' AND metadata->>'gemeente'='rotterdam'` must return ≥4,500 (full BAG state — the Gemini pre-flight requires this).
+- **After step 4**: `SELECT ROUND(100.0 * COUNT(*) FILTER (WHERE array_length(key_entities,1) > 0) / COUNT(*), 1) FROM document_chunks` must show ≥60% coverage (handoff target).
+- **After step 7 (calibration)**: manually inspect the 100 enriched chunks. Look for VN vs official confidence differentiation (VN rows have `confidence < gemini_confidence`). Check `stats.edges_rejected` in logs — if >20%, the prompt needs tuning before step 8.
+- **After step 8 (full Gemini)**: `SELECT relation_type, COUNT(*) FROM kg_relationships WHERE metadata->>'source'='gemini_flash_lite' GROUP BY 1` must show HEEFT_BUDGET, BETREFT_WIJK, SPREEKT_OVER with reasonable counts (tens of thousands).
+- **After step 10**: Qdrant point sample — `client.retrieve(collection_name='notulen_chunks', ids=[<sample_id>], with_payload=True)` must show `entity_ids` populated.
+
+### Promote + test (after audit passes)
+
+11. **Stage `mcp_server_v3.py` VN-awareness edits** (uncommitted as of 2026-04-14; interleaved with WS4/WS6/WS8f WIP). Options: `git add -p` (interactive), or commit the whole file if all WIP from other workstreams is ready. The VN-awareness changes add `include_virtual_notulen` arg + VN/official edge-count fields to `traceer_motie` + `vergelijk_partijen`.
+12. Deploy via Kamal: `kamal deploy` (pattern per [`deploy` skill](../../CLAUDE.md) or `scripts/deploy.sh`).
+13. Flip `GRAPH_WALK_ENABLED=1` in container env (`config/deploy.yml` or `.env`), restart MCP server + FastAPI.
+14. Smoke-test the 15 existing MCP tools — must not regress.
+15. Test `traceer_motie` on the 10 hand-validated moties listed in Acceptance Criteria §8.
+16. Test `vergelijk_partijen(onderwerp="warmtenetten", partijen=["Leefbaar Rotterdam","GroenLinks-PvdA","VVD"])`.
+
+### Final eval gate (A/B replay)
+
+Run each of the [6 MCP chat replay sessions](#layer-2--mcp-chat-replay-the-real-quality-gate) **twice**:
+
+1. Default mode (`INCLUDE_VIRTUAL_NOTULEN=true`) — max recall
+2. Strict mode (`INCLUDE_VIRTUAL_NOTULEN=false`) — provenance-pure
+
+Score each session against the 1.8/5 baseline at [`eval/baselines/ws1_pre_enrichment_baseline.md`](../../eval/baselines/ws1_pre_enrichment_baseline.md). Acceptance:
+
+- Composite score ≥ 3.0/5 (from 1.8)
+- VN-strict delta ≤ 0.3 below default on every session (if delta inverts, VN is contributing noise and needs remediation)
+- All 4 RED items pass
+
+Fill in the **Outcome** section at the bottom of this file with actuals, surprises, follow-ups. Mark `Status → done` in the header.
+
+### If you get stuck
+
+- **preflight_checks fails on BAG** → step 3 didn't complete. Re-run `scripts/import_bag_locations.py --gemeente rotterdam` (idempotent).
+- **preflight_checks fails on active writers** → check `pg_stat_activity` for rogue processes. Often the committee_notulen_pipeline if it's restarted.
+- **Gemini cost cap hits early** → verify real spend matches expected (~$0.00028/chunk); if way higher, prompt/chunk selection is wrong, inspect calibration output.
+- **graph_walk returns empty in testing** → `GRAPH_WALK_ENABLED` env var not set or `kg_relationships` count < 200K (see `services/graph_retrieval.py:is_graph_walk_ready`).
+
+### Phase-1 code inventory (reference)
+
+All shipped, no further edits required:
+
+| File | Purpose | Shipped in |
+|---|---|---|
+| [scripts/enrich_chunks_gazetteer.py](../../scripts/enrich_chunks_gazetteer.py) | Chunk-text gazetteer pass (Heemraadssingel fix) | ce64706 |
+| [scripts/run_flair_ner.py](../../scripts/run_flair_ner.py) | Flair Dutch NER over chunks | ce64706 |
+| [scripts/import_bag_locations.py](../../scripts/import_bag_locations.py) | PDOK BAG + CBS hierarchy import | ce64706 |
+| [scripts/gemini_semantic_enrichment.py](../../scripts/gemini_semantic_enrichment.py) | Semantic edge enrichment (hardened 2026-04-14) | ce64706 → d6e1d58 → 44c87d5 |
+| [scripts/link_motie_to_notulen.py](../../scripts/link_motie_to_notulen.py) | DISCUSSED_IN / VOTED_IN edges | ce64706 + cf43441 (VN) |
+| [scripts/backfill_qdrant_entity_ids.py](../../scripts/backfill_qdrant_entity_ids.py) | Qdrant payload backfill | ce64706 |
+| [services/graph_retrieval.py](../../services/graph_retrieval.py) | 5th retrieval stream + VN filters | ce64706 + cf43441 |
+| [tests/test_graph_retrieval.py](../../tests/test_graph_retrieval.py) | 30 unit tests | ce64706 + cf43441 |
+| [eval/scripts/ws1_quality_audit.sql](../../eval/scripts/ws1_quality_audit.sql) | 12-check post-enrichment audit | ce64706 |
+| [eval/baselines/ws1_pre_enrichment_baseline.md](../../eval/baselines/ws1_pre_enrichment_baseline.md) | 1.8/5 composite pre-enrichment baseline | c7d2c13 |
 
 ## Acceptance criteria
 

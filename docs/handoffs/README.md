@@ -37,7 +37,7 @@ When a workstream finishes:
 
 | # | File | Title | Priority | Status | Depends on |
 |---|---|---|---|---|---|
-| WS1 | [`WS1_GRAPHRAG.md`](WS1_GRAPHRAG.md) | GraphRAG retrieval (incl. VN provenance layer added 2026-04-14) | 1 | **blocked** — waiting on WS7, WS11, WS12 | WS7 + WS11 + WS12 (clean, complete corpus + VN `quality_score` populated before enrichment) |
+| WS1 | [`WS1_GRAPHRAG.md`](WS1_GRAPHRAG.md) | GraphRAG retrieval (incl. VN provenance + Phase 1 execution runbook) | 1 | **blocked on execution** — all code shipped (Phase 0 + A bis + Phase 1 prep); waiting on WS7/WS11/WS12 to unblock the 10-step execution runbook | WS7 + WS11 + WS12 (clean, complete corpus + VN `quality_score` populated before enrichment) |
 | WS2 | [`done/WS2_FINANCIAL.md`](done/WS2_FINANCIAL.md) | Trustworthy financial analysis | 2 | **done** — shipped 2026-04-12 | none |
 | WS2b | [`WS2b_IV3_TAAKVELD.md`](WS2b_IV3_TAAKVELD.md) | IV3 taakveld FK backfill | 2 | not started | WS2 done ✅ |
 | WS3 | [`WS3_JOURNEY.md`](WS3_JOURNEY.md) | Document journey timelines | 3 | not started | WS1 Phase A (motie↔notulen linking) |
@@ -65,6 +65,8 @@ When a workstream finishes:
 **WS4 reliability follow-ups opened 2026-04-14** after two same-day MCP outages (routing double-mount bug + `ALTER TABLE users` holding an exclusive lock that stalled every `validate_api_token` call). Two items now queued in [WS4 §Post-ship reliability follow-ups](WS4_MCP_DISCIPLINE.md#post-ship-reliability-follow-ups-opened-2026-04-14): (1) 3 s `statement_timeout` on the auth path so blocked queries fail fast, (2) promote MCP from Kamal accessory to service role so every MCP deploy is blue-green zero-downtime (config already staged in `config/deploy.yml`). Rules distilled into [`feedback_mcp_uptime.md`](../../.claude/projects/-Users-dennistak-Documents-Final-Frontier-NeoDemos/memory/feedback_mcp_uptime.md).
 
 **WS7 + WS11 + WS12 are the current active track.** All three must complete before WS1 Phase A (enrichment) starts — enriching garbled text or an incomplete corpus wastes Gemini spend and produces lower-quality KG edges. **WS12 specifically:** `staging.meetings.quality_score` must be populated for every VN meeting (WS1's new provenance layer multiplies edge confidence by `source_quality`; missing scores default to 0.5 conservative).
+
+**WS1 Phase 1 execution is ready to fire the moment WS7/WS11/WS12 finish.** All code is shipped and hardened (Phase 0 + Phase A bis + Phase 1 prep, commits `ce64706` → `cf43441` → `d6e1d58` → `44c87d5`). See [`WS1_GRAPHRAG.md` § Phase 1 Execution Runbook](WS1_GRAPHRAG.md#phase-1-execution-runbook-agent-pickup-point) for the 10-step command sequence a fresh agent can run cold. Script pre-flight checks auto-fail on incomplete upstream state so execution can't misfire.
 
 **WS1 VN provenance addendum (2026-04-14):** Dennis surfaced the dilemma that VN data quality is uncertain but committee coverage requires VN inclusion. Resolution: standard provenance-aware KG pattern (Facebook KG / NELL). Every `kg_relationships` row gets `metadata.source` + `source_quality`; effective confidence = `base * source_quality`; query-time killswitch via existing `INCLUDE_VIRTUAL_NOTULEN` env var, now extended to graph_walk. Detailed in [`WS1_GRAPHRAG.md` § Phase A bis](WS1_GRAPHRAG.md#phase-a-bis--vn-provenance-layer-added-2026-04-14). No new workstream — folded into WS1 because it's a write-time + query-time hook on existing scripts.
 
