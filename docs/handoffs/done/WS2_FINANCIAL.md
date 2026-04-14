@@ -17,7 +17,7 @@ When a council member asks "wat is de begrotingsruimte voor wijkveiligheid in 20
 
 ## Cold-start prompt
 
-> You are picking up Workstream 2 (Trustworthy Financial Analysis) of NeoDemos v0.2.0. The full plan is at `docs/architecture/V0_2_BEAT_MAAT_PLAN.md` §4. This handoff at `docs/handoffs/WS2_FINANCIAL.md` is self-contained — you do not need to read the master plan.
+> You are picking up Workstream 2 (Trustworthy Financial Analysis) of NeoDemos v0.2.0. The full plan is at `docs/architecture/V0_2_BEAT_MAAT_PLAN.md` §4. This handoff at `docs/handoffs/done/WS2_FINANCIAL.md` is self-contained — you do not need to read the master plan.
 >
 > Read in order: (1) this file top-to-bottom, (2) `docs/architecture/FINANCIAL_DATA_DOCLING_UPGRADE.md`, (3) `pipeline/financial_ingestor.py`, (4) `mcp_server_v3.py` `zoek_financieel` tool (around line 349), (5) the existing financial scripts in `scripts/run_financial_batch.py` and `scripts/promote_financial_docs.py`.
 >

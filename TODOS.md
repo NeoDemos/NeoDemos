@@ -46,7 +46,7 @@ Full context + file paths in [WS4 §Post-ship reliability follow-ups](docs/hando
 | # | Workstream | Handoff | Status |
 |---|---|---|---|
 | WS1 | GraphRAG retrieval | [WS1_GRAPHRAG.md](docs/handoffs/WS1_GRAPHRAG.md) | not started |
-| WS2 | Trustworthy financial analysis | [WS2_FINANCIAL.md](docs/handoffs/WS2_FINANCIAL.md) | not started |
+| WS2 | Trustworthy financial analysis | [WS2_FINANCIAL.md](docs/handoffs/done/WS2_FINANCIAL.md) | not started |
 | WS3 | Document journey timelines | [WS3_JOURNEY.md](docs/handoffs/WS3_JOURNEY.md) | not started |
 | WS4 | Best-in-class MCP surface | [WS4_MCP_DISCIPLINE.md](docs/handoffs/WS4_MCP_DISCIPLINE.md) | not started |
 | WS5a | Nightly pipeline | [WS5a_NIGHTLY_PIPELINE.md](docs/handoffs/WS5a_NIGHTLY_PIPELINE.md) | not started |
@@ -70,7 +70,7 @@ Full context + file paths in [WS4 §Post-ship reliability follow-ups](docs/hando
 | 2026-04-11 | `zoek_moties` title-only bug for single-word queries | [WS4 §MCP tool bug fixes](docs/handoffs/WS4_MCP_DISCIPLINE.md) | MCP tool quality fix — natural WS4 home |
 | 2026-04-11 | RAG BM25 `%notule%` fallback filter | [WS1 §Phase B](docs/handoffs/WS1_GRAPHRAG.md) | `services/rag_service.py` bug; WS1 already edits that file |
 | 2026-04-11 | Overview query latency (`zoek_moties` → `lees_fragment` sequential) | [WS4 §MCP tool bug fixes](docs/handoffs/WS4_MCP_DISCIPLINE.md) | Tool API design (preview chars, batch tool) |
-| 2026-04-11 | IV3 / taakvelden canonical aggregation layer | [WS2 §IV3 canonical aggregation](docs/handoffs/WS2_FINANCIAL.md) | Explicit WS2 prerequisite — financial schema concern |
+| 2026-04-11 | IV3 / taakvelden canonical aggregation layer | [WS2 §IV3 canonical aggregation](docs/handoffs/done/WS2_FINANCIAL.md) | Explicit WS2 prerequisite — financial schema concern |
 | 2026-04-11 | Chunk → `document_id` attribution audit (from FEEDBACK_LOG) | [WS5a §Data integrity audit](docs/handoffs/WS5a_NIGHTLY_PIPELINE.md) | Ingest integrity — pipeline reliability concern |
 | 2026-04-11 | `lees_fragment(query=...)` re-ranking (from FEEDBACK_LOG) | [WS4 §Tool API improvements](docs/handoffs/WS4_MCP_DISCIPLINE.md) | MCP tool API change |
 | 2026-04-11 | `corpus_coverage` metadata on search tool responses (from FEEDBACK_LOG) | [WS4 §Tool API improvements](docs/handoffs/WS4_MCP_DISCIPLINE.md) | Output schema change (depends on WS5a coverage data) |

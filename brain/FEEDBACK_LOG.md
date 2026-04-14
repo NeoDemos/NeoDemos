@@ -38,6 +38,47 @@ See [`TODOS.md`](../TODOS.md) header for the full scope rules on where items liv
 
 <!-- Add entries below, newest at top -->
 
+### 2026-04-14 Systematic MCP testing — onderwijs / sociale huur + nachtleven / stemgedrag (two sessions)
+
+**Query / params:**
+Two consecutive testing sessions via Claude.ai iOS app against the live MCP surface. Session 1 themed around onderwijs, sociale huurwoningen, D66 Kasmi, budget comparison across 10 tools. Session 2 themed around D66 nachtlevenmoties + party voting behaviour on restrictive proposals. Full raw feedback pasted in conversation 2026-04-14.
+
+**What came back / what was wrong:**
+10 numbered items in session 1 (BUG-001..BUG-007 + IMP-001..IMP-006), 6 items + 2 observations + 1 feature request in session 2. Condensed list below; full detail lives in the handoff entries they've been triaged into.
+
+- **BUG-001** `vergelijk_partijen` returns zero results (known pre-Phase A expected behaviour, not a new bug)
+- **BUG-002** `tijdlijn_besluitvorming` relevance floor too low — returns procedural noise at 0.71-0.73
+- **BUG-003** `lijst_vergaderingen` commissie filter only matches abbreviation codes (WIOS, ZOCS), not full names
+- **BUG-004** `haal_partijstandpunt_op` profile DB empty; fallback RAG returns 2015-2017 fragments
+- **BUG-005 / BUG-002 s2** `zoek_moties` wastes slots on "Lijst met openstaande moties" overview docs
+- **BUG-006 / BUG-006 s2** `zoek_moties` `uitkomst` unreliable — inherits from container, misses `AANGENOMEN` in body
+- **BUG-007** `lijst_vergaderingen` iBabs/ORI duplicates (numeric ID + UUID for same meeting)
+- **BUG-003 s2** `zoek_moties` no BB-number dedup across tussenberichten + herziene versies
+- **IMP-001** Financial tools return `"87506.00"` without unit — Rotterdam publishes in thousands
+- **IMP-002** `iv3_omschrijving` null — reference table has the name, just needs JOIN
+- **IMP-003** `zoek_uitspraken` party-filter weak (returns generic chunks, not speaker-level)
+- **IMP-004** `zoek_uitspraken_op_rol` dominated by signatures + toezeggingen rows
+- **IMP-005** `lees_fragment` returns 1 chunk when 3 requested with no visibility on total
+- **IMP-006** Chunk titles generated in English ("D66's Clarification of Stance")
+- **FEATURE-001** `zoek_stemgedrag` + `motie_stemmen` table needed for "how did D66 vote on others' proposals"
+
+**Observations (positive):**
+- `vergelijk_begrotingsjaren` + `vraag_begrotingsregel` return rich, verified financial data (only unit-label issue)
+- `zoek_uitspraken` + `zoek_uitspraken_op_rol` partij filter works for finding relevant debate contributions (Walgenbach 2019-2020 nachtcultuur)
+- Offensive/defensive distinction confirmed: MCP covers the "what D66 filed" side well; defensive side ("how D66 voted on others") is the gap and justifies `motie_stemmen` as #1 v0.3.0 priority
+
+**Severity:** mixed — HIGH for BUG-002, BUG-005, BUG-006; MEDIUM for BUG-003, BUG-004, BUG-007; LOW for IMP-*
+
+**Triaged:** 2026-04-14 → multiple destinations:
+- **[WS4 §(4) Tool quality fixes from 2026-04-14](../docs/handoffs/WS4_MCP_DISCIPLINE.md#4-tool-quality-fixes-from-2026-04-14-systematic-testing-added-2026-04-14)** (10 items T1–T10: BUG-002, BUG-003, BUG-005, BUG-006, BUG-003 s2, IMP-003, IMP-004, IMP-005 + broad-query demotion). Ship before v0.2.0 eval gate.
+- **[WS14 B5 (meeting dedup)](../docs/handoffs/WS14_CALENDAR_QUALITY.md)** — BUG-007 confirmed, direction set (prefer record with populated `commissie` code; surface both IDs in response).
+- **[WS2b IV-1 + IV-2](../docs/handoffs/WS2b_IV3_TAAKVELD.md#appended-2026-04-14-from-mcp-testing-feedback)** — IMP-001 (unit field) + IMP-002 (iv3_omschrijving JOIN). Ships with main WS2b backfill.
+- **[WS1 Future work](../docs/handoffs/WS1_GRAPHRAG.md#future-work-do-not-do-in-this-workstream)** — BUG-001 is expected pre-Phase A (no action); full `haal_partijstandpunt_op` programme-based profile seeding deferred past v0.4; `vergelijk_partijen` retrieval-based flavour stays in v0.2.0.
+- **[WS6 Follow-up bug](../docs/handoffs/WS6_SUMMARIZATION.md#follow-up-bug-from-2026-04-14-mcp-testing)** — IMP-006 English chunk titles.
+- **[WS15 `motie_stemmen` (NEW, v0.2.0)](../docs/handoffs/WS15_MOTIE_STEMMEN.md)** — FEATURE-001 `zoek_stemgedrag` + `motie_stemmen` table promoted to v0.2.0 on 2026-04-14 (was v0.3.0). Regex-parsed from 1,077 besluitenlijsten, no LLM. Defensive-vote query class (D66 voting on others' restrictive nachtleven motions) is now a v0.2.0 acceptance item.
+
+---
+
 ### 2026-04-11 Full session audit — Woningbouwbeleid Rotterdam (10 jaar)
 
 **Query / params:**
@@ -218,19 +259,19 @@ De tool-description in [mcp_server_v3.py:438-440](../mcp_server_v3.py#L438-L440)
 
 **Verbeteringen — root causes → fixes:**
 
-1. **[KRITIEK, WS2] Scope-dimensie op financial_lines + MCP response** — voeg `scope` (`gemeente` | `gemeenschappelijke_regeling` | `regio` | `nationaal`) en `entity_id` toe aan het `financial_lines`-schema. Tag GRJR-documenten bij ingest als `scope='gemeenschappelijke_regeling'`, `entity_id='grjr'`. `zoek_financieel` en `vraag_begrotingsregel` retourneren altijd `scope` + `entity` in elke match, zodat de LLM niet meer regio met gemeente kan verwarren. Zie uitgebreide beschrijving in [WS2_FINANCIAL.md §Joint-arrangement (GRJR) & scope handling](../docs/handoffs/WS2_FINANCIAL.md).
+1. **[KRITIEK, WS2] Scope-dimensie op financial_lines + MCP response** — voeg `scope` (`gemeente` | `gemeenschappelijke_regeling` | `regio` | `nationaal`) en `entity_id` toe aan het `financial_lines`-schema. Tag GRJR-documenten bij ingest als `scope='gemeenschappelijke_regeling'`, `entity_id='grjr'`. `zoek_financieel` en `vraag_begrotingsregel` retourneren altijd `scope` + `entity` in elke match, zodat de LLM niet meer regio met gemeente kan verwarren. Zie uitgebreide beschrijving in [WS2_FINANCIAL.md §Joint-arrangement (GRJR) & scope handling](../docs/handoffs/done/WS2_FINANCIAL.md).
 
-2. **[KRITIEK, WS2] GR-bijdrageverdeling als eerste-klas data** — GRJR-jaarstukken bevatten altijd een `inwonerbijdrage`-tabel. Nieuwe extractie-regel in `pipeline/financial_lines_extractor.py`: voor documenten met `scope='gemeenschappelijke_regeling'`, ook de deelnemersverdeling extraheren naar een `gr_member_contributions`-tabel (`entity_id`, `member_gemeente`, `jaar`, `bijdrage_eur`, `bijdrage_pct`). `vraag_begrotingsregel(gemeente='rotterdam', ..., include_gr_shares=True)` kan dan voor regionale totalen automatisch Rotterdam's afgeleide aandeel meeberekenen. Zie [WS2_FINANCIAL.md §Joint-arrangement (GRJR) & scope handling](../docs/handoffs/WS2_FINANCIAL.md).
+2. **[KRITIEK, WS2] GR-bijdrageverdeling als eerste-klas data** — GRJR-jaarstukken bevatten altijd een `inwonerbijdrage`-tabel. Nieuwe extractie-regel in `pipeline/financial_lines_extractor.py`: voor documenten met `scope='gemeenschappelijke_regeling'`, ook de deelnemersverdeling extraheren naar een `gr_member_contributions`-tabel (`entity_id`, `member_gemeente`, `jaar`, `bijdrage_eur`, `bijdrage_pct`). `vraag_begrotingsregel(gemeente='rotterdam', ..., include_gr_shares=True)` kan dan voor regionale totalen automatisch Rotterdam's afgeleide aandeel meeberekenen. Zie [WS2_FINANCIAL.md §Joint-arrangement (GRJR) & scope handling](../docs/handoffs/done/WS2_FINANCIAL.md).
 
-3. **[WS2] OCR-kwaliteitsmetadata per chunk** — bij ingest van financiële documenten, bereken (a) `ocr_backend` (`native_pdf` | `easyocr` | `tesseract`), (b) `ocr_dict_hit_ratio` (fraction van tokens die matchen tegen een Nederlands lexicon — goedkoop, geen ML nodig), (c) `ocr_confidence` als Docling het rapporteert. Opslaan in `chunks.metadata`. Twee downstream gevolgen: filter low-quality chunks uit de default retrieval (drempel `dict_hit_ratio >= 0.85`) of annoteer ze expliciet in de response (`quality_warning: "ocr_artefacten_waarschijnlijk"`). Zie [WS2_FINANCIAL.md §Joint-arrangement (GRJR) & scope handling](../docs/handoffs/WS2_FINANCIAL.md).
+3. **[WS2] OCR-kwaliteitsmetadata per chunk** — bij ingest van financiële documenten, bereken (a) `ocr_backend` (`native_pdf` | `easyocr` | `tesseract`), (b) `ocr_dict_hit_ratio` (fraction van tokens die matchen tegen een Nederlands lexicon — goedkoop, geen ML nodig), (c) `ocr_confidence` als Docling het rapporteert. Opslaan in `chunks.metadata`. Twee downstream gevolgen: filter low-quality chunks uit de default retrieval (drempel `dict_hit_ratio >= 0.85`) of annoteer ze expliciet in de response (`quality_warning: "ocr_artefacten_waarschijnlijk"`). Zie [WS2_FINANCIAL.md §Joint-arrangement (GRJR) & scope handling](../docs/handoffs/done/WS2_FINANCIAL.md).
 
-4. **[WS2] Finer-grained table chunking bij financiële docs** — al impliciet gedekt door `financial_lines` structured extractie (één rij per cel); na go-live hoort `zoek_financieel` voor exacte getallen een router te zijn die doorroutet naar `vraag_begrotingsregel`. Het tekst-pad verdwijnt niet maar is alleen nog voor narratieve vragen. Reeds in [WS2_FINANCIAL.md §MCP tools](../docs/handoffs/WS2_FINANCIAL.md) opgenomen.
+4. **[WS2] Finer-grained table chunking bij financiële docs** — al impliciet gedekt door `financial_lines` structured extractie (één rij per cel); na go-live hoort `zoek_financieel` voor exacte getallen een router te zijn die doorroutet naar `vraag_begrotingsregel`. Het tekst-pad verdwijnt niet maar is alleen nog voor narratieve vragen. Reeds in [WS2_FINANCIAL.md §MCP tools](../docs/handoffs/done/WS2_FINANCIAL.md) opgenomen.
 
 5. **[WS4] `budget_year` vs `datum_van` documentatie herschrijven naar AI-consumptie template** — opgenomen in de tool-description-rewrite van de bestaande 13 tools. Concreet voorbeeld dat de divergentie illustreert: "Begroting 2025 wordt ingediend in oktober 2024 (publicatiedatum) maar beschrijft fiscaal jaar 2025 (budget_year). Gebruik `budget_year=2025` wanneer je vraagt 'wat is de begrotingsruimte voor 2025' en `datum_van='2024-10-01'` wanneer je vraagt 'welke begrotingsdocumenten werden gepubliceerd in oktober 2024'." Ingewerkt in [WS4_MCP_DISCIPLINE.md §Tool API improvements](../docs/handoffs/WS4_MCP_DISCIPLINE.md).
 
 6. **[WS4] `exclude_ids` parameter op alle retrieval-tools** — goedkope server-side dedup voor multi-call sessies. LLM stuurt de document_ids die al geconsumeerd zijn mee; de tool filtert ze uit. Ingewerkt in [WS4_MCP_DISCIPLINE.md §Tool API improvements](../docs/handoffs/WS4_MCP_DISCIPLINE.md).
 
-**Triaged:** 2026-04-11 → [WS2_FINANCIAL.md §Joint-arrangement (GRJR) & scope handling](../docs/handoffs/WS2_FINANCIAL.md) (primary, items 1–4) + [WS4_MCP_DISCIPLINE.md §Tool API improvements](../docs/handoffs/WS4_MCP_DISCIPLINE.md) (item 5: `budget_year` docs + scope metadata passthrough). Item 6 (duplicaat doc_ids): token-waste, geen infra fix — adres via tool-description "do NOT use when"-clausule in WS4. Issue 7 (`lees_fragment` ID-compatibiliteit) reeds gedekt door bestaande WS4 MCP bug fixes.
+**Triaged:** 2026-04-11 → [WS2_FINANCIAL.md §Joint-arrangement (GRJR) & scope handling](../docs/handoffs/done/WS2_FINANCIAL.md) (primary, items 1–4) + [WS4_MCP_DISCIPLINE.md §Tool API improvements](../docs/handoffs/WS4_MCP_DISCIPLINE.md) (item 5: `budget_year` docs + scope metadata passthrough). Item 6 (duplicaat doc_ids): token-waste, geen infra fix — adres via tool-description "do NOT use when"-clausule in WS4. Issue 7 (`lees_fragment` ID-compatibiliteit) reeds gedekt door bestaande WS4 MCP bug fixes.
 
 ---
 

@@ -26,7 +26,7 @@ WS2 shipped 61,182 `financial_lines` rows with `iv3_taakveld = NULL` for all of 
 
 > You are picking up Workstream 2b (IV3 Taakveld FK Backfill) of NeoDemos v0.2.0.
 >
-> Read in order: (1) this file, (2) `docs/handoffs/WS2_FINANCIAL.md` §Outcome (especially the "IV3 taakveld mapping" gap note), (3) `pipeline/financial_ingestor.py` (the `_assign_iv3` method and `_write_lines` batch writer), (4) `scripts/seed_programma_aliases.py` (to understand the alias table structure).
+> Read in order: (1) this file, (2) `docs/handoffs/done/WS2_FINANCIAL.md` §Outcome (especially the "IV3 taakveld mapping" gap note), (3) `pipeline/financial_ingestor.py` (the `_assign_iv3` method and `_write_lines` batch writer), (4) `scripts/seed_programma_aliases.py` (to understand the alias table structure).
 >
 > Your job: wire the existing `programma_aliases` lookup into `_assign_iv3` so new extractions populate `iv3_taakveld`, then run a one-time SQL UPDATE backfill for the 61,182 existing rows. Verify coverage reaches ≥ 80% (some programma names will never match a taakveld — that is expected and acceptable).
 >
@@ -34,7 +34,7 @@ WS2 shipped 61,182 `financial_lines` rows with `iv3_taakveld = NULL` for all of 
 
 ## Files to read first
 
-- [`docs/handoffs/WS2_FINANCIAL.md`](WS2_FINANCIAL.md) — §Outcome "IV3 taakveld mapping" gap note at the bottom
+- [`docs/handoffs/done/WS2_FINANCIAL.md`](done/WS2_FINANCIAL.md) — §Outcome "IV3 taakveld mapping" gap note at the bottom
 - [`pipeline/financial_ingestor.py`](../../pipeline/financial_ingestor.py) — `_assign_iv3` method (search for this name), `_write_lines` batch writer
 - [`scripts/seed_programma_aliases.py`](../../scripts/seed_programma_aliases.py) — shows structure of `programma_aliases` (programma_name → iv3_taakveld_id)
 - Postgres: `financial_lines`, `programma_aliases`, `iv3_taakvelden` tables
@@ -93,6 +93,17 @@ The `_assign_iv3` method in `pipeline/financial_ingestor.py` exists but returns 
 - [ ] All new extractions (re-running `financial_ingestor.py`) produce populated `iv3_taakveld` on first write — no separate backfill needed going forward
 - [ ] Backfill script is idempotent — re-running it does not create duplicates or overwrite already-correct values
 - [ ] `vraag_begrotingsregel` MCP tool response includes `iv3_taakveld` in the returned row
+
+---
+
+## Appended 2026-04-14 from MCP testing feedback
+
+Two small display/contract issues surfaced during systematic MCP testing ([`brain/FEEDBACK_LOG.md` 2026-04-14 session 1](../../brain/FEEDBACK_LOG.md)). Both land in this WS because they sit on the same tools this backfill touches.
+
+- [ ] **IV-1 — Add `unit` field to `vraag_begrotingsregel` and `vergelijk_begrotingsjaren` response schemas.** Bedragen like `"87506.00"` are ambiguous without a unit label — Rotterdam publishes in thousands (x €1.000). Add `"unit": "x €1.000"` (or `"EUR"` where the source is euros) to every response that contains a `bedrag` field. Source of truth: the `financial_lines.unit` column if present, otherwise default `"x €1.000"` per Rotterdam convention. Document in tool description too so the calling LLM uses the right scale in summaries.
+- [ ] **IV-2 — Populate `iv3_omschrijving` in responses, not just `iv3_taakveld`.** Currently the tool returns `"iv3_taakveld": "4.3", "iv3_omschrijving": null`. The `iv3_taakvelden` reference table already has the full name ("Onderwijsbeleid en leerlingzaken" for 4.3) — JOIN it into the response. Helps the calling LLM ground numbers in human-readable categories without a second tool call. Null-safe: if the JOIN misses (legacy rows), return the code alone.
+
+**Sequence:** ship IV-1 + IV-2 together with the main WS2b backfill — same files touched, one deploy.
 
 ---
 

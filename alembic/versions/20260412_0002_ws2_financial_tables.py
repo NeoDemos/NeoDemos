@@ -2,7 +2,7 @@
 programma_aliases, and gr_member_contributions tables.
 
 Workstream: WS2 (Trustworthy Financial Analysis)
-Handoff: docs/handoffs/WS2_FINANCIAL.md
+Handoff: docs/handoffs/done/WS2_FINANCIAL.md
 Seed data: data/financial/iv3_taakvelden.json, data/financial/financial_entities_seed.json
 
 Revision ID: 0002

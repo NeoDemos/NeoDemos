@@ -20,7 +20,7 @@ def upgrade() -> None:
     # Existing production tables (documents, document_chunks, meetings, etc.)
     # are managed by scripts/create_*.py and scripts/migrate_*.sql.
     # This baseline revision marks the point where Alembic takes over
-    # for NEW tables only. See docs/handoffs/WS2_FINANCIAL.md.
+    # for NEW tables only. See docs/handoffs/done/WS2_FINANCIAL.md.
     pass
 
 

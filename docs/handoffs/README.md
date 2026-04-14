@@ -38,7 +38,7 @@ When a workstream finishes:
 | # | File | Title | Priority | Status | Depends on |
 |---|---|---|---|---|---|
 | WS1 | [`WS1_GRAPHRAG.md`](WS1_GRAPHRAG.md) | GraphRAG retrieval (incl. VN provenance layer added 2026-04-14) | 1 | **blocked** — waiting on WS7, WS11, WS12 | WS7 + WS11 + WS12 (clean, complete corpus + VN `quality_score` populated before enrichment) |
-| WS2 | [`WS2_FINANCIAL.md`](WS2_FINANCIAL.md) | Trustworthy financial analysis | 2 | **done** — shipped 2026-04-12 | none |
+| WS2 | [`done/WS2_FINANCIAL.md`](done/WS2_FINANCIAL.md) | Trustworthy financial analysis | 2 | **done** — shipped 2026-04-12 | none |
 | WS2b | [`WS2b_IV3_TAAKVELD.md`](WS2b_IV3_TAAKVELD.md) | IV3 taakveld FK backfill | 2 | not started | WS2 done ✅ |
 | WS3 | [`WS3_JOURNEY.md`](WS3_JOURNEY.md) | Document journey timelines | 3 | not started | WS1 Phase A (motie↔notulen linking) |
 | WS4 | [`WS4_MCP_DISCIPLINE.md`](WS4_MCP_DISCIPLINE.md) | Best-in-class MCP surface | 4 | **shipped 2026-04-13** (v0.2.0-alpha.2); 2 reliability follow-ups opened 2026-04-14 | none |
@@ -54,6 +54,7 @@ When a workstream finishes:
 | WS12 | [`WS12_VIRTUAL_NOTULEN_BACKFILL.md`](WS12_VIRTUAL_NOTULEN_BACKFILL.md) | Virtual notulen backfill & production hardening | 1 | **in progress** — Dennis running | none |
 | WS13 | [`WS13_MULTI_GEMEENTE_PIPELINE.md`](WS13_MULTI_GEMEENTE_PIPELINE.md) | Multi-gemeente pipeline: tenant-aware ingestion | 1 (v0.2.1) | not started | WS5a stable |
 | WS14 | [`WS14_CALENDAR_QUALITY.md`](WS14_CALENDAR_QUALITY.md) | Calendar quality & bijlage reconciliation | 1 (launch blocker) | **not started** — plan approved 2026-04-14; C1 hotfix ships standalone | WS8f `done` (sequencing); cross-refs WS11 (B3), WS5a (B6), WS13 (E) |
+| WS15 | [`WS15_MOTIE_STEMMEN.md`](WS15_MOTIE_STEMMEN.md) | Per-party voting data (`motie_stemmen` + `zoek_stemgedrag` MCP tool) | 1.5 | **not started** — promoted from v0.3.0 on 2026-04-14 | WS11 ✅, WS4 ✅; independent of WS1 |
 
 **Webcast timestamp linking** (priority 7) is split across WS5a (schema + backfill) and WS5b (HLS player UI).
 
@@ -216,7 +217,7 @@ v0.2.1 — search-only beyond Rotterdam
 
 For a fresh LLM agent (Claude Code, Cursor, etc.):
 
-1. Open the handoff file (e.g. `WS2_FINANCIAL.md`)
+1. Open the handoff file (e.g. `done/WS2_FINANCIAL.md`)
 2. Copy the **Cold-start prompt** block verbatim
 3. Paste into the agent's first message
 4. Let the agent read its `Files to read first`, then start the `Build tasks`

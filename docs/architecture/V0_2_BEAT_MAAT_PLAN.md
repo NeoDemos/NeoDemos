@@ -11,7 +11,7 @@
 > | Workstream | Handoff file | Status |
 > |---|---|---|
 > | WS1 GraphRAG | [`docs/handoffs/WS1_GRAPHRAG.md`](../handoffs/WS1_GRAPHRAG.md) | not started |
-> | WS2 Trustworthy financial | [`docs/handoffs/WS2_FINANCIAL.md`](../handoffs/WS2_FINANCIAL.md) | not started |
+> | WS2 Trustworthy financial | [`docs/handoffs/done/WS2_FINANCIAL.md`](../handoffs/done/WS2_FINANCIAL.md) | not started |
 > | WS3 Document journey | [`docs/handoffs/WS3_JOURNEY.md`](../handoffs/WS3_JOURNEY.md) | not started |
 > | WS4 Best-in-class MCP | [`docs/handoffs/WS4_MCP_DISCIPLINE.md`](../handoffs/WS4_MCP_DISCIPLINE.md) | not started |
 > | WS5a Nightly pipeline | [`docs/handoffs/WS5a_NIGHTLY_PIPELINE.md`](../handoffs/WS5a_NIGHTLY_PIPELINE.md) | not started |
