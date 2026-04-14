@@ -68,7 +68,7 @@ _Target: 2026-04-24 (2 weeks from 2026-04-10 kickoff)_
 - [ ] **WS3 Document journey** — `document_journeys` view + `traceer_document` MCP tool (UI deferred to v0.2.1). Blocked on WS1 Phase A.
 - [ ] **WS4 Best-in-class MCP** — tool registry + `get_neodemos_context` primer + tool-collision detection + scoped OAuth + audit log + parameter/output filters (FactSet defense-in-depth)
 - [ ] **WS5 Reliable nightly ingest** — 7-step idempotent job graph + advisory locks + smoke test + admin dashboard (Rotterdam only)
-- [ ] **WS6 Source-spans-only summarization** — `services/summarizer.py` + verification badges + cached per-document summaries
+- [ ] **WS6 Source-spans-only summarization** — `services/summarizer.py` ✅ + verifier ✅ + Gemini Batch pipeline ✅ + bulk backfill ⏳ *(Phase 3 DB write running 2026-04-14; 25.5K short summaries)*; MCP tool `vat_document_samen` + UI verification badges still pending
 - [ ] **WS7 OCR recovery** — Re-OCR 2,700 garbled moties/amendementen via Docling, BM25 hit rate 77.5% → ≥95%. *(in progress — Dennis running)*. **Must finish before WS1 Phase A.**
 - [x] **WS8 Frontend redesign** — Design tokens (Tailwind v4), landing page, calendar list view, subpages (over/technologie/methodologie), polish *(WS8a-e done 2026-04-12)*
 - [ ] **WS8f Admin panel + content management** — `site_content` + `site_pages` tables, structured form editor at `/admin/content` (68 editable items), GrapeJS visual page builder at `/admin/editor/<slug>`, CSS restructure (Tailwind v4 `@layer` modules), `main.py` router split (→ 4 modules), subscription tier scaffolding (`free_beta`)

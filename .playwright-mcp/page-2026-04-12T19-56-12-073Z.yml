@@ -1,0 +1,155 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "NeoDemos home" [ref=e3] [cursor=pointer]:
+      - /url: /
+      - text: NeoDemos
+    - navigation [ref=e4]:
+      - link "Kalender" [ref=e5] [cursor=pointer]:
+        - /url: /calendar
+      - link "AI-koppeling" [ref=e6] [cursor=pointer]:
+        - /url: /mcp-installer
+      - link "Over" [ref=e7] [cursor=pointer]:
+        - /url: /over
+      - link "Inloggen" [ref=e8] [cursor=pointer]:
+        - /url: /login
+  - main [ref=e9]:
+    - generic [ref=e10]:
+      - generic [ref=e13]:
+        - heading "24 jaar raadsbesluiten. Doorzoekbaar in seconden." [level=1] [ref=e14]:
+          - text: 24 jaar raadsbesluiten.
+          - text: Doorzoekbaar in seconden.
+        - generic [ref=e15]:
+          - textbox "Stel uw eigen vraag..." [ref=e16]
+          - button "Zoek" [ref=e17] [cursor=pointer]
+        - generic [ref=e18]:
+          - generic [ref=e19]: "Of probeer:"
+          - button "Heeft het college haar beloftes waargemaakt?" [ref=e20] [cursor=pointer]
+          - button "Hoe stemden partijen over woningbouw?" [ref=e21] [cursor=pointer]
+          - button "Welke moties over klimaat zijn aangenomen sinds 2020?" [ref=e22] [cursor=pointer]
+        - generic [ref=e23]: 90.000+ documenten · 24 jaar · Rotterdam · Open brondata
+      - generic [ref=e24]:
+        - generic [ref=e25]: Coalitieakkoord vs. uitvoering
+        - generic [ref=e26]:
+          - generic [ref=e27]: “Heeft het college haar beloftes waargemaakt? Geef me een overzicht.”
+          - heading [level=1] [ref=e29]:
+            - text: "Debat-voorbereidingsdossier: Collegebeloften - Evaluatie en Uitvoering ## 1. # 📅 Context & Vorige bespreking Dit dossier evalueert de mate waarin het college haar beloftes heeft waargemaakt, gebaseerd op de beschikbare informatie uit raadsdocumenten en verslaglegging. De discussie rond collegebeloften en de naleving ervan is een terugkerend thema in de gemeenteraad. Eerdere besprekingen, zoals die betreffende de Voorjaarsnota 2003, toonden al een focus op de alignering van collegeprioriteiten met het partijprogramma"
+            - link "1" [ref=e30] [cursor=pointer]:
+              - /url: https://rotterdam.raadsinformatie.nl/document/241376/1/document?connection_type=1&connection_id=105141
+            - text: . Ook moties, zoals die voor de ondertunneling van de 's-Gravendijkwal/Henegouwerlaan, hebben geleid tot vervolgbrieven van het college
+            - link "5" [ref=e31] [cursor=pointer]:
+              - /url: https://rotterdam.raadsinformatie.nl/document/5248833/1/015e85ac9013c8e2069e8784991531c0?connection_type=1&connection_id=3408914
+            - link "9" [ref=e32] [cursor=pointer]:
+              - /url: https://rotterdam.raadsinformatie.nl/document/5348968/1/s16bb003459_4_38251_tds?connection_type=1&connection_id=3408914
+            - text: . De evaluatie van financiële verslagen en accountantscontroles, zoals die van Ernst & Young Accountants LLP betreffende de jaarrekening 2007, onderstrepen het belang van zorgvuldige controle en verantwoording
+            - link "21" [ref=e33] [cursor=pointer]:
+              - /url: https://rotterdam.raadsinformatie.nl/document/4797615/1/08gr1633e_Uitkomsten_controle_jaarrekening_2007_verslag_van_bevindingen_voor_de_gemeenteraad___ernst__amp__young?connection_type=1&connection_id=2829008
+            - text: . Verder is er sprake van een continue ontwikkeling van beleid op gebieden als integriteit en wijkteams, waarbij de gemeente de implementatie van haar plannen evalueert en bijstuurt
+            - link "12" [ref=e34] [cursor=pointer]:
+              - /url: "#"
+            - link "27" [ref=e35] [cursor=pointer]:
+              - /url: https://api1.ibabs.eu/publicdownload.aspx?site=RotterdamRaad&id=40e92769-84ad-4e4d-bedb-3d98b82c9203
+            - text: ". ## 2. # 📌 Argumenten & Hoofdpunten Uit de aangeleverde feiten en de analyse van verkiezingsprogramma's van verschillende partijen, komen de volgende kernargumenten en hoofdpunten naar voren met betrekking tot de waargemaakte beloftes van het college: *"
+            - strong [ref=e36]: "GroenLinks-PvdA's kritische blik:"
+            - text: De partij benadrukt de noodzaak van een groene, leefbare stad met betaalbare woningen en een ambitieus klimaatplan
+            - link "2" [ref=e37] [cursor=pointer]:
+              - /url: "#"
+            - link "8" [ref=e38] [cursor=pointer]:
+              - /url: "#"
+            - text: . Ze pleiten voor het weren van vervuilende bedrijven en het omvormen van bedrijventerreinen die hinder veroorzaken of geen toekomst meer hebben
+            - link "16" [ref=e39] [cursor=pointer]:
+              - /url: "#"
+            - text: . Een hoge prioriteit voor milieuhandhaving bij de omgevingsdienst is essentieel
+            - link "16" [ref=e40] [cursor=pointer]:
+              - /url: "#"
+            - text: . Ook wordt aandacht gevraagd voor de ecologische voetafdruk van de gemeente
+            - link "14" [ref=e41] [cursor=pointer]:
+              - /url: "#"
+            - text: . *
+            - strong [ref=e42]: "SP's focus op betaalbaarheid en bestaanszekerheid:"
+            - text: De SP benadrukt de noodzaak van betaalbare woningen en het tegengaan van inkomensverschillen. Ze willen dat de economie werkt voor mensen, met welzijn boven winst
+            - link "4" [ref=e43] [cursor=pointer]:
+              - /url: "#"
+            - link "16" [ref=e44] [cursor=pointer]:
+              - /url: "#"
+            - text: . De partij pleit voor een herziening van het collegebeleid inzake armoede, met duidelijke regels voor bijzondere bijstand en een versimpelde werkwijze
+            - link "4" [ref=e45] [cursor=pointer]:
+              - /url: "#"
+            - text: . *
+            - strong [ref=e46]: "VVD's economische focus:"
+            - text: De VVD wil dat Rotterdam de economische motor van Nederland is, met een bruisende economie en een sterke haven
+            - link "6" [ref=e47] [cursor=pointer]:
+              - /url: "#"
+            - text: . Ze benadrukken het belang van minder regels en een stabiel ondernemingsklimaat
+            - link "38" [ref=e48] [cursor=pointer]:
+              - /url: https://rotterdam.raadsinformatie.nl/document/6469511/1/10gr2479a?connection_type=1&connection_id=816637
+            - text: . Ook investeren in het woon- en leefklimaat om talent te binden, behoort tot hun prioriteiten
+            - link "38" [ref=e49] [cursor=pointer]:
+              - /url: https://rotterdam.raadsinformatie.nl/document/6469511/1/10gr2479a?connection_type=1&connection_id=816637
+            - text: . *
+            - strong [ref=e50]: "Partij voor de Dieren's prioriteit voor mens, dier en natuur:"
+            - text: Deze partij zet vol in op een leefbare aarde, met een eerlijke oplossing voor de klimaat- en natuurcrisis, waarbij besparen op energiegebruik de hoogste prioriteit heeft
+            - link "14" [ref=e51] [cursor=pointer]:
+              - /url: "#"
+            - text: . Ze willen geen dierenindustrie in Rotterdam en pleiten voor respect en zorg voor vrije dieren
+            - link "10" [ref=e52] [cursor=pointer]:
+              - /url: "#"
+            - text: . *
+            - strong [ref=e53]: "DENK Rotterdam's inzet op diversiteit, inclusie en democratie:"
+            - text: Deze partij wil dat de gemeente haar beleid toetst aan diversiteit en inclusie, met concrete doelen en een plan van aanpak
+            - link "10" [ref=e54] [cursor=pointer]:
+              - /url: "#"
+            - text: . Ze streven naar meer democratie in de wijken en willen dat wijkraden bindend adviesrecht krijgen
+            - link "10" [ref=e55] [cursor=pointer]:
+              - /url: "#"
+            - text: ". ## 3. # 🚩 Wat vindt GroenLinks-PvdA van dit onderwerp? GroenLinks-PvdA vindt dat de gemeente haar beleid consequent moet toetsen aan de principes van duurzaamheid, sociale rechtvaardigheid en democratische participatie. De partij acht het cruciaal dat het college concrete stappen zet om de ecologische voetafdruk te verkleinen en te investeren in een groenere toekomst, zoals het stimuleren van plantaardig voedsel"
+            - link "14" [ref=e56] [cursor=pointer]:
+              - /url: "#"
+            - text: . Ze benadrukken het belang van transparant en open bestuur, waarbij informatie toegankelijk is voor alle inwoners en lobbyisme openbaar wordt gemaakt
+            - link "12" [ref=e57] [cursor=pointer]:
+              - /url: "#"
+            - text: . De partij acht het van belang dat de gemeente scholen ondersteunt bij de begeleiding van startende leraren om uitval te verminderen en dat er geïnvesteerd wordt in een gezond binnenklimaat en verduurzaming van schoolgebouwen
+            - link "4" [ref=e58] [cursor=pointer]:
+              - /url: "#"
+            - text: . Tevens hechten zij belang aan de verspreiding van festivals en evenementen over de stad, en de veiligheid in de binnenstad
+            - link "4" [ref=e59] [cursor=pointer]:
+              - /url: "#"
+            - text: ". Specifieke standpunten van GroenLinks-PvdA, zoals vastgelegd in hun verkiezingsprogramma, omvatten: * Het streven naar een stad die duurzaam en circulair is en waarin het ecosysteem en het welzijn van mens en dier centraal stelt 117. * De wens om bedrijventerreinen die geen toekomst meer hebben of te veel hinder veroorzaken, circulair en schoon omvormen of omvormen tot woonwijken en groen"
+            - link "16" [ref=e60] [cursor=pointer]:
+              - /url: "#"
+            - text: . * De noodzaak om milieuhandhaving een hoge prioriteit krijgt bij de omgevingsdienst
+            - link "16" [ref=e61] [cursor=pointer]:
+              - /url: "#"
+            - text: . * De ambitie dat alle gemeentelijke gebouwen in 2030 klimaatneutraal, natuurinclusief en fossielvrij zijn
+            - link "14" [ref=e62] [cursor=pointer]:
+              - /url: "#"
+            - text: . * Het voorstel dat medewerkers van de gemeente, inclusief de gemeenteraad en het college, worden gestimuleerd om op de fiets of met het openbaar vervoer naar het werk te gaan
+            - link "14" [ref=e63] [cursor=pointer]:
+              - /url: "#"
+            - text: . * Het pleidooi voor een economie die werkt voor mensen, niet de mensen voor de economie
+            - link "4" [ref=e64] [cursor=pointer]:
+              - /url: "#"
+            - text: . * De kritiek dat economische groei niets waard is als daarmee roofbouw wordt gepleegd op milieu en kwetsbare mensen
+            - link "4" [ref=e65] [cursor=pointer]:
+              - /url: "#"
+            - text: . * De wens om musea minimaal één dag in de week gratis toegankelijk te maken voor inwoners van de gemeente
+            - link "2" [ref=e66] [cursor=pointer]:
+              - /url: "#"
+            - text: ". ## 4. # 📄 Wat houdt het voorstel precies in? Dit dossier bevat geen specifiek voorstel dat ter bespreking voorligt, maar evalueert"
+          - group [ref=e68]:
+            - generic "▸ Bronnen (116)" [ref=e69] [cursor=pointer]
+        - text: “”
+  - contentinfo [ref=e70]:
+    - navigation [ref=e71]:
+      - link "Over" [ref=e72] [cursor=pointer]:
+        - /url: /over
+      - text: ·
+      - link "Technologie" [ref=e73] [cursor=pointer]:
+        - /url: /technologie
+      - text: ·
+      - link "Methodologie" [ref=e74] [cursor=pointer]:
+        - /url: /methodologie
+      - text: ·
+      - link "AI-koppeling" [ref=e75] [cursor=pointer]:
+        - /url: /mcp-installer
+    - generic [ref=e76]: "Analyse door AI (Anthropic) · Europees gehost · Brondata: Open Raadsinformatie"
+    - generic [ref=e77]: NeoDemos (alpha) v0.2.0-alpha.2

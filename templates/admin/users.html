@@ -1,0 +1,93 @@
+{% extends "admin/_layout.html" %}
+{% set active = 'users' %}
+{% block admin_body %}
+<p class="admin-help">
+  Beheer gebruikersaccounts, rollen en toegangsniveaus.
+</p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>E-mail</th>
+      <th>Naam</th>
+      <th>Abonnement</th>
+      <th>Rol</th>
+      <th>Status</th>
+      <th>MCP</th>
+      <th>DB Toegang</th>
+      <th>Aangemaakt</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for u in users %}
+    <tr data-user-id="{{ u.id }}">
+      <td>{{ u.email }}</td>
+      <td>{{ u.display_name or '-' }}</td>
+      <td><span class="subscription-tier-badge tier-{{ u.subscription_tier }}">{{ u.subscription_tier }}</span></td>
+      <td>
+        <select class="access-select" onchange="updateUser({{ u.id }}, 'role', this.value)"
+                {% if u.id == user.id %}disabled{% endif %}>
+          <option value="user" {% if u.role == 'user' %}selected{% endif %}>User</option>
+          <option value="admin" {% if u.role == 'admin' %}selected{% endif %}>Admin</option>
+        </select>
+      </td>
+      <td>
+        {% if u.id != user.id %}
+        <button class="toggle-btn {{ 'active' if u.is_active else 'inactive' }}"
+                onclick="toggleActive({{ u.id }}, this)">
+          {{ 'Actief' if u.is_active else 'Inactief' }}
+        </button>
+        {% else %}
+        <span class="badge badge-admin">Jij</span>
+        {% endif %}
+      </td>
+      <td>
+        <button class="toggle-btn {{ 'active' if u.mcp_access else '' }}"
+                onclick="updateUser({{ u.id }}, 'mcp_access', {{ 'false' if u.mcp_access else 'true' }})">
+          {{ 'Aan' if u.mcp_access else 'Uit' }}
+        </button>
+      </td>
+      <td>
+        <select class="access-select" onchange="updateUser({{ u.id }}, 'db_access_level', this.value)">
+          <option value="none" {% if u.db_access_level == 'none' %}selected{% endif %}>Geen</option>
+          <option value="read" {% if u.db_access_level == 'read' %}selected{% endif %}>Lezen</option>
+          <option value="write" {% if u.db_access_level == 'write' %}selected{% endif %}>Schrijven</option>
+        </select>
+      </td>
+      <td>{{ u.created_at[:10] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  async function updateUser(userId, field, value) {
+    const body = {};
+    body[field] = value;
+    const res = await fetch(`/admin/api/users/${userId}/update`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body)
+    });
+    if (res.ok) {
+      location.reload();
+    } else {
+      const err = await res.json();
+      alert(err.error || 'Fout bij bijwerken');
+    }
+  }
+
+  async function toggleActive(userId, btn) {
+    const res = await fetch(`/admin/api/users/${userId}/toggle-active`, {
+      method: 'POST'
+    });
+    if (res.ok) {
+      location.reload();
+    } else {
+      const err = await res.json();
+      alert(err.error || 'Fout bij bijwerken');
+    }
+  }
+</script>
+{% endblock %}

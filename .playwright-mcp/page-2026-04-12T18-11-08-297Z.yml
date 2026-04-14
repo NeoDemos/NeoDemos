@@ -1,0 +1,41 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "NeoDemos home" [ref=e3] [cursor=pointer]:
+      - /url: /
+      - text: NeoDemos
+    - button "Menu openen" [ref=e4] [cursor=pointer]
+  - main [ref=e8]:
+    - generic [ref=e9]:
+      - heading "De raadsvergadering was altijd openbaar. Nu is ze ook begrijpelijk." [level=1] [ref=e11]:
+        - text: De raadsvergadering was altijd openbaar.
+        - text: Nu is ze ook begrijpelijk.
+      - generic [ref=e12]:
+        - text: “”
+        - group [ref=e13]:
+          - generic "Bekijk voorbeeld" [ref=e14] [cursor=pointer]
+          - text: “”
+      - generic [ref=e15]:
+        - textbox "Stel uw eigen vraag..." [ref=e16]
+        - button "Zoek" [ref=e17] [cursor=pointer]
+      - generic [ref=e19]:
+        - generic [ref=e20]: "Of probeer:"
+        - button "Heeft het college haar beloftes waargemaakt?" [ref=e21] [cursor=pointer]
+        - button "Hoe stemden partijen over woningbouw?" [ref=e22] [cursor=pointer]
+        - button "Welke moties over klimaat zijn aangenomen sinds 2020?" [ref=e23] [cursor=pointer]
+      - generic [ref=e24]: 90.000+ documenten · 24 jaar · Rotterdam · Open brondata
+      - generic [ref=e25]: Europees gehost · Elke bewering herleidbaar naar het brondocument
+  - contentinfo [ref=e26]:
+    - generic [ref=e27]: "NeoDemos (alpha) v0.2.0-alpha.2 · Brondata: Open Raadsinformatie"
+    - generic [ref=e28]:
+      - link "Over" [ref=e29] [cursor=pointer]:
+        - /url: /over
+      - text: ·
+      - link "Technologie" [ref=e30] [cursor=pointer]:
+        - /url: /technologie
+      - text: ·
+      - link "Methodologie" [ref=e31] [cursor=pointer]:
+        - /url: /methodologie
+      - text: ·
+      - link "MCP" [ref=e32] [cursor=pointer]:
+        - /url: /mcp-installer
+    - generic [ref=e33]: Analyse door AI (Anthropic) · Europees gehost

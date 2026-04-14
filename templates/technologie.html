@@ -3,52 +3,52 @@
 {% block body_class %}has-hero{% endblock %}
 
 {% block content %}
+{% if page_html %}
+<div class="grapejs-content">{{ page_html | safe }}</div>
+{% else %}
 <div class="subpage-hero-image" style="background-image: -webkit-image-set(url('/static/images/erasmusbrug.jpg') 1x, url('/static/images/erasmusbrug@2x.jpg') 2x); background-image: image-set(url('/static/images/erasmusbrug.jpg') 1x, url('/static/images/erasmusbrug@2x.jpg') 2x);">
     <div class="subpage-hero-overlay">
-        <h1 class="subpage-hero-title">Technologie</h1>
-        <p class="subpage-hero-subtitle">Uw data, uw AI</p>
+        <h1 class="subpage-hero-title">{{ content('technologie.hero_title', 'Technologie') }}</h1>
+        <p class="subpage-hero-subtitle">{{ content('technologie.hero_subtitle', 'Uw data, uw AI') }}</p>
     </div>
 </div>
 
 <div class="subpage">
 
     <section class="subpage-section">
-        <h2>Volledig Europees</h2>
+        <h2>{{ content('technologie.eu_title', 'Volledig Europees') }}</h2>
         <p>
-            NeoDemos is gebouwd op Europese infrastructuur. Geen afhankelijkheid van Amerikaanse clouddiensten, geen blootstelling aan de CLOUD Act, geen data die de EU verlaat.
+            {{ content('technologie.eu_intro', 'NeoDemos is gebouwd op Europese infrastructuur. Geen afhankelijkheid van Amerikaanse clouddiensten, geen blootstelling aan de CLOUD Act, geen data die de EU verlaat.') | safe }}
         </p>
         <div class="sovereignty-grid">
             <div class="sovereignty-card">
-                <h3>Hetzner, Duitsland</h3>
-                <p>Servers in Duitse datacenters. Europese jurisdictie, GDPR-compliant.</p>
+                <h3>{{ content('technologie.eu_hetzner_title', 'Hetzner, Duitsland') }}</h3>
+                <p>{{ content('technologie.eu_hetzner_text', 'Servers in Duitse datacenters. Europese jurisdictie, GDPR-compliant.') | safe }}</p>
             </div>
             <div class="sovereignty-card">
-                <h3>Nebius, EU AI</h3>
-                <p>AI-inferentie via Europese providers. Geen data naar OpenAI of Google servers.</p>
+                <h3>{{ content('technologie.eu_nebius_title', 'Nebius, EU AI') }}</h3>
+                <p>{{ content('technologie.eu_nebius_text', 'AI-inferentie via Europese providers. Geen data naar OpenAI of Google servers.') | safe }}</p>
             </div>
             <div class="sovereignty-card">
-                <h3>Geen US CLOUD Act</h3>
-                <p>Geen Amerikaanse partij kan uw gegevens opvragen via juridische achterdeur.</p>
+                <h3>{{ content('technologie.eu_cloud_act_title', 'Geen US CLOUD Act') }}</h3>
+                <p>{{ content('technologie.eu_cloud_act_text', 'Geen Amerikaanse partij kan uw gegevens opvragen via juridische achterdeur.') | safe }}</p>
             </div>
         </div>
     </section>
 
     <section class="subpage-section">
-        <h2>Veiligheidsgaranties</h2>
+        <h2>{{ content('technologie.security_title', 'Veiligheidsgaranties') }}</h2>
         <ul class="security-checklist">
-            <li>Alleen publieke brondata &mdash; geen vertrouwelijke documenten</li>
-            <li>Geen tracking of profilering van gebruikers</li>
-            <li>Lokale AI mogelijk via Ollama, LM Studio of Open WebUI</li>
-            <li>Audit trail op elk antwoord &mdash; elke bewering herleidbaar naar brondocument</li>
-            <li>EU AI Act conform &mdash; transparant over wat AI doet en niet doet</li>
-            <li>Uw vragen trainen geen AI-modellen</li>
+            {% for item in content('technologie.security_checklist', 'Alleen publieke brondata &mdash; geen vertrouwelijke documenten\nGeen tracking of profilering van gebruikers\nLokale AI mogelijk via Ollama, LM Studio of Open WebUI\nAudit trail op elk antwoord &mdash; elke bewering herleidbaar naar brondocument\nEU AI Act conform &mdash; transparant over wat AI doet en niet doet\nUw vragen trainen geen AI-modellen').split('\n') %}
+            <li>{{ item | safe }}</li>
+            {% endfor %}
         </ul>
     </section>
 
     <section class="subpage-section">
-        <h2>Lokale AI: uw data verlaat nooit uw netwerk</h2>
+        <h2>{{ content('technologie.local_ai_title', 'Lokale AI: uw data verlaat nooit uw netwerk') }}</h2>
         <p>
-            NeoDemos werkt via het Model Context Protocol (MCP), een open standaard die u in staat stelt uw eigen AI-assistent te verbinden. Dat betekent dat u kunt kiezen waar uw vragen worden verwerkt:
+            {{ content('technologie.local_ai_intro', 'NeoDemos werkt via het Model Context Protocol (MCP), een open standaard die u in staat stelt uw eigen AI-assistent te verbinden. Dat betekent dat u kunt kiezen waar uw vragen worden verwerkt:') | safe }}
         </p>
         <div class="sovereignty-grid">
             <div class="sovereignty-card">
@@ -67,9 +67,9 @@
     </section>
 
     <section class="subpage-section">
-        <h2>Modelonafhankelijk</h2>
+        <h2>{{ content('technologie.model_independence_title', 'Modelonafhankelijk') }}</h2>
         <p>
-            NeoDemos is niet gebonden aan &eacute;&eacute;n AI-provider. Via MCP werkt het platform met elk compatibel model:
+            {{ content('technologie.model_independence_text', 'NeoDemos is niet gebonden aan &eacute;&eacute;n AI-provider. Via MCP werkt het platform met elk compatibel model:') | safe }}
         </p>
         <div class="compatibility-list">
             <span class="compatibility-badge">Claude</span>
@@ -85,33 +85,34 @@
     </section>
 
     <section class="subpage-section">
-        <h2>Architectuur in het kort</h2>
+        <h2>{{ content('technologie.architecture_title', 'Architectuur in het kort') }}</h2>
         <p>
-            NeoDemos combineert drie lagen om betrouwbare antwoorden te genereren:
+            {{ content('technologie.architecture_intro', 'NeoDemos combineert drie lagen om betrouwbare antwoorden te genereren:') | safe }}
         </p>
         <div class="architecture-steps">
             <div class="architecture-step">
                 <span class="step-number">1</span>
                 <div>
-                    <h3>Brondata</h3>
-                    <p>90.000+ documenten van de Rotterdamse gemeenteraad, gestructureerd en doorzoekbaar gemaakt met vector- en full-text search.</p>
+                    <h3>{{ content('technologie.arch_step1_title', 'Brondata') }}</h3>
+                    <p>{{ content('technologie.arch_step1_text', '90.000+ documenten van de Rotterdamse gemeenteraad, gestructureerd en doorzoekbaar gemaakt met vector- en full-text search.') | safe }}</p>
                 </div>
             </div>
             <div class="architecture-step">
                 <span class="step-number">2</span>
                 <div>
-                    <h3>Retrieval</h3>
-                    <p>Elke vraag wordt beantwoord op basis van de meest relevante documentfragmenten. Geen hallucinatie &mdash; alleen feiten uit brondocumenten.</p>
+                    <h3>{{ content('technologie.arch_step2_title', 'Retrieval') }}</h3>
+                    <p>{{ content('technologie.arch_step2_text', 'Elke vraag wordt beantwoord op basis van de meest relevante documentfragmenten. Geen hallucinatie &mdash; alleen feiten uit brondocumenten.') | safe }}</p>
                 </div>
             </div>
             <div class="architecture-step">
                 <span class="step-number">3</span>
                 <div>
-                    <h3>Transparantie</h3>
-                    <p>Elk antwoord bevat bronverwijzingen. Klik op een citaat om het originele document te lezen.</p>
+                    <h3>{{ content('technologie.arch_step3_title', 'Transparantie') }}</h3>
+                    <p>{{ content('technologie.arch_step3_text', 'Elk antwoord bevat bronverwijzingen. Klik op een citaat om het originele document te lezen.') | safe }}</p>
                 </div>
             </div>
         </div>
     </section>
 </div>
+{% endif %}
 {% endblock %}

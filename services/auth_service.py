@@ -51,7 +51,8 @@ class AuthService:
                     """INSERT INTO users (email, password_hash, display_name, role, mcp_access)
                        VALUES (%s, %s, %s, %s, %s)
                        RETURNING id, email, password_hash, display_name, role, is_active,
-                                 mcp_access, db_access_level, created_at""",
+                                 mcp_access, db_access_level, created_at,
+                                 subscription_tier, beta_expires_at, stripe_customer_id""",
                     (email.lower().strip(), hashed, display_name, role, mcp_access),
                 )
                 row = cur.fetchone()
@@ -62,7 +63,9 @@ class AuthService:
             with conn.cursor() as cur:
                 cur.execute(
                     "SELECT id, email, password_hash, display_name, role, is_active, "
-                    "mcp_access, db_access_level, created_at FROM users WHERE email = %s",
+                    "mcp_access, db_access_level, created_at, "
+                    "subscription_tier, beta_expires_at, stripe_customer_id "
+                    "FROM users WHERE email = %s",
                     (email.lower().strip(),),
                 )
                 row = cur.fetchone()
@@ -79,7 +82,9 @@ class AuthService:
             with conn.cursor() as cur:
                 cur.execute(
                     "SELECT id, email, password_hash, display_name, role, is_active, "
-                    "mcp_access, db_access_level, created_at FROM users WHERE id = %s",
+                    "mcp_access, db_access_level, created_at, "
+                    "subscription_tier, beta_expires_at, stripe_customer_id "
+                    "FROM users WHERE id = %s",
                     (user_id,),
                 )
                 row = cur.fetchone()
@@ -90,7 +95,9 @@ class AuthService:
             with conn.cursor() as cur:
                 cur.execute(
                     "SELECT id, email, password_hash, display_name, role, is_active, "
-                    "mcp_access, db_access_level, created_at FROM users WHERE email = %s",
+                    "mcp_access, db_access_level, created_at, "
+                    "subscription_tier, beta_expires_at, stripe_customer_id "
+                    "FROM users WHERE email = %s",
                     (email.lower().strip(),),
                 )
                 row = cur.fetchone()
@@ -101,13 +108,15 @@ class AuthService:
             with conn.cursor() as cur:
                 cur.execute(
                     "SELECT id, email, password_hash, display_name, role, is_active, "
-                    "mcp_access, db_access_level, created_at FROM users ORDER BY created_at"
+                    "mcp_access, db_access_level, created_at, "
+                    "subscription_tier, beta_expires_at, stripe_customer_id "
+                    "FROM users ORDER BY created_at"
                 )
                 rows = cur.fetchall()
         return [self._user_row_to_dict(r) for r in rows]
 
     def update_user(self, user_id: int, **fields) -> Optional[dict]:
-        allowed = {"display_name", "role", "is_active", "mcp_access", "db_access_level"}
+        allowed = {"display_name", "role", "is_active", "mcp_access", "db_access_level", "subscription_tier"}
         updates = {k: v for k, v in fields.items() if k in allowed}
         if not updates:
             return self.get_user_by_id(user_id)
@@ -119,7 +128,8 @@ class AuthService:
                     f"UPDATE users SET {set_clause}, updated_at = CURRENT_TIMESTAMP "
                     f"WHERE id = %s "
                     f"RETURNING id, email, password_hash, display_name, role, is_active, "
-                    f"mcp_access, db_access_level, created_at",
+                    f"mcp_access, db_access_level, created_at, "
+                    f"subscription_tier, beta_expires_at, stripe_customer_id",
                     values,
                 )
                 row = cur.fetchone()
@@ -157,7 +167,8 @@ class AuthService:
                 cur.execute(
                     "SELECT s.user_id, s.expires_at, "
                     "u.id, u.email, u.password_hash, u.display_name, u.role, u.is_active, "
-                    "u.mcp_access, u.db_access_level, u.created_at "
+                    "u.mcp_access, u.db_access_level, u.created_at, "
+                    "u.subscription_tier, u.beta_expires_at, u.stripe_customer_id "
                     "FROM sessions s JOIN users u ON s.user_id = u.id "
                     "WHERE s.id = %s",
                     (session_id,),
@@ -217,7 +228,8 @@ class AuthService:
                 cur.execute(
                     "SELECT t.id, t.user_id, t.scopes, t.is_active, t.expires_at, "
                     "u.id, u.email, u.password_hash, u.display_name, u.role, u.is_active, "
-                    "u.mcp_access, u.db_access_level, u.created_at "
+                    "u.mcp_access, u.db_access_level, u.created_at, "
+                    "u.subscription_tier, u.beta_expires_at, u.stripe_customer_id "
                     "FROM api_tokens t JOIN users u ON t.user_id = u.id "
                     "WHERE t.token = %s",
                     (_hash_token(token),),
@@ -350,4 +362,7 @@ class AuthService:
             "mcp_access": row[6],
             "db_access_level": row[7],
             "created_at": str(row[8]),
+            "subscription_tier": row[9],
+            "beta_expires_at": str(row[10]) if row[10] else None,
+            "stripe_customer_id": row[11],
         }

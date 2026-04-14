@@ -1,0 +1,668 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "NeoDemos home" [ref=e3] [cursor=pointer]:
+      - /url: /
+      - text: NeoDemos
+    - navigation [ref=e4]:
+      - link "Zoeken" [ref=e5] [cursor=pointer]:
+        - /url: /
+      - link "Kalender" [ref=e6] [cursor=pointer]:
+        - /url: /calendar
+      - link "Over" [ref=e7] [cursor=pointer]:
+        - /url: /over
+      - link "MCP" [ref=e8] [cursor=pointer]:
+        - /url: /mcp-installer
+      - link "Inloggen" [ref=e9] [cursor=pointer]:
+        - /url: /login
+  - main [ref=e10]:
+    - generic [ref=e11]:
+      - combobox "Jaar" [ref=e12]:
+        - option "2026" [selected]
+        - option "2025"
+        - option "2024"
+        - option "2023"
+        - option "2022"
+        - option "2021"
+        - option "2020"
+        - option "2019"
+        - option "2018"
+        - option "2017"
+        - option "2016"
+        - option "2015"
+        - option "2014"
+        - option "2013"
+        - option "2012"
+        - option "2011"
+        - option "2010"
+        - option "2009"
+        - option "2008"
+        - option "2007"
+        - option "2006"
+        - option "2005"
+        - option "2004"
+        - option "2003"
+        - option "2002"
+      - searchbox "Zoek vergaderingen" [ref=e13]
+      - generic [ref=e14]:
+        - button "Lijstweergave" [ref=e15] [cursor=pointer]: ☰
+        - button "Kalenderweergave" [ref=e16] [cursor=pointer]: ▦
+    - generic [ref=e17]:
+      - button "Alle" [ref=e18] [cursor=pointer]
+      - button "6065857" [ref=e19] [cursor=pointer]
+      - button "6065858" [ref=e20] [cursor=pointer]
+      - button "6065859" [ref=e21] [cursor=pointer]
+      - button "6065860" [ref=e22] [cursor=pointer]
+      - button "6065861" [ref=e23] [cursor=pointer]
+      - button "6065862" [ref=e24] [cursor=pointer]
+      - button "6065863" [ref=e25] [cursor=pointer]
+      - button "6065864" [ref=e26] [cursor=pointer]
+      - button "6065865" [ref=e27] [cursor=pointer]
+      - button "6065866" [ref=e28] [cursor=pointer]
+      - button "6065867" [ref=e29] [cursor=pointer]
+      - button "6065868" [ref=e30] [cursor=pointer]
+      - button "6065869" [ref=e31] [cursor=pointer]
+      - button "6065870" [ref=e32] [cursor=pointer]
+      - button "6065871" [ref=e33] [cursor=pointer]
+      - button "6065872" [ref=e34] [cursor=pointer]
+      - button "6065873" [ref=e35] [cursor=pointer]
+      - button "6065874" [ref=e36] [cursor=pointer]
+      - button "6065875" [ref=e37] [cursor=pointer]
+      - button "6065876" [ref=e38] [cursor=pointer]
+      - button "6065877" [ref=e39] [cursor=pointer]
+      - button "6065878" [ref=e40] [cursor=pointer]
+      - button "Agendapunt" [ref=e41] [cursor=pointer]
+      - button "BOFV" [ref=e42] [cursor=pointer]
+      - button "BWB" [ref=e43] [cursor=pointer]
+      - button "COR" [ref=e44] [cursor=pointer]
+      - button "MHEK" [ref=e45] [cursor=pointer]
+      - button "Sprekersmoment" [ref=e46] [cursor=pointer]
+      - button "Sub-BOOR" [ref=e47] [cursor=pointer]
+      - button "WIOS" [ref=e48] [cursor=pointer]
+      - button "ZOCS" [ref=e49] [cursor=pointer]
+    - generic [ref=e50]:
+      - heading "December 2026" [level=3] [ref=e52]
+      - group [ref=e53]:
+        - generic "▶ 17 december donderdag 17 december 2026" [ref=e54] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e55]: 17 december
+          - link "donderdag 17 december 2026" [ref=e57]:
+            - /url: /meeting/2c5c34dd-55e9-4efc-9278-14be0090daaf
+      - group [ref=e58]:
+        - generic "▶ 3 december donderdag 3 december 2026" [ref=e59] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e60]: 3 december
+          - link "donderdag 3 december 2026" [ref=e62]:
+            - /url: /meeting/0f41ac00-ca6b-438d-b44c-4029758a41e8
+      - heading "November 2026" [level=3] [ref=e64]
+      - group [ref=e65]:
+        - generic "▶ 12 november donderdag 12 november 2026" [ref=e66] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e67]: 12 november
+          - link "donderdag 12 november 2026" [ref=e69]:
+            - /url: /meeting/21cd8805-9820-45b5-a9ba-284f10ca27d7
+      - group [ref=e70]:
+        - generic "▶ 10 november dinsdag 10 november 2026" [ref=e71] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e72]: 10 november
+          - link "dinsdag 10 november 2026" [ref=e74]:
+            - /url: /meeting/4c889760-54b7-47e3-abe6-b20f4f7c2297
+      - heading "Oktober 2026" [level=3] [ref=e76]
+      - group [ref=e77]:
+        - generic "▶ 15 oktober donderdag 15 oktober 2026" [ref=e78] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e79]: 15 oktober
+          - link "donderdag 15 oktober 2026" [ref=e81]:
+            - /url: /meeting/03f160e4-9833-4cc8-989c-eb1485206ca2
+      - group [ref=e82]:
+        - generic "▶ 1 oktober donderdag 1 oktober 2026" [ref=e83] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e84]: 1 oktober
+          - link "donderdag 1 oktober 2026" [ref=e86]:
+            - /url: /meeting/9f0ee187-8bf0-4ec4-994a-2c70299fd7f3
+      - heading "September 2026" [level=3] [ref=e88]
+      - group [ref=e89]:
+        - generic "▶ 10 september donderdag 10 september 2026" [ref=e90] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e91]: 10 september
+          - link "donderdag 10 september 2026" [ref=e93]:
+            - /url: /meeting/c3deba48-2f4b-4105-8a21-5ce62d44c3a2
+      - heading "Juli 2026" [level=3] [ref=e95]
+      - group [ref=e96]:
+        - generic "▶ 16 juli donderdag 16 juli 2026" [ref=e97] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e98]: 16 juli
+          - link "donderdag 16 juli 2026" [ref=e100]:
+            - /url: /meeting/84435398-c044-4995-9d7b-f6b51f85e1c6
+      - group [ref=e101]:
+        - generic "▶ 14 juli dinsdag 14 juli 2026" [ref=e102] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e103]: 14 juli
+          - link "dinsdag 14 juli 2026" [ref=e105]:
+            - /url: /meeting/33570787-f716-42fa-9f6f-51e33bab4bc9
+      - heading "Juni 2026" [level=3] [ref=e107]
+      - group [ref=e108]:
+        - generic "▶ 25 juni donderdag 25 juni 2026" [ref=e109] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e110]: 25 juni
+          - link "donderdag 25 juni 2026" [ref=e112]:
+            - /url: /meeting/c39aec37-5c35-40bb-a981-6da1550dd2f1
+      - group [ref=e113]:
+        - generic "▶ 18 juni donderdag 18 juni 2026" [ref=e114] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e115]: 18 juni
+          - link "donderdag 18 juni 2026" [ref=e117]:
+            - /url: /meeting/4f58100f-ea6a-4843-9b5a-8bff5ef32fb8
+      - group [ref=e118]:
+        - generic "▶ 11 juni donderdag 11 juni 2026" [ref=e119] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e120]: 11 juni
+          - link "donderdag 11 juni 2026" [ref=e122]:
+            - /url: /meeting/65a3b2b5-60df-40eb-8468-862268aa58f2
+      - heading "Mei 2026" [level=3] [ref=e124]
+      - group [ref=e125]:
+        - generic "▶ 21 mei donderdag 21 mei 2026" [ref=e126] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e127]: 21 mei
+          - link "donderdag 21 mei 2026" [ref=e129]:
+            - /url: /meeting/a307d7ba-7915-446a-bfce-9087fef27003
+      - heading "Deze week" [level=3] [ref=e131]
+      - group [ref=e132]:
+        - generic "▶ 16 april donderdag 16 april 2026" [ref=e133] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e134]: 16 april
+          - link "donderdag 16 april 2026" [ref=e136]:
+            - /url: /meeting/f9b8b1c0-0073-4528-96cb-c78e3f9aafd8
+      - heading "Vorige week" [level=3] [ref=e138]
+      - group [ref=e139]:
+        - generic "▶ 8 april woensdag 8 april 2026" [ref=e140] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e141]: 8 april
+          - link "woensdag 8 april 2026" [ref=e143]:
+            - /url: /meeting/d1cc33ce-d4fb-49f4-9869-96df4d7eb9c6
+      - heading "April 2026" [level=3] [ref=e145]
+      - group [ref=e146]:
+        - generic "▶ 1 april Gemeenteraad 1 documenten" [ref=e147] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e148]: 1 april
+          - link "Gemeenteraad" [ref=e150]:
+            - /url: /meeting/7774622
+          - generic [ref=e151]: 1 documenten
+      - group [ref=e152]:
+        - generic "▶ 1 april woensdag 1 april 2026" [ref=e153] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e154]: 1 april
+          - link "woensdag 1 april 2026" [ref=e156]:
+            - /url: /meeting/e00bf3d7-a8c3-4be5-9eb6-f6253d0c20f1
+      - heading "Maart 2026" [level=3] [ref=e158]
+      - group [ref=e159]:
+        - generic "▶ 30 maart Gemeenteraad 7 documenten" [ref=e160] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e161]: 30 maart
+          - link "Gemeenteraad" [ref=e163]:
+            - /url: /meeting/7764079
+          - generic [ref=e164]: 7 documenten
+      - group [ref=e165]:
+        - generic "▶ 30 maart maandag 30 maart 2026" [ref=e166] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e167]: 30 maart
+          - link "maandag 30 maart 2026" [ref=e169]:
+            - /url: /meeting/ea41e07b-7106-4a4d-8afc-cb0c60dfcba4
+      - heading "Februari 2026" [level=3] [ref=e171]
+      - group [ref=e172]:
+        - generic "▶ 26 februari donderdag 26 februari 2026 6 agendapunten · 196 documenten" [ref=e173] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e174]: 26 februari
+          - link "donderdag 26 februari 2026" [ref=e176]:
+            - /url: /meeting/8c66e8af-b867-4817-9fc8-658a14637240
+          - generic [ref=e177]: 6 agendapunten · 196 documenten
+      - group [ref=e178]:
+        - generic "▶ 12 februari Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026) 6065872 3 agendapunten · 5 documenten" [ref=e179] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e180]: 12 februari
+          - link "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)" [ref=e182]:
+            - /url: /meeting/7692677
+          - generic [ref=e183]: "6065872"
+          - generic [ref=e184]: 3 agendapunten · 5 documenten
+      - group [ref=e185]:
+        - generic "▶ 12 februari Actualiteitenraad" [ref=e186] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e187]: 12 februari
+          - link "Actualiteitenraad" [ref=e189]:
+            - /url: /meeting/7692676
+      - group [ref=e190]:
+        - generic "▶ 12 februari Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)" [ref=e191] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e192]: 12 februari
+          - link "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)" [ref=e194]:
+            - /url: /meeting/a737b588-f0bf-47e5-a407-02a038600459
+      - group [ref=e195]:
+        - generic "▶ 11 februari Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026) 6065876 7 agendapunten · 16 documenten" [ref=e196] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e197]: 11 februari
+          - link "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)" [ref=e199]:
+            - /url: /meeting/7687740
+          - generic [ref=e200]: "6065876"
+          - generic [ref=e201]: 7 agendapunten · 16 documenten
+      - group [ref=e202]:
+        - generic "▶ 11 februari Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026) 6065878 3 agendapunten · 3 documenten" [ref=e203] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e204]: 11 februari
+          - link "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)" [ref=e206]:
+            - /url: /meeting/7687739
+          - generic [ref=e207]: "6065878"
+          - generic [ref=e208]: 3 agendapunten · 3 documenten
+      - group [ref=e209]:
+        - generic "▶ 11 februari Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ 6065874 2 agendapunten · 2 documenten" [ref=e210] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e211]: 11 februari
+          - link "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ" [ref=e213]:
+            - /url: /meeting/7687738
+          - generic [ref=e214]: "6065874"
+          - generic [ref=e215]: 2 agendapunten · 2 documenten
+      - group [ref=e216]:
+        - generic "▶ 11 februari Commissie Bouwen, Wonen en Buitenruimte (2022-2026) 6065875 5 agendapunten · 7 documenten" [ref=e217] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e218]: 11 februari
+          - link "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)" [ref=e220]:
+            - /url: /meeting/7687737
+          - generic [ref=e221]: "6065875"
+          - generic [ref=e222]: 5 agendapunten · 7 documenten
+      - group [ref=e223]:
+        - generic "▶ 11 februari Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)" [ref=e224] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e225]: 11 februari
+          - link "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)" [ref=e227]:
+            - /url: /meeting/387904a0-640c-4c20-8654-b7eb311357ab
+      - group [ref=e228]:
+        - generic "▶ 11 februari Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ" [ref=e229] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e230]: 11 februari
+          - link "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ" [ref=e232]:
+            - /url: /meeting/42cfb927-eecd-4c88-8229-93558ac3744e
+      - group [ref=e233]:
+        - generic "▶ 11 februari Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)" [ref=e234] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e235]: 11 februari
+          - link "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)" [ref=e237]:
+            - /url: /meeting/c7b7b5fa-57d7-4704-8d2c-b1fd917f2e03
+      - group [ref=e238]:
+        - generic "▶ 11 februari Commissie Bouwen, Wonen en Buitenruimte (2022-2026)" [ref=e239] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e240]: 11 februari
+          - link "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)" [ref=e242]:
+            - /url: /meeting/a0bc7d3e-0a44-4f61-a521-c9036ed9e6ec
+      - group [ref=e243]:
+        - generic "▶ 10 februari Commissie tot Onderzoek van de Rekening (2022-2026) 6065866 7 agendapunten · 9 documenten" [ref=e244] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e245]: 10 februari
+          - link "Commissie tot Onderzoek van de Rekening (2022-2026)" [ref=e247]:
+            - /url: /meeting/7683551
+          - generic [ref=e248]: "6065866"
+          - generic [ref=e249]: 7 agendapunten · 9 documenten
+      - group [ref=e250]:
+        - generic "▶ 10 februari Commissie tot Onderzoek van de Rekening (2022-2026) 6065866 1 agendapunten · 1 documenten" [ref=e251] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e252]: 10 februari
+          - link "Commissie tot Onderzoek van de Rekening (2022-2026)" [ref=e254]:
+            - /url: /meeting/7683550
+          - generic [ref=e255]: "6065866"
+          - generic [ref=e256]: 1 agendapunten · 1 documenten
+      - group [ref=e257]:
+        - generic "▶ 10 februari Commissie tot Onderzoek van de Rekening (2022-2026)" [ref=e258] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e259]: 10 februari
+          - link "Commissie tot Onderzoek van de Rekening (2022-2026)" [ref=e261]:
+            - /url: /meeting/e1ed98fa-2b30-4b1d-9d68-eafebbc3b290
+      - group [ref=e262]:
+        - generic "▶ 5 februari Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026) 6065872 8 agendapunten · 15 documenten" [ref=e263] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e264]: 5 februari
+          - link "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)" [ref=e266]:
+            - /url: /meeting/7673518
+          - generic [ref=e267]: "6065872"
+          - generic [ref=e268]: 8 agendapunten · 15 documenten
+      - group [ref=e269]:
+        - generic "▶ 5 februari Actualiteitenraad" [ref=e270] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e271]: 5 februari
+          - link "Actualiteitenraad" [ref=e273]:
+            - /url: /meeting/7673520
+      - group [ref=e274]:
+        - generic "▶ 5 februari Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)" [ref=e275] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e276]: 5 februari
+          - link "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)" [ref=e278]:
+            - /url: /meeting/4fb959b7-ce60-4492-a38c-dc096eaf1f25
+      - group [ref=e279]:
+        - generic "▶ 4 februari Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026) 6065876" [ref=e280] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e281]: 4 februari
+          - link "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)" [ref=e283]:
+            - /url: /meeting/7669007
+          - generic [ref=e284]: "6065876"
+      - group [ref=e285]:
+        - generic "▶ 4 februari Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026) 6065878 8 agendapunten · 32 documenten" [ref=e286] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e287]: 4 februari
+          - link "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)" [ref=e289]:
+            - /url: /meeting/7669005
+          - generic [ref=e290]: "6065878"
+          - generic [ref=e291]: 8 agendapunten · 32 documenten
+      - group [ref=e292]:
+        - generic "▶ 4 februari Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ 6065874 10 agendapunten · 17 documenten" [ref=e293] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e294]: 4 februari
+          - link "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ" [ref=e296]:
+            - /url: /meeting/7669008
+          - generic [ref=e297]: "6065874"
+          - generic [ref=e298]: 10 agendapunten · 17 documenten
+      - group [ref=e299]:
+        - generic "▶ 4 februari Commissie Bouwen, Wonen en Buitenruimte (2022-2026) 6065875 15 agendapunten · 29 documenten" [ref=e300] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e301]: 4 februari
+          - link "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)" [ref=e303]:
+            - /url: /meeting/7669006
+          - generic [ref=e304]: "6065875"
+          - generic [ref=e305]: 15 agendapunten · 29 documenten
+      - group [ref=e306]:
+        - generic "▶ 4 februari Commissie Bouwen, Wonen en Buitenruimte (2022-2026)" [ref=e307] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e308]: 4 februari
+          - link "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)" [ref=e310]:
+            - /url: /meeting/38647144-32fb-4562-8b0e-b36997b9cfe3
+      - group [ref=e311]:
+        - generic "▶ 4 februari Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ 1 documenten" [ref=e312] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e313]: 4 februari
+          - link "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ" [ref=e315]:
+            - /url: /meeting/6cb015d7-32d8-43e9-ba24-107ea6265dbd
+          - generic [ref=e316]: 1 documenten
+      - group [ref=e317]:
+        - generic "▶ 3 februari Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026) 6065876 2 agendapunten · 6 documenten" [ref=e318] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e319]: 3 februari
+          - link "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)" [ref=e321]:
+            - /url: /meeting/7665945
+          - generic [ref=e322]: "6065876"
+          - generic [ref=e323]: 2 agendapunten · 6 documenten
+      - group [ref=e324]:
+        - generic "▶ 3 februari Subcommissie bestemmingsplannen Commissie Bouwen, Wonen en Buitenruimte (2022-2026) 6065873" [ref=e325] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e326]: 3 februari
+          - link "Subcommissie bestemmingsplannen Commissie Bouwen, Wonen en Buitenruimte (2022-2026)" [ref=e328]:
+            - /url: /meeting/7665944
+          - generic [ref=e329]: "6065873"
+      - group [ref=e330]:
+        - generic "▶ 3 februari Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)" [ref=e331] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e332]: 3 februari
+          - link "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)" [ref=e334]:
+            - /url: /meeting/462acf47-fd4a-4691-b63d-3cfbbcbfb0ff
+      - heading "Januari 2026" [level=3] [ref=e336]
+      - group [ref=e337]:
+        - generic "▶ 29 januari Gemeenteraad 4 documenten" [ref=e338] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e339]: 29 januari
+          - link "Gemeenteraad" [ref=e341]:
+            - /url: /meeting/7653846
+          - generic [ref=e342]: 4 documenten
+      - group [ref=e343]:
+        - generic "▶ 29 januari donderdag 29 januari 2026 12 agendapunten · 152 documenten" [ref=e344] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e345]: 29 januari
+          - link "donderdag 29 januari 2026" [ref=e347]:
+            - /url: /meeting/faea5d12-b3f0-4afb-b2d8-e57f0ca855d3
+          - generic [ref=e348]: 12 agendapunten · 152 documenten
+      - group [ref=e349]:
+        - generic "▶ 28 januari Commissie Bouwen, Wonen en Buitenruimte (2022-2026)" [ref=e350] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e351]: 28 januari
+          - link "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)" [ref=e353]:
+            - /url: /meeting/c28df5bf-f72a-4503-8fb0-97a81a9a49e1
+      - group [ref=e354]:
+        - generic "▶ 27 januari Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ 6065874 2 agendapunten · 8 documenten" [ref=e355] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e356]: 27 januari
+          - link "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ" [ref=e358]:
+            - /url: /meeting/7633833
+          - generic [ref=e359]: "6065874"
+          - generic [ref=e360]: 2 agendapunten · 8 documenten
+      - group [ref=e361]:
+        - generic "▶ 27 januari Commissie Bouwen, Wonen en Buitenruimte (2022-2026) 6065875 3 documenten" [ref=e362] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e363]: 27 januari
+          - link "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)" [ref=e365]:
+            - /url: /meeting/7633832
+          - generic [ref=e366]: "6065875"
+          - generic [ref=e367]: 3 documenten
+      - group [ref=e368]:
+        - generic "▶ 27 januari Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ 1 documenten" [ref=e369] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e370]: 27 januari
+          - link "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ" [ref=e372]:
+            - /url: /meeting/b794ed70-abde-4193-b661-6b6119423d51
+          - generic [ref=e373]: 1 documenten
+      - group [ref=e374]:
+        - generic "▶ 22 januari Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026) 6065872 3 agendapunten · 3 documenten" [ref=e375] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e376]: 22 januari
+          - link "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)" [ref=e378]:
+            - /url: /meeting/7572680
+          - generic [ref=e379]: "6065872"
+          - generic [ref=e380]: 3 agendapunten · 3 documenten
+      - group [ref=e381]:
+        - generic "▶ 22 januari Actualiteitenraad" [ref=e382] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e383]: 22 januari
+          - link "Actualiteitenraad" [ref=e385]:
+            - /url: /meeting/7572682
+      - group [ref=e386]:
+        - generic "▶ 22 januari Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026) 1 documenten" [ref=e387] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e388]: 22 januari
+          - link "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)" [ref=e390]:
+            - /url: /meeting/ef93a0ff-26eb-4145-b6ce-75b0d7dce94d
+          - generic [ref=e391]: 1 documenten
+      - group [ref=e392]:
+        - generic "▶ 21 januari Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026) 6065876 2 agendapunten · 4 documenten" [ref=e393] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e394]: 21 januari
+          - link "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)" [ref=e396]:
+            - /url: /meeting/7568714
+          - generic [ref=e397]: "6065876"
+          - generic [ref=e398]: 2 agendapunten · 4 documenten
+      - group [ref=e399]:
+        - generic "▶ 21 januari Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026) 6065878 3 agendapunten · 3 documenten" [ref=e400] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e401]: 21 januari
+          - link "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)" [ref=e403]:
+            - /url: /meeting/7568713
+          - generic [ref=e404]: "6065878"
+          - generic [ref=e405]: 3 agendapunten · 3 documenten
+      - group [ref=e406]:
+        - generic "▶ 21 januari Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ 6065874 4 agendapunten · 6 documenten" [ref=e407] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e408]: 21 januari
+          - link "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ" [ref=e410]:
+            - /url: /meeting/7568711
+          - generic [ref=e411]: "6065874"
+          - generic [ref=e412]: 4 agendapunten · 6 documenten
+      - group [ref=e413]:
+        - generic "▶ 21 januari Commissie Bouwen, Wonen en Buitenruimte (2022-2026) 6065875 6 agendapunten · 7 documenten" [ref=e414] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e415]: 21 januari
+          - link "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)" [ref=e417]:
+            - /url: /meeting/7568712
+          - generic [ref=e418]: "6065875"
+          - generic [ref=e419]: 6 agendapunten · 7 documenten
+      - group [ref=e420]:
+        - generic "▶ 21 januari Commissie Bouwen, Wonen en Buitenruimte (2022-2026) 1 documenten" [ref=e421] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e422]: 21 januari
+          - link "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)" [ref=e424]:
+            - /url: /meeting/8495b265-5d94-45be-9986-decd1260799b
+          - generic [ref=e425]: 1 documenten
+      - group [ref=e426]:
+        - generic "▶ 21 januari Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026) 1 documenten" [ref=e427] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e428]: 21 januari
+          - link "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)" [ref=e430]:
+            - /url: /meeting/8ce6926c-8296-44c3-8646-a9db0348337c
+          - generic [ref=e431]: 1 documenten
+      - group [ref=e432]:
+        - generic "▶ 20 januari Commissie tot Onderzoek van de Rekening (2022-2026) 6065866 5 agendapunten · 6 documenten" [ref=e433] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e434]: 20 januari
+          - link "Commissie tot Onderzoek van de Rekening (2022-2026)" [ref=e436]:
+            - /url: /meeting/7566061
+          - generic [ref=e437]: "6065866"
+          - generic [ref=e438]: 5 agendapunten · 6 documenten
+      - group [ref=e439]:
+        - generic "▶ 20 januari Commissie tot Onderzoek van de Rekening (2022-2026) 1 documenten" [ref=e440] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e441]: 20 januari
+          - link "Commissie tot Onderzoek van de Rekening (2022-2026)" [ref=e443]:
+            - /url: /meeting/334d5368-c0f0-4d62-a036-3a565e684fc6
+          - generic [ref=e444]: 1 documenten
+      - group [ref=e445]:
+        - generic "▶ 19 januari Subcommissie BOOR (2022–2026) 6065877 2 agendapunten · 2 documenten" [ref=e446] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e447]: 19 januari
+          - link "Subcommissie BOOR (2022–2026)" [ref=e449]:
+            - /url: /meeting/7564227
+          - generic [ref=e450]: "6065877"
+          - generic [ref=e451]: 2 agendapunten · 2 documenten
+      - group [ref=e452]:
+        - generic "▶ 16 januari Commissie Bouwen, Wonen en Buitenruimte (2022-2026) 6065875 2 documenten" [ref=e453] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e454]: 16 januari
+          - link "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)" [ref=e456]:
+            - /url: /meeting/7561117
+          - generic [ref=e457]: "6065875"
+          - generic [ref=e458]: 2 documenten
+      - group [ref=e459]:
+        - generic "▶ 15 januari Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026) 6065872 1 agendapunten · 1 documenten" [ref=e460] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e461]: 15 januari
+          - link "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)" [ref=e463]:
+            - /url: /meeting/7557375
+          - generic [ref=e464]: "6065872"
+          - generic [ref=e465]: 1 agendapunten · 1 documenten
+      - group [ref=e466]:
+        - generic "▶ 15 januari Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026) 6065872 8 agendapunten · 13 documenten" [ref=e467] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e468]: 15 januari
+          - link "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)" [ref=e470]:
+            - /url: /meeting/7557376
+          - generic [ref=e471]: "6065872"
+          - generic [ref=e472]: 8 agendapunten · 13 documenten
+      - group [ref=e473]:
+        - generic "▶ 15 januari Actualiteitenraad" [ref=e474] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e475]: 15 januari
+          - link "Actualiteitenraad" [ref=e477]:
+            - /url: /meeting/7557377
+      - group [ref=e478]:
+        - generic "▶ 15 januari Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026) 1 documenten" [ref=e479] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e480]: 15 januari
+          - link "Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)" [ref=e482]:
+            - /url: /meeting/098f5f63-9f58-4593-b6f6-84cec8304424
+          - generic [ref=e483]: 1 documenten
+      - group [ref=e484]:
+        - generic "▶ 14 januari Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026) 6065876 7 agendapunten · 15 documenten" [ref=e485] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e486]: 14 januari
+          - link "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)" [ref=e488]:
+            - /url: /meeting/7552966
+          - generic [ref=e489]: "6065876"
+          - generic [ref=e490]: 7 agendapunten · 15 documenten
+      - group [ref=e491]:
+        - generic "▶ 14 januari Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026) 6065878 8 agendapunten · 17 documenten" [ref=e492] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e493]: 14 januari
+          - link "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)" [ref=e495]:
+            - /url: /meeting/7552968
+          - generic [ref=e496]: "6065878"
+          - generic [ref=e497]: 8 agendapunten · 17 documenten
+      - group [ref=e498]:
+        - generic "▶ 14 januari Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ 6065874 8 agendapunten · 13 documenten" [ref=e499] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e500]: 14 januari
+          - link "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ" [ref=e502]:
+            - /url: /meeting/7552965
+          - generic [ref=e503]: "6065874"
+          - generic [ref=e504]: 8 agendapunten · 13 documenten
+      - group [ref=e505]:
+        - generic "▶ 14 januari Commissie Bouwen, Wonen en Buitenruimte (2022-2026) 6065875 10 agendapunten · 23 documenten" [ref=e506] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e507]: 14 januari
+          - link "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)" [ref=e509]:
+            - /url: /meeting/7552964
+          - generic [ref=e510]: "6065875"
+          - generic [ref=e511]: 10 agendapunten · 23 documenten
+      - group [ref=e512]:
+        - generic "▶ 14 januari Commissie Bouwen, Wonen en Buitenruimte (2022-2026) 1 documenten" [ref=e513] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e514]: 14 januari
+          - link "Commissie Bouwen, Wonen en Buitenruimte (2022-2026)" [ref=e516]:
+            - /url: /meeting/13bddd3e-aa2a-452d-b94e-64ee571c6422
+          - generic [ref=e517]: 1 documenten
+      - group [ref=e518]:
+        - generic "▶ 14 januari Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026) 1 documenten" [ref=e519] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e520]: 14 januari
+          - link "Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)" [ref=e522]:
+            - /url: /meeting/065deb10-ff16-486c-a7b7-d712732ccf5e
+          - generic [ref=e523]: 1 documenten
+      - group [ref=e524]:
+        - generic "▶ 13 januari Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026) 6065876 1 agendapunten · 5 documenten" [ref=e525] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e526]: 13 januari
+          - link "Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)" [ref=e528]:
+            - /url: /meeting/7549978
+          - generic [ref=e529]: "6065876"
+          - generic [ref=e530]: 1 agendapunten · 5 documenten
+      - group [ref=e531]:
+        - generic "▶ 13 januari Subcommissie bestemmingsplannen Commissie Bouwen, Wonen en Buitenruimte (2022-2026) 6065873 6 agendapunten · 8 documenten" [ref=e532] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e533]: 13 januari
+          - link "Subcommissie bestemmingsplannen Commissie Bouwen, Wonen en Buitenruimte (2022-2026)" [ref=e535]:
+            - /url: /meeting/7549977
+          - generic [ref=e536]: "6065873"
+          - generic [ref=e537]: 6 agendapunten · 8 documenten
+      - group [ref=e538]:
+        - generic "▶ 13 januari Subcommissie bestemmingsplannen Commissie Bouwen, Wonen en Buitenruimte (2022-2026) 1 documenten" [ref=e539] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e540]: 13 januari
+          - link "Subcommissie bestemmingsplannen Commissie Bouwen, Wonen en Buitenruimte (2022-2026)" [ref=e542]:
+            - /url: /meeting/717292ea-e4a9-4f94-98a6-8ab96c7b4696
+          - generic [ref=e543]: 1 documenten
+      - group [ref=e544]:
+        - generic "▶ 8 januari Gemeenteraad" [ref=e545] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e546]: 8 januari
+          - link "Gemeenteraad" [ref=e548]:
+            - /url: /meeting/7543040
+      - group [ref=e549]:
+        - generic "▶ 8 januari donderdag 8 januari 2026 5 agendapunten · 22 documenten" [ref=e550] [cursor=pointer]:
+          - text: ▶
+          - generic [ref=e551]: 8 januari
+          - link "donderdag 8 januari 2026" [ref=e553]:
+            - /url: /meeting/43305437-b33b-43ba-96ef-a40832d7c841
+          - generic [ref=e554]: 5 agendapunten · 22 documenten
+  - contentinfo [ref=e555]:
+    - generic [ref=e556]: "NeoDemos (alpha) v0.2.0-alpha.2 · Brondata: Open Raadsinformatie"
+    - generic [ref=e557]:
+      - link "Over" [ref=e558] [cursor=pointer]:
+        - /url: /over
+      - text: ·
+      - link "Technologie" [ref=e559] [cursor=pointer]:
+        - /url: /technologie
+      - text: ·
+      - link "Methodologie" [ref=e560] [cursor=pointer]:
+        - /url: /methodologie
+      - text: ·
+      - link "MCP" [ref=e561] [cursor=pointer]:
+        - /url: /mcp-installer
+    - generic [ref=e562]: Analyse door AI (Anthropic) · Europees gehost

@@ -105,13 +105,15 @@ class StorageService:
                 for agenda_row in agenda_rows:
                     item = dict(agenda_row)
                     
-                    # Get documents for this agenda item via junction table
+                    # Get documents for this agenda item via junction table.
+                    # DISTINCT guards against duplicate junction rows (WS14 C1 hotfix).
                     cur.execute(
                         '''
-                        SELECT d.* 
+                        SELECT DISTINCT ON (d.id) d.*
                         FROM documents d
                         JOIN document_assignments da ON d.id = da.document_id
                         WHERE da.agenda_item_id = %s
+                        ORDER BY d.id, d.name
                         ''',
                         (item['id'],)
                     )

@@ -1,0 +1,29 @@
+{% extends "admin/_layout.html" %}
+{% set active = 'dashboard' %}
+{% block admin_body %}
+<p class="admin-help">
+  Overzicht van gebruikers, inhoud en pagina's. Gebruik de zijbalk om een onderdeel te beheren.
+</p>
+<div class="admin-stats">
+  <div class="stat-card">
+    <div class="stat-number">{{ stats.users }}</div>
+    <div class="stat-label">Gebruikers</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">{{ stats.active_users }}</div>
+    <div class="stat-label">Actieve gebruikers</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">{{ stats.tokens }}</div>
+    <div class="stat-label">API Tokens</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">{{ stats.content_items }}</div>
+    <div class="stat-label">Inhoudsitems</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">{{ stats.pages }}</div>
+    <div class="stat-label">Pagina's</div>
+  </div>
+</div>
+{% endblock %}

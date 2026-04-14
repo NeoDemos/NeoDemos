@@ -1,0 +1,291 @@
+/* ================================================================
+   Page: MCP Installer
+   ================================================================ */
+
+@layer components {
+  .installer-container {
+    max-width: 860px;
+    margin: var(--space-8) auto;
+  }
+
+  .installer-hero {
+    text-align: center;
+    padding: var(--space-8) 0 var(--space-10);
+  }
+
+  .installer-hero h1 {
+    font-size: 2rem;
+    margin-bottom: var(--space-2);
+  }
+
+  .installer-hero p {
+    font-size: 1.05rem;
+    color: var(--color-text-secondary);
+    max-width: 620px;
+    margin: 0 auto;
+  }
+
+  .method-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 0;
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .method-tab {
+    padding: var(--space-3) var(--space-6);
+    background: none;
+    border: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .method-tab.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+  }
+
+  .method-tab:hover:not(.active) {
+    color: var(--color-text);
+  }
+
+  .method-panel {
+    display: none;
+    background: var(--color-surface-raised);
+    padding: var(--space-8);
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .method-panel.active {
+    display: block;
+  }
+
+  .recommended-badge {
+    display: inline-block;
+    background: var(--color-success-light);
+    color: var(--color-success);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius-md);
+    margin-left: var(--space-1);
+    vertical-align: middle;
+    text-transform: uppercase;
+  }
+
+  .install-section {
+    margin-bottom: var(--space-8);
+  }
+
+  .install-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .install-section h3 {
+    font-size: 1.1rem;
+    margin-bottom: var(--space-3);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-body);
+    font-weight: 600;
+  }
+
+  .install-section h4 {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    margin: var(--space-5) 0 var(--space-2);
+  }
+
+  .install-section p,
+  .install-section li {
+    color: var(--color-text-secondary);
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .install-section ol {
+    padding-left: var(--space-6);
+  }
+
+  .install-section li {
+    margin-bottom: var(--space-2);
+  }
+
+  .step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: var(--color-primary);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .code-block {
+    background: var(--color-primary);
+    color: var(--color-primary-light);
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 0.84rem;
+    line-height: 1.5;
+    position: relative;
+    margin: var(--space-3) 0;
+  }
+
+  .code-block pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  .copy-btn {
+    position: absolute;
+    top: var(--space-2);
+    right: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-tertiary);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+
+  .copy-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+  }
+
+  .copy-btn.copied {
+    background: var(--color-success);
+    color: var(--color-success-light);
+    border-color: var(--color-success);
+  }
+
+  .action-btn {
+    display: inline-block;
+    padding: var(--space-3) var(--space-6);
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.2s;
+    font-family: inherit;
+  }
+
+  .action-btn:hover {
+    opacity: 0.9;
+    color: white;
+  }
+
+  .action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .action-btn-secondary {
+    background: var(--color-text-secondary);
+  }
+
+  .token-generate-area {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    margin: var(--space-4) 0;
+  }
+
+  .token-display {
+    display: none;
+    margin-top: var(--space-4);
+  }
+
+  .token-display.visible {
+    display: block;
+  }
+
+  .token-warning {
+    background: var(--color-warning-light);
+    border: 1px solid var(--color-warning);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    color: var(--color-warning);
+    margin-bottom: var(--space-4);
+  }
+
+  .token-value {
+    background: var(--color-primary);
+    color: var(--color-success);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    word-break: break-all;
+    position: relative;
+  }
+
+  .info-callout {
+    background: var(--color-primary-light);
+    border: 1px solid var(--color-primary);
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    font-size: 0.88rem;
+    color: var(--color-primary);
+    margin: var(--space-4) 0;
+  }
+
+  .info-callout strong {
+    color: var(--color-primary);
+  }
+
+  .login-prompt {
+    text-align: center;
+    padding: var(--space-8);
+    background: var(--color-surface);
+    border: 1px dashed var(--color-border-strong);
+    border-radius: var(--radius-md);
+    margin: var(--space-4) 0;
+  }
+
+  .login-prompt p {
+    margin-bottom: var(--space-4);
+    color: var(--color-text-secondary);
+  }
+
+  .tools-section {
+    background: var(--color-surface-raised);
+    padding: var(--space-8);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    margin-top: var(--space-8);
+  }
+
+  .tools-section h3 {
+    margin-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-2);
+    font-family: var(--font-body);
+    font-weight: 600;
+  }
+}

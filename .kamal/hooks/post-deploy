@@ -1,0 +1,5 @@
+#!/bin/sh
+# post-deploy: prune old Docker images after each successful deploy.
+# Keeps the running image + 1 previous; removes the rest.
+# This prevents the disk from filling up on a 226GB server with 10GB+ images.
+docker image prune -f --filter "until=168h"

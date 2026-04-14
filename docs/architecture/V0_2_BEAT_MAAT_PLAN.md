@@ -16,7 +16,7 @@
 > | WS4 Best-in-class MCP | [`docs/handoffs/WS4_MCP_DISCIPLINE.md`](../handoffs/WS4_MCP_DISCIPLINE.md) | not started |
 > | WS5a Nightly pipeline | [`docs/handoffs/WS5a_NIGHTLY_PIPELINE.md`](../handoffs/WS5a_NIGHTLY_PIPELINE.md) | not started |
 > | WS5b Multi-portal (search-only) | [`docs/handoffs/WS5b_MULTI_PORTAL.md`](../handoffs/WS5b_MULTI_PORTAL.md) | deferred to v0.2.1 |
-> | WS6 Source-spans summarization | [`docs/handoffs/WS6_SUMMARIZATION.md`](../handoffs/WS6_SUMMARIZATION.md) | not started |
+> | WS6 Source-spans summarization | [`docs/handoffs/WS6_SUMMARIZATION.md`](../handoffs/WS6_SUMMARIZATION.md) | **in progress** — Phase 3 DB backfill running (2026-04-14) |
 >
 > Index, parallelism map, house rules, and how-to-invoke-an-agent are in [`docs/handoffs/README.md`](../handoffs/README.md).
 

@@ -155,3 +155,4 @@ accessories:
       memory: 1G
       name: neodemos-mcp
       # No network override — let kamal-proxy see the accessory on the `kamal` network.
+      # Restart policy: Kamal enforces unless-stopped on all accessories automatically.

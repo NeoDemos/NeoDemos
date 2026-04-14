@@ -1374,9 +1374,59 @@ def run(
 
         # Create temp dir for PDF downloads
         with tempfile.TemporaryDirectory(prefix="ocr_recovery_") as temp_dir:
+            global_idx = 0
+
+            # ── Phase 1: Fast in-place ligature fix (no download, no OCR) ──────
+            # Ligature damage = Unicode chars (ﬁ→fi, ﬂ→fl, etc.) already present
+            # in the stored DB content. normalize_text() fixes them instantly.
+            # No PDF download or OCR engine needed — pure text transformation.
+            ligature_cands = [c for c in candidates if c.get("damage_type") == "ligature"]
+            ocr_cands      = [c for c in candidates if c.get("damage_type") != "ligature"]
+
+            if ligature_cands:
+                logger.info(
+                    f"  Phase 1: In-place ligature fix ({len(ligature_cands)} docs — no OCR)"
+                )
+                # Fetch all ligature doc content in one batch query
+                lig_ids = [c["document_id"] for c in ligature_cands]
+                _cur = conn.cursor(cursor_factory=RealDictCursor)
+                _cur.execute(
+                    "SELECT id::text AS id, content FROM documents WHERE id = ANY(%s)",
+                    (lig_ids,),
+                )
+                content_map: Dict[str, str] = {r["id"]: r["content"] for r in _cur.fetchall()}
+                _cur.close()
+
+                for doc in ligature_cands:
+                    global_idx += 1
+                    doc_id = doc["document_id"]
+                    existing = content_map.get(doc_id)
+                    if not existing:
+                        _handle_result(global_idx, doc, "no_source", "content not found in DB")
+                        continue
+                    normalized = normalize_text(existing)
+                    try:
+                        status, detail = process_single_document(
+                            conn=conn, doc=doc, temp_dir=temp_dir,
+                            dry_run=dry_run, skip_re_embed=skip_re_embed,
+                            wait_for_lock=wait_for_lock, engine=engine,
+                            prefetched_text=normalized,
+                        )
+                    except Exception as e:
+                        status, detail = "error", f"unexpected: {e}"
+                        try:
+                            conn.rollback()
+                        except Exception:
+                            pass
+                    _handle_result(global_idx, doc, status, detail)
+
+            # ── Phase 2: OCR-based recovery for non-ligature docs ───────────────
+            candidates = ocr_cands  # garbled_spacing, low_clean_ratio, etc.
+
             if workers <= 1:
                 # ── Sequential mode (default) ──────────────────────────────
-                for idx, doc in enumerate(candidates, 1):
+                for doc in candidates:
+                    global_idx += 1
                     try:
                         status, detail = process_single_document(
                             conn=conn, doc=doc, temp_dir=temp_dir,
@@ -1390,7 +1440,7 @@ def run(
                             conn.rollback()
                         except Exception:
                             pass
-                    _handle_result(idx, doc, status, detail)
+                    _handle_result(global_idx, doc, status, detail)
 
             else:
                 # ── Parallel prefetch mode ──────────────────────────────────
@@ -1399,8 +1449,8 @@ def run(
                 # submitted immediately — pool is never idle waiting for a batch.
                 # Memory bounded: at most `workers` OCR results in memory at once.
                 # GC runs every batch_size docs to reclaim Docling/Tesseract memory.
-                logger.info(f"  Parallel prefetch: {workers} workers (streaming)")
-                idx = 0
+                logger.info(f"  Phase 2: OCR prefetch: {workers} workers (streaming, {len(candidates)} docs)")
+                idx = global_idx  # continue counter from phase 1
 
                 with ThreadPoolExecutor(max_workers=workers) as pool:
                     future_to_doc: Dict = {}

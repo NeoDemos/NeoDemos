@@ -1,0 +1,88 @@
+{% extends "admin/_layout.html" %}
+{% set active = 'content' %}
+{% block admin_body %}
+<p class="admin-help">
+  Bewerk de teksten op de publieke pagina's. Wijzigingen zijn binnen 60 seconden zichtbaar.
+</p>
+
+{% for section_name, items in sections.items() %}
+<details class="admin-section-accordion" {% if loop.first %}open{% endif %}>
+  <summary class="admin-section-summary">
+    <span class="section-name">{{ section_name | capitalize }}</span>
+    <span class="section-count">{{ items | length }} items</span>
+  </summary>
+  <div class="admin-section-body">
+    {% if items %}
+    {% for item in items %}
+    <div class="content-item" data-key="{{ item.key }}">
+      <label class="content-item-label" for="content-{{ item.id }}">{{ item.label }}</label>
+      {% if item.help_text %}
+      <p class="content-item-help">{{ item.help_text }}</p>
+      {% endif %}
+      {% if item.content_type == 'textarea' or item.content_type == 'html' %}
+      <textarea id="content-{{ item.id }}" class="content-input" rows="4">{{ item.value or item.default_value }}</textarea>
+      {% else %}
+      <input id="content-{{ item.id }}" type="text" class="content-input" value="{{ item.value or item.default_value }}">
+      {% endif %}
+      <div class="content-item-actions">
+        <button class="btn btn-primary btn-sm" onclick="saveContent('{{ item.key }}', this)">Opslaan</button>
+        <button class="btn btn-ghost btn-sm" onclick="resetContent('{{ item.key }}', this)">Herstel standaard</button>
+        <span class="content-item-status" data-status></span>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p class="text-muted">Nog geen items in deze sectie.</p>
+    {% endif %}
+  </div>
+</details>
+{% endfor %}
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+async function saveContent(key, btn) {
+  const itemEl = btn.closest('.content-item');
+  const input = itemEl.querySelector('.content-input');
+  const statusEl = itemEl.querySelector('[data-status]');
+  btn.disabled = true;
+  statusEl.textContent = 'Opslaan...';
+  statusEl.className = 'content-item-status';
+  try {
+    const res = await fetch(`/admin/api/content/${encodeURIComponent(key)}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({value: input.value})
+    });
+    if (res.ok) {
+      statusEl.textContent = 'Opgeslagen';
+      statusEl.className = 'content-item-status success';
+    } else {
+      let msg = 'Fout';
+      try {
+        const err = await res.json();
+        msg = err.error || msg;
+      } catch (e) {}
+      statusEl.textContent = msg;
+      statusEl.className = 'content-item-status error';
+    }
+  } catch (e) {
+    statusEl.textContent = 'Netwerkfout';
+    statusEl.className = 'content-item-status error';
+  } finally {
+    btn.disabled = false;
+    setTimeout(() => {
+      statusEl.textContent = '';
+      statusEl.className = 'content-item-status';
+    }, 3000);
+  }
+}
+
+async function resetContent(key, btn) {
+  if (!confirm('Weet u zeker dat u deze waarde wilt herstellen naar de standaard?')) return;
+  const res = await fetch(`/admin/api/content/${encodeURIComponent(key)}/reset`, {method: 'POST'});
+  if (res.ok) location.reload();
+  else alert('Fout bij herstellen');
+}
+</script>
+{% endblock %}

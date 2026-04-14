@@ -1,0 +1,101 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "NeoDemos home" [ref=e3] [cursor=pointer]:
+      - /url: /
+      - text: NeoDemos
+    - navigation [ref=e4]:
+      - link "Zoeken" [ref=e5] [cursor=pointer]:
+        - /url: /
+      - link "Kalender" [ref=e6] [cursor=pointer]:
+        - /url: /calendar
+      - link "Over" [ref=e7] [cursor=pointer]:
+        - /url: /over
+      - link "MCP" [ref=e8] [cursor=pointer]:
+        - /url: /mcp-installer
+      - link "Inloggen" [ref=e9] [cursor=pointer]:
+        - /url: /login
+  - main [ref=e10]:
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - heading "Technologie" [level=1] [ref=e13]
+        - paragraph [ref=e14]: Uw data, uw AI
+      - generic [ref=e15]:
+        - heading "Volledig Europees" [level=2] [ref=e16]
+        - paragraph [ref=e17]: NeoDemos is gebouwd op Europese infrastructuur. Geen afhankelijkheid van Amerikaanse clouddiensten, geen blootstelling aan de CLOUD Act, geen data die de EU verlaat.
+        - generic [ref=e18]:
+          - generic [ref=e19]:
+            - heading "Hetzner, Duitsland" [level=3] [ref=e20]
+            - paragraph [ref=e21]: Servers in Duitse datacenters. Europese jurisdictie, GDPR-compliant.
+          - generic [ref=e22]:
+            - heading "Nebius, EU AI" [level=3] [ref=e23]
+            - paragraph [ref=e24]: AI-inferentie via Europese providers. Geen data naar OpenAI of Google servers.
+          - generic [ref=e25]:
+            - heading "Geen US CLOUD Act" [level=3] [ref=e26]
+            - paragraph [ref=e27]: Geen Amerikaanse partij kan uw gegevens opvragen via juridische achterdeur.
+      - generic [ref=e28]:
+        - heading "Veiligheidsgaranties" [level=2] [ref=e29]
+        - list [ref=e30]:
+          - listitem [ref=e31]: ✓ Alleen publieke brondata — geen vertrouwelijke documenten
+          - listitem [ref=e32]: ✓ Geen tracking of profilering van gebruikers
+          - listitem [ref=e33]: ✓ Lokale AI mogelijk via Ollama, LM Studio of Open WebUI
+          - listitem [ref=e34]: ✓ Audit trail op elk antwoord — elke bewering herleidbaar naar brondocument
+          - listitem [ref=e35]: ✓ EU AI Act conform — transparant over wat AI doet en niet doet
+          - listitem [ref=e36]: ✓ Uw vragen trainen geen AI-modellen
+      - generic [ref=e37]:
+        - 'heading "Lokale AI: uw data verlaat nooit uw netwerk" [level=2] [ref=e38]'
+        - paragraph [ref=e39]: "NeoDemos werkt via het Model Context Protocol (MCP), een open standaard die u in staat stelt uw eigen AI-assistent te verbinden. Dat betekent dat u kunt kiezen waar uw vragen worden verwerkt:"
+        - generic [ref=e40]:
+          - generic [ref=e41]:
+            - heading "Ollama" [level=3] [ref=e42]
+            - paragraph [ref=e43]: Draai open-source modellen lokaal op uw eigen hardware. Volledig offline mogelijk.
+          - generic [ref=e44]:
+            - heading "LM Studio" [level=3] [ref=e45]
+            - paragraph [ref=e46]: Gebruiksvriendelijke interface voor lokale AI-modellen. Geen technische kennis vereist.
+          - generic [ref=e47]:
+            - heading "Open WebUI" [level=3] [ref=e48]
+            - paragraph [ref=e49]: Webinterface voor lokale modellen. Draait in uw browser, data blijft op uw machine.
+      - generic [ref=e50]:
+        - heading "Modelonafhankelijk" [level=2] [ref=e51]
+        - paragraph [ref=e52]: "NeoDemos is niet gebonden aan één AI-provider. Via MCP werkt het platform met elk compatibel model:"
+        - generic [ref=e53]:
+          - generic [ref=e54]: Claude
+          - generic [ref=e55]: ChatGPT
+          - generic [ref=e56]: Cursor
+          - generic [ref=e57]: Ollama
+          - generic [ref=e58]: LM Studio
+          - generic [ref=e59]: Open WebUI
+        - paragraph [ref=e60]: U kiest het model dat past bij uw eisen rond kosten, privacy en kwaliteit. NeoDemos levert de data en de bronverwijzingen — het model levert de analyse.
+      - generic [ref=e61]:
+        - heading "Architectuur in het kort" [level=2] [ref=e62]
+        - paragraph [ref=e63]: "NeoDemos combineert drie lagen om betrouwbare antwoorden te genereren:"
+        - generic [ref=e64]:
+          - generic [ref=e65]:
+            - generic [ref=e66]: "1"
+            - generic [ref=e67]:
+              - heading "Brondata" [level=3] [ref=e68]
+              - paragraph [ref=e69]: 90.000+ documenten van de Rotterdamse gemeenteraad, gestructureerd en doorzoekbaar gemaakt met vector- en full-text search.
+          - generic [ref=e70]:
+            - generic [ref=e71]: "2"
+            - generic [ref=e72]:
+              - heading "Retrieval" [level=3] [ref=e73]
+              - paragraph [ref=e74]: Elke vraag wordt beantwoord op basis van de meest relevante documentfragmenten. Geen hallucinatie — alleen feiten uit brondocumenten.
+          - generic [ref=e75]:
+            - generic [ref=e76]: "3"
+            - generic [ref=e77]:
+              - heading "Transparantie" [level=3] [ref=e78]
+              - paragraph [ref=e79]: Elk antwoord bevat bronverwijzingen. Klik op een citaat om het originele document te lezen.
+  - contentinfo [ref=e80]:
+    - generic [ref=e81]: "NeoDemos (alpha) v0.2.0-alpha.2 · Brondata: Open Raadsinformatie"
+    - generic [ref=e82]:
+      - link "Over" [ref=e83] [cursor=pointer]:
+        - /url: /over
+      - text: ·
+      - link "Technologie" [ref=e84] [cursor=pointer]:
+        - /url: /technologie
+      - text: ·
+      - link "Methodologie" [ref=e85] [cursor=pointer]:
+        - /url: /methodologie
+      - text: ·
+      - link "MCP" [ref=e86] [cursor=pointer]:
+        - /url: /mcp-installer
+    - generic [ref=e87]: Analyse door AI (Anthropic) · Europees gehost

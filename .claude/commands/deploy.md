@@ -11,6 +11,25 @@ Use this skill when deploying, starting, stopping, or troubleshooting the NeoDem
 3. **Kamal binary is NOT in PATH.** It lives at `/opt/homebrew/lib/ruby/gems/4.0.0/bin/kamal`. `which kamal` returns empty; that does not mean it's missing.
 4. **kamal-proxy is the sole public reverse proxy.** There is no Caddy, no Traefik, no nginx. Everything public goes through kamal-proxy on ports 80/443, including TLS termination via Let's Encrypt.
 5. **Protect the postgres named volume** `neodemos_postgres_data` — it holds all council data (2865 meetings + chunks + embeddings). Never accept a config change that would switch it to an anonymous volume. Never run `docker compose` on the host — it can silently trigger a postgres recreate.
+6. **Deployment window (SLO): downtime only 23:00–07:00 CET.** User traffic is growing. Zero-downtime operations are allowed any time; downtime-incurring operations are restricted to the maintenance window unless it is an emergency fix for an active outage. See the classification table below before proceeding.
+
+### Deploy classification — can I ship this now?
+
+| Operation | Downtime | Allowed window |
+|---|---|---|
+| `kamal deploy` (web service code change) | **Zero** — blue-green via kamal-proxy, drains old container after new one is healthy | Any time |
+| `kamal rollback <sha>` (web service) | **Zero** — same blue-green path | Any time |
+| `kamal accessory reboot mcp` | **~5–15s** — container stop/start, kamal-proxy returns 502 until `/up` healthy | 23:00–07:00 CET only (unless fixing active MCP outage) |
+| `kamal accessory reboot postgres` / `qdrant` | **Seconds to minutes** — data services, web app errors until reconnect | 23:00–07:00 CET only; announce in advance |
+| Postgres schema migration (Alembic) | **Varies** — zero for additive DDL; locking for NOT NULL / indexed cols | Any time for additive/CONCURRENTLY; else 23:00–07:00 CET |
+| Kamal image build+push only (`kamal build push`) | **Zero** — nothing restarts | Any time |
+| Any manual `docker` on host | **DO NOT** | Never |
+
+Rule of thumb: if you're about to run `accessory reboot` and it's a business-hours day, ask yourself — is this fixing an active outage, or is it routine? If routine, schedule it for 23:00–07:00 CET. Write it into the plan, not into the moment.
+
+### Emergency override
+
+If MCP or web is already down during business hours, fix forward immediately — an already-broken service is not an SLO breach of the deployment window. Note the emergency in the incident log below so the exception is visible.
 
 ---
 

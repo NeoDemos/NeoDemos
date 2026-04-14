@@ -34,7 +34,7 @@ def compute_missing_ids(qdrant_client=None, pg_conn=None) -> list:
     while True:
         res, next_offset = qdrant_client.scroll(
             collection_name=COLLECTION_NAME,
-            limit=10000,
+            limit=50000,
             with_payload=False,
             with_vectors=False,
             offset=offset

@@ -1,0 +1,365 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - link "NeoDemos home" [ref=e3] [cursor=pointer]:
+      - /url: /
+      - text: NeoDemos
+    - navigation [ref=e4]:
+      - link "Kalender" [ref=e5] [cursor=pointer]:
+        - /url: /calendar
+      - link "AI-koppeling" [ref=e6] [cursor=pointer]:
+        - /url: /mcp-installer
+      - link "Over" [ref=e7] [cursor=pointer]:
+        - /url: /over
+      - link "Inloggen" [ref=e8] [cursor=pointer]:
+        - /url: /login
+  - main [ref=e9]:
+    - generic [ref=e10]:
+      - generic [ref=e13]:
+        - heading "24 jaar raadsbesluiten. Doorzoekbaar in seconden." [level=1] [ref=e14]:
+          - text: 24 jaar raadsbesluiten.
+          - text: Doorzoekbaar in seconden.
+        - generic [ref=e15]:
+          - textbox "Stel uw eigen vraag..." [ref=e16]: Welke moties over klimaat zijn aangenomen sinds 2020?
+          - button "Zoek" [active] [ref=e17] [cursor=pointer]
+        - generic [ref=e18]:
+          - generic [ref=e19]: "Of probeer:"
+          - button "Heeft het college haar beloftes waargemaakt?" [ref=e20] [cursor=pointer]
+          - button "Hoe stemden partijen over woningbouw?" [ref=e21] [cursor=pointer]
+          - button "Welke moties over klimaat zijn aangenomen sinds 2020?" [ref=e22] [cursor=pointer]
+        - generic [ref=e23]: 90.000+ documenten · 24 jaar · Rotterdam · Open brondata
+      - text: “” ▸ “”
+      - generic [ref=e78]:
+        - text: ●
+        - generic [ref=e82]:
+          - generic [ref=e83]: 🧠
+          - heading "Analyse" [level=2] [ref=e84]
+        - generic [ref=e85]:
+          - heading "Gevonden Documenten" [level=3] [ref=e86]
+          - generic [ref=e87] [cursor=pointer]:
+            - generic [ref=e88]:
+              - heading "17bb8556 Raadsvoorstel aanwijzing Lokale Publieke Omroep 2018-2023, advies aan commissariaat voor de Media, afdoeningsvoorstel moties 17bb5697 en 17bb" [level=4] [ref=e89]
+              - generic [ref=e90]: 2017-12-14
+            - paragraph [ref=e91]: "Rotterdam, 24 oktober 2017 17bb8556 Aan: de gemeenteraad Onderwerp: Aanwijzing Lokale Publieke Omroep. Gevraagd besluit: Vaststellen van het advies aan het Commissariaat voor de Media met betrekking t..."
+            - generic [ref=e92]: 🏛️ Agendapunt
+          - generic [ref=e93] [cursor=pointer]:
+            - generic [ref=e94]:
+              - heading "4 Openstaande toezeggingen, moties en schriftelijke vragen waarvan de termijn overschreden" [level=4] [ref=e95]
+              - generic [ref=e96]: 2017-12-06
+            - paragraph [ref=e97]: Geen samenvatting beschikbaar
+            - generic [ref=e98]: 🏛️ Agendapunt
+          - generic [ref=e99] [cursor=pointer]:
+            - generic [ref=e100]:
+              - heading "Openstaande moties cie BWB 06-12-2017" [level=4] [ref=e101]
+              - generic [ref=e102]: 2017-12-06
+            - paragraph [ref=e103]: "Vergaderdatum: 6 december 2017 Datum Indiener Titel Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder b 14-05-2009 L.P.M. de Kleijn Bereikbaar Stadion 15-12-2017 09g..."
+            - generic [ref=e104]: 🏛️ Agendapunt
+          - generic [ref=e105] [cursor=pointer]:
+            - generic [ref=e106]:
+              - heading "Openstaande moties cie BWB 22 november 2017" [level=4] [ref=e107]
+              - generic [ref=e108]: 2017-11-22
+            - paragraph [ref=e109]: "Vergaderdatum: 22 november 2017 Datum Indiener Titel Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder b 14-05-2009 L.P.M. de Kleijn Bereikbaar Stadion 15-12-2017 09..."
+            - generic [ref=e110]: 🏛️ Agendapunt
+          - generic [ref=e111] [cursor=pointer]:
+            - generic [ref=e112]:
+              - heading "Openstaande moties cie BWB 4 oktober 2017" [level=4] [ref=e113]
+              - generic [ref=e114]: 2017-10-04
+            - paragraph [ref=e115]: "Vergaderdatum: 4 oktober 2017 Datum Indiener Titel Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder b 14-05-2009 L.P.M. de Kleijn Bereikbaar Stadion 15-11-2017 09gr..."
+            - generic [ref=e116]: 🏛️ Agendapunt
+          - generic [ref=e117] [cursor=pointer]:
+            - generic [ref=e118]:
+              - heading "Openstaande moties cie BWB 28-06-2017" [level=4] [ref=e119]
+              - generic [ref=e120]: 2017-06-28
+            - paragraph [ref=e121]: "Vergaderdatum: 28 juni 2017 Datum Indiener Titel Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder 17-07-2008 E.P. van Heemst Motie om een stadionpark te realiseren ..."
+            - generic [ref=e122]: 🏛️ Agendapunt
+          - generic [ref=e123] [cursor=pointer]:
+            - generic [ref=e124]:
+              - heading "Openstaande moties cies BWB 17 mei 2017" [level=4] [ref=e125]
+              - generic [ref=e126]: 2017-05-17
+            - paragraph [ref=e127]: "Vergaderdatum: 17 mei 2017 Datum Indiener Titel Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder 17-07-2008 E.P. van Heemst Motie om een stadionpark te realiseren i..."
+            - generic [ref=e128]: 🏛️ Agendapunt
+          - generic [ref=e129] [cursor=pointer]:
+            - generic [ref=e130]:
+              - heading "Lijst van openstaande moties WIPV 22-3-2017" [level=4] [ref=e131]
+              - generic [ref=e132]: 2017-03-22
+            - paragraph [ref=e133]: "Vergaderdatum: 22 maart 2017 A1 Werk en Inkomen A2 Participatie A3 Volksgezondheid Datum Indiener Titel / Tekst Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder ..."
+            - generic [ref=e134]: 🏛️ Agendapunt
+          - generic [ref=e135] [cursor=pointer]:
+            - generic [ref=e136]:
+              - heading "Openstaande moties cie. BWB 08-03-2017" [level=4] [ref=e137]
+              - generic [ref=e138]: 2017-03-08
+            - paragraph [ref=e139]: "Vergaderdatum: 8 maart 2017 A1 Bouwen en Wonen A2 Buitenruimte Datum Indiener Titel / Tekst Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder 17-7-2008 E.P. van He..."
+            - generic [ref=e140]: 🏛️ Agendapunt
+          - generic [ref=e141] [cursor=pointer]:
+            - generic [ref=e142]:
+              - heading "16bb5418 Collegebrief Plus Programma Duurzaam 2015-2018 en Afdoeningsvoorstel moties Bonte ea over Ieder dak een zonnepaneel 15bb6235, motie Van der L" [level=4] [ref=e143]
+              - generic [ref=e144]: 2017-02-23
+            - paragraph [ref=e145]: Duurzaam dichter bij de Rotterdammer PLUS programma Duurzaam Programma Duurzaam 2015-2018 Programma Duurzaam 2015-2018 | 3 PLUS programma Duurzaam 2 | Programma Duurzaam 2015-2018 PLUS program...
+            - generic [ref=e146]: 🏛️ Agendapunt
+          - generic [ref=e147] [cursor=pointer]:
+            - generic [ref=e148]:
+              - heading "Annotatie Afdoening aangehouden moties" [level=4] [ref=e149]
+              - generic [ref=e150]: 2017-01-18
+            - paragraph [ref=e151]: "Gemeente Rotterdam College van Burgemeester en Wethouders Burgemeester en Wethouders Aan de gemeenteraad Bezoekadres: Stadhuis Coolsingel 40 3011 AD Rotterdam Postadres: Postbus 70012 3000 KP Rotterda..."
+            - generic [ref=e152]: 🏛️ Agendapunt
+          - generic [ref=e153] [cursor=pointer]:
+            - generic [ref=e154]:
+              - heading "Openstaande moties d.d. 16 november 2016" [level=4] [ref=e155]
+              - generic [ref=e156]: 2016-11-16
+            - paragraph [ref=e157]: "Vergaderdatum: 16 november 2016 A1 Economie A 2 Haven A3 Mobiliteit A4 Duurzaamheid Datum Indiener Titel / Tekst Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehoude..."
+            - generic [ref=e158]: 🏛️ Agendapunt
+          - generic [ref=e159] [cursor=pointer]:
+            - generic [ref=e160]:
+              - heading "Openstaande moties commissie EHMD" [level=4] [ref=e161]
+              - generic [ref=e162]: 2016-10-05
+            - paragraph [ref=e163]: "Vergaderdatum: 5 oktober 2016 A1 Economie A2 Haven A3 Mobiliteit A4 Duurzaamheid Datum Indiener Titel / Tekst Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder 7..."
+            - generic [ref=e164]: 🏛️ Agendapunt
+          - generic [ref=e165] [cursor=pointer]:
+            - generic [ref=e166]:
+              - heading "Lijst openstaande moties VOF 15 september 2016" [level=4] [ref=e167]
+              - generic [ref=e168]: 2016-09-15
+            - paragraph [ref=e169]: "Vergaderdatum: 15 september 2016 A1 Veiligheid A2 Organisatie A3 Financien Datum Indiener Titel / Tekst Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder 2-10-201..."
+            - generic [ref=e170]: 🏛️ Agendapunt
+          - generic [ref=e171] [cursor=pointer]:
+            - generic [ref=e172]:
+              - heading "Lijst overschreden moties VOF 15 september 2016" [level=4] [ref=e173]
+              - generic [ref=e174]: 2016-09-15
+            - paragraph [ref=e175]: "Vergaderdatum: ############### A1 Veiligheid A2 Organisatie A3 Financien Datum Titel Tekst Verwachte datum Nummer Portefeuillehouder Stand van zaken afdoening 19-5-2016 Jaarrapportage radicaliserin..."
+            - generic [ref=e176]: 🏛️ Agendapunt
+          - generic [ref=e177] [cursor=pointer]:
+            - generic [ref=e178]:
+              - heading "Openstaande moties commissie EHMD 31 augustus 2016" [level=4] [ref=e179]
+              - generic [ref=e180]: 2016-08-31
+            - paragraph [ref=e181]: "Vergaderdatum: 31 augustus 2016 A1 Economie A 2 Haven A3 Mobiliteit A4 Duurzaamheid Datum Indiener Titel / Tekst Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehoude..."
+            - generic [ref=e182]: 🏛️ Agendapunt
+          - generic [ref=e183] [cursor=pointer]:
+            - generic [ref=e184]:
+              - heading "16bb4507 Tussenbericht moties Sies, Verheij en Yazir over World Expo 2025 16bb2101, 16bb2105 en 16bb2107" [level=4] [ref=e185]
+              - generic [ref=e186]: 2016-08-31
+            - paragraph [ref=e187]: "Aan de gemeenteraadsleden van de gemeenten in de Metropoolregio Rotterdam Den Haag en de leden van Provinciale Staten van de Provincie Zuid-Holland Onderwerp: Voorstel tot onderzoek van de mogelijkhe..."
+            - generic [ref=e188]: 🏛️ Agendapunt
+          - generic [ref=e189] [cursor=pointer]:
+            - generic [ref=e190]:
+              - heading "Openstaande moties cie. BWB 29 juni 2016" [level=4] [ref=e191]
+              - generic [ref=e192]: 2016-06-29
+            - paragraph [ref=e193]: "^^^3^^^ Gemeente Rotterdam College van Burgemeester en Wethouders Bezoekadres: Stadhuis Coolsingel 40 3011 AD Rotterdam Postadres: Postbus 70012 3000 KP Rotterdam Aan de Gemeenteraad Website: www..."
+            - generic [ref=e194]: 🏛️ Agendapunt
+          - generic [ref=e195] [cursor=pointer]:
+            - generic [ref=e196]:
+              - heading "Openstaande moties cie. BWB 8 juni 2016" [level=4] [ref=e197]
+              - generic [ref=e198]: 2016-06-08
+            - paragraph [ref=e199]: "Vergaderdatum: 8 juni 2016 A1 Bouwen en Wonen A2 Buitenruimte Datum Indiener Titel / Tekst Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder 17-7-2008 E.P. van Hee..."
+            - generic [ref=e200]: 🏛️ Agendapunt
+          - generic [ref=e201] [cursor=pointer]:
+            - generic [ref=e202]:
+              - heading "Openstaande moties cie. BWB 25-05-2016" [level=4] [ref=e203]
+              - generic [ref=e204]: 2016-05-25
+            - paragraph [ref=e205]: "Vergaderdatum: 25 mei 2016 A1 Bouwen en Wonen A2 Buitenruimte Datum Indiener Titel / Tekst Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder 17-7-2008 E.P. van Hee..."
+            - generic [ref=e206]: 🏛️ Agendapunt
+          - generic [ref=e207] [cursor=pointer]:
+            - generic [ref=e208]:
+              - heading "Openstaande moties cie. BWB 13 april 2016" [level=4] [ref=e209]
+              - generic [ref=e210]: 2016-04-13
+            - paragraph [ref=e211]: "Vergaderdatum: 13 april 2016 A1 Bouwen en Wonen A2 Buitenruimte Datum Indiener Titel / Tekst Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder 17-7-2008 E.P. van H..."
+            - generic [ref=e212]: 🏛️ Agendapunt
+          - generic [ref=e213] [cursor=pointer]:
+            - generic [ref=e214]:
+              - heading "Openstaande moties cie. BWB 23 maart 2016" [level=4] [ref=e215]
+              - generic [ref=e216]: 2016-03-23
+            - paragraph [ref=e217]: "Vergaderdatum: 23 maart 2016 A1 Bouwen en Wonen A2 Buitenruimte Datum Indiener Titel / Tekst Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder 17-7-2008 E.P. van H..."
+            - generic [ref=e218]: 🏛️ Agendapunt
+          - generic [ref=e219] [cursor=pointer]:
+            - generic [ref=e220]:
+              - heading "Openstaande moties commissie EHMD" [level=4] [ref=e221]
+              - generic [ref=e222]: 2016-03-02
+            - paragraph [ref=e223]: "Vergaderdatum: 2 maart 2016 A1 Economie A 2 Haven A3 Mobiliteit A4 Duurzaamheid Datum Indiener Titel / Tekst Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder 11..."
+            - generic [ref=e224]: 🏛️ Agendapunt
+          - generic [ref=e225] [cursor=pointer]:
+            - generic [ref=e226]:
+              - heading "Lijst openstaande moties cie. ZOCS 2-3-2016" [level=4] [ref=e227]
+              - generic [ref=e228]: 2016-03-02
+            - paragraph [ref=e229]: "Vergaderdatum: 3 maart 2016 A1 Zorg A2 Onderwijs en Jeugd A3 Cultuur A4 Sport Datum Indiener Titel / Tekst Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder 26-1..."
+            - generic [ref=e230]: 🏛️ Agendapunt
+          - generic [ref=e231] [cursor=pointer]:
+            - generic [ref=e232]:
+              - heading "Lijst van overschreden moties cie. ZOCS" [level=4] [ref=e233]
+              - generic [ref=e234]: 2016-03-02
+            - paragraph [ref=e235]: "Vergaderdatum: 3 maart 2016 A1 Zorg A2 Onderwijs en Jeugd A3 Cultuur A4 Sport Datum Indiener Titel schriftelijke vragen Verwachte datum Partij afdoening Nummer Datum tussenantwoord Beleidsveld 6-1..."
+            - generic [ref=e236]: 🏛️ Agendapunt
+          - generic [ref=e237] [cursor=pointer]:
+            - generic [ref=e238]:
+              - heading "Openstaande moties commissie EHMD" [level=4] [ref=e239]
+              - generic [ref=e240]: 2016-01-20
+            - paragraph [ref=e241]: "Vergaderdatum: 20 januari 2016 A1 Economie A 2 Haven A3 Mobiliteit A4 Duurzaamheid Datum Indiener Titel / Tekst Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder..."
+            - generic [ref=e242]: 🏛️ Agendapunt
+          - generic [ref=e243] [cursor=pointer]:
+            - generic [ref=e244]:
+              - heading "Openstaande moties commissie EHMD 18-12-2015" [level=4] [ref=e245]
+              - generic [ref=e246]: 2015-12-02
+            - paragraph [ref=e247]: "Vergaderdatum: 18 december 2015 A1 Economie A 2 Haven A3 Mobiliteit A4 Duurzaamheid Datum Indiener Titel / Tekst Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehoude..."
+            - generic [ref=e248]: 🏛️ Agendapunt
+          - generic [ref=e249] [cursor=pointer]:
+            - generic [ref=e250]:
+              - heading "Openstaande moties cie. BWB 14 oktober 2015" [level=4] [ref=e251]
+              - generic [ref=e252]: 2015-10-14
+            - paragraph [ref=e253]: "Vergaderdatum: 14 oktober 2015 A1 Bouwen en Wonen A2 Buitenruimte Datum Indiener Titel / Tekst Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder 17-7-2008 E.P. van..."
+            - generic [ref=e254]: 🏛️ Agendapunt
+          - generic [ref=e255] [cursor=pointer]:
+            - generic [ref=e256]:
+              - heading "Openstaande moties" [level=4] [ref=e257]
+              - generic [ref=e258]: 2015-10-14
+            - paragraph [ref=e259]: "Vergaderdatum: 14 oktober 2015 A1 Economie A2 Haven A3 Mobiliteit A4 Duurzaamheid Datum Indiener Titel / Tekst Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder ..."
+            - generic [ref=e260]: 🏛️ Agendapunt
+          - generic [ref=e261] [cursor=pointer]:
+            - generic [ref=e262]:
+              - heading "Overschreden moties VOF 25-6-2015" [level=4] [ref=e263]
+              - generic [ref=e264]: 2015-06-25
+            - paragraph [ref=e265]: "Vergaderdatum: 25 juni 2015 A1 Veiligheid A2 Organisatie A3 Financien Datum Indiener Titel / Tekst Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder Datum Indiene..."
+            - generic [ref=e266]: 🏛️ Agendapunt
+          - generic [ref=e267] [cursor=pointer]:
+            - generic [ref=e268]:
+              - heading "moties VOF 25-6-2015" [level=4] [ref=e269]
+              - generic [ref=e270]: 2015-06-25
+            - paragraph [ref=e271]: "Vergaderdatum: 25 juni 2015 A1 Veiligheid A2 Organisatie A3 Financien Datum Indiener Titel / Tekst Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder 23-1-2014 E.P..."
+            - generic [ref=e272]: 🏛️ Agendapunt
+          - generic [ref=e273] [cursor=pointer]:
+            - generic [ref=e274]:
+              - heading "Openstaande moties cie. BWB 10-06-2015" [level=4] [ref=e275]
+              - generic [ref=e276]: 2015-06-10
+            - paragraph [ref=e277]: "Vergaderdatum: 10 juni 2015 A1 Bouwen en Wonen A2 Buitenruimte Datum Indiener Titel / Tekst Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder 17-7-2008 E.P. van He..."
+            - generic [ref=e278]: 🏛️ Agendapunt
+          - generic [ref=e279] [cursor=pointer]:
+            - generic [ref=e280]:
+              - heading "Openstaande moties cie. BWB 25 maart 2015" [level=4] [ref=e281]
+              - generic [ref=e282]: 2015-03-25
+            - paragraph [ref=e283]: "Vergaderdatum: 25 maart 2015 A1 Bouwen en Wonen A2 Buitenruimte Datum Indiener Titel / Tekst Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder 17-7-2008 E.P. van H..."
+            - generic [ref=e284]: 🏛️ Agendapunt
+          - generic [ref=e285] [cursor=pointer]:
+            - generic [ref=e286]:
+              - heading "Openstaande moties commissie EHMD" [level=4] [ref=e287]
+              - generic [ref=e288]: 2014-11-19
+            - paragraph [ref=e289]: "Vergaderdatum: 19 november 2014 A1 Economie A2 Haven A3 Mobiliteit A4 Duurzaamheid Datum Indiener Titel / Tekst Verwachte datum Nummer Partij Stand van zaken afdoening Afdoening Portefeuillehouder..."
+            - generic [ref=e290]: 🏛️ Agendapunt
+          - generic [ref=e291] [cursor=pointer]:
+            - generic [ref=e292]:
+              - heading "EHM 2006-36 Afdoening 3 moties mbt glasvezelkabel (2)" [level=4] [ref=e293]
+              - generic [ref=e294]: 2006-03-01
+            - paragraph [ref=e295]: Beleid EWO 174971 Rotterdam, 31 januari 2006. Afdoening van de moties van de heren M.F. van Gent en Th. Woudenberg over de aanleg van glasvezelkabel Aan de Gemeenteraad. Wij hebben op 31 januari 2006 ...
+            - generic [ref=e296]: 🏛️ Agendapunt
+          - generic [ref=e297] [cursor=pointer]:
+            - generic [ref=e298]:
+              - heading "Notitie griffier over afdoening moties en toezeggingen najaar 2005" [level=4] [ref=e299]
+              - generic [ref=e300]: 2005-12-01
+            - paragraph [ref=e301]: "Griffie Notitie Van: R. H. (Luuk) van. Luyk, E-mail: rh.luyk@griffie.rotterdam.nl Fax: (010) 417 91 61 Telefoon: (010) 417 23 58 Bezoekadres: Stadhuis Coolsingel 40 Rotterdam Postadres: Postbus 70012 ..."
+            - generic [ref=e302]: 🏛️ Agendapunt
+          - generic [ref=e303] [cursor=pointer]:
+            - generic [ref=e304]:
+              - heading "brief aan gemeenteraad 3 moties versie 8 juni 05" [level=4] [ref=e305]
+              - generic [ref=e306]: 2005-06-16
+            - paragraph [ref=e307]: "Griffie Notitie Van: W. den Boer E-mail: w.denboer@griffie.rotterdam.nl Fax: (010) 417 91 61 Telefoon: (010) 417 91 53 Bezoekadres: Stadhuis, kamer 136 Coolsingel 40, 3011 AD Rotterdam Postadres: Post..."
+            - generic [ref=e308]: 🏛️ Agendapunt
+          - generic [ref=e309] [cursor=pointer]:
+            - generic [ref=e310]:
+              - heading "raadsrapportage moties" [level=4] [ref=e311]
+              - generic [ref=e312]: 2005-04-13
+            - paragraph [ref=e313]: "Griffie Notitie Van: ir. R Bout-Saari E-mail: rk.bout@griffie.rotterdam.nl Fax: (010) 417 91 61 Telefoon: (010) 417 34 48 Bezoekadres: Stadhuis Coolsingel 40 Rotterdam Postadres: Postbus 70012 3000 K..."
+            - generic [ref=e314]: 🏛️ Agendapunt
+          - generic [ref=e315] [cursor=pointer]:
+            - generic [ref=e316]:
+              - heading "notitie-motiesICT-ReijkerszMarapin" [level=4] [ref=e317]
+              - generic [ref=e318]: 2005-04-07
+            - paragraph [ref=e319]: "Commissie middelen N.J.G. Janssens Wethouder Middelen en Sport Bezoekadres: Stadhuis Coolsingel 40 Rotterdam Postadres: Postbus 70012 3000 KP Rotterdam Website: www.rotterdam.nl E-mail: a.vandevijver..."
+            - generic [ref=e320]: 🏛️ Agendapunt
+          - generic [ref=e321] [cursor=pointer]:
+            - generic [ref=e322]:
+              - heading "Notitie inzake moties en toezeggingen" [level=4] [ref=e323]
+              - generic [ref=e324]: 2005-04-07
+            - paragraph [ref=e325]: "Griffie Notitie Van: R. H. (Luuk) van. Luyk, E-mail: rh.luyk@griffie.rotterdam.nl Fax: (010) 417 91 61 Telefoon: (010) 417 23 58 Bezoekadres: Stadskantoor Rodezand 18 Rotterdam Postadres: Postb..."
+            - generic [ref=e326]: 🏛️ Agendapunt
+          - generic [ref=e327] [cursor=pointer]:
+            - generic [ref=e328]:
+              - heading "Halfjaarlijkse rapportage afdoening en preadvisering moties en stand van zaken initiatiefvoorstellen" [level=4] [ref=e329]
+              - generic [ref=e330]: 2003-05-14
+            - paragraph [ref=e331]: "Griffie Aan de gemeenteraad Bezoekadres: Stadskantoor Rodezand 18 Rotterdam Postadres: Postbus 70012 3000 KP Rotterdam Website: www.stadhuis.rotterdam.nl E-mail: info@griffie.rotterdam.nl Fax: (010) ..."
+            - generic [ref=e332]: 🏛️ Agendapunt
+          - generic [ref=e333] [cursor=pointer]:
+            - generic [ref=e334]:
+              - heading "Halfjaarlijkse rapportage afdoening en preadvisering moties en stand van zaken initiatiefvoorstellen" [level=4] [ref=e335]
+              - generic [ref=e336]: 2003-05-07
+            - paragraph [ref=e337]: "Griffie Aan de gemeenteraad Bezoekadres: Stadskantoor Rodezand 18 Rotterdam Postadres: Postbus 70012 3000 KP Rotterdam Website: www.stadhuis.rotterdam.nl E-mail: info@griffie.rotterdam.nl Fax: (010) ..."
+            - generic [ref=e338]: 🏛️ Agendapunt
+          - generic [ref=e339] [cursor=pointer]:
+            - generic [ref=e340]:
+              - heading "Halfjaarlijkse rapportage afdoening en preadvisering moties en stand van zaken initiatiefvoorstellen" [level=4] [ref=e341]
+              - generic [ref=e342]: 2003-04-24
+            - paragraph [ref=e343]: "Griffie Aan de gemeenteraad Bezoekadres: Stadskantoor Rodezand 18 Rotterdam Postadres: Postbus 70012 3000 KP Rotterdam Website: www.stadhuis.rotterdam.nl E-mail: info@griffie.rotterdam.nl Fax: (010) ..."
+            - generic [ref=e344]: 🏛️ Agendapunt
+          - generic [ref=e345] [cursor=pointer]:
+            - generic [ref=e346]:
+              - heading "Halfjaarlijkse rapportage afdoening en preadvisering moties en stand van zaken initiatiefvoorstellen" [level=4] [ref=e347]
+              - generic [ref=e348]: 2003-04-24
+            - paragraph [ref=e349]: "Griffie Aan de gemeenteraad Bezoekadres: Stadskantoor Rodezand 18 Rotterdam Postadres: Postbus 70012 3000 KP Rotterdam Website: www.stadhuis.rotterdam.nl E-mail: info@griffie.rotterdam.nl Fax: (010) ..."
+            - generic [ref=e350]: 🏛️ Agendapunt
+          - generic [ref=e351] [cursor=pointer]:
+            - generic [ref=e352]:
+              - heading "15 Halfjaarlijkse rapportage afdoening en preadvisering moties en stand van zaken initiati" [level=4] [ref=e353]
+              - generic [ref=e354]: 2003-04-17
+            - paragraph [ref=e355]: Geen samenvatting beschikbaar
+            - generic [ref=e356]: 🏛️ Agendapunt
+          - generic [ref=e357] [cursor=pointer]:
+            - generic [ref=e358]:
+              - heading "Halfjaarlijkse rapportage afdoening en preadvisering moties en stand van zaken initiatiefvoorstellen" [level=4] [ref=e359]
+              - generic [ref=e360]: 2003-04-16
+            - paragraph [ref=e361]: "Griffie Aan de gemeenteraad Bezoekadres: Stadskantoor Rodezand 18 Rotterdam Postadres: Postbus 70012 3000 KP Rotterdam Website: www.stadhuis.rotterdam.nl E-mail: info@griffie.rotterdam.nl Fax: (010) ..."
+            - generic [ref=e362]: 🏛️ Agendapunt
+          - generic [ref=e363] [cursor=pointer]:
+            - generic [ref=e364]:
+              - heading "11 Brief van het college met betrekking tot afdoening moties, aangenomen tijdens de begrot" [level=4] [ref=e365]
+              - generic [ref=e366]: 2003-01-30
+            - paragraph [ref=e367]: Geen samenvatting beschikbaar
+            - generic [ref=e368]: 🏛️ Agendapunt
+          - generic [ref=e369] [cursor=pointer]:
+            - generic [ref=e370]:
+              - heading "13 Brief van het college met betrekking tot de afdoening van moties, aangenomen tijdens de" [level=4] [ref=e371]
+              - generic [ref=e372]: 2003-01-16
+            - paragraph [ref=e373]: Geen samenvatting beschikbaar
+            - generic [ref=e374]: 🏛️ Agendapunt
+          - generic [ref=e375] [cursor=pointer]:
+            - generic [ref=e376]:
+              - heading "Halfjaarlijkse rapportage afdoening en pre-advisering moties en de stand van zaken m.b.t. initiatiefvoorstellen" [level=4] [ref=e377]
+              - generic [ref=e378]: 2002-10-17
+            - paragraph [ref=e379]: Geen samenvatting beschikbaar
+            - generic [ref=e380]: 🏛️ Agendapunt
+          - generic [ref=e381] [cursor=pointer]:
+            - generic [ref=e382]:
+              - heading "Halfjaarlijkse rapportage afdoening en pre-advisering moties en de stand van zaken m.b.t. initiatiefvoorstellen" [level=4] [ref=e383]
+              - generic [ref=e384]: 2002-10-17
+            - paragraph [ref=e385]: BGS 02/1583 Rotterdam, 1 oktober 2002. Halfjaarlijkse rapportage afdoening en preadvisering moties en stand van zaken initiatiefvoorstellen Aan de Gemeenteraad. Hierbij bieden wij u onze halfjaarlijks...
+            - generic [ref=e386]: 🏛️ Agendapunt
+      - generic [ref=e388]:
+        - paragraph [ref=e389]: Wist u dat u uw zoekopdrachten kunt bewaren?
+        - paragraph [ref=e390]: Maak een gratis account en bewaar uw zoekgeschiedenis, stel uw partijlens in, en exporteer analyses naar Word.
+        - generic [ref=e391]:
+          - link "Gratis account aanmaken" [ref=e392] [cursor=pointer]:
+            - /url: /register
+          - button "Niet nu" [ref=e393] [cursor=pointer]
+      - generic [ref=e395]:
+        - paragraph [ref=e396]: "Tip: gebruik NeoDemos rechtstreeks in Claude, ChatGPT of Cursor voor diepere analyses. Werkt ook met Ollama."
+        - generic [ref=e397]:
+          - link "Meer info" [ref=e398] [cursor=pointer]:
+            - /url: /mcp-installer
+          - button "Sluiten" [ref=e399] [cursor=pointer]
+  - contentinfo [ref=e70]:
+    - navigation [ref=e71]:
+      - link "Over" [ref=e72] [cursor=pointer]:
+        - /url: /over
+      - text: ·
+      - link "Technologie" [ref=e73] [cursor=pointer]:
+        - /url: /technologie
+      - text: ·
+      - link "Methodologie" [ref=e74] [cursor=pointer]:
+        - /url: /methodologie
+      - text: ·
+      - link "AI-koppeling" [ref=e75] [cursor=pointer]:
+        - /url: /mcp-installer
+    - generic [ref=e76]: "Analyse door AI (Anthropic) · Europees gehost · Brondata: Open Raadsinformatie"
+    - generic [ref=e77]: NeoDemos (alpha) v0.2.0-alpha.2

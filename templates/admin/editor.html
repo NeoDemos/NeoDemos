@@ -1,0 +1,336 @@
+{% extends "base.html" %}
+{# GrapeJS visual editor — uses full viewport instead of the admin sidebar layout. #}
+{% block body_class %}admin-editor-body{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="https://unpkg.com/grapesjs@0.22.15/dist/css/grapes.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="editor-topbar">
+  <div class="editor-topbar-left">
+    <a href="/admin/pages" class="btn btn-ghost btn-sm">← Terug naar pagina's</a>
+    <h1 class="editor-page-title">{{ page_title }}</h1>
+    <span class="editor-status" id="editor-status"></span>
+  </div>
+  <div class="editor-topbar-right">
+    <button class="btn btn-ghost btn-sm" id="btn-load-template" type="button" title="Laadt de huidige sjabloon-inhoud in de editor (éénrichting migratie)">Laad sjabloon</button>
+    <button class="btn btn-ghost btn-sm" id="btn-save" type="button">Opslaan</button>
+    <button class="btn btn-primary btn-sm" id="btn-publish" type="button">Publiceren</button>
+    <button class="btn btn-ghost btn-sm" id="btn-unpublish" type="button">Depubliceren</button>
+  </div>
+</div>
+
+<div id="gjs"></div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://unpkg.com/grapesjs@0.22.15/dist/grapes.min.js"></script>
+<script src="/static/admin-editor/components.js"></script>
+<script>
+(function initEditor() {
+  const SLUG = {{ slug | tojson }};
+  const statusEl = document.getElementById('editor-status');
+
+  function setStatus(text, type) {
+    statusEl.textContent = text;
+    statusEl.className = 'editor-status' + (type ? ' ' + type : '');
+  }
+
+  // Blocks reference registered component types by `type` rather than raw HTML strings.
+  // Typed components provide traits, locking, and structural integrity — see
+  // /static/admin-editor/components.js for the registrations.
+  const ND_BLOCKS = [
+    // ── Hero's ──
+    {
+      id: 'nd-subpage-hero',
+      label: 'Subpagina hero',
+      category: "Hero's",
+      attributes: { class: 'gjs-block-thumb' },
+      content: { type: 'nd-subpage-hero' },
+    },
+
+    // ── Secties ──
+    {
+      id: 'nd-section-default',
+      label: 'Standaard sectie',
+      category: 'Secties',
+      content: { type: 'nd-section', variant: 'default' },
+    },
+    {
+      id: 'nd-section-highlight',
+      label: 'Highlight sectie',
+      category: 'Secties',
+      content: { type: 'nd-section', variant: 'highlight' },
+    },
+    {
+      id: 'nd-section-testimonial',
+      label: 'Testimonial sectie',
+      category: 'Secties',
+      content: { type: 'nd-section', variant: 'testimonial' },
+    },
+    {
+      id: 'nd-cta-section',
+      label: 'Call to action',
+      category: 'Secties',
+      content: { type: 'nd-cta-section' },
+    },
+
+    // ── Inhoud ──
+    {
+      id: 'nd-text-block',
+      label: 'Tekstblok',
+      category: 'Inhoud',
+      content: { type: 'nd-text-block' },
+    },
+    {
+      id: 'nd-paragraph',
+      label: 'Paragraaf',
+      category: 'Inhoud',
+      content: { type: 'nd-paragraph' },
+    },
+    {
+      id: 'nd-heading-h2',
+      label: 'Kop H2',
+      category: 'Inhoud',
+      content: { type: 'nd-heading-h2' },
+    },
+    {
+      id: 'nd-heading-h3',
+      label: 'Kop H3',
+      category: 'Inhoud',
+      content: { type: 'nd-heading-h3' },
+    },
+    {
+      id: 'nd-founder-quote',
+      label: 'Oprichtercitaat',
+      category: 'Inhoud',
+      content: { type: 'nd-founder-quote' },
+    },
+    {
+      id: 'nd-testimonial',
+      label: 'Testimonial citaat',
+      category: 'Inhoud',
+      content: { type: 'nd-testimonial' },
+    },
+
+    // ── Kaarten ──
+    {
+      id: 'nd-audience-grid',
+      label: 'Doelgroep grid',
+      category: 'Kaarten',
+      content: { type: 'nd-audience-grid' },
+    },
+    {
+      id: 'nd-sovereignty-grid',
+      label: 'Soevereiniteit grid',
+      category: 'Kaarten',
+      content: { type: 'nd-sovereignty-grid' },
+    },
+    {
+      id: 'nd-stat-grid',
+      label: 'Stat-kaarten',
+      category: 'Kaarten',
+      content: { type: 'nd-stat-grid' },
+    },
+    {
+      id: 'nd-eval-grid',
+      label: 'Eval grid',
+      category: 'Kaarten',
+      content: { type: 'nd-eval-grid' },
+    },
+
+    // ── Lijsten ──
+    {
+      id: 'nd-checklist-security',
+      label: 'Checklist (beveiliging)',
+      category: 'Lijsten',
+      content: { type: 'nd-checklist', variant: 'security' },
+    },
+    {
+      id: 'nd-checklist-transparency',
+      label: 'Checklist (transparantie)',
+      category: 'Lijsten',
+      content: { type: 'nd-checklist', variant: 'transparency' },
+    },
+    {
+      id: 'nd-architecture-steps',
+      label: 'Stappen (architectuur)',
+      category: 'Lijsten',
+      content: { type: 'nd-architecture-steps' },
+    },
+    {
+      id: 'nd-methodology-steps',
+      label: 'Stappen (methodologie)',
+      category: 'Lijsten',
+      content: { type: 'nd-methodology-steps' },
+    },
+    {
+      id: 'nd-compatibility-list',
+      label: 'Compatibiliteitsbadges',
+      category: 'Lijsten',
+      content: { type: 'nd-compatibility-list' },
+    },
+
+    // ── Knoppen ──
+    {
+      id: 'nd-btn-accent',
+      label: 'Knop accent',
+      category: 'Knoppen',
+      content: { type: 'nd-btn', variant: 'accent' },
+    },
+    {
+      id: 'nd-btn-primary',
+      label: 'Knop primair',
+      category: 'Knoppen',
+      content: { type: 'nd-btn', variant: 'primary' },
+    },
+    {
+      id: 'nd-btn-secondary',
+      label: 'Knop secundair',
+      category: 'Knoppen',
+      content: { type: 'nd-btn', variant: 'secondary' },
+    },
+  ];
+
+  const editor = grapesjs.init({
+    container: '#gjs',
+    height: 'calc(100vh - 60px)',
+    width: 'auto',
+    storageManager: false,  // we handle save/load via our own API
+    canvas: {
+      // Inject the site's compiled CSS into the editor iframe so blocks render
+      // with their real visual appearance (hero images, card grids, stat numbers, etc.).
+      styles: ['/static/dist/main.css'],
+    },
+    // Our component library provides all blocks; no extra plugins needed.
+    plugins: [],
+    // NOTE: we intentionally do NOT override `panels` — the default preset
+    // includes the Traits panel on the right sidebar, which is the core UX
+    // improvement of v2. Overriding with an empty defaults array hides it.
+    selectorManager: {
+      // Admins should not be creating new CSS classes or selectors directly —
+      // the design tokens + locked nd-* components own the visual system.
+      componentFirst: true,
+    },
+    styleManager: {
+      // Empty sectors — design-token locked components render "No styles for this
+      // component" in the Style Manager, which is the correct signal for admins.
+      sectors: [],
+    },
+    blockManager: {
+      blocks: ND_BLOCKS,
+    },
+  });
+
+  // Register all NeoDemos component types BEFORE project data is loaded so that
+  // isComponent matchers can convert stored HTML/JSON into typed nd-* components.
+  if (typeof window.registerNDComponents === 'function') {
+    try {
+      window.registerNDComponents(editor);
+    } catch (err) {
+      console.error('registerNDComponents threw — editor will continue with generic components', err);
+    }
+  } else {
+    console.error('NeoDemos component library not loaded — blocks will fall back to generic HTML');
+  }
+
+  // Load existing page data (async so we can await template fallback on first open)
+  (async function loadPage() {
+    try {
+      const res = await fetch('/admin/api/page/' + encodeURIComponent(SLUG));
+      const data = await res.json();
+      if (data.grapes_json) {
+        try {
+          editor.loadProjectData(JSON.parse(data.grapes_json));
+        } catch (e) {
+          console.warn('Invalid grapes_json, starting fresh', e);
+        }
+      } else {
+        // No existing data — load the Jinja template as a starting point so the
+        // editor isn't blank for brand-new pages. This is a one-way migration from
+        // legacy HTML; isComponent matchers on the nd-* types promote matching
+        // markup to typed components with traits.
+        try {
+          const tplRes = await fetch('/admin/api/page/' + encodeURIComponent(SLUG) + '/template');
+          if (tplRes.ok) {
+            const tpl = await tplRes.json();
+            editor.setComponents(tpl.html || '');
+            if (tpl.css) editor.setStyle(tpl.css);
+          }
+        } catch (e) {
+          console.warn('Could not auto-load template', e);
+        }
+      }
+      if (data.is_published) setStatus('Gepubliceerd', 'success');
+      else if (data.grapes_json) setStatus('Concept', 'muted');
+      else setStatus('Niet bewerkt', 'muted');
+    } catch (err) {
+      console.error('Load failed', err);
+      setStatus('Laden mislukt', 'error');
+    }
+  })();
+
+  async function savePage() {
+    const grapes_json = JSON.stringify(editor.getProjectData());
+    const html = editor.getHtml();
+    const css = editor.getCss();
+    const res = await fetch('/admin/api/page/' + encodeURIComponent(SLUG), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ grapes_json: grapes_json, html: html, css: css }),
+    });
+    return res.ok;
+  }
+
+  document.getElementById('btn-load-template').addEventListener('click', async function () {
+    if (editor.getHtml() && !confirm('Huidige inhoud vervangen door de sjabloon? Niet-opgeslagen werk gaat verloren.')) return;
+    setStatus('Sjabloon laden...');
+    try {
+      const res = await fetch('/admin/api/page/' + encodeURIComponent(SLUG) + '/template');
+      if (!res.ok) throw new Error('Kon sjabloon niet laden');
+      const data = await res.json();
+      editor.setComponents(data.html || '');
+      if (data.css) editor.setStyle(data.css);
+      setStatus('Sjabloon geladen', 'success');
+    } catch (err) {
+      console.error(err);
+      setStatus('Sjabloon laden mislukt', 'error');
+    }
+  });
+
+  document.getElementById('btn-save').addEventListener('click', async function () {
+    setStatus('Opslaan...');
+    const ok = await savePage();
+    if (ok) setStatus('Opgeslagen (concept)', 'success');
+    else setStatus('Opslaan mislukt', 'error');
+  });
+
+  document.getElementById('btn-publish').addEventListener('click', async function () {
+    if (!confirm('Deze pagina publiceren? De concept-versie wordt live.')) return;
+    setStatus('Publiceren...');
+    // Save first, then publish (atomicity via two calls; brief window of inconsistency accepted)
+    const savedOk = await savePage();
+    if (!savedOk) {
+      setStatus('Opslaan mislukt', 'error');
+      return;
+    }
+    const res = await fetch('/admin/api/page/' + encodeURIComponent(SLUG) + '/publish', {
+      method: 'POST',
+    });
+    if (res.ok) setStatus('Gepubliceerd', 'success');
+    else setStatus('Publiceren mislukt', 'error');
+  });
+
+  document.getElementById('btn-unpublish').addEventListener('click', async function () {
+    if (!confirm('Deze pagina depubliceren? De sjabloonversie wordt weer live.')) return;
+    setStatus('Depubliceren...');
+    const res = await fetch('/admin/api/page/' + encodeURIComponent(SLUG) + '/unpublish', {
+      method: 'POST',
+    });
+    if (res.ok) setStatus('Gedepubliceerd', 'muted');
+    else setStatus('Depubliceren mislukt', 'error');
+  });
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,359 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - link "NeoDemos home" [ref=e3] [cursor=pointer]:
+      - /url: /
+      - text: NeoDemos
+    - navigation [ref=e4]:
+      - link "Kalender" [ref=e5] [cursor=pointer]:
+        - /url: /calendar
+      - link "AI-koppeling" [ref=e6] [cursor=pointer]:
+        - /url: /mcp-installer
+      - link "Over" [ref=e7] [cursor=pointer]:
+        - /url: /over
+      - link "Inloggen" [ref=e8] [cursor=pointer]:
+        - /url: /login
+  - main [ref=e9]:
+    - generic [ref=e10]:
+      - generic [ref=e13]:
+        - heading "24 jaar raadsbesluiten. Doorzoekbaar in seconden." [level=1] [ref=e14]:
+          - text: 24 jaar raadsbesluiten.
+          - text: Doorzoekbaar in seconden.
+        - generic [ref=e15]:
+          - textbox "Stel uw eigen vraag..." [ref=e16]: Hoeveel vergaderingen waren er in 2024?
+          - button "Zoek" [active] [ref=e17] [cursor=pointer]
+        - generic [ref=e18]:
+          - generic [ref=e19]: "Of probeer:"
+          - button "Heeft het college haar beloftes waargemaakt?" [ref=e20] [cursor=pointer]
+          - button "Hoe stemden partijen over woningbouw?" [ref=e21] [cursor=pointer]
+          - button "Welke moties over klimaat zijn aangenomen sinds 2020?" [ref=e22] [cursor=pointer]
+        - generic [ref=e23]: 90.000+ documenten · 24 jaar · Rotterdam · Open brondata
+      - text: “” ▸ “”
+      - generic [ref=e78]:
+        - text: ●
+        - generic [ref=e82]:
+          - generic [ref=e83]: 🧠
+          - heading "Analyse" [level=2] [ref=e84]
+        - generic [ref=e85]:
+          - heading "Gevonden Documenten" [level=3] [ref=e86]
+          - generic [ref=e87] [cursor=pointer]:
+            - generic [ref=e88]:
+              - heading "15bb3102 Van B en W een voorstel tot vaststelling over brede Raad en vaststelling wijziging Algemene vergoedingsverordening" [level=4] [ref=e89]
+              - generic [ref=e90]: 2015-06-18
+            - paragraph [ref=e91]: "jaar. Per saldo krijgen de leden derhalve een vast bedrag over 10 maanden, ongeacht bij hoeveel vergaderingen zij daadwerkelijk aanwezig zijn. «ft- Registratienummer dienst: 15MO05461 Portefeuillehouder: H.M. de Jonge Behandelaar: P. Weijerse, 010-4984138 raadsvergadering..."
+            - generic [ref=e92]: 🏛️ Agendapunt
+          - generic [ref=e93] [cursor=pointer]:
+            - generic [ref=e94]:
+              - heading "11 september 2003" [level=4] [ref=e95]
+              - generic [ref=e96]: 2003-09-11
+            - paragraph [ref=e97]: nemen -, een heel eind komen. De VOORZITTER. Ik schors de vergadering tot kwart over vijf. Hierna wordt enige tijd gepauzeerd. De VOORZITTER. De vergadering is heropend. Vanwege het feit dat ik hier en daar...
+            - generic [ref=e98]: 🏛️ Agendapunt
+          - generic [ref=e99] [cursor=pointer]:
+            - generic [ref=e100]:
+              - heading "Mededeling van ingekomen stukken week 29 tot en met 34" [level=4] [ref=e101]
+              - generic [ref=e102]: 2006-09-07
+            - paragraph [ref=e103]: bezwaarschrift indien daarbij hun onpartijdigheid in het geding kan zijn. Hierdoor, en vooral door het grote aantal vergaderingen, is wisseling in de samenstelling van de ABC geboden. Bijkomend voordeelh iervan is datz oveel mogelijk leden...
+            - generic [ref=e104]: 🏛️ Agendapunt
+          - generic [ref=e105] [cursor=pointer]:
+            - generic [ref=e106]:
+              - heading "12gr3130 Vaststelling bestemmingsplan ‘Laurenskwartier’" [level=4] [ref=e107]
+              - generic [ref=e108]: 2012-12-20
+            - paragraph [ref=e109]: horecakaart die is opgenomen in de bijlage van de regels is aangegeven hoeveel vestigingen binnen een bouwblok zijn toegestaan. Eveneens is aangegeven hoeveel bruto m² vloeroppervlak per horecavestiging is toe gestaan. Voor de horecalocaties...
+            - generic [ref=e110]: 🏛️ Agendapunt
+          - generic [ref=e111] [cursor=pointer]:
+            - generic [ref=e112]:
+              - heading "3. Stand van zaken coronamaatregelen in Rotterdam." [level=4] [ref=e113]
+              - generic [ref=e114]: 2020-09-03
+            - paragraph [ref=e115]: aanloop naar dit besluit is uiteraard gekeken hoe het digitaal vergaderen verloopt. Er is gekeken hoeveel online vergaderingen er gevolgd zijn en daarnaast zijn de commissies ondersteund in het proces van vergaderen. Dit blijkt...
+            - generic [ref=e116]: 🏛️ Algemeen
+          - generic [ref=e117] [cursor=pointer]:
+            - generic [ref=e118]:
+              - heading "Verzelfstandiging GHR - brief van burgemeester en wethouders aan de raad van 27 mei 2003" [level=4] [ref=e119]
+              - generic [ref=e120]: 2003-04-24
+            - paragraph [ref=e121]: niet toege- staan. Bij de machtiging, die voor ten hoogste achttien maanden geldt, moet de algemene vergadering bepalen hoeveel aandelen mogen worden verkregen, hoe zij mogen worden verkregen en tussen welke grenzen de prijs moet...
+            - generic [ref=e122]: 🏛️ Agendapunt
+          - generic [ref=e123] [cursor=pointer]:
+            - generic [ref=e124]:
+              - heading "a. vaststelling van het ‘Instellingsbesluit Adviescommissie aanwending verkoopopbrengst Eneco;" [level=4] [ref=e125]
+              - generic [ref=e126]: 2021-03-18
+            - paragraph [ref=e127]: stukken wordt in acht genomen. . De commissie vergadert tenminste één keer per jaar. De commissie bepaalt hoeveel extra vergaderingen er nodig zijn om tot een gedegen advies te komen. De vergaderingen van de commissie zijn...
+            - generic [ref=e128]: 🏛️ Algemeen
+          - generic [ref=e129] [cursor=pointer]:
+            - generic [ref=e130]:
+              - heading "Notulen raadsvergadering 18 februari 2016" [level=4] [ref=e131]
+              - generic [ref=e132]: 2016-04-07
+            - paragraph [ref=e133]: Hoeveel tijd hebt u nodig? De heer SCHAMPERS (d66). Hoe lang is een Chinees? Hoe lang hebben wij nodig? Vijf minuutjes, tien minuutjes? Dat wij half tien terugkomen? De VOORZITTER. Ik schors de vergadering...
+            - generic [ref=e134]: 🏛️ Agendapunt
+          - generic [ref=e135] [cursor=pointer]:
+            - generic [ref=e136]:
+              - heading "Notulen raadsvergadering 18 februari 2016" [level=4] [ref=e137]
+              - generic [ref=e138]: 2016-02-18
+            - paragraph [ref=e139]: Hoeveel tijd hebt u nodig? De heer SCHAMPERS (d66). Hoe lang is een Chinees? Hoe lang hebben wij nodig? Vijf minuutjes, tien minuutjes? Dat wij half tien terugkomen? De VOORZITTER. Ik schors de vergadering...
+            - generic [ref=e140]: 🏛️ Agendapunt
+          - generic [ref=e141] [cursor=pointer]:
+            - generic [ref=e142]:
+              - heading "Moties" [level=4] [ref=e143]
+              - generic [ref=e144]: 2021-11-11
+            - paragraph [ref=e145]: "GEMEENTERAAD VERGADERING VAN 1 110. 2021 50).a VERWORPEN PLUS ROTTERDAM MOTIE: Hoeveel sociale woningen zijn gebouwd sinds 2018? De gemeenteraad van Rotterdam in vergadering bijeen op 11 november 2021 ter bespreking van agendapunt 'Voortgangsrapportage..."
+            - generic [ref=e146]: 🏛️ Algemeen
+          - generic [ref=e147] [cursor=pointer]:
+            - generic [ref=e148]:
+              - heading "3. Vaststelling van de notulen van de raadsvergadering van 10 september 2020." [level=4] [ref=e149]
+              - generic [ref=e150]: 2020-10-15
+            - paragraph [ref=e151]: vormgeven. We zouden het wel toejuichen als ze ook digitaal blijven vergaderen, want je ziet hoeveel publiek ze daarmee getrokken hebben. Dat is natuurlijk hartstikke goed, maar wij vinden it belangrijk dat ze ook fysiek...
+            - generic [ref=e152]: 🏛️ Algemeen
+          - generic [ref=e153] [cursor=pointer]:
+            - generic [ref=e154]:
+              - heading "Vaststelling van de notulen van de openbare raadsvergadering van 29 januari 2026." [level=4] [ref=e155]
+              - generic [ref=e156]: 2026-02-26
+            - paragraph [ref=e157]: "BASTEMEIJER (wethouder): Voorzitter, u vraagt mij, dat heeft u ook aan de voorkant van deze vergadering gevraagd, op hoofdlijnen, hoeveel geld er in 30 december is uitgegeven. Die cijfers heb ik niet paraat. Ik denk..."
+            - generic [ref=e158]: 🏛️ Algemeen
+          - generic [ref=e159] [cursor=pointer]:
+            - generic [ref=e160]:
+              - heading "Notulen van de raadsvergadering van 30 mei 2002." [level=4] [ref=e161]
+              - generic [ref=e162]: 2002-09-19
+            - paragraph [ref=e163]: vraag van iemand krijgt en daarop een voornemen tot een besluit neemt. Wij nemen per vergadering ik weet niet hoeveel besluiten waarover niets wordt gezegd, terwijl een ander besluit wel tot discussie kan leiden...
+            - generic [ref=e164]: 🏛️ Agendapunt
+          - generic [ref=e165] [cursor=pointer]:
+            - generic [ref=e166]:
+              - heading "Het uitvoeringsplan en kwaliteitsbeleid Studentenhuisvesting." [level=4] [ref=e167]
+              - generic [ref=e168]: 2023-03-23
+            - paragraph [ref=e169]: ChristenUnieRotterdam GROEN LINKSROTTERDAM MOTIE EXTRASTUDENTENKAMERS, MAAR HOEVEEL EN WAAR? GEMEENTERAAD VERGADERING VAN De gemeenteraad van Rotterdam bijeen op 23 maart 2023 ter bespreking van het uitvoeringsplanen kwaliteitsbeleid Studentenhuisvesting. 230412023 VERWORPEN...
+            - generic [ref=e170]: 🏛️ Algemeen
+          - generic [ref=e171] [cursor=pointer]:
+            - generic [ref=e172]:
+              - heading "printversie schriftelijk verslag" [level=4] [ref=e173]
+              - generic [ref=e174]: 2014-10-16
+            - paragraph [ref=e175]: Agendapunt 10 wordt van de agenda afgevoerd. Ik constateer voorts dat de raad de totale hoeveelheid spreektijd voor deze vergadering op 7 uur stelt. raadsvergadering van 16 oktober 2014 Notulen 422 De heer VAN ELCK...
+            - generic [ref=e176]: 🏛️ Agendapunt
+          - generic [ref=e177] [cursor=pointer]:
+            - generic [ref=e178]:
+              - heading "Commissieplanning en lange termijn agenda raad" [level=4] [ref=e179]
+              - generic [ref=e180]: 2025-09-03
+            - paragraph [ref=e181]: vergadering te beginnen. Lastig daarbij is dat pas twee dagen voor de vergadering bekend is of en hoeveel insprekers er zijn. Wilt u vanaf dit najaar om 9 uur beginnen wanneer er drie of meer...
+            - generic [ref=e182]: 🏛️ 6065874
+          - generic [ref=e183] [cursor=pointer]:
+            - generic [ref=e184]:
+              - heading "Besluitenlijst openbare vergadering commissie Fysieke Infrastructuur en Verkeer d.d.10 juni 2003" [level=4] [ref=e185]
+              - generic [ref=e186]: 2003-08-26
+            - paragraph [ref=e187]: heer Sonneveld wijst op de grote hoeveelheid stukken, die ten behoeve van deze vergadering is toegezonden, waardoor hij zich niet goed heeft kunnen voorbereiden. De voorzitter merkt op, dat dit door de griffie is nagegaan...
+            - generic [ref=e188]: 🏛️ Agendapunt
+          - generic [ref=e189] [cursor=pointer]:
+            - generic [ref=e190]:
+              - heading "14.2 Stemming over alle ingediende moties en amendementen." [level=4] [ref=e191]
+              - generic [ref=e192]: 2020-11-12
+            - paragraph [ref=e193]: "wéÁ/{jgû GEMEENTERAAD VERGADERING VAN 1 2 NOV. 2020 O VERWORPEN% ’ Motie: ‘Hoeveel woningen ipv nieuw stadion’ De gemeenteraad van Rotterdam bijeen op 10 en 12 november 2020 ter bespreking van het agendapunt “Begroting..."
+            - generic [ref=e194]: 🏛️ Algemeen
+          - generic [ref=e195] [cursor=pointer]:
+            - generic [ref=e196]:
+              - heading "11. Moties en amendementen die zijn ingediend, onderdeel zijn van de beraadslagingen bij de begrotingsbehandeling." [level=4] [ref=e197]
+              - generic [ref=e198]: 2020-11-10
+            - paragraph [ref=e199]: "wéÁ/{jgû GEMEENTERAAD VERGADERING VAN 1 2 NOV. 2020 O VERWORPEN% ’ Motie: ‘Hoeveel woningen ipv nieuw stadion’ De gemeenteraad van Rotterdam bijeen op 10 en 12 november 2020 ter bespreking van het agendapunt “Begroting..."
+            - generic [ref=e200]: 🏛️ Algemeen
+          - generic [ref=e201] [cursor=pointer]:
+            - generic [ref=e202]:
+              - heading "Besluitenlijst openbare procedurevergadering van 17 mei 2023" [level=4] [ref=e203]
+              - generic [ref=e204]: 2023-06-07
+            - paragraph [ref=e205]: Vergadering 7 juni Gezien de hoeveelheid agendapunten op 7 juni a.s. wordt de commissie gevraagd rekening te houden met een avondzitting...
+            - generic [ref=e206]: 🏛️ 6065878
+          - generic [ref=e207] [cursor=pointer]:
+            - generic [ref=e208]:
+              - heading "16bb7217 Herzien raadsvoorstel rapport Rekenkamer Rotterdam 'Zorg om Zuid onderzoek Nationaal Programma Rotterdam Zui" [level=4] [ref=e209]
+              - generic [ref=e210]: 2016-09-29
+            - paragraph [ref=e211]: heer Molenaar). Het lijkt mij een goed idee om een moment te schorsen. Hoeveel tijd? Een kwartier. De vergadering wordt voor een kwartier g eschorst. (Schorsing.) De VOORZITTER (de heer Molenaar). Wil iedereen zijn plaats...
+            - generic [ref=e212]: 🏛️ Agendapunt
+          - generic [ref=e213] [cursor=pointer]:
+            - generic [ref=e214]:
+              - heading "20160623 Notulen van de raadsvergadering van 23 juni 2016" [level=4] [ref=e215]
+              - generic [ref=e216]: 2016-09-08
+            - paragraph [ref=e217]: heer Molenaar). Het lijkt mij een goed idee om een moment te schorsen. Hoeveel tijd? Een kwartier. De vergadering wordt voor een kwartier geschorst. (Schorsing...
+            - generic [ref=e218]: 🏛️ Agendapunt
+          - generic [ref=e219] [cursor=pointer]:
+            - generic [ref=e220]:
+              - heading "16bb5814 initiatiefvoorstel VVD" [level=4] [ref=e221]
+              - generic [ref=e222]: 2016-07-07
+            - paragraph [ref=e223]: heer Molenaar). Het lijkt mij een goed idee om een moment te schorsen. Hoeveel tijd? Een kwartier. De vergadering wordt voor een kwartier geschorst. (Schorsing.) De VOORZITTER (de heer Molenaar). Wil iedereen zijn plaats weer...
+            - generic [ref=e224]: 🏛️ Agendapunt
+          - generic [ref=e225] [cursor=pointer]:
+            - generic [ref=e226]:
+              - heading "Notulen raadsvergadering 7 juli 2016" [level=4] [ref=e227]
+              - generic [ref=e228]: 2016-07-07
+            - paragraph [ref=e229]: heer Molenaar). Het lijkt mij een goed idee om een moment te schorsen. Hoeveel tijd? Een kwartier. De vergadering wordt voor een kwartier geschorst. (Schorsing.) De VOORZITTER (de heer Molenaar). Wil iedereen zijn plaats weer...
+            - generic [ref=e230]: 🏛️ Agendapunt
+          - generic [ref=e231] [cursor=pointer]:
+            - generic [ref=e232]:
+              - heading "verslag OV BVM 05-06-2008" [level=4] [ref=e233]
+              - generic [ref=e234]: 2008-09-04
+            - paragraph [ref=e235]: burgemeester heeft de zinvolle dagbesteding in de vorm van sport in een eerdere vergadering gekenmerkt als een stap naar werk. Hoeveel deelnemers hebben inmiddels een baan...
+            - generic [ref=e236]: 🏛️ Agendapunt
+          - generic [ref=e237] [cursor=pointer]:
+            - generic [ref=e238]:
+              - heading "Van de heer M.F. van Gent e.a. een motie om te bevorderen dat de kosten van de verbouwing van de ss Rotterdam beheersbaar worden gehouden en deze voor" [level=4] [ref=e239]
+              - generic [ref=e240]: 2003-07-03
+            - paragraph [ref=e241]: algemene vergadering vereist. Een zodanige machtiging geldt voor ten hoogste achttien maanden. De algemene vergadering moet in de machtiging bepalen hoeveel aandelen mogen worden verkregen, hoe zij mogen worden verkregen en tussen welke grenzen...
+            - generic [ref=e242]: 🏛️ Agendapunt
+          - generic [ref=e243] [cursor=pointer]:
+            - generic [ref=e244]:
+              - heading "Notulen van de raadsvergadering van19 februari 2009 (middag)" [level=4] [ref=e245]
+              - generic [ref=e246]: 2009-04-16
+            - paragraph [ref=e247]: fracties dat te bepalen. Het gaat om één vergadering, die zal worden onderbroken door een eetpauze. Wij maken zelf uit hoeveel tijd wij per fractie vanmiddag of vanavond besteden. Vanmiddag beginnen wij bij agendapunt...
+            - generic [ref=e248]: 🏛️ Agendapunt
+          - generic [ref=e249] [cursor=pointer]:
+            - generic [ref=e250]:
+              - heading "Notulen van de raadsvergadering van19 februari 2009 (middag)" [level=4] [ref=e251]
+              - generic [ref=e252]: 2009-02-19
+            - paragraph [ref=e253]: fracties dat te bepalen. Het gaat om één vergadering, die zal worden onderbroken door een eetpauze. Wij maken zelf uit hoeveel tijd wij per fractie vanmiddag of vanavond besteden. Vanmiddag beginnen wij bij agendapunt...
+            - generic [ref=e254]: 🏛️ Agendapunt
+          - generic [ref=e255] [cursor=pointer]:
+            - generic [ref=e256]:
+              - heading "Notulen raadsvergadering 28 mei 2015 ochtendzitting" [level=4] [ref=e257]
+              - generic [ref=e258]: 2015-11-05
+            - paragraph [ref=e259]: heeft veel processen verbeterd. Eén daarvan is het beteugelen van de hoeveelheid papier die wij te verwerken hadden. Hij heeft het 'paperless vergaderen' ingevoerd, wat tot een enorme kostenbesparing heeft geleid. Omdat hij daarmee...
+            - generic [ref=e260]: 🏛️ Agendapunt
+          - generic [ref=e261] [cursor=pointer]:
+            - generic [ref=e262]:
+              - heading "Van de verenigde Rotterdamse deelgemeenten een brief over de verdeling bevoegdheden nWRO" [level=4] [ref=e263]
+              - generic [ref=e264]: 2008-09-18
+            - paragraph [ref=e265]: zowel bestuurlijk als ambtelijk een intensieve werkwijze, die vaak gepaard ging met een grote hoeveelheid aan infor- matie en intensieve vergaderingen. Tegelijk was de tijdsdruk vrijwel voortdurend hoog. Opvallend is, dat er – ondanks de verwarring...
+            - generic [ref=e266]: 🏛️ Agendapunt
+          - generic [ref=e267] [cursor=pointer]:
+            - generic [ref=e268]:
+              - heading "20170928 Notulen van de raadsvergadering van 28 september 2017" [level=4] [ref=e269]
+              - generic [ref=e270]: 2017-11-09
+            - paragraph [ref=e271]: De VOORZITTER (mevrouw Laan). Schorsing. Hoeveel tijd hebt u nodig? Vijf minuten? Ja? Gaat uw...
+            - generic [ref=e272]: 🏛️ Agendapunt
+          - generic [ref=e273] [cursor=pointer]:
+            - generic [ref=e274]:
+              - heading "Notulen van de raadsvergadering van 25 januari, middagzitting" [level=4] [ref=e275]
+              - generic [ref=e276]: 2007-04-05
+            - paragraph [ref=e277]: heer SCHUURMAN (Leefbaar Rotterdam). Aan het begin van de vergadering is duidelijk gewaarschuwd dat de hoeveelheid spreektijd beperkt is, maar men gaat gewoon door met praten. Mijn fractie stelt dan ook voor ons te houden...
+            - generic [ref=e278]: 🏛️ Agendapunt
+          - generic [ref=e279] [cursor=pointer]:
+            - generic [ref=e280]:
+              - heading "Notulen van de raadsvergadering van 25 januari, middagzitting" [level=4] [ref=e281]
+              - generic [ref=e282]: 2007-01-25
+            - paragraph [ref=e283]: heer SCHUURMAN (Leefbaar Rotterdam). Aan het begin van de vergadering is duidelijk gewaarschuwd dat de hoeveelheid spreektijd beperkt is, maar men gaat gewoon door met praten. Mijn fractie stelt dan ook voor ons te houden...
+            - generic [ref=e284]: 🏛️ Agendapunt
+          - generic [ref=e285] [cursor=pointer]:
+            - generic [ref=e286]:
+              - heading "Notulen van de raadsvergadering van 25 januari, middagzitting" [level=4] [ref=e287]
+              - generic [ref=e288]: 2007-01-25
+            - paragraph [ref=e289]: heer SCHUURMAN (Leefbaar Rotterdam). Aan het begin van de vergadering is duidelijk gewaarschuwd dat de hoeveelheid spreektijd beperkt is, maar men gaat gewoon door met praten. Mijn fractie stelt dan ook voor ons te houden...
+            - generic [ref=e290]: 🏛️ Agendapunt
+          - generic [ref=e291] [cursor=pointer]:
+            - generic [ref=e292]:
+              - heading "Statuten van Ontwikkelingsmaatschappij Stadshavens Rotterdam NV; concept 8 mei 2003" [level=4] [ref=e293]
+              - generic [ref=e294]: 2003-06-11
+            - paragraph [ref=e295]: algemene vergadering vereist. Een zodanige machtiging geldt voor ten hoogste achttien maanden. De algemene vergadering moet in de machtiging bepalen hoeveel aandelen mogen worden verkregen, hoe zij mogen worden verkregen en tussen welke grenzen...
+            - generic [ref=e296]: 🏛️ Agendapunt
+          - generic [ref=e297] [cursor=pointer]:
+            - generic [ref=e298]:
+              - heading "printversie schriftelijk verslag middagsessie" [level=4] [ref=e299]
+              - generic [ref=e300]: 2009-02-19
+            - paragraph [ref=e301]: bepalen. De heer COŞKUN (sp). Het gaat om één vergadering, die zal worden onderbroken door een eetpauze. Wij maken zelf uit hoeveel tijd wij per fractie vanmiddag of vanavond besteden. Vanmiddag beginnen wij bij agendapunt...
+            - generic [ref=e302]: 🏛️ Agendapunt
+          - generic [ref=e303] [cursor=pointer]:
+            - generic [ref=e304]:
+              - heading "Printversie besluitenlijst" [level=4] [ref=e305]
+              - generic [ref=e306]: 2016-06-29
+            - paragraph [ref=e307]: besproken onder punt 6 van de overlegvergadering. 6. Planning In verband met de hoeveelheid te bespreken onderwerpen worden twee extra vergaderingen na het zomerreces ingepland (1 hele woensdag en 1 extra woensdagochtend). 7. Subcommissie bestemmingsplannen...
+            - generic [ref=e308]: 🏛️ Agendapunt
+          - generic [ref=e309] [cursor=pointer]:
+            - generic [ref=e310]:
+              - heading "Notulen van de raadsvergadering van 20 september 2007 (middagzitting)" [level=4] [ref=e311]
+              - generic [ref=e312]: 2007-09-20
+            - paragraph [ref=e313]: voorstel van de heer Cornelissen aan de hoeveelheid spreektijd een uur toe te voegen? De heer SÖRENSEN (Leefbaar Rotterdam). Mij fractie wil doorgaans zo kort mogelijk vergaderen, maar vandaag hebben wij een zeer volle agenda...
+            - generic [ref=e314]: 🏛️ Agendapunt
+          - generic [ref=e315] [cursor=pointer]:
+            - generic [ref=e316]:
+              - heading "Notulen van 19 december 2013 inclusief besluit." [level=4] [ref=e317]
+              - generic [ref=e318]: 2014-03-06
+            - paragraph [ref=e319]: agenda kunnen worden afgevoerd. De heer BONTE (gl). Het lijkt mij onverstandig een vergadering te beginnen op basis van een bepaalde hoeveelheid spreektijd en maar te zien hoe ver wij zullen komen, wat de heer...
+            - generic [ref=e320]: 🏛️ Agendapunt
+          - generic [ref=e321] [cursor=pointer]:
+            - generic [ref=e322]:
+              - heading "13gr3599 Van de heer N. El Ouali van de fractie in de gemeenteraad van GroenLinks de mededeling dat hij per heden ontslag neemt als gemeenteraadslid." [level=4] [ref=e323]
+              - generic [ref=e324]: 2013-12-19
+            - paragraph [ref=e325]: agenda kunnen worden afgevoerd. De heer BONTE (gl). Het lijkt mij onverstandig een vergadering te beginnen op basis van een bepaalde hoeveelheid spreektijd en maar te zien hoe ver wij zullen komen, wat de heer...
+            - generic [ref=e326]: 🏛️ Agendapunt
+          - generic [ref=e327] [cursor=pointer]:
+            - generic [ref=e328]:
+              - heading "17bb8601 Afdoeningsvoorstel wethouder De Jonge toezegging 17bb8142 over gymcapaciteit Nieuwbouw Het Open Venster" [level=4] [ref=e329]
+              - generic [ref=e330]: 2017-11-22
+            - paragraph [ref=e331]: "kort ingegaan op de adviezen van de raadscommissie BWB, zoals besproken tijdens haar vergadering op 31 augustus 2016: - Er is gevraagd hoeveel procent groen door de ontwikkeling Nieuw Kralingen verloren gaat. Wethouder SOI heeft aangegeven..."
+            - generic [ref=e332]: 🏛️ Agendapunt
+          - generic [ref=e333] [cursor=pointer]:
+            - generic [ref=e334]:
+              - heading "Vaststelling van de notulen van de openbare raadsvergaderingen van 4 juli (ochtend en avond), 9 juli en 11 juli 2024." [level=4] [ref=e335]
+              - generic [ref=e336]: 2024-09-11
+            - paragraph [ref=e337]: "vergadering bijeen op 9 en 11 juli 2024, ter bespreking van agendapunt 7.1 Voorjaarsnota 2024; constaterende dat: - lachgas sinds januari 2023 onder de Opiumwet valt, daarmee illegaal is geworden; - sindsdien grote hoeveelheden lachgascilinders op straat..."
+            - generic [ref=e338]: 🏛️ 6065875
+          - generic [ref=e339] [cursor=pointer]:
+            - generic [ref=e340]:
+              - heading "Het voorstel tot vaststelling van het actieplan Samenleven in één stad 2024-2027." [level=4] [ref=e341]
+              - generic [ref=e342]: 2023-10-12
+            - paragraph [ref=e343]: "rotterdam 50 GROEN LINKS PLUS ROTTERDAM ROTTERDAM Motie: Hoeveel is gescoord van het Regenboogstembusakkoord? De gemeenteraad van Rotterdam, in vergadering bijeen op 12 oktober 2023, ter bespreking van agendapunt 5.2 Het voorstel tot vaststelling..."
+            - generic [ref=e344]: 🏛️ Algemeen
+          - generic [ref=e345] [cursor=pointer]:
+            - generic [ref=e346]:
+              - heading "Vaststelling van de notulen van de raadsvergaderingen van:" [level=4] [ref=e347]
+              - generic [ref=e348]: 2023-11-07
+            - paragraph [ref=e349]: "gemeenteraad van Rotterdam, in vergadering bijeen op 28 september 2023 ter bespreking van Agendapunt 7.3: Het plan van aanpak 'Op weg naar herstel en een thuis' (2023-2026); constaterende dat: - het voorliggend plan van aanpak..."
+            - generic [ref=e350]: 🏛️ Algemeen
+          - generic [ref=e351] [cursor=pointer]:
+            - generic [ref=e352]:
+              - heading "Vaststelling van de notulen van de raadsvergadering van 14 maart 2024." [level=4] [ref=e353]
+              - generic [ref=e354]: 2024-04-03
+            - paragraph [ref=e355]: "Rotterdam, in vergadering bijeen op 14 maart 2024, ter bespreking van het voorstel tot vaststelling van de nota Dierenwelzijn 2023-2026; constaterende dat: - consumeren van dieren als menselijk voedsel in grote hoeveelheden slecht is voor..."
+            - generic [ref=e356]: 🏛️ 6065875
+          - generic [ref=e357] [cursor=pointer]:
+            - generic [ref=e358]:
+              - heading "3.1 Notulen van 6 en 13 juni 2019" [level=4] [ref=e359]
+              - generic [ref=e360]: 2019-09-12
+            - paragraph [ref=e361]: gaat de schorsing voor. Dat lijkt me handig. Dan gaan we schorsen. Hoeveel tijd heeft u nodig? Vijf minuutjes? Akkoord. De vergadering is geschorst. (De vergadering is geschorst.) De VOORZITTER. Wilt u allen gaan zitten...
+            - generic [ref=e362]: 🏛️ Algemeen
+          - generic [ref=e363] [cursor=pointer]:
+            - generic [ref=e364]:
+              - heading "Doorlopende lijst nummer week 3 4 5 ingekomen stukken" [level=4] [ref=e365]
+              - generic [ref=e366]: 2010-02-18
+            - paragraph [ref=e367]: "Registratienummer dienst: raadsvergadering van Uitvoer preventieve maatregelen € 2.200.000,- Ontwerp/engineeringskosten € 3.400.000,- Directievoering/toezicht € 700.000,- Metingen in de..."
+            - generic [ref=e368]: 🏛️ Agendapunt
+          - generic [ref=e369] [cursor=pointer]:
+            - generic [ref=e370]:
+              - heading "Een kwestie van kiezen EBMR" [level=4] [ref=e371]
+              - generic [ref=e372]: 2016-11-24
+            - paragraph [ref=e373]: Besteding van budgetten Onderstaande tabel laat zien hoeveel budget de gebiedscommissies hebben besteed in 2015, in hoeverre sprake is van onderbesteding en aan welke taak de commissies hun gelden besteden. Gebied Besteed Niet besteed Participatie...
+            - generic [ref=e374]: 🏛️ Agendapunt
+          - generic [ref=e375] [cursor=pointer]:
+            - generic [ref=e376]:
+              - heading "Brief van het Albeda college inzake reactie op de ongegrond-verklaring zienswijze ontwerpbestemmingsplan Kern en Plassen" [level=4] [ref=e377]
+              - generic [ref=e378]: 2009-09-17
+            - paragraph [ref=e379]: keer. Vooral in de eerste helft van 2008 waren er meer vergaderingen dan gebruikelijk; dit was nodig voor het vaststellen van de grote hoeveelheid cultuurplanadviezen. In de samenstelling van de Raad hebben zich geen wijzigingen...
+            - generic [ref=e380]: 🏛️ Agendapunt
+      - generic [ref=e382]:
+        - paragraph [ref=e383]: Wist u dat u uw zoekopdrachten kunt bewaren?
+        - paragraph [ref=e384]: Maak een gratis account en bewaar uw zoekgeschiedenis, stel uw partijlens in, en exporteer analyses naar Word.
+        - generic [ref=e385]:
+          - link "Gratis account aanmaken" [ref=e386] [cursor=pointer]:
+            - /url: /register
+          - button "Niet nu" [ref=e387] [cursor=pointer]
+      - generic [ref=e389]:
+        - paragraph [ref=e390]: "Tip: gebruik NeoDemos rechtstreeks in Claude, ChatGPT of Cursor voor diepere analyses. Werkt ook met Ollama."
+        - generic [ref=e391]:
+          - link "Meer info" [ref=e392] [cursor=pointer]:
+            - /url: /mcp-installer
+          - button "Sluiten" [ref=e393] [cursor=pointer]
+  - contentinfo [ref=e70]:
+    - navigation [ref=e71]:
+      - link "Over" [ref=e72] [cursor=pointer]:
+        - /url: /over
+      - text: ·
+      - link "Technologie" [ref=e73] [cursor=pointer]:
+        - /url: /technologie
+      - text: ·
+      - link "Methodologie" [ref=e74] [cursor=pointer]:
+        - /url: /methodologie
+      - text: ·
+      - link "AI-koppeling" [ref=e75] [cursor=pointer]:
+        - /url: /mcp-installer
+    - generic [ref=e76]: "Analyse door AI (Anthropic) · Europees gehost · Brondata: Open Raadsinformatie"
+    - generic [ref=e77]: NeoDemos (alpha) v0.2.0-alpha.2

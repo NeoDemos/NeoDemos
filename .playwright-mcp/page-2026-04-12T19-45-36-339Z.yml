@@ -1,0 +1,364 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - link "NeoDemos home" [ref=e3] [cursor=pointer]:
+      - /url: /
+      - text: NeoDemos
+    - navigation [ref=e4]:
+      - link "Kalender" [ref=e5] [cursor=pointer]:
+        - /url: /calendar
+      - link "AI-koppeling" [ref=e6] [cursor=pointer]:
+        - /url: /mcp-installer
+      - link "Over" [ref=e7] [cursor=pointer]:
+        - /url: /over
+      - link "Inloggen" [ref=e8] [cursor=pointer]:
+        - /url: /login
+  - main [ref=e9]:
+    - generic [ref=e10]:
+      - generic [ref=e13]:
+        - heading "24 jaar raadsbesluiten. Doorzoekbaar in seconden." [level=1] [ref=e14]:
+          - text: 24 jaar raadsbesluiten.
+          - text: Doorzoekbaar in seconden.
+        - generic [ref=e15]:
+          - textbox "Stel uw eigen vraag..." [ref=e16]: Welke moties over klimaat zijn aangenomen sinds 2020?
+          - button "Zoek" [active] [ref=e17] [cursor=pointer]
+        - generic [ref=e18]:
+          - generic [ref=e19]: "Of probeer:"
+          - button "Heeft het college haar beloftes waargemaakt?" [ref=e20] [cursor=pointer]
+          - button "Hoe stemden partijen over woningbouw?" [ref=e21] [cursor=pointer]
+          - button "Welke moties over klimaat zijn aangenomen sinds 2020?" [ref=e22] [cursor=pointer]
+        - generic [ref=e23]: 90.000+ documenten · 24 jaar · Rotterdam · Open brondata
+      - text: “” ▾ “”
+      - generic [ref=e78]:
+        - generic [ref=e80]:
+          - generic [ref=e82]:
+            - generic [ref=e83]: 🧠
+            - heading "AI-zoeklimiet bereikt" [level=2] [ref=e84]
+          - generic [ref=e369]:
+            - paragraph [ref=e370]: U heeft uw maandelijkse AI-zoeklimiet bereikt (3 zoekopdrachten).
+            - paragraph [ref=e371]: Maak een gratis account aan voor onbeperkt AI-zoeken.
+            - link "Gratis account aanmaken" [ref=e372] [cursor=pointer]:
+              - /url: /register
+        - generic [ref=e90]:
+          - heading "Gevonden Documenten" [level=3] [ref=e373]
+          - generic [ref=e374] [cursor=pointer]:
+            - generic [ref=e375]:
+              - heading "Onderzoek van de vereisten welke verband houden met het wethouderschap." [level=4] [ref=e376]
+              - generic [ref=e377]: 2025-02-19
+            - paragraph [ref=e378]: ABIGAIL NORVILLE PERSONALIA PROFIEL Met mijn directe en appreciërende manier van communiceren, creëer ik duidelijkheid en motiveer ik mensen hun eigen bijdrage in te brengen. Ik sta middenin de samenl...
+            - generic [ref=e379]: 🏛️ 6065875
+          - generic [ref=e380] [cursor=pointer]:
+            - generic [ref=e381]:
+              - heading "Onderzoek van de vereisten welke verband houden met het wethouderschap." [level=4] [ref=e382]
+              - generic [ref=e383]: 2024-07-11
+            - paragraph [ref=e384]: "Curriculum Vitae Naam: Pascal Lansink-Bastemeijer Adres: Postcode/Woonplaats: Mobiel: E-mail: Linkedin: Geboortedatum: Nationaliteit: Nederlandse Burgerlijke staat: Wat zeggen anderen over mij?: ..."
+            - generic [ref=e385]: 🏛️ Algemeen
+          - generic [ref=e386] [cursor=pointer]:
+            - generic [ref=e387]:
+              - heading "Onderzoek van de vereisten welke verband houden met het wethouderschap." [level=4] [ref=e388]
+              - generic [ref=e389]: 2023-09-28
+            - paragraph [ref=e390]: "OPGAVE FUNCTIES EN OPENBARE BETREKKINGEN WETHOUDER Ondergetekende: Geboortedatum: verklaart hierbij, overeenkomstig de artikelen 12 en 41bvan de Gemeentewet, naast het (voorgenomen) wethouderschap de ..."
+            - generic [ref=e391]: 🏛️ Algemeen
+          - generic [ref=e392] [cursor=pointer]:
+            - generic [ref=e393]:
+              - heading "6 Vaststelling welke moties en amendementen die vooraf zijn ingediend, onderdeel zijn van de beraadslagingen bij de begrotingsbehandeling." [level=4] [ref=e394]
+              - generic [ref=e395]: 2021-11-09
+            - paragraph [ref=e396]: "## Overzicht moties en amendementen Begroting 2022 - Versie 3 (overzicht voor stemmingen) | # | Fractie(s) | Eerste indiener ..."
+            - generic [ref=e397]: 🏛️ Algemeen
+          - generic [ref=e398] [cursor=pointer]:
+            - generic [ref=e399]:
+              - heading "3.1 Onderzoek van wettelijke vereisten en verenigbaarheid van functies welke verband houden met het wethouderschap." [level=4] [ref=e400]
+              - generic [ref=e401]: 2021-02-18
+            - paragraph [ref=e402]: "Gemeente Rotterdam Burgemeester Aan de gemeenteraad ing. A. Aboutaleb Burgemeester Bezoekadres: Stadhuis Coolsingel 40 3011 AD Rotterdam Postadres: Postbus 70012 3000 KP Rotterdam Website: www.rotterd..."
+            - generic [ref=e403]: 🏛️ Algemeen
+          - generic [ref=e404] [cursor=pointer]:
+            - generic [ref=e405]:
+              - heading "11GR736 Van mevrouw Belhaj e.a. een motie om te bevorderen dat er wordt onderzocht op welke wijze er voortaan bij de uitgifte van (reis)documenten doo" [level=4] [ref=e406]
+              - generic [ref=e407]: 2012-04-19
+            - paragraph [ref=e408]: "Gemeente Rotterdam College van Burgemeester en Wethouders Aan de Gemeenteraad Bezoekadres: Stadhuis Coolsingel 40 Rotterdam Postadres: Postbus 70012 3000 KP Rotterdam Website: www.rotterdam.nl E-mail:..."
+            - generic [ref=e409]: 🏛️ Agendapunt
+          - generic [ref=e410] [cursor=pointer]:
+            - generic [ref=e411]:
+              - heading "10GR1372 Van B en W een brief over de methodiek en de resultaten van de monitoring van de panden welke direct grenzen aan het werk Statenwegtracé Rand" [level=4] [ref=e412]
+              - generic [ref=e413]: 2010-09-15
+            - paragraph [ref=e414]: "Gemeente Rotterdam College van Burgemeester en Wethouders Aan de Gemeenteraad Bezoekadres: Stadhuis Coolsinget 40 Rotterdam Postadres: Postbus 70012 3000KP Rotterdam Website: www.rotterdam.nl E-mail: ..."
+            - generic [ref=e415]: 🏛️ Agendapunt
+          - generic [ref=e416] [cursor=pointer]:
+            - generic [ref=e417]:
+              - heading "12 Onderzoek van vereisten en onverenigbaarheid van functies welke verband houden met het" [level=4] [ref=e418]
+              - generic [ref=e419]: 2010-05-27
+            - paragraph [ref=e420]: Geen samenvatting beschikbaar
+            - generic [ref=e421]: 🏛️ Agendapunt
+          - generic [ref=e422] [cursor=pointer]:
+            - generic [ref=e423]:
+              - heading "10gr1211 Het voorstel tot instelling van een commissie tot onderzoek van de stukken welke verband houden met de benoeming van een of meer wethouders" [level=4] [ref=e424]
+              - generic [ref=e425]: 2010-04-29
+            - paragraph [ref=e426]: Geen samenvatting beschikbaar
+            - generic [ref=e427]: 🏛️ Agendapunt
+          - generic [ref=e428] [cursor=pointer]:
+            - generic [ref=e429]:
+              - heading "2 c. Instelling van een Commissie die de stukken onderzoekt welke verband houden met een o" [level=4] [ref=e430]
+              - generic [ref=e431]: 2010-04-29
+            - paragraph [ref=e432]: Geen samenvatting beschikbaar
+            - generic [ref=e433]: 🏛️ Agendapunt
+          - generic [ref=e434] [cursor=pointer]:
+            - generic [ref=e435]:
+              - heading "A. Bekrachtiging van de geheimhouding van stukken welke overeenkomstig artikel 25 van de G" [level=4] [ref=e436]
+              - generic [ref=e437]: 2009-11-05
+            - paragraph [ref=e438]: Geen samenvatting beschikbaar
+            - generic [ref=e439]: 🏛️ Agendapunt
+          - generic [ref=e440] [cursor=pointer]:
+            - generic [ref=e441]:
+              - heading "Van de burgemeester een brief over de botsing welke tussen twee goederentreinen op 24 september 2009 in Barendrecht heeft plaatsgevonden" [level=4] [ref=e442]
+              - generic [ref=e443]: 2009-11-05
+            - paragraph [ref=e444]: Inhoudsopgave 1. Inleiding 3 1.1 Doelstelling 3 1.2 Leeswijzer 3 2. Ruimtelijke situatie 4 2.1 Huidige situatie 4 2.2 Toekomstige situatie 4 3. Wettelijke bepalingen en beleid 6 3.1 Transportroutes 7 ...
+            - generic [ref=e445]: 🏛️ Agendapunt
+          - generic [ref=e446] [cursor=pointer]:
+            - generic [ref=e447]:
+              - heading "6. Bekrachtiging van de geheimhouding van stukken welke overeenkomstig artikel 25 van de G" [level=4] [ref=e448]
+              - generic [ref=e449]: 2009-04-16
+            - paragraph [ref=e450]: Geen samenvatting beschikbaar
+            - generic [ref=e451]: 🏛️ Agendapunt
+          - generic [ref=e452] [cursor=pointer]:
+            - generic [ref=e453]:
+              - heading "Van burgemeester en wethouders (12-5-2006) het rapport Nalevingsstrategie Wet milieubeheer, welke beschrijft hoe de DCMR namens Rotterdam het toezicht" [level=4] [ref=e454]
+              - generic [ref=e455]: 2006-06-15
+            - paragraph [ref=e456]: "'- Gemeente Rotterdam College van Burgemeester en Wethouders Aan de gemeenteraad College van Burgemeester en Wethouders Bezoekadres: Stadhuis Coolsingel 40 Rotterdam Postadres: Postbus 70012 3000 KP R..."
+            - generic [ref=e457]: 🏛️ Agendapunt
+          - generic [ref=e458] [cursor=pointer]:
+            - generic [ref=e459]:
+              - heading "Een brief waarin bezwaar wordt gemaakt tegen een vergunning welke is verleend voor het rooien van bomen naast de toegang tot de luchthaven Rotterdam A" [level=4] [ref=e460]
+              - generic [ref=e461]: 2006-02-16
+            - paragraph [ref=e462]: Geen samenvatting beschikbaar
+            - generic [ref=e463]: 🏛️ Agendapunt
+          - generic [ref=e464] [cursor=pointer]:
+            - generic [ref=e465]:
+              - heading "Een brief over maatregelen welke getroffen gaan worden naar aanleiding van de adviezen van de Audit Services Rotterdam (ASR) op basis van het onderzoe" [level=4] [ref=e466]
+              - generic [ref=e467]: 2006-02-08
+            - paragraph [ref=e468]: Gemeente Rotterdam College van Burgemeester en Wethouders EMBARGO tot cie. EHM behandeling 25-1-2006 Tot 10:30 uur doorlopende lijst van ingekomen stukken voor de raadsvergadering van 2 FEB20Ü6 Bezoek...
+            - generic [ref=e469]: 🏛️ Agendapunt
+          - generic [ref=e470] [cursor=pointer]:
+            - generic [ref=e471]:
+              - heading "Bouwen en Wonen" [level=4] [ref=e472]
+              - generic [ref=e473]: 2024-01-31
+            - paragraph [ref=e474]: "afschrift van de brief welke wethouder Klimaat, Bouwen en Wonen in antwoord op het ongevraagde advies van de wijkraad Cool Scheepvaartkwartier - Stadsdriehoek heeft uitgebracht. Relatie met het coalitieakkoord/collegewerkprogramma/eerder aangenomen moties en gedane toezeggingen: - 17 november..."
+            - generic [ref=e475]: 🏛️ 6065875
+          - generic [ref=e476] [cursor=pointer]:
+            - generic [ref=e477]:
+              - heading "Bouwen en Wonen" [level=4] [ref=e478]
+              - generic [ref=e479]: 2024-08-28
+            - paragraph [ref=e480]: "Koninkrijksrelaties, de G4 en enkele andere grote gemeenten. Relatie met het coalitieakkoord/collegewerkprogramma/eerder aangenomen moties en gedane toezeggingen: • Coalitieakkoord 2022-2026 \\\"Eén stad\\\" • Klimaat Actieplan Rotterdam (23bb002728) • Actieplan isolatie woningen en toekomstbestendige VvE's 2023 (22bb6383..."
+            - generic [ref=e481]: 🏛️ 6065875
+          - generic [ref=e482] [cursor=pointer]:
+            - generic [ref=e483]:
+              - heading "Daarbij betrekken" [level=4] [ref=e484]
+              - generic [ref=e485]: 2023-05-24
+            - paragraph [ref=e486]: "nemen aan een technische sessie over de opzet van het Rotterdams Burgerberaad Klimaat (RBK). Relatie met het coalitieakkoord/collegewerkprogramma/eerder aangenomen moties en gedane toezeggingen: - Coalitieakkoord “Eén Stad” - In de bijlage van “Collegebrief over verdeling DTB middelen..."
+            - generic [ref=e487]: 🏛️ 6065876
+          - generic [ref=e488] [cursor=pointer]:
+            - generic [ref=e489]:
+              - heading "2.08 Concept zienswijze Warmtewet 2.0" [level=4] [ref=e490]
+              - generic [ref=e491]: 2020-07-09
+            - paragraph [ref=e492]: "willen u de gelegenheid geven om te reageren op onze concept zienswijze. ## Relatie met het coalitieakkoord/collegewerkprogramma/begroting/eerder aangenomen moties en gedane toezeggingen: - Coalitieakkoord - -Schone Energie Strategie (19bb24492) - Leidraad gebiedsaanpak aardgasvrij (19bb13528) - -Concept RES regio Rotterdam..."
+            - generic [ref=e493]: 🏛️ 6065858
+          - generic [ref=e494] [cursor=pointer]:
+            - generic [ref=e495]:
+              - heading "20.30 uur Technische sessie warmtewet 2.0" [level=4] [ref=e496]
+              - generic [ref=e497]: 2020-07-07
+            - paragraph [ref=e498]: "willen u de gelegenheid geven om te reageren op onze concept zienswijze. ## Relatie met het coalitieakkoord/collegewerkprogramma/begroting/eerder aangenomen moties en gedane toezeggingen: - Coalitieakkoord - -Schone Energie Strategie (19bb24492) - Leidraad gebiedsaanpak aardgasvrij (19bb13528) - -Concept RES regio Rotterdam..."
+            - generic [ref=e499]: 🏛️ 6065858
+          - generic [ref=e500] [cursor=pointer]:
+            - generic [ref=e501]:
+              - heading "Bouwen en Wonen" [level=4] [ref=e502]
+              - generic [ref=e503]: 2023-04-05
+            - paragraph [ref=e504]: "welke gronden deze brief?/Waarom nu voorgelegd? Afdoening motie Een inclusieve gemeente is natuurinclusief (22bb007432) en toezegging ondertekenen van het manifest 'Bouwen voor Natuur' (22bb007313). Relatie met het coalitieakkoord/collegewerkprogramma/eerder aangenomen moties en gedane toezeggingen: Coalitieakkoord..."
+            - generic [ref=e505]: 🏛️ 6065875
+          - generic [ref=e506] [cursor=pointer]:
+            - generic [ref=e507]:
+              - heading "Klimaatmaatregelen voor 2030 en Vijfde update Klimaatactieplan Rotterdam" [level=4] [ref=e508]
+              - generic [ref=e509]: 2026-02-11
+            - paragraph [ref=e510]: "Voorgeschiedenis: • De vierde update van het KAR werd op 9 juli 2025 besproken in de..."
+            - generic [ref=e511]: 🏛️ 6065876
+          - generic [ref=e512] [cursor=pointer]:
+            - generic [ref=e513]:
+              - heading "Duurzaam" [level=4] [ref=e514]
+              - generic [ref=e515]: 2022-06-08
+            - paragraph [ref=e516]: Op welke gronden deze brief?Maarom nu voorgelegd? Naar aanleiding van diverse moties en toezeggingen...
+            - generic [ref=e517]: 🏛️ 6065871
+          - generic [ref=e518] [cursor=pointer]:
+            - generic [ref=e519]:
+              - heading "Annotatie van de griffier behorende bij de behandeling van de begroting 2011" [level=4] [ref=e520]
+              - generic [ref=e521]: 2010-10-27
+            - paragraph [ref=e522]: topsport. Cultureel Klimaat Uitgangspunten Cultuurplan 2013-2016. Bij de vaststelling van het huidige cultuurplan heeft de raad vier moties aangenomen (2008-3724, 2008-3726, 2008-3727, 2008-3725). De afdoening van deze moties staan gepland...
+            - generic [ref=e523]: 🏛️ Agendapunt
+          - generic [ref=e524] [cursor=pointer]:
+            - generic [ref=e525]:
+              - heading "Technische sessie over Burgerberaad Klimaat" [level=4] [ref=e526]
+              - generic [ref=e527]: 2023-04-19
+            - paragraph [ref=e528]: "nemen aan een technische sessie over de opzet van het Rotterdams Burgerberaad Klimaat (RBK). Relatie met het coalitieakkoord/collegewerkprogramma/eerder aangenomen moties en gedane toezeggingen: - Coalitieakkoord “Eén Stad” - In de bijlage van “Collegebrief over verdeling DTB middelen..."
+            - generic [ref=e529]: 🏛️ 6065876
+          - generic [ref=e530] [cursor=pointer]:
+            - generic [ref=e531]:
+              - heading "Duurzaam" [level=4] [ref=e532]
+              - generic [ref=e533]: 2023-04-05
+            - paragraph [ref=e534]: nemen aan een technische sessie over de opzet van het Rotterdams Burgerberaad Klimaat (RBK). Relatie met het coalitieakkoord/collegewerkprogramma/eerder aangenomen moties en gedane toezeggingen...
+            - generic [ref=e535]: 🏛️ 6065876
+          - generic [ref=e536] [cursor=pointer]:
+            - generic [ref=e537]:
+              - heading "Bouwen en Wonen" [level=4] [ref=e538]
+              - generic [ref=e539]: 2023-03-08
+            - paragraph [ref=e540]: februari 2023 Op welke gronden deze brief?/Waarom nu voorgelegd? Bij deze berichten wij u dat wij besloten hebben het \"Uitwerkingsplan Milieupark Bovendijk\" vast te stellen. Relatie met het coalitieakkoord/collegewerkprogramma/eerder aangenomen moties en gedane toezeggingen...
+            - generic [ref=e541]: 🏛️ 6065875
+          - generic [ref=e542] [cursor=pointer]:
+            - generic [ref=e543]:
+              - heading "Bouwen en Wonen" [level=4] [ref=e544]
+              - generic [ref=e545]: 2023-10-04
+            - paragraph [ref=e546]: "kenmerk: 20bb6777; 22bb006881 Ons kenmerk: M2210-5839- 23bo007155 Onderwerp: Moties afdoen met betrekking tot gebiedsontwikkeling Schiekadeblok. Datum: B&W 19 september 2023 Op welke gronden deze briefľ/Waarom nu voorgelegd..."
+            - generic [ref=e547]: 🏛️ 6065875
+          - generic [ref=e548] [cursor=pointer]:
+            - generic [ref=e549]:
+              - heading "Bouwen en Wonen" [level=4] [ref=e550]
+              - generic [ref=e551]: 2023-12-06
+            - paragraph [ref=e552]: juli 2019 is door uw raad het bestemmingsplan Zestienhaven vastgesteld. Naar aanleiding daarvan is een aantal moties aangenomen. Met deze brief leggen wij u een voorstel voor ter afdoening van deze moties. Relatie...
+            - generic [ref=e553]: 🏛️ 6065875
+          - generic [ref=e554] [cursor=pointer]:
+            - generic [ref=e555]:
+              - heading "Daarbij betrekken" [level=4] [ref=e556]
+              - generic [ref=e557]: 2024-01-31
+            - paragraph [ref=e558]: "jaar aangeboden aan de raad. De bijgevoegde rapportage is de vierde voortgangsrapportage. Relatie met het coalitieakkoord/collegewerkprogramma/eerder aangenomen moties en gedane toezeggingen: De voortgangsrapportage rapporteert over het actieplan Goed Huren en Verhuren (20bb14819). Met het actieplan..."
+            - generic [ref=e559]: 🏛️ 6065875
+          - generic [ref=e560] [cursor=pointer]:
+            - generic [ref=e561]:
+              - heading "Bouwen en Wonen" [level=4] [ref=e562]
+              - generic [ref=e563]: 2023-11-15
+            - paragraph [ref=e564]: "sociale grondprijzen voor corporaties aan de raad te doen toekomen. Relatie met het coalitieakkoord/collegewerkprogramma/eerder aangenomen moties en gedane toezeggingen: Toezegging wethouder Kasmi (waarnemend voor wethouder Zeegers) tijdens Actualiteitenraad 5 oktober 2023. Toelichting: Uw raad heeft..."
+            - generic [ref=e565]: 🏛️ 6065875
+          - generic [ref=e566] [cursor=pointer]:
+            - generic [ref=e567]:
+              - heading "Bouwen en Wonen" [level=4] [ref=e568]
+              - generic [ref=e569]: 2023-09-13
+            - paragraph [ref=e570]: "bestemmingsplan zit in de volgende fase: Startfase Concept- en ontwerpfase ▼ Vaststellingsfase Beroepsfase Relatie met het coalitieakkoord/collegewerkprogramma/eerder aangenomen moties en gedane toezeggingen: Bij de behandeling van het raadsvoorstel ten behoeve van het toepassen van de coördinatieregeling..."
+            - generic [ref=e571]: 🏛️ 6065875
+          - generic [ref=e572] [cursor=pointer]:
+            - generic [ref=e573]:
+              - heading "Bouwen en Wonen" [level=4] [ref=e574]
+              - generic [ref=e575]: 2023-06-28
+            - paragraph [ref=e576]: "raad de motie ‘Raadsagendering buitenplanse afwijkingen blijft Rotterdamse werkwijze’ ingediend en aangenomen. Relatie met het coalitieakkoord/collegewerkprogramma/eerder aangenomen moties en gedane toezeggingen: Aangenomen motie ‘Raadsagendering buitenplanse afwijkingen blijft Rotterdamse werkwijze’ Toelichting: Op 24 februari..."
+            - generic [ref=e577]: 🏛️ 6065875
+          - generic [ref=e578] [cursor=pointer]:
+            - generic [ref=e579]:
+              - heading "Bouwen en Wonen" [level=4] [ref=e580]
+              - generic [ref=e581]: 2023-06-07
+            - paragraph [ref=e582]: "vaststelling van het bestemmingsplan K.P. van der Mandelelaan 130 op 15 december 2022 zijn de volgende moties aangenomen: • • • • • 22bb1229 -BS22/00144, Motie Maak van Brainpark, Studybrainpark! (3 februari 2022). 22bb1227 -BS22/00142, Motie Brain park voor jong..."
+            - generic [ref=e583]: 🏛️ 6065875
+          - generic [ref=e584] [cursor=pointer]:
+            - generic [ref=e585]:
+              - heading "Economie" [level=4] [ref=e586]
+              - generic [ref=e587]: 2024-08-28
+            - paragraph [ref=e588]: "kenmerk: M2307-750 /M2310-561- 24bo006150 Onderwerp: Afdoeningsvoorstel moties Check je ondersteuning en Nadeelcompensatie in je voordeel laten werken Datum: B&W2 juli 2024 ## Op welke gronden deze brief?/Waarom nu voorgelegd? Afdoening motie \"Check..."
+            - generic [ref=e589]: 🏛️ 6065876
+          - generic [ref=e590] [cursor=pointer]:
+            - generic [ref=e591]:
+              - heading "Bouwen en Wonen" [level=4] [ref=e592]
+              - generic [ref=e593]: 2023-08-23
+            - paragraph [ref=e594]: "december 2021 aan de commissie BWB - Tussenbericht AaZ 20bb9246). Relatie met het coalitieakkoord/collegewerkprogramma/eerder aangenomen moties en gedane toezeggingen: \\\"De komende vier jaar bouwen we flink door.\\\" (blz. 26 Coalitieakkoord 2022 - 2026). Toelichting: Sinds september..."
+            - generic [ref=e595]: 🏛️ 6065875
+          - generic [ref=e596] [cursor=pointer]:
+            - generic [ref=e597]:
+              - heading "Daarbij betrekken" [level=4] [ref=e598]
+              - generic [ref=e599]: 2020-11-05
+            - paragraph [ref=e600]: stellen wij uw raad voor om een aantal moties af te doen. In uw raad zijn in de periode van 2017 t/m 2019 diverse moties aangenomen met betrekking tot warmte. Op 28 november 2019 heeft...
+            - generic [ref=e601]: 🏛️ 6065858
+          - generic [ref=e602] [cursor=pointer]:
+            - generic [ref=e603]:
+              - heading "1.03.05 Financien" [level=4] [ref=e604]
+              - generic [ref=e605]: 2020-09-03
+            - paragraph [ref=e606]: stellen wij uw raad voor om een aantal moties af te doen. In uw raad zijn in de periode van 2017 t/m 2019 diverse moties aangenomen met betrekking tot warmte. Op 28 november 2019 heeft...
+            - generic [ref=e607]: 🏛️ 6065858
+          - generic [ref=e608] [cursor=pointer]:
+            - generic [ref=e609]:
+              - heading "16bb5418 Collegebrief Plus Programma Duurzaam 2015-2018 en Afdoeningsvoorstel moties Bonte ea over Ieder dak een zonnepaneel 15bb6235, motie Van der L" [level=4] [ref=e610]
+              - generic [ref=e611]: 2017-02-23
+            - paragraph [ref=e612]: Op welke gronden deze briefŶ/Waarom nu voorgelegd? Eind vorig jaar werd in Parijs door...
+            - generic [ref=e613]: 🏛️ Agendapunt
+          - generic [ref=e614] [cursor=pointer]:
+            - generic [ref=e615]:
+              - heading "Bouwen en Wonen" [level=4] [ref=e616]
+              - generic [ref=e617]: 2023-10-25
+            - paragraph [ref=e618]: "ontwikkelingen de kansen en risico's voor de gemeentelijke grond- en vastgoedportefeuilles. Relatie met het coalitieakkoord/collegewerkprogramma/eerder aangenomen moties en gedane toezeggingen: Veranderende (markt)omstandigheden en (nieuwe) kansen en risico's in de gemeentelijke grond..."
+            - generic [ref=e619]: 🏛️ 6065875
+          - generic [ref=e620] [cursor=pointer]:
+            - generic [ref=e621]:
+              - heading "Bouwen en Wonen" [level=4] [ref=e622]
+              - generic [ref=e623]: 2024-06-26
+            - paragraph [ref=e624]: "oude schoolgebouw (Baan 163). Hierover willen we uw raad informeren. Relatie met het coalitieakkoord/collegewerkprogramma/eerder aangenomen moties en gedane toezeggingen: N.v.t. Toelichting: Op 6 november 2023 werden ons college schríftelijke vragen gesteld over dit project (23bb007467..."
+            - generic [ref=e625]: 🏛️ 6065875
+          - generic [ref=e626] [cursor=pointer]:
+            - generic [ref=e627]:
+              - heading "Bouwen en Wonen" [level=4] [ref=e628]
+              - generic [ref=e629]: 2024-06-05
+            - paragraph [ref=e630]: "grondexploitatie wordt gedekt het doorbouwfonds voor eigen grondexploitaties met tegenwind. Relatie met het coalitieakkoord/collegewerkprogramma/eerder aangenomen moties en gedane toezeggingen: Collegebrief over openen grondexploitatie Insulindestraat 240-248 (22bb002616). Raadsvoorstel over Vaststelling bestemmingsplan Insulindestraat 240-248 (22bb002619..."
+            - generic [ref=e631]: 🏛️ 6065875
+          - generic [ref=e632] [cursor=pointer]:
+            - generic [ref=e633]:
+              - heading "Het uitvoeringsplan en kwaliteitsbeleid Studentenhuisvesting." [level=4] [ref=e634]
+              - generic [ref=e635]: 2023-03-23
+            - paragraph [ref=e636]: "afgesproken. Relatie met het coalitieakkoord/collegewerkprogramma/eerder aangenomen moties en gedane toezeggingen: In het coalitieakkoord is opgenomen om deze collegeperiode jaarlijks circa 400 studentenwoningen te realiseren. In het voorliggende Uitvoeringsplan Stadsontwikkeling Klimaat, Bouwen, Wonen Chantal Zeegers Bezoekadres..."
+            - generic [ref=e637]: 🏛️ Algemeen
+          - generic [ref=e638] [cursor=pointer]:
+            - generic [ref=e639]:
+              - heading "Daarbij betrekken" [level=4] [ref=e640]
+              - generic [ref=e641]: 2023-06-28
+            - paragraph [ref=e642]: "zenden, beschouwen wij hiermee als afgedaan. Zie voor de leidraad bijlage 1. Relatie met het coalitieakkoord/collegewerkprogramma/eerder aangenomen moties en gedane toezeggingen: Toezegging 22bb006512, \\\"RR Thuis in cijfers (Afwegingskader Stedelijke Vernieuwing)\\\" Toelichting: Op 12 oktober..."
+            - generic [ref=e643]: 🏛️ 6065875
+          - generic [ref=e644] [cursor=pointer]:
+            - generic [ref=e645]:
+              - heading "Bouwen en Wonen" [level=4] [ref=e646]
+              - generic [ref=e647]: 2023-05-17
+            - paragraph [ref=e648]: "zenden, beschouwen wij hiermee als afgedaan. Zie voor de leidraad bijlage 1. Relatie met het coalitieakkoord/collegewerkprogramma/eerder aangenomen moties en gedane toezeggingen: Toezegging 22bb006512, \\\"RR Thuis in cijfers (Afwegingskader Stedelijke Vernieuwing)\\\" Toelichting: Op 12 oktober..."
+            - generic [ref=e649]: 🏛️ 6065875
+          - generic [ref=e650] [cursor=pointer]:
+            - generic [ref=e651]:
+              - heading "Bouwen en Wonen" [level=4] [ref=e652]
+              - generic [ref=e653]: 2022-12-21
+            - paragraph [ref=e654]: "twee jaar na de start van het Actieplan Goed Huren en Verhuren. Relatie met het coalitieakkoord/collegewerkprogramma/eerder aangenomen moties en gedane toezeggingen: De voortgangsrapportage rapporteert over het actieplan Goed Huren en Verhuren (20bbl4819) en de Uitvoeringsaanpak..."
+            - generic [ref=e655]: 🏛️ 6065875
+          - generic [ref=e656] [cursor=pointer]:
+            - generic [ref=e657]:
+              - heading "Herziene annotatie Duurzaam Plus EHMD 16 november 2016" [level=4] [ref=e658]
+              - generic [ref=e659]: 2016-11-16
+            - paragraph [ref=e660]: "Gemeente Rotterdam College van Burgemeester en Wethouders Aan de gemeenteraad Bezoekadres: Stadhuis Coolsingel 40 3011..."
+            - generic [ref=e661]: 🏛️ Agendapunt
+          - generic [ref=e662] [cursor=pointer]:
+            - generic [ref=e663]:
+              - heading "16bb4847 Afdoeningsvoorstel motie Weerdmeester Geen Olieboring in Rotterdams havengebied 16bb2130 en toezegging 16bb2194 NAM locatie en vragen Weerdme" [level=4] [ref=e664]
+              - generic [ref=e665]: 2016-08-31
+            - paragraph [ref=e666]: "Gemeente Rotterdam College van Burgemeester en Wethouders Aan de gemeenteraad Bezoekadres: Stadhuis Coolsingel 40 3011..."
+            - generic [ref=e667]: 🏛️ Agendapunt
+      - generic [ref=e363]:
+        - paragraph [ref=e364]: Wist u dat u uw zoekopdrachten kunt bewaren?
+        - paragraph [ref=e365]: Maak een gratis account en bewaar uw zoekgeschiedenis, stel uw partijlens in, en exporteer analyses naar Word.
+        - generic [ref=e366]:
+          - link "Gratis account aanmaken" [ref=e367] [cursor=pointer]:
+            - /url: /register
+          - button "Niet nu" [ref=e368] [cursor=pointer]
+      - generic [ref=e669]:
+        - paragraph [ref=e670]: "Tip: gebruik NeoDemos rechtstreeks in Claude, ChatGPT of Cursor voor diepere analyses. Werkt ook met Ollama."
+        - generic [ref=e671]:
+          - link "Meer info" [ref=e672] [cursor=pointer]:
+            - /url: /mcp-installer
+          - button "Sluiten" [ref=e673] [cursor=pointer]
+  - contentinfo [ref=e70]:
+    - navigation [ref=e71]:
+      - link "Over" [ref=e72] [cursor=pointer]:
+        - /url: /over
+      - text: ·
+      - link "Technologie" [ref=e73] [cursor=pointer]:
+        - /url: /technologie
+      - text: ·
+      - link "Methodologie" [ref=e74] [cursor=pointer]:
+        - /url: /methodologie
+      - text: ·
+      - link "AI-koppeling" [ref=e75] [cursor=pointer]:
+        - /url: /mcp-installer
+    - generic [ref=e76]: "Analyse door AI (Anthropic) · Europees gehost · Brondata: Open Raadsinformatie"
+    - generic [ref=e77]: NeoDemos (alpha) v0.2.0-alpha.2

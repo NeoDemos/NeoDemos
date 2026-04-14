@@ -11,6 +11,38 @@ Version is the single source of truth in [`VERSION`](VERSION); see [`docs/VERSIO
 
 ## [Unreleased]
 
+### Added (WS8f v2 — 2026-04-13)
+- **GrapeJS component library** (`static/admin-editor/components.js`) — 27 custom component types with `nd-` prefix using real site CSS classes: `nd-subpage-hero`, `nd-section` (variants), `nd-founder-quote`, `nd-audience-grid`/`-card`, `nd-sovereignty-grid`/`-card`, `nd-stat-grid`/`-card`, `nd-eval-grid`/`-card`, `nd-checklist`, `nd-architecture-steps`/`-step`, `nd-methodology-steps`/`-step`, `nd-compatibility-list`/`-badge`, `nd-btn`, `nd-cta-section`, `nd-testimonial`, free-edit leaves
+- **Traits panel** for structured content editing — form inputs (title, subtitle, image URL, CTA label/URL, variant select) instead of free contentEditable
+- **Structural locking** — `draggable: false`, `removable: false`, `selectable: false` on internal wrappers; `propagate: ['stylable']` for design-token lockdown; `droppable` containment rules (audience-card only drops into audience-grid)
+- **Editor canvas CSS injection** — `canvas.styles: ['/static/dist/main.css']` so blocks render with real site styling in the GrapeJS iframe
+- **Template auto-loader** (`GET /admin/api/page/{slug}/template`) — renders current Jinja template with `content()` defaults, strips chrome, returns content-only HTML for editor starter; "Laad sjabloon" button + first-open auto-populate
+- **GrapeJS 0.22.15** — upgraded from 0.21.13 (latest stable, DataSources API added upstream, no breaking changes for us)
+
+### Added (WS8f v1 — 2026-04-13)
+- **Admin content management** (`/admin/content`) — edit ~95 content items across landing, over, technologie, methodologie, footer sections without touching code
+- **GrapeJS visual editor** (`/admin/editor/{slug}`) — drag-and-drop layout editing for /, /over, /technologie, /methodologie with draft/publish workflow
+- **Admin panel restructure** — sidebar navigation with Dashboard, Inhoud, Gebruikers, Tokens, Pagina's, Instellingen
+- **Subscription tier scaffolding** — `subscription_tier` column on users (default `free_beta`), beta messaging on registration
+- Alembic migrations `0008` (site_content + site_pages tables) and `0009` (subscription columns)
+- Services: `ContentService` (60s TTL cache), `PageService`
+- Seed script `scripts/seed_site_content.py` (95 content items)
+- `bleach==6.1.0` for GrapeJS HTML sanitization
+
+### Changed (WS8f — 2026-04-13)
+- **main.py split** — 1,508-line monolith refactored into `main.py` (250 lines) + `app_state.py` (145) + `routes/auth.py` (343) + `routes/admin.py` + `routes/pages.py` (194) + `routes/api.py` (687)
+- **CSS restructure** — 4,037-line `main.css` split into 12 modules with Tailwind v4 `@layer` directives; build output functionally identical (±0.05%)
+- **Templates** — 95 `{{ content() }}` calls across 5 templates (search.html, over.html, technologie.html, methodologie.html, _footer.html); every call has hardcoded fallback so site renders with empty DB
+- **Page routes** — `/`, `/over`, `/technologie`, `/methodologie` now check for published GrapeJS page and render stored HTML when available, falling back to Jinja template
+- **CSP** — `/admin/editor/*` paths get relaxed CSP (unpkg.com for GrapeJS, `unsafe-eval`); public routes unchanged
+
+### Removed (WS8f — 2026-04-13)
+- `static/css/style.css` (958 lines, legacy, only loaded by dead `index.html`)
+- `templates/index.html` (no route served it)
+- `templates/admin.html` (decomposed into `templates/admin/*.html`)
+
+---
+
 Planned for **v0.2.0 — "GraphRAG + Trustworthy Numbers"**.
 Full plan: [`docs/architecture/V0_2_BEAT_MAAT_PLAN.md`](docs/architecture/V0_2_BEAT_MAAT_PLAN.md).
 

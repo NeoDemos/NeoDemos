@@ -1,0 +1,65 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "NeoDemos home" [ref=e3] [cursor=pointer]:
+      - /url: /
+      - text: NeoDemos
+    - navigation [ref=e4]:
+      - link "Zoeken" [ref=e5] [cursor=pointer]:
+        - /url: /
+      - link "Kalender" [ref=e6] [cursor=pointer]:
+        - /url: /calendar
+      - link "Over" [ref=e7] [cursor=pointer]:
+        - /url: /over
+      - link "MCP" [ref=e8] [cursor=pointer]:
+        - /url: /mcp-installer
+      - link "Inloggen" [ref=e9] [cursor=pointer]:
+        - /url: /login
+  - main [ref=e10]:
+    - generic [ref=e11]:
+      - heading "Over NeoDemos" [level=1] [ref=e12]
+      - blockquote [ref=e15]:
+        - paragraph [ref=e16]: “Als raadslid had ik toegang tot alles — en toch klikte ik me een weg door honderden losse PDF’s om één antwoord te vinden. Dat kon beter.”
+        - text: — Dennis Tak, oud-raadslid Rotterdam
+      - generic [ref=e17]:
+        - heading "Democratie werkt alleen als burgers en raadsleden dezelfde informatie hebben" [level=2] [ref=e18]
+        - paragraph [ref=e19]: "De Rotterdamse gemeenteraad produceert duizenden documenten per jaar: moties, amendementen, notulen, begrotingen, commissieverslagen. Die zijn allemaal openbaar — maar in de praktijk ontoegankelijk. Ze staan verspreid over portalen, in PDF-formaat, zonder samenhang."
+        - paragraph [ref=e20]: NeoDemos maakt die informatie doorzoekbaar, analyseerbaar en begrijpelijk. Niet door te versimpelen, maar door verbanden zichtbaar te maken die er altijd al waren.
+      - generic [ref=e21]:
+        - heading "Hoe het begon" [level=2] [ref=e22]
+        - paragraph [ref=e23]: NeoDemos is ontstaan uit frustratie. Als gemeenteraadslid in Rotterdam merkte oprichter Dennis Tak dat essentiële informatie weliswaar openbaar was, maar in de praktijk onvindbaar. Dossiers die drie jaar eerder waren behandeld, beloftes uit coalitieakkoorden, stemmingen over vergelijkbare moties — het kostte uren om de puzzelstukjes bij elkaar te zoeken.
+        - paragraph [ref=e24]: Dat moest anders. NeoDemos combineert meer dan 90.000 raadsdocumenten uit de periode 2002 tot heden met kunstmatige intelligentie, zodat elke vraag over wat de gemeente deed, besloot of beloofde direct antwoord krijgt — met bronvermelding.
+      - generic [ref=e25]:
+        - heading "Wat gebruikers zeggen" [level=2] [ref=e26]
+        - blockquote [ref=e27]:
+          - paragraph [ref=e28]: “Dit spaarde me twee uur voorbereiding.”
+          - text: — Raadslid, Rotterdam
+      - generic [ref=e29]:
+        - heading "Voor wie" [level=2] [ref=e30]
+        - generic [ref=e31]:
+          - generic [ref=e32]:
+            - heading "Raadsleden & fractiemedewerkers" [level=3] [ref=e33]
+            - paragraph [ref=e34]: Snellere dossiervoorbereiding, inzicht in stemgedrag en beleidscontinuiteit.
+          - generic [ref=e35]:
+            - heading "Journalisten" [level=3] [ref=e36]
+            - paragraph [ref=e37]: Feitelijke basis voor onderzoeksverhalen, met directe verwijzing naar brondocumenten.
+          - generic [ref=e38]:
+            - heading "Ambtenaren" [level=3] [ref=e39]
+            - paragraph [ref=e40]: Overzicht van eerdere besluiten en toezeggingen bij beleidsvoorbereiding.
+          - generic [ref=e41]:
+            - heading "Betrokken bewoners" [level=3] [ref=e42]
+            - paragraph [ref=e43]: Begrijpelijke antwoorden op vragen over wat de gemeente heeft gedaan en besloten.
+  - contentinfo [ref=e44]:
+    - generic [ref=e45]: "NeoDemos (alpha) v0.2.0-alpha.2 · Brondata: Open Raadsinformatie"
+    - generic [ref=e46]:
+      - link "Over" [ref=e47] [cursor=pointer]:
+        - /url: /over
+      - text: ·
+      - link "Technologie" [ref=e48] [cursor=pointer]:
+        - /url: /technologie
+      - text: ·
+      - link "Methodologie" [ref=e49] [cursor=pointer]:
+        - /url: /methodologie
+      - text: ·
+      - link "MCP" [ref=e50] [cursor=pointer]:
+        - /url: /mcp-installer
+    - generic [ref=e51]: Analyse door AI (Anthropic) · Europees gehost

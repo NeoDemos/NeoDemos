@@ -27,3 +27,4 @@ tqdm
 docling
 nltk>=3.8
 alembic>=1.13.0
+bleach==6.1.0

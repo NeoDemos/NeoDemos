@@ -33,7 +33,7 @@ When a workstream finishes:
 
 ## Workstream index
 
-> **Last updated:** 2026-04-13
+> **Last updated:** 2026-04-14
 
 | # | File | Title | Priority | Status | Depends on |
 |---|---|---|---|---|---|
@@ -44,19 +44,20 @@ When a workstream finishes:
 | WS4 | [`WS4_MCP_DISCIPLINE.md`](WS4_MCP_DISCIPLINE.md) | Best-in-class MCP surface | 4 | not started | none |
 | WS5a | [`WS5a_NIGHTLY_PIPELINE.md`](WS5a_NIGHTLY_PIPELINE.md) | 100% reliable nightly ingest | 5 | not started | none |
 | WS5b | [`WS5b_MULTI_PORTAL.md`](WS5b_MULTI_PORTAL.md) | Multi-portal connectors (search-only) | 6 | **deferred to v0.2.1** | WS5a stable for 14d |
-| WS6 | [`WS6_SUMMARIZATION.md`](WS6_SUMMARIZATION.md) | Source-spans-only summarization | 8 | not started | none for v0.2.0 minimum; WS1 for `mode='structured'` |
+| WS6 | [`WS6_SUMMARIZATION.md`](WS6_SUMMARIZATION.md) | Source-spans-only summarization | 8 | **in progress** — Phase 3 DB write running (~4K of 25.5K); code complete; MCP tool + UI badges pending | none for v0.2.0 minimum; WS1 for `mode='structured'` |
 | WS7 | [`WS7_OCR_RECOVERY.md`](WS7_OCR_RECOVERY.md) | OCR recovery for moties/amendementen | 2.5 | **in progress** — Dennis running | none; **must finish before WS1 Phase A** |
 | WS8 | [`WS8_FRONTEND_REDESIGN.md`](WS8_FRONTEND_REDESIGN.md) | Frontend redesign: design system, landing page, calendar | 1 (launch blocker) | **done** — WS8a-e shipped 2026-04-12 | WS9 (soft — for demo answer + streaming search) |
-| WS8f | [`WS8f_ADMIN_CMS.md`](WS8f_ADMIN_CMS.md) | Admin panel + content management + GrapeJS editor | 2 (launch enhancer) | not started | WS8a-e complete ✅ |
+| WS8f | [`WS8f_ADMIN_CMS.md`](WS8f_ADMIN_CMS.md) | Admin panel + content management + GrapeJS editor | 2 (launch enhancer) | **review** — shipped 2026-04-13, pending Dennis QA — **must finish QA before WS14 Phase D** | WS8a-e complete ✅ |
 | WS9 | [`WS9_WEB_INTELLIGENCE.md`](WS9_WEB_INTELLIGENCE.md) | Web intelligence: MCP-as-backend, Sonnet tool_use, SSE streaming | 1 (launch blocker) | **done** — deployed 2026-04-13 (b3104c3) | none (extract from existing MCP tools) |
 | WS10 | [`WS10_TABLE_RICH_EXTRACTION.md`](WS10_TABLE_RICH_EXTRACTION.md) | Table-rich document extraction (Docling layout pass) | 6 | **paused** — infrastructure done, full backfill deferred; curated 20-doc run only | none |
 | WS11 | [`WS11_CORPUS_COMPLETENESS.md`](WS11_CORPUS_COMPLETENESS.md) | Corpus completeness 2018–2026 (ORI gap + metadata backfill) | 1 | **in progress** — P1 ORI ingest running; WS11a complete (62,627 docs classified, 30 types) | none |
 | WS12 | [`WS12_VIRTUAL_NOTULEN_BACKFILL.md`](WS12_VIRTUAL_NOTULEN_BACKFILL.md) | Virtual notulen backfill & production hardening | 1 | **in progress** — Dennis running | none |
-| WS13 | [`WS13_MULTI_GEMEENTE_PIPELINE.md`](WS13_MULTI_GEMEENTE_PIPELINE.md) | Multi-gemeente pipeline: tenant-aware ingestion | 1 (v0.2.1) | not started | WS5a stable | 
+| WS13 | [`WS13_MULTI_GEMEENTE_PIPELINE.md`](WS13_MULTI_GEMEENTE_PIPELINE.md) | Multi-gemeente pipeline: tenant-aware ingestion | 1 (v0.2.1) | not started | WS5a stable |
+| WS14 | [`WS14_CALENDAR_QUALITY.md`](WS14_CALENDAR_QUALITY.md) | Calendar quality & bijlage reconciliation | 1 (launch blocker) | **not started** — plan approved 2026-04-14; C1 hotfix ships standalone | WS8f `done` (sequencing); cross-refs WS11 (B3), WS5a (B6), WS13 (E) |
 
 **Webcast timestamp linking** (priority 7) is split across WS5a (schema + backfill) and WS5b (HLS player UI).
 
-**WS8a-e shipped 2026-04-12.** WS8f (admin CMS) is next but does not block the press moment.
+**WS8a-e shipped 2026-04-12. WS8f shipped 2026-04-13** — admin CMS with form editor + GrapeJS visual editor (v2: 27 component types with traits and structural locking on GrapeJS 0.22.15, site-CSS-aware editor canvas, template auto-loader), router split (main.py 1,508→250 lines), CSS modularized (4,037-line monolith → 12 files with @layer), subscription scaffolding. Pending Dennis QA.
 
 **WS9 shipped 2026-04-13.** 18 tools via Sonnet + tool_use, SSE stream, IP rate limiting (3/month anon), teaser+expand UX, Gemini fallback. Live at `/api/search/stream`. Phase 4 manual eval (20 MCP-replay queries) pending.
 
@@ -122,7 +123,7 @@ v0.2.0 — three parallel tracks
   │  └──────────────┘  └────────────┘  └────────┘  └────────────┘  │
   └─────────────────────────────────────────────────────────────────┘
 
-  TRACK C: Public launch (WS8 + WS9) — independent of Tracks A & B
+  TRACK C: Public launch (WS8 + WS9 + WS14) — independent of Tracks A & B
   ┌─────────────────────────────────────────────────────────────────┐
   │                                                                  │
   │  ┌──────────────────────────────────────────────────────────┐    │
@@ -131,12 +132,21 @@ v0.2.0 — three parallel tracks
   │  └──────────────────────────────────────────────────────────┘    │
   │                                                                  │
   │  ┌──────────────────────┐   ┌──────────────────────────────┐    │
-  │  │  WS9 ✅ DONE         │   │  WS8f — Admin CMS            │    │
-  │  │  Sonnet+tool_use     │   │  (not started, not blocking) │    │
-  │  │  deployed 2026-04-13 │   │                              │    │
-  │  └──────────────────────┘   └──────────────────────────────┘    │
-  │                                                                  │
-  │  ► eval gate C ◄  → public launch + press outreach             │
+  │  │  WS9 ✅ DONE         │   │  WS8f ✅ SHIPPED (review)    │    │
+  │  │  Sonnet+tool_use     │   │  Admin CMS + GrapeJS +       │    │
+  │  │  deployed 2026-04-13 │   │  router/CSS refactor (4/13)  │    │
+  │  └──────────────────────┘   └──────────────┬───────────────┘    │
+  │                                            │                     │
+  │                                            ▼                     │
+  │                              ┌──────────────────────────────┐    │
+  │                              │  WS14 — Calendar quality     │    │
+  │                              │  bijlage reconciliation +    │    │
+  │                              │  dedup (planned 2026-04-14)  │    │
+  │                              │  blocks on WS8f QA for D     │    │
+  │                              └──────────────┬───────────────┘    │
+  │                                             │                    │
+  │                                             ▼                    │
+  │  ► eval gate C ◄  → public launch + press outreach              │
   └─────────────────────────────────────────────────────────────────┘
 
 v0.2.1 — search-only beyond Rotterdam
@@ -147,10 +157,10 @@ v0.2.1 — search-only beyond Rotterdam
 ```
 
 **Critical path (Track A):** WS7 + WS11 + WS12 (parallel, NOW) → WS1 Phase A (enrichment) → WS1 Phase B (graph svc + MCP) → WS3.
-**Critical path (Track C):** WS9 ✅ done. Track C unblocked — press outreach can begin once Dennis validates demo answer quality.
+**Critical path (Track C):** WS9 ✅ done, WS8f in review. **Track C now gated on WS14** (calendar quality / bijlage reconciliation) — press outreach waits until /calendar shows complete, non-duplicated document data for 2023-2026.
 **Active blockers:** WS1 is explicitly held until WS7/11/12 finish — enriching on garbled or incomplete text wastes Gemini spend ($90-130) and requires costly re-run.
 **WS10 removed from critical path** — infrastructure done, targeted run only, not a WS1 dependency.
-**No blockers for:** WS4, WS5a, WS6 — these can start independently when agent capacity allows.
+**No blockers for:** WS4, WS5a — these can start independently when agent capacity allows. **WS6 is in progress** (Phase 3 backfill running; 25,500 short summaries queued for DB write, ~95% `verified=True` on sample).
 
 ---
 
@@ -176,7 +186,7 @@ v0.2.1 — search-only beyond Rotterdam
 | IV3 taakveld coverage | WS2b backfill | ≥ 80% of financial_lines | ❌ not started |
 | MCP bug backlog cleared | WS4 blockers B1–B8 | All 8 bugs fixed before eval run | ❌ not started |
 | Nightly reliability | WS5a smoke test logs | 14 consecutive clean days | ❌ not started |
-| Source-spans strip test | WS6 verifier | Pass on 50 random docs | ❌ not started |
+| Source-spans strip test | WS6 verifier | Pass on 50 random docs | ⏳ Phase 3 running — sample shows ~4.4% `verified=False` (reranker 429'd, content still saved) |
 | Tool-description uniqueness | WS4 startup check | No pair > 0.85 cosine | ❌ not started |
 | KG Layer 2 size | WS1 quality audit | ≥ 500K relationship edges | ❌ blocked on WS1 |
 
@@ -191,6 +201,10 @@ v0.2.1 — search-only beyond Rotterdam
 | Mobile search above fold | Playwright screenshot at 375px | Search bar + CTA visible without scroll | ✅ WS8 shipped |
 | Demo answer cached | `GET /` response time | < 200ms (pre-rendered, no API call) | ⏳ demo cache wired — verify in prod |
 | Landing headline rotation | Config check | `LANDING_HEADLINE` env var wired, weekly swap documented | ✅ WS8 shipped |
+| Calendar bijlage visibility | WS14 A1 re-run | % of 2023-2026 meetings (with ≥1 agenda_item, excl. procedural-only) showing ≥1 bijlage ≥ **95%** | ❌ blocked on WS14 |
+| Calendar duplicate meetings | WS14 A7 re-run | 0 logical-duplicate meetings on /calendar | ❌ blocked on WS14 |
+| Calendar duplicate docs | WS14 walk of 2023-2026 meetings | 0 documents duplicated within a single agenda item | ❌ blocked on WS14 (C1 hotfix removes most) |
+| Calendar annotatie/bijlage split | Manual UI smoke on 20 meetings | Bijlagen rendered in prominent section; annotaties de-emphasized | ❌ blocked on WS14 Phase D |
 
 ---
 

@@ -1,123 +1,37 @@
-from fastapi import FastAPI, Request, Depends, Form
-from fastapi.responses import StreamingResponse, RedirectResponse, JSONResponse, PlainTextResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-from fastapi.middleware.cors import CORSMiddleware
-from starlette.middleware.base import BaseHTTPMiddleware
+"""NeoDemos FastAPI application shell.
+
+Routes live in `routes/*.py`. Service singletons live in `app_state.py`.
+This file owns: app construction, middleware, lifespan, the scheduler
+definitions, static-mount, and the Kamal liveness probe.
+"""
 import os
-import re
-from dotenv import load_dotenv
-import logging
-from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.triggers.interval import IntervalTrigger
 import asyncio
-import json
-from datetime import datetime, date
-from markupsafe import Markup
+import logging
 from contextlib import asynccontextmanager
 
-# Load environment variables from .env file
-load_dotenv()
+from dotenv import load_dotenv
+from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse, PlainTextResponse
+from starlette.middleware.base import BaseHTTPMiddleware
+from apscheduler.triggers.interval import IntervalTrigger
 
-# dotenv handles .env loading above — no manual fallback needed
+# Load environment variables from .env file before importing anything that reads them
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-from neodemos_version import VERSION_LABEL, DISPLAY_NAME, STAGE
-
-# Landing page headline — rotate weekly via env var, no redeploy needed
-# Supports literal \n in .env files (converted to real newlines)
-_raw_headline = os.getenv(
-    "LANDING_HEADLINE",
-    "De raadsvergadering was altijd openbaar.\nNu is ze ook begrijpelijk."
-)
-LANDING_HEADLINE = _raw_headline.replace("\\n", "\n")
-
-# ── Demo answer cache ──────────────────────────────────────────────────────
-# Pre-rendered AI answers loaded from data/demo_cache.json at startup.
-# Generate with: python scripts/cache_demo_answers.py
-# Each entry: {id, question, label, answer (markdown), sources, cached_at}
-_DEMO_CACHE_PATH = os.path.join(os.path.dirname(__file__), "data", "demo_cache.json")
-
-def _load_demo_cache() -> list:
-    try:
-        with open(_DEMO_CACHE_PATH) as f:
-            entries = json.load(f)
-            if entries:
-                logger.info(f"Demo cache loaded: {len(entries)} answers")
-            return entries
-    except FileNotFoundError:
-        logger.info("Demo cache not found — run scripts/cache_demo_answers.py")
-        return []
-    except Exception as e:
-        logger.warning(f"Demo cache load failed: {e}")
-        return []
-
-DEMO_CACHE: list = _load_demo_cache()
-
-def _get_demo_entry() -> dict | None:
-    """Return the primary demo entry (first in cache), or None if cache empty."""
-    if not DEMO_CACHE:
-        return None
-    # DEMO_ANSWER_ID env var lets you pin a specific demo by id without redeploy
-    pinned_id = os.getenv("DEMO_ANSWER_ID")
-    if pinned_id:
-        for entry in DEMO_CACHE:
-            if entry.get("id") == pinned_id:
-                return entry
-    return DEMO_CACHE[0]
-
+from neodemos_version import VERSION_LABEL
 from services.db_pool import close_pool
-from services.open_raad import OpenRaadService
-from services.storage import StorageService
-from services.ai_service import AIService, GEMINI_AVAILABLE
-from services.refresh_service import RefreshService
-from services.party_position_profile_service import PartyPositionProfileService
-from services.policy_lens_evaluation_service import PolicyLensEvaluationService
-from services.auth_dependencies import (
-    auth_service, require_login, require_admin, get_api_user,
-    get_current_user, sign_session_id, unsign_session_id,
-    generate_csrf_token,
-)
-from services.web_intelligence import WebIntelligenceService
+from services.auth_dependencies import auth_service
 
-raad_service = OpenRaadService()
-storage = StorageService()
-# Initialize services
-try:
-    ai_service = AIService()
-    logger.info("AIService init complete. GEMINI_AVAILABLE=%s use_llm=%s has_key=%s", GEMINI_AVAILABLE, ai_service.use_llm, bool(ai_service.api_key))
-except Exception as e:
-    logger.warning("AIService init FAILED: %s", e)
-    ai_service = None
-refresh_service = RefreshService(storage, raad_service, ai_service)
+from app_state import scheduler, refresh_service
 
-# WS9 — Web Intelligence Service (Sonnet + MCP tool_use)
-# Pass ai_service as Gemini fallback when Anthropic is unavailable or errors
-try:
-    web_intel = WebIntelligenceService(ai_service=ai_service)
-    if web_intel.available:
-        logger.info(f"WebIntelligenceService ready (model={web_intel.model})")
-    else:
-        logger.warning("WebIntelligenceService unavailable — ANTHROPIC_API_KEY not set, Gemini fallback active")
-except Exception as e:
-    logger.error(f"WebIntelligenceService init failed: {e}")
-    web_intel = None
 
-# Initialize party profile and lens evaluation services
-# These are lazy-loaded since they're only used for party lens analysis
-try:
-    from cachetools import TTLCache
-    _party_profile_cache: dict = TTLCache(maxsize=500, ttl=3600)
-    _party_lens_cache: dict = TTLCache(maxsize=500, ttl=3600)
-except ImportError:
-    _party_profile_cache = {}  # fallback if cachetools not installed
-    _party_lens_cache = {}
-
-# Initialize scheduler for daily auto-refresh at 8 AM
-scheduler = BackgroundScheduler()
+# ── Scheduled job functions ──
 
 def scheduled_refresh():
     """Wrapper for async refresh to run in scheduler"""
@@ -127,15 +41,6 @@ def scheduled_refresh():
     except Exception as e:
         logger.error(f"Scheduled refresh failed: {e}")
 
-scheduler.add_job(
-    scheduled_refresh,
-    IntervalTrigger(minutes=15),
-    id='interval_refresh',
-    name='Check for new documents every 15 minutes',
-    max_instances=1,
-    coalesce=True,
-    misfire_grace_time=300,
-)
 
 def scheduled_document_processor():
     """Process unchunked documents: chunk + build BM25 tsvector."""
@@ -150,15 +55,6 @@ def scheduled_document_processor():
     except Exception as e:
         logger.error(f"Document processor failed: {e}")
 
-scheduler.add_job(
-    scheduled_document_processor,
-    IntervalTrigger(minutes=20),
-    id='document_processor',
-    name='Chunk new documents and build BM25 tsvectors',
-    max_instances=1,
-    coalesce=True,
-    misfire_grace_time=300,
-)
 
 def scheduled_financial_sweep():
     """Hourly sweep: extract financial_lines from any doc with table_json chunks."""
@@ -173,15 +69,6 @@ def scheduled_financial_sweep():
     except Exception as e:
         logger.error(f"Financial sweep failed: {e}")
 
-scheduler.add_job(
-    scheduled_financial_sweep,
-    IntervalTrigger(hours=1),
-    id='financial_sweep',
-    name='Extract financial_lines from unprocessed table docs',
-    max_instances=1,
-    coalesce=True,
-    misfire_grace_time=600,
-)
 
 def cleanup_sessions():
     """Purge expired sessions from the database."""
@@ -191,6 +78,20 @@ def cleanup_sessions():
             logger.info(f"Cleaned up {count} expired sessions")
     except Exception as e:
         logger.error(f"Session cleanup failed: {e}")
+
+
+# Register scheduler jobs (session cleanup is registered in lifespan below).
+_JOB_DEFAULTS = dict(max_instances=1, coalesce=True)
+scheduler.add_job(scheduled_refresh, IntervalTrigger(minutes=15),
+                  id='interval_refresh', name='Check for new documents every 15 minutes',
+                  misfire_grace_time=300, **_JOB_DEFAULTS)
+scheduler.add_job(scheduled_document_processor, IntervalTrigger(minutes=20),
+                  id='document_processor', name='Chunk new documents and build BM25 tsvectors',
+                  misfire_grace_time=300, **_JOB_DEFAULTS)
+scheduler.add_job(scheduled_financial_sweep, IntervalTrigger(hours=1),
+                  id='financial_sweep', name='Extract financial_lines from unprocessed table docs',
+                  misfire_grace_time=600, **_JOB_DEFAULTS)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -264,14 +165,20 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.error(f"Failed to close DB pool: {e}")
 
-# Create FastAPI app with lifespan manager
+
+# ── App ──
 app = FastAPI(title="NeoDemos", lifespan=lifespan)
 
-# Canonical-host redirect: permanent 301 from neodemos.eu / www.neodemos.eu
-# to the equivalent path on https://neodemos.nl. Previously handled by Caddy;
-# moved here when we switched the public reverse proxy to kamal-proxy, which
-# has no native cross-TLD redirect feature.
+
+# ── Middleware ──
+
 class CanonicalHostRedirectMiddleware(BaseHTTPMiddleware):
+    """Permanent 301 from neodemos.eu / www.neodemos.eu to neodemos.nl.
+
+    Previously handled by Caddy; moved here when we switched the public reverse
+    proxy to kamal-proxy, which has no native cross-TLD redirect feature.
+    """
+
     async def dispatch(self, request: Request, call_next):
         host = (request.headers.get("host") or "").split(":")[0].lower()
         if host.endswith("neodemos.eu"):
@@ -282,7 +189,6 @@ class CanonicalHostRedirectMiddleware(BaseHTTPMiddleware):
         return await call_next(request)
 
 
-# Security headers middleware
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         response = await call_next(request)
@@ -290,15 +196,32 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response.headers["X-Frame-Options"] = "DENY"
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
         response.headers["X-NeoDemos-Version"] = VERSION_LABEL
-        response.headers["Content-Security-Policy"] = (
-            "default-src 'self'; "
-            "script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; "
-            "style-src 'self' 'unsafe-inline'; "
-            "font-src 'self'; "
-            "img-src 'self' data:; "
-            "frame-ancestors 'none'"
-        )
+
+        # GrapeJS visual editor needs CDN access (unpkg.com) plus 'unsafe-eval'
+        # (well-known GrapeJS internal requirement). Scope the relaxation to the
+        # admin editor route only — public pages keep the strict CSP.
+        if request.url.path.startswith("/admin/editor"):
+            response.headers["Content-Security-Policy"] = (
+                "default-src 'self'; "
+                "script-src 'self' https://cdn.jsdelivr.net https://unpkg.com "
+                "'unsafe-inline' 'unsafe-eval'; "
+                "style-src 'self' https://unpkg.com 'unsafe-inline'; "
+                "font-src 'self' data:; "
+                "img-src 'self' data: blob: https:; "
+                "connect-src 'self'; "
+                "frame-ancestors 'none'"
+            )
+        else:
+            response.headers["Content-Security-Policy"] = (
+                "default-src 'self'; "
+                "script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; "
+                "style-src 'self' 'unsafe-inline'; "
+                "font-src 'self'; "
+                "img-src 'self' data:; "
+                "frame-ancestors 'none'"
+            )
         return response
+
 
 # Note: Starlette runs middleware in reverse registration order for incoming
 # requests, so the redirect middleware must be added LAST to execute FIRST.
@@ -316,406 +239,6 @@ app.add_middleware(
 # Mount static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Setup templates
-templates = Jinja2Templates(directory="templates")
-
-# Add tojson filter for Jinja2 templates with datetime support
-# Must use Markup() to prevent HTML entity escaping of JSON in <script> tags
-def tojson_filter(obj):
-    def default_handler(o):
-        if isinstance(o, (datetime, date)):
-            return o.isoformat()
-        raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
-    
-    # Return Markup to prevent Jinja2 auto-escaping of the JSON string
-    return Markup(json.dumps(obj, default=default_handler))
-
-templates.env.filters['tojson'] = tojson_filter
-
-# Version context available in all templates (footer badge, cache busting)
-templates.env.globals["version_label"] = VERSION_LABEL
-templates.env.globals["display_name"] = DISPLAY_NAME
-templates.env.globals["stage"] = STAGE
-
-
-# ── Auth routes (public) ──
-
-@app.get("/login")
-async def login_page(request: Request, success: str = None):
-    # Generate a temporary CSRF token (not session-bound for login page)
-    csrf = generate_csrf_token("login-form")
-    return templates.TemplateResponse(name="login.html", request=request, context={
-        "title": "Inloggen", "csrf_token": csrf, "error": None, "success": success,
-    })
-
-@app.post("/login")
-async def login_submit(
-    request: Request,
-    email: str = Form(...),
-    password: str = Form(...),
-    csrf_token: str = Form(""),
-):
-    # Rate limiting
-    if not auth_service.check_login_rate_limit(email):
-        csrf = generate_csrf_token("login-form")
-        return templates.TemplateResponse(name="login.html", request=request, context={
-            "title": "Inloggen", "csrf_token": csrf, "email": email,
-            "error": "Te veel mislukte pogingen. Probeer het over 15 minuten opnieuw.",
-        })
-
-    user = auth_service.authenticate(email, password)
-    if not user:
-        auth_service.record_failed_login(email)
-        csrf = generate_csrf_token("login-form")
-        return templates.TemplateResponse(name="login.html", request=request, context={
-            "title": "Inloggen", "csrf_token": csrf, "email": email,
-            "error": "Ongeldige inloggegevens.",
-        })
-
-    if not user["is_active"]:
-        csrf = generate_csrf_token("login-form")
-        return templates.TemplateResponse(name="login.html", request=request, context={
-            "title": "Inloggen", "csrf_token": csrf, "email": email,
-            "error": "Uw account is gedeactiveerd. Neem contact op met de beheerder.",
-        })
-
-    # Create session
-    ip = request.client.host if request.client else None
-    ua = request.headers.get("user-agent", "")[:200]
-    session_id = auth_service.create_session(user["id"], ip_address=ip, user_agent=ua)
-    signed = sign_session_id(session_id)
-
-    response = RedirectResponse(url="/", status_code=303)
-    is_prod = os.getenv("ENVIRONMENT", "").lower() == "production"
-    response.set_cookie(
-        "session_id", signed,
-        httponly=True, secure=is_prod, samesite="lax", path="/",
-        max_age=int(os.getenv("SESSION_MAX_AGE", "604800")),
-    )
-    return response
-
-@app.get("/register")
-async def register_page(request: Request):
-    csrf = generate_csrf_token("register-form")
-    return templates.TemplateResponse(name="register.html", request=request, context={
-        "title": "Registreren", "csrf_token": csrf, "error": None,
-    })
-
-@app.post("/register")
-async def register_submit(
-    request: Request,
-    email: str = Form(...),
-    password: str = Form(...),
-    password_confirm: str = Form(...),
-    display_name: str = Form(""),
-    csrf_token: str = Form(""),
-):
-    ip = request.client.host if request.client else "unknown"
-
-    # Rate limiting
-    if not auth_service.check_register_rate_limit(ip):
-        csrf = generate_csrf_token("register-form")
-        return templates.TemplateResponse(name="register.html", request=request, context={
-            "title": "Registreren", "csrf_token": csrf, "email": email,
-            "display_name": display_name,
-            "error": "Te veel registraties. Probeer het later opnieuw.",
-        })
-
-    # Validation
-    email_clean = email.lower().strip()
-    if not re.match(r'^[^@\s]+@[^@\s]+\.[^@\s]+$', email_clean):
-        csrf = generate_csrf_token("register-form")
-        return templates.TemplateResponse(name="register.html", request=request, context={
-            "title": "Registreren", "csrf_token": csrf, "email": email,
-            "display_name": display_name,
-            "error": "Ongeldig e-mailadres.",
-        })
-
-    if len(password) < 8:
-        csrf = generate_csrf_token("register-form")
-        return templates.TemplateResponse(name="register.html", request=request, context={
-            "title": "Registreren", "csrf_token": csrf, "email": email,
-            "display_name": display_name,
-            "error": "Wachtwoord moet minimaal 8 tekens bevatten.",
-        })
-
-    if password != password_confirm:
-        csrf = generate_csrf_token("register-form")
-        return templates.TemplateResponse(name="register.html", request=request, context={
-            "title": "Registreren", "csrf_token": csrf, "email": email,
-            "display_name": display_name,
-            "error": "Wachtwoorden komen niet overeen.",
-        })
-
-    # Check if email already exists
-    if auth_service.get_user_by_email(email_clean):
-        csrf = generate_csrf_token("register-form")
-        return templates.TemplateResponse(name="register.html", request=request, context={
-            "title": "Registreren", "csrf_token": csrf, "email": email,
-            "display_name": display_name,
-            "error": "Dit e-mailadres is al in gebruik.",
-        })
-
-    auth_service.create_user(email_clean, password, display_name=display_name.strip() or None)
-    auth_service.record_registration(ip)
-
-    return RedirectResponse(url="/login?success=Account+aangemaakt.+U+kunt+nu+inloggen.", status_code=303)
-
-@app.post("/logout")
-async def logout(request: Request):
-    signed = request.cookies.get("session_id")
-    if signed:
-        session_id = unsign_session_id(signed)
-        if session_id:
-            auth_service.delete_session(session_id)
-    response = RedirectResponse(url="/", status_code=303)
-    response.delete_cookie("session_id", path="/")
-    return response
-
-
-# ── OAuth 2.1 Consent Flow (for MCP clients: Claude, ChatGPT, Perplexity) ──
-
-from services.mcp_oauth_provider import NeodemosOAuthProvider
-from urllib.parse import urlencode
-
-_oauth_provider = NeodemosOAuthProvider()
-
-
-@app.get("/oauth/authorize")
-async def oauth_authorize_page(
-    request: Request,
-    client_id: str = "",
-    redirect_uri: str = "",
-    state: str = "",
-    scope: str = "mcp search",
-    code_challenge: str = "",
-):
-    """
-    OAuth 2.1 consent page. The MCP SDK redirects here during the authorization flow.
-    If the user is already logged in (session cookie), show consent screen.
-    If not, show login form that returns here after authentication.
-    """
-    # Check if user is already logged in via session cookie
-    user = await get_current_user(request)
-
-    if not user:
-        # Store OAuth params in query string, redirect to login with return URL
-        oauth_params = urlencode({
-            "client_id": client_id, "redirect_uri": redirect_uri,
-            "state": state, "scope": scope, "code_challenge": code_challenge,
-        })
-        return RedirectResponse(
-            url=f"/oauth/login?{oauth_params}",
-            status_code=303,
-        )
-
-    # User is logged in — check mcp_access
-    if not user.get("mcp_access"):
-        return templates.TemplateResponse(name="oauth_error.html", request=request, context={
-            "title": "Geen MCP-toegang",
-            "error": "Uw account heeft geen MCP-toegang. Neem contact op met de beheerder.",
-        })
-
-    # Show consent page
-    client = await _oauth_provider.get_client(client_id)
-    csrf = generate_csrf_token("oauth-consent")
-    return templates.TemplateResponse(name="oauth_consent.html", request=request, context={
-        "title": "Toestemming verlenen",
-        "user": user,
-        "client_name": client.client_name if client else client_id,
-        "scope": scope,
-        "client_id": client_id,
-        "redirect_uri": redirect_uri,
-        "state": state,
-        "code_challenge": code_challenge,
-        "csrf_token": csrf,
-    })
-
-
-@app.get("/oauth/login")
-async def oauth_login_page(
-    request: Request,
-    client_id: str = "", redirect_uri: str = "", state: str = "",
-    scope: str = "mcp search", code_challenge: str = "",
-):
-    """Login page during OAuth flow — after login, returns to consent page."""
-    csrf = generate_csrf_token("oauth-login")
-    return templates.TemplateResponse(name="oauth_login.html", request=request, context={
-        "title": "Inloggen — MCP Autorisatie",
-        "csrf_token": csrf, "error": None,
-        "client_id": client_id, "redirect_uri": redirect_uri,
-        "state": state, "scope": scope, "code_challenge": code_challenge,
-    })
-
-
-@app.post("/oauth/login")
-async def oauth_login_submit(
-    request: Request,
-    email: str = Form(...),
-    password: str = Form(...),
-    client_id: str = Form(""),
-    redirect_uri: str = Form(""),
-    state: str = Form(""),
-    scope: str = Form("mcp search"),
-    code_challenge: str = Form(""),
-    csrf_token: str = Form(""),
-):
-    """Process login during OAuth flow, then redirect to consent."""
-    user = auth_service.authenticate(email, password)
-    if not user:
-        csrf = generate_csrf_token("oauth-login")
-        return templates.TemplateResponse(name="oauth_login.html", request=request, context={
-            "title": "Inloggen — MCP Autorisatie",
-            "csrf_token": csrf, "email": email, "error": "Ongeldige inloggegevens.",
-            "client_id": client_id, "redirect_uri": redirect_uri,
-            "state": state, "scope": scope, "code_challenge": code_challenge,
-        })
-
-    if not user["is_active"]:
-        csrf = generate_csrf_token("oauth-login")
-        return templates.TemplateResponse(name="oauth_login.html", request=request, context={
-            "title": "Inloggen — MCP Autorisatie",
-            "csrf_token": csrf, "email": email,
-            "error": "Uw account is gedeactiveerd.",
-            "client_id": client_id, "redirect_uri": redirect_uri,
-            "state": state, "scope": scope, "code_challenge": code_challenge,
-        })
-
-    # Create session cookie so the consent page knows the user
-    ip = request.client.host if request.client else None
-    ua = request.headers.get("user-agent", "")[:200]
-    session_id = auth_service.create_session(user["id"], ip_address=ip, user_agent=ua)
-    signed = sign_session_id(session_id)
-
-    # Redirect back to consent page with OAuth params
-    oauth_params = urlencode({
-        "client_id": client_id, "redirect_uri": redirect_uri,
-        "state": state, "scope": scope, "code_challenge": code_challenge,
-    })
-    response = RedirectResponse(url=f"/oauth/authorize?{oauth_params}", status_code=303)
-    is_prod = os.getenv("ENVIRONMENT", "").lower() == "production"
-    response.set_cookie(
-        "session_id", signed,
-        httponly=True, secure=is_prod, samesite="lax", path="/",
-        max_age=int(os.getenv("SESSION_MAX_AGE", "604800")),
-    )
-    return response
-
-
-@app.post("/oauth/consent")
-async def oauth_consent_submit(
-    request: Request,
-    client_id: str = Form(...),
-    redirect_uri: str = Form(...),
-    state: str = Form(""),
-    scope: str = Form("mcp search"),
-    code_challenge: str = Form(...),
-    csrf_token: str = Form(""),
-):
-    """User approved consent — generate auth code and redirect back to client."""
-    user = await get_current_user(request)
-    if not user:
-        return RedirectResponse(url="/oauth/login", status_code=303)
-
-    if not user.get("mcp_access"):
-        return templates.TemplateResponse(name="oauth_error.html", request=request, context={
-            "title": "Geen MCP-toegang", "error": "Geen MCP-toegang voor dit account.",
-        })
-
-    # Generate authorization code
-    code = await _oauth_provider.create_authorization_code(
-        client_id=client_id,
-        user_id=user["id"],
-        redirect_uri=redirect_uri,
-        scope=scope,
-        code_challenge=code_challenge,
-    )
-
-    # Build the full callback URL with code + state
-    params = {"code": code}
-    if state:
-        params["state"] = state
-    separator = "&" if "?" in redirect_uri else "?"
-    full_redirect = f"{redirect_uri}{separator}{urlencode(params)}"
-
-    # Look up the client's display name so the success page can name it
-    client = await _oauth_provider.get_client(client_id)
-    client_name = client.client_name if client and client.client_name else client_id
-
-    # Show an interstitial success page instead of redirecting straight away.
-    # The template has a 2-second meta-refresh to `full_redirect`, plus manual
-    # fallback buttons in case the auto-refresh is blocked. This gives the user
-    # explicit visual confirmation that NeoDemos accepted the consent before
-    # handing control back to the MCP client.
-    return templates.TemplateResponse(name="oauth_success.html", request=request, context={
-        "title": "Autorisatie geslaagd",
-        "client_name": client_name,
-        "redirect_url": full_redirect,
-    })
-
-
-# ── MCP Installer (public) ──
-
-_MCP_SERVER_URL = os.getenv("MCP_BASE_URL", "https://mcp.neodemos.nl") + "/mcp"
-
-
-@app.get("/mcp-installer")
-async def mcp_installer_page(request: Request):
-    user = await get_current_user(request)
-    token_data = None
-    existing_tokens = []
-    if user:
-        existing_tokens = auth_service.list_user_tokens(user["id"])
-    return templates.TemplateResponse(name="mcp_installer.html", request=request, context={
-        "title": "MCP Installer",
-        "user": user,
-        "mcp_url": _MCP_SERVER_URL,
-        "token_data": token_data,
-        "existing_tokens": existing_tokens,
-    })
-
-
-@app.post("/api/mcp/generate-token")
-async def generate_mcp_token(request: Request):
-    """Auto-generate an API token for MCP use. Returns JSON with token and config snippets."""
-    user = await get_current_user(request)
-    if not user:
-        return JSONResponse({"error": "Niet ingelogd"}, status_code=401)
-    if not user.get("is_active"):
-        return JSONResponse({"error": "Account is gedeactiveerd"}, status_code=403)
-
-    # Grant mcp_access if not already set
-    if not user.get("mcp_access"):
-        auth_service.update_user(user["id"], mcp_access=True)
-
-    # Generate token
-    token_data = auth_service.create_api_token(
-        user_id=user["id"],
-        name="MCP Auto-Install",
-        scopes="search,mcp",
-    )
-
-    return JSONResponse({
-        "token": token_data["token"],
-        "mcp_url": _MCP_SERVER_URL,
-        "claude_desktop_config": {
-            "mcpServers": {
-                "neodemos": {
-                    "url": _MCP_SERVER_URL,
-                    "headers": {
-                        "Authorization": f"Bearer {token_data['token']}"
-                    }
-                }
-            }
-        },
-        "claude_code_command": (
-            f"claude mcp add neodemos"
-            f" --transport streamable-http"
-            f" --url {_MCP_SERVER_URL}"
-            f' --header "Authorization: Bearer {token_data["token"]}"'
-        ),
-    })
-
 
 # ── Liveness probe (Kamal / kamal-proxy convention) ──
 
@@ -726,781 +249,16 @@ async def kamal_up():
     return PlainTextResponse("ok", status_code=200)
 
 
-# ── Public subpages ──
-
-@app.get("/over")
-async def over_page(request: Request):
-    """About page: founder story, democratic ambition, user quotes."""
-    user = await get_current_user(request)
-    return templates.TemplateResponse(name="over.html", request=request, context={
-        "title": "Over", "user": user,
-    })
-
-@app.get("/technologie")
-async def technologie_page(request: Request):
-    """Technology page: EU sovereignty, local AI, security, model independence."""
-    user = await get_current_user(request)
-    return templates.TemplateResponse(name="technologie.html", request=request, context={
-        "title": "Technologie", "user": user,
-    })
-
-@app.get("/methodologie")
-async def methodologie_page(request: Request):
-    """Methodology page: how it works, data sources, eval scores, limitations."""
-    user = await get_current_user(request)
-    return templates.TemplateResponse(name="methodologie.html", request=request, context={
-        "title": "Methodologie", "user": user,
-    })
-
-
-# ── Protected page routes ──
-
-@app.get("/")
-async def search_page(request: Request):
-    """Public landing page: 4-element design (demo, search, credibility, trust).
-
-    Anonymous users see the pre-rendered demo answer and credibility lines.
-    Logged-in users see a clean search-only experience.
-    """
-    user = await get_current_user(request)
-    demo = _get_demo_entry()
-    return templates.TemplateResponse(name="search.html", request=request, context={
-        "title": "Zoeken",
-        "user": user,
-        "landing_headline": Markup(LANDING_HEADLINE.replace("\n", "<br>")),
-        "demo_question": demo["question"] if demo else "Heeft het college haar beloftes waargemaakt?",
-        "demo_answer_markdown": demo["answer"] if demo else None,
-        "demo_sources": demo["sources"] if demo else [],
-        "demo_label": demo["label"] if demo else None,
-        "demo_cached_at": demo["cached_at"] if demo else None,
-    })
-
-@app.get("/overview")
-async def overview_page(request: Request, user: dict = Depends(require_login)):
-    meetings = storage.get_meetings(limit=500)
-    return templates.TemplateResponse(name="overview.html", request=request, context={
-        "title": "Overzicht",
-        "meetings": meetings,
-        "user": user,
-    })
-
-@app.get("/api/search")
-async def api_search(request: Request, q: str, deep: bool = False, mode: str = None, party: str = "GroenLinks-PvdA", date_from: str = None, date_to: str = None, user: dict = Depends(get_api_user)):
-    """
-    Search for agenda items and documents.
-    If deep=True, also performs AI Deep Research.
-    """
-    if not q or len(q) < 3:
-        return {"results": [], "ai_answer": None}
-
-    # Temporal extraction: detect date references in natural language
-    # Only runs if no explicit date filters were provided by the frontend
-    if not date_from and not date_to:
-        try:
-            temporal = await ai_service.extract_temporal_filters(q)
-            if temporal.get("date_from") or temporal.get("date_to"):
-                q = temporal["query"]
-                date_from = temporal.get("date_from")
-                date_to = temporal.get("date_to")
-                logger.info(f"Temporal extraction: query='{q}' date_from={date_from} date_to={date_to}")
-        except Exception:
-            pass  # Non-critical — proceed with original query
-
-    # 1. Traditional Keyword Search
-    from psycopg2.extras import RealDictCursor
-    def get_keyword_results():
-        with storage._get_connection() as conn:
-            with conn.cursor(cursor_factory=RealDictCursor) as cur:
-                try:
-                    # Optimized search using CTE and deferred headline generation
-                    score_threshold=0.15  # Extremely relaxed recall for long queries
-                    search_query = """
-                    WITH matches AS (
-                        -- 1. Trigram match on agenda item name (Highest priority/rank)
-                        SELECT ai.id as agenda_item_id, 1.0 as rank, NULL::int as chunk_id
-                        FROM agenda_items ai
-                        WHERE ai.name ILIKE %s
-                        
-                        UNION ALL
-                        
-                        -- 2. FTS match on document chunks
-                        SELECT d.agenda_item_id, ts_rank_cd(dc.text_search, websearch_to_tsquery('dutch', %s), 32) as rank, dc.id as chunk_id
-                        FROM document_chunks dc
-                        JOIN documents d ON dc.document_id = d.id
-                        WHERE dc.text_search @@ websearch_to_tsquery('dutch', %s)
-                    ),
-                    ranked_items AS (
-                        -- Pick the best match (highest rank) for each unique agenda item
-                        SELECT DISTINCT ON (agenda_item_id) 
-                            agenda_item_id, 
-                            rank, 
-                            chunk_id
-                        FROM matches
-                        ORDER BY agenda_item_id, rank DESC
-                    ),
-                    top_items AS (
-                        -- Take the top 50 results overall
-                        SELECT * FROM ranked_items
-                        ORDER BY rank DESC
-                        LIMIT 50
-                    )
-                    SELECT 
-                        t.agenda_item_id,
-                        ai.meeting_id,
-                        ai.name,
-                        m.start_date as meeting_date,
-                        m.committee,
-                        CASE 
-                            WHEN t.chunk_id IS NOT NULL THEN 
-                                ts_headline('dutch', dc.content, websearch_to_tsquery('dutch', %s), 
-                                            'StartSel=<b>, StopSel=</b>, MaxWords=35, MinWords=15, ShortWord=3, HighlightAll=FALSE, MaxFragments=1, FragmentDelimiter=" ... "')
-                            ELSE (
-                                SELECT LEFT(content, 200) 
-                                FROM documents 
-                                WHERE agenda_item_id = t.agenda_item_id 
-                                LIMIT 1
-                            )
-                        END as snippet,
-                        t.rank
-                    FROM top_items t
-                    JOIN agenda_items ai ON t.agenda_item_id = ai.id
-                    JOIN meetings m ON ai.meeting_id = m.id
-                    LEFT JOIN document_chunks dc ON t.chunk_id = dc.id
-                    ORDER BY t.rank DESC, m.start_date DESC;
-                    """
-                    # Fallback to a broader search if literal pattern fails
-                    search_pattern = f"%{q.split()[0]}%" # Match at least the first word
-                    cur.execute(search_query, (search_pattern, q, q, q))
-                    results = cur.fetchall()
-                    
-                    # If still empty, try even broader
-                    if not results and len(q.split()) > 1:
-                        broad_q = " & ".join(q.split()[:3]) # First 3 words ANDed
-                        cur.execute(search_query, (f"%{q.split()[0]}%", broad_q, broad_q, broad_q))
-                        results = cur.fetchall()
-                    
-                    return results
-                except Exception as e:
-                    logger.error(f"Keyword search failed for query '{q}': {e}")
-                    return []
-
-    # Determine if we need to run AI research
-    run_ai = deep or mode == 'debate'
-    
-    if run_ai:
-        # Run both in parallel if AI is requested
-        if mode == 'debate':
-            ai_task = ai_service.perform_agentic_debate_prep(q, storage, party=party, date_from=date_from, date_to=date_to)
-        else:
-            ai_task = ai_service.perform_deep_search(q, storage, date_from=date_from, date_to=date_to)
-            
-        loop = asyncio.get_running_loop()
-        keyword_rows = await loop.run_in_executor(None, get_keyword_results)
-        ai_result = await ai_task
-    else:
-        # Standard fast search
-        loop = asyncio.get_running_loop()
-        keyword_rows = await loop.run_in_executor(None, get_keyword_results)
-        ai_result = {"answer": None, "sources": []}
-            
-    results = []
-    for r in keyword_rows:
-        results.append({
-            "agenda_item_id": r['agenda_item_id'],
-            "meeting_id": r['meeting_id'],
-            "name": r['name'],
-            "meeting_date": str(r['meeting_date']).split('T')[0].split(' ')[0] if r['meeting_date'] else 'Onbekend',
-            "committee": r['committee'],
-            "snippet": r['snippet'] + "..." if r['snippet'] else ""
-        })
-        
-    return {
-        "results": results,
-        "ai_answer": ai_result.get("answer"),
-        "sources": ai_result.get("sources", [])
-    }
-
-
-# ---------------------------------------------------------------------------
-# WS9 — AI Search via Sonnet + MCP tool_use (SSE streaming)
-# ---------------------------------------------------------------------------
-
-_AI_SEARCH_MONTHLY_LIMIT_ANON = 3  # anonymous users: 3 AI searches per month
-
-
-def _get_client_ip(request: Request) -> str:
-    """Extract client IP, respecting X-Forwarded-For from kamal-proxy."""
-    forwarded = request.headers.get("x-forwarded-for")
-    if forwarded:
-        return forwarded.split(",")[0].strip()
-    return request.client.host if request.client else "unknown"
-
-
-def _check_ai_rate_limit(ip: str) -> dict:
-    """
-    Check IP-based rate limit for anonymous AI searches.
-    Uses PostgreSQL for persistence across restarts.
-    Returns {"allowed": bool, "remaining": int, "total": int}.
-    """
-    from services.db_pool import get_connection
-    try:
-        with get_connection() as conn:
-            cur = conn.cursor()
-            # Ensure table exists (idempotent)
-            cur.execute("""
-                CREATE TABLE IF NOT EXISTS ai_search_rate_limits (
-                    ip TEXT NOT NULL,
-                    month TEXT NOT NULL,
-                    count INTEGER NOT NULL DEFAULT 0,
-                    PRIMARY KEY (ip, month)
-                )
-            """)
-            month_key = date.today().strftime("%Y-%m")
-            cur.execute(
-                "SELECT count FROM ai_search_rate_limits WHERE ip = %s AND month = %s",
-                (ip, month_key),
-            )
-            row = cur.fetchone()
-            current = row[0] if row else 0
-            conn.commit()
-            cur.close()
-            remaining = max(0, _AI_SEARCH_MONTHLY_LIMIT_ANON - current)
-            return {
-                "allowed": current < _AI_SEARCH_MONTHLY_LIMIT_ANON,
-                "remaining": remaining,
-                "total": _AI_SEARCH_MONTHLY_LIMIT_ANON,
-            }
-    except Exception as e:
-        logger.error(f"Rate limit check failed: {e}")
-        return {"allowed": True, "remaining": 1, "total": _AI_SEARCH_MONTHLY_LIMIT_ANON}
-
-
-def _increment_ai_rate_limit(ip: str) -> None:
-    """Increment the AI search counter for an IP."""
-    from services.db_pool import get_connection
-    try:
-        with get_connection() as conn:
-            cur = conn.cursor()
-            month_key = date.today().strftime("%Y-%m")
-            cur.execute("""
-                INSERT INTO ai_search_rate_limits (ip, month, count)
-                VALUES (%s, %s, 1)
-                ON CONFLICT (ip, month) DO UPDATE SET count = ai_search_rate_limits.count + 1
-            """, (ip, month_key))
-            conn.commit()
-            cur.close()
-    except Exception as e:
-        logger.error(f"Rate limit increment failed: {e}")
-
-
-@app.get("/api/search/limit")
-async def api_search_limit(request: Request):
-    """Check remaining AI search quota. Logged-in users have unlimited."""
-    user = await get_current_user(request)
-    if user and user.get("is_active"):
-        return {"remaining": -1, "total": -1, "unlimited": True}
-    ip = _get_client_ip(request)
-    limit = _check_ai_rate_limit(ip)
-    return {"remaining": limit["remaining"], "total": limit["total"], "unlimited": False}
-
-
-@app.get("/api/search/stream")
-async def api_search_stream(request: Request, q: str):
-    """
-    SSE endpoint for AI-powered search with Sonnet + MCP tool_use.
-    Anonymous: rate-limited to 3/month. Logged-in: unlimited.
-    """
-    if not q or len(q) < 3:
-        return JSONResponse({"error": "Zoekvraag te kort (minimaal 3 tekens)"}, status_code=400)
-
-    if not web_intel or not web_intel.available:
-        return JSONResponse({"error": "AI-zoekservice niet beschikbaar"}, status_code=503)
-
-    # Auth + rate limiting
-    user = await get_current_user(request)
-    is_authenticated = user and user.get("is_active")
-    partij = None
-
-    if not is_authenticated:
-        ip = _get_client_ip(request)
-        limit = _check_ai_rate_limit(ip)
-        if not limit["allowed"]:
-            return JSONResponse({
-                "error": "Maandelijkse AI-zoeklimiet bereikt",
-                "remaining": 0,
-                "total": _AI_SEARCH_MONTHLY_LIMIT_ANON,
-                "action": "create_account",
-            }, status_code=429)
-    else:
-        ip = None
-        # If user has a party preference, pass it to Sonnet
-        partij = user.get("party")
-
-    async def event_generator():
-        # Increment rate limit for anonymous users at start
-        if not is_authenticated and ip:
-            _increment_ai_rate_limit(ip)
-
-        async for event in web_intel.stream(q, partij=partij):
-            if await request.is_disconnected():
-                break
-            yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
-
-    return StreamingResponse(
-        event_generator(),
-        media_type="text/event-stream",
-        headers={
-            "Cache-Control": "no-cache",
-            "X-Accel-Buffering": "no",
-            "Connection": "keep-alive",
-        },
-    )
-
-
-@app.get("/calendar")
-async def read_calendar(
-    request: Request,
-    year: int = None,
-    month: int = None,
-    committee: str = None,
-    search: str = None,
-    view: str = "list",
-    show_empty: bool = False,
-):
-    """Public calendar page -- no login required.
-
-    By default (show_empty=False), future meetings without documents are hidden.
-    The template exposes a toggle so users can reveal them.
-    """
-    user = await get_current_user(request)
-    available_years = storage.get_meeting_years()
-    # Filter out numeric-only committee IDs before rendering chips
-    committees = [c for c in storage.get_distinct_committees() if c and not c.strip().isdigit()]
-    if year is None and available_years:
-        year = available_years[0]
-    meetings = storage.get_meetings_filtered(
-        year=year, committee=committee, search=search, limit=2000,
-    )
-    return templates.TemplateResponse(name="calendar.html", request=request, context={
-        "title": "Raadskalender",
-        "meetings": meetings,
-        "selected_year": year,
-        "selected_month": month,
-        "available_years": available_years,
-        "committees": committees,
-        "selected_committee": committee or "",
-        "search_query": search or "",
-        "view": view,
-        "show_empty": show_empty,
-        "user": user,
-    })
-
-@app.get("/settings")
-async def read_settings(request: Request, user: dict = Depends(require_login)):
-    tokens = auth_service.list_user_tokens(user["id"])
-    return templates.TemplateResponse(name="settings.html", request=request, context={
-        "title": "Instellingen",
-        "user": user,
-        "tokens": tokens,
-    })
-
-@app.get("/meeting/{meeting_id}")
-async def read_meeting(request: Request, meeting_id: str, user: dict = Depends(require_login)):
-    # Pre-2018 meetings have rotterdam_raad_ prefix — serve from Postgres only
-    if meeting_id.startswith("rotterdam_raad_"):
-        meeting = storage.get_meeting_details(meeting_id)
-        if not meeting:
-            return templates.TemplateResponse(name="meeting.html", request=request, context={
-                "title": "Vergadering niet gevonden",
-                "meeting": {"name": "Vergadering niet gevonden", "agenda": []},
-                "user": user,
-            })
-    else:
-        meeting = storage.get_meeting_details(meeting_id)
-        # Fall back to live API only if not found in DB
-        if not meeting or not meeting.get("name"):
-            meeting = await raad_service.get_meeting_details(meeting_id)
-    
-    # Mark which agenda items are substantive (should be analyzed)
-    if meeting.get("agenda"):
-        meeting_name = meeting.get("name", "")
-        committee = meeting.get("committee", "")
-        combined_name = f"{meeting_name} {committee}"
-        
-        def mark_substantive(items):
-            for item in items:
-                item["is_substantive"] = storage.is_substantive_item(item, combined_name)
-                if item.get("sub_items"):
-                    mark_substantive(item["sub_items"])
-        
-        mark_substantive(meeting["agenda"])
-    
-    return templates.TemplateResponse(name="meeting.html", request=request, context={
-        "title": meeting.get("name", "Meeting"),
-        "meeting": meeting,
-        "user": user,
-    })
-
-@app.get("/api/summarize/{doc_id}")
-async def api_summarize(
-    request: Request,
-    doc_id: str,
-    mode: str = "short",
-    user: dict = Depends(get_api_user),
-):
-    """WS6 — Source-spans-verified per-document summary."""
-    from types import SimpleNamespace
-    from services.summarizer import Summarizer
-    from services.storage_ws6 import (
-        get_all_chunks_for_document,
-        get_document_summary_cache,
-        update_document_summary_columns,
-    )
-
-    if mode not in ("short", "long"):
-        return JSONResponse({"error": f"Ongeldige mode '{mode}'."}, status_code=400)
-
-    # Cache fast-path for mode='short'.
-    if mode == "short":
-        cached = get_document_summary_cache(doc_id)
-        if cached and cached.get("summary_short"):
-            return {
-                "document_id": doc_id, "mode": "short",
-                "text": cached["summary_short"],
-                "verified": bool(cached.get("summary_verified")),
-                "cached": True, "computed_at": cached.get("summary_computed_at"),
-            }
-
-    # Compute on demand via WS6 Summarizer.
-    chunk_rows = get_all_chunks_for_document(doc_id)
-    if not chunk_rows:
-        return JSONResponse({"error": f"Geen fragmenten voor '{doc_id}'."}, status_code=404)
-
-    chunks = [
-        SimpleNamespace(chunk_id=r["chunk_id"], document_id=r["document_id"],
-                        title=r.get("title") or "", content=r.get("content") or "")
-        for r in chunk_rows
-    ]
-
-    summarizer = Summarizer()
-    try:
-        result = await summarizer.summarize_async(chunks, mode=mode)
-    except Exception as e:
-        logger.exception(f"Summarizer failed for {doc_id}: {e}")
-        return JSONResponse({"error": f"Samenvatten mislukt: {e}"}, status_code=500)
-
-    if not result.text:
-        return JSONResponse({"error": "Lege samenvatting."}, status_code=502)
-
-    # Write-through for mode='short'.
-    if mode == "short":
-        try:
-            update_document_summary_columns(
-                doc_id, summary_short=result.text, summary_verified=result.verified)
-        except Exception:
-            pass
-
-    return {
-        "document_id": doc_id, "mode": mode, "text": result.text,
-        "verified": result.verified, "stripped_count": result.stripped_count,
-        "total_sentences": result.total_sentences,
-        "citations": [c.chunk_id for c in result.sources],
-        "cached": False, "latency_ms": result.latency_ms,
-    }
-
-@app.get("/api/analyse/agenda/{agenda_item_id}")
-async def api_analyse_agenda_item(request: Request, agenda_item_id: str, user: dict = Depends(get_api_user)):
-    """
-    Perform a general AI analysis of the agenda item.
-    """
-    logger.info(f"GENERAL AI ANALYSIS ENDPOINT CALLED for agenda item {agenda_item_id}")
-    # Fetch agenda item and recursively collect documents from its sub-items
-    item_data = storage.get_agenda_item_with_sub_documents(agenda_item_id)
-    if not item_data:
-        return {"error": f"Agendapunt {agenda_item_id} niet gevonden"}
-    
-    item_name = item_data['name']
-    doc_rows = item_data['documents']
-
-    if not doc_rows:
-        return {
-            "summary": f"Geen documenten beschikbaar voor agendapunt: {item_name}",
-            "key_points": [],
-            "conflicts": [],
-            "decision_points": [],
-            "controversial_topics": [],
-            "questions": [],
-            "party_alignment": None
-        }
-
-    # Prepare documents for analysis (FULL CONTENT, not truncated)
-    documents = [
-        {
-            "name": row['name'],
-            "content": row['content']
-        }
-        for row in doc_rows
-    ]
-
-    analysis = await ai_service.analyze_agenda_item(item_name, documents)
-    return analysis
-
-def _get_party_lens_service(party_name: str = "GroenLinks-PvdA"):
-    """
-    Get or create a PolicyLensEvaluationService for the specified party.
-    Caches services to avoid reloading party profiles repeatedly.
-    """
-    cache_key = party_name.lower()
-    
-    if cache_key not in _party_lens_cache:
-        service = PolicyLensEvaluationService(party_name=party_name)
-        
-        # Load party profile - searches in data/profiles/ directory
-        profile_path = f"data/profiles/party_profile_{cache_key.replace(' ', '_').replace('-', '_')}.json"
-        
-        # Also try the standard naming convention
-        if not os.path.exists(profile_path):
-            profile_path = f"data/profiles/party_profile_{cache_key.replace('-', '_')}.json"
-        
-        if os.path.exists(profile_path):
-            service.load_party_profile(profile_path)
-        else:
-            logger.warning(f"Party profile not found: {profile_path}")
-        
-        _party_lens_cache[cache_key] = service
-    
-    return _party_lens_cache[cache_key]
-
-@app.get("/api/analyse/party-lens/{agenda_item_id}")
-async def api_analyse_party_lens(request: Request, agenda_item_id: str, party: str = "GroenLinks-PvdA", user: dict = Depends(get_api_user)):
-    """
-    Analyze an agenda item through a party's perspective.
-    
-    Parameters:
-    - party: The party to analyze through (default: GroenLinks-PvdA)
-    """
-    logger.info(f"PARTY LENS ENDPOINT CALLED: party={party}")
-    from psycopg2.extras import RealDictCursor
-    with storage._get_connection() as conn:
-        with conn.cursor(cursor_factory=RealDictCursor) as cur:
-            # Get agenda item and meeting
-            cur.execute(
-                "SELECT name, meeting_id FROM agenda_items WHERE id = %s",
-                (agenda_item_id,)
-            )
-            item_row = cur.fetchone()
-            if not item_row:
-                return {
-                    "error": f"Agendapunt {agenda_item_id} niet gevonden",
-                    "alignment_score": None
-                }
-            
-            item_name = item_row['name']
-            meeting_id = item_row['meeting_id']
-            
-            # Get meeting name
-            cur.execute("SELECT name FROM meetings WHERE id = %s", (meeting_id,))
-            meeting_row = cur.fetchone()
-            meeting_name = meeting_row['name'] if meeting_row else "Onbekende vergadering"
-            
-            # Get all documents for this agenda item
-            cur.execute(
-                "SELECT name, content FROM documents WHERE agenda_item_id = %s AND content IS NOT NULL ORDER BY id",
-                (agenda_item_id,)
-            )
-            doc_rows = cur.fetchall()
-
-    if not doc_rows:
-        return {
-            "error": f"Geen documenten beschikbaar voor agendapunt: {item_name}",
-            "alignment_score": None
-        }
-
-    seen_doc_ids = set()
-    documents = []
-    for row in doc_rows:
-        unique_key = (row.get('name'), row.get('url'))
-        if unique_key not in seen_doc_ids:
-            documents.append({
-                "name": row['name'],
-                "content": row['content'],
-                "url": row.get('url', '#')
-            })
-            seen_doc_ids.add(unique_key)
-    
-    # Use party lens service for through-party-lens analysis
-    lens_service = _get_party_lens_service(party)
-    
-    # Combine documents into agenda item text
-    agenda_text = f"{meeting_name} - {item_name}\n\n"
-    for doc in documents:
-        agenda_text += f"Document: {doc['name']}\n{doc['content']}\n\n"
-    
-    # Evaluate through the party's lens
-    result = lens_service.evaluate_agenda_item(agenda_text)
-    
-    if result.get('analyse'):
-        analysis = result['analyse']
-        return {
-            "agenda_item_id": agenda_item_id,
-            "agenda_item_name": item_name,
-            "meeting_name": meeting_name,
-            "party": party,
-            "alignment_score": analysis.get('afstemming_score', 0.5),
-            "analysis": analysis.get('gedetailleerde_analyse', ''),
-            "positieve_punten": analysis.get('positieve_punten', []),
-            "kritische_punten": analysis.get('kritische_punten', []),
-            "vraag_suggesties": analysis.get('vraag_suggesties', []),
-            "tegenvoorstel_suggesties": analysis.get('tegenvoorstel_suggesties', []),
-            "recommendations": result.get('aanbevelingen', []),
-            "source": "party_lens_analysis"
-        }
-
-    return {
-        "error": f"Partijlensanalyse leverde geen resultaat op voor agendapunt: {item_name}",
-        "alignment_score": None
-    }
-
-@app.get("/api/analyse/unified/{agenda_item_id}")
-async def api_analyse_unified(request: Request, agenda_item_id: str, party: str = "GroenLinks-PvdA", user: dict = Depends(get_api_user)):
-    """
-    Streams the agentic meeting analysis as Server-Sent Events (SSE).
-    Events: {type: "status"|"chunk"|"done"|"error", ...}
-    """
-    logger.info(f"UNIFIED ANALYSIS ENDPOINT CALLED for agenda item {agenda_item_id}, party {party}")
-    item_data = storage.get_agenda_item_with_sub_documents(agenda_item_id)
-    if not item_data:
-        async def _not_found():
-            yield f"data: {json.dumps({'type': 'error', 'message': f'Agendapunt {agenda_item_id} niet gevonden'})}\n\n"
-        return StreamingResponse(_not_found(), media_type="text/event-stream")
-
-    item_name = item_data['name']
-    doc_rows = item_data['documents']
-
-    seen_doc_ids = set()
-    documents = []
-    for row in doc_rows:
-        unique_key = (row.get('name'), row.get('url'))
-        if unique_key not in seen_doc_ids:
-            documents.append({
-                "name": row['name'],
-                "content": row['content'],
-                "url": row.get('url', '#')
-            })
-            seen_doc_ids.add(unique_key)
-
-    async def event_stream():
-        try:
-            async for event in ai_service.stream_agentic_meeting_analysis(item_name, documents, party=party):
-                yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
-        except Exception as e:
-            logger.error(f"Streaming unified analysis error: {e}")
-            yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
-
-    return StreamingResponse(
-        event_stream(),
-        media_type="text/event-stream",
-        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
-    )
-
-@app.get("/api/analyse/speech/{agenda_item_id}")
-async def api_analyse_speech(request: Request, agenda_item_id: str, party: str = "GroenLinks-PvdA", user: dict = Depends(get_api_user)):
-    """
-    Generate a draft speech (bijdrage) for a councillor based on the agenda item analysis.
-    """
-    logger.info(f"SPEECH GENERATION ENDPOINT CALLED for agenda item {agenda_item_id}, party {party}")
-    from psycopg2.extras import RealDictCursor
-    with storage._get_connection() as conn:
-        with conn.cursor(cursor_factory=RealDictCursor) as cur:
-            cur.execute("SELECT name, meeting_id FROM agenda_items WHERE id = %s", (agenda_item_id,))
-            item_row = cur.fetchone()
-            if not item_row: return {"error": "Agendapunt niet gevonden"}
-            item_name = item_row['name']
-            
-            cur.execute("SELECT name, content FROM documents WHERE agenda_item_id = %s AND content IS NOT NULL", (agenda_item_id,))
-            doc_rows = cur.fetchall()
-
-    if not doc_rows: return {"error": "Geen documenten beschikbaar"}
-    
-    documents = [{"name": r['name'], "content": r['content']} for r in doc_rows]
-    lens_service = _get_party_lens_service(party)
-    
-    # We use the existing analysis but request a speech format
-    speech = await ai_service.generate_speech_draft(item_name, documents, lens_service.party_vision)
-    return {"speech": speech}
-
-# ── Admin routes ──
-
-@app.get("/admin")
-async def admin_page(request: Request, user: dict = Depends(require_admin)):
-    users = auth_service.list_users()
-    tokens = auth_service.list_all_tokens()
-    return templates.TemplateResponse(name="admin.html", request=request, context={
-        "title": "Beheer", "user": user, "users": users, "tokens": tokens,
-    })
-
-@app.get("/admin/api/users")
-async def admin_list_users(request: Request, user: dict = Depends(require_admin)):
-    users = auth_service.list_users()
-    return JSONResponse(users)
-
-@app.post("/admin/api/users/{user_id}/update")
-async def admin_update_user(request: Request, user_id: int, user: dict = Depends(require_admin)):
-    body = await request.json()
-    allowed = {"is_active", "mcp_access", "db_access_level", "role"}
-    updates = {k: v for k, v in body.items() if k in allowed}
-    # Prevent admin from demoting themselves
-    if user_id == user["id"] and updates.get("role") == "user":
-        return JSONResponse({"error": "Kan eigen admin-rol niet verwijderen"}, status_code=400)
-    updated = auth_service.update_user(user_id, **updates)
-    if not updated:
-        return JSONResponse({"error": "Gebruiker niet gevonden"}, status_code=404)
-    logger.info(f"Admin {user['email']} updated user {user_id}: {updates}")
-    return JSONResponse(updated)
-
-@app.post("/admin/api/users/{user_id}/toggle-active")
-async def admin_toggle_active(request: Request, user_id: int, user: dict = Depends(require_admin)):
-    if user_id == user["id"]:
-        return JSONResponse({"error": "Kan eigen account niet deactiveren"}, status_code=400)
-    target = auth_service.get_user_by_id(user_id)
-    if not target:
-        return JSONResponse({"error": "Gebruiker niet gevonden"}, status_code=404)
-    updated = auth_service.update_user(user_id, is_active=not target["is_active"])
-    logger.info(f"Admin {user['email']} toggled active for user {user_id}: {updated['is_active']}")
-    return JSONResponse(updated)
-
-@app.delete("/admin/api/tokens/{token_id}")
-async def admin_revoke_token(request: Request, token_id: int, user: dict = Depends(require_admin)):
-    revoked = auth_service.revoke_api_token(token_id)
-    if not revoked:
-        return JSONResponse({"error": "Token niet gevonden"}, status_code=404)
-    logger.info(f"Admin {user['email']} revoked token {token_id}")
-    return JSONResponse({"ok": True})
-
-
-# ── Token management (for logged-in users) ──
-
-@app.get("/api/tokens")
-async def list_tokens(request: Request, user: dict = Depends(require_login)):
-    tokens = auth_service.list_user_tokens(user["id"])
-    return JSONResponse(tokens)
-
-@app.post("/api/tokens")
-async def create_token(request: Request, user: dict = Depends(require_login)):
-    body = await request.json()
-    name = body.get("name", "Default")[:50]
-    scopes = body.get("scopes", "search,mcp")
-    token_data = auth_service.create_api_token(user["id"], name=name, scopes=scopes)
-    return JSONResponse(token_data)
-
-@app.delete("/api/tokens/{token_id}")
-async def revoke_token(request: Request, token_id: int, user: dict = Depends(require_login)):
-    # Verify the token belongs to this user
-    tokens = auth_service.list_user_tokens(user["id"])
-    if not any(t["id"] == token_id for t in tokens):
-        return JSONResponse({"error": "Token niet gevonden"}, status_code=404)
-    auth_service.revoke_api_token(token_id)
-    return JSONResponse({"ok": True})
+# ── Routers ──
+from routes.auth import router as auth_router
+from routes.admin import router as admin_router
+from routes.pages import router as pages_router
+from routes.api import router as api_router
+
+app.include_router(auth_router)
+app.include_router(admin_router)
+app.include_router(pages_router)
+app.include_router(api_router)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,19 @@
+{% extends "admin/_layout.html" %}
+{% set active = 'settings' %}
+{% block admin_body %}
+<div class="admin-help">
+  <p>Deze instellingen worden via omgevingsvariabelen beheerd. Wijzigen vereist een herstart.</p>
+</div>
+<div class="settings-grid">
+  <div class="setting-row">
+    <label>DEMO_ANSWER_ID</label>
+    <code>{{ settings.demo_answer_id or '(niet ingesteld)' }}</code>
+    <p class="setting-help">Pint een specifiek demo-antwoord op de landingspagina.</p>
+  </div>
+  <div class="setting-row">
+    <label>LANDING_HEADLINE</label>
+    <code>{{ settings.landing_headline or '(standaard)' }}</code>
+    <p class="setting-help">De roterende kop op de landingspagina.</p>
+  </div>
+</div>
+{% endblock %}

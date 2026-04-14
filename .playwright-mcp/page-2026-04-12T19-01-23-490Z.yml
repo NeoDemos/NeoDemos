@@ -1,0 +1,57 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "NeoDemos home" [ref=e3] [cursor=pointer]:
+      - /url: /
+      - text: NeoDemos
+    - navigation [ref=e4]:
+      - link "Kalender" [ref=e5] [cursor=pointer]:
+        - /url: /calendar
+      - link "AI-koppeling" [ref=e6] [cursor=pointer]:
+        - /url: /mcp-installer
+      - link "Over" [ref=e7] [cursor=pointer]:
+        - /url: /over
+      - link "Inloggen" [ref=e8] [cursor=pointer]:
+        - /url: /login
+  - main [ref=e9]:
+    - generic [ref=e10]:
+      - generic [ref=e13]:
+        - heading "24 jaar raadsbesluiten. Doorzoekbaar in seconden." [level=1] [ref=e14]:
+          - text: 24 jaar raadsbesluiten.
+          - text: Doorzoekbaar in seconden.
+        - generic [ref=e15]:
+          - textbox "Stel uw eigen vraag..." [ref=e16]
+          - button "Zoek" [ref=e17] [cursor=pointer]
+        - generic [ref=e18]:
+          - generic [ref=e19]: "Of probeer:"
+          - button "Heeft het college haar beloftes waargemaakt?" [ref=e20] [cursor=pointer]
+          - button "Hoe stemden partijen over woningbouw?" [ref=e21] [cursor=pointer]
+          - button "Welke moties over klimaat zijn aangenomen sinds 2020?" [ref=e22] [cursor=pointer]
+        - generic [ref=e23]: 90.000+ documenten · 24 jaar · Rotterdam · Open brondata
+      - generic [ref=e24]:
+        - generic [ref=e25]:
+          - generic [ref=e26]: “Heeft het college haar beloftes waargemaakt?”
+          - generic [ref=e27]:
+            - paragraph [ref=e28]: Op basis van het coalitieakkoord 2022-2026 en de jaarstukken van 2023 en 2024 zijn er duidelijke verschillen tussen belofte en uitvoering.
+            - paragraph [ref=e29]:
+              - strong [ref=e30]: "Woningbouw:"
+              - text: Het college beloofde 18.000 nieuwe woningen. De voortgangsrapportage laat zien dat er 12.400 vergunningen zijn verleend — op koers, maar de daadwerkelijke oplevering loopt achter.
+            - paragraph [ref=e31]:
+              - strong [ref=e32]: "Klimaat:"
+              - text: De ambitie voor 55% CO2-reductie in 2030 is bijgesteld naar 49% na de evaluatie van het Rotterdams Klimaatakkoord.
+            - paragraph [ref=e33]: Bekijk de volledige analyse door zelf te zoeken.
+        - text: “”
+  - contentinfo [ref=e34]:
+    - navigation [ref=e35]:
+      - link "Over" [ref=e36] [cursor=pointer]:
+        - /url: /over
+      - text: ·
+      - link "Technologie" [ref=e37] [cursor=pointer]:
+        - /url: /technologie
+      - text: ·
+      - link "Methodologie" [ref=e38] [cursor=pointer]:
+        - /url: /methodologie
+      - text: ·
+      - link "AI-koppeling" [ref=e39] [cursor=pointer]:
+        - /url: /mcp-installer
+    - generic [ref=e40]: "Analyse door AI (Anthropic) · Europees gehost · Brondata: Open Raadsinformatie"
+    - generic [ref=e41]: NeoDemos (alpha) v0.2.0-alpha.2

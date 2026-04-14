@@ -1,0 +1,88 @@
+/* ================================================================
+   NeoDemos Design Tokens — Derived from Canva dark green + beige
+   Color source: design/canva_designs/ SVG templates
+   - Primary dark green: #042825 (Corporate Report template)
+   - Beige surface: #f4efe5 / #e8e3db (Charity Gala template)
+   - Orange accent: #ff751f (NeoDemos logo SVG)
+   ================================================================ */
+
+/* Self-hosted fonts (variable) */
+@font-face {
+  font-family: 'Inter';
+  src: url('/static/fonts/Inter-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Instrument Serif';
+  src: url('/static/fonts/InstrumentSerif-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Instrument Serif';
+  src: url('/static/fonts/InstrumentSerif-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@theme {
+  /* === Colors (from Canva dark green #042825 + beige #f4efe5 + logo orange #ff751f) === */
+  --color-primary: #042825;
+  --color-primary-hover: #031f1d;
+  --color-primary-light: #d4e8e6;
+  --color-secondary: #0a3d38;
+  --color-accent: #ff751f;
+  --color-accent-hover: #e5671b;
+  --color-accent-light: #fff0e6;
+  --color-surface: #f7f4ef;
+  --color-surface-raised: #ffffff;
+  --color-surface-sunken: #efe9e0;
+  --color-border: #ddd5ca;
+  --color-border-strong: #c8bfb2;
+  --color-text: #1a1f1e;
+  --color-text-secondary: #5a6664;
+  --color-text-tertiary: #8b9492;
+  --color-success: #2D7A4F;
+  --color-success-light: #E8F5EE;
+  --color-warning: #9A6C1E;
+  --color-warning-light: #FDF4E3;
+  --color-error: #C23A3A;
+  --color-error-light: #FDE8E8;
+
+  /* === Typography === */
+  --font-heading: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  /* === Spacing (8px base) === */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+
+  /* === Shadows (green-tinted, layered) === */
+  --shadow-xs: 0 1px 2px rgba(4,40,37,0.04), 0 1px 3px rgba(4,40,37,0.06);
+  --shadow-sm: 0 2px 4px rgba(4,40,37,0.04), 0 4px 8px rgba(4,40,37,0.06);
+  --shadow-md: 0 4px 8px rgba(4,40,37,0.04), 0 8px 24px rgba(4,40,37,0.08);
+  --shadow-lg: 0 8px 16px rgba(4,40,37,0.06), 0 16px 48px rgba(4,40,37,0.1);
+
+  /* === Border radius === */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+}

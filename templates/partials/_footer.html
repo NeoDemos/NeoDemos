@@ -9,11 +9,11 @@
         <a href="/mcp-installer">AI-koppeling</a>
     </nav>
     <div class="footer-meta">
-        <span>Analyse door AI (Anthropic)</span>
+        <span>{{ content('footer.attribution_ai', 'Analyse door AI (Anthropic)') }}</span>
         <span class="footer-separator">&middot;</span>
-        <span>Europees gehost</span>
+        <span>{{ content('footer.attribution_hosting', 'Europees gehost') }}</span>
         <span class="footer-separator">&middot;</span>
-        <span>Brondata: Open Raadsinformatie</span>
+        <span>{{ content('footer.attribution_source', 'Brondata: Open Raadsinformatie') }}</span>
     </div>
     <div class="footer-version">
         {{ display_name }} {{ version_label }}

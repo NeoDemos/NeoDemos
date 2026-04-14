@@ -1,0 +1,41 @@
+{% extends "admin/_layout.html" %}
+{% set active = 'pages' %}
+{% block admin_body %}
+<p class="admin-help">
+  Visuele pagina-editor (GrapeJS). Bewerk de hoofdpagina's met sleep-en-neerzet
+  blokken. Gepubliceerde pagina's vervangen de standaard sjabloon op de publieke
+  route. Niet-gepubliceerde wijzigingen blijven concept totdat je publiceert.
+</p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Slug</th>
+      <th>Titel</th>
+      <th>Status</th>
+      <th>Laatst bijgewerkt</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in pages %}
+    <tr>
+      <td><code>{{ p.slug }}</code></td>
+      <td>{{ p.title }}</td>
+      <td>
+        {% if p.is_published %}
+        <span class="badge badge-user">Gepubliceerd</span>
+        {% elif p.has_draft %}
+        <span class="badge badge-inactive">Concept</span>
+        {% else %}
+        <span class="badge">Niet bewerkt</span>
+        {% endif %}
+      </td>
+      <td>{{ p.updated_at[:16] if p.updated_at else '—' }}</td>
+      <td>
+        <a href="/admin/editor/{{ p.slug }}" class="btn btn-sm btn-primary">Bewerken</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

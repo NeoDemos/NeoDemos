@@ -1,7 +1,7 @@
 # WS7 — OCR Recovery for Moties & Amendementen
 
 > **Priority:** 2.5 (between WS2 and WS3 — blocks WS1 quality ceiling)
-> **Status:** `in progress` — Dennis running as of 2026-04-13
+> **Status:** `complete` — shipped 2026-04-14
 > **Owner:** `dennis`
 > **Target release:** v0.2.0 (pre eval-gate — improves WS1 baseline scores)
 > **Master plan section:** N/A — spun off from WS1 pre-enrichment baseline audit 2026-04-12
@@ -226,4 +226,29 @@ If WS7 is deferred past WS1 Phase 1, the enrichment will run on garbled source t
 **New docs are handled automatically** — only the backfill of existing garbled docs is manual.
 
 ## Outcome
-*To be filled in when shipped. Include: docs recovered, BM25 improvement, OCR score improvement, surprises, follow-ups.*
+
+**Shipped 2026-04-14.** Full corpus recovery run completed across all damage types.
+
+### Results
+
+| Metric | Result |
+|---|---|
+| garbled_spacing recovered | 337 / 522 (64.6%) |
+| ligature fixed (in-place) | ~564 docs (text transform, no OCR) |
+| bm25_miss | skipped — near-zero recovery rate, needs tsvector refresh not OCR |
+| Large docs >50K chars | deferred to WS10 (Docling layout pass) |
+| Errors | 0 |
+| Total checkpoint | 4,192 docs processed across full run |
+
+### Key learnings
+- Detection heuristic `[^\s]{40,}` had 77% false-positive rate on URLs/separators. Fixed with word-concat regex requiring alphabetic evidence.
+- Ligature damage (`ﬁ→fi`) does not need re-OCR — `normalize_text()` in-place is sufficient and 100× faster.
+- Advisory lock 42 leak from a killed process blocked all DB writes for 2+ hours. Fixed by terminating stale PostgreSQL backend.
+- Parallel OCR with 4 workers achieved ~11 docs/min once lock was cleared.
+- `bm25_miss` class (~3,154 docs) is a BM25 indexing issue, not OCR damage — fix is `UPDATE documents SET text_search = to_tsvector(...)`, not re-OCR.
+
+### Follow-up (next steps, not blocking v0.2)
+1. **Batch re-embed** — 337 recovered docs need Qdrant embedding (used `--skip-re-embed` for speed). Run embedding pipeline filtered to recovered IDs before v0.2.1.
+2. **BM25 verification** — run Phase C query from this doc to confirm hit rate ≥ 95%.
+3. **bm25_miss tsvector refresh** — separate task, not OCR.
+4. **WS10** — large table-rich docs (bestemmingsplannen) need Docling layout pass, not OCR recovery.

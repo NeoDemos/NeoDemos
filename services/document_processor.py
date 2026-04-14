@@ -443,9 +443,13 @@ def process_documents(limit: int = 200, triggered_by: str = "apscheduler",
             logger.debug("[doc_processor] No unchunked documents found")
 
         # --- Phase 2: Embed chunks missing vectors → Qdrant ---
+        # Qdrant is the source of truth for embeddings. The `embedded_at`
+        # timestamp on document_chunks is a lightweight "this chunk is in
+        # Qdrant" marker — it prevents Phase 2 from wastefully re-embedding
+        # chunks that are already in Qdrant. See Alembic migration 0010.
         summary["embedded"] = 0
         try:
-            from services.embedding import create_embedder, EMBEDDING_DIM, QDRANT_COLLECTION
+            from services.embedding import create_embedder, QDRANT_COLLECTION
             from qdrant_client import QdrantClient
             from qdrant_client.models import PointStruct
 
@@ -455,8 +459,6 @@ def process_documents(limit: int = 200, triggered_by: str = "apscheduler",
             qdrant = QdrantClient(url=qdrant_url,
                                   api_key=qdrant_key if qdrant_key else None)
 
-            # Find chunks that have no embedding yet (not in Qdrant)
-            # We check for chunks created recently that likely need embedding
             embed_cur = conn.cursor(cursor_factory=RealDictCursor)
             embed_cur.execute("""
                 SELECT dc.id, dc.document_id, dc.title, dc.content,
@@ -466,7 +468,7 @@ def process_documents(limit: int = 200, triggered_by: str = "apscheduler",
                        d.municipality, d.doc_classification
                 FROM document_chunks dc
                 JOIN documents d ON d.id = dc.document_id
-                WHERE dc.embedding IS NULL
+                WHERE dc.embedded_at IS NULL
                   AND dc.content IS NOT NULL
                   AND LENGTH(dc.content) > 20
                 ORDER BY dc.id DESC
@@ -489,7 +491,7 @@ def process_documents(limit: int = 200, triggered_by: str = "apscheduler",
                     vectors = [embedder.embed(t) for t in texts]
 
                 points = []
-                pg_updates = []
+                chunk_ids_embedded = []
                 for row, vec in zip(unembedded, vectors):
                     if vec is None:
                         continue
@@ -518,7 +520,7 @@ def process_documents(limit: int = 200, triggered_by: str = "apscheduler",
                     points.append(PointStruct(
                         id=point_id, vector=vec, payload=payload,
                     ))
-                    pg_updates.append((vec, row["id"]))
+                    chunk_ids_embedded.append(row["id"])
 
                 # Upsert to Qdrant in batches
                 batch_size = 100
@@ -526,14 +528,13 @@ def process_documents(limit: int = 200, triggered_by: str = "apscheduler",
                     batch = points[i : i + batch_size]
                     qdrant.upsert(collection_name=QDRANT_COLLECTION, points=batch)
 
-                # Store embedding in Postgres too
-                if pg_updates:
+                # Mark chunks as embedded (only AFTER successful Qdrant upsert)
+                if chunk_ids_embedded:
                     up_cur = conn.cursor()
-                    for vec, chunk_id in pg_updates:
-                        up_cur.execute(
-                            "UPDATE document_chunks SET embedding = %s WHERE id = %s",
-                            (vec, chunk_id),
-                        )
+                    up_cur.execute(
+                        "UPDATE document_chunks SET embedded_at = NOW() WHERE id = ANY(%s)",
+                        (chunk_ids_embedded,),
+                    )
                     conn.commit()
                     up_cur.close()
 

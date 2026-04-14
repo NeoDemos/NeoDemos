@@ -1,0 +1,234 @@
+/* ================================================================
+   Layout + Header / Navigation + Footer
+   ================================================================ */
+
+@layer components {
+  /* ── Layout ── */
+
+  main {
+    padding: var(--space-12) 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ── Header / Navigation ── */
+
+  .site-header {
+    padding: var(--space-4) 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-border);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  /* Transparent nav overlaying hero images — no chrome, blends into image */
+  .has-hero .site-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: transparent;
+    backdrop-filter: none;
+    border-bottom: none;
+    padding: var(--space-6) 5%;
+  }
+
+  .has-hero .logo {
+    color: #fff;
+  }
+
+  .has-hero .logo span {
+    color: var(--color-accent);
+  }
+
+  .has-hero .nav-desktop a {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .has-hero .nav-desktop a:hover,
+  .has-hero .nav-desktop a.active {
+    color: #fff;
+  }
+
+  .has-hero .nav-link-button {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .has-hero .nav-link-button:hover {
+    color: #fff;
+  }
+
+  .has-hero .nav-hamburger span {
+    background: #fff;
+  }
+
+  .logo {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--color-primary);
+    text-decoration: none;
+    letter-spacing: -0.3px;
+  }
+
+  .logo:hover {
+    opacity: 0.85;
+  }
+
+  .logo span {
+    color: var(--color-accent);
+  }
+
+  .nav-desktop {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .nav-desktop a {
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+    text-decoration: none;
+  }
+
+  .nav-desktop a:hover,
+  .nav-desktop a.active {
+    color: var(--color-primary);
+  }
+
+  .nav-link-button {
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 0;
+    transition: color 0.2s ease;
+  }
+
+  .nav-link-button:hover {
+    color: var(--color-primary);
+  }
+
+  /* Mobile nav */
+  .nav-hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--space-2);
+  }
+
+  .nav-hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--color-primary);
+    margin: 5px 0;
+    transition: transform 0.3s ease;
+  }
+
+  .nav-mobile {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 280px;
+    background: var(--color-surface-raised);
+    box-shadow: var(--shadow-lg);
+    padding: var(--space-16) var(--space-8);
+    z-index: 2000;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .nav-mobile.open {
+    display: flex;
+  }
+
+  .nav-mobile a,
+  .nav-mobile .nav-link-button {
+    font-size: 1.1rem;
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--color-border);
+    display: block;
+    color: var(--color-text);
+  }
+
+  .nav-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.3);
+    z-index: 1999;
+  }
+
+  .nav-overlay.open {
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    .nav-desktop {
+      display: none;
+    }
+    .nav-hamburger {
+      display: block;
+    }
+  }
+
+  /* ── Footer ── */
+
+  .site-footer {
+    text-align: center;
+    padding: var(--space-8) 5%;
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--space-12);
+    color: var(--color-text-tertiary);
+    font-size: 0.85rem;
+    line-height: 2;
+  }
+
+  .site-footer a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+  }
+
+  .site-footer a:hover {
+    color: var(--color-primary);
+  }
+
+  .footer-links {
+    margin-bottom: var(--space-2);
+  }
+
+  .footer-links a {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .footer-meta {
+    font-size: 0.8rem;
+    margin-bottom: var(--space-1);
+  }
+
+  .footer-version {
+    font-size: 0.75rem;
+    color: var(--color-border-strong);
+    margin-top: var(--space-2);
+  }
+
+  .footer-separator {
+    margin: 0 0.5rem;
+    color: var(--color-border);
+  }
+}

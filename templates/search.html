@@ -4,6 +4,9 @@
 
 {% block content %}
 
+{% if page_html %}
+<div class="grapejs-content">{{ page_html | safe }}</div>
+{% else %}
 <div class="search-container">
 
     <!-- ── Full-viewport hero: image + headline + search + examples ── -->
@@ -14,7 +17,7 @@
 
                 <!-- Search bar ON the hero -->
                 <div class="search-box-wrapper">
-                    <textarea id="search-input" class="search-input" placeholder="Stel uw eigen vraag..."
+                    <textarea id="search-input" class="search-input" placeholder="{{ content('landing.hero_placeholder', 'Stel uw eigen vraag...') }}"
                         rows="1"></textarea>
                     <button type="button" onclick="performSearch()" class="search-btn">Zoek</button>
                     <div id="mention-menu" class="mention-menu">
@@ -27,21 +30,21 @@
 
                 <!-- Example queries ON the hero -->
                 <div class="example-queries">
-                    <span class="example-queries-label">Of probeer:</span>
-                    <button type="button" class="example-query" onclick="runExample(this)">Heeft het college haar beloftes waargemaakt?</button>
-                    <button type="button" class="example-query" onclick="runExample(this)">Hoe stemden partijen over woningbouw?</button>
-                    <button type="button" class="example-query" onclick="runExample(this)">Welke moties over klimaat zijn aangenomen sinds 2020?</button>
+                    <span class="example-queries-label">{{ content('landing.example_queries_label', 'Of probeer:') }}</span>
+                    <button type="button" class="example-query" onclick="runExample(this)">{{ content('landing.example_query_1', 'Heeft het college haar beloftes waargemaakt?') }}</button>
+                    <button type="button" class="example-query" onclick="runExample(this)">{{ content('landing.example_query_2', 'Hoe stemden partijen over woningbouw?') }}</button>
+                    <button type="button" class="example-query" onclick="runExample(this)">{{ content('landing.example_query_3', 'Welke moties over klimaat zijn aangenomen sinds 2020?') }}</button>
                 </div>
 
                 <!-- Credibility + trust ON the hero -->
                 <div class="hero-stats">
-                    <span>90.000+ documenten</span>
+                    <span>{{ content('landing.stat_documents', '90.000+ documenten') }}</span>
                     <span class="hero-stats-sep">&middot;</span>
-                    <span>24 jaar</span>
+                    <span>{{ content('landing.stat_years', '24 jaar') }}</span>
                     <span class="hero-stats-sep">&middot;</span>
-                    <span>Rotterdam</span>
+                    <span>{{ content('landing.stat_city', 'Rotterdam') }}</span>
                     <span class="hero-stats-sep">&middot;</span>
-                    <span>Open brondata</span>
+                    <span>{{ content('landing.stat_open', 'Open brondata') }}</span>
                 </div>
 
                 <!-- Loading state + AI result live inside the hero so skyline shows behind them -->
@@ -109,7 +112,7 @@
 
         <!-- Mobile: collapsed behind tap target -->
         <details class="demo-answer-mobile">
-            <summary>Bekijk voorbeeld</summary>
+            <summary>{{ content('landing.demo_mobile_summary', 'Bekijk voorbeeld') }}</summary>
             <div class="demo-answer-question">{{ demo_question }}</div>
             <div class="ai-content" id="demo-answer-content-mobile">
                 {% if not demo_answer_markdown %}
@@ -181,10 +184,10 @@
     <!-- Account nudge (hidden, shown after 3rd search for anonymous users) -->
     <div id="account-nudge" class="nudge-banner" hidden>
         <div class="nudge-content">
-            <p class="nudge-title">Wist u dat u uw zoekopdrachten kunt bewaren?</p>
-            <p class="nudge-text">Maak een gratis account en bewaar uw zoekgeschiedenis, stel uw partijlens in, en exporteer analyses naar Word.</p>
+            <p class="nudge-title">{{ content('landing.nudge_title', 'Wist u dat u uw zoekopdrachten kunt bewaren?') }}</p>
+            <p class="nudge-text">{{ content('landing.nudge_text', 'Maak een gratis account en bewaar uw zoekgeschiedenis, stel uw partijlens in, en exporteer analyses naar Word.') }}</p>
             <div class="nudge-actions">
-                <a href="/register" class="btn btn-accent">Gratis account aanmaken</a>
+                <a href="/register" class="btn btn-accent">{{ content('landing.nudge_cta', 'Gratis account aanmaken') }}</a>
                 <button class="btn btn-ghost" onclick="dismissNudge('account')">Niet nu</button>
             </div>
         </div>
@@ -193,7 +196,7 @@
     <!-- MCP nudge (hidden, shown after 5th search for all users) -->
     <div id="mcp-nudge" class="nudge-banner nudge-mcp" hidden>
         <div class="nudge-content">
-            <p class="nudge-text">Tip: gebruik NeoDemos rechtstreeks in Claude, ChatGPT of Cursor voor diepere analyses. Werkt ook met Ollama.</p>
+            <p class="nudge-text">{{ content('landing.mcp_nudge', 'Tip: gebruik NeoDemos rechtstreeks in Claude, ChatGPT of Cursor voor diepere analyses. Werkt ook met Ollama.') }}</p>
             <div class="nudge-actions">
                 <a href="/mcp-installer" class="btn btn-secondary btn-sm">Meer info</a>
                 <button class="btn btn-ghost btn-sm" onclick="dismissNudge('mcp')">Sluiten</button>
@@ -642,4 +645,5 @@
         headlineEl.innerHTML = headlines[idx].replace('\n', '<br>');
     }
 </script>
+{% endif %}
 {% endblock %}

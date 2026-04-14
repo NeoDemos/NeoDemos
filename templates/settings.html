@@ -56,6 +56,18 @@
         </div>
     </div>
 
+    <div class="settings-group">
+        <h3>Abonnement</h3>
+        <div class="subscription-info">
+            <span class="subscription-tier-badge tier-{{ user.subscription_tier }}">
+                {% if user.subscription_tier == 'free_beta' %}Gratis (beta){% else %}{{ user.subscription_tier }}{% endif %}
+            </span>
+            <p class="subscription-note">
+                Alle functies zijn gratis beschikbaar tijdens de beta-periode.
+            </p>
+        </div>
+    </div>
+
     <button class="save-btn" onclick="saveSettings()">Wijzigingen Opslaan</button>
 
     <div class="tokens-section">

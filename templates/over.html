@@ -3,10 +3,13 @@
 {% block body_class %}has-hero{% endblock %}
 
 {% block content %}
+{% if page_html %}
+<div class="grapejs-content">{{ page_html | safe }}</div>
+{% else %}
 <div class="subpage-hero-image" style="background-image: -webkit-image-set(url('/static/images/gemeenteraad.jpg') 1x, url('/static/images/gemeenteraad@2x.jpg') 2x); background-image: image-set(url('/static/images/gemeenteraad.jpg') 1x, url('/static/images/gemeenteraad@2x.jpg') 2x);">
     <div class="subpage-hero-overlay">
-        <h1 class="subpage-hero-title">Over NeoDemos</h1>
-        <p class="subpage-hero-subtitle">De raadsinformatie was er altijd al. Wij maken haar vindbaar.</p>
+        <h1 class="subpage-hero-title">{{ content('over.hero_title', 'Over NeoDemos') }}</h1>
+        <p class="subpage-hero-subtitle">{{ content('over.hero_subtitle', 'De raadsinformatie was er altijd al. Wij maken haar vindbaar.') }}</p>
     </div>
 </div>
 
@@ -14,37 +17,37 @@
     <section class="founder-section">
         <div class="founder-quote">
             <blockquote>
-                <p>&ldquo;Als raadslid had ik toegang tot alles &mdash; en toch klikte ik me een weg door honderden losse PDF&rsquo;s om &eacute;&eacute;n antwoord te vinden. Dat kon beter.&rdquo;</p>
-                <cite>&mdash; Dennis Tak, oud-raadslid Rotterdam</cite>
+                <p>{{ content('over.founder_quote', '&ldquo;Als raadslid had ik toegang tot alles &mdash; en toch klikte ik me een weg door honderden losse PDF&rsquo;s om &eacute;&eacute;n antwoord te vinden. Dat kon beter.&rdquo;') | safe }}</p>
+                <cite>{{ content('over.founder_cite', '&mdash; Dennis Tak, oud-raadslid Rotterdam') | safe }}</cite>
             </blockquote>
         </div>
     </section>
 
     <section class="subpage-section subpage-section--highlight">
-        <h2>Democratie werkt alleen als burgers en raadsleden dezelfde informatie hebben</h2>
+        <h2>{{ content('over.mission_title', 'Democratie werkt alleen als burgers en raadsleden dezelfde informatie hebben') }}</h2>
         <p>
-            De Rotterdamse gemeenteraad produceert duizenden documenten per jaar: moties, amendementen, notulen, begrotingen, commissieverslagen. Die zijn allemaal openbaar &mdash; maar in de praktijk ontoegankelijk. Ze staan verspreid over portalen, in PDF-formaat, zonder samenhang.
+            {{ content('over.mission_p1', 'De Rotterdamse gemeenteraad produceert duizenden documenten per jaar: moties, amendementen, notulen, begrotingen, commissieverslagen. Die zijn allemaal openbaar &mdash; maar in de praktijk ontoegankelijk. Ze staan verspreid over portalen, in PDF-formaat, zonder samenhang.') | safe }}
         </p>
         <p>
-            NeoDemos maakt die informatie doorzoekbaar, analyseerbaar en begrijpelijk. Niet door te versimpelen, maar door verbanden zichtbaar te maken die er altijd al waren.
+            {{ content('over.mission_p2', 'NeoDemos maakt die informatie doorzoekbaar, analyseerbaar en begrijpelijk. Niet door te versimpelen, maar door verbanden zichtbaar te maken die er altijd al waren.') | safe }}
         </p>
     </section>
 
     <section class="subpage-section">
-        <h2>Hoe het begon</h2>
+        <h2>{{ content('over.origin_title', 'Hoe het begon') }}</h2>
         <p>
-            NeoDemos is ontstaan uit frustratie. Als gemeenteraadslid in Rotterdam merkte oprichter Dennis Tak dat essenti&euml;le informatie weliswaar openbaar was, maar in de praktijk onvindbaar. Dossiers die drie jaar eerder waren behandeld, beloftes uit coalitieakkoorden, stemmingen over vergelijkbare moties &mdash; het kostte uren om de puzzelstukjes bij elkaar te zoeken.
+            {{ content('over.origin_p1', 'NeoDemos is ontstaan uit frustratie. Als gemeenteraadslid in Rotterdam merkte oprichter Dennis Tak dat essenti&euml;le informatie weliswaar openbaar was, maar in de praktijk onvindbaar. Dossiers die drie jaar eerder waren behandeld, beloftes uit coalitieakkoorden, stemmingen over vergelijkbare moties &mdash; het kostte uren om de puzzelstukjes bij elkaar te zoeken.') | safe }}
         </p>
         <p>
-            Dat moest anders. NeoDemos combineert meer dan 90.000 raadsdocumenten uit de periode 2002 tot heden met kunstmatige intelligentie, zodat elke vraag over wat de gemeente deed, besloot of beloofde direct antwoord krijgt &mdash; met bronvermelding.
+            {{ content('over.origin_p2', 'Dat moest anders. NeoDemos combineert meer dan 90.000 raadsdocumenten uit de periode 2002 tot heden met kunstmatige intelligentie, zodat elke vraag over wat de gemeente deed, besloot of beloofde direct antwoord krijgt &mdash; met bronvermelding.') | safe }}
         </p>
     </section>
 
     <section class="subpage-section subpage-section--testimonial">
         <h2>Wat gebruikers zeggen</h2>
         <blockquote class="testimonial">
-            <p>&ldquo;Dit spaarde me twee uur voorbereiding.&rdquo;</p>
-            <cite>&mdash; Raadslid, Rotterdam</cite>
+            <p>{{ content('over.testimonial_quote', '&ldquo;Dit spaarde me twee uur voorbereiding.&rdquo;') | safe }}</p>
+            <cite>{{ content('over.testimonial_cite', '&mdash; Raadslid, Rotterdam') | safe }}</cite>
         </blockquote>
     </section>
 
@@ -52,22 +55,23 @@
         <h2>Voor wie</h2>
         <div class="audience-grid">
             <div class="audience-card">
-                <h3>Raadsleden &amp; fractiemedewerkers</h3>
-                <p>Snellere dossiervoorbereiding, inzicht in stemgedrag en beleidscontinuiteit.</p>
+                <h3>{{ content('over.audience_raadsleden_title', 'Raadsleden &amp; fractiemedewerkers') | safe }}</h3>
+                <p>{{ content('over.audience_raadsleden_text', 'Snellere dossiervoorbereiding, inzicht in stemgedrag en beleidscontinuiteit.') | safe }}</p>
             </div>
             <div class="audience-card">
-                <h3>Journalisten</h3>
-                <p>Feitelijke basis voor onderzoeksverhalen, met directe verwijzing naar brondocumenten.</p>
+                <h3>{{ content('over.audience_journalisten_title', 'Journalisten') }}</h3>
+                <p>{{ content('over.audience_journalisten_text', 'Feitelijke basis voor onderzoeksverhalen, met directe verwijzing naar brondocumenten.') | safe }}</p>
             </div>
             <div class="audience-card">
-                <h3>Ambtenaren</h3>
-                <p>Overzicht van eerdere besluiten en toezeggingen bij beleidsvoorbereiding.</p>
+                <h3>{{ content('over.audience_ambtenaren_title', 'Ambtenaren') }}</h3>
+                <p>{{ content('over.audience_ambtenaren_text', 'Overzicht van eerdere besluiten en toezeggingen bij beleidsvoorbereiding.') | safe }}</p>
             </div>
             <div class="audience-card">
-                <h3>Betrokken bewoners</h3>
-                <p>Begrijpelijke antwoorden op vragen over wat de gemeente heeft gedaan en besloten.</p>
+                <h3>{{ content('over.audience_bewoners_title', 'Betrokken bewoners') }}</h3>
+                <p>{{ content('over.audience_bewoners_text', 'Begrijpelijke antwoorden op vragen over wat de gemeente heeft gedaan en besloten.') | safe }}</p>
             </div>
         </div>
     </section>
 </div>
+{% endif %}
 {% endblock %}
