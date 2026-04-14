@@ -11,44 +11,40 @@ Use this skill when deploying, starting, stopping, or troubleshooting the NeoDem
 3. **Kamal binary is NOT in PATH.** It lives at `/opt/homebrew/lib/ruby/gems/4.0.0/bin/kamal`. `which kamal` returns empty; that does not mean it's missing.
 4. **kamal-proxy is the sole public reverse proxy.** There is no Caddy, no Traefik, no nginx. Everything public goes through kamal-proxy on ports 80/443, including TLS termination via Let's Encrypt.
 5. **Protect the postgres named volume** `neodemos_postgres_data` — it holds all council data (2865 meetings + chunks + embeddings). Never accept a config change that would switch it to an anonymous volume. Never run `docker compose` on the host — it can silently trigger a postgres recreate.
-6. **Deployment window (SLO): downtime only 23:00–07:00 CET.** User traffic is growing. Zero-downtime operations are allowed any time; downtime-incurring operations are restricted to the maintenance window unless it is an emergency fix for an active outage. See the classification table below before proceeding.
+6. **Eliminate downtime, don't schedule it.** Both `neodemos-web` and `neodemos-mcp` are Kamal services with `proxy:` blocks — every `kamal deploy` is blue-green via kamal-proxy. Ship any time. Data accessories (postgres, qdrant) are the only components with a downtime cost; those are touched rarely and announced in advance. Do not add deployment windows to the runbook: they are a legacy CAB-era practice that the blue-green path obsoletes.
 
-### Deploy classification — can I ship this now?
+### Deploy classification — what has downtime?
 
-| Operation | Downtime | Allowed window |
+| Operation | Downtime | Notes |
 |---|---|---|
-| `kamal deploy` (web service code change) | **Zero** — blue-green via kamal-proxy, drains old container after new one is healthy | Any time |
-| `kamal rollback <sha>` (web service) | **Zero** — same blue-green path | Any time |
-| `kamal accessory reboot mcp` | **~5–15s** — container stop/start, kamal-proxy returns 502 until `/up` healthy | 23:00–07:00 CET only (unless fixing active MCP outage) |
-| `kamal accessory reboot postgres` / `qdrant` | **Seconds to minutes** — data services, web app errors until reconnect | 23:00–07:00 CET only; announce in advance |
-| Postgres schema migration (Alembic) | **Varies** — zero for additive DDL; locking for NOT NULL / indexed cols | Any time for additive/CONCURRENTLY; else 23:00–07:00 CET |
-| Kamal image build+push only (`kamal build push`) | **Zero** — nothing restarts | Any time |
+| `kamal deploy` (web + MCP, or either) | **Zero** — blue-green via kamal-proxy for both roles | Ship any time |
+| `kamal deploy -r web` or `-r mcp` | **Zero** — same | Ship any time |
+| `kamal rollback <sha>` | **Zero** — blue-green | Ship any time |
+| `kamal build push` (no deploy) | **Zero** — nothing restarts | Any time |
+| Postgres/Qdrant accessory reboot or image bump | **Seconds to minutes** | Announce; ideally off-hours |
+| Postgres schema migration (Alembic) | **Varies** — zero for additive / `CREATE INDEX CONCURRENTLY`; locking for NOT NULL / FK adds | Prefer zero-lock patterns; else announce |
 | Any manual `docker` on host | **DO NOT** | Never |
 
-Rule of thumb: if you're about to run `accessory reboot` and it's a business-hours day, ask yourself — is this fixing an active outage, or is it routine? If routine, schedule it for 23:00–07:00 CET. Write it into the plan, not into the moment.
-
-### Emergency override
-
-If MCP or web is already down during business hours, fix forward immediately — an already-broken service is not an SLO breach of the deployment window. Note the emergency in the incident log below so the exception is visible.
+If you are considering a path that has user-visible downtime, first ask whether the underlying change can be reshaped to avoid downtime (additive migration, expand/contract schema change, blue-green at the app layer). Downtime is a design smell to eliminate, not a window to schedule around.
 
 ---
 
-## Production topology (as of 2026-04-11 after Caddy → kamal-proxy migration)
+## Production topology (as of 2026-04-14, MCP promoted to service role)
 
 ```
 Internet
   │
-  ├── HTTPS (443) ──► kamal-proxy  ─┬─► neodemos-web-<sha>  :8000  (FastAPI)
-  │                                 └─► neodemos-mcp         :8001  (MCP server)
+  ├── HTTPS (443) ──► kamal-proxy  ─┬─► neodemos-web-<sha>  :8000  (FastAPI, role=web)
+  │                                 └─► neodemos-mcp-<sha>  :8001  (MCP server, role=mcp)
   │
   └── (kamal-internal Docker network)
-           ├── neodemos-postgres :5432
-           └── neodemos-qdrant   :6333/6334
+           ├── neodemos-postgres :5432   (accessory)
+           └── neodemos-qdrant   :6333/6334 (accessory)
 ```
 
 - **Host:** Hetzner VPS `178.104.137.168`
 - **SSH:** `ssh -i ~/.ssh/neodemos_ed25519 deploy@178.104.137.168`
-- **Registry:** `ghcr.io/neodemos/neodemos` (single image shared by web service and all accessories)
+- **Registry:** `ghcr.io/neodemos/neodemos` (single image shared by both service roles)
 - **Kamal config:** [config/deploy.yml](config/deploy.yml) · **Secrets:** [.kamal/secrets](.kamal/secrets)
 - **Docker network:** `kamal` (managed by Kamal, all containers join it automatically)
 
@@ -56,10 +52,12 @@ Internet
 
 | Name | Kamal type | Container | Role |
 |---|---|---|---|
-| `neodemos` | service (`web`) | `neodemos-web-<sha>` | FastAPI app, uvicorn on 8000 |
-| `mcp` | accessory | `neodemos-mcp` | MCP server, uvicorn on 8001, OAuth 2.1 |
+| `web` | service role | `neodemos-web-<sha>` | FastAPI app, uvicorn on 8000. Blue-green on deploy. |
+| `mcp` | service role | `neodemos-mcp-<sha>` | MCP server, uvicorn on 8001, OAuth 2.1. Blue-green on deploy. |
 | `postgres` | accessory | `neodemos-postgres` | DB — named volume `neodemos_postgres_data` |
 | `qdrant` | accessory | `neodemos-qdrant` | Vector store — bind mount `/home/deploy/neodemos-data/qdrant_storage` |
+
+Both `web` and `mcp` are roles of the single Kamal service `neodemos` — they share the image and config, differ only in `cmd`, `proxy.hosts`, and `env.PORT`. `kamal deploy` deploys both roles; `kamal deploy -r mcp` targets one role.
 
 Note: there is **no `caddy` accessory anymore**. kamal-proxy handles 80/443 directly and is managed via `kamal proxy *` commands, not via the accessories block.
 

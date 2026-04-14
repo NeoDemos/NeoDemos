@@ -45,3 +45,10 @@ tmp_*.txt
 *.xlsx
 eval_notulen/runs/
 .claude/worktrees/
+
+# Auto-generated / tooling noise
+.playwright-mcp/
+_pgbackup/
+_pginfo/
+pinegrow.json
+review-*.png

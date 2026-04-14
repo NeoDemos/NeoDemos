@@ -28,6 +28,39 @@ servers:
         interval: 3
         timeout: 10
 
+  # MCP as a Kamal service role (not an accessory). This gives us blue-green
+  # zero-downtime deploys via kamal-proxy: new container boots, passes /up,
+  # proxy atomically cuts traffic, old drains. Previous accessory setup caused
+  # a 10–15s stop/start outage on every `kamal accessory reboot mcp` — a hole
+  # in the SLO now that user traffic is growing (promoted 2026-04-14).
+  mcp:
+    hosts:
+      - 178.104.137.168
+    cmd: "python mcp_server_v3.py --http --port 8001"
+    proxy:
+      ssl: true
+      hosts:
+        - mcp.neodemos.nl
+        - mcp.neodemos.eu
+      app_port: 8001
+      healthcheck:
+        path: /up
+        interval: 3
+        timeout: 10
+    env:
+      clear:
+        # Override web role's PORT=8000. Dockerfile HEALTHCHECK curls :$PORT/up,
+        # so this must match the uvicorn bind port for the MCP process.
+        PORT: "8001"
+        MCP_BASE_URL: https://mcp.neodemos.nl
+        NEODEMOS_BASE_URL: https://neodemos.nl
+      # DB_*, QDRANT_URL, and secrets (DB_PASSWORD, GEMINI_API_KEY,
+      # NEBIUS_API_KEY, QDRANT_API_KEY) are inherited from the top-level env
+      # block. Web-only secrets (SECRET_KEY, ORI_API_KEY, ADMIN_*, ANTHROPIC)
+      # are also inherited — image is shared; MCP ignores what it doesn't use.
+    options:
+      memory: 1G
+
 builder:
   arch: amd64
 
@@ -117,42 +150,6 @@ accessories:
       name: neodemos-qdrant
       network: kamal
 
-  mcp:
-    image: ghcr.io/neodemos/neodemos
-    host: 178.104.137.168
-    cmd: "python mcp_server_v3.py --http --port 8001"
-    # kamal-proxy routes both mcp.neodemos.nl and mcp.neodemos.eu to this
-    # accessory over TLS. MCP clients (Claude.ai, ChatGPT, etc.) get OAuth
-    # 2.1 over HTTPS at the /mcp endpoint.
-    proxy:
-      ssl: true
-      hosts:
-        - mcp.neodemos.nl
-        - mcp.neodemos.eu
-      app_port: 8001
-      healthcheck:
-        path: /up
-        interval: 3
-        timeout: 10
-    env:
-      clear:
-        # PORT=8001 tells the Dockerfile HEALTHCHECK to curl the right port
-        # (the MCP server listens on 8001, not the web default of 8000).
-        PORT: "8001"
-        DB_HOST: neodemos-postgres
-        DB_PORT: "5432"
-        DB_NAME: neodemos
-        DB_USER: postgres
-        QDRANT_URL: http://neodemos-qdrant:6333
-        MCP_BASE_URL: https://mcp.neodemos.nl
-        NEODEMOS_BASE_URL: https://neodemos.nl
-      secret:
-        - DB_PASSWORD
-        - GEMINI_API_KEY
-        - NEBIUS_API_KEY
-        - QDRANT_API_KEY
-    options:
-      memory: 1G
-      name: neodemos-mcp
-      # No network override — let kamal-proxy see the accessory on the `kamal` network.
-      # Restart policy: Kamal enforces unless-stopped on all accessories automatically.
+  # MCP was an accessory here until 2026-04-14. It has been promoted to a
+  # service role (see `servers.mcp` above) so it gets blue-green zero-downtime
+  # deploys via kamal-proxy, the same as the web service.
