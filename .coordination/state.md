@@ -1,7 +1,7 @@
 # NeoDemos Project State
 
 > Auto-generated from `.coordination/events.jsonl` — do not edit manually.
-> Last rebuilt: 2026-04-14T19:14:41Z
+> Last rebuilt: 2026-04-14T19:20:01Z
 
 ## Active Now
 
@@ -11,6 +11,7 @@
 | WS12 | Virtual notulen backfill & production hardening    | seed       | 2026-04-14 |                                                        |
 | WS8f | Admin panel + CMS + GrapeJS editor                 | seed       | 2026-04-14 | Shipped 2026-04-13, pending Dennis QA via /ws-complete |
 | WS7  | OCR recovery for moties/amendementen               | seed       | 2026-04-14 |                                                        |
+| WS5a | 100% reliable nightly ingest                       | dennistak  | 2026-04-14 | claimed via /ws-claim                                  |
 | WS6  | Source-spans-only summarization                    | seed       | 2026-04-14 | Phase 3 DB write running; mode='structured' needs WS1  |
 
 ## Blocked
@@ -25,10 +26,9 @@
 
 ## Available (unclaimed, no blockers)
 
-| WS   | Title                        | Dependencies |
-|------|------------------------------|--------------|
-| WS2b | IV3 taakveld FK backfill     | WS2          |
-| WS5a | 100% reliable nightly ingest | none         |
+| WS   | Title                    | Dependencies |
+|------|--------------------------|--------------|
+| WS2b | IV3 taakveld FK backfill | WS2          |
 
 ## Paused
 
@@ -54,7 +54,6 @@
 ## Recent events (last 15)
 
 ```jsonl
-{"agent": "seed", "blocker": ["WS7", "WS11", "WS12"], "event": "blocked", "ts": "2026-04-14T15:31:44Z", "ws": "WS1"}
 {"agent": "seed", "detail": "Infrastructure done; targeted 20-doc run only", "event": "claimed", "ts": "2026-04-14T15:31:44Z", "ws": "WS10"}
 {"agent": "seed", "detail": "Infrastructure done; targeted 20-doc run only", "event": "paused", "ts": "2026-04-14T15:31:44Z", "ws": "WS10"}
 {"agent": "seed", "event": "claimed", "ts": "2026-04-14T15:31:44Z", "ws": "WS11"}
@@ -69,4 +68,5 @@
 {"agent": "mcp_alert", "detail": "p95 61.1s last 5min", "event": "alert", "metrics": {"p95_latency_ms": 61144.5}, "rule": "latency", "ts": "2026-04-14T18:43:30Z"}
 {"agent": "mcp_alert", "detail": "20 calls (20.0x baseline)", "event": "alert", "metrics": {"baseline_5m": 1.0, "calls_5m": 20, "ratio": 20.0}, "rule": "traffic_spike", "ts": "2026-04-14T18:48:32Z"}
 {"agent": "Dennis", "commit": "58caebc", "detail": "Statement timeout + T1-T10 tool quality fixes + MCP service-role migration + requirements pin", "event": "completed", "ts": "2026-04-14T19:14:27Z", "ws": "WS4"}
+{"agent": "dennistak", "detail": "claimed via /ws-claim", "event": "claimed", "ts": "2026-04-14T19:20:01Z", "ws": "WS5a"}
 ```
