@@ -22,7 +22,7 @@ platform for the Rotterdam municipal council.
 
 Read these files first:
 - docs/handoffs/WS8d_SUBPAGES.md (this file)
-- docs/handoffs/WS8_FRONTEND_REDESIGN.md §2D (subpage content spec)
+- docs/handoffs/done/WS8_FRONTEND_REDESIGN.md §2D (subpage content spec)
 - templates/base.html (updated structure from WS8a)
 - static/css/main.css (Tailwind tokens from WS8a)
 - design/photos/ (all photos — view them to understand placement)

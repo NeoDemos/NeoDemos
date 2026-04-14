@@ -39,7 +39,7 @@ You are picking up WS8_FRONTEND_REDESIGN for the NeoDemos project — a civic in
 platform for the Rotterdam municipal council (90,000+ documents, 2002-present).
 
 Read these files first:
-- docs/handoffs/WS8_FRONTEND_REDESIGN.md (this file — full spec)
+- docs/handoffs/done/WS8_FRONTEND_REDESIGN.md (this file — full spec)
 - templates/base.html (current template structure)
 - templates/search.html (current landing page)
 - templates/calendar.html (current calendar)
@@ -685,3 +685,41 @@ The following skills are installed in `.agents/skills/` (symlinked to Claude Cod
 
 **Playwright MCP** is installed (`claude mcp add playwright`) for screenshot-based visual testing.
 Use it to verify mobile layouts on 375px and 768px viewports before marking phases complete.
+
+---
+
+## Outcome
+
+**Shipped 2026-04-12.** The frontend pivoted from an MCP-first developer surface to a search-first civic intelligence platform. WS8a–e shipped in sequence: Vite + Tailwind v4 foundation with self-hosted fonts and a dark-green/beige/orange token palette; a stripped landing page built around a rotating headline, cached demo answer, and search hero; a filterable meeting list calendar with URL state and grid fallback; three marketing subpages (`/over`, `/technologie`, `/methodologie`) with full-bleed photography; and a polish pass covering footer restructure, nav renaming, and a hero-into-page blend fade. WS8f (admin CMS + GrapeJS) is tracked separately and is not part of this Outcome.
+
+### What shipped (per sub-workstream)
+
+- **WS8a — CSS architecture:** Vite + Tailwind CSS v4 build (`static/css/main.css` → `static/dist/main.css`), design tokens in `@theme {}` (dark green `#042825` + beige `#f4efe5` + orange `#ff751f`), Inter + Instrument Serif WOFF2 self-hosted to `static/fonts/`. All component CSS consolidated into a single `main.css` rather than per-page files (simpler on Tailwind v4).
+- **WS8b — Landing page:** `search.html` simplified to hero + demo + search + credibility/trust. Full-viewport hero with skyline image + overlay gradient, rotating headlines (5 variants, hourly JS rotation), demo answer with desktop/mobile `<details>` split, pre-rendered cache via `scripts/cache_demo_answers.py` → `data/demo_cache.json` (5 queries, loaded at startup, `DEMO_ANSWER_ID` env pin), account nudge after 3rd search, MCP nudge after 5th.
+- **WS8c — Calendar:** Default view is filterable list with committee filter chips (`aria-pressed`), `<details>`/`<summary>` row expansion, sticky date group headers, URL state sync via `history.replaceState`; grid view preserved as a toggle.
+- **WS8d — Subpages:** `/over` (founder quote, democratic ambition, audience grid), `/technologie` (EU sovereignty, security checklist, local AI options, MCP explanation), `/methodologie` (3-step methodology, sources stats, eval scores 0.99 / 4.8 / 2.75). All three use full-viewport hero images with a `::after` blend fade and a consistent `has-hero` body class.
+- **WS8e — Polish:** Logout redirect changed to `/` (was `/login`); "MCP" renamed to "AI-koppeling" across nav and footer; footer restructured (nav → meta → dimmed version); hero image 80px blend fade into page background; stats pill treatment on the landing hero (glass blur, orange separators, uppercase); `DB_HOST` fixed from `localhost` to `127.0.0.1` (SSH tunnel IPv6 issue).
+
+### Eval gate results
+
+| Metric | Target | Actual |
+|---|---|---|
+| Lighthouse Performance | ≥ 90 | Pass (per README Track C table) |
+| Lighthouse Accessibility | ≥ 95 (WCAG AA) | Pass (per README Track C table) |
+| Mobile search above fold @ 375px | Pass | Pass (per README Track C table) |
+| Landing headline rotation wired | Pass | Pass (`LANDING_HEADLINE` env var) |
+
+Lighthouse numeric scores not recorded in the handoff files — only pass/fail against targets in `docs/handoffs/README.md` Track C table.
+
+### Diffs from original plan
+
+- Color palette shifted from the original "Civic Blue + Muted Gold" spec to dark green + beige + orange (`#ff751f`) after Dennis's Canva design direction landed in WS8a.
+- CSS architecture consolidated into a single `main.css` under Tailwind v4 `@theme` instead of the originally-planned split across `tokens.css` / `reset.css` / `base.css` / `components.css` + per-page files.
+- Demo answer caching implemented as a pre-computed JSON cache (`data/demo_cache.json`, 5 queries, `DEMO_ANSWER_ID` env pin) rather than a single hardcoded answer.
+
+### Known gaps / follow-ups
+
+- WS8f (Admin CMS + GrapeJS editor) tracked in its own handoff file — not part of this Outcome.
+- Demo answer quality depends on WS9 orchestrator quality; WS9 shipped 2026-04-13 and demo/live answers now flow through Sonnet + tool_use.
+- Phase 4 manual eval (20 MCP-replay queries side-by-side) pending Dennis — tracked under WS9.
+- Demo cache prod verification (`GET /` < 200ms) still listed as "verify in prod" in the README Track C table.

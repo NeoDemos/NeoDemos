@@ -21,7 +21,7 @@ platform for the Rotterdam municipal council.
 
 Read these files first:
 - docs/handoffs/WS8a_CSS_ARCHITECTURE.md (this file — full spec)
-- docs/handoffs/WS8_FRONTEND_REDESIGN.md (parent spec — design tokens, colors, typography)
+- docs/handoffs/done/WS8_FRONTEND_REDESIGN.md (parent spec — design tokens, colors, typography)
 - templates/base.html (current template structure)
 - static/css/style.css (current styles — will be decomposed)
 - design/design_kit/neodemos-design-kit.svg (component library with token values)
