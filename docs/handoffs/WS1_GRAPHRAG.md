@@ -1,13 +1,14 @@
 # WS1 — GraphRAG Retrieval
 
 > **Priority:** 1 (highest impact, MAAT cannot match)
-> **Status:** `blocked` — waiting on WS7 (OCR), WS10 (table-rich), WS11 (corpus gaps), WS12 (virtual notulen) to finish before Phase A enrichment starts
+> **Status:** Phase 0 `done` (2026-04-12) · Phase A `blocked` — waiting on WS7 (OCR), WS11 (corpus gaps), WS12 (virtual notulen + `staging.meetings.quality_score`). WS10 (table-rich) is no longer a WS1 blocker per README 2026-04-13 decision.
 > **Owner:** `unassigned`
 > **Target release:** v0.2.0
 > **Master plan section:** [V0_2_BEAT_MAAT_PLAN.md §3](../architecture/V0_2_BEAT_MAAT_PLAN.md)
+> **Phase naming:** "Phase A" (build tasks) == "Phase 1" (eval gate text). Same thing — Phase A is the build label; Phase 1 is the execution-stage label used in the eval gate.
 
 ## TL;DR
-Today we have 57K KG edges, a politician registry, a domain gazetteer, and 3.3M entity-mentions — and we never query any of it at retrieval time. This workstream lights up the graph: enriches it to ~500K edges via Flair NER + Gemini, builds `services/graph_retrieval.py`, adds graph traversal as the 5th retrieval stream, and ships two flagship MCP tools (`traceer_motie`, `vergelijk_partijen`) that no Dutch competitor can match.
+Today we have 57K KG edges, a politician registry, a domain gazetteer, and 3.3M entity-mentions — and we never query any of it at retrieval time. This workstream lights up the graph: enriches it to ~500K edges via Flair NER + Gemini, exposes it via [`services/graph_retrieval.py`](../../services/graph_retrieval.py) (built in Phase 0, 2026-04-12), wires graph traversal as the 5th retrieval stream, and ships two flagship MCP tools (`traceer_motie`, `vergelijk_partijen`) that no Dutch competitor can match. Phase A bis (added 2026-04-14) tags every edge with provenance metadata so virtual notulen (WS12) can be included in the KG without compromising production-grade output quality.
 
 ## Dependencies
 - **WS7 (OCR recovery)** must complete first — enrichment must operate on clean source text, not garbled OCR
@@ -24,9 +25,11 @@ Today we have 57K KG edges, a politician registry, a domain gazetteer, and 3.3M 
 
 > You are picking up Workstream 1 (GraphRAG) of NeoDemos v0.2.0. The full plan is at `docs/architecture/V0_2_BEAT_MAAT_PLAN.md` §3 but you do not need to read it — this handoff is self-contained at `docs/handoffs/WS1_GRAPHRAG.md`.
 >
-> Read in order: (1) this handoff top-to-bottom, (2) `docs/architecture/PLAN_G_CONTEXTUAL_RETRIEVAL.md`, (3) `docs/architecture/PLAN_I_LIGHTRAG_ENTITY_EXTRACTION.md`, (4) `docs/architecture/PLAN_GI_MERGED_STATUS.md`, (5) `mcp_server_v3.py` (current 13 tools), (6) `services/rag_service.py` (current 4-stream retrieval).
+> **Phase 0 is already done (2026-04-12).** All scaffolding code exists: `services/graph_retrieval.py` (665 lines, 24/24 tests pass), 6 enrichment scripts under `scripts/` (gazetteer, Flair NER, BAG import, Gemini, motie linker, Qdrant backfill), and the `traceer_motie` + `vergelijk_partijen` MCP tool implementations. The 5th `graph_walk` stream is wired into `services/rag_service.py` (gated behind `GRAPH_WALK_ENABLED` env var, default false). Your job is to execute Phase A (run the enrichment scripts) and Phase B (test the MCP tools end-to-end), then promote and run the eval gate.
 >
-> Your job is to ship phase A (Flair + Gemini enrichment, ~500K KG edges) followed by phase B (graph_retrieval service + 5th retrieval stream + `traceer_motie` + `vergelijk_partijen` MCP tools). The acceptance criteria and eval gate are listed below — all must pass before you mark this workstream `done`. Do not let scope creep into other workstreams; if you find adjacent issues, write them in the `Future work` section instead of fixing them.
+> Read in order: (1) this handoff top-to-bottom, (2) `docs/handoffs/WS12_VIRTUAL_NOTULEN_BACKFILL.md` (your hard dep — needs `staging.meetings.quality_score` populated), (3) `services/graph_retrieval.py` (the file you'll be running), (4) `eval/baselines/ws1_pre_enrichment_baseline.md` (the 1.8/5 composite "before" you must beat), (5) `mcp_server_v3.py` (15+ tools incl. your two new ones at the end), (6) `services/rag_service.py` (5-stream retrieval, 5th gated on env var).
+>
+> Acceptance criteria and eval gate are listed below — all must pass before you mark this workstream `done`. Do not let scope creep into other workstreams; if you find adjacent issues, write them in the `Future work` section instead of fixing them.
 >
 > Honor the project house rules in `docs/handoffs/README.md`. The most important one for you: **never write to Qdrant or PostgreSQL during the Flair/Gemini enrichment run** — coordinate via `pg_advisory_lock(42)` or by waiting for the latest `staging.pipeline_runs` row to populate `completed_at`. Memory file `project_embedding_process.md` documents why.
 >
@@ -40,12 +43,30 @@ Today we have 57K KG edges, a politician registry, a domain gazetteer, and 3.3M 
 > - `document_chunks.key_entities` is `text[]`, not `jsonb`. Use `array_length(key_entities, 1) > 0` for coverage checks, not `jsonb_array_length`.
 
 ## Files to read first
+
+**Hard dependencies (read these to understand WS1 in current state):**
+- [`docs/handoffs/WS12_VIRTUAL_NOTULEN_BACKFILL.md`](WS12_VIRTUAL_NOTULEN_BACKFILL.md) — VN data source feeding WS1 enrichment; provides `staging.meetings.quality_score` that the provenance layer multiplies into edge confidence
+- [`eval/baselines/ws1_pre_enrichment_baseline.md`](../../eval/baselines/ws1_pre_enrichment_baseline.md) — the **1.8/5 composite baseline** measured 2026-04-12; Phase 1 must beat this on the 6 MCP chat replay sessions
+
+**Phase 0 artifacts (already shipped 2026-04-12):**
+- [`services/graph_retrieval.py`](../../services/graph_retrieval.py) — 665 lines; 4-function public API (extract_query_entities, walk, score_paths, hydrate_chunks) + retrieve_via_graph orchestrator
+- [`tests/test_graph_retrieval.py`](../../tests/test_graph_retrieval.py) — 24 unit tests, all passing
+- [`scripts/enrich_chunks_gazetteer.py`](../../scripts/enrich_chunks_gazetteer.py) — chunk-text gazetteer quick-win (Heemraadssingel fix)
+- [`scripts/run_flair_ner.py`](../../scripts/run_flair_ner.py) — Flair Dutch NER over 1.7M chunks
+- [`scripts/import_bag_locations.py`](../../scripts/import_bag_locations.py) — PDOK BAG + CBS Wijk- en Buurtkaart import
+- [`scripts/gemini_semantic_enrichment.py`](../../scripts/gemini_semantic_enrichment.py) — Gemini Flash Lite with `--cost-cap` enforcement
+- [`scripts/link_motie_to_notulen.py`](../../scripts/link_motie_to_notulen.py) — DISCUSSED_IN / VOTED_IN cross-doc edges
+- [`scripts/backfill_qdrant_entity_ids.py`](../../scripts/backfill_qdrant_entity_ids.py) — Qdrant payload entity_ids backfill
+- [`eval/scripts/ws1_quality_audit.sql`](../../eval/scripts/ws1_quality_audit.sql) — 12 acceptance-criteria checks ready to run
+
+**Architecture context (background reading):**
 - [`docs/architecture/PLAN_G_CONTEXTUAL_RETRIEVAL.md`](../architecture/PLAN_G_CONTEXTUAL_RETRIEVAL.md)
 - [`docs/architecture/PLAN_I_LIGHTRAG_ENTITY_EXTRACTION.md`](../architecture/PLAN_I_LIGHTRAG_ENTITY_EXTRACTION.md)
 - [`docs/architecture/PLAN_GI_MERGED_STATUS.md`](../architecture/PLAN_GI_MERGED_STATUS.md)
-- [`mcp_server_v3.py`](../../mcp_server_v3.py) — current 13 tools, especially `_format_chunks_v3` and the existing `zoek_moties` tool
-- [`services/rag_service.py`](../../services/rag_service.py) — current 4-stream retrieval architecture (`retrieve_parallel_context`)
-- Postgres schema: `kg_relationships` (column: `relation_type`), `kg_entities` (column: `type`), `kg_mentions` (chunk↔entity link table), `politician_registry`, `documents`, `document_chunks`
+- [`mcp_server_v3.py`](../../mcp_server_v3.py) — 15+ tools incl. `traceer_motie` + `vergelijk_partijen` at EOF; reference shapes: `_format_chunks_v3`, `zoek_moties`
+- [`services/rag_service.py`](../../services/rag_service.py) — 5-stream retrieval (`retrieve_parallel_context`); 5th `graph_walk` stream gated on `GRAPH_WALK_ENABLED`
+
+**Postgres schema (verified live 2026-04-11):** `kg_relationships` (column: `relation_type`), `kg_entities` (column: `type`), `kg_mentions` (chunk↔entity link table), `politician_registry`, `documents`, `document_chunks`. `staging.meetings.quality_score` (WS12) feeds the VN provenance layer.
 
 ## Build tasks
 
@@ -53,17 +74,17 @@ Today we have 57K KG edges, a politician registry, a domain gazetteer, and 3.3M 
 
 These were originally scoped as standalone v0.2.0 work; they are now folded in as prerequisites for phase B.
 
-- [ ] **[Quick win — do this first] Re-run Layer 1 `key_entities` enrichment over chunk text, not just parent-document title.** Current state ([PLAN_GI_MERGED_STATUS.md:14](../architecture/PLAN_GI_MERGED_STATUS.md#L14)): 449K chunks (28%) tagged via gazetteer-match against doc title only. A chunk like *"bewoners van de Heemraadssingel klagen over parkeerdruk"* in a document titled "Voortgangsrapportage parkeren 2024" gets zero `key_entities` tags → invisible to the Qdrant payload filter. Fix: second pass of [`scripts/enrich_and_extract.py`](../../scripts/enrich_and_extract.py) that scans chunk-body text against the existing 2.217-entry [`data/knowledge_graph/domain_gazetteer.json`](../../data/knowledge_graph/domain_gazetteer.json). No NER, no LLM, no new dependencies — just an extra string-match pass. Closes the most common location-query failure mode (see [FEEDBACK_LOG.md 2026-04-11](../../brain/FEEDBACK_LOG.md) Heemraadssingel entry) before Flair even runs.
-- [ ] **Run Flair `ner-dutch-large`** on all 1.6M chunks. Target: `key_entities` coverage 28% → ~65% (combined with the quick-win pass above, expect closer to ~75%). Use existing pipeline scripts under `scripts/` (look for layer 2 / NER runners). Flair Dutch LOC tagging picks up street-level entities the static gazetteer misses (Heemraadssingel, Mathenesserlaan, etc.), populating `kg_mentions` at chunk granularity.
-- [ ] **BAG-based location hierarchy as KG edges.** Import the Dutch national address registry ([Basisregistratie Adressen en Gebouwen](https://www.pdok.nl/introductie/-/article/basisregistratie-adressen-en-gebouwen-ba-1)) joined to the [CBS Wijk- en Buurtkaart](https://www.cbs.nl/nl-nl/dossier/nederland-regionaal/geografische-data/wijk-en-buurtkaart-2024) and emit `LOCATED_IN` edges in `kg_relationships`. For Rotterdam: ~5.000 streets + ~80 buurten + 14 gebieden + 1 gemeente. After import, a query for "Heemraadssingel" can walk one hop to "Middelland" → "Delfshaven" → "Rotterdam" via existing graph traversal. Replaces the alternative of a separate JSON lookup table — same data, better integrated, composable with the rest of the KG.
+- [ ] **[Quick win — do this first] Run [`scripts/enrich_chunks_gazetteer.py`](../../scripts/enrich_chunks_gazetteer.py)** (Phase 0 ✅ — script exists, dry-runnable). Scans chunk-body text against [`data/knowledge_graph/domain_gazetteer.json`](../../data/knowledge_graph/domain_gazetteer.json) (~2,217 entries across 6 lists). Current state: 25.2% `key_entities` coverage on 1,698,930 chunks (per pre-flight baseline 2026-04-12). A chunk like *"bewoners van de Heemraadssingel klagen over parkeerdruk"* in a document titled "Voortgangsrapportage parkeren 2024" currently gets zero `key_entities` tags → invisible to the Qdrant payload filter. This pass closes that gap. Smoke first: `python scripts/enrich_chunks_gazetteer.py --dry-run --limit 1000`. Closes the Heemraadssingel 0-hit failure (see [FEEDBACK_LOG.md 2026-04-11](../../brain/FEEDBACK_LOG.md), [eval/baselines/ws1_pre_enrichment_baseline.md R3](../../eval/baselines/ws1_pre_enrichment_baseline.md)).
+- [ ] **Run [`scripts/run_flair_ner.py`](../../scripts/run_flair_ner.py)** (Phase 0 ✅ — script exists, GPU auto-detected, `--dry-run` + `--limit` + `--resume`). Flair `ner-dutch-large` over all 1,698,930 chunks. Target: `key_entities` coverage 25.2% → ~65% (combined with the quick-win above, expect ~75%). Flair Dutch LOC tagging picks up street-level entities the static gazetteer misses (Heemraadssingel, Mathenesserlaan, etc.), populating `kg_mentions` at chunk granularity. Estimated runtime: 6-12 hours on Apple Silicon MPS.
+- [ ] **Run [`scripts/import_bag_locations.py --gemeente rotterdam`](../../scripts/import_bag_locations.py)** (Phase 0 ✅ — script exists, downloads cached, idempotent). Imports the Dutch national address registry ([Basisregistratie Adressen en Gebouwen](https://www.pdok.nl/introductie/-/article/basisregistratie-adressen-en-gebouwen-ba-1)) joined to the [CBS Wijk- en Buurtkaart](https://www.cbs.nl/nl-nl/dossier/nederland-regionaal/geografische-data/wijk-en-buurtkaart-2024) and emits `LOCATED_IN` edges in `kg_relationships`. For Rotterdam: ~5.000 streets + ~80 buurten + 14 gebieden + 1 gemeente. After import, a query for "Heemraadssingel" can walk one hop to "Middelland" → "Delfshaven" → "Rotterdam" via existing graph traversal. **Note:** the script's CBS download URL may need `--cbs-url` override on first run (CBS rotates filenames annually).
   - **Multi-tenant design constraints (locked here, paid back in WS5b):**
     - Use the **BAG `openbare_ruimte` 16-digit identifier** as the canonical primary key for Location nodes — NOT the street name. Street names are not unique across municipalities ("Hoofdstraat" exists in 100+ towns; "Marnixstraat" in 10+ large cities). Setting this now prevents a painful canonicalization migration when v0.2.1 multi-portal expansion adds Apeldoorn/Zoetermeer/etc.
     - Every `Location` entity in `kg_entities` gets a mandatory `gemeente` attribute, even though v0.2.0 only has Rotterdam data.
     - The `LOCATED_IN` edge type carries a `level` attribute (`buurt` | `wijk` | `gebied` | `stadsdeel` | `gemeente`) so different municipalities with different sub-municipal structures (Amsterdam stadsdelen, Utrecht wijken-only, Rotterdam gebieden) all fit the same schema without per-tenant changes.
   - Output: new ~5.100 nodes + ~5.100 edges in Rotterdam-only mode; rolls forward to ~9,5M addresses + matching edges if/when full Netherlands coverage is enabled in a later release.
-- [ ] **Gemini Flash Lite enrichment pass** for: `answerable_questions`, `section_topic` refinement, semantic relationships (`HEEFT_BUDGET`, `BETREFT_WIJK`, `SPREEKT_OVER`). Budget: ~$90–130. Small-batch (100% retention) per [project_pipeline_hardening.md](../../../.claude/projects/-Users-dennistak-Documents-Final-Frontier-NeoDemos/memory/project_pipeline_hardening.md). Now that BAG-derived `LOCATED_IN` edges exist, `BETREFT_WIJK` should resolve targets to BAG-canonical Location IDs rather than free-text wijk names.
+- [ ] **Run [`scripts/gemini_semantic_enrichment.py`](../../scripts/gemini_semantic_enrichment.py)** (Phase 0 ✅ — script exists, has hard `--cost-cap 130` enforcement). Gemini Flash Lite pass for: `answerable_questions`, `section_topic` refinement, semantic relationships (`HEEFT_BUDGET`, `BETREFT_WIJK`, `SPREEKT_OVER`). Budget: $90–130. Small-batch (100% retention) per [project_pipeline_hardening.md](../../../.claude/projects/-Users-dennistak-Documents-Final-Frontier-NeoDemos/memory/project_pipeline_hardening.md). Now that BAG-derived `LOCATED_IN` edges exist, `BETREFT_WIJK` resolves targets to BAG-canonical Location IDs rather than free-text wijk names. **STOP for cost re-approval before full run** — first do `--init-schema` then `--dry-run --limit 100` to calibrate cost per chunk.
 - [ ] **Materialize new edges** into `kg_relationships`. Target: 57K → ≥500K edges (Flair semantic relationships dominate; BAG hierarchy adds the constant 5K location skeleton).
-- [ ] **Cross-document motie↔notulen vote linking** — populate edges connecting a `motie` document to the `notulen` chunks where it was discussed/voted. Write into `kg_relationships` using the canonical shape `(source_entity_id, target_entity_id, relation_type='DISCUSSED_IN' | 'VOTED_IN', document_id, chunk_id, confidence, metadata)`. **WS3 depends on this.**
+- [ ] **Run [`scripts/link_motie_to_notulen.py`](../../scripts/link_motie_to_notulen.py)** (Phase 0 ✅) — cross-document motie↔notulen vote linking. Populates edges connecting a `motie` document to the `notulen` chunks where it was discussed/voted. Writes into `kg_relationships` using the canonical shape `(source_entity_id, target_entity_id, relation_type='DISCUSSED_IN' | 'VOTED_IN', document_id, chunk_id, confidence, metadata)`. **WS3 depends on this.**
 - [ ] **Quality audit** — two layers for Phase A (the full eval gate including MCP chat replay runs after Phase B):
   - SQL: row counts per edge type, NULL/orphan checks, coverage % on `key_entities`
   - Deterministic: 100 hand-curated entity→chunk pairs validated
@@ -114,25 +135,38 @@ Effective `confidence` column = `base_confidence * source_quality`. A Gemini edg
   - `score_paths()`: add `vn_penalty: float = 0.7` multiplier per VN edge in path (compound with hop penalty).
   - `retrieve_via_graph()`: read env var and pass `exclude_sources=['virtual_notulen']` to `walk()` when killswitch is on.
 - [ ] **MCP tool VN-awareness** — `traceer_motie` and `vergelijk_partijen` accept `include_virtual_notulen: bool = True`. Returned JSON includes `{ "virtual_notulen_edge_count": N, "official_edge_count": M }` so the host LLM (and Dennis for press use) can judge grounding.
+- [ ] **Add VN unit tests to [`tests/test_graph_retrieval.py`](../../tests/test_graph_retrieval.py)** — 4 new tests:
+  1. `walk(exclude_sources=['virtual_notulen'])` filters out VN edges from the CTE result
+  2. `walk(min_source_quality=0.7)` filters out edges with `metadata.source_quality < 0.7`
+  3. `score_paths(vn_penalty=0.7)` reduces a VN-only path's score by the expected factor
+  4. `retrieve_via_graph()` honors `INCLUDE_VIRTUAL_NOTULEN=false` env override (mock the env var)
+  All 4 tests should run with the existing FakeCursor pattern — no live DB.
+
+**Pattern references for the VN provenance work:**
+- [Uncertainty Management in the Construction of Knowledge Graphs (arXiv 2405.16929, 2024)](https://arxiv.org/html/2405.16929v2) — survey of provenance + confidence patterns; Facebook KG and NELL used as canonical examples
+- [Provenance-Aware Knowledge Representation: A Survey (Springer 2020)](https://link.springer.com/article/10.1007/s41019-020-00118-0) — embedded vs associated metadata trade-off (we use embedded via JSONB)
+- [Construction of Knowledge Graphs: Current State and Challenges (MDPI Information 2024)](https://www.mdpi.com/2078-2489/15/8/509) — heterogeneous source integration patterns
 
 ### Phase B — Graph retrieval service + MCP tools (~5–7 days)
 
-- [ ] **`services/graph_retrieval.py`** — new file. Functions:
-  - `extract_query_entities(query: str) -> list[Entity]` — Flair NER + gazetteer match + politician alias resolution
-  - `walk(seed_entities: list[Entity], max_hops: int = 2, edge_types: list[str] | None = None) -> list[Path]` — recursive PostgreSQL CTE traversal of `kg_relationships` (column name `relation_type`). **Hard cap at 2 hops in v0.2.**
-  - `score_paths(paths: list[Path], query_intent: str) -> list[ScoredPath]` — penalize long paths, boost matches against query intent classifier
-  - `hydrate_chunks(entity_ids: list[int], gemeente: str) -> list[Chunk]` — fetch chunks where entities appear via the existing `kg_mentions` join (NOT a nonexistent `chunk_entities` table)
-- [ ] **Bug fix first — drop the legacy `%%notule%%` filter in `_retrieve_by_keywords()`** at [`services/rag_service.py:438`](../../services/rag_service.py#L438) *(added 2026-04-11, triaged from TODOS)*. The current BM25 fallback used by `scan_breed` / `zoek_raadshistorie` hard-filters to `WHERE d.name ILIKE '%%notule%%'`, silently excluding every motie / amendement / initiatiefvoorstel / raadsvoorstel from document-level BM25 — a whole class of retrieval failures nobody sees. The vector search has no such filter and doesn't need one. Action: (1) remove the filter entirely; (2) log when the fallback fires so we can tell if this path is still load-bearing; (3) if doc-type scoping is ever needed, make it an explicit parameter, not a hidden default. Must land before the 5th stream is added (below), so the regression baseline is clean.
-- [ ] **Add 5th retrieval stream `graph_walk`** to [`services/rag_service.py:70`](../../services/rag_service.py#L70) `retrieve_parallel_context`. Reuse the existing Jina v3 reranker to merge with the other 4 streams.
-- [ ] **Entity-based Qdrant pre-filtering** — add `entity_ids: int[]` to all Qdrant payloads at promote-time (or via a backfill script). Then a graph walk can prune the dense search to *only* chunks mentioning the resolved entities → big speedup.
-- [ ] **MCP tool `traceer_motie(motie_id: str) -> dict`** in [`mcp_server_v3.py`](../../mcp_server_v3.py)
-  - Walks: `motie → DIENT_IN → indieners → LID_VAN → partijen → STEMT_VOOR/TEGEN → uitkomst → BETREFT (wijk/programma) → linked notulen fragments`
-  - Returns structured: `{motie, indieners, vote: {voor, tegen, uitkomst}, related_documents, journey_anchor, citation_chain}`
-  - **This is the flagship demo tool for v0.2.0.** Test it with the Feyenoord stadion files first.
-- [ ] **MCP tool `vergelijk_partijen(topic: str, partijen: list[str], date_from: date, date_to: date) -> dict`**
-  - For each party: `LID_VAN ∩ SPREEKT_OVER(topic)` → fetch chunks → rerank → top 5
-  - Returns side-by-side: `{party: [chunks_with_citations]}`
-- [ ] **Tool descriptions written for AI consumption** (not humans). Each must say: when to pick this tool, when *not* to pick it. Coordinate with WS4 — they own the description-writing convention.
+> **Phase 0 status (2026-04-12):** all scaffolding code is shipped. The remaining Phase B work is RUN + TEST + PROMOTE, not BUILD. Boxes below marked ✅ are code-complete from Phase 0; they still need execution / verification against live data.
+
+- [x] **`services/graph_retrieval.py`** — ✅ shipped Phase 0 (665 lines). Public API:
+  - `extract_query_entities(query: str) -> list[Entity]` — gazetteer match + politician alias resolution (no Flair at query time, kept for offline enrichment only)
+  - `walk(seed_entity_ids: list[int], max_hops: int = 2, edge_types: list[str] | None = None) -> list[Path]` — recursive PostgreSQL CTE traversal of `kg_relationships` (column name `relation_type`). **Hard cap at 2 hops in v0.2.**
+  - `score_paths(paths: list[Path], query_intent: str = "") -> list[ScoredPath]` — penalize long paths via `_HOP_PENALTY=0.7`; intent boosts via `_INTENT_EDGE_BOOSTS` table (motie_trace, party_comparison, location, financial)
+  - `hydrate_chunks(entity_ids: list[int], gemeente: str | None = None, limit: int = 30) -> list[GraphChunk]` — joins via `kg_mentions` (NOT a nonexistent `chunk_entities` table)
+  - `retrieve_via_graph(query, k, query_intent, gemeente)` — orchestration helper used by rag_service
+  - `is_graph_walk_ready()` — env-gated readiness (returns False until `GRAPH_WALK_ENABLED=1`)
+  - **Phase A bis adds**: `exclude_sources`, `min_source_quality`, `vn_penalty` parameters and env-var honoring.
+- [x] **Bug fix — drop the legacy `%%notule%%` filter in `_retrieve_by_keywords()`** ✅ shipped 2026-04-12 (commit 7aad784). Logging added when fallback fires.
+- [x] **Add 5th retrieval stream `graph_walk`** to [`services/rag_service.py`](../../services/rag_service.py) `retrieve_parallel_context` ✅ shipped 2026-04-12. Distribution updated to `{"financial": 3, "debate": 3, "fact": 2, "vision": 2, "graph": 2}`. Gated behind `GRAPH_WALK_ENABLED` env var.
+- [ ] **Run [`scripts/backfill_qdrant_entity_ids.py`](../../scripts/backfill_qdrant_entity_ids.py)** (Phase 0 ✅ — script exists). Backfills `entity_ids: int[]` into all 1.7M Qdrant payloads from `kg_mentions`. Must run AFTER Phase A enrichment completes. Uses `qdrant.batch_update_points` for one HTTP round-trip per batch of 500 points. Then a graph walk can prune the dense search to *only* chunks mentioning the resolved entities → big speedup.
+- [x] **MCP tool `traceer_motie(motie_id: str)`** in [`mcp_server_v3.py`](../../mcp_server_v3.py) ✅ scaffold shipped 2026-04-12. Walks: `motie → DIENT_IN → indieners → LID_VAN → partijen → STEMT_VOOR/TEGEN → uitkomst → BETREFT (wijk/programma) → linked notulen fragments`. Returns: `{motie, indieners, vote: {voor, tegen, uitkomst}, related_documents, notulen_fragments, trace_available, citation_chain, motie_id}`. Currently returns `trace_available: false` until KG enrichment lands. **This is the flagship demo tool for v0.2.0.**
+  - [ ] **Test against 10 hand-validated moties** post-Phase A: Feyenoord stadion, Boijmans, Warmtebedrijf (3), Tweebosbuurt sloop, warmtenetten (2), woningbouw, leegstand. All 10 must return correct vote outcome.
+- [x] **MCP tool `vergelijk_partijen(onderwerp, partijen, datum_van, datum_tot, max_fragmenten_per_partij)`** ✅ scaffold shipped 2026-04-12. For each party: existing 5-stream retrieval + post-filter on party-name-in-content + top-N. When `is_graph_walk_ready()` is true, the graph_walk stream contributes LID_VAN ∩ SPREEKT_OVER paths.
+  - [ ] **Test post-Phase A**: `vergelijk_partijen(onderwerp="warmtenetten", partijen=["Leefbaar Rotterdam","GroenLinks-PvdA","VVD"])` returns differentiated per-party fragments.
+- [x] **AI-consumption tool descriptions** ✅ both new tools have "use this when / do NOT use this when" descriptions per WS4 convention. WS4 is `done` per [README](README.md).
 
 ## Acceptance criteria
 
@@ -144,7 +178,7 @@ Effective `confidence` column = `base_confidence * source_quality`. A Gemini edg
 - [ ] `services/graph_retrieval.py` exists and exposes the 4 functions above
 - [ ] `services/rag_service.py:retrieve_parallel_context` calls a 5th `graph_walk` stream
 - [ ] Every Qdrant point payload has `entity_ids` populated
-- [ ] `traceer_motie` MCP tool returns a structured trace for at least 10 hand-validated moties (Feyenoord stadion, Boijmans, warmtenetten, …)
+- [ ] `traceer_motie` MCP tool returns a structured trace for the following 10 hand-validated moties, each with correct `vote.uitkomst` AND ≥1 indiener resolved to a politician_registry entry: (1) Feyenoord City stadion, (2) Boijmans depot, (3) Warmtebedrijf "Definitief stekker eruit" 2019-11-12, (4) Warmtebedrijf "Publiek kader" 2020-11-12, (5) Warmtebedrijf "Grip op besluitvorming" 2020-06-18, (6) Tweebosbuurt "Stop de sloop" 2019-10-03, (7) Tweebosbuurt "Bouwen aan een nieuwe buurt" 2018-11-29, (8) warmtenetten 2023, (9) woningbouw leegstand 2024, (10) one operator-chosen recent motie from the 2025 corpus.
 - [ ] `vergelijk_partijen` MCP tool returns coherent side-by-side for `topic="warmtenetten", partijen=["Leefbaar Rotterdam", "GroenLinks-PvdA", "VVD"]`
 - [ ] Both new tools have AI-consumption descriptions registered with the WS4 tool registry
 - [ ] No regression on existing 13 tools (run smoke tests against each)
@@ -180,7 +214,7 @@ Replay these 6 sessions through the live MCP tools **after Phase 1 enrichment**.
 |---|---|---|---|---|
 | R1 | **Tweebosbuurt 2018 stemming** | `traceer_motie` on the sloop motie | Returns correct vote parties AND identifies GL/PvdA as **coalitiepartij** at time of vote (not opposition). Must use `coalition_history` from `get_neodemos_context`, not guess from training data. | RED |
 | R2 | **Warmtebedrijf motie trace** | `traceer_motie` on ≥3 Warmtebedrijf moties (2019-2022) | Returns complete indieners + vote counts + at least 1 DISCUSSED_IN notulen chunk per motie. `trace_available: true`. | RED |
-| R3 | **Heemraadssingel parkeren** | `zoek_raadshistorie("Heemraadssingel parkeren")` | Returns ≥1 chunk (was 0 hits pre-enrichment — the chunk-text gazetteer quick-win closes this). | RED |
+| R3 | **Heemraadssingel parkeren** | `zoek_raadshistorie("Heemraadssingel parkeren")` | Returns ≥3 chunks where BOTH "Heemraadssingel" AND "parkeren" appear in the chunk content (verified via grep). Pre-enrichment baseline: 9 results returned but NONE were on-topic — about parking generally OR about Heemraadssingel cultuurhistorie, not the intersection. The chunk-text gazetteer pass + Flair LOC tagging together close this. | RED |
 | R4 | **Partijvergelijking warmtenetten** | `vergelijk_partijen(onderwerp="warmtenetten", partijen=["Leefbaar Rotterdam","GroenLinks-PvdA","VVD"])` | Returns **differentiated** per-party fragments — not the same generic warmtenetten chunks for all three. At least 3 of the 5 fragments per party must mention that party by name. | RED |
 | R5 | **Woningbouw 10-jaar research** | Full multi-tool session: `scan_breed` → `zoek_raadshistorie` → `zoek_moties` → `traceer_motie` → `lees_fragment` | Qualitative: graph_walk stream contributes at least 2 chunks that would NOT have appeared via the 4-stream retrieval alone (visible via `stream_type='graph'` tag). | YELLOW |
 | R6 | **Haven verduurzaming dossier** | `scan_breed("verduurzaming haven Rotterdam")` → `zoek_uitspraken` | Slot efficiency: ≤2 duplicate `document_id` values in first 8 results (was 4/8 pre-fix). Score floor: no result with `similarity_score < 0.15`. | YELLOW |
