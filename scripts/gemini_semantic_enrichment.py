@@ -422,13 +422,18 @@ def release_advisory_lock(conn) -> None:
 
 # ── Pre-flight checks (WS1 Phase 1, added 2026-04-14) ────────────────
 
-# Minimum buurt/wijk/gebied Locations required before Gemini can resolve
-# BETREFT_WIJK edges to the BAG-canonical hierarchy. Rotterdam expects
-# ~80 buurten + ~40 wijken + 14 gebieden + 1 gemeente ≈ 130 hierarchical
-# rows. Streets (~5K) are nice-to-have for other queries but NOT needed
-# for BETREFT_WIJK resolution. Threshold at 100 catches "import ran but
-# was partial" cases while not demanding the full street catalogue.
+# Expected BAG state for Rotterdam after a successful import:
+#   ~5,000 streets + ~80 buurten + ~40 wijken + 14 gebieden + 1 gemeente ≈ 5,135 rows.
+# We check BOTH the full total AND the hierarchy separately so a partial
+# import is caught with precise diagnostics:
+#   - hierarchy < MIN_BAG_HIERARCHY  → BETREFT_WIJK cannot resolve at all
+#   - total < MIN_BAG_TOTAL           → import is incomplete; re-run it
+# Streets are "nice-to-have for Gemini specifically" but the pipeline as a
+# whole (traceer_motie cites, Flair street-tag canonicalisation, R3
+# Heemraadssingel test) needs them. BAG import is ~30 min, idempotent;
+# we always require the full state, not the Gemini-minimum state.
 MIN_BAG_HIERARCHY = int(os.getenv("GEMINI_MIN_BAG_HIERARCHY", "100"))
+MIN_BAG_TOTAL = int(os.getenv("GEMINI_MIN_BAG_TOTAL", "4500"))
 
 
 def preflight_checks(read_conn, require_bag: bool = True) -> bool:
@@ -448,14 +453,19 @@ def preflight_checks(read_conn, require_bag: bool = True) -> bool:
     cur = read_conn.cursor()
     ok = True
 
-    # 1. BAG hierarchy (buurt/wijk/gebied/gemeente) — NOT street count.
-    # BETREFT_WIJK edges target the hierarchical levels. ~135 expected for
-    # Rotterdam (80 buurten + 40 wijken + 14 gebieden + 1 gemeente).
+    # 1. BAG import completeness — check BOTH hierarchy AND total.
+    # Expected post-import: ~5,000 streets + ~80 buurten + ~40 wijken
+    # + 14 gebieden + 1 gemeente ≈ 5,135 rows. We want the FULL state
+    # because downstream features (traceer_motie cites, Flair street-tag
+    # canonicalisation, R3 Heemraadssingel test) all need streets too,
+    # not just the hierarchy Gemini strictly requires. BAG import is ~30
+    # min + idempotent; a partial state is a bug to fix, not a green light.
     if require_bag:
         cur.execute(
             """
             SELECT
-              COUNT(*) AS total,
+              COUNT(*) AS total_rotterdam,
+              COUNT(*) FILTER (WHERE metadata->>'level' = 'straat') AS straten,
               COUNT(*) FILTER (WHERE metadata->>'level' = 'buurt') AS buurten,
               COUNT(*) FILTER (WHERE metadata->>'level' = 'wijk') AS wijken,
               COUNT(*) FILTER (WHERE metadata->>'level' = 'gebied') AS gebieden,
@@ -463,25 +473,40 @@ def preflight_checks(read_conn, require_bag: bool = True) -> bool:
             FROM kg_entities
             WHERE type = 'Location'
               AND metadata->>'gemeente' = 'rotterdam'
-              AND metadata->>'level' IN ('buurt', 'wijk', 'gebied', 'gemeente')
+              AND metadata->>'level' IS NOT NULL
             """
         )
         row = cur.fetchone()
-        hier_count = int(row[0])
+        total = int(row[0])
+        straten, buurten, wijken, gebieden, gemeenten = [int(x) for x in row[1:]]
+        hier_count = buurten + wijken + gebieden + gemeenten
+        detail = (
+            f"straten={straten}, buurten={buurten}, wijken={wijken}, "
+            f"gebieden={gebieden}, gemeenten={gemeenten}, total={total}"
+        )
+
         if hier_count < MIN_BAG_HIERARCHY:
             log.error(
                 f"Pre-flight FAIL: BAG hierarchy rows = {hier_count} "
-                f"(need >= {MIN_BAG_HIERARCHY}). "
-                f"Buurten={row[1]}, wijken={row[2]}, gebieden={row[3]}, gemeenten={row[4]}. "
-                f"Run `python scripts/import_bag_locations.py --gemeente rotterdam` first. "
-                f"BETREFT_WIJK edges cannot resolve to BAG-canonical IDs without this."
+                f"(need >= {MIN_BAG_HIERARCHY}). {detail}. "
+                f"BETREFT_WIJK edges cannot resolve to BAG-canonical IDs. "
+                f"Run `python scripts/import_bag_locations.py --gemeente rotterdam`."
+            )
+            ok = False
+        elif total < MIN_BAG_TOTAL:
+            log.error(
+                f"Pre-flight FAIL: BAG total rows = {total} "
+                f"(need >= {MIN_BAG_TOTAL} for full state; expected ~5,135). "
+                f"{detail}. The hierarchy is present but streets are missing — "
+                f"BAG import was partial. Re-run "
+                f"`python scripts/import_bag_locations.py --gemeente rotterdam` "
+                f"(idempotent) to finish. Streets are needed for traceer_motie "
+                f"cites, Flair NER street-tag canonicalisation, and the R3 "
+                f"Heemraadssingel eval-gate test."
             )
             ok = False
         else:
-            log.info(
-                f"  [OK] BAG hierarchy: {hier_count} rows "
-                f"(buurt={row[1]}, wijk={row[2]}, gebied={row[3]}, gemeente={row[4]})"
-            )
+            log.info(f"  [OK] BAG fully imported: {detail}")
 
     # 2. No other active writers on kg_* tables.
     # Gemini's advisory lock covers other kg-aware scripts, but it does NOT
