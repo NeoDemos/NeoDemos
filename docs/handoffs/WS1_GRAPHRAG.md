@@ -10,7 +10,9 @@
 Today we have 57K KG edges, a politician registry, a domain gazetteer, and 3.3M entity-mentions — and we never query any of it at retrieval time. This workstream lights up the graph: enriches it to ~500K edges via Flair NER + Gemini, builds `services/graph_retrieval.py`, adds graph traversal as the 5th retrieval stream, and ships two flagship MCP tools (`traceer_motie`, `vergelijk_partijen`) that no Dutch competitor can match.
 
 ## Dependencies
-- **None for phase A** (Flair + Gemini enrichment)
+- **WS7 (OCR recovery)** must complete first — enrichment must operate on clean source text, not garbled OCR
+- **WS11 (corpus completeness)** must complete first — no point enriching an incomplete corpus
+- **WS12 (virtual notulen)** must complete first AND `staging.meetings.quality_score` must be populated for every VN meeting — WS1's provenance layer depends on it (see Phase A section "VN Provenance Layer" below)
 - **Phase B (graph service + MCP tools) depends on phase A finishing**
 - **WS3 (Journey) depends on this workstream's cross-document motie↔notulen linking**
 - Memory to read first:
@@ -67,6 +69,52 @@ These were originally scoped as standalone v0.2.0 work; they are now folded in a
   - Deterministic: 100 hand-curated entity→chunk pairs validated
   - *(Optional diagnostic, not a gate)* LLM judge: 200 random edges scored 1–5 by Gemini Flash. If mean < 3.5, iterate the Gemini prompt before proceeding to Phase B. This catches obviously bad edges but cannot catch politically misleading interpretation — the MCP chat replay in the Eval gate (Layer 2) tests that.
 
+### Phase A bis — VN Provenance Layer (added 2026-04-14)
+
+WS12 ships virtual notulen (ASR-transcribed committee meetings) as a first-class data source — and the only source for committee-level debate. Quality varies; `staging.meetings.quality_score` (0.0–1.0) quantifies it per meeting. The existing `INCLUDE_VIRTUAL_NOTULEN` killswitch in [`services/rag_service.py:12`](../../services/rag_service.py#L12) covers the dense/BM25 streams but NOT the new graph_walk stream. Without provenance tagging on KG edges, we cannot ship VN-inclusive enrichment without producing politically misleading output.
+
+Pattern: standard provenance-aware KG (Facebook KG / NELL, per [arXiv 2405.16929](https://arxiv.org/html/2405.16929v2)). Include VN data, tag every edge with provenance, expose filtering at query time.
+
+**Metadata contract** — every new `kg_relationships` row written in Phase A must populate `metadata`:
+
+```json
+{
+  "source": "virtual_notulen" | "official_notulen" | "motie_body" | "amendement_body"
+          | "politician_registry" | "raadslid_rollen" | "bag_pdok" | "cbs_wbk"
+          | "flair_ner" | "gemini_flash_lite",
+  "source_quality": 0.0-1.0,
+  "source_meeting_id": "..." | null,
+  "source_doc_id": "..." | null,
+  "extractor": "flair_ner" | "gemini_flash_lite" | "regex" | "registry_lookup",
+  "extracted_at": "ISO-8601"
+}
+```
+
+Effective `confidence` column = `base_confidence * source_quality`. A Gemini edge (base 0.85) from a VN meeting with quality_score 0.6 lands as 0.51 — automatically down-ranked by the existing `score_paths` confidence product.
+
+- [ ] **Backfill source tags on the existing 57K edges** (one-shot SQL, ~1 minute, fully reversible). All pre-existing edges came from rule-based extraction over motie documents + politician_registry + raadslid_rollen — none from VN. Run before Phase A scripts:
+  ```sql
+  UPDATE kg_relationships SET metadata = metadata || jsonb_build_object(
+    'source', CASE
+      WHEN relation_type = 'LID_VAN' THEN 'politician_registry'
+      WHEN relation_type = 'IS_WETHOUDER_VAN' THEN 'raadslid_rollen'
+      ELSE 'motie_body'
+    END,
+    'source_quality', 1.0,
+    'extractor', 'regex'
+  ) WHERE metadata->>'source' IS NULL;
+  ```
+- [ ] **Tag Flair NER edges** ([`scripts/run_flair_ner.py`](../../scripts/run_flair_ner.py)) — at write time, JOIN to `documents.is_virtual_notulen` + `staging.meetings.quality_score`. Set `metadata.source = 'flair_ner'`, `source_quality = quality_score (or 1.0 for non-VN)`, `source_meeting_id`, `source_doc_id`. Mentions in `kg_mentions` do NOT need source tags (chunks themselves carry the source via `documents.doc_type`); only relationship edges get tagged.
+- [ ] **Tag Gemini semantic edges** ([`scripts/gemini_semantic_enrichment.py`](../../scripts/gemini_semantic_enrichment.py)) — every HEEFT_BUDGET / BETREFT_WIJK / SPREEKT_OVER edge gets `metadata.source = 'gemini_flash_lite'` + the chunk's source provenance fields. Multiply `confidence = gemini_confidence * source_quality` before INSERT.
+- [ ] **Tag motie↔notulen edges** ([`scripts/link_motie_to_notulen.py`](../../scripts/link_motie_to_notulen.py)) — when the target chunk is from a VN meeting, set `metadata.source = 'virtual_notulen'` + the meeting's quality_score. Otherwise `'official_notulen'` with quality 1.0.
+- [ ] **Update `services/graph_retrieval.py`**:
+  - Read `INCLUDE_VIRTUAL_NOTULEN` env var at module load (mirror the rag_service pattern).
+  - `walk()`: add `exclude_sources: list[str] | None = None` and `min_source_quality: float = 0.0` parameters; both filter via the CTE.
+  - `hydrate_chunks()`: same filter applied at hydration so excluded VN chunks don't leak through.
+  - `score_paths()`: add `vn_penalty: float = 0.7` multiplier per VN edge in path (compound with hop penalty).
+  - `retrieve_via_graph()`: read env var and pass `exclude_sources=['virtual_notulen']` to `walk()` when killswitch is on.
+- [ ] **MCP tool VN-awareness** — `traceer_motie` and `vergelijk_partijen` accept `include_virtual_notulen: bool = True`. Returned JSON includes `{ "virtual_notulen_edge_count": N, "official_edge_count": M }` so the host LLM (and Dennis for press use) can judge grounding.
+
 ### Phase B — Graph retrieval service + MCP tools (~5–7 days)
 
 - [ ] **`services/graph_retrieval.py`** — new file. Functions:
@@ -101,6 +149,11 @@ These were originally scoped as standalone v0.2.0 work; they are now folded in a
 - [ ] Both new tools have AI-consumption descriptions registered with the WS4 tool registry
 - [ ] No regression on existing 13 tools (run smoke tests against each)
 - [ ] Cross-document motie↔notulen edges populated; visible in `traceer_motie` output
+- [ ] **VN provenance:** 100% of `kg_relationships` rows written in Phase A have `metadata.source` populated. Verify: `SELECT COUNT(*) FROM kg_relationships WHERE metadata->>'source' IS NULL` returns zero.
+- [ ] **VN provenance:** the 57K pre-existing edges are backfilled with `metadata.source` (motie_body / politician_registry / raadslid_rollen as appropriate).
+- [ ] **VN provenance:** `walk(exclude_sources=['virtual_notulen'])` returns no paths that include a VN-derived edge (covered by `tests/test_graph_retrieval.py`).
+- [ ] **VN provenance:** `INCLUDE_VIRTUAL_NOTULEN=false` removes VN chunks from both graph_walk results AND their hydrated chunks.
+- [ ] **VN provenance:** edge count by source published in the quality audit, with VN-derived share explicitly broken out (see expected distribution in WS1 plan addendum).
 
 ## Eval gate
 
@@ -134,6 +187,8 @@ Replay these 6 sessions through the live MCP tools **after Phase 1 enrichment**.
 
 **How to run:** use Claude Desktop (or any MCP host) connected to the production NeoDemos MCP server after Phase 1 enrichment + `GRAPH_WALK_ENABLED=1` deploy. Each session is a natural-language conversation that exercises the tool sequence shown. Score pass/fail manually against the condition column. Record results in the **Outcome** section at the bottom of this file.
 
+**VN A/B run (added 2026-04-14):** each of the 6 sessions is run **twice** — once with `INCLUDE_VIRTUAL_NOTULEN=True` (default, max recall) and once with `INCLUDE_VIRTUAL_NOTULEN=False` (provenance-pure). Both scores recorded. Acceptance: the provenance-pure score must be **no more than 0.3 below** the default on any session — if VN is contributing more noise than signal, the delta inverts and VN gets downgraded in the KG write step (re-tag with lower base_quality) instead of patched at query time.
+
 **Why this replaces the abstract LLM-judge:** The original handoff prescribed "200 random edges scored 1-5 by Gemini Flash, mean ≥ 4.0." That gate catches obviously bad edges but cannot catch the Tweebosbuurt-class failure (politically misleading interpretation of structurally correct data). The 6 replay sessions test end-to-end correctness including the host LLM's interpretation of retrieved context — which is where the actual user trust lives. The edge-quality LLM-judge can still be run as a diagnostic during Phase A enrichment iteration (if the mean drops below 3.5, iterate the Gemini prompt before proceeding to Phase B), but it is **not** a gate for marking WS1 `done`.
 
 ## Risks specific to this workstream
@@ -146,6 +201,8 @@ Replay these 6 sessions through the live MCP tools **after Phase 1 enrichment**.
 | Gemini cost overrun | Small-batch flags from `project_pipeline_hardening.md`; estimate at $90–130 max |
 | KG quality below 3.5 on edge LLM-judge | Iterate Gemini prompt + chunk size + add SQL post-filters; do not promote to Phase B until diagnostic passes. The *real* gate is the MCP chat replay (Eval gate Layer 2), not this score. |
 | MCP chat replay failures (Tweebosbuurt-class) | Root-cause whether the failure is in enrichment (Phase A), graph traversal (Phase B), or host-LLM interpretation (WS4 primer). Fix in the responsible workstream before marking WS1 done. |
+| VN-derived edges add noise / mislead (e.g. ASR speaker misattribution → wrong DIENT_IN edge) | Provenance tagging on every edge + `score_paths` VN penalty + A/B eval. Worst case: re-tag VN edges with `source_quality=0` post-hoc to neutralize them without re-running enrichment. |
+| `staging.meetings.quality_score` not populated for some VN meetings | Default to 0.5 if NULL — conservative middle ground. Log the count of edges written with a defaulted quality_score; if > 5%, root-cause in WS12. |
 
 ## Future work (do NOT do in this workstream)
 - Per-municipality KG isolation (out of v0.2 scope; multi-portal deferred to v0.2.1)
