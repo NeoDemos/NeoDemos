@@ -90,11 +90,31 @@ Loading 1.33M rows into Python at once spikes RAM by several GB. Use a streaming
 
 | File | Purpose |
 |---|---|
+| `services/embedding.py` | **`compute_point_id(doc_id, db_id)` — canonical Scheme A point-ID helper.** All embedding writers import this. |
 | `scripts/migrate_embeddings.py` | Main migration script with GPU hang protection |
 | `services/local_ai_service.py` | `generate_embedding()` (single-item), `generate_embeddings_batch()` (DO NOT USE for migration) |
 | `scripts/audit_vector_gaps.py` | `compute_missing_ids()` — cross-references Qdrant vs Postgres |
 | `data/pipeline_state/migration_checkpoint.json` | Resume checkpoint |
 | `logs/migration_errors.log` | NaN/Inf skips, upsert failures, GPU hang detections |
+
+## Canonical Point-ID Scheme (Scheme A)
+
+**Every Qdrant point ID MUST be computed via `services.embedding.compute_point_id(document_id, db_id)`** — no ad-hoc MD5 literals.
+
+```python
+# services/embedding.py
+def compute_point_id(document_id: str, db_id: int) -> int:
+    return int(hashlib.md5(f"{document_id}_{db_id}".encode()).hexdigest()[:15], 16)
+```
+
+- `db_id` = `document_chunks.id` (SERIAL PK, stable for the chunk's lifetime)
+- SERIAL changes when a chunk is re-inserted (rechunking) — this is intentional; rechunk writers MUST delete the old point(s) before upserting new ones to avoid orphans
+- Historical Scheme B (`md5(f"{doc}_{child_id}_{chunk_index}")[:15]`) is deprecated — only `scripts/repair_scheme_b_points.py` and `scripts/ws10_finalize_embeddings.py::legacy_scheme_b_point_id()` know about it, for one-time cleanup of legacy points
+- All 6 writers (`document_processor`, `migrate_embeddings`, `ws10_finalize_embeddings`, `promote_committee_notulen`, `pipeline/ingestion`, `pipeline/staging_ingestor`) + 1 reader (`audit_vector_gaps`) use the helper
+
+**Phase 2 kill-switch:** set `DOCUMENT_PROCESSOR_PHASE2_ENABLED=false` in `config/deploy.yml` env.clear to pause scheduled embedding during bulk operations. Set back to `true` + redeploy when done.
+
+**WS11c cleanup (2026-04-14):** one-shot standardization ran scripts `repair_scheme_b_points.py`, `rekey_vn_points.py`, `cleanup_safe_orphans.py` + manual Phase 9b restore. 274,596 orphan points removed. See `docs/handoffs/WS11_CORPUS_COMPLETENESS.md` section "WS11c" for the full audit trail and the "Resume Phase 6" runbook if embedded_at backfill needs picking up.
 
 ## Metadata vs Vector Embedding for Dates
 

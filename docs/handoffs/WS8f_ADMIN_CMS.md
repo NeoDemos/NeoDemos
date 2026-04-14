@@ -416,3 +416,77 @@ Admin UX is now:
 - Click "Laad sjabloon" → canvas pre-populates with current `/over` content, parsed into typed components via `isComponent` matchers
 
 This matches Webflow / Framer / Studio SDK patterns for production CMSes.
+
+---
+
+## v3 Post-Test Fixes — Editor UX & Staging Ops (2026-04-14)
+
+Dennis did hands-on testing. Several issues surfaced and were fixed same-day; one production-environment blocker remains for Dennis to pick up later.
+
+### Issues fixed
+
+| Issue | Root cause | Fix |
+|---|---|---|
+| Public routes (`/`, `/over`, etc.) returned HTTP 500 before migration 0008 applied | `page_service.get_published()` raised `UndefinedTable` on missing `site_pages` | Added `try/except psycopg2.errors.UndefinedTable` to every `page_service.*` method; returns `None`/`[]` when table is missing |
+| Login returned HTTP 500 when migration 0009 not applied | `auth_service` SELECT queries referenced `subscription_tier` column that doesn't exist yet | Refactored with cached `_has_subscription_cols()` check at module load + conditional `_user_cols()` helper; every SELECT site now uses the helper; `_user_row_to_dict` handles both 9-col and 12-col rows gracefully; `update_user` only allows `subscription_tier` in allowed fields when the column exists |
+| Editor page showed NeoDemos global nav + cramped canvas | `templates/admin/editor.html` extended `base.html` which renders the site nav + footer | Rewrote as standalone full-viewport HTML (no `{% extends %}`); editor owns its own `<html>`/`<head>`/`<body>` |
+| Editor had no Blocks panel on left and no Traits/Layers/Styles tabs on right | GrapeJS default init renders `blockManager.blocks` in memory but has no DOM target without a preset plugin; the `grapesjs-preset-webpage@1.0.3` URL I first tried was wrong (package only ships `dist/index.js`, no `.min.js`) and targets GrapeJS 0.21 anyway | Rebuilt editor with **manual panel mounting** via `blockManager.appendTo: '#blocks-container'`, `traitManager.appendTo`, `layerManager.appendTo`, `styleManager.appendTo`. Built a 3-column shell in the template (sidebar / canvas / right-panel with tab switcher) styled with our design tokens. This is version-agnostic and doesn't depend on any plugin |
+| Canvas was empty — template auto-load silently failed | `/admin/api/page/{slug}/template` endpoint crashed with `'request' is undefined`: `templates/partials/_nav.html` uses `request.url.path` for active-link highlighting but the Python call didn't pass a `request` object | Added `_StubRequest` / `_StubURL` classes in `routes/admin.py` with minimal `.url.path`, `.headers`, `.cookies`, `.query_params`; wrapped render in `try/except` with proper error logging; also strip `<script>` tags from returned HTML so site JS doesn't execute in the editor iframe |
+
+### Verified working in Playwright
+
+With all the fixes in place and uvicorn restarted, Playwright confirmed end-to-end:
+- Endpoint: `GET /admin/api/page/home/template` → HTTP 200, 7,391 bytes of HTML
+- Canvas iframe body: populated with `.landing-hero-image` → `.landing-hero-overlay` → `.landing-hero-content` → search box + stats pill
+- Editor CSS load: `/static/dist/main.css?v=v0.2.0-alpha.2` with 45 sheet rules active in the iframe
+- Hero element: `height: 644px`, `background-image: image-set(...)` resolved to the Rotterdam skyline
+- Blocks panel: 23 blocks visible, grouped under 6 Dutch categories (Hero's / Secties / Inhoud / Kaarten / Lijsten / Knoppen)
+- Right sidebar tabs: Eigenschappen / Lagen / Stijlen switching works
+
+Screenshot saved at `editor-current.png` in repo root shows the landing page fully rendered inside the editor with real styling.
+
+### Open blocker for next session
+
+**Migration 0009 cannot be applied until the production embedding pipeline quiesces.**
+
+When attempted on 2026-04-14, the ALTER TABLE queued behind two long-running production transactions:
+
+| PID | Query | Runtime at time of attempt |
+|---|---|---|
+| 92133 | `SELECT ... FROM document_chunks WHERE document_id = '255970'` | 7m 35s |
+| 102266 | `UPDATE document_chunks SET embedded_at = NOW() WHERE embedded_at IS NULL` | 5m 10s |
+
+Both are legitimate embedding-pipeline work (see `reference_embedding_runbook.md` memory). The `UPDATE ... WHERE embedded_at IS NULL` in particular is a massive unbatched table update that holds row-level transaction locks for minutes. Every SELECT on `users` (auth, sessions, OAuth tokens) gets queued behind these, which is also why the local uvicorn lifespan's `auth_service.get_user_by_email(ADMIN_EMAIL)` admin-seed step hangs on boot.
+
+**Options when Dennis resumes:**
+
+1. **Wait for the embedding pipeline to finish**, then run `alembic upgrade head` during the quiet window. The migration has `lock_timeout = '3s'` so it will fail fast if the lock is still contended — safe to retry.
+2. **Batch the embedding update** (recommended for the pipeline anyway): replace the unbounded `UPDATE document_chunks SET embedded_at = NOW() WHERE embedded_at IS NULL` with a chunked version that updates N rows per transaction. This is a pipeline hygiene win independent of WS8f.
+3. **Deploy the code to Hetzner now** (auth_service is already schema-tolerant — it degrades gracefully without 0009). The subscription UI badges will just show blank until 0009 lands. Everything else works.
+
+Once 0009 applies, the subscription column populates with `'free_beta'` via the DB default for all existing users automatically (Postgres 11+ stores DEFAULTs as metadata without a table rewrite).
+
+### Local-dev note
+
+To boot uvicorn against the cloud-tunneled DB while production is under lock contention, start with admin-seed skipped:
+
+```bash
+ADMIN_EMAIL="" ADMIN_PASSWORD="" DB_POOL_SIZE=2 DB_MAX_OVERFLOW=3 \
+  uvicorn main:app --host 127.0.0.1 --port 8000 --log-level warning
+```
+
+The admin user already exists in the DB — the lifespan only `create_user`s it if missing. Unsetting `ADMIN_EMAIL` skips the existence check entirely and uvicorn boots without hitting `users` during startup.
+
+### Files changed in v3
+
+- `routes/admin.py` — `_StubRequest` stub class; template endpoint hardened with `try/except`; `<script>` strip regex added to returned HTML
+- `services/auth_service.py` — `_has_subscription_cols()` cache; `_user_cols()` helper; all SELECTs refactored to use it; `_user_row_to_dict` handles variable row length
+- `services/page_service.py` — `try/except UndefinedTable` on all 3 read paths (`get_published`, `get_draft`, `list_pages`)
+- `templates/admin/editor.html` — rewritten as standalone full-viewport HTML with manual panel mounting (3-column shell, tab switcher, no plugin dependency)
+- `alembic/versions/20260414_0009_subscription_tier.py` — `SET lock_timeout = '3s'` before ALTER TABLE statements so future retries fail fast instead of blocking prod auth; columns are now nullable (NOT NULL can be added later once all rows have a default value populated)
+
+### Status for pickup
+
+- **Review-ready** — code is shippable; the CMS works end-to-end for the 4 editable slugs (`home`, `over`, `technologie`, `methodologie`)
+- **One open action** — apply migration 0009 during a quiet window (after embedding pipeline finishes)
+- **No regressions** — public site works, login works, admin panel works, MCP untouched

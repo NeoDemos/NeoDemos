@@ -15,3 +15,8 @@
 {"agent": "seed", "detail": "Phase 3 DB write running; mode='structured' needs WS1", "event": "claimed", "ts": "2026-04-14T15:31:44Z", "ws": "WS6"}
 {"agent": "seed", "event": "claimed", "ts": "2026-04-14T15:31:44Z", "ws": "WS7"}
 {"agent": "seed", "detail": "Shipped 2026-04-13, pending Dennis QA via /ws-complete", "event": "claimed", "ts": "2026-04-14T15:31:44Z", "ws": "WS8f"}
+{"agent": "dennistak", "detail": "claimed via /ws-claim", "event": "claimed", "ts": "2026-04-14T18:30:57Z", "ws": "WS4"}
+{"agent": "dennistak", "detail": "claimed via /ws-claim", "event": "claimed", "ts": "2026-04-14T18:31:41Z", "ws": "WS9"}
+{"agent": "dennistak", "detail": "alembic 0005b rename done; Phase 4 eval deferred to Dennis", "event": "completed", "ts": "2026-04-14T18:35:34Z", "ws": "WS9"}
+{"agent": "mcp_alert", "detail": "p95 61.1s last 5min", "event": "alert", "metrics": {"p95_latency_ms": 61144.5}, "rule": "latency", "ts": "2026-04-14T18:43:30Z"}
+{"agent": "mcp_alert", "detail": "20 calls (20.0x baseline)", "event": "alert", "metrics": {"baseline_5m": 1.0, "calls_5m": 20, "ratio": 20.0}, "rule": "traffic_spike", "ts": "2026-04-14T18:48:32Z"}

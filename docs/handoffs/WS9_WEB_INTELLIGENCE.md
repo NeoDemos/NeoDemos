@@ -639,4 +639,4 @@ The rate limiting from WS8 makes the higher per-query cost manageable. At realis
 ### Remaining
 
 - Phase 4 manual eval: 20 MCP-replay queries side-by-side (needs Dennis to run)
-- `services/storage.py` + `alembic/versions/0005_document_events.py` revision rename held back pending WS11 migration 0006 on prod
+- ~~`alembic/versions/0005_document_events.py` rename~~ — done 2026-04-14: renamed to `20260412_0005b_document_events.py` to match internal revision ID; alembic single-head verified

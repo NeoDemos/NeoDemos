@@ -214,6 +214,19 @@ _TEMPLATE_SLUG_MAP = {
 }
 
 
+class _StubURL:
+    """Stub url object for templates that reference request.url.path (e.g. nav active-link highlighting)."""
+    path = ""
+
+
+class _StubRequest:
+    """Minimal request stub for template rendering outside an HTTP handler."""
+    url = _StubURL()
+    headers = {}
+    cookies = {}
+    query_params = {}
+
+
 @router.get("/admin/api/page/{slug}/template")
 async def admin_get_template(slug: str, _user: dict = Depends(require_admin)):
     """Render the Jinja template for a slug with content() defaults, for GrapeJS editor starter.
@@ -233,6 +246,7 @@ async def admin_get_template(slug: str, _user: dict = Depends(require_admin)):
     try:
         tpl = templates.env.get_template(template_name)
         full_html = tpl.render(
+            request=_StubRequest(),  # stub — _nav.html uses request.url.path for active state
             title="",
             user=None,
             page_html=None,
@@ -246,6 +260,9 @@ async def admin_get_template(slug: str, _user: dict = Depends(require_admin)):
             # overview.html (just in case)
             meetings=[],
         )
+    except Exception as e:
+        logger.error(f"Template render failed for slug={slug}: {e}")
+        return JSONResponse({"error": f"Sjabloon kon niet worden geladen: {e}"}, status_code=500)
     finally:
         # Always restore — never leave the shared env mutated
         if original_content is not None:
@@ -257,6 +274,9 @@ async def admin_get_template(slug: str, _user: dict = Depends(require_admin)):
         content_html = match.group(1).strip()
     else:
         content_html = full_html.strip()
+
+    # Strip <script> blocks — GrapeJS shouldn't execute site JS in the editor canvas
+    content_html = re.sub(r'<script\b[^>]*>.*?</script>', '', content_html, flags=re.DOTALL | re.IGNORECASE)
 
     return JSONResponse({"html": content_html, "css": None})
 

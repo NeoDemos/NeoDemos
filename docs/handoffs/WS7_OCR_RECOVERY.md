@@ -161,7 +161,8 @@ Notulen are natively digital iBabs transcripts (not PDFs) and are mostly clean.
 
 - [ ] `staging.ocr_recovery_queue` table populated with all identified damaged documents
 - [ ] `scripts/ocr_recovery_moties.py` exists with `--dry-run`, `--limit`, `--resume`, advisory lock 42
-- [ ] Source content backed up in `staging.ocr_recovery_originals` before any overwrites
+- [x] Source content backed up in `staging.ocr_recovery_originals` before any overwrites
+      *(Used successfully by WS11c on 2026-04-14 — restored 8 over-aggressively-truncated docs from this backup: +104K chars recovered. Pre-restore copies preserved in `staging.ws11_pre_restore_backup` for symmetric rollback. See `WS11_CORPUS_COMPLETENESS.md` WS11c section.)*
 - [ ] BM25 hit rate for "gemeenteraad" on moties: ≥ 95% (from 77.5%)
 - [ ] Garbled-spacing count (40+ chars no space): ≤ 5% of moties (from 20%)
 - [ ] No regression on documents that were already clean

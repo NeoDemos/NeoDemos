@@ -1,7 +1,7 @@
 # NeoDemos Project State
 
 > Auto-generated from `.coordination/events.jsonl` — do not edit manually.
-> Last rebuilt: 2026-04-14T15:31:44Z
+> Last rebuilt: 2026-04-14T18:35:34Z
 
 ## Active Now
 
@@ -11,6 +11,7 @@
 | WS12 | Virtual notulen backfill & production hardening    | seed       | 2026-04-14 |                                                        |
 | WS8f | Admin panel + CMS + GrapeJS editor                 | seed       | 2026-04-14 | Shipped 2026-04-13, pending Dennis QA via /ws-complete |
 | WS7  | OCR recovery for moties/amendementen               | seed       | 2026-04-14 |                                                        |
+| WS4  | Best-in-class MCP surface                          | dennistak  | 2026-04-14 | claimed via /ws-claim                                  |
 | WS6  | Source-spans-only summarization                    | seed       | 2026-04-14 | Phase 3 DB write running; mode='structured' needs WS1  |
 
 ## Blocked
@@ -44,19 +45,15 @@
 
 ## Recently Completed (last 14 days)
 
-| WS  | Title                                                  | Completed  | Worker |
-|-----|--------------------------------------------------------|------------|--------|
-| WS4 | Best-in-class MCP surface                              | 2026-04-13 | seed   |
-| WS9 | Web intelligence: MCP-as-backend, Sonnet tool_use, SSE | 2026-04-13 | seed   |
-| WS2 | Trustworthy financial analysis                         | 2026-04-12 | seed   |
-| WS8 | Frontend redesign: design system, landing, calendar    | 2026-04-12 | seed   |
+| WS  | Title                                                  | Completed  | Worker    |
+|-----|--------------------------------------------------------|------------|-----------|
+| WS9 | Web intelligence: MCP-as-backend, Sonnet tool_use, SSE | 2026-04-14 | dennistak |
+| WS2 | Trustworthy financial analysis                         | 2026-04-12 | seed      |
+| WS8 | Frontend redesign: design system, landing, calendar    | 2026-04-12 | seed      |
 
 ## Recent events (last 15)
 
 ```jsonl
-{"agent": "seed", "event": "claimed", "ts": "2026-04-12T00:00:00Z", "ws": "WS8"}
-{"agent": "seed", "event": "completed", "ts": "2026-04-12T00:00:00Z", "ws": "WS8"}
-{"agent": "seed", "detail": "2 reliability follow-ups opened 2026-04-14", "event": "claimed", "ts": "2026-04-13T00:00:00Z", "ws": "WS4"}
 {"agent": "seed", "detail": "2 reliability follow-ups opened 2026-04-14", "event": "completed", "ts": "2026-04-13T00:00:00Z", "ws": "WS4"}
 {"agent": "seed", "event": "claimed", "ts": "2026-04-13T00:00:00Z", "ws": "WS9"}
 {"agent": "seed", "event": "completed", "ts": "2026-04-13T00:00:00Z", "ws": "WS9"}
@@ -69,4 +66,7 @@
 {"agent": "seed", "detail": "Phase 3 DB write running; mode='structured' needs WS1", "event": "claimed", "ts": "2026-04-14T15:31:44Z", "ws": "WS6"}
 {"agent": "seed", "event": "claimed", "ts": "2026-04-14T15:31:44Z", "ws": "WS7"}
 {"agent": "seed", "detail": "Shipped 2026-04-13, pending Dennis QA via /ws-complete", "event": "claimed", "ts": "2026-04-14T15:31:44Z", "ws": "WS8f"}
+{"agent": "dennistak", "detail": "claimed via /ws-claim", "event": "claimed", "ts": "2026-04-14T18:30:57Z", "ws": "WS4"}
+{"agent": "dennistak", "detail": "claimed via /ws-claim", "event": "claimed", "ts": "2026-04-14T18:31:41Z", "ws": "WS9"}
+{"agent": "dennistak", "detail": "alembic 0005b rename done; Phase 4 eval deferred to Dennis", "event": "completed", "ts": "2026-04-14T18:35:34Z", "ws": "WS9"}
 ```

@@ -76,6 +76,7 @@ _Target: 2026-04-24 (2 weeks from 2026-04-10 kickoff)_
 - [ ] **WS10 Table-rich extraction** — Docling layout pass for 1,336 table-rich documents *(in progress — classifier + converters done, backfill pending)*
 - [ ] **WS11 Corpus completeness** — ORI gap backfill (~2,756 schriftelijke vragen) + metadata backfill (753 docs with NULL doc_classification) + municipality/source columns *(in progress — Dennis running)*
 - [ ] **WS12 Virtual notulen backfill** — Promote 2025 virtual notulen to production, backfill 2018-2024 (661 meetings), Whisper API migration *(in progress — Dennis running)*
+- [ ] **WS15 Per-party voting data** — `motie_stemmen` Postgres table + `zoek_stemgedrag` MCP tool. Regex-extract per-party voor/tegen from 1,077 besluitenlijsten (no LLM). Defensive-vote query class ("how did D66 vote on others' restrictive nachtleven motions"). *(promoted from v0.3.0 on 2026-04-14 after MCP testing surfaced this as the #1 missing query class — see [`WS15_MOTIE_STEMMEN.md`](../handoffs/WS15_MOTIE_STEMMEN.md))*
 
 **Eval gate (must pass before tag):**
 - Completeness ≥ 3.5 (from 2.75 baseline)
@@ -112,6 +113,7 @@ _Target: 2026-06-05 (4 weeks after v0.2.1)_
 
 - [ ] TypeScript codegen for MCP tools — `@neodemos/mcp-tools` published to npm (generated from `services/mcp_tool_registry.py`; requires npm org setup + CI publish pipeline)
 - [ ] Anthropic [Code Execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp) example workflows
+- [ ] _(`motie_stemmen` + `zoek_stemgedrag` promoted to v0.2.0 on 2026-04-14 — see WS15 above)_
 - [ ] Anomaly-detection rate limiting (FactSet pattern)
 - [ ] Promote 2 of the 5 search-only gemeenten to full mode (KG + financial + journey) — **data-pipeline-bound**: Flair NER + Gemini enrichment + KG build for each gemeente takes 3-5 days compute; schedule these runs early in the sprint
 - [ ] First external testers onboarded (≤5; requires scoped OAuth from WS4, onboarding guide, and rate limits in place)
@@ -123,6 +125,7 @@ _Target: 2026-07-03 (4 weeks after v0.3.0)_
 
 - [ ] _(Public eval scoreboard promoted to v0.2.1 on 2026-04-11 — see above)_
 - [ ] `vergelijk_gemeenten` cross-municipality comparison MCP tool — requires ≥2 full-mode municipalities (Rotterdam + the 2 promoted in v0.3.0)
+- [ ] _(Explicit non-goal through v0.4.0)_ **Party-programme-based structured stance comparison** (ingest 14 fracties' 2022 verkiezingsprogramma PDFs → structured stance-per-beleidsgebied DB → seed `haal_partijstandpunt_op`). Deferred past v0.4, candidate slot v0.9. Rationale: programme's are 4-year-old strategist copy, register-mismatched with raadszaal behaviour; structured-stance extraction from a 40-page programme is research-grade; retrieval-based `vergelijk_partijen` (v0.2.0 WS1 Phase B) already covers the high-value "who said what + how did they vote" query. Decided 2026-04-14 with Dennis.
 - [ ] Council-watcher agent: monitor new agenda items matching saved queries; push alerts via email + webhook (Slack/Teams)
 - [ ] **Voice-first citizen PWA** — thin wrapper over the public MCP surface for Claude/Gemini voice modes; structurally impossible for MAAT's stack (V0_2_BEAT_MAAT_PLAN.md §9). Prerequisite: v0.3.0 public MCP surface stable.
 - [ ] **Native Notubiz adapter** `pipeline/sources/notubiz.py` — Notubiz = ~38% of Dutch municipalities (second-largest portal after iBabs). No confirmed anchor MAAT customers on Notubiz (Apeldoorn is Parlaeus, not Notubiz — confirmed 2026-04-11). ORI-fallback in v0.2.1 gives partial coverage; this is full-depth ingestion. Prerequisite: Parlaeus adapter (v0.3.0) shipped and stable.

@@ -307,11 +307,28 @@ python scripts/ws10_table_extraction.py --type garbled_table_rich --limit 14 \
 
 ## Remaining Work
 
-- [ ] Run Alembic migration on production (if not already run)
-- [ ] Targeted 20-doc run on curated high-ROI candidates (TABLE_RICH, `--sort desc`)
+- [x] Run Alembic migration on production — done (0011 at head as of 2026-04-14)
+- [ ] Targeted 21-doc run on curated high-ROI candidates — **run BEFORE Phase 4 (migrate_embeddings)**
 - [ ] Spot-check 3-5 docs post-run: verify chunk counts and content length increases
 - [ ] Full backfill: **deferred to post-v0.2** — TABLE_RICH (655 unique PDFs), then GARBLED_TABLE_RICH
 - [ ] Consider `vergelijk_tabelgegevens` MCP tool for cross-document table comparison (post-backfill)
+
+## Embedding Integration with WS11 (2026-04-14)
+
+WS10 uses `--skip-re-embed` so rechunked docs land in `document_chunks` with `embedded_at IS NULL`.
+**Run WS10 curated batch BEFORE `scripts/migrate_embeddings.py` (Phase 4 of WS11).**
+
+`migrate_embeddings.py` scans `WHERE id > checkpoint AND embedded_at IS NULL` in ascending ID order.
+WS10 chunks always get fresh SERIAL IDs (above the checkpoint), so they're picked up in the same
+Phase 4 pass — no separate embedding step needed.
+
+Sequence:
+```
+WS11 Phase 3 complete → WS11 Phase 5 (rekey VN) → WS10 curated batch → WS11 Phase 4 (migrate_embeddings)
+```
+
+WS10 runs Docling locally (MPS GPU). Phase 4 calls Nebius API via SSH tunnel. They do not conflict
+and can overlap: WS10 creates chunks, Phase 4 embeds them as it scrolls upward through IDs.
 
 ## Contact
 
