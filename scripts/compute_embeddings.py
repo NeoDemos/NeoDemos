@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 """
+⚠️  DEPRECATED — DO NOT RUN without first updating the Qdrant point-ID hash.
+    This script uses a legacy Scheme C formula: md5(f"{document_id}_{idx}")[:15]
+    which is incompatible with the canonical Scheme A used by every other
+    writer (services.embedding.compute_point_id). Running it would create
+    orphan points in Qdrant. See WS11 hash-scheme migration 2026-04-14.
+
 Phase B: Full RAG Chunking Pipeline — All Document Types
 =========================================================
 Processes ALL 71k+ documents with:

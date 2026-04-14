@@ -1,7 +1,6 @@
 import os
 import sys
 import json
-import hashlib
 import psycopg2
 from tqdm import tqdm
 from qdrant_client import QdrantClient
@@ -59,11 +58,11 @@ def compute_missing_ids(qdrant_client=None, pg_conn=None) -> list:
     count_cur.close()
     print(f"Auditing: {total_pg} chunks in Postgres.")
 
-    # 3. Cross-reference using the same hash as migrate_embeddings.py
+    # 3. Cross-reference using the canonical hash (services.embedding.compute_point_id)
+    from services.embedding import compute_point_id
     missing_ids = []
     for db_id, doc_id in tqdm(stream_cur, desc="Auditing gaps", unit="chunk", total=total_pg):
-        hash_str = hashlib.md5(f"{doc_id}_{db_id}".encode()).hexdigest()
-        point_id = int(hash_str[:15], 16)
+        point_id = compute_point_id(str(doc_id), db_id)
         if point_id not in qdrant_ids:
             missing_ids.append(db_id)
 

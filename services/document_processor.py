@@ -14,7 +14,6 @@ Runs as an APScheduler job (every 15 min, after refresh) or manually:
 """
 
 import gc
-import hashlib
 import json
 import logging
 import os
@@ -447,9 +446,18 @@ def process_documents(limit: int = 200, triggered_by: str = "apscheduler",
         # timestamp on document_chunks is a lightweight "this chunk is in
         # Qdrant" marker — it prevents Phase 2 from wastefully re-embedding
         # chunks that are already in Qdrant. See Alembic migration 0010.
+        #
+        # Kill-switch: set DOCUMENT_PROCESSOR_PHASE2_ENABLED=false to skip
+        # Phase 2 entirely (used during hash-scheme migrations / maintenance).
         summary["embedded"] = 0
+        class _Phase2Disabled(Exception):
+            pass
+        _phase2_enabled = os.getenv("DOCUMENT_PROCESSOR_PHASE2_ENABLED", "true").lower() == "true"
         try:
-            from services.embedding import create_embedder, QDRANT_COLLECTION
+            if not _phase2_enabled:
+                logger.info("[doc_processor] Phase 2 disabled via DOCUMENT_PROCESSOR_PHASE2_ENABLED=false")
+                raise _Phase2Disabled()
+            from services.embedding import create_embedder, QDRANT_COLLECTION, compute_point_id
             from qdrant_client import QdrantClient
             from qdrant_client.models import PointStruct
 
@@ -495,10 +503,7 @@ def process_documents(limit: int = 200, triggered_by: str = "apscheduler",
                 for row, vec in zip(unembedded, vectors):
                     if vec is None:
                         continue
-                    hash_str = hashlib.md5(
-                        f"{row['document_id']}_{row['child_id']}_{row['chunk_index']}".encode()
-                    ).hexdigest()
-                    point_id = int(hash_str[:15], 16)
+                    point_id = compute_point_id(row['document_id'], row['id'])
                     payload = {
                         "document_id": row["document_id"],
                         "doc_name": row["doc_name"] or "",
@@ -541,6 +546,8 @@ def process_documents(limit: int = 200, triggered_by: str = "apscheduler",
                 summary["embedded"] = len(points)
                 logger.info("[doc_processor] Embedded %d chunks → Qdrant", len(points))
 
+        except _Phase2Disabled:
+            pass
         except Exception as e:
             logger.warning("[doc_processor] Embedding phase failed (non-fatal): %s", e)
 

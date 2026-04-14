@@ -97,6 +97,10 @@ env:
     LOG_LEVEL: INFO
     DOMAIN: neodemos.nl
     ALLOWED_HOSTS: neodemos.nl,www.neodemos.nl,neodemos.eu,www.neodemos.eu,mcp.neodemos.nl,mcp.neodemos.eu
+    # WS11 hash-scheme migration (2026-04-14): disable Phase 2 embedding while
+    # we re-key legacy Scheme B points to canonical Scheme A. Flip back to
+    # "true" after Phase 6 (backfill_embedded_at.py --exact) completes.
+    DOCUMENT_PROCESSOR_PHASE2_ENABLED: "false"
   secret:
     - DB_PASSWORD
     - GEMINI_API_KEY

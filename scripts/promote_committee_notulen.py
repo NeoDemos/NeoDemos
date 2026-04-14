@@ -258,10 +258,13 @@ def promote_meeting(meeting_id: str) -> bool:
             print(f"  + {len(children)} document_children copied")
 
             # 5. Copy document_chunks (with remapped child_ids)
+            # Capture production db_ids via RETURNING so the Qdrant point-ID hash
+            # (Scheme A: md5(document_id_db_id)) uses the PRODUCTION id, not staging.
             s_cur.execute("""
                 SELECT * FROM document_chunks WHERE document_id = ANY(%s)
             """, (doc_ids,))
             chunks = s_cur.fetchall()
+            prod_chunks = []  # list of (document_id, prod_db_id, title, content, chunk_type, child_id, chunk_index)
             for chunk in chunks:
                 chunk_dict = dict(chunk)
                 # Remap child_id
@@ -274,7 +277,18 @@ def promote_meeting(meeting_id: str) -> bool:
                             %(table_json)s, %(tokens_estimated)s, %(child_id)s)
                     ON CONFLICT (document_id, chunk_index) DO UPDATE SET
                         content = EXCLUDED.content, title = EXCLUDED.title, child_id = EXCLUDED.child_id
+                    RETURNING id
                 """, _pg_row(chunk_dict))
+                prod_db_id = p_cur.fetchone()[0]
+                prod_chunks.append({
+                    "document_id": chunk_dict["document_id"],
+                    "id": prod_db_id,
+                    "title": chunk_dict.get("title"),
+                    "content": chunk_dict.get("content"),
+                    "chunk_type": chunk_dict.get("chunk_type"),
+                    "child_id": chunk_dict["child_id"],
+                    "chunk_index": chunk_dict.get("chunk_index"),
+                })
             print(f"  + {len(chunks)} document_chunks copied")
 
             # 6. Copy document_assignments
@@ -294,12 +308,12 @@ def promote_meeting(meeting_id: str) -> bool:
         #    (Audit-first architecture: no vectors exist in staging,
         #     embedding happens here at promotion time.)
         try:
-            import hashlib
             from qdrant_client import QdrantClient
             from qdrant_client.models import PointStruct
 
             sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
             from services.ai_service import AIService
+            from services.embedding import compute_point_id
 
             qdrant = QdrantClient(url=QDRANT_URL, api_key=QDRANT_API_KEY if QDRANT_API_KEY else None)
             local_ai = AIService()
@@ -313,19 +327,21 @@ def promote_meeting(meeting_id: str) -> bool:
             start_date_iso = meta_row["start_date"].isoformat() if meta_row and meta_row["start_date"] else None
             committee_val = (meta_row["committee"] if meta_row else None) or None
 
-            # Fetch all chunks for this meeting
-            s_cur.execute("""
-                SELECT dc.id, dc.document_id, dc.chunk_index, dc.title,
-                       dc.content, dc.chunk_type, dc.child_id,
-                       d.name AS doc_name
-                FROM document_chunks dc
-                JOIN documents d ON dc.document_id = d.id
-                WHERE d.meeting_id = %s
-                ORDER BY dc.chunk_index
-            """, (meeting_id,))
-            all_chunks = s_cur.fetchall()
+            # Use production chunks captured via RETURNING at step 5.
+            # Enrich with doc_name from production documents table.
+            p_cur.execute(
+                "SELECT id, name FROM documents WHERE id = ANY(%s)",
+                (doc_ids,)
+            )
+            doc_name_by_id = {did: name for (did, name) in p_cur.fetchall()}
+            all_chunks = []
+            for c in prod_chunks:
+                row = dict(c)
+                row["doc_name"] = doc_name_by_id.get(c["document_id"]) or ""
+                all_chunks.append(row)
 
             points = []
+            embedded_chunk_ids = []
             for chunk in all_chunks:
                 text = (chunk["content"] or "").strip()
                 if len(text) < 20:
@@ -338,10 +354,8 @@ def promote_meeting(meeting_id: str) -> bool:
                 if embedding is None:
                     continue
 
-                hash_str = hashlib.md5(
-                    f"{chunk['document_id']}_{chunk['child_id']}_{chunk['chunk_index']}".encode()
-                ).hexdigest()
-                point_id = int(hash_str[:15], 16)
+                point_id = compute_point_id(chunk['document_id'], chunk['id'])
+                embedded_chunk_ids.append(chunk['id'])
 
                 payload = {
                     "document_id": chunk["document_id"],
@@ -363,6 +377,15 @@ def promote_meeting(meeting_id: str) -> bool:
             for i in range(0, len(points), 100):
                 batch = points[i:i + 100]
                 qdrant.upsert(collection_name=PRODUCTION_COLLECTION, points=batch)
+
+            # Mark chunks as embedded (only AFTER successful Qdrant upsert).
+            # Must use p_cur (production schema) because chunks were inserted into production
+            # at step 5 — embedded_chunk_ids are production db_ids.
+            if embedded_chunk_ids:
+                p_cur.execute(
+                    "UPDATE document_chunks SET embedded_at = NOW() WHERE id = ANY(%s)",
+                    (embedded_chunk_ids,),
+                )
 
             print(f"  + {len(points)} chunks embedded and upserted to {PRODUCTION_COLLECTION}")
         except ImportError as ie:

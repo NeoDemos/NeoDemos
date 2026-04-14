@@ -1,6 +1,5 @@
 import sys
 import os
-import hashlib
 import json
 import logging
 import psycopg2
@@ -16,7 +15,7 @@ load_dotenv()
 sys.path.insert(0, os.getcwd())
 sys.stdout.reconfigure(line_buffering=True)
 
-from services.embedding import create_embedder
+from services.embedding import create_embedder, compute_point_id
 from scripts.audit_vector_gaps import compute_missing_ids
 
 DB_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/neodemos")
@@ -69,8 +68,7 @@ def process_and_upsert_batch(batch, embedder, qdrant, error_logger):
                 skipped += 1
                 continue
 
-            hash_str = hashlib.md5(f"{doc_id}_{db_id}".encode()).hexdigest()
-            point_id = int(hash_str[:15], 16)
+            point_id = compute_point_id(str(doc_id), db_id)
 
             points.append(models.PointStruct(
                 id=point_id,

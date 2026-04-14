@@ -239,6 +239,7 @@ WS2 established the pattern: each workstream ships its processing as an **APSche
 - **Chunk cap per reranker call**: `MAX_RERANK_CHUNKS=100` with stride-sampling — keeps individual Jina calls under token budget while preserving document coverage.
 - **JSONL checkpoint before DB writes**: Raw Gemini output saved to disk before any verification or DB write. Crash-safe: `--replay-from` re-runs Phase 3 without re-submitting to Gemini.
 - **WS7 integration**: `WHERE ocr_quality IS NULL OR ocr_quality != 'bad'` — excludes OCR-damaged documents from summarization.
+- **Jina budget priority (2026-04-14)**: WS6 backfill runs with `JINA_TPM_BUDGET=1000000` env override (half of Jina's 2M TPM cap). Leaves ~800K TPM guaranteed headroom for interactive MCP queries. Until a cross-process distributed budget lands (tracked in [WS4 §Post-ship reliability follow-ups (3)](./WS4_MCP_DISCIPLINE.md#3-cross-process-jina-token-budget-with-priority-tiers-added-2026-04-14)), **always launch this script with the reduced env var** so it yields to MCP traffic.
 
 ## Outcome
 *To be completed after Phase 3 replay. Include: chosen rerank threshold, strip rate distribution, faithfulness delta, final backfill cost.*

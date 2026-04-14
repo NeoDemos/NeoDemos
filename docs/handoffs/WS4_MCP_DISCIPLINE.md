@@ -414,3 +414,29 @@ Recommended execution order: ship (1) first (pure code change, zero-risk), then 
 **Risk:** low. Both hostnames are already TLS-issued; kamal-proxy just rebinds the target. In the worst case, a brief 5–10 s blip during re-registration — still strictly better than the 10–15 s that every `accessory reboot` costs today.
 
 **Rollback:** put `mcp:` back in the `accessories:` block, run `kamal accessory boot mcp`. The old accessory config is preserved in git history (commit range around `bad7d5d`…`97f2fb5`).
+
+### (3) Cross-process Jina token budget with priority tiers *(added 2026-04-14)*
+
+**Why:** Today every Python process (MCP server, WS6 backfill, synthesizer, future multi-gemeente jobs) runs its own local `_TokenBucket` in [`services/reranker.py:127`](../../services/reranker.py#L127) with the same default ceiling (`JINA_TPM_BUDGET=1800000`). They all independently push up to that cap, then collide at Jina's actual **2M TPM hard limit** and start 429-retrying. Retry storms across workers caused WS6 hangs on 2026-04-14 — and any concurrent MCP query is starved behind the backfill. We need coordination *across processes* with priority, not bigger per-process budgets.
+
+**Tactical fix shipped 2026-04-14 (Tier 1):** WS6 backfill now runs with `JINA_TPM_BUDGET=1000000` (half), leaving MCP with ~800K TPM headroom. Simple env-var isolation, no shared state. *Does not solve the general problem* — breaks if we add another background job, and still doesn't give MCP priority when Jina itself is the bottleneck.
+
+**Proper fix (Tier 3):** distributed token bucket in Redis with priority queue.
+
+- [ ] Add Redis to the Kamal stack as an accessory (if not already present for other uses). Single instance, local-only, no persistence needed for this use case.
+- [ ] New module `services/jina_budget.py` — Redis-backed token bucket, same `acquire(tokens, priority)` signature as the current local `_TokenBucket`.
+  - Rolling 60-second window, implemented with Redis sorted set or Lua script.
+  - Budget configured to Jina's actual ceiling (~1.8M TPM, with 10% headroom for unaccounted overhead).
+  - `priority: "interactive" | "background"`. Background acquires block when current spend > 70% of budget; interactive always acquires.
+  - Fail-soft: on Redis unavailable, fall back to the current per-process `_TokenBucket` so a Redis outage doesn't take down rerank entirely.
+- [ ] Refactor `services/reranker.py` to route through `jina_budget.acquire()` instead of the local bucket.
+- [ ] Every MCP tool that calls the reranker passes `priority="interactive"`. The Summarizer, WS6 scripts, and any nightly/batch job passes `priority="background"`.
+- [ ] Instrument: add `/api/admin/jina-budget` endpoint (admin-only) returning current window spend, interactive vs background split, and throttle events in the last hour. Useful for capacity planning when we add gemeenten.
+
+**Files:** `services/jina_budget.py` (new), `services/reranker.py` (route calls), `services/summarizer.py` (tag priority), `scripts/nightly/06b_compute_summaries.py` (tag priority), `mcp_server_v3.py` or `routes/api.py` (admin endpoint), `config/deploy.yml` (Redis accessory).
+
+**Rollout:** Ship behind a feature flag `JINA_BUDGET_BACKEND=redis|local` with default `local` until the new path has 48h of production traffic. Flip to `redis` after soak.
+
+**Risk:** medium. Gets us cross-process priority right but introduces a Redis dependency on the hot retrieval path. Mitigate with fail-soft fallback to local bucket if Redis is unreachable.
+
+**When to ship:** After v0.2.0 press moment. Current Tier 1 workaround (env-var budget split) is sufficient for single-gemeente Rotterdam operation. Tier 3 becomes necessary when we onboard additional gemeenten in v0.2.1+ where background jobs multiply.

@@ -1,10 +1,11 @@
 # WS12 — Virtual Notulen Backfill & Production Hardening
 
-> **Status:** `in progress` — Dennis running as of 2026-04-13
+> **Status:** `in progress` — 2025 + 2026 promoted to production; 2018–2024 backfill pending
 > **Owner:** `dennis`
 > **Priority:** 1 (blocks press moment — corpus needs full committee coverage)
 > **Dependencies:** WS11 (corpus completeness) runs in parallel
 > **Created:** 2026-04-13
+> **Last updated:** 2026-04-14
 
 ---
 
@@ -18,30 +19,48 @@ The virtual notulen pipeline is validated and working (2025: 214/282 completed, 
 
 ---
 
-## Current State (as of 2026-04-13)
+## Current State (as of 2026-04-14)
 
-### Coverage
+### Coverage (staging)
 
-| Year | Committee Meetings | Aligned (ibabs_url) | Completed | Pending | Failed | Coverage |
-|------|--------------------|---------------------|-----------|---------|--------|----------|
-| 2018 | 77 | 17 | 0 | 0 | 53 | 0% |
-| 2019 | 63 | 41 | 0 | 0 | 0 | 0% |
-| 2020 | 169 | 132 | 0 | 0 | 0 | 0% |
-| 2021 | 203 | 168 | 0 | 0 | 0 | 0% |
-| 2022 | 76 | 39 | 0 | 0 | 0 | 0% |
-| 2023 | 66 | 51 | 0 | 0 | 0 | 0% |
-| 2024 | 84 | 68 | 0 | 0 | 0 | 0% |
-| 2025 | 94 | 60 | 214 | 22 | 0 | 92% |
-| 2026 | 54 | 21 | 0 | 21 | 24 | 0% |
-| **Total** | **886** | **597** | **214** | **43** | **77** | |
+| Year | Committee Meetings | Aligned (ibabs_url) | Promoted | Pending | Rejected |
+|------|--------------------|---------------------|----------|---------|----------|
+| 2018 | 59 | 17 | 52 | 1 | 0 |
+| 2019 | 63 | 41 | 0 | 0 | 0 |
+| 2020 | 169 | 132 | 0 | 0 | 0 |
+| 2021 | 203 | 168 | 0 | 0 | 0 |
+| 2022 | 76 | 39 | 0 | 0 | 0 |
+| 2023 | 66 | 51 | 0 | 0 | 0 |
+| 2024 | 84 | 68 | 0 | 0 | 0 |
+| 2025 | 84 | 60 | 213 | 0 | 1 |
+| 2026 | 54 | 21 | 34 | 0 | 0 |
+| **Total** | **858** | **597** | **299** | **1** | **1** |
 
-### Lessons Learned from 2025 Run
+> Note: "Promoted" counts exceed "Committee Meetings" for some years because multiple transcript variants per meeting ID can exist in staging (CompanyWebcast vs iBabs agenda UUID — see known bug below).
 
-1. **MLX-Whisper is the bottleneck** — 5–20 min/meeting on MacBook GPU vs ~2–3 min for LLM post-processing
+### 2026-04-14 updates (this session)
+
+- **2026 backfill complete**: 23 meetings processed after iBabs URL migration fix; 10 final `approved`-but-unpromoted meetings promoted manually (1,079 chunks to production Qdrant + DB).
+- **iBabs URL format fix**: numeric IDs (`/Agenda/Index/7557375`) permanently deprecated; UUID format is the new standard. `sync_ibabs_urls.py` updated and cron on Hetzner fixed (hardcoded container name + `--all` flag for monthly full-history resolution).
+- **Cron hardening**: `/home/deploy/sync-ibabs-urls.sh` now uses dynamic container lookup (`docker ps | grep '^neodemos-web'`) so Kamal hash-suffix renames don't break the job.
+
+### Lessons Learned from 2025 + 2026 Runs
+
+1. **MLX-Whisper is faster than expected** — ~16× realtime on MacBook (not 3×). 12h40m meeting transcribed in 47 min.
 2. **Pipeline is laptop-dependent** — reboots, sleep, tunnel drops kill the run
 3. **DB outages cause cascading failures** — 20 meetings re-failed 3x because the state file marks them failed immediately with no auto-retry
 4. **Segment retention is excellent** — 99–100% across all completions (small-batch + SEG-NNN anchors work)
 5. **VTT captions available for most meetings** — avoids Whisper entirely when present
+6. **`--approve-batch` misses `review_status = 'approved'`** — the batch filter only picks up `auto_approved` and `pending`; manually-approved (or status-migrated) meetings are silently skipped. Worked around with direct `promote_meeting()` loop.
+7. **Promotion tunnel hiccups leak Qdrant upserts** — Qdrant upsert happens before `prod_conn.commit()`; a dropped tunnel mid-UPDATE leaves chunks in Qdrant without matching PostgreSQL rows. Retry is safe (Qdrant point IDs are stable MD5 hashes → overwrite).
+
+### Known Bugs (open)
+
+| Bug | Location | Impact | Fix |
+|-----|----------|--------|-----|
+| Orphan `meeting_id` | `pipeline/committee_notulen_pipeline.py:371-381` | Chunks saved with `meeting_id = NULL` when CompanyWebcast UUID ≠ iBabs agenda UUID; breaks meeting→transcript link | One-line: `transcript["meeting_id"] = m_id` before `ingest_transcript()` call |
+| `--approve-batch` status filter | `scripts/promote_committee_notulen.py:cmd_approve_batch` | Skips `review_status='approved'` meetings | Add `'approved'` to IN clause |
+| Promotion commit ordering | `scripts/promote_committee_notulen.py:promote_meeting` | Qdrant upsert before prod commit → orphan points on tunnel drop | Move Qdrant upsert after prod commit, OR add post-failure cleanup |
 
 ### Code Fixes Applied (this workstream)
 
@@ -51,23 +70,17 @@ The virtual notulen pipeline is validated and working (2025: 214/282 completed, 
 | Video URL passthrough | `pipeline/committee_notulen_pipeline.py` | `ibabs_url` injected into transcript data for fragment linking |
 | Quality killswitch | `services/rag_service.py` | `INCLUDE_VIRTUAL_NOTULEN=false` env var excludes all virtual notulen from both Qdrant and BM25 results |
 | DB creds fix | `pipeline/normalization.py` | Reads `DATABASE_URL` from env instead of hardcoded `postgres:postgres` |
+| iBabs URL sync cron | `/home/deploy/sync-ibabs-urls.sh` (Hetzner) | Dynamic container lookup + monthly `--all` for historical backfill |
 
 ---
 
 ## Execution Plan
 
-### Phase 1: Promote 2025 to Production (1 hour)
+### Phase 1: Promote 2025 + 2026 to Production ✅ DONE (2026-04-14)
 
-```bash
-# Verify staging state
-python scripts/promote_committee_notulen.py --dry-run --year 2025
-
-# Promote (embeds + upserts to production Qdrant + copies chunks to production DB)
-python scripts/promote_committee_notulen.py --year 2025
-
-# Verify in production
-python -c "from services.rag_service import RAGService; r = RAGService(); print(r._retrieve_chunks_by_keywords('commissievergadering 2025', top_k=3))"
-```
+- 2025: 213 meetings promoted to production (earlier batch, scoring ≥ 0.7 VTT)
+- 2026: 34 meetings promoted (24 via `--approve-batch`; 10 via direct `promote_meeting()` loop to work around the `approved`-status filter bug)
+- Final 2026 batch added 1,079 chunks to production Qdrant + PostgreSQL
 
 **Rollback:** `INCLUDE_VIRTUAL_NOTULEN=false` hides from RAG immediately. To fully remove: delete from `document_chunks` and Qdrant where `doc_type = 'virtual_notulen'`.
 
@@ -111,11 +124,11 @@ docker exec neodemos-web python -m pipeline.committee_notulen_pipeline --year 20
 - VTT missing + Whisper API: ~8 min/meeting (API transcription + LLM)
 - VTT missing + local Whisper: ~20 min/meeting (current local speed)
 
-### Phase 4: 2026 Recovery (ongoing)
+### Phase 4: 2026 Recovery ✅ DONE (2026-04-14)
 
-- **24 failed meetings:** iBabs returning HTTP 500 for post-Feb-12 meetings. These self-heal when `sync_ibabs_urls.py` cron picks up new UUIDs after iBabs resolves the server issue.
-- **21 pending:** waiting for `ibabs_url` alignment. Same cron resolves this.
-- No manual action needed — automated via nightly cron on Hetzner.
+- **Root cause:** iBabs permanently migrated from numeric IDs (`/Agenda/Index/7557375`) to UUIDs (`/Agenda/Index/f5b29e97-...`). The 24 "HTTP 500" failures were not server issues — the URL format was dead.
+- **Fix:** `sync_ibabs_urls.py` now pulls UUID iBabs URLs from ORI `was_generated_by.original_identifier`. Hetzner cron fixed (dynamic container name + `--all` for history).
+- **Result:** 23 meetings re-processed, 0 failed, all 34 final 2026 staged meetings promoted.
 
 ---
 

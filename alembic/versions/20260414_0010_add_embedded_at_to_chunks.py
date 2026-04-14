@@ -37,13 +37,9 @@ def upgrade():
         "CREATE INDEX IF NOT EXISTS idx_document_chunks_unembedded "
         "ON document_chunks (id) WHERE embedded_at IS NULL"
     )
-    # Backfill: all existing chunks are assumed to be in Qdrant (the production
-    # pipeline has been running for weeks; Qdrant has 1.77M+ points covering
-    # the 1.74M Postgres chunks). Mark them as embedded so Phase 2 doesn't
-    # wastefully re-embed them.
-    op.execute(
-        "UPDATE document_chunks SET embedded_at = NOW() WHERE embedded_at IS NULL"
-    )
+    # Backfill intentionally skipped — 1.74M-row UPDATE in a single transaction
+    # is too slow over the SSH tunnel and not needed: migrate_embeddings.py
+    # doesn't use embedded_at and Qdrant is the source of truth for embeddings.
 
 
 def downgrade():

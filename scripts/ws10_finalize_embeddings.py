@@ -28,6 +28,7 @@ from scripts.ocr_recovery import (
     acquire_advisory_lock,
     release_advisory_lock,
 )
+from services.embedding import compute_point_id
 
 logging.basicConfig(
     level=logging.INFO,
@@ -45,8 +46,12 @@ DUPLICATES = ["4864056", "4921772", "6119609", "6121453"]
 ALL_DOCS = PRIMARIES + DUPLICATES
 
 
-def compute_point_id(document_id: str, child_id: str, chunk_index: int) -> int:
-    """Reproduce the Qdrant point ID used by document_processor.py:496."""
+def legacy_scheme_b_point_id(document_id: str, child_id: str, chunk_index: int) -> int:
+    """Reproduce the LEGACY Scheme B Qdrant point ID (pre-2026-04-14 standardization).
+
+    Used ONLY to pre-delete orphaned Scheme B points during re-chunking cleanup.
+    NEW writes must use `services.embedding.compute_point_id(doc_id, db_id)` (Scheme A).
+    """
     h = hashlib.md5(f"{document_id}_{child_id}_{chunk_index}".encode()).hexdigest()
     return int(h[:15], 16)
 
@@ -61,14 +66,18 @@ def purge_qdrant_by_postgres_chunks(conn, qdrant, collection: str, doc_id: str) 
 
     cur = conn.cursor()
     cur.execute(
-        "SELECT child_id, chunk_index FROM document_chunks WHERE document_id = %s",
+        "SELECT id, child_id, chunk_index FROM document_chunks WHERE document_id = %s",
         (doc_id,),
     )
     rows = cur.fetchall()
     cur.close()
     if not rows:
         return 0
-    point_ids = [compute_point_id(doc_id, child_id, ci) for (child_id, ci) in rows]
+    # Purge BOTH schemes: Scheme A (current canonical) + Scheme B (legacy orphans).
+    # Harmless to target an ID that doesn't exist — Qdrant ignores unknown IDs.
+    scheme_a_ids = [compute_point_id(doc_id, db_id) for (db_id, _c, _i) in rows]
+    scheme_b_ids = [legacy_scheme_b_point_id(doc_id, c, i) for (_db, c, i) in rows]
+    point_ids = scheme_a_ids + scheme_b_ids
     # Delete in batches of 500 to keep payloads small
     for i in range(0, len(point_ids), 500):
         qdrant.delete(
@@ -144,10 +153,7 @@ def embed_docs_phase2(conn, doc_ids: list[str], qdrant, collection: str) -> int:
     for row, vec in zip(unembedded, vectors):
         if vec is None:
             continue
-        hash_str = hashlib.md5(
-            f"{row['document_id']}_{row['child_id']}_{row['chunk_index']}".encode()
-        ).hexdigest()
-        point_id = int(hash_str[:15], 16)
+        point_id = compute_point_id(row['document_id'], row['id'])
         payload = {
             "document_id": row["document_id"],
             "doc_name": row["doc_name"] or "",
@@ -293,10 +299,10 @@ def main():
         doc_id, chars, ocr, cls, chunks, embed_pg = r
         # Compute expected point IDs from current Postgres chunks, check how many exist
         verify_cur.execute(
-            "SELECT child_id, chunk_index FROM document_chunks WHERE document_id = %s LIMIT 1000",
+            "SELECT id FROM document_chunks WHERE document_id = %s LIMIT 1000",
             (doc_id,),
         )
-        expected_ids = [compute_point_id(doc_id, cid, ci) for (cid, ci) in verify_cur.fetchall()]
+        expected_ids = [compute_point_id(doc_id, db_id) for (db_id,) in verify_cur.fetchall()]
         if not expected_ids:
             qpts = 0
         else:

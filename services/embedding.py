@@ -29,6 +29,17 @@ EMBEDDING_MODEL = "Qwen/Qwen3-Embedding-8B"
 EMBEDDING_DIM = 4096
 QDRANT_COLLECTION = "notulen_chunks"
 
+
+# ---------------------------------------------------------------------------
+# Canonical Qdrant point-ID hash — Scheme A: md5(f"{document_id}_{db_id}")[:15].
+# Used by every writer/reader of the notulen_chunks collection. Any script that
+# re-chunks must explicitly delete old point IDs (computed from the OLD db_id)
+# BEFORE upserting the new chunks — db_id changes on row replacement.
+# ---------------------------------------------------------------------------
+def compute_point_id(document_id: str, db_id: int) -> int:
+    hash_str = hashlib.md5(f"{document_id}_{db_id}".encode()).hexdigest()
+    return int(hash_str[:15], 16)
+
 # In-memory LRU cache shared across backends
 _EMBED_CACHE: OrderedDict = OrderedDict()
 _EMBED_CACHE_MAX = 512

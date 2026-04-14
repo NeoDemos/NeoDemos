@@ -16,7 +16,6 @@ All chunking, embedding, and storage logic is inherited unchanged.
 """
 
 import logging
-import hashlib
 import os
 import psycopg2
 from psycopg2.extras import execute_values
@@ -240,9 +239,10 @@ class StagingIngestor(SmartIngestor):
           - start_date: ISO date from staging.meetings (enables RAG date filtering)
           - committee: committee name (enables MCP committee display/filtering)
         """
+        from services.embedding import compute_point_id
         cur = conn.cursor()
-        points = []
         pg_data = []
+        chunk_meta = []  # parallel metadata used for embedding
 
         # Fetch meeting metadata once for all chunks in this call
         meeting_meta = self._get_meeting_meta(conn, meeting_id)
@@ -254,43 +254,62 @@ class StagingIngestor(SmartIngestor):
             title = chunk.get("title", "Untitled")
             chunk_type = chunk.get("chunk_type", "quote")
             pg_data.append((doc_id, idx, title, text, chunk_type, None, int(len(text) / 4), child_id))
+            chunk_meta.append({
+                "text": text, "title": title, "chunk_type": chunk_type,
+                "chunk_index": idx, "questions": chunk.get("questions", []),
+            })
 
-            if not self.chunk_only and self.local_ai and self.local_ai.is_available():
-                context_str = f"[Document: {doc_name} | Section: {title}]\n"
-                embedding = self.local_ai.generate_embedding(context_str + text)
-                if embedding is not None:
-                    hash_str = hashlib.md5(f"{doc_id}_{child_id}_{idx}".encode()).hexdigest()
-                    point_id = int(hash_str[:15], 16)
-                    payload = {
-                        "document_id": doc_id,
-                        "doc_name": doc_name,
-                        # ── Virtual notulen identity fields ──────────
-                        "doc_type": "virtual_notulen",
-                        "is_virtual_notulen": True,
-                        # ── Meeting context (enables RAG filtering) ──
-                        "meeting_id": meeting_id,
-                        "start_date": meeting_meta.get("start_date"),
-                        "committee": meeting_meta.get("committee"),
-                        # ── Chunk context ────────────────────────────
-                        "child_id": child_id,
-                        "chunk_index": idx,
-                        "chunk_type": chunk_type,
-                        "title": title,
-                        "content": text,
-                        "questions": chunk.get("questions", []),
-                    }
-                    points.append(PointStruct(id=point_id, vector=embedding, payload=payload))
-
-        if points and self.qdrant:
-            self.qdrant.upsert(collection_name=self.collection_name, points=points)
+        # INSERT first (with RETURNING id) so Qdrant points are keyed by the
+        # canonical Scheme A hash (compute_point_id(document_id, db_id)).
+        db_ids = []
         if pg_data:
-            execute_values(cur, """
+            rows = execute_values(cur, """
                 INSERT INTO document_chunks
                     (document_id, chunk_index, title, content, chunk_type, table_json, tokens_estimated, child_id)
                 VALUES %s
                 ON CONFLICT (document_id, chunk_index) DO UPDATE SET
                     content = EXCLUDED.content, title = EXCLUDED.title, child_id = EXCLUDED.child_id
-            """, pg_data)
+                RETURNING id
+            """, pg_data, fetch=True)
+            db_ids = [r[0] for r in rows]
+
+        # Embed + upsert to Qdrant using returned db_ids
+        points = []
+        embedded_db_ids = []
+        if not self.chunk_only and self.local_ai and self.local_ai.is_available():
+            for meta, db_id in zip(chunk_meta, db_ids):
+                context_str = f"[Document: {doc_name} | Section: {meta['title']}]\n"
+                embedding = self.local_ai.generate_embedding(context_str + meta["text"])
+                if embedding is None:
+                    continue
+                point_id = compute_point_id(doc_id, db_id)
+                payload = {
+                    "document_id": doc_id,
+                    "doc_name": doc_name,
+                    # ── Virtual notulen identity fields ──────────
+                    "doc_type": "virtual_notulen",
+                    "is_virtual_notulen": True,
+                    # ── Meeting context (enables RAG filtering) ──
+                    "meeting_id": meeting_id,
+                    "start_date": meeting_meta.get("start_date"),
+                    "committee": meeting_meta.get("committee"),
+                    # ── Chunk context ────────────────────────────
+                    "child_id": child_id,
+                    "chunk_index": meta["chunk_index"],
+                    "chunk_type": meta["chunk_type"],
+                    "title": meta["title"],
+                    "content": meta["text"],
+                    "questions": meta["questions"],
+                }
+                points.append(PointStruct(id=point_id, vector=embedding, payload=payload))
+                embedded_db_ids.append(db_id)
+
+        if points and self.qdrant:
+            self.qdrant.upsert(collection_name=self.collection_name, points=points)
+            cur.execute(
+                "UPDATE document_chunks SET embedded_at = NOW() WHERE id = ANY(%s)",
+                (embedded_db_ids,),
+            )
         conn.commit()
         cur.close()
         logger.info(f"    ✓ [STAGING] Stored {len(pg_data)} chunks (doc_type=virtual_notulen)"

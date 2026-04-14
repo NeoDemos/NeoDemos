@@ -667,41 +667,62 @@ Return ONLY the JSON array."""
 
     def _store_grandchildren(self, conn, doc_id: str, doc_name: str, meeting_id: str, chunks: List[Dict], child_id: int):
         """Stores grandchildren chunks in Postgres (and optionally embeds + upserts to Qdrant)."""
+        from services.embedding import compute_point_id
         cur = conn.cursor()
-        points = []
+        # Build pg_data; keep a parallel list of the in-memory chunk info needed for embedding.
         pg_data = []
+        chunk_meta = []  # rows parallel to pg_data: {text, title, chunk_type, chunk_index, questions}
         for idx, chunk in enumerate(chunks):
             text = chunk.get("text", "").strip()
             if len(text) < 20: continue
             title = chunk.get("title", "Untitled")
             chunk_type = chunk.get("chunk_type", "quote")
             pg_data.append((doc_id, idx, title, text, chunk_type, None, int(len(text)/4), child_id))
+            chunk_meta.append({
+                "text": text, "title": title, "chunk_type": chunk_type,
+                "chunk_index": idx, "questions": chunk.get("questions", []),
+            })
 
-            # Only embed if not in chunk_only mode
-            if not self.chunk_only and self.local_ai and self.local_ai.is_available():
-                context_str = f"[Document: {doc_name} | Section: {title}]\n"
-                embedding = self.local_ai.generate_embedding(context_str + text)
-                if embedding is not None:
-                    hash_str = hashlib.md5(f"{doc_id}_{child_id}_{idx}".encode()).hexdigest()
-                    point_id = int(hash_str[:15], 16)
-                    payload = {
-                        "document_id": doc_id, "doc_name": doc_name, "doc_type": "municipal_doc",
-                        "meeting_id": meeting_id, "child_id": child_id, "chunk_index": idx,
-                        "chunk_type": chunk_type, "title": title, "content": text,
-                        "questions": chunk.get("questions", [])
-                    }
-                    points.append(PointStruct(id=point_id, vector=embedding, payload=payload))
-
-        if points and self.qdrant:
-            self.qdrant.upsert(collection_name=self.collection_name, points=points)
+        # INSERT first (with RETURNING id) so Qdrant points can be keyed by the
+        # canonical Scheme A hash (compute_point_id(document_id, db_id)).
+        prod_db_ids = []
         if pg_data:
-            execute_values(cur, """
+            rows = execute_values(cur, """
                 INSERT INTO document_chunks
                     (document_id, chunk_index, title, content, chunk_type, table_json, tokens_estimated, child_id)
                 VALUES %s
                 ON CONFLICT (document_id, chunk_index) DO UPDATE SET
                     content = EXCLUDED.content, title = EXCLUDED.title, child_id = EXCLUDED.child_id
-            """, pg_data)
+                RETURNING id
+            """, pg_data, fetch=True)
+            prod_db_ids = [r[0] for r in rows]
+
+        # Embed + upsert to Qdrant (using production db_ids just returned)
+        points = []
+        embedded_db_ids = []
+        if not self.chunk_only and self.local_ai and self.local_ai.is_available():
+            for meta, db_id in zip(chunk_meta, prod_db_ids):
+                context_str = f"[Document: {doc_name} | Section: {meta['title']}]\n"
+                embedding = self.local_ai.generate_embedding(context_str + meta["text"])
+                if embedding is None:
+                    continue
+                point_id = compute_point_id(doc_id, db_id)
+                payload = {
+                    "document_id": doc_id, "doc_name": doc_name, "doc_type": "municipal_doc",
+                    "meeting_id": meeting_id, "child_id": child_id, "chunk_index": meta["chunk_index"],
+                    "chunk_type": meta["chunk_type"], "title": meta["title"], "content": meta["text"],
+                    "questions": meta["questions"],
+                }
+                points.append(PointStruct(id=point_id, vector=embedding, payload=payload))
+                embedded_db_ids.append(db_id)
+
+        if points and self.qdrant:
+            self.qdrant.upsert(collection_name=self.collection_name, points=points)
+            # Mark embedded_at so Phase 2 doesn't re-embed
+            cur.execute(
+                "UPDATE document_chunks SET embedded_at = NOW() WHERE id = ANY(%s)",
+                (embedded_db_ids,),
+            )
         conn.commit()
         cur.close()
         logger.info(f"    ✓ Stored {len(pg_data)} Grandchild chunks{' (chunk_only, no embedding)' if self.chunk_only else ''}")

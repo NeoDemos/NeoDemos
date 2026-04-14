@@ -80,6 +80,82 @@ def cleanup_sessions():
         logger.error(f"Session cleanup failed: {e}")
 
 
+# WS6 advisory lock key — shared with scripts/nightly/06b_compute_summaries.py
+# so the scheduled job skips cleanly while a manual backfill holds the lock.
+_WS6_SUMMARIES_LOCK_KEY = 7_640_601
+
+
+def scheduled_summarization():
+    """WS6 — compute per-document summaries for docs where summary_short IS NULL.
+
+    Processes a small batch per firing via the real-time Summarizer path.
+    The big historical backfill uses Gemini Batch API separately; this job
+    only keeps new/updated docs current.
+    """
+    try:
+        import os
+        import psycopg2
+        from types import SimpleNamespace
+        from services.summarizer import Summarizer
+        from services.storage_ws6 import (
+            list_documents_needing_summary,
+            get_all_chunks_for_document,
+            update_document_summary_columns,
+        )
+
+        # Dedicated connection so the advisory lock auto-releases on conn.close().
+        lock_conn = psycopg2.connect(os.environ["DATABASE_URL"])
+        try:
+            cur = lock_conn.cursor()
+            cur.execute("SELECT pg_try_advisory_lock(%s)", (_WS6_SUMMARIES_LOCK_KEY,))
+            if not cur.fetchone()[0]:
+                logger.info("Summarization: skipped (another run holds the lock)")
+                return
+
+            docs = list_documents_needing_summary(limit=20)
+            if not docs:
+                return
+
+            summarizer = Summarizer()
+            ok = failed = 0
+            for doc in docs:
+                doc_id = doc["id"]
+                try:
+                    chunk_rows = get_all_chunks_for_document(doc_id)
+                    if not chunk_rows:
+                        continue
+                    chunks = [
+                        SimpleNamespace(
+                            chunk_id=r["chunk_id"], document_id=r["document_id"],
+                            title=r.get("title") or "", content=r.get("content") or "",
+                        )
+                        for r in chunk_rows
+                    ]
+                    result = summarizer.summarize(chunks, mode="short")
+                    if result.text.strip():
+                        update_document_summary_columns(
+                            doc_id,
+                            summary_short=result.text,
+                            summary_verified=result.verified,
+                        )
+                        ok += 1
+                    else:
+                        failed += 1
+                except Exception as e:
+                    logger.warning(f"Summarization failed for doc {doc_id}: {e}")
+                    failed += 1
+
+            if ok or failed:
+                logger.info(
+                    f"Summarization: {ok} computed, {failed} failed "
+                    f"(of {len(docs)} candidates)"
+                )
+        finally:
+            lock_conn.close()
+    except Exception as e:
+        logger.error(f"Summarization job failed: {e}")
+
+
 # Register scheduler jobs (session cleanup is registered in lifespan below).
 _JOB_DEFAULTS = dict(max_instances=1, coalesce=True)
 scheduler.add_job(scheduled_refresh, IntervalTrigger(minutes=15),
@@ -91,6 +167,9 @@ scheduler.add_job(scheduled_document_processor, IntervalTrigger(minutes=20),
 scheduler.add_job(scheduled_financial_sweep, IntervalTrigger(hours=1),
                   id='financial_sweep', name='Extract financial_lines from unprocessed table docs',
                   misfire_grace_time=600, **_JOB_DEFAULTS)
+scheduler.add_job(scheduled_summarization, IntervalTrigger(hours=12),
+                  id='summarization', name='WS6 — compute summary_short for new documents',
+                  misfire_grace_time=1800, **_JOB_DEFAULTS)
 
 
 @asynccontextmanager
