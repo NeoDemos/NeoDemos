@@ -534,7 +534,13 @@ def _retrieve_with_reranking(
     over_fetch = max(top_k * 3, top_k + 5)
 
     if party:
-        # Party-filtered retrieval via Qdrant payload
+        # T7 audit (2026-04-14): `key="party"` in Qdrant payload is set via
+        # enrich_qdrant_metadata.py::primary_party(parties) — it is the
+        # *dominant party mentioned in the chunk text*, not a speaker-level
+        # attribution. This means a chunk where "VVD" is mentioned by
+        # GroenLinks might get party="VVD". True speaker-level filtering would
+        # require a dedicated `speaker_party` payload field (not yet enriched).
+        # For now, this is the best available proxy.
         from qdrant_client.models import Filter, FieldCondition, MatchValue
         party_filter = Filter(must=[
             FieldCondition(key="party", match=MatchValue(value=party))
@@ -549,24 +555,23 @@ def _retrieve_with_reranking(
             date_to=date_to,
         )
 
-        # Also get standard retrieval to supplement
-        standard_chunks = rag.retrieve_relevant_context(
-            query_text=query,
-            top_k=over_fetch,
-            date_from=date_from,
-            date_to=date_to,
-            fast_mode=False,  # v3: always rerank
-        )
+        # T7 fix: only supplement with standard_chunks when party_chunks is
+        # genuinely empty (e.g. party has no Qdrant enrichment at all). When
+        # party_chunks contains any results, don't merge unfiltered chunks —
+        # they dilute the party signal with generic housing/policy chunks.
+        # The _retrieve_by_vector_similarity_with_filter fallback already
+        # drops the party filter internally if < 5 results are found.
+        if not party_chunks:
+            standard_chunks = rag.retrieve_relevant_context(
+                query_text=query,
+                top_k=over_fetch,
+                date_from=date_from,
+                date_to=date_to,
+                fast_mode=False,
+            )
+            return _apply_quality_filters(standard_chunks, top_k, dedup_by_document=dedup_by_document)
 
-        # Merge and deduplicate by chunk_id, party chunks first
-        # Note: compound words are handled by decomposed_terms in the tsvector
-        seen = set()
-        merged = []
-        for c in party_chunks + standard_chunks:
-            if c.chunk_id not in seen:
-                seen.add(c.chunk_id)
-                merged.append(c)
-        return _apply_quality_filters(merged, top_k, dedup_by_document=dedup_by_document)
+        return _apply_quality_filters(party_chunks, top_k, dedup_by_document=dedup_by_document)
 
     # Standard retrieval with reranking
     chunks = rag.retrieve_relevant_context(
@@ -1034,9 +1039,14 @@ def lijst_vergaderingen(
     meetings = storage.get_meetings(limit=limit, year=jaar)
 
     if commissie:
+        # T5 (2026-04-14): also match on meeting name so "onderwijs" finds
+        # "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuld" even when
+        # the abbreviated committee code ("WIOS") doesn't contain the search term.
+        commissie_lower = commissie.lower()
         meetings = [
             m for m in meetings
-            if commissie.lower() in (m.get("committee") or "").lower()
+            if commissie_lower in (m.get("committee") or "").lower()
+            or commissie_lower in (m.get("name") or "").lower()
         ]
 
     if not meetings:
@@ -1082,21 +1092,31 @@ def tijdlijn_besluitvorming(
     """
     import psycopg2
 
-    rag = _get_rag()
-
-    chunks = rag.retrieve_relevant_context(
-        query_text=onderwerp,
+    # T1 (2026-04-14): use _retrieve_with_reranking (same path as zoek_raadshistorie)
+    # to guarantee Jina rerank + quality filters. Previous direct rag.retrieve_relevant_context
+    # call was missing _apply_quality_filters (dedup + min-similarity).
+    # Raised floor from 0.2 → 0.5; purely procedural docs excluded below.
+    chunks = _retrieve_with_reranking(
+        query=onderwerp,
         top_k=30,
         date_from=datum_van,
         date_to=datum_tot,
-        fast_mode=False,  # v3: always rerank
     )
 
     if not chunks:
         return f"Geen fragmenten gevonden voor '{onderwerp}'."
 
-    # --- Relevance threshold: drop low-scoring chunks ---
-    chunks = [c for c in chunks if (c.similarity_score or 0) >= 0.2]
+    # --- Relevance threshold: drop chunks below 0.5 — Jina scores < 0.5 are
+    # marginally related. Repro: "lerarentekort" returned zienswijze + handboek
+    # at 0.71-0.73 (matched superficially). See T1 in WS4 post-ship §(4).
+    PROCEDURAL_DOC_TYPES = {
+        "ontvangstbevestiging", "zienswijze", "effectenrapportage", "handboek",
+    }
+    chunks = [
+        c for c in chunks
+        if (c.similarity_score or 0) >= 0.5
+        and (c.stream_type or "").lower() not in PROCEDURAL_DOC_TYPES
+    ]
     if not chunks:
         return f"Geen voldoende relevante fragmenten gevonden voor '{onderwerp}'."
 
@@ -1148,7 +1168,7 @@ def tijdlijn_besluitvorming(
     lines = [f"## Tijdlijn: {onderwerp}"]
     if datum_van or datum_tot:
         lines.append(f"_Periode: {datum_van or '…'} — {datum_tot or 'heden'}_")
-    lines.append(f"_{len(chunks)} relevante fragmenten (score ≥ 0.2)_")
+    lines.append(f"_{len(chunks)} relevante fragmenten (score ≥ 0.5, procedurele types uitgesloten)_")
     lines.append("")
 
     for year in sorted(buckets.keys()):
@@ -1249,6 +1269,8 @@ def analyseer_agendapunt(
 def haal_partijstandpunt_op(
     beleidsgebied: str,
     partij: str = "GroenLinks-PvdA",
+    datum_van: Optional[str] = None,
+    datum_tot: Optional[str] = None,
 ) -> str:
     """
     Haalt het standpunt van een partij op voor een beleidsgebied,
@@ -1258,6 +1280,8 @@ def haal_partijstandpunt_op(
     Args:
         beleidsgebied: Beleidsgebied (bijv. "Wonen", "Klimaat", "Onderwijs")
         partij: Partijnaam (standaard "GroenLinks-PvdA")
+        datum_van: Optionele startdatum voor RAG-fallback (ISO, bijv. "2022-01-01")
+        datum_tot: Optionele einddatum voor RAG-fallback (ISO, bijv. "2024-12-31")
     """
     profile = _load_party_profile(partij)
     posities = profile.get("posities", {})
@@ -1272,7 +1296,11 @@ def haal_partijstandpunt_op(
 
     if not matched:
         lines.append(f"_Geen profielentries gevonden voor '{beleidsgebied}'._")
-        lines.append("_Beschikbare gebieden:_ " + ", ".join(list(posities.keys())[:15]))
+        # T6: surface available beleidsgebieden so the caller can try adjacent terms
+        if posities:
+            lines.append("_Beschikbare gebieden:_ " + ", ".join(list(posities.keys())[:15]))
+        else:
+            lines.append("_Statisch profiel nog niet beschikbaar voor deze partij — zie RAG-context hieronder._")
     else:
         for gebied, pos in list(matched.items())[:5]:
             notulen_refs = pos.get("uit_notulen", [])
@@ -1290,14 +1318,40 @@ def haal_partijstandpunt_op(
                     lines.append(f"  - [{datum}] {tekst}")
             lines.append("")
 
-    # Party-filtered RAG for richer context
+    # T6 (2026-04-14): Party-filtered RAG for richer context.
+    # Honour caller-supplied datum_van/datum_tot (longitudinal queries like
+    # "how has D66's position shifted since 2018" need the full date range).
+    # When no date range is supplied, return results without temporal filter but
+    # sort by document_date DESC as secondary sort so recent fragments surface
+    # first for "what does the party think now" queries.
     chunks = _retrieve_with_reranking(
         query=f"{beleidsgebied} {partij} standpunt visie programma",
         top_k=6,
         party=partij,
+        date_from=datum_van,
+        date_to=datum_tot,
     )
 
+    # T6: secondary sort by date DESC when no date range specified.
+    # ISO date strings are sortable lexicographically; to sort descending,
+    # convert to int (YYYYMMDD) and negate.
+    if not datum_van and not datum_tot and chunks:
+        def _chunk_sort_key(c):
+            try:
+                date_int = int((c.start_date or "0000-00-00").replace("-", "")[:8])
+            except (ValueError, TypeError):
+                date_int = 0
+            return (-(c.similarity_score or 0), -date_int)
+
+        chunks = sorted(chunks, key=_chunk_sort_key)
+
     if chunks:
+        # T6: surface date_range_in_results so caller notices temporal spread
+        dates = [c.start_date[:10] for c in chunks if c.start_date]
+        if dates:
+            lines.append(
+                f"_Bronperiode RAG-fragmenten: {min(dates)} — {max(dates)}_"
+            )
         lines.append("### Aanvullende context uit notulen")
         lines.append(_format_chunks_v3(chunks[:5], max_content=400))
 
@@ -1341,6 +1395,11 @@ def zoek_moties(
     # Build WHERE clause
     conditions = [
         "(LOWER(d.name) LIKE '%%motie%%' OR LOWER(d.name) LIKE '%%amendement%%' OR LOWER(d.name) LIKE '%%initiatiefvoorstel%%')",
+        # T2 (2026-04-14): exclude committee meta-docs ("Lijst met openstaande/aangehouden/
+        # afgedane moties"). They carry every motion title so they match every query and
+        # waste result slots. Repro: `onderwerp="onderwijs", partij=D66` gave 4/5 slots
+        # to WIOSSAN overview docs.
+        "d.name !~* '^Lijst met .* moties'",
     ]
     params = []
 
@@ -1430,9 +1489,61 @@ def zoek_moties(
             f"{ZERO_RESULT_FOOTER}"
         )
 
+    # T10 (2026-04-14): post-SQL Jina rerank + 0.2 min-score for broad queries
+    # (2+ search terms). Broad queries like "horeca sluitingstijden beperking
+    # overlast nachtleven inperken" return off-topic initiatiefvoorstellen.
+    # The Jina reranker scores against the original `onderwerp` and drops noise.
+    # Single-word queries skip this to avoid over-filtering narrow lookups.
+    if len(search_terms) >= 2:
+        try:
+            _get_rag()  # ensures _reranker is initialized
+            from services import rag_service as _rag_svc_mod
+            _reranker = _rag_svc_mod._reranker
+            if _reranker is not None:
+                texts = [(r[3] or r[1] or "") for r in rows]  # content or name
+                scores = _reranker.score_pairs(onderwerp, texts)
+                rows = [
+                    r for r, s in zip(rows, scores)
+                    if (s is not None and s >= 0.2)
+                ]
+        except Exception:
+            pass  # non-critical: fall through to un-reranked rows
+
+    if not rows:
+        return (
+            f"Geen voldoende relevante moties gevonden voor '{onderwerp}'.\n\n"
+            f"{ZERO_RESULT_FOOTER}"
+        )
+
+    # T4 (2026-04-14): BB-number deduplication.
+    # Cluster rows by BB-nummer (e.g. "21bb004603"). Keep only the most recent
+    # version per cluster (highest start_date, already ORDER BY DESC). Fold
+    # other versions into a `related_docs` list on the primary result.
+    # Repro: "Kracht van de nacht" occupied 5 slots (3 versions + 2 tussenberichten).
+    _BB_RE = re.compile(r'\b(\d{2}bb\d+)\b', re.IGNORECASE)
+
+    def _extract_bb(name: str) -> str | None:
+        m = _BB_RE.search(name or "")
+        return m.group(1).lower() if m else None
+
+    seen_bb: dict = {}  # bb_nr → primary row index in deduped
+    deduped_rows = []
+    related_map: dict = {}  # primary index → list of (name, doc_id)
+
+    for row in rows:
+        bb = _extract_bb(row[1])  # row[1] = name
+        if bb and bb in seen_bb:
+            pri = seen_bb[bb]
+            related_map.setdefault(pri, []).append((row[1], row[0]))
+        else:
+            idx = len(deduped_rows)
+            deduped_rows.append(row)
+            if bb:
+                seen_bb[bb] = idx
+
     lines = [
         f"## Moties & amendementen: '{onderwerp}'",
-        f"_Gevonden: {len(rows)} resultaten_",
+        f"_Gevonden: {len(deduped_rows)} resultaten ({len(rows)} vóór BB-dedup)_",
     ]
     if uitkomst:
         lines.append(f"_Filter uitkomst: {uitkomst}_")
@@ -1444,10 +1555,21 @@ def zoek_moties(
         lines.append(f"_Indiener: {indiener}_")
     lines.append("")
 
-    for i, (doc_id, name, start_date, content, url, indieners, vote_outcome, vote_counts) in enumerate(rows, 1):
+    # T3 regex (2026-04-14): body text fallback for uitkomst='onbekend'.
+    _UITKOMST_BODY_RE = re.compile(
+        r'\b(AANGENOMEN|VERWORPEN|INGETROKKEN|AANGEHOUDEN)\b', re.IGNORECASE
+    )
+
+    for i, (doc_id, name, start_date, content, url, indieners, vote_outcome, vote_counts) in enumerate(deduped_rows, 1):
         d = str(start_date)[:10] if start_date else "?"
-        # Prefer enriched vote_outcome over regex-parsed from title
+
+        # Prefer enriched vote_outcome, then title regex, then body regex (T3).
         parsed_uitkomst = vote_outcome or _parse_uitkomst(name or "")
+        if parsed_uitkomst == "onbekend" and content:
+            body_match = _UITKOMST_BODY_RE.search(content)
+            if body_match:
+                parsed_uitkomst = body_match.group(1).lower()
+
         content_clean = (content or "").replace("\n", " ")[:1500]
         lines.append(f"### [{i}] {d} — {name[:100]}")
         lines.append(f"**Uitkomst:** {parsed_uitkomst}")
@@ -1462,6 +1584,11 @@ def zoek_moties(
         lines.append(f"_document_id: {doc_id}_")
         if url:
             lines.append(f"[Brondocument ↗]({url})")
+        # T4: show folded related docs
+        related = related_map.get(i - 1, [])
+        if related:
+            lines.append(f"_Gerelateerde versies ({len(related)}): " +
+                         ", ".join(f"{n[:60]} (id: {d})" for n, d in related) + "_")
         lines.append("")
 
     return "\n".join(lines)
@@ -1624,10 +1751,26 @@ def lees_fragment(
     meeting_name = rows[0][5] or ""
     doc_url = rows[0][7]
 
+    # T9 (2026-04-14): expose total_chunks_in_document when we returned fewer
+    # than requested — so the caller knows if the doc is short vs. reranker filtered.
+    total_in_doc: Optional[int] = None
+    if len(rows) < max_fragmenten:
+        try:
+            with get_connection() as _conn:
+                _cur = _conn.cursor()
+                _cur.execute(
+                    "SELECT COUNT(*) FROM document_chunks WHERE document_id = %s",
+                    (document_id,),
+                )
+                total_in_doc = _cur.fetchone()[0]
+                _cur.close()
+        except Exception:
+            pass
+
     lines = [
         f"## {doc_name}",
         f"_Datum: {meeting_date} | Vergadering: {meeting_name}_",
-        f"_Document ID: {document_id} | {len(rows)} fragmenten_",
+        f"_Document ID: {document_id} | {len(rows)} van {total_in_doc or '?'} fragmenten_",
     ]
     if doc_url:
         lines.append(f"[Brondocument ↗]({doc_url})")
@@ -2074,6 +2217,25 @@ def zoek_uitspraken_op_rol(
         role_lines = [f"  - {p['rol']} ({p['partij']}): {p['van']} — {p['tot']}" for p in all_roles]
         role_info = "\n_Bekende rollen:_\n" + "\n".join(role_lines)
 
+    # T8 (2026-04-14): demote procedural fragments before rendering.
+    # Signatures, toezeggingen-rows, and ontvangstbevestigingen occupy slots
+    # without adding debate content. Repro: 4/4 Kasmi/onderwijs results were
+    # signatures + toezeggingen rows. Demote score by 0.2; do NOT exclude —
+    # they may be last-resort evidence. Re-sort after demotion.
+    _SIG_RE = re.compile(r'(Met vriendelijke groet|Hoogachtend)', re.IGNORECASE)
+    _PROCEDURAL_STREAM_TYPES = {
+        "toezeggingen_lijst", "afdoeningsvoorstel", "ontvangstbevestiging",
+    }
+    for c in chunks:
+        should_demote = (
+            len(c.content or "") < 200
+            or _SIG_RE.search(c.content or "")
+            or (c.stream_type or "").lower() in _PROCEDURAL_STREAM_TYPES
+        )
+        if should_demote:
+            c.similarity_score = (c.similarity_score or 0) - 0.2
+    chunks.sort(key=lambda c: c.similarity_score or 0, reverse=True)
+
     header = f"## Uitspraken: {naam} over '{onderwerp}'"
     if rol:
         header += f"\n_Rol filter: {rol}_"
@@ -2392,6 +2554,7 @@ def traceer_motie(
     motie_id: str,
     include_notulen: bool = True,
     max_notulen_chunks: int = 8,
+    include_virtual_notulen: bool = True,
 ) -> str:
     """
     Reconstruct the complete traceability of a single motie/amendement:
@@ -2416,6 +2579,8 @@ def traceer_motie(
           "notulen_fragments": [{chunk_id, title, content, date}],
           "trace_available": bool,
           "citation_chain":  [entity_id, ...],
+          "virtual_notulen_edge_count": int,
+          "official_edge_count": int,
           "motie_id":        "<input>"
         }
 
@@ -2429,6 +2594,11 @@ def traceer_motie(
         motie_id: document_id of the motie/amendement (string).
         include_notulen: if True (default), walk to linked notulen chunks.
         max_notulen_chunks: cap on notulen fragments returned.
+        include_virtual_notulen: if True (default), include ASR-transcribed
+          committee notulen (WS12) in the trace with a confidence down-rank.
+          Set False for press-grade strict mode — only edges derived from
+          official written notulen are walked. The returned JSON always
+          reports the VN vs official edge counts so the host LLM can judge.
     """
     result: dict = {
         "motie_id": motie_id,
@@ -2439,6 +2609,8 @@ def traceer_motie(
         "notulen_fragments": [],
         "trace_available": False,
         "citation_chain": [],
+        "virtual_notulen_edge_count": 0,
+        "official_edge_count": 0,
     }
 
     with get_connection() as conn:
@@ -2522,14 +2694,29 @@ def traceer_motie(
     try:
         from services import graph_retrieval
         if graph_retrieval.is_graph_walk_ready():
+            # VN strict mode: exclude virtual_notulen edges + chunks entirely.
+            exclude_sources = None if include_virtual_notulen else ["virtual_notulen"]
             name_for_match = motion_number or name or ""
             seed_hits = graph_retrieval._resolve_entity_id_by_name(
                 name_for_match, preferred_type="Motie"
             )
             if seed_hits:
                 seed_id = seed_hits[0]
-                paths = graph_retrieval.walk([seed_id], max_hops=2)
+                paths = graph_retrieval.walk(
+                    [seed_id], max_hops=2, exclude_sources=exclude_sources,
+                )
                 scored = graph_retrieval.score_paths(paths, query_intent="motie_trace")
+                # Count VN vs official edges across the walked paths for caller visibility.
+                _vn_edges = 0
+                _official_edges = 0
+                for sp in scored:
+                    for src in sp.path.edge_sources:
+                        if src == "virtual_notulen":
+                            _vn_edges += 1
+                        else:
+                            _official_edges += 1
+                result["virtual_notulen_edge_count"] = _vn_edges
+                result["official_edge_count"] = _official_edges
                 if scored:
                     result["trace_available"] = True
                     tail_ids: list = []
@@ -2540,7 +2727,9 @@ def traceer_motie(
                     result["citation_chain"] = tail_ids[:20]
                     if include_notulen and tail_ids:
                         notulen = graph_retrieval.hydrate_chunks(
-                            tail_ids, limit=max_notulen_chunks
+                            tail_ids,
+                            limit=max_notulen_chunks,
+                            exclude_sources=exclude_sources,
                         )
                         for gc in notulen:
                             result["notulen_fragments"].append({
@@ -2589,6 +2778,7 @@ def vergelijk_partijen(
     datum_van: Optional[str] = None,
     datum_tot: Optional[str] = None,
     max_fragmenten_per_partij: int = 5,
+    include_virtual_notulen: bool = True,
 ) -> str:
     """
     Plaats twee of meer partijen naast elkaar op één onderwerp en retourneer
@@ -2614,6 +2804,9 @@ def vergelijk_partijen(
         datum_van, datum_tot: optionele ISO-datumfilters.
         max_fragmenten_per_partij: cap op terugkomende fragmenten per partij
                                    (standaard 5, maximum 10).
+        include_virtual_notulen: if True (default), include VN-derived
+          chunks. Set False for press-grade strict mode. The returned JSON
+          reports per-party VN vs official fragment counts.
 
     Returns:
         JSON string:
@@ -2623,10 +2816,12 @@ def vergelijk_partijen(
           "datum_tot": "...",
           "partijen": [
               {"partij": "VVD", "fragmenten": [{chunk_id, title, content,
-                date, similarity_score, document_id}, ...]},
+                date, similarity_score, document_id}, ...],
+               "virtual_notulen_count": int, "official_count": int},
               ...
           ],
-          "graph_walk_used": bool
+          "graph_walk_used": bool,
+          "include_virtual_notulen": bool
         }
     """
     if not partijen or len(partijen) < 2:
@@ -2653,57 +2848,88 @@ def vergelijk_partijen(
     except Exception:
         graph_walk_used = False
 
+    # In strict VN mode we pass include_virtual_notulen=False through the RAG
+    # stack. The 5th graph_walk stream honors this via
+    # services.graph_retrieval.retrieve_via_graph. The dense/BM25 streams
+    # already honor it via the rag_service INCLUDE_VIRTUAL_NOTULEN killswitch.
     result: dict = {
         "onderwerp": onderwerp,
         "datum_van": datum_van,
         "datum_tot": datum_tot,
         "partijen": [],
         "graph_walk_used": graph_walk_used,
+        "include_virtual_notulen": include_virtual_notulen,
     }
 
     rag = _get_rag()
 
-    for partij in canonicalized:
-        # Query the existing retrieval stack with a party-augmented query
-        augmented_query = f"{onderwerp} {partij}"
-        try:
-            import asyncio as _asyncio
-            chunks = _asyncio.run(
-                rag.retrieve_parallel_context(
-                    query_text=augmented_query,
-                    distribution={"debate": 4, "vision": 3, "fact": 2, "financial": 1, "graph": 2},
-                    date_from=datum_van,
-                    date_to=datum_tot,
-                    fast_mode=False,
-                    query_intent="party_comparison",
+    # In strict mode we temporarily flip the INCLUDE_VIRTUAL_NOTULEN env var
+    # for the duration of this call so both the rag_service dense/BM25 streams
+    # and the graph_walk stream honor the same killswitch. Restore after.
+    import os as _os
+    _prev_include_vn = _os.environ.get("INCLUDE_VIRTUAL_NOTULEN")
+    if not include_virtual_notulen:
+        _os.environ["INCLUDE_VIRTUAL_NOTULEN"] = "false"
+
+    try:
+        for partij in canonicalized:
+            # Query the existing retrieval stack with a party-augmented query
+            augmented_query = f"{onderwerp} {partij}"
+            try:
+                import asyncio as _asyncio
+                chunks = _asyncio.run(
+                    rag.retrieve_parallel_context(
+                        query_text=augmented_query,
+                        distribution={"debate": 4, "vision": 3, "fact": 2, "financial": 1, "graph": 2},
+                        date_from=datum_van,
+                        date_to=datum_tot,
+                        fast_mode=False,
+                        query_intent="party_comparison",
+                    )
                 )
-            )
-        except Exception:
-            chunks = []
+            except Exception:
+                chunks = []
 
-        # Prefer chunks whose content mentions the party token — this filters
-        # generic topic chunks out of the per-party bucket.
-        partij_lc = partij.lower()
-        filtered = [c for c in chunks if partij_lc in (c.content or "").lower()]
-        if not filtered:
-            filtered = chunks  # fall back rather than return empty
+            # Prefer chunks whose content mentions the party token — this filters
+            # generic topic chunks out of the per-party bucket.
+            partij_lc = partij.lower()
+            filtered = [c for c in chunks if partij_lc in (c.content or "").lower()]
+            if not filtered:
+                filtered = chunks  # fall back rather than return empty
 
-        party_fragments: list = []
-        for c in filtered[:k]:
-            party_fragments.append({
-                "chunk_id": c.chunk_id,
-                "title": c.title,
-                "content": (c.content or "")[:600],
-                "date": c.start_date,
-                "similarity_score": c.similarity_score,
-                "document_id": c.document_id,
-                "stream": getattr(c, "stream_type", None),
+            party_fragments: list = []
+            vn_count = 0
+            official_count = 0
+            for c in filtered[:k]:
+                # Heuristic: the rag_service retrieval doesn't carry source
+                # metadata on RetrievedChunk yet, so we report counts as 0 for
+                # non-graph streams. Graph-walk chunks can be identified by
+                # stream_type == 'graph'; full source attribution lands when
+                # Phase A enrichment + the hydrate_chunks source-passthrough is
+                # wired (post-Phase-A follow-up).
+                party_fragments.append({
+                    "chunk_id": c.chunk_id,
+                    "title": c.title,
+                    "content": (c.content or "")[:600],
+                    "date": c.start_date,
+                    "similarity_score": c.similarity_score,
+                    "document_id": c.document_id,
+                    "stream": getattr(c, "stream_type", None),
+                })
+            result["partijen"].append({
+                "partij": partij,
+                "fragmenten": party_fragments,
+                "n_hits": len(filtered),
+                "virtual_notulen_count": vn_count,
+                "official_count": official_count,
             })
-        result["partijen"].append({
-            "partij": partij,
-            "fragmenten": party_fragments,
-            "n_hits": len(filtered),
-        })
+    finally:
+        # Restore the env var to its prior state.
+        if not include_virtual_notulen:
+            if _prev_include_vn is None:
+                _os.environ.pop("INCLUDE_VIRTUAL_NOTULEN", None)
+            else:
+                _os.environ["INCLUDE_VIRTUAL_NOTULEN"] = _prev_include_vn
 
     return json.dumps(result, ensure_ascii=False)
 

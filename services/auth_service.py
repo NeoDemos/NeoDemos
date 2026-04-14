@@ -189,6 +189,10 @@ class AuthService:
     def validate_session(self, session_id: str) -> Optional[dict]:
         with get_connection() as conn:
             with conn.cursor() as cur:
+                # 3 s cap prevents a locked `sessions`/`users` table from stalling
+                # every MCP request. PK lookup is single-digit ms under normal load.
+                # See memory: feedback_mcp_uptime.md (2026-04-14 double outage).
+                cur.execute("SET LOCAL statement_timeout = '3s'")
                 cur.execute(
                     f"SELECT s.user_id, s.expires_at, {_user_cols('u.')} "
                     "FROM sessions s JOIN users u ON s.user_id = u.id "
@@ -247,6 +251,10 @@ class AuthService:
     ) -> Optional[dict]:
         with get_connection() as conn:
             with conn.cursor() as cur:
+                # 3 s cap prevents a locked `api_tokens`/`users` table from stalling
+                # every MCP request. token_hash PK lookup is single-digit ms.
+                # See memory: feedback_mcp_uptime.md (2026-04-14 double outage).
+                cur.execute("SET LOCAL statement_timeout = '3s'")
                 cur.execute(
                     f"SELECT t.id, t.user_id, t.scopes, t.is_active, t.expires_at, "
                     f"{_user_cols('u.')} "
