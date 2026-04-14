@@ -3176,10 +3176,18 @@ if __name__ == "__main__":
         async def _root_up(_request):  # pragma: no cover
             return _RootPlainText("ok", status_code=200)
 
+        # IMPORTANT: FastMCP's streamable_http_app() already contains Route("/mcp", ...)
+        # and Route("/.well-known/...", ...) internally. If we wrap it in _Mount("/mcp", ...),
+        # Starlette strips "/mcp" from the path before forwarding, so the inner app receives
+        # "/" and never matches its own "/mcp" route → 307 loop then 404.
+        #
+        # Fix: mount at the correct prefix that leaves the right path for the inner app:
+        # - _Mount("/public", ...) strips "/public" → inner app receives "/mcp" ✓
+        # - _Mount("/", ...) catch-all strips nothing → inner app receives "/mcp", "/.well-known/..." ✓
         _root_app = _Starlette(routes=[
             _Route("/up", endpoint=_root_up, methods=["GET"]),
-            _Mount("/public/mcp", app=_pub_asgi_with_cors),
-            _Mount("/mcp", app=_auth_asgi),
+            _Mount("/public", app=_pub_asgi_with_cors),
+            _Mount("/", app=_auth_asgi),
         ])
         print(f"{DISPLAY_NAME} {VERSION_LABEL} — transport={transport} port={mcp.settings.port} (authenticated /mcp + public /public/mcp)", flush=True)
         uvicorn.run(_root_app, host=mcp.settings.host, port=mcp.settings.port, log_level="info")
