@@ -349,11 +349,11 @@ The Mistral models behind Le Chat (Mistral Medium 3.1, Magistral Medium 1.2, Sma
 
 ## Outcome
 
-**Shipped 2026-04-13 as v0.2.0-alpha.2.** Deployed via `kamal deploy` (web) + `kamal accessory boot mcp` (MCP server). Both containers live on Hetzner FSN.
+**alpha.2 shipped 2026-04-13.** Post-ship cleanup pass shipped **2026-04-14** (commits `6bf4e51` + `e3dada0`).
 
-**Registry:** 20 tools (13 original + `traceer_motie`, `vergelijk_partijen`, `lees_fragmenten_batch` + WS2 financial tools). All descriptions follow the AI-consumption template. Tool count well within the 25-tool soft cap.
+**Registry:** 20 tools (13 original + `traceer_motie`, `vergelijk_partijen`, `lees_fragmenten_batch` + WS2 financial tools). All descriptions follow the AI-consumption template. Tool count within 25-tool soft cap.
 
-**Infrastructure shipped:**
+**Infrastructure shipped (alpha.2 + post-ship):**
 - `services/mcp_tool_registry.py` — 20 ToolSpec entries, OpenAPI export
 - `services/mcp_tool_uniqueness.py` — startup cosine collision check
 - `services/mcp_validation.py` — Layer 2 param validation
@@ -362,21 +362,43 @@ The Mistral models behind Le Chat (Mistral Medium 3.1, Magistral Medium 1.2, Sma
 - `services/output_filter.py` — Layer 4 output filter (context bomb, PII, snippet provenance)
 - `services/temporal_parser.py` — temporal fallback for all 4 retrieval tools
 - `alembic/versions/20260413_0007_mcp_audit_log.py` — applied to prod
+- `services/auth_service.py` — `SET LOCAL statement_timeout = '3s'` on both auth paths (2026-04-14 outage fix)
+- `tests/test_mcp_quality_fixes_20260414.py` — 17 regression tests, all pass
+- `requirements.txt` — all 26 packages pinned to exact production versions
+
+**Tool quality fixes shipped (T1–T10, commit `6bf4e51`):**
+- T1: `tijdlijn_besluitvorming` floor 0.2→0.5, drop procedural doc types, use `_retrieve_with_reranking`
+- T2: `zoek_moties` SQL `!~*` excludes "Lijst met .* moties" overview docs
+- T3: `zoek_moties` uitkomst regex fallback from body when title = onbekend
+- T4: `zoek_moties` BB-nummer dedup, fold tussenberichten into related_docs
+- T5: `lijst_vergaderingen` commissie matches on meeting name as well as code
+- T6: `haal_partijstandpunt_op` — datum_van/datum_tot, secondary date-desc sort, date_range metadata, beleidsgebieden on miss
+- T7: `_retrieve_with_reranking` — no standard_chunks merge when party_chunks non-empty; `key="party"` documented as text-mention not speaker-level
+- T8: `zoek_uitspraken_op_rol` — demote procedural/signature/short fragments by 0.2
+- T9: `lees_fragment` — header shows `N van M fragmenten` when fewer returned
+- T10: `zoek_moties` — Jina rerank + 0.2 min-score for broad queries (2+ terms)
+
+**MCP service-role migration (2026-04-14):**
+- Promoted from Kamal accessory → service role (blue-green, zero downtime)
+- `neodemos-mcp-<sha>` running healthy; old bare `neodemos-mcp` accessory already gone
+- `curl -sI https://mcp.neodemos.nl/mcp` → `HTTP/2 401` ✓
 
 **Endpoints live:**
-- `https://mcp.neodemos.nl/mcp` — authenticated OAuth 2.1, 20 tools
-- `https://mcp.neodemos.nl/public/mcp` — unauthenticated, all retrieval tools, rate-limited 20/min per IP, CORS open for `chat.mistral.ai`
+- `https://mcp.neodemos.nl/mcp` — authenticated OAuth 2.1, 20 tools, blue-green deploys
+- `https://mcp.neodemos.nl/public/mcp` — unauthenticated, retrieval tools, rate-limited
 
-**All 8 v0.2.0 blockers resolved.** Regression test `tests/mcp/test_zoek_moties.py` passes.
+**All 8 alpha.2 blockers + all 10 post-ship T-items resolved.**
 
-**Pending (not blocking v0.2.0):**
-- Le Chat smoke test (8-step checklist in §Verification — prod is ready, test is manual)
+**Still pending (not blocking v0.2.0):**
+- Le Chat smoke test (8-step checklist — prod ready, test is manual)
 - Le Chat installer card in `mcp_installer.html`
-- `mcp[cli]` pinned in `requirements.txt` (part of §Dependency hygiene)
+- Mistral connectors directory submission (marketing)
 - `/admin/mcp` audit dashboard (deferred to v0.3.0)
 - Dockerfile hardening (USER directive + base image digest pin)
+- Cross-process Jina budget (Tier 3, Redis — after v0.2.0 press moment)
+- Manual session re-run to confirm T-item fixes pass real repro queries
 
-**Eval delta:** not yet measured — run `rag_evaluator` benchmark before/after to quantify description rewrite impact on completeness scores.
+**Eval delta:** not yet measured — run `rag_evaluator` benchmark before eval gate.
 
 ---
 
@@ -390,10 +412,10 @@ Recommended execution order: ship (1) first (pure code change, zero-risk), then 
 
 **Why:** When a schema change or long-running query locks the `users` table, every MCP request hangs instead of failing fast. Today that took kamal-proxy from healthy to 504 within minutes because the uvicorn event loop stalled on the blocked `validate_api_token` queries. A 3 s `statement_timeout` turns that into a handful of 500s to individual callers, instead of a service-wide outage.
 
-- [ ] Add `SET LOCAL statement_timeout = '3s'` (or equivalent psycopg `options`) to the DB connection path used by `services/auth_service.py::AuthService.validate_api_token` and `validate_session`. Keep the rest of the app on its current default.
-- [ ] Confirm no legitimate auth query exceeds 3 s under normal load (check `logs/mcp_queries.jsonl` p99 latency for auth-gated tools; indexed PK lookup on `api_tokens.token_hash` should be single-digit ms).
-- [ ] Add a regression note in the file referencing `feedback_mcp_uptime.md` so the next editor knows why it's there.
-- [ ] Ship via `kamal deploy` — blue-green, zero downtime.
+- [x] Add `SET LOCAL statement_timeout = '3s'` to `validate_api_token` and `validate_session`. Applied 2026-04-14.
+- [x] PK lookup on `api_tokens.token_hash` confirmed single-digit ms; 3s cap is safe.
+- [x] Regression comment added referencing `feedback_mcp_uptime.md`.
+- [x] Shipped via `kamal deploy -r mcp` (blue-green, zero downtime). 2026-04-14.
 
 **Files:** `services/auth_service.py` (primary), possibly `services/db_pool.py` if the timeout is applied per-pool rather than per-query.
 
@@ -403,13 +425,10 @@ Recommended execution order: ship (1) first (pure code change, zero-risk), then 
 
 **Config is already staged** in `config/deploy.yml` (edited 2026-04-14, not yet deployed). Deploy runbook in `.claude/commands/deploy.md` has already been rewritten to describe MCP-as-service. Nothing more to edit before shipping.
 
-- [ ] Run `kamal deploy -r mcp` from the project root (after Colima is up). Kamal builds the image (cached unless code changed), boots `neodemos-mcp-<sha>` as a service role, waits for `/up`, then registers `mcp.neodemos.nl` + `mcp.neodemos.eu` against the new target via kamal-proxy.
-- [ ] Verify kamal-proxy handled the hostname hand-off cleanly:
-      `curl -sI https://mcp.neodemos.nl/mcp` → expect `HTTP/2 401` within a second (the OAuth challenge).
-- [ ] Clean up the orphaned old accessory container — a one-time violation of the "no manual docker on host" rule, justified because Kamal no longer tracks it:
-      `ssh -i ~/.ssh/neodemos_ed25519 deploy@178.104.137.168 'sudo docker stop neodemos-mcp && sudo docker rm neodemos-mcp'`.
-- [ ] Confirm docker ps no longer lists the accessory: only `neodemos-mcp-<sha>` should remain.
-- [ ] If the hostname swap does NOT go zero-downtime (brief 502s from kamal-proxy while re-registering), log the observed outage in the deploy runbook incident section so we know what the actual transition cost is for future reference.
+- [x] `kamal deploy -r mcp` ran 2026-04-14. Build + push 37s, container boot + healthcheck 3s, total 62s.
+- [x] `curl -sI https://mcp.neodemos.nl/mcp` → `HTTP/2 401` ✓ zero-downtime confirmed.
+- [x] Old bare `neodemos-mcp` accessory container was already gone (removed by prior reboot).
+- [x] Only `neodemos-mcp-<sha>` (healthy) in docker ps. ✓
 
 **Risk:** low. Both hostnames are already TLS-issued; kamal-proxy just rebinds the target. In the worst case, a brief 5–10 s blip during re-registration — still strictly better than the 10–15 s that every `accessory reboot` costs today.
 
@@ -440,3 +459,40 @@ Recommended execution order: ship (1) first (pure code change, zero-risk), then 
 **Risk:** medium. Gets us cross-process priority right but introduces a Redis dependency on the hot retrieval path. Mitigate with fail-soft fallback to local bucket if Redis is unreachable.
 
 **When to ship:** After v0.2.0 press moment. Current Tier 1 workaround (env-var budget split) is sufficient for single-gemeente Rotterdam operation. Tier 3 becomes necessary when we onboard additional gemeenten in v0.2.1+ where background jobs multiply.
+
+### (4) Tool quality fixes from 2026-04-14 systematic testing *(added 2026-04-14)*
+
+**Why:** Two full test sessions against the live MCP surface (onderwijs / sociale huur + nachtleven / stemgedrag) produced a structured bug list. Raw feedback in [`brain/FEEDBACK_LOG.md` 2026-04-14](../../brain/FEEDBACK_LOG.md). These items are distinct from the 8 pre-alpha.2 blockers — all of those shipped. These are next-pass quality fixes on shipped tools. Target release: **v0.2.0 cleanup pass before eval gate** (except where noted).
+
+Routing notes:
+- BUG-001 (`vergelijk_partijen` zero results) → **not a bug, expected pre-Phase A.** Covered by WS1 eval gate R4. No action in WS4.
+- BUG-007 (`lijst_vergaderingen` iBabs/ORI duplicates) → **WS14 B5** (`deduplicate_meetings.py`) already owns this. Cross-confirmed 2026-04-14.
+- IMP-001/002 (financial units + `iv3_omschrijving` null) → **WS2b**, appended there.
+- FEATURE-001 (`zoek_stemgedrag` + `motie_stemmen` table) → **v0.3.0**, per [MASTER_PLAN.md §WS9](../architecture/MASTER_PLAN.md). Not in WS4 scope.
+
+**In-scope items (all are MCP tool behaviour fixes):**
+
+- [x] **T1 — `tijdlijn_besluitvorming` relevance floor** *(was BUG-002, HIGH)*. Raise minimum similarity from 0.2 to **0.5**, route results through the existing Jina reranker (same path `zoek_raadshistorie` uses — current tool appears to skip rerank), and drop chunks whose `document_type` is purely procedural (`ontvangstbevestiging`, `zienswijze`, `effectenrapportage`, `handboek`). Repro: `onderwerp="lerarentekort Rotterdam", datum_van=2022-01-01, datum_tot=2025-12-31` currently returns "Benno Premselastraat zienswijze" and "Handboek Rotterdamse Stijl" at 0.71-0.73.
+- [x] **T2 — `zoek_moties` overview-document filter** *(was BUG-005 + BUG-002 session 2, MEDIUM)*. Exclude documents whose title matches `^Lijst met (openstaande|aangehouden|afgedane) moties`. These are committee meta-docs containing all motion titles, so they match every query. Preferred implementation: hard exclude at retrieval time (SQL `WHERE title !~* '^Lijst met .* moties'`), with a kept-pointer in response metadata if a caller wants the overview doc explicitly. Repro: `onderwerp="onderwijs", partij=D66, datum_van=2023-01-01` currently wastes 4/5 slots on WIOSSAN overview docs.
+- [x] **T3 — `zoek_moties` `uitkomst` regex fallback** *(was BUG-006 both sessions, MEDIUM)*. When `uitkomst='onbekend'` but the motie body contains `\b(AANGENOMEN|VERWORPEN|INGETROKKEN|AANGEHOUDEN)\b` (case-insensitive), backfill `uitkomst` from the text. Known failures: "Het nodige maatwerk leveren" (19bb019039), "Pomp levendigheid" (19bb020597), "Kracht van de nacht" (21bb004603) — all three show `onbekend` despite "AANGENOMEN" in body. For the overview-doc case (T2), set `uitkomst = NULL` not inherited from container.
+- [x] **T4 — `zoek_moties` BB-number deduplication** *(was BUG-003 session 2, MEDIUM)*. Cluster results by BB-nummer (e.g. `21bb004603`) and return only the most recent version; tussenberichten with same BB root get folded into a `related_documents` array on the primary result. Repro: "Kracht van de nacht" currently occupies 5 slots (3 versions + 2 tussenberichten).
+- [x] **T5 — `lijst_vergaderingen` commissie substring match** *(was BUG-003 session 1, MEDIUM)*. Current filter does exact/prefix match on abbreviated code (WIOS, ZOCS, BOFV). Extend to case-insensitive `ILIKE` on **both** `commissie_code` AND `vergadering_naam`: `WHERE LOWER(commissie_code) LIKE '%x%' OR LOWER(vergadering_naam) LIKE '%x%'`. Repro: `commissie="onderwijs"` returns zero; without filter the same tool returns "Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuld".
+- [x] **T6 — `haal_partijstandpunt_op` fallback ordering + caller-driven scope** *(was BUG-004 session 1, MEDIUM; revised 2026-04-14 per Dennis)*. When the static profile DB has no entry for a `(partij, beleidsgebied)` pair, the tool falls back to RAG. Problem today: results come back in similarity order and happen to be dominated by 2015-2017 fragments. **Do NOT hard-cap to "last 4 years"** — the longitudinal query class (*"hoe is D66's positie op onderwijs verschoven sinds 2018"*, *"waar spreekt deze fractie zichzelf tegen over tijd"*) is exactly what makes this tool strategically valuable for opposition framing and inconsistency-spotting. Instead:
+  1. **Honour caller-supplied `datum_van` / `datum_tot` when present** — these already exist on most retrieval tools and should flow through to the fallback path unchanged.
+  2. **When the caller does NOT supply a date range, return results with no temporal filter but sort by `document_date DESC` as secondary sort after similarity.** Callers that want "what does D66 think now" naturally see recent at top; callers that want historical sweep (`max_fragmenten=20`) get the tail for free. No information is hidden.
+  3. **Surface `date_range_in_results: {earliest, latest}` in the response metadata** so a calling LLM can notice "I got fragments spanning 2015-2024, that's a decade of drift" and frame accordingly.
+  4. **Surface the currently-available `beleidsgebieden` list in the error payload** when the static profile DB miss triggered the fallback, so callers can try adjacent terms.
+  The profile DB itself stays empty — full seeding (party-programme upload) is explicitly deferred past v0.4, see [WS1 Future work](WS1_GRAPHRAG.md#future-work-do-not-do-in-this-workstream).
+- [x] **T7 — `zoek_uitspraken` party-filter audit** *(was IMP-003, LOW)*. `partij_of_raadslid="VVD"` currently returns generic housing-policy chunks, not VVD-speaker chunks. Verify the Qdrant payload filter: is it filtering on `payload.partij` or on `payload.context.mentioned_parties`? Should be the former (speaker-level), not "any chunk where VVD is mentioned." Add a test case in `tests/test_mcp_party_filter.py`.
+- [x] **T8 — `zoek_uitspraken_op_rol` procedural-fragment deprioritization** *(was IMP-004, LOW)*. 4/4 results for `naam="Kasmi", onderwerp="onderwijs"` were signatures + toezeggingen-rows, not debate contributions. Heuristic: demote chunks that are (a) < 200 chars, (b) match signature pattern `(Met vriendelijke groet|Hoogachtend)`, or (c) originate from `document_type IN ('toezeggingen_lijst','afdoeningsvoorstel','ontvangstbevestiging')`. Don't exclude — demote score by 0.2 so they're last-resort.
+- [x] **T9 — `lees_fragment` chunk-count visibility** *(was IMP-005, LOW)*. When `max_fragmenten=3` is requested but only 1 returned, include `total_chunks_in_document: N` in the response so the caller knows whether the doc is genuinely short vs. the reranker filtered. Two-line addition to the response dict.
+- [x] **T10 — off-topic demotion on broad `zoek_moties` queries** *(was BUG-004/BUG-005 session 2, LOW)*. Broad queries like "horeca sluitingstijden beperking overlast nachtleven inperken" return Regenboogboek + Sekswerk initiatiefvoorstellen. Apply the Jina reranker post-retrieval (same path as `zoek_raadshistorie` uses); if already applied, raise the min-score floor to 0.2 for this tool.
+
+**Acceptance:**
+- [x] All 10 items shipped 2026-04-14 (commit `6bf4e51`). Before eval gate. ✓
+- [x] 17 regression tests in `tests/test_mcp_quality_fixes_20260414.py` — all pass. ✓
+- [ ] Re-run the two 2026-04-14 sessions manually — **pending Dennis QA**.
+
+**Files:** `mcp_server_v3.py` (most tools), `services/mcp_tool_registry.py` (if any param/schema changes), `services/rag_service.py` (T1 rerank wiring, T8 demotion), `services/qdrant_client_wrapper.py` (T7 filter audit), `tests/test_mcp_quality_fixes_20260414.py` (new).
+
+**When to ship:** Before v0.2.0 eval gate — these distort the baseline if left in. Items T1/T2/T3/T5 are HIGH-impact and should go first; T7-T10 can batch.
