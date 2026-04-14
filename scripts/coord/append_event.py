@@ -23,7 +23,7 @@ DEPENDENCIES = COORD_DIR / "dependencies.yaml"
 VALID_EVENTS = {
     "claimed", "started", "completed", "blocked", "unblocked",
     "note", "paused", "resumed", "qa_passed", "qa_rejected",
-    "escalation", "released",
+    "rejected", "escalation", "released", "alert", "feedback",
 }
 
 
