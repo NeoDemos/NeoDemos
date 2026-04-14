@@ -138,7 +138,7 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 # ── Project bootstrap ─────────────────────────────────────────────────
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -165,9 +165,17 @@ CHECKPOINT_PATH = CHECKPOINT_DIR / "gemini_enrichment_checkpoint.json"
 ADVISORY_LOCK_KEY = 42
 
 # Gemini model + pricing
-DEFAULT_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite")
-COST_INPUT_PER_M = float(os.getenv("GEMINI_COST_INPUT_PER_M", "0.075"))
-COST_OUTPUT_PER_M = float(os.getenv("GEMINI_COST_OUTPUT_PER_M", "0.30"))
+# Pinned to versioned model ID to avoid silent model rollovers mid-run.
+# If Google rotates the stable alias, this won't break until we explicitly bump.
+DEFAULT_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite-001")
+# Real 2026-04 prices for gemini-2.5-flash-lite (verified against benchlm.ai + pricepertoken.com).
+# Batch API mode would be 50% off ($0.05 / $0.20) but we use interactive for Tier 3 speed.
+COST_INPUT_PER_M = float(os.getenv("GEMINI_COST_INPUT_PER_M", "0.10"))
+COST_OUTPUT_PER_M = float(os.getenv("GEMINI_COST_OUTPUT_PER_M", "0.40"))
+# Cap Gemini output to prevent runaway completions. Each chunk emits ~250-350
+# output tokens (3-5 questions + 1-3 edges); 2048 is a generous per-batch-chunk
+# cap that gives Gemini room to emit full edge lists without truncating JSON.
+MAX_OUTPUT_TOKENS_PER_BATCH_CHUNK = int(os.getenv("GEMINI_MAX_OUTPUT_TOKENS_PER_CHUNK", "2048"))
 
 # Allowed edge types + canonical source/target types
 ALLOWED_RELATIONS = {"HEEFT_BUDGET", "BETREFT_WIJK", "SPREEKT_OVER"}
@@ -412,6 +420,131 @@ def release_advisory_lock(conn) -> None:
         log.warning(f"Failed to release advisory lock: {exc}")
 
 
+# ── Pre-flight checks (WS1 Phase 1, added 2026-04-14) ────────────────
+
+# Minimum buurt/wijk/gebied Locations required before Gemini can resolve
+# BETREFT_WIJK edges to the BAG-canonical hierarchy. Rotterdam expects
+# ~80 buurten + ~40 wijken + 14 gebieden + 1 gemeente ≈ 130 hierarchical
+# rows. Streets (~5K) are nice-to-have for other queries but NOT needed
+# for BETREFT_WIJK resolution. Threshold at 100 catches "import ran but
+# was partial" cases while not demanding the full street catalogue.
+MIN_BAG_HIERARCHY = int(os.getenv("GEMINI_MIN_BAG_HIERARCHY", "100"))
+
+
+def preflight_checks(read_conn, require_bag: bool = True) -> bool:
+    """
+    Run read-only pre-flight validation before committing to a Gemini run.
+    Returns True if all checks pass, False on any failure (with ERROR logs).
+
+    Checks:
+      1. BAG location skeleton is imported (>= MIN_BAG_LOCATIONS rows).
+         Skippable for scope='all' since we may run experimentally before BAG.
+      2. No other active writer on kg_* tables (prevents double-writes).
+      3. staging.meetings.quality_score coverage (warns if < 80%).
+
+    Each failure prints a clear "fix this" message.
+    """
+    log.info("Running pre-flight checks...")
+    cur = read_conn.cursor()
+    ok = True
+
+    # 1. BAG hierarchy (buurt/wijk/gebied/gemeente) — NOT street count.
+    # BETREFT_WIJK edges target the hierarchical levels. ~135 expected for
+    # Rotterdam (80 buurten + 40 wijken + 14 gebieden + 1 gemeente).
+    if require_bag:
+        cur.execute(
+            """
+            SELECT
+              COUNT(*) AS total,
+              COUNT(*) FILTER (WHERE metadata->>'level' = 'buurt') AS buurten,
+              COUNT(*) FILTER (WHERE metadata->>'level' = 'wijk') AS wijken,
+              COUNT(*) FILTER (WHERE metadata->>'level' = 'gebied') AS gebieden,
+              COUNT(*) FILTER (WHERE metadata->>'level' = 'gemeente') AS gemeenten
+            FROM kg_entities
+            WHERE type = 'Location'
+              AND metadata->>'gemeente' = 'rotterdam'
+              AND metadata->>'level' IN ('buurt', 'wijk', 'gebied', 'gemeente')
+            """
+        )
+        row = cur.fetchone()
+        hier_count = int(row[0])
+        if hier_count < MIN_BAG_HIERARCHY:
+            log.error(
+                f"Pre-flight FAIL: BAG hierarchy rows = {hier_count} "
+                f"(need >= {MIN_BAG_HIERARCHY}). "
+                f"Buurten={row[1]}, wijken={row[2]}, gebieden={row[3]}, gemeenten={row[4]}. "
+                f"Run `python scripts/import_bag_locations.py --gemeente rotterdam` first. "
+                f"BETREFT_WIJK edges cannot resolve to BAG-canonical IDs without this."
+            )
+            ok = False
+        else:
+            log.info(
+                f"  [OK] BAG hierarchy: {hier_count} rows "
+                f"(buurt={row[1]}, wijk={row[2]}, gebied={row[3]}, gemeente={row[4]})"
+            )
+
+    # 2. No other active writers on kg_* tables.
+    # Gemini's advisory lock covers other kg-aware scripts, but it does NOT
+    # coordinate with the committee_notulen_pipeline, which writes to kg_*
+    # without acquiring lock 42. Detect by pg_stat_activity.
+    cur.execute(
+        """
+        SELECT pid, usename, state, LEFT(query, 200) AS query
+        FROM pg_stat_activity
+        WHERE state = 'active'
+          AND pid != pg_backend_pid()
+          AND (query ILIKE '%%INSERT INTO kg_%%'
+               OR query ILIKE '%%UPDATE kg_%%'
+               OR query ILIKE '%%INSERT INTO document_chunks%%'
+               OR query ILIKE '%%UPDATE document_chunks%%')
+        """
+    )
+    active_writers = cur.fetchall()
+    if active_writers:
+        log.error(
+            f"Pre-flight FAIL: {len(active_writers)} other active writer(s) on "
+            f"kg_* / document_chunks tables. Risk of race. "
+            f"Details: {active_writers}"
+        )
+        ok = False
+    else:
+        log.info("  [OK] No other active kg_* writers")
+
+    # 3. staging.meetings.quality_score coverage (warn-only).
+    # VN provenance confidence multiplier needs this; missing scores default
+    # to 0.5 conservative, but low coverage suggests WS12 isn't finished.
+    try:
+        cur.execute(
+            """
+            SELECT
+              COUNT(*) AS total,
+              COUNT(quality_score) AS with_score
+            FROM staging.meetings
+            """
+        )
+        row = cur.fetchone()
+        total, with_score = int(row[0]), int(row[1])
+        if total > 0:
+            coverage = 100.0 * with_score / total
+            if coverage < 80.0:
+                log.warning(
+                    f"  [WARN] staging.meetings.quality_score coverage = "
+                    f"{coverage:.1f}% ({with_score:,}/{total:,}). "
+                    f"Missing scores default to 0.5 conservative. "
+                    f"Verify WS12 status if this is unexpected."
+                )
+            else:
+                log.info(
+                    f"  [OK] staging.meetings.quality_score coverage: "
+                    f"{coverage:.1f}% ({with_score:,}/{total:,})"
+                )
+    except Exception as exc:
+        log.warning(f"  [WARN] Could not check staging.meetings: {exc}")
+
+    cur.close()
+    return ok
+
+
 # ── Schema check / init ───────────────────────────────────────────────
 
 def column_exists(conn, table: str, column: str) -> bool:
@@ -486,26 +619,134 @@ class GeminiClient:
         )
         self._schema_supported: bool | None = None
 
+    # Exponential backoff schedule for 429/5xx errors (seconds).
+    # Covers rate-limit bursts (first 2 retries) and longer outages (next 3).
+    _BACKOFF_SCHEDULE = (2, 4, 8, 16, 32)
+
+    def _parse_json_with_fallback(
+        self, text: str, genai, user_prompt: str,
+    ) -> dict:
+        """
+        Parse Gemini's JSON response. Three escalation levels:
+
+          1. Direct ``json.loads`` — happy path, structured output should land here.
+          2. Extract the substring between first ``{`` and last ``}`` and retry.
+             Handles the occasional leading/trailing stray text even under
+             response_mime_type=application/json.
+          3. Retry the whole API call once (same prompt). Catches transient
+             model-side formatting glitches.
+
+        Raises on exhausting all three. The caller's batch-skip logic catches
+        the exception and moves on.
+        """
+        try:
+            return json.loads(text)
+        except json.JSONDecodeError:
+            pass
+        lo = text.find("{")
+        hi = text.rfind("}")
+        if lo >= 0 and hi > lo:
+            try:
+                return json.loads(text[lo : hi + 1])
+            except json.JSONDecodeError:
+                pass
+        # Final escalation: retry the API call once. The backoff wrapper still
+        # handles transient 429s; this retry specifically targets model-side
+        # JSON-formatting glitches.
+        log.warning(
+            "Gemini returned non-JSON output; retrying batch once. "
+            "Raw head: %r", text[:200],
+        )
+        response = self._generate_with_backoff(
+            genai, user_prompt,
+            use_schema=(self._schema_supported is not False),
+        )
+        retry_text = (response.text or "").strip()
+        if not retry_text:
+            raise RuntimeError("Gemini returned empty response on JSON retry")
+        try:
+            return json.loads(retry_text)
+        except json.JSONDecodeError as exc:
+            lo2, hi2 = retry_text.find("{"), retry_text.rfind("}")
+            if lo2 >= 0 and hi2 > lo2:
+                return json.loads(retry_text[lo2 : hi2 + 1])
+            raise RuntimeError(
+                f"Gemini returned non-JSON on both first try + retry: {exc}\n"
+                f"--- first raw ---\n{text[:500]}\n"
+                f"--- retry raw ---\n{retry_text[:500]}"
+            ) from exc
+
+    def _is_retryable(self, exc: Exception) -> bool:
+        """Detect 429s and 5xxs without depending on SDK-internal exception types."""
+        msg = str(exc).lower()
+        # Common substrings across google-genai SDK error paths:
+        # "429", "resource exhausted", "rate limit", "quota", "500", "503",
+        # "504", "deadline", "unavailable", "internal error".
+        markers = (
+            "429", "rate", "quota", "resource exhausted",
+            "500", "502", "503", "504",
+            "deadline", "unavailable", "internal error", "overloaded",
+        )
+        return any(m in msg for m in markers)
+
+    def _generate_with_backoff(self, genai, user_prompt: str, use_schema: bool):
+        """
+        Call generate_content with exponential backoff on transient failures.
+        Returns the raw response object. Raises on non-retryable errors or
+        after exhausting retries.
+        """
+        import time as _time
+
+        config_kwargs = {
+            "response_mime_type": "application/json",
+            "temperature": 0.1,
+            "max_output_tokens": MAX_OUTPUT_TOKENS_PER_BATCH_CHUNK * 20,
+        }
+        if use_schema:
+            config_kwargs["response_schema"] = RESPONSE_SCHEMA
+
+        last_exc: Exception | None = None
+        for attempt, delay in enumerate((*self._BACKOFF_SCHEDULE, None)):
+            try:
+                return self.model.generate_content(
+                    user_prompt,
+                    generation_config=genai.GenerationConfig(**config_kwargs),
+                )
+            except TypeError:
+                # Distinct from retryable: let the caller handle SDK drift.
+                raise
+            except Exception as exc:
+                if not self._is_retryable(exc) or delay is None:
+                    raise
+                last_exc = exc
+                log.warning(
+                    f"Gemini API error (attempt {attempt + 1}/{len(self._BACKOFF_SCHEDULE)}): "
+                    f"{type(exc).__name__}: {str(exc)[:200]}. "
+                    f"Backing off {delay}s…"
+                )
+                _time.sleep(delay)
+        raise RuntimeError(
+            f"Gemini API exhausted retries after {len(self._BACKOFF_SCHEDULE)} attempts: {last_exc}"
+        )
+
     def generate_json_batch(
         self, user_prompt: str,
     ) -> tuple[dict, tuple[int, int]]:
         """
         Returns (parsed_json_dict, (tokens_in, tokens_out)).
         Raises on unrecoverable errors.
+
+        2026-04-14: added exponential backoff on 429/5xx via
+        _generate_with_backoff, retry-once on malformed JSON, and an explicit
+        max_output_tokens cap so the SDK can't silently truncate a long
+        response into invalid JSON.
         """
         genai = self._genai
 
         # First attempt: use structured output.
         if self._schema_supported is not False:
             try:
-                response = self.model.generate_content(
-                    user_prompt,
-                    generation_config=genai.GenerationConfig(
-                        response_mime_type="application/json",
-                        response_schema=RESPONSE_SCHEMA,
-                        temperature=0.1,
-                    ),
-                )
+                response = self._generate_with_backoff(genai, user_prompt, use_schema=True)
                 self._schema_supported = True
             except TypeError as exc:
                 # Older SDK without response_schema kwarg.
@@ -514,39 +755,15 @@ class GeminiClient:
                     f"falling back to JSON-prompt mode for the rest of the run."
                 )
                 self._schema_supported = False
-                response = self.model.generate_content(
-                    user_prompt,
-                    generation_config=genai.GenerationConfig(
-                        response_mime_type="application/json",
-                        temperature=0.1,
-                    ),
-                )
+                response = self._generate_with_backoff(genai, user_prompt, use_schema=False)
         else:
-            response = self.model.generate_content(
-                user_prompt,
-                generation_config=genai.GenerationConfig(
-                    response_mime_type="application/json",
-                    temperature=0.1,
-                ),
-            )
+            response = self._generate_with_backoff(genai, user_prompt, use_schema=False)
 
         text = (response.text or "").strip()
         if not text:
             raise RuntimeError("Gemini returned an empty response")
 
-        try:
-            parsed = json.loads(text)
-        except json.JSONDecodeError as exc:
-            # Last-ditch: find the first { and last } and retry.
-            lo = text.find("{")
-            hi = text.rfind("}")
-            if lo >= 0 and hi > lo:
-                parsed = json.loads(text[lo : hi + 1])
-            else:
-                raise RuntimeError(
-                    f"Gemini returned non-JSON output: {exc}\n"
-                    f"--- raw ---\n{text[:500]}"
-                ) from exc
+        parsed = self._parse_json_with_fallback(text, genai, user_prompt)
 
         # Usage metadata: field names vary across SDK versions.
         usage_meta = getattr(response, "usage_metadata", None)
@@ -672,12 +889,17 @@ def resolve_target_entity(
 def build_chunk_payload(rows: list[dict]) -> str:
     """
     Serialise a batch of chunk rows into the JSON blob the prompt embeds.
-    Content is capped at 4000 chars per chunk to keep input tokens down —
-    the bulk of the useful signal lives in the first 1-2 paragraphs.
+
+    2026-04-14: removed the 4000-char truncation (WS1 Phase 1 guidance).
+    Truncation was cutting off motie signatories at document bottom, which
+    the rule-based enrichment depends on. Smart chunk selection in the
+    SELECT query (build_chunk_selection_clause below) avoids sending
+    oversized chunks in the first place, so raw content is passed through.
+    P90 chunk length across all doc types is <= 2,545 chars, so batches
+    of 20 full-content chunks stay under 15K input tokens per call.
     """
     items = []
     for r in rows:
-        content = (r.get("content") or "")[:4000]
         items.append({
             "id": int(r["id"]),
             "title": (r.get("title") or "")[:200],
@@ -685,9 +907,83 @@ def build_chunk_payload(rows: list[dict]) -> str:
             "meeting_name": (r.get("meeting_name") or "")[:200],
             "existing_topic": r.get("section_topic") or "",
             "speaker_hint": r.get("speaker_hint") or "",
-            "content": content,
+            "content": r.get("content") or "",
         })
     return json.dumps({"chunks": items}, ensure_ascii=False)
+
+
+# Max chunk length to feed Gemini. Chunks above this threshold are rare
+# (<5% of corpus) and usually represent whole sections or table dumps that
+# need a doc-level pass (WS10), not a per-chunk enrichment. Filter them out
+# in the SELECT rather than truncating.
+MAX_CHUNK_LENGTH_FOR_GEMINI = int(os.getenv("GEMINI_MAX_CHUNK_CHARS", "15000"))
+MIN_CHUNK_LENGTH_FOR_GEMINI = int(os.getenv("GEMINI_MIN_CHUNK_CHARS", "200"))
+
+
+def build_chunk_selection_clause(
+    scope: str = "p1_p2",
+    year_from: int | None = None,
+) -> tuple[str, list]:
+    """
+    Return (WHERE clause fragment, params list) for the SELECT query that
+    chooses which chunks to enrich. Replaces the pre-2026-04-14 "enrich
+    everything and truncate" approach with explicit value-based targeting.
+
+    Scopes (set via CLI --scope):
+      - 'p1':      must-have — high edge yield (moties, amendementen,
+                   initiatiefvoorstel, afdoening, raadsvoorstel, financial,
+                   speaker-attributed notulen). ~600K chunks.
+      - 'p1_p2':   default — P1 + recent briefs + key_entities-tagged "other".
+                   ~885K chunks, ~$130 at Tier 3 interactive.
+      - 'all':     full corpus, no filter. ~1.7M chunks, ~$260. Opt-in only.
+
+    Always applies: min/max chunk length, content not null, date filter.
+    """
+    filters = [
+        "dc.content IS NOT NULL",
+        "LENGTH(dc.content) >= %s",
+        "LENGTH(dc.content) <= %s",
+    ]
+    params: list = [MIN_CHUNK_LENGTH_FOR_GEMINI, MAX_CHUNK_LENGTH_FOR_GEMINI]
+
+    if scope == "all":
+        # No doc-type filter; still respect length bounds.
+        pass
+    else:
+        p1_patterns = [
+            "LOWER(d.name) LIKE '%%motie%%'",
+            "LOWER(d.name) LIKE '%%amendement%%'",
+            "LOWER(d.name) LIKE '%%initiatiefvoorstel%%'",
+            "LOWER(d.name) LIKE '%%afdoening%%'",
+            "LOWER(d.name) LIKE '%%raadsvoorstel%%'",
+            "LOWER(d.name) LIKE '%%fin_%%'",
+            "LOWER(d.name) LIKE '%%begroting%%'",
+            "LOWER(d.name) LIKE '%%jaarstuk%%'",
+            "LOWER(d.name) LIKE '%%voorjaars%%'",
+            # Speaker-attributed notulen only (filters out agenda-only chunks)
+            "(LOWER(d.name) ~ '(notulen|verslag)' AND dc.content ~ 'De heer|mevrouw|de voorzitter')",
+        ]
+        conds = [f"({' OR '.join(p1_patterns)})"]
+
+        if scope == "p1_p2":
+            # Add P2 filters: recent briefs + chunks already tagged with entities.
+            p2_patterns = [
+                # Recent briefs (2020+)
+                "(LOWER(d.name) LIKE '%%brief%%' AND m.start_date >= '2020-01-01')",
+                # Any chunk the Phase 0 gazetteer pass identified as substantive
+                "(dc.key_entities IS NOT NULL AND array_length(dc.key_entities, 1) > 0)",
+            ]
+            conds.append(f"({' OR '.join(p2_patterns)})")
+            filters.append(f"({' OR '.join(conds)})")
+        else:
+            # scope == 'p1'
+            filters.append(" AND ".join(conds))
+
+    if year_from is not None:
+        filters.append("m.start_date >= %s")
+        params.append(f"{int(year_from)}-01-01")
+
+    return " AND ".join(filters), params
 
 
 def build_user_prompt(rows: list[dict]) -> str:
@@ -932,6 +1228,8 @@ def run(
     wait_for_lock: bool,
     skip_enriched: bool,
     dry_run: bool,
+    scope: str = "p1_p2",
+    year_from: int | None = None,
 ) -> int:
     log.info("=" * 64)
     log.info("  GEMINI SEMANTIC ENRICHMENT")
@@ -953,6 +1251,16 @@ def run(
 
     # Schema gate (fail-fast, no DDL)
     require_schema(read_conn)
+
+    # ── WS1 Phase 1 pre-flight (added 2026-04-14) ───────────────────
+    # These checks catch predictable failure modes BEFORE any budget is
+    # spent. Each failure returns a distinct exit code so the runbook can
+    # give a precise "fix this" message.
+    if not dry_run:
+        if not preflight_checks(read_conn, require_bag=(scope != "all")):
+            read_conn.close()
+            write_conn.close()
+            return 5
 
     # Advisory lock on the write connection (so commits and lock live on
     # the same session).
@@ -990,14 +1298,28 @@ def run(
             f"${stats.total_cost_usd:.4f} spent so far)"
         )
 
-    # ── Count for progress bar ───────────────────────────────────────
-    count_cur = read_conn.cursor()
-    where = ["dc.id > %s"]
-    params: list[Any] = [start_id]
+    # ── Smart chunk selection (WS1 Phase 1, 2026-04-14) ──────────────
+    # Replaces the old "all chunks, truncate content" strategy with explicit
+    # value-based targeting. See build_chunk_selection_clause() for scope defs.
+    selection_clause, selection_params = build_chunk_selection_clause(
+        scope=scope, year_from=year_from,
+    )
+    where = ["dc.id > %s", selection_clause]
+    params: list[Any] = [start_id, *selection_params]
     if skip_enriched:
         where.append("dc.answerable_questions IS NULL")
+
+    log.info(f"  scope         = {scope}")
+    if year_from is not None:
+        log.info(f"  year_from     = {year_from}")
+
+    # ── Count for progress bar ───────────────────────────────────────
+    count_cur = read_conn.cursor()
     count_cur.execute(
-        f"SELECT COUNT(*) FROM document_chunks dc WHERE {' AND '.join(where)}",
+        f"""SELECT COUNT(*) FROM document_chunks dc
+            JOIN documents d ON dc.document_id = d.id
+            LEFT JOIN meetings m ON d.meeting_id = m.id
+            WHERE {' AND '.join(where)}""",
         params,
     )
     total = int(count_cur.fetchone()[0])
@@ -1125,6 +1447,21 @@ def run(
                 f"[batch {stats.batches_done:>5}] {stats.report()}"
             )
 
+            # Rejection-rate threshold: if > 20% of attempted edges are
+            # being dropped (schema mismatch, bad pairing, ...), the prompt
+            # or model is off and we're burning budget. Log a WARNING every
+            # time we cross the threshold on a 500-edge window.
+            _total_edges = stats.edges_inserted + stats.edges_rejected
+            if _total_edges > 500:
+                _rej_rate = stats.edges_rejected / _total_edges
+                if _rej_rate > 0.20 and stats.batches_done % 10 == 0:
+                    log.warning(
+                        f"Edge rejection rate {_rej_rate*100:.1f}% "
+                        f"({stats.edges_rejected:,}/{_total_edges:,}) "
+                        f"exceeds 20% threshold. Prompt or schema may be off — "
+                        f"inspect recent edges_rejected in logs."
+                    )
+
             if limit and rows_seen >= limit:
                 break
 
@@ -1224,6 +1561,19 @@ def main() -> int:
         "--no-skip-enriched", dest="skip_enriched", action="store_false",
         help="Re-enrich chunks even if answerable_questions is already set.",
     )
+    parser.add_argument(
+        "--scope", choices=["p1", "p1_p2", "all"], default="p1_p2",
+        help="Chunk-selection scope (WS1 Phase 1): 'p1' = must-have "
+             "(moties/amendementen/financial/speaker-notulen, ~600K chunks), "
+             "'p1_p2' = default (P1 + recent briefs + key_entities-tagged, "
+             "~885K chunks, ~$130 at Tier 3), 'all' = full corpus opt-in "
+             "(~1.7M chunks, ~$260).",
+    )
+    parser.add_argument(
+        "--year-from", dest="year_from", type=int, default=None,
+        help="Optional year floor (e.g. 2018). Chunks from meetings before "
+             "this year are skipped. Applied on top of --scope.",
+    )
     args = parser.parse_args()
 
     logging.getLogger().setLevel(args.log_level)
@@ -1258,6 +1608,8 @@ def main() -> int:
         wait_for_lock=args.wait_for_lock,
         skip_enriched=args.skip_enriched,
         dry_run=args.dry_run,
+        scope=args.scope,
+        year_from=args.year_from,
     )
 
 

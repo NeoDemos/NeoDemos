@@ -82,7 +82,25 @@ These were originally scoped as standalone v0.2.0 work; they are now folded in a
     - Every `Location` entity in `kg_entities` gets a mandatory `gemeente` attribute, even though v0.2.0 only has Rotterdam data.
     - The `LOCATED_IN` edge type carries a `level` attribute (`buurt` | `wijk` | `gebied` | `stadsdeel` | `gemeente`) so different municipalities with different sub-municipal structures (Amsterdam stadsdelen, Utrecht wijken-only, Rotterdam gebieden) all fit the same schema without per-tenant changes.
   - Output: new ~5.100 nodes + ~5.100 edges in Rotterdam-only mode; rolls forward to ~9,5M addresses + matching edges if/when full Netherlands coverage is enabled in a later release.
-- [ ] **Run [`scripts/gemini_semantic_enrichment.py`](../../scripts/gemini_semantic_enrichment.py)** (Phase 0 ✅ — script exists, has hard `--cost-cap 130` enforcement). Gemini Flash Lite pass for: `answerable_questions`, `section_topic` refinement, semantic relationships (`HEEFT_BUDGET`, `BETREFT_WIJK`, `SPREEKT_OVER`). Budget: $90–130. Small-batch (100% retention) per [project_pipeline_hardening.md](../../../.claude/projects/-Users-dennistak-Documents-Final-Frontier-NeoDemos/memory/project_pipeline_hardening.md). Now that BAG-derived `LOCATED_IN` edges exist, `BETREFT_WIJK` resolves targets to BAG-canonical Location IDs rather than free-text wijk names. **STOP for cost re-approval before full run** — first do `--init-schema` then `--dry-run --limit 100` to calibrate cost per chunk.
+- [ ] **Run [`scripts/gemini_semantic_enrichment.py`](../../scripts/gemini_semantic_enrichment.py)** — hardened 2026-04-14 with `--scope` selection (no truncation), exponential backoff on 429/5xx `[2,4,8,16,32]s`, malformed-JSON retry-once, edge-rejection-rate >20% warning, model pinned to `gemini-2.5-flash-lite-001`, max_output_tokens cap, pre-flight checks (BAG hierarchy ≥100, no active kg_* writers, staging.meetings quality_score coverage). Advisory lock 42.
+
+  **Pass for:** `answerable_questions`, `section_topic` refinement, semantic relationships (`HEEFT_BUDGET`, `BETREFT_WIJK`, `SPREEKT_OVER`). VN provenance metadata + `confidence = gemini_confidence × source_quality` per Phase A bis.
+
+  **Cost + scope — verified 2026-04-14 against live corpus (1,737,932 chunks, real prices $0.10/1M in + $0.40/1M out):**
+
+  | `--scope` | Chunks | Est. cost | Time @ Tier 3 (4000 RPM) |
+  |---|---|---|---|
+  | `p1` | ~600K (moties, amendementen, initiatief, afdoening, raadsvoorstel, financial, speaker-attributed notulen) | **~$85** | ~40 min |
+  | `p1_p2` (default) | ~885K (P1 + 2020+ briefs + `key_entities`-tagged "other") | **~$125** | ~60 min |
+  | `all` | 1.74M | ~$245 | ~2h |
+
+  **No content truncation.** Previous 4000-char cap was cutting motie signatories at document bottom (project_motie_signatories.md). Length filter `[200, 15000]` chars skips noise + outliers without losing mid-chunk content. P90 chunk length is 2,545 chars — 90% of chunks fit comfortably.
+
+  **Execution protocol:**
+  1. `--init-schema` — adds `answerable_questions text[]` column.
+  2. `--dry-run --limit 10` — no API calls; validate SELECT + prompt builder.
+  3. `--limit 100 --no-skip-enriched` — real run, ~$0.50, **STOP for Dennis approval** on cost trajectory + output quality.
+  4. Full run: `--scope p1_p2 --cost-cap 150` (default) OR `--scope p1 --cost-cap 100` (strict budget).
 - [ ] **Materialize new edges** into `kg_relationships`. Target: 57K → ≥500K edges (Flair semantic relationships dominate; BAG hierarchy adds the constant 5K location skeleton).
 - [ ] **Run [`scripts/link_motie_to_notulen.py`](../../scripts/link_motie_to_notulen.py)** (Phase 0 ✅) — cross-document motie↔notulen vote linking. Populates edges connecting a `motie` document to the `notulen` chunks where it was discussed/voted. Writes into `kg_relationships` using the canonical shape `(source_entity_id, target_entity_id, relation_type='DISCUSSED_IN' | 'VOTED_IN', document_id, chunk_id, confidence, metadata)`. **WS3 depends on this.**
 - [ ] **Quality audit** — two layers for Phase A (the full eval gate including MCP chat replay runs after Phase B):
@@ -245,6 +263,8 @@ Replay these 6 sessions through the live MCP tools **after Phase 1 enrichment**.
 - Streaming graph results to the LLM (Anthropic Code Execution work — v0.3)
 - Full Netherlands BAG coverage import (only Rotterdam-relevant subset in v0.2.0; the full ~9.5M-address national set lands when WS5b promotes new gemeenten to full mode in v0.3.0+)
 - Geographic/spatial queries via PostGIS (BAG provides coordinates, but spatial radius search is out of scope for v0.2)
+- **Party-programme-based `haal_partijstandpunt_op` profile seeding** *(decision 2026-04-14)*. The `haal_partijstandpunt_op` scaffold currently returns empty because the profile DB isn't seeded. The "proper" seeding path — ingest 2022 GR verkiezingsprogramma PDFs for each Rotterdamse fractie, extract structured stances per `beleidsgebied` — is **deferred past v0.4**, and may sit at v0.9. Rationale: (a) programmes are 4-year-old strategist copy, register-mismatched with raadszaal behaviour; (b) structured-stance extraction from a 40-page programme is a research-grade problem, not a week's work; (c) the retrieval-based `vergelijk_partijen` (Phase B, this file) already covers the highest-value "who said what + how did they vote" query class. Cheap mitigation in the meantime lives in [WS4 §(4) T6](WS4_MCP_DISCIPLINE.md#4-tool-quality-fixes-from-2026-04-14-systematic-testing-added-2026-04-14) — recency-bias the fallback RAG so it stops returning 2015-2017 fragments.
+- **`zoek_stemgedrag` + `motie_stemmen` structured voting table** — promoted to v0.2.0 on 2026-04-14 as **[WS15](WS15_MOTIE_STEMMEN.md)** (was v0.3.0 per old MASTER_PLAN WS9). Not a WS1 scope item. KG `STEMT_VOOR/TEGEN` edges from this WS handle qualitative graph walks; WS15 gives the aggregatable SQL layer for "how did D66 vote on restrictive proposals they didn't author." Where they disagree, WS15 is the source of truth (besluitenlijsten beat motie-body party signatories).
 
 ## Pipeline integration (added 2026-04-12)
 
