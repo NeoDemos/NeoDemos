@@ -170,7 +170,7 @@ Add to `eval/data/questions.json`:
 
 > *"Hoe stemde D66 op restrictieve nachtleven-moties (sluitingstijden, geluidsoverlast, vergunningsverkorting) ingediend door andere fracties tussen 2018 en 2025? Geef per stemming: motie, indiener, D66-stem, datum."*
 
-Gold answer requires `zoek_stemgedrag(partij='D66', onderwerp='nachtleven', stem_filter=None, indiener_partij=None)` *minus* motions where D66 was indiener — i.e. uses the `indiener_partij` exclusion path. Pre-WS15 baseline: tool doesn't exist, current best alternative (`zoek_moties` + manual filtering) returns mostly D66-authored motions, missing the defensive-vote answer entirely. This was the trigger session in [`brain/FEEDBACK_LOG.md` 2026-04-14](../../brain/FEEDBACK_LOG.md).
+Gold answer requires `zoek_stemgedrag(partij='D66', onderwerp='nachtleven', stem_filter=None, indiener_partij=None)` *minus* motions where D66 was indiener — i.e. uses the `indiener_partij` exclusion path. Pre-WS15 baseline: tool doesn't exist, current best alternative (`zoek_moties` + manual filtering) returns mostly D66-authored motions, missing the defensive-vote answer entirely. This was the trigger session in [`.coordination/FEEDBACK_LOG.md` 2026-04-14](../../.coordination/FEEDBACK_LOG.md).
 
 ---
 

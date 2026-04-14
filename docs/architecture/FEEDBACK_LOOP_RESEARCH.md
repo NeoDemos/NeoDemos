@@ -11,7 +11,7 @@
 NeoDemos currently runs a manual production → triage → fix → verify loop:
 
 1. Dennis uses the MCP server / web UI in real chat sessions.
-2. When something goes wrong, he writes the observation into `brain/FEEDBACK_LOG.md` (scheduled to move to `.coordination/FEEDBACK_LOG.md` in Phase 0).
+2. When something goes wrong, he writes the observation into `.coordination/FEEDBACK_LOG.md` (scheduled to move to `.coordination/FEEDBACK_LOG.md` in Phase 0).
 3. Every Monday, he triages the past week's entries into one of four destinations: WS handoff edit, TODOS.md inbox, memory update, or discard.
 4. Items in TODOS.md triage inbox get max 7 days before being assigned to a WS or discarded.
 
@@ -25,7 +25,7 @@ This works for v0.2.0 because query volume is low (<100/day). It will not scale 
 | Query logging | `/logs/mcp_queries.jsonl` (raw params) | No rotation, no session grouping |
 | Failure signals | `status_code`, `error_class` | No "zero citations", "user frustrated", "repeated retry" detection |
 | User rating | None | No thumbs-up/down, no "report issue" |
-| Triage workflow | `brain/FEEDBACK_LOG.md` + Monday ritual (TODOS.md §triage) | No back-reference from feedback → WS → fix → verify |
+| Triage workflow | `.coordination/FEEDBACK_LOG.md` + Monday ritual (TODOS.md §triage) | No back-reference from feedback → WS → fix → verify |
 | Alerting | None — WS4 §daily-summary deferred to v0.3.0 | |
 | Retention | None defined | TODOS.md has a pending "rotate mcp_queries.jsonl" item |
 

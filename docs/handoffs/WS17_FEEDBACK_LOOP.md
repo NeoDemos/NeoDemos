@@ -10,7 +10,7 @@
 
 ## TL;DR
 
-Today Dennis's quality gate is `brain/FEEDBACK_LOG.md` plus a weekly Monday triage ritual. The ritual is the *right* gate — memory [`feedback_eval_quality_audit.md`](../../.claude/projects/-Users-dennistak-Documents-Final-Frontier-NeoDemos/memory/feedback_eval_quality_audit.md) explicitly rejects LLM-as-judge in favour of real MCP chat replay — but it is entirely manual, and at >100 queries/day the friction breaks the loop. WS17 automates **signal capture** (what went wrong?) and **close-the-loop tracking** (did the fix stick?) while keeping **triage** and **scoring** strictly manual. Deliverables: schema instrumentation on `mcp_audit_log`, a `detect.py` candidate-generation script, a Sunday-night `digest.py` that produces `MONDAY_DIGEST.md`, a new `feedback` event type in `events.jsonl`, a `/ws-retest` command, and a warn-not-block hook in `/ws-complete` for WSs with unretested feedback items.
+Today Dennis's quality gate is `.coordination/FEEDBACK_LOG.md` plus a weekly Monday triage ritual. The ritual is the *right* gate — memory [`feedback_eval_quality_audit.md`](../../.claude/projects/-Users-dennistak-Documents-Final-Frontier-NeoDemos/memory/feedback_eval_quality_audit.md) explicitly rejects LLM-as-judge in favour of real MCP chat replay — but it is entirely manual, and at >100 queries/day the friction breaks the loop. WS17 automates **signal capture** (what went wrong?) and **close-the-loop tracking** (did the fix stick?) while keeping **triage** and **scoring** strictly manual. Deliverables: schema instrumentation on `mcp_audit_log`, a `detect.py` candidate-generation script, a Sunday-night `digest.py` that produces `MONDAY_DIGEST.md`, a new `feedback` event type in `events.jsonl`, a `/ws-retest` command, and a warn-not-block hook in `/ws-complete` for WSs with unretested feedback items.
 
 ---
 
@@ -33,7 +33,7 @@ Every design choice in this handoff falls out of that split. If an agent ever pr
 |---|---|---|
 | WS4 shipped ✅ | hard | Uses `mcp_audit_log` table + `services/audit_logger.py` as the raw signal source |
 | WS16 (monitoring) | soft | Schema migration pattern + script conventions established there — reuse them |
-| Phase 0 archival of `brain/FEEDBACK_LOG.md` → `.coordination/FEEDBACK_LOG.md` | hard | Digest reads the canonical path; must be moved before `digest.py` runs |
+| Phase 0 archival of `.coordination/FEEDBACK_LOG.md` → `.coordination/FEEDBACK_LOG.md` | hard | Digest reads the canonical path; must be moved before `digest.py` runs |
 | `scripts/coord/append_event.py` | reuse | Do **not** fork; extend with a new `event=feedback` case |
 | Memory: [`feedback_eval_quality_audit.md`](../../.claude/projects/-Users-dennistak-Documents-Final-Frontier-NeoDemos/memory/feedback_eval_quality_audit.md) | read first | The "why no LLM-judge" decision |
 
@@ -45,7 +45,7 @@ Every design choice in this handoff falls out of that split. If an agent ever pr
 You are picking up WS17_FEEDBACK_LOOP for NeoDemos — civic transparency platform
 for Rotterdam raad (and Middelburg v0.2.1). This workstream automates the
 production → feedback → triage → fix → verify loop that today runs entirely
-through brain/FEEDBACK_LOG.md + Dennis's Monday ritual.
+through .coordination/FEEDBACK_LOG.md + Dennis's Monday ritual.
 
 LOAD-BEARING DESIGN PRINCIPLE (do not violate):
   Two functions, two automation levels.
@@ -322,7 +322,7 @@ Do **not** pull any of these into WS17. Each is either rejected on principle or 
 
 ## Open questions for Dennis
 
-- [ ] Confirm Phase 0 move path: `brain/FEEDBACK_LOG.md` → `.coordination/FEEDBACK_LOG.md` — still planned for v0.2.1 cut?
+- [ ] Confirm Phase 0 move path: `.coordination/FEEDBACK_LOG.md` → `.coordination/FEEDBACK_LOG.md` — still planned for v0.2.1 cut?
 - [ ] Which week to run the one-time backtest against? Recommendation: the most recent 4 complete ISO weeks at the time Phase 2 ships.
 - [ ] Launchd vs cron for the nightly `detect.py` — preference?
 

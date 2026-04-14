@@ -3,7 +3,7 @@
 **Scope rules** *(updated 2026-04-11 — keeps this file from becoming a graveyard)*:
 
 - **Feature work lives in [`docs/handoffs/`](docs/handoffs/).** If an item has a clear workstream home, move it there — do not keep it here.
-- **Raw observations live in [`brain/FEEDBACK_LOG.md`](brain/FEEDBACK_LOG.md).** This file is for *already-triaged* items that need follow-up.
+- **Raw observations live in [`.coordination/FEEDBACK_LOG.md`](.coordination/FEEDBACK_LOG.md).** This file is for *already-triaged* items that need follow-up.
 - **What belongs here:**
   - (a) Items triaged from `FEEDBACK_LOG.md` that genuinely have no clear WS home (**max 7 days** — if it lingers, either force a WS assignment or discard)
   - (b) Operational / ops tasks that don't fit any WS (deploys, certs, gitignore, log rotation, one-off scripts)

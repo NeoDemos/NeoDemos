@@ -388,7 +388,7 @@ Before writing the plan, read these files to understand the current system:
 4. `memory-bank/projectbrief.md` — project north star
 5. `memory-bank/progress.md` — what's been done
 6. `memory-bank/activeContext.md` — current session state
-7. `brain/FEEDBACK_LOG.md` — the triage inbox
+7. `.coordination/FEEDBACK_LOG.md` — the triage inbox
 8. `brain/implementation_plan.md` — active build status
 9. `TODOS.md` — current triage system
 10. `docs/WAY_OF_WORKING.md` — development workflow

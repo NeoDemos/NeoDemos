@@ -1372,7 +1372,7 @@ This is the proposed mapping of today's files to the new system.
 | `memory-bank/productContext.md` | Keep + move | Relocate to `docs/PRODUCT_CONTEXT.md` |
 | `memory-bank/techContext.md` | Keep + move | Relocate to `docs/architecture/TECH_CONTEXT.md` |
 | `memory-bank/systemPatterns.md` | Keep + move | Relocate to `docs/architecture/SYSTEM_PATTERNS.md` |
-| `brain/FEEDBACK_LOG.md` | Replaced | Triage items become `note` events in events.jsonl |
+| `.coordination/FEEDBACK_LOG.md` | Replaced | Triage items become `note` events in events.jsonl |
 | `brain/implementation_plan.md` | Replaced | Superseded by handoff MDs |
 | `brain/task.md` | Replaced | Superseded by next-task flow |
 | `brain/walkthrough.md` | Keep + move | Relocate to `docs/WALKTHROUGH.md` |

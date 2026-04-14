@@ -98,7 +98,7 @@ The `_assign_iv3` method in `pipeline/financial_ingestor.py` exists but returns 
 
 ## Appended 2026-04-14 from MCP testing feedback
 
-Two small display/contract issues surfaced during systematic MCP testing ([`brain/FEEDBACK_LOG.md` 2026-04-14 session 1](../../brain/FEEDBACK_LOG.md)). Both land in this WS because they sit on the same tools this backfill touches.
+Two small display/contract issues surfaced during systematic MCP testing ([`.coordination/FEEDBACK_LOG.md` 2026-04-14 session 1](../../.coordination/FEEDBACK_LOG.md)). Both land in this WS because they sit on the same tools this backfill touches.
 
 - [ ] **IV-1 — Add `unit` field to `vraag_begrotingsregel` and `vergelijk_begrotingsjaren` response schemas.** Bedragen like `"87506.00"` are ambiguous without a unit label — Rotterdam publishes in thousands (x €1.000). Add `"unit": "x €1.000"` (or `"EUR"` where the source is euros) to every response that contains a `bedrag` field. Source of truth: the `financial_lines.unit` column if present, otherwise default `"x €1.000"` per Rotterdam convention. Document in tool description too so the calling LLM uses the right scale in summaries.
 - [ ] **IV-2 — Populate `iv3_omschrijving` in responses, not just `iv3_taakveld`.** Currently the tool returns `"iv3_taakveld": "4.3", "iv3_omschrijving": null`. The `iv3_taakvelden` reference table already has the full name ("Onderwijsbeleid en leerlingzaken" for 4.3) — JOIN it into the response. Helps the calling LLM ground numbers in human-readable categories without a second tool call. Null-safe: if the JOIN misses (legacy rows), return the code alone.

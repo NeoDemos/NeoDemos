@@ -131,7 +131,7 @@ This part is shared with WS5b (UI is in v0.2.1) but the schema work must happen 
 - [ ] Ensure every transcript chunk in Qdrant has `start_seconds`, `end_seconds`, `webcast_url` in its payload. Check [`pipeline/staging_ingestor.py:12`](../../pipeline/staging_ingestor.py#L12) — `start_date` is currently the only timestamp field.
 - [ ] **Backfill script** `scripts/nightly/backfill_webcast_timestamps.py` — populates the new payload fields for existing transcript chunks by re-querying `committee_transcripts_staging`. Must run with advisory lock.
 
-### Data integrity audit — chunk → document_id attribution (~1 day) *(added 2026-04-11, triaged from [FEEDBACK_LOG.md 2026-04-11](../../brain/FEEDBACK_LOG.md))*
+### Data integrity audit — chunk → document_id attribution (~1 day) *(added 2026-04-11, triaged from [FEEDBACK_LOG.md 2026-04-11](../../.coordination/FEEDBACK_LOG.md))*
 
 **Why this is in WS5a and not WS1 or WS4:** the failure mode is an *ingest-time* attribution bug, not a retrieval bug. A search for parkeertarieven returned `doc 246823` with a snippet showing "Centrum €3.50 / Buiten centrum €2.00", but when `lees_fragment` was called the document turned out to be a GroenLinks kaderbrief about urban development — no parking content at all. The only way this happens is if a chunk's `document_id` does not match the document the chunk text actually came from. That's an ingest pipeline integrity failure. **This is the single most dangerous failure mode in the platform** because it produces confident-looking hallucinations that no LLM can catch without auditing every source manually.
 
@@ -141,7 +141,7 @@ This part is shared with WS5b (UI is in v0.2.1) but the schema work must happen 
 - [ ] **Corrective action** — if mismatches are found, write `scripts/repair_chunk_attribution.py` that either re-attributes (if the source doc is findable by hash) or quarantines (if not) affected chunks. Runs under `pg_advisory_lock(42)`.
 - [ ] **Acceptance** — audit run produces zero `mismatch` rows; smoke test asserts the invariant; add `chunk_attribution_audit_passed` to the daily 07:00 CET health email.
 
-**Related FEEDBACK_LOG entry:** [2026-04-11 zoek_raadshistorie / lees_fragment — Parkeertarieven Rotterdam](../../brain/FEEDBACK_LOG.md), specifically the "doc 246823 was a false positive" failure mode.
+**Related FEEDBACK_LOG entry:** [2026-04-11 zoek_raadshistorie / lees_fragment — Parkeertarieven Rotterdam](../../.coordination/FEEDBACK_LOG.md), specifically the "doc 246823 was a false positive" failure mode.
 
 ## Acceptance criteria
 

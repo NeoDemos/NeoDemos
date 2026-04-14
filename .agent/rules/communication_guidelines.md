@@ -49,3 +49,20 @@ These rules govern how the AI assistant (Antigravity) should communicate with th
 
 > [!IMPORTANT]
 > Always check these guidelines at the start of every session.
+
+## Sources of truth
+
+Read these, in this order:
+1. `docs/handoffs/README.md` — workstream index, status, parallelism map
+2. `docs/handoffs/WS*.md` — task definitions, acceptance criteria
+3. `docs/WAY_OF_WORKING.md` — workflow conventions
+4. `.coordination/state.md` — auto-generated live status
+5. `.coordination/FEEDBACK_LOG.md` — live triage inbox
+6. `.agent/rules/` — behavioral rules
+7. `.claude/commands/` — skill + coordination commands
+
+## Do NOT read
+
+- `docs/archive/` — historical artifacts, intentionally frozen
+- `docs/archive/memory-bank/` — superseded by handoffs + auto-memory
+- `docs/archive/brain/` — stale working notes (except FEEDBACK_LOG, now at `.coordination/`)
