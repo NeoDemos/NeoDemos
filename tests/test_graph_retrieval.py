@@ -159,9 +159,9 @@ class TestWalk:
 
     def test_walk_hydrates_rows_into_path_objects(self):
         rows = [
-            # (node_ids, edge_types, edge_confs, depth)
-            ([1, 2], ["DIENT_IN"], [0.9], 1),
-            ([1, 2, 3], ["DIENT_IN", "LID_VAN"], [0.9, 0.8], 2),
+            # (node_ids, edge_types, edge_confs, edge_sources, depth) — 5-tuple per walk CTE signature
+            ([1, 2], ["DIENT_IN"], [0.9], ["motie_body"], 1),
+            ([1, 2, 3], ["DIENT_IN", "LID_VAN"], [0.9, 0.8], ["motie_body", "politician_registry"], 2),
         ]
         cur = FakeCursor(rows=rows)
         with patch.object(graph_retrieval, "get_connection", lambda: fake_get_connection(cur)):
@@ -170,8 +170,10 @@ class TestWalk:
         assert paths[0].node_ids == [1, 2]
         assert paths[0].edge_types == ["DIENT_IN"]
         assert paths[0].edge_confidences == [0.9]
+        assert paths[0].edge_sources == ["motie_body"]
         assert paths[0].total_confidence == pytest.approx(0.9)
         assert paths[1].node_ids == [1, 2, 3]
+        assert paths[1].edge_sources == ["motie_body", "politician_registry"]
         assert paths[1].total_confidence == pytest.approx(0.9 * 0.8)
 
 
@@ -357,5 +359,115 @@ class TestRetrieveViaGraphOrchestration:
             graph_retrieval, "extract_query_entities",
             lambda q: [graph_retrieval.Entity(id=1, type="Person", name="X")],
         )
-        monkeypatch.setattr(graph_retrieval, "walk", lambda seeds, max_hops=2: [])
+        monkeypatch.setattr(graph_retrieval, "walk", lambda seeds, **kwargs: [])
         assert graph_retrieval.retrieve_via_graph("x") == []
+
+
+# ---------------------------------------------------------------------------
+# Phase A bis — VN provenance layer (added 2026-04-14)
+# ---------------------------------------------------------------------------
+
+
+class TestVNProvenanceFilters:
+    """Pins down the 4 VN-filtering hooks added in WS1 Phase A bis."""
+
+    def test_walk_exclude_sources_adds_cte_predicate(self):
+        """walk(exclude_sources=[...]) must add a metadata.source filter to the CTE."""
+        captured: list = []
+        cur = FakeCursor(rows=[], capture=captured)
+        with patch.object(graph_retrieval, "get_connection", lambda: fake_get_connection(cur)):
+            graph_retrieval.walk([1], max_hops=2, exclude_sources=["virtual_notulen"])
+        sql, params = captured[0]
+        # The CTE must reference metadata->>'source' for the exclusion
+        assert "metadata->>'source'" in sql
+        # Exclusion list must be in params (somewhere between seeds and path_limit)
+        assert ["virtual_notulen"] in params
+
+    def test_walk_min_source_quality_adds_cte_predicate(self):
+        """walk(min_source_quality=X) must filter edges below that quality."""
+        captured: list = []
+        cur = FakeCursor(rows=[], capture=captured)
+        with patch.object(graph_retrieval, "get_connection", lambda: fake_get_connection(cur)):
+            graph_retrieval.walk([1], max_hops=2, min_source_quality=0.7)
+        sql, params = captured[0]
+        # The CTE must reference source_quality for the filter
+        assert "source_quality" in sql
+        assert 0.7 in params
+
+    def test_score_paths_vn_penalty_downweights_vn_paths(self):
+        """A path with a VN-derived edge should score lower than the same path with no VN edges."""
+        official = graph_retrieval.Path(
+            node_ids=[1, 2], edge_types=["DIENT_IN"],
+            edge_confidences=[0.9], edge_sources=["motie_body"],
+            total_confidence=0.9,
+        )
+        vn = graph_retrieval.Path(
+            node_ids=[1, 2], edge_types=["DISCUSSED_IN"],
+            edge_confidences=[0.9], edge_sources=["virtual_notulen"],
+            total_confidence=0.9,
+        )
+        scored = graph_retrieval.score_paths([official, vn], vn_penalty=0.7)
+        assert scored[0].path is official  # official ranks first
+        # VN path score is base * 0.7 (one VN edge); official is base * 1.0
+        assert scored[1].score == pytest.approx(scored[0].score * 0.7)
+
+        # With vn_penalty=1.0 the VN path is not downweighted and both tie (stable sort).
+        scored_no_penalty = graph_retrieval.score_paths([official, vn], vn_penalty=1.0)
+        assert scored_no_penalty[0].score == pytest.approx(scored_no_penalty[1].score)
+
+    def test_hydrate_chunks_exclude_sources_filters_vn_documents(self):
+        """hydrate_chunks(exclude_sources=['virtual_notulen']) must filter on documents.is_virtual_notulen."""
+        captured: list = []
+        cur = FakeCursor(rows=[], capture=captured)
+        with patch.object(graph_retrieval, "get_connection", lambda: fake_get_connection(cur)):
+            graph_retrieval.hydrate_chunks([1, 2], exclude_sources=["virtual_notulen"])
+        sql = captured[0][0]
+        assert "is_virtual_notulen" in sql
+
+
+class TestIncludeVirtualNotulenEnvVar:
+    """retrieve_via_graph honors the INCLUDE_VIRTUAL_NOTULEN env var + explicit arg override."""
+
+    def test_env_false_passes_exclude_sources_to_walk_and_hydrate(self, monkeypatch):
+        """When INCLUDE_VIRTUAL_NOTULEN is False, walk + hydrate_chunks both get exclude_sources=['virtual_notulen']."""
+        monkeypatch.setattr(graph_retrieval, "is_graph_walk_ready", lambda: True)
+        monkeypatch.setattr(graph_retrieval, "INCLUDE_VIRTUAL_NOTULEN", False)
+        monkeypatch.setattr(
+            graph_retrieval, "extract_query_entities",
+            lambda q: [graph_retrieval.Entity(id=1, type="Person", name="X")],
+        )
+
+        walk_kwargs: dict = {}
+        hydrate_kwargs: dict = {}
+
+        def fake_walk(seeds, **kwargs):
+            walk_kwargs.update(kwargs)
+            return [graph_retrieval.Path(
+                node_ids=[1, 2], edge_types=["DIENT_IN"],
+                edge_confidences=[0.9], edge_sources=["motie_body"],
+                total_confidence=0.9,
+            )]
+
+        def fake_hydrate(ids, **kwargs):
+            hydrate_kwargs.update(kwargs)
+            return []
+
+        monkeypatch.setattr(graph_retrieval, "walk", fake_walk)
+        monkeypatch.setattr(graph_retrieval, "hydrate_chunks", fake_hydrate)
+        graph_retrieval.retrieve_via_graph("x")
+        assert walk_kwargs.get("exclude_sources") == ["virtual_notulen"]
+        assert hydrate_kwargs.get("exclude_sources") == ["virtual_notulen"]
+
+    def test_explicit_arg_overrides_env(self, monkeypatch):
+        """include_virtual_notulen=True overrides env=False; no exclude filter propagated."""
+        monkeypatch.setattr(graph_retrieval, "is_graph_walk_ready", lambda: True)
+        monkeypatch.setattr(graph_retrieval, "INCLUDE_VIRTUAL_NOTULEN", False)
+        monkeypatch.setattr(
+            graph_retrieval, "extract_query_entities",
+            lambda q: [graph_retrieval.Entity(id=1, type="Person", name="X")],
+        )
+        walk_kwargs: dict = {}
+        monkeypatch.setattr(graph_retrieval, "walk", lambda seeds, **k: (walk_kwargs.update(k) or []))
+        monkeypatch.setattr(graph_retrieval, "hydrate_chunks", lambda ids, **k: [])
+        graph_retrieval.retrieve_via_graph("x", include_virtual_notulen=True)
+        assert walk_kwargs.get("exclude_sources") is None

@@ -130,7 +130,7 @@ import logging
 import os
 import sys
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 # -- Project bootstrap ------------------------------------------------
@@ -438,15 +438,20 @@ ORDER BY d.id
 
 NOTULEN_EXACT_SQL = """
 SELECT
-    dc.id           AS chunk_id,
-    dc.document_id  AS notulen_document_id,
+    dc.id                   AS chunk_id,
+    dc.document_id          AS notulen_document_id,
     dc.content,
     dc.vote_outcome,
-    d.meeting_id    AS notulen_meeting_id,
-    m.start_date    AS notulen_date
+    d.meeting_id            AS notulen_meeting_id,
+    m.start_date            AS notulen_date,
+    COALESCE(d.is_virtual_notulen, FALSE) AS is_virtual_notulen,
+    sm.quality_score        AS vn_quality_score
 FROM document_chunks dc
 JOIN documents d ON dc.document_id = d.id
 LEFT JOIN meetings m ON d.meeting_id = m.id
+LEFT JOIN staging.meetings sm
+    ON d.is_virtual_notulen = TRUE
+   AND sm.id = d.meeting_id
 WHERE dc.motion_number = %s
   AND LOWER(d.name) LIKE '%%notulen%%'
   AND (%s::date IS NULL OR m.start_date IS NULL
@@ -456,15 +461,20 @@ WHERE dc.motion_number = %s
 
 NOTULEN_FALLBACK_SQL = """
 SELECT
-    dc.id           AS chunk_id,
-    dc.document_id  AS notulen_document_id,
+    dc.id                   AS chunk_id,
+    dc.document_id          AS notulen_document_id,
     dc.content,
     dc.vote_outcome,
-    d.meeting_id    AS notulen_meeting_id,
-    m.start_date    AS notulen_date
+    d.meeting_id            AS notulen_meeting_id,
+    m.start_date            AS notulen_date,
+    COALESCE(d.is_virtual_notulen, FALSE) AS is_virtual_notulen,
+    sm.quality_score        AS vn_quality_score
 FROM document_chunks dc
 JOIN documents d ON dc.document_id = d.id
 LEFT JOIN meetings m ON d.meeting_id = m.id
+LEFT JOIN staging.meetings sm
+    ON d.is_virtual_notulen = TRUE
+   AND sm.id = d.meeting_id
 WHERE dc.motion_number IS DISTINCT FROM %s
   AND dc.content ILIKE %s
   AND LOWER(d.name) LIKE '%%notulen%%'
@@ -487,6 +497,9 @@ class Stats:
         self.voted_edges: int = 0
         self.skipped_dupe_edges: int = 0
         self.total_matches: int = 0
+        self.virtual_notulen_edges: int = 0
+        self.official_notulen_edges: int = 0
+        self.vn_edges_missing_quality: int = 0
         self.start_time: float = time.time()
 
     def record_zero(self, document_id: str) -> None:
@@ -508,6 +521,9 @@ class Stats:
             f"zero={self.moties_zero_match:,} | "
             f"DISCUSSED_IN={self.discussed_edges:,} | "
             f"VOTED_IN={self.voted_edges:,} | "
+            f"VN_edges={self.virtual_notulen_edges:,} | "
+            f"official_edges={self.official_notulen_edges:,} | "
+            f"VN_missing_quality={self.vn_edges_missing_quality:,} | "
             f"skipped_dupes={self.skipped_dupe_edges:,} | "
             f"avg_matches/motie={avg:.2f} | "
             f"{rate:.1f} moties/s"
@@ -599,6 +615,22 @@ def link_one_motie(
         content: str | None = notulen["content"]
         quote = content[:QUOTE_LEN] if content else None
 
+        # --- VN vs. official notulen provenance (WS1 Phase A bis) ----
+        is_vn = bool(notulen.get("is_virtual_notulen"))
+        vn_quality = notulen.get("vn_quality_score")
+        if is_vn:
+            source_label = "virtual_notulen"
+            if vn_quality is None:
+                source_quality = 0.5
+                stats.vn_edges_missing_quality += 1
+            else:
+                source_quality = float(vn_quality)
+            stats.virtual_notulen_edges += 1
+        else:
+            source_label = "official_notulen"
+            source_quality = 1.0
+            stats.official_notulen_edges += 1
+
         metadata = {
             "motion_number": motion_number,
             "motie_document_id": document_id,
@@ -617,9 +649,17 @@ def link_one_motie(
             ),
             "target_mode": target_mode,
             "date_window_days": date_window_days,
+            # VN provenance contract (see WS1_GRAPHRAG.md §"Phase A bis")
+            "source": source_label,
+            "source_quality": source_quality,
+            "source_meeting_id": notulen["notulen_meeting_id"],
+            "source_doc_id": notulen["notulen_document_id"],
+            "extractor": "link_motie_regex",
+            "extracted_at": datetime.now(timezone.utc).isoformat(),
         }
 
-        confidence = 0.95 if relation_type == "VOTED_IN" else 0.85
+        base_confidence = 0.95 if relation_type == "VOTED_IN" else 0.85
+        confidence = base_confidence * source_quality
 
         batch.append(
             (
@@ -796,6 +836,15 @@ def run(
     log.info(f"  {stats.report()}")
     log.info(f"  Edges inserted this session: {edges_inserted_session:,}")
     log.info(f"  Last motie document_id: {last_motie_id}")
+    total_edges = stats.virtual_notulen_edges + stats.official_notulen_edges
+    if total_edges > 0:
+        vn_pct = 100.0 * stats.virtual_notulen_edges / total_edges
+        log.info(
+            f"  Provenance split: "
+            f"virtual_notulen={stats.virtual_notulen_edges:,} ({vn_pct:.1f}%) | "
+            f"official_notulen={stats.official_notulen_edges:,} | "
+            f"VN edges missing quality_score={stats.vn_edges_missing_quality:,}"
+        )
     if stats.zero_match_sample:
         log.info(
             f"  Zero-match sample (up to {ZERO_MATCH_SAMPLE}): "

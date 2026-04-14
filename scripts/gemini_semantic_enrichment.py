@@ -791,6 +791,36 @@ def apply_results_to_db(
                 )
 
         # 3. edges
+        #
+        # VN provenance layer (WS1 Phase A bis): every kg_relationships row
+        # we write must carry source_quality metadata so the graph walk can
+        # filter / downweight VN-derived edges at query time. We compute
+        # source_quality ONCE per chunk (not per edge) because it's a
+        # property of the source document:
+        #
+        #   - documents.is_virtual_notulen = false  -> 1.0  (authoritative)
+        #   - is_virtual_notulen = true, quality_score present  -> the score
+        #   - is_virtual_notulen = true, quality_score NULL     -> 0.5
+        #
+        # The multiplication `gemini_confidence * source_quality` happens
+        # BEFORE the INSERT, so VN edges rank lower in graph walk path
+        # scoring automatically without any reader-side logic.
+        is_vn = bool(row.get("is_virtual_notulen"))
+        raw_qs = row.get("vn_quality_score")
+        if not is_vn:
+            source_quality = 1.0
+        elif raw_qs is None:
+            source_quality = 0.5
+        else:
+            try:
+                source_quality = float(raw_qs)
+            except (TypeError, ValueError):
+                source_quality = 0.5
+        # Clamp into [0,1] defensively in case staging ever stores
+        # out-of-range values.
+        source_quality = max(0.0, min(1.0, source_quality))
+        source_meeting_id = row.get("source_meeting_id")
+
         edges = result.get("edges") or []
         for edge in edges:
             if not isinstance(edge, dict):
@@ -824,10 +854,17 @@ def apply_results_to_db(
                 continue
 
             try:
-                confidence = float(edge.get("confidence") or 0.5)
+                gemini_confidence = float(edge.get("confidence") or 0.5)
             except (TypeError, ValueError):
-                confidence = 0.5
-            confidence = max(0.0, min(1.0, confidence))
+                gemini_confidence = 0.5
+            gemini_confidence = max(0.0, min(1.0, gemini_confidence))
+            # VN provenance: multiply raw Gemini confidence by the source
+            # quality BEFORE the INSERT so the persisted value reflects both
+            # extractor certainty and source trust in one scalar. Graph walk
+            # path scoring consumes kg_relationships.confidence directly, so
+            # this makes VN-derived edges rank lower without any extra
+            # reader-side plumbing.
+            confidence = max(0.0, min(1.0, gemini_confidence * source_quality))
 
             quote = (edge.get("quote") or "").strip()[:QUOTE_MAX_CHARS]
 
@@ -843,10 +880,26 @@ def apply_results_to_db(
                 row.get("document_id"),
             )
 
+            # Provenance metadata contract (WS1 Phase A bis). Keys:
+            #   source               — legacy script-level tag (preserved)
+            #   source_quality       — VN quality multiplier applied above
+            #   source_meeting_id    — staging meeting id, or null for non-VN
+            #   source_doc_id        — documents.id for this chunk, or null
+            #   extractor            — which component produced the edge
+            #   extracted_at         — ISO-8601 UTC of THIS batch
+            #   gemini_model         — model id for this run
+            #   gemini_ts            — same as extracted_at, kept for
+            #                          backwards compat with earlier edges
+            #   rule_section_topic   — preserved (pre-existing key)
             metadata = {
+                "source": "gemini_flash_lite",
+                "source_quality": source_quality,
+                "source_meeting_id": source_meeting_id,
+                "source_doc_id": row.get("document_id"),
+                "extractor": "gemini_flash_lite",
+                "extracted_at": now_iso,
                 "gemini_model": model_name,
                 "gemini_ts": now_iso,
-                "source": "gemini_semantic_enrichment",
                 "rule_section_topic": existing_topic,
             }
 
@@ -962,10 +1015,14 @@ def run(
         f"""
         SELECT dc.id, dc.document_id, dc.title, dc.content, dc.section_topic,
                d.name AS doc_name,
-               m.name AS meeting_name
+               d.is_virtual_notulen AS is_virtual_notulen,
+               d.meeting_id AS source_meeting_id,
+               m.name AS meeting_name,
+               sm.quality_score AS vn_quality_score
         FROM document_chunks dc
         JOIN documents d ON dc.document_id = d.id
         LEFT JOIN meetings m ON d.meeting_id = m.id
+        LEFT JOIN staging.meetings sm ON sm.id = d.meeting_id
         WHERE {' AND '.join(where)}
         ORDER BY dc.id
         """,

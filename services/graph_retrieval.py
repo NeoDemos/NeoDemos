@@ -43,7 +43,7 @@ import os
 import re
 import threading
 from dataclasses import dataclass, field
-from typing import Any, Iterable, List, Optional, Sequence
+from typing import Any, List, Optional, Sequence
 
 from services.db_pool import get_connection
 
@@ -70,6 +70,7 @@ class Path:
     node_ids: List[int]               # e.g. [seed_id, hop1_id, hop2_id]
     edge_types: List[str]             # one per hop (len = len(node_ids) - 1)
     edge_confidences: List[float]     # per-edge confidence from kg_relationships
+    edge_sources: List[str] = field(default_factory=list)  # metadata.source per edge
     total_confidence: float = 1.0     # product of edge confidences × hop penalty
 
 
@@ -127,12 +128,29 @@ GRAPH_WALK_MIN_EDGES = _env_int("GRAPH_WALK_MIN_EDGES", 200_000)
 # returns []. Set GRAPH_WALK_ENABLED=1 after Phase 1 quality audit passes.
 GRAPH_WALK_ENABLED = _env_flag("GRAPH_WALK_ENABLED", default=False)
 
+# Virtual-notulen killswitch (added 2026-04-14 for WS1 Phase A bis VN provenance).
+# Mirrors the existing rag_service.py INCLUDE_VIRTUAL_NOTULEN env var. When False,
+# retrieve_via_graph passes exclude_sources=['virtual_notulen'] to both walk() and
+# hydrate_chunks() so no VN-derived edge or chunk leaks into graph_walk results.
+# Default True — we include VN by default (max recall) and let downstream tools
+# flip the switch per use case (e.g. press-moment strict mode).
+INCLUDE_VIRTUAL_NOTULEN = _env_flag("INCLUDE_VIRTUAL_NOTULEN", default=True)
+
 # v0.2 design constant — do NOT raise without a benchmark pass (handoff risk row).
 MAX_HOPS_V02 = 2
 
 # How many hydrated chunks to return from hydrate_chunks. Rerank is a caller
 # concern; this just caps the SQL fanout.
 HYDRATE_DEFAULT_LIMIT = 30
+
+# Default score multiplier applied to paths containing VN-derived edges. 0.7 per
+# VN edge, compounded. So a 2-hop path with 1 VN edge gets 0.7x; with both edges
+# from VN gets 0.49x. Production callers can override via score_paths(vn_penalty=...).
+_DEFAULT_VN_PENALTY = 0.7
+
+# The source strings that identify VN-derived edges. Written by
+# link_motie_to_notulen.py when the target chunk is from a VN meeting.
+_VN_SOURCE_VALUES = frozenset({"virtual_notulen"})
 
 
 # ---------------------------------------------------------------------------
@@ -351,6 +369,8 @@ def walk(
     max_hops: int = 2,
     edge_types: Optional[Sequence[str]] = None,
     path_limit: int = 200,
+    exclude_sources: Optional[Sequence[str]] = None,
+    min_source_quality: float = 0.0,
 ) -> List[Path]:
     """
     Breadth-first walk through ``kg_relationships`` starting from
@@ -369,6 +389,14 @@ def walk(
     The recursive CTE keeps the entire walk inside a single SQL round-trip,
     which is ~10× faster than iterating in Python for 2-hop walks with a
     kg_relationships table of ~500K rows.
+
+    **VN provenance filters (added 2026-04-14 for WS1 Phase A bis):**
+    - ``exclude_sources``: list of ``metadata->>'source'`` values to exclude from
+      the walk. Pass ``['virtual_notulen']`` for strict production mode. Edges
+      with ``NULL`` source are kept (backwards-compat with pre-backfill data).
+    - ``min_source_quality``: minimum ``metadata->>'source_quality'`` for an
+      edge to be walked. Default 0.0 (no floor). Edges with ``NULL`` quality
+      are treated as 1.0 so legacy high-trust edges are not excluded.
     """
     if not seed_entity_ids:
         return []
@@ -380,22 +408,39 @@ def walk(
     if not seed_list:
         return []
 
-    edge_filter = ""
-    params: List[Any] = [seed_list, max_hops]
+    # Build optional filter clauses. Each is applied inside the LATERAL subquery
+    # so the recursive step only walks to edges matching all predicates.
+    extra_filters: List[str] = []
+    extra_params: List[Any] = []
     if edge_types:
-        edge_filter = "AND r.relation_type = ANY(%s)"
-        params.append(list(edge_types))
-    params.append(path_limit)
+        extra_filters.append("AND r.relation_type = ANY(%s)")
+        extra_params.append(list(edge_types))
+    if exclude_sources:
+        extra_filters.append(
+            "AND (r.metadata->>'source' IS NULL "
+            "OR NOT (r.metadata->>'source' = ANY(%s::text[])))"
+        )
+        extra_params.append(list(exclude_sources))
+    if min_source_quality and min_source_quality > 0.0:
+        extra_filters.append(
+            "AND COALESCE((r.metadata->>'source_quality')::float, 1.0) >= %s"
+        )
+        extra_params.append(float(min_source_quality))
+    edge_filter = "\n                  ".join(extra_filters)
+
+    params: List[Any] = [seed_list, max_hops, *extra_params, path_limit]
 
     # Note: column is relation_type, not relationship_type (handoff drift fix).
     # The CTE emits both directions of every edge by unioning a forward and
-    # reverse projection in the recursive step.
+    # reverse projection in the recursive step. edge_sources tracks metadata.source
+    # per edge so score_paths can apply a VN penalty downstream.
     sql = f"""
-        WITH RECURSIVE walk(node_ids, edge_types, edge_confs, depth, last_node, visited) AS (
+        WITH RECURSIVE walk(node_ids, edge_types, edge_confs, edge_sources, depth, last_node, visited) AS (
             SELECT
                 ARRAY[seed_id]::bigint[],
                 ARRAY[]::text[],
                 ARRAY[]::double precision[],
+                ARRAY[]::text[],
                 0,
                 seed_id,
                 ARRAY[seed_id]::bigint[]
@@ -405,12 +450,13 @@ def walk(
                 w.node_ids || next_node,
                 w.edge_types || r.relation_type,
                 w.edge_confs || COALESCE(r.confidence, 0.8),
+                w.edge_sources || COALESCE(r.metadata->>'source', 'unknown'),
                 w.depth + 1,
                 next_node,
                 w.visited || next_node
             FROM walk w
             JOIN LATERAL (
-                SELECT r.relation_type, r.confidence,
+                SELECT r.relation_type, r.confidence, r.metadata,
                        CASE WHEN r.source_entity_id = w.last_node
                             THEN r.target_entity_id
                             ELSE r.source_entity_id
@@ -423,7 +469,7 @@ def walk(
               AND NOT (r.next_node = ANY(w.visited))
               AND r.next_node IS NOT NULL
         )
-        SELECT node_ids, edge_types, edge_confs, depth
+        SELECT node_ids, edge_types, edge_confs, edge_sources, depth
         FROM walk
         WHERE depth > 0
         ORDER BY depth ASC, (
@@ -440,17 +486,19 @@ def walk(
                 rows = cur.fetchall()
     except Exception:
         logger.exception(
-            "[graph_retrieval] walk failed (seeds=%s, max_hops=%d)", seed_list[:5], max_hops
+            "[graph_retrieval] walk failed (seeds=%s, max_hops=%d, exclude_sources=%s, min_sq=%s)",
+            seed_list[:5], max_hops, exclude_sources, min_source_quality,
         )
         return []
 
     paths: List[Path] = []
-    for node_ids, edge_types_arr, edge_confs, _depth in rows:
+    for node_ids, edge_types_arr, edge_confs, edge_sources_arr, _depth in rows:
         # Convert Postgres arrays (may come back as Python lists already
         # depending on psycopg2 adapter) to plain lists of python ints/floats.
         node_ids_list = [int(x) for x in (node_ids or [])]
         edge_types_list = [str(x) for x in (edge_types_arr or [])]
         edge_confs_list = [float(x) for x in (edge_confs or [])]
+        edge_sources_list = [str(x) for x in (edge_sources_arr or [])]
         if not edge_types_list:
             continue
         product = 1.0
@@ -460,6 +508,7 @@ def walk(
             node_ids=node_ids_list,
             edge_types=edge_types_list,
             edge_confidences=edge_confs_list,
+            edge_sources=edge_sources_list,
             total_confidence=product,
         ))
     return paths
@@ -490,15 +539,24 @@ _INTENT_EDGE_BOOSTS: dict = {
 _HOP_PENALTY = 0.7  # each extra hop multiplies score by this
 
 
-def score_paths(paths: Sequence[Path], query_intent: str = "") -> List[ScoredPath]:
+def score_paths(
+    paths: Sequence[Path],
+    query_intent: str = "",
+    vn_penalty: float = _DEFAULT_VN_PENALTY,
+) -> List[ScoredPath]:
     """
     Attach a final score to each Path. Heuristic:
 
-        score = total_confidence × (HOP_PENALTY ** (hops - 1)) × intent_boost
+        score = total_confidence × (HOP_PENALTY ** (hops - 1)) × intent_boost × vn_factor
 
-    where intent_boost is the geometric mean of the edge-type boosts from
-    ``_INTENT_EDGE_BOOSTS[query_intent]``, defaulting to 1.0 for edges not in
-    the table. Results are sorted descending by score.
+    where:
+    - ``intent_boost`` is the geometric mean of the edge-type boosts from
+      ``_INTENT_EDGE_BOOSTS[query_intent]`` (defaults to 1.0 outside table)
+    - ``vn_factor`` is ``vn_penalty ** (count of VN-derived edges in path)``.
+      So a 2-hop path with 1 VN edge gets a 0.7x penalty; with both VN gets
+      0.49x. Pass ``vn_penalty=1.0`` to disable the VN penalty.
+
+    Results are sorted descending by score.
 
     No ML classifier — this is deliberate for v0.2. If/when an intent
     classifier is trained, swap the string lookup for a model inference call.
@@ -515,7 +573,12 @@ def score_paths(paths: Sequence[Path], query_intent: str = "") -> List[ScoredPat
             boost_product *= intent_boosts.get(et, 1.0)
         boost = boost_product ** (1.0 / hops)
         penalty = _HOP_PENALTY ** max(hops - 1, 0)
-        score = p.total_confidence * penalty * boost
+        # VN penalty: count edges whose source is in _VN_SOURCE_VALUES. Paths
+        # walked with no source metadata (pre-backfill) are treated as non-VN
+        # and get a vn_factor of 1.0.
+        vn_edge_count = sum(1 for s in p.edge_sources if s in _VN_SOURCE_VALUES)
+        vn_factor = vn_penalty ** vn_edge_count if vn_edge_count else 1.0
+        score = p.total_confidence * penalty * boost * vn_factor
         scored.append(ScoredPath(path=p, score=score))
     scored.sort(key=lambda sp: sp.score, reverse=True)
     return scored
@@ -530,6 +593,8 @@ def hydrate_chunks(
     entity_ids: Sequence[int],
     gemeente: Optional[str] = None,
     limit: int = HYDRATE_DEFAULT_LIMIT,
+    exclude_sources: Optional[Sequence[str]] = None,
+    min_source_quality: float = 0.0,
 ) -> List[GraphChunk]:
     """
     For a set of entity ids, return the document_chunks where those entities
@@ -538,8 +603,17 @@ def hydrate_chunks(
 
     Optional ``gemeente`` filter scopes results to chunks whose **seed entity**
     has ``metadata->>'gemeente' = :gemeente``. The multi-portal schema design
-    puts gemeente on every Location entity (handoff §50) — when this field is
-    populated (Phase 1 onwards), WS5b gets per-tenant isolation for free.
+    puts gemeente on every Location entity — when this field is populated
+    (Phase 1 onwards), WS5b gets per-tenant isolation for free.
+
+    **VN provenance filters (added 2026-04-14 for WS1 Phase A bis):**
+    - ``exclude_sources``: pass ``['virtual_notulen']`` to drop chunks whose
+      document is a virtual notulen (``documents.is_virtual_notulen = TRUE``).
+      Semantics match the edge-level filter in ``walk()`` — 'virtual_notulen'
+      maps to ``is_virtual_notulen = TRUE`` on the chunk's source document.
+    - ``min_source_quality``: drop chunks where the source meeting's
+      ``staging.meetings.quality_score`` is below the threshold. Default 0.0.
+      Only applies to VN chunks; official chunks always pass.
 
     Results are ordered by (a) number of distinct seed entities mentioned in
     the chunk (DESC), then (b) chunk id (ASC) as a deterministic tiebreaker.
@@ -560,6 +634,31 @@ def hydrate_chunks(
 
     where_clause = " AND ".join(filters)
 
+    # Post-hits filtering on the chunk's source document.
+    doc_filters: List[str] = []
+    doc_params: List[Any] = []
+    exclude_vn = bool(exclude_sources) and "virtual_notulen" in set(exclude_sources)
+    if exclude_vn:
+        doc_filters.append("COALESCE(d.is_virtual_notulen, FALSE) = FALSE")
+    min_sq = float(min_source_quality or 0.0)
+    needs_staging_join = min_sq > 0.0
+    if needs_staging_join:
+        # Only filter VN chunks by quality_score; official chunks always pass.
+        doc_filters.append(
+            "(COALESCE(d.is_virtual_notulen, FALSE) = FALSE "
+            "OR COALESCE(sm.quality_score, 0.5) >= %s)"
+        )
+        doc_params.append(min_sq)
+
+    doc_where = ""
+    if doc_filters:
+        doc_where = "WHERE " + " AND ".join(doc_filters)
+
+    staging_join = (
+        "LEFT JOIN staging.meetings sm ON sm.id = d.meeting_id"
+        if needs_staging_join else ""
+    )
+
     sql = f"""
         WITH hits AS (
             SELECT km.chunk_id, COUNT(DISTINCT km.entity_id) AS seed_hits,
@@ -575,10 +674,12 @@ def hydrate_chunks(
         JOIN document_chunks dc ON dc.id = h.chunk_id
         LEFT JOIN documents d ON dc.document_id = d.id
         LEFT JOIN meetings m ON d.meeting_id = m.id
+        {staging_join}
+        {doc_where}
         ORDER BY h.seed_hits DESC, dc.id ASC
         LIMIT %s
     """
-    params.append(int(limit))
+    params = [*params, *doc_params, int(limit)]
 
     try:
         with get_connection() as conn:
@@ -587,8 +688,8 @@ def hydrate_chunks(
                 rows = cur.fetchall()
     except Exception:
         logger.exception(
-            "[graph_retrieval] hydrate_chunks failed (n_entities=%d, gemeente=%s)",
-            len(eid_list), gemeente,
+            "[graph_retrieval] hydrate_chunks failed (n_entities=%d, gemeente=%s, exclude_sources=%s, min_sq=%s)",
+            len(eid_list), gemeente, exclude_sources, min_source_quality,
         )
         return []
 
@@ -619,6 +720,7 @@ def retrieve_via_graph(
     k: int = 10,
     query_intent: str = "",
     gemeente: Optional[str] = None,
+    include_virtual_notulen: Optional[bool] = None,
 ) -> List[GraphChunk]:
     """
     One-call helper that glues the four primitives together:
@@ -628,6 +730,11 @@ def retrieve_via_graph(
     an empty list when (a) the KG isn't ready per is_graph_walk_ready(),
     (b) no entities resolve from the query, or (c) the walk yields no paths.
     Never raises.
+
+    ``include_virtual_notulen`` controls whether VN-derived edges and chunks
+    leak into the result. When None (default), falls back to the module-level
+    ``INCLUDE_VIRTUAL_NOTULEN`` env var (default True). Pass ``False`` for
+    strict production / press-moment mode.
     """
     if not is_graph_walk_ready():
         return []
@@ -638,10 +745,21 @@ def retrieve_via_graph(
         logger.debug("[graph_retrieval] retrieve_via_graph: no seeds resolved for %r", query[:60])
         return []
 
-    paths = walk(seed_ids, max_hops=MAX_HOPS_V02)
+    # Resolve VN gating: explicit arg overrides env var; env var overrides default.
+    vn_ok = INCLUDE_VIRTUAL_NOTULEN if include_virtual_notulen is None else bool(include_virtual_notulen)
+    exclude_sources = None if vn_ok else ["virtual_notulen"]
+
+    paths = walk(
+        seed_ids,
+        max_hops=MAX_HOPS_V02,
+        exclude_sources=exclude_sources,
+    )
     if not paths:
         return []
 
+    # vn_penalty=1.0 when VN is allowed with full trust; default 0.7 otherwise.
+    # This is additive to the edge-level filter: even in VN-allowed mode, VN
+    # edges get a confidence down-rank so official sources bubble up first.
     scored = score_paths(paths, query_intent=query_intent)
 
     # Collect distinct terminal nodes from the top-scored paths — these are the
@@ -662,4 +780,9 @@ def retrieve_via_graph(
             target_ids.append(sid)
             seen.add(sid)
 
-    return hydrate_chunks(target_ids, gemeente=gemeente, limit=k)
+    return hydrate_chunks(
+        target_ids,
+        gemeente=gemeente,
+        limit=k,
+        exclude_sources=exclude_sources,
+    )
