@@ -1,6 +1,6 @@
 {
   "name": "neodemos",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "description": "NeoDemos \u2014 civic intelligence platform for Dutch municipal councils",
   "scripts": {
     "dev": "vite",
