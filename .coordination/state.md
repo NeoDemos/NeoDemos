@@ -1,15 +1,15 @@
 # NeoDemos Project State
 
 > Auto-generated from `.coordination/events.jsonl` — do not edit manually.
-> Last rebuilt: 2026-04-15T12:36:49Z
+> Last rebuilt: 2026-04-15T12:45:16Z
 
 ## Active Now
 
 | WS   | Title                              | Claimed by | Since      | Detail                                                       |
 |------|------------------------------------|------------|------------|--------------------------------------------------------------|
 | WS16 | MCP monitoring & observability     | Dennis     | 2026-04-14 | Initial seed: Phase 1 shipped 2026-04-14                     |
-| WS8f | Admin panel + CMS + GrapeJS editor | dennistak  | 2026-04-15 | Phase 8 shipped 2026-04-15: nd-answer + nd-analyse as Shadow |
-| WS5a | 100% reliable nightly ingest       | dennistak  | 2026-04-14 | claimed via /ws-claim                                        |
+| WS8f | Admin panel + CMS + GrapeJS editor | dennistak  | 2026-04-15 | DEPLOYED 586b72e: Phase 8 Web Components (nd-answer, nd-anal |
+| WS5a | 100% reliable nightly ingest       | dennistak  | 2026-04-14 | DEPLOYED 586b72e: combined deploy WS5a B.7 (ibabs parser fix |
 | WS6  | Source-spans-only summarization    | seed       | 2026-04-14 | Phase 3 DB write running; mode='structured' needs WS1        |
 
 ## Blocked
@@ -57,9 +57,6 @@
 ## Recent events (last 15)
 
 ```jsonl
-{"agent": "dennistak", "detail": "Plan only — handoff seeded 2026-04-15; execution blocked on WS8f QA + WS14 Phase D/F", "event": "claimed", "ts": "2026-04-15T08:51:11Z", "ws": "WS8g"}
-{"agent": "mcp_alert", "detail": "p95 37.8s last 5min", "event": "alert", "metrics": {"p95_latency_ms": 37809.0}, "rule": "latency", "ts": "2026-04-15T09:14:55Z"}
-{"agent": "mcp_alert", "detail": "0 calls in 15min (was averaging 36/hr)", "event": "alert", "metrics": {"calls_15m": 0, "prior_60m_calls": 36}, "rule": "silent", "ts": "2026-04-15T09:35:04Z"}
 {"agent": "dennistak", "detail": "Round 5 feedback shipped 2026-04-15: instellingen !important fix, logo bumped 3xl, Gemini favicon (6 sizes + ICO), /abonnement editor-editable, landing long-scroll (5 Oatmeal-inspired sections), Profiel avatar picker + tier switch (mig 0013 pending), /abonnement 2-tier rewrite + FAQ, tool_rounds 5->8 with synthesis fallback, cost tracking (mig 0012 pending), WS14 Phase A audit doc + C1 DISTINCT + C6 calendar_labels.py.", "event": "note", "ts": "2026-04-15T09:56:24Z", "ws": "WS8f"}
 {"agent": "mcp_alert", "detail": "p95 52.2s last 5min", "event": "alert", "metrics": {"p95_latency_ms": 52169.4}, "rule": "latency", "ts": "2026-04-15T10:00:16Z"}
 {"agent": "mcp_alert", "detail": "9 calls (15.4x baseline)", "event": "alert", "metrics": {"baseline_5m": 0.58, "calls_5m": 9, "ratio": 15.43}, "rule": "traffic_spike", "ts": "2026-04-15T10:00:16Z"}
@@ -72,4 +69,7 @@
 {"agent": "dennistak", "detail": "Phase 8 shipped 2026-04-15: nd-answer + nd-analyse as Shadow DOM Web Components, GrapesJS blocks registered. WS8f carry-overs complete: subpage 48rem→64rem, Phase 8 Web Components. Pending: migration 0009 + 0013 apply, Dennis sign-off on WS8g + pricing.", "event": "note", "ts": "2026-04-15T12:09:28Z", "ws": "WS8f"}
 {"agent": "mcp_alert", "detail": "0 calls in 15min (was averaging 10/hr)", "event": "alert", "metrics": {"calls_15m": 0, "prior_60m_calls": 10}, "rule": "silent", "ts": "2026-04-15T12:16:20Z"}
 {"agent": "dennistak", "detail": "LIVE: B1 backfill (2117 junction rows), B2 dedupe (3781 rows deleted), WS11 classifier re-run (571 docs), WS14 B3 bijlage fallback (3117 docs). Post-audit: A2=0, A3=0 for 2023-2026, A8 NULL rate cut 93% (14%→0.4% for 2023). Migrations 0014/0015 still deferred (pg_dump + audit holding shared locks). B5 dry-run: 236 groups, 262 losers, 1432 docs to reparent — awaiting Dennis approval for live.", "event": "note", "ts": "2026-04-15T12:36:49Z", "ws": "WS14"}
+{"agent": "dennistak", "detail": "DEPLOYED 586b72e: combined deploy WS5a B.7 (ibabs parser fix + ensure_document_assignment + resolve_references) + WS14 Phase B/C/D/F + WS8f Phase 8 Web Components. Both web + mcp healthy (containers running version 586b72e, /up=200). Next 15-min scheduled_refresh cycle exercises ibabs fix; committee meeting agendas should populate.", "event": "note", "ts": "2026-04-15T12:45:16Z", "ws": "WS5a"}
+{"agent": "dennistak", "detail": "DEPLOYED 586b72e alongside WS5a B.7. Phase A audit + Phase B/C/D/F code all live on prod. Migrations 0014/0015 deferred (pg_dump + audit_chunk_attribution holding shared locks — apply in next quiescent window).", "event": "note", "ts": "2026-04-15T12:45:16Z", "ws": "WS14"}
+{"agent": "dennistak", "detail": "DEPLOYED 586b72e: Phase 8 Web Components (nd-answer, nd-analyse) shipped alongside WS5a + WS14.", "event": "note", "ts": "2026-04-15T12:45:16Z", "ws": "WS8f"}
 ```
