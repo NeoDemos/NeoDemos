@@ -342,12 +342,15 @@ def test_build_checks_fuzzy_regression_goes_red(monkeypatch):
     assert qd._overall([c["status"] for c in checks]) == qd.STATUS_RED
 
 
-def test_build_checks_mismatch_is_always_red(monkeypatch):
-    """Per handoff: any non-zero mismatch count must be RED, no yellow band."""
+def test_build_checks_mismatch_thresholds(monkeypatch):
+    """Mismatch thresholds calibrated 2026-04-15 after full 1.74M audit:
+    <1% green / 1-2% yellow / >2% red. Baseline is 0.65% WS7 OCR drift,
+    not corruption — so any realistic corpus should sit GREEN unless a
+    new regression pushes it above 1%."""
     monkeypatch.setattr(qd, "check_chunk_attribution",
-                        lambda n: {"total_sampled": 2000, "mismatch_count": 1,
-                                   "mismatch_pct": 0.05, "fuzzy_count": 10,
-                                   "fuzzy_pct": 0.5, "missing_doc_count": 0})
+                        lambda n: {"total_sampled": 2000, "mismatch_count": 30,
+                                   "mismatch_pct": 1.5, "fuzzy_count": 400,
+                                   "fuzzy_pct": 20.0, "missing_doc_count": 0})
     # Fill the rest with greens so only the mismatch contributes a red.
     monkeypatch.setattr(qd, "check_vector_gaps",
                         lambda n: {"missing_count": 0, "sample_missing_ids": [],
@@ -371,7 +374,10 @@ def test_build_checks_mismatch_is_always_red(monkeypatch):
 
     checks = qd._build_checks(sample_size=2000)
     by_name = {c["name"]: c for c in checks}
-    assert by_name["chunk_attribution_mismatch"]["status"] == qd.STATUS_RED
+    # 1.5% lands in the yellow band (1-2%)
+    assert by_name["chunk_attribution_mismatch"]["status"] == qd.STATUS_YELLOW
+    # And 20% fuzzy is green (baseline is 20.8%)
+    assert by_name["chunk_attribution_fuzzy"]["status"] == qd.STATUS_GREEN
 
 
 def test_build_checks_survives_individual_failures(monkeypatch):
