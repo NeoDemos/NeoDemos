@@ -210,6 +210,13 @@
     color: rgba(255, 255, 255, 0.7);
   }
 
+  /* Chat state flips the nav back to solid cream — chevron needs to
+     return to a visible dark color, otherwise the white-alpha .has-hero
+     color leaves it invisible against the cream surface. */
+  body.chat-active.has-hero .nav-user-chevron {
+    color: var(--color-text-secondary);
+  }
+
   /* Dropdown panel sits on a cream surface — override the has-hero white-link
      rule so menu items stay dark + readable. !important needed because
      .has-hero .nav-right a has equal specificity and the override is defensive. */

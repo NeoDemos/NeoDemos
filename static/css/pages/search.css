@@ -911,22 +911,18 @@
     color: var(--color-text-on-dark);
   }
 
-  /* Chat thread (state = chat) — widens on larger viewports for desktop comfort.
-     48rem = mobile/small-tablet default; bumps to 56rem at md and 64rem at xl. */
+  /* Chat thread: fill the viewport on small screens; cap comfortably on
+     desktop. Using min() means we scale smoothly from 100% at narrow
+     widths up to the hard cap at large displays — no awkward "stuck at
+     48rem on a 780px window" gap between breakpoints. */
   .chat-thread {
-    max-width: 48rem;
+    max-width: min(100%, 64rem);
+    width: 100%;
     margin: 0 auto;
     padding: var(--space-8) var(--space-5) var(--space-32);
     display: flex;
     flex-direction: column;
     gap: var(--space-6);
-  }
-
-  @media (min-width: 768px) {
-    .chat-thread { max-width: 56rem; }
-  }
-  @media (min-width: 1280px) {
-    .chat-thread { max-width: 64rem; }
   }
 
   .chat-turn {
@@ -1008,24 +1004,15 @@
   .chat-composer {
     padding: var(--space-6) var(--space-5) var(--space-4);
     margin: 0 auto;
-    max-width: 48rem;
+    max-width: min(100%, 64rem);
     width: 100%;
   }
 
   .chat-composer[hidden] { display: none; }
 
   .chat-composer-inner {
-    max-width: 48rem;
+    max-width: min(100%, 64rem);
     margin: 0 auto;
-  }
-
-  @media (min-width: 768px) {
-    .chat-composer,
-    .chat-composer-inner { max-width: 56rem; }
-  }
-  @media (min-width: 1280px) {
-    .chat-composer,
-    .chat-composer-inner { max-width: 64rem; }
   }
 
   .chat-composer .chip-rail-chat { margin-bottom: var(--space-2); }
@@ -1272,16 +1259,9 @@
   /* Pinned variant: compact, near the page edge. Width tracks .chat-thread
      so the composer visually belongs to the thread above it. */
   .claude-composer--pinned {
-    max-width: 48rem;
+    max-width: min(100%, 64rem);
     margin: 0 auto;
     padding: var(--space-3) var(--space-4) var(--space-2);
-  }
-
-  @media (min-width: 768px) {
-    .claude-composer--pinned { max-width: 56rem; }
-  }
-  @media (min-width: 1280px) {
-    .claude-composer--pinned { max-width: 64rem; }
   }
 
   .claude-composer--pinned .claude-composer__input {
