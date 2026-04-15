@@ -387,12 +387,14 @@ class StorageService:
                     source = document_data.get('source')
                     doc_classification = document_data.get('doc_classification')
                     category = document_data.get('category')
+                    document_date = document_data.get('document_date')
 
                     cur.execute("""
                         INSERT INTO documents
                             (id, name, meeting_id, content, summary_json, url,
-                             municipality, source, doc_classification, category)
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                             municipality, source, doc_classification, category,
+                             document_date)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                         ON CONFLICT (id) DO UPDATE SET
                             name = EXCLUDED.name,
                             url = COALESCE(EXCLUDED.url, documents.url),
@@ -405,7 +407,8 @@ class StorageService:
                             municipality = COALESCE(EXCLUDED.municipality, documents.municipality),
                             source = COALESCE(EXCLUDED.source, documents.source),
                             doc_classification = COALESCE(EXCLUDED.doc_classification, documents.doc_classification),
-                            category = COALESCE(EXCLUDED.category, documents.category)
+                            category = COALESCE(EXCLUDED.category, documents.category),
+                            document_date = COALESCE(EXCLUDED.document_date, documents.document_date)
                     """, (
                         document_data['id'],
                         document_data.get('name'),
@@ -417,6 +420,7 @@ class StorageService:
                         source,
                         doc_classification,
                         category,
+                        document_date,
                     ))
 
                     # Ensure assignment exists

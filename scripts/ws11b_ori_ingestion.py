@@ -315,6 +315,8 @@ async def ingest_target(
 
         # Build document record
         content = doc.get("text", "").strip()
+        raw_date = doc.get("last_discussed_at") or doc.get("start_date")
+        document_date = raw_date[:10] if raw_date else None  # Keep only YYYY-MM-DD
         doc_data = {
             "id": ori_id,
             "name": doc.get("name") or "",
@@ -325,6 +327,7 @@ async def ingest_target(
             "municipality": "rotterdam",
             "source": "ori",
             "meeting_id": None,  # Will be derived later if was_generated_by is present
+            "document_date": document_date,
         }
 
         # Attempt meeting linkage via was_generated_by

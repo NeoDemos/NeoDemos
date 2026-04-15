@@ -220,12 +220,15 @@ def log_event(cur, doc_id: str, event_type: str, details: dict, triggered_by: st
 
 def apply_update(conn, doc_id: str, new_content: str, new_url: str | None,
                  old_content_len: int, new_content_len: int,
-                 media_id: str, triggered_by: str) -> None:
-    """Update document content+url and drop existing chunks for re-processing."""
+                 media_id: str, triggered_by: str,
+                 document_date: str | None = None) -> None:
+    """Update document content+url+date and drop existing chunks for re-processing."""
     cur = conn.cursor()
     try:
-        cur.execute("UPDATE documents SET content = %s, url = %s WHERE id = %s",
-                    (new_content, new_url, doc_id))
+        cur.execute(
+            "UPDATE documents SET content = %s, url = %s, document_date = COALESCE(%s::date, document_date) WHERE id = %s",
+            (new_content, new_url, document_date, doc_id),
+        )
         cur.execute("DELETE FROM document_chunks WHERE document_id = %s", (doc_id,))
         chunks_deleted = cur.rowcount
         log_event(cur, doc_id, "ori_mediaobject_backfilled", {
@@ -233,6 +236,7 @@ def apply_update(conn, doc_id: str, new_content: str, new_url: str | None,
             "old_content_len": old_content_len,
             "new_content_len": new_content_len,
             "url_captured": bool(new_url),
+            "document_date": document_date,
             "chunks_deleted": chunks_deleted,
         }, triggered_by)
         conn.commit()
@@ -335,6 +339,7 @@ def main() -> int:
                     new_content_len=new_len,
                     media_id=str(media.get("@id") or ""),
                     triggered_by=args.triggered_by,
+                    document_date=new_date,
                 )
                 stats["applied"] += 1
                 log.info("[APPLIED %s]", doc_id)
