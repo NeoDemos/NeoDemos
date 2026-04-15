@@ -20,7 +20,7 @@
         {% endif %}
     </p>
     {# D5 — "Vraag erover" deeplink from meeting detail header #}
-    <a href="/?q=%40{{ meeting.name | urlencode }}%20{{ meeting.start_date.split('T')[0] | urlencode }}"
+    <a href="/?q=%40{{ meeting.name | urlencode }}{% if meeting.start_date %}%20{{ meeting.start_date.split('T')[0] | urlencode }}{% endif %}"
        class="meeting-vraag-link">Vraag erover →</a>
 </div>
 
