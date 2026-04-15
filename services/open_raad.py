@@ -296,6 +296,58 @@ class OpenRaadService:
             print(f"Error in fetch_docs_by_name_pattern (year={year}, offset={from_offset}): {e}")
             return [], 0
 
+    async def _find_mediaobject_for_report(
+        self,
+        client: httpx.AsyncClient,
+        index: str,
+        report_name: str,
+    ) -> Optional[Dict[str, Any]]:
+        """Look up the MediaObject paired to an ORI Report by name.
+
+        Uses the same exact-match logic as ws4_backfill: strip the
+        "[NNbbNNNNNN] " prefix from MediaObject names, then require
+        exactly one match to avoid ambiguous merges.
+        """
+        query = {
+            "size": 3,
+            "query": {
+                "bool": {
+                    "must": [
+                        {"match_phrase": {"name": report_name}},
+                        {"term": {"@type": "MediaObject"}},
+                    ]
+                }
+            },
+            "_source": ["@id", "name", "url", "original_url", "last_discussed_at", "text"],
+        }
+        try:
+            resp = await client.post(f"{self.BASE_URL}/{index}/_search", json=query, timeout=30.0)
+            resp.raise_for_status()
+        except Exception:
+            return None
+
+        hits = resp.json().get("hits", {}).get("hits", [])
+        if not hits:
+            return None
+
+        # Prefer an exact tail-match (strip "[NNbbNNNNNN] " prefix)
+        exact = []
+        for h in hits:
+            src = h.get("_source", {})
+            nm = (src.get("name") or "").strip()
+            if nm.startswith("[") and "]" in nm:
+                tail = nm.split("]", 1)[1].lstrip()
+            else:
+                tail = nm
+            if tail == report_name:
+                exact.append(src)
+
+        if len(exact) == 1:
+            return exact[0]
+        if len(hits) == 1:
+            return hits[0].get("_source") or {}
+        return None
+
     async def fetch_docs_by_classification(
         self,
         classification_value: str,
@@ -306,6 +358,10 @@ class OpenRaadService:
 
         E.g. classification_value='Raadsvragen' fetches formally classified
         schriftelijke vragen reports.  Complements fetch_docs_by_name_pattern.
+
+        For each Report that has no text, we also look up the paired
+        MediaObject (by name match) to capture content + URL — preventing
+        the stub-no-URL pattern that previously blocked retrieval.
 
         Returns (docs, total_hits).
         """
@@ -335,12 +391,27 @@ class OpenRaadService:
                 docs = []
                 for hit in data.get("hits", {}).get("hits", []):
                     src = hit.get("_source", {})
+                    name = src.get("name") or ""
+                    text = src.get("description") or ""
+                    url = ""
+
+                    # Report records carry no text/url — look up the paired MediaObject
+                    if not text and name:
+                        media = await self._find_mediaobject_for_report(client, index, name)
+                        if media:
+                            text_parts = media.get("text", [])
+                            if isinstance(text_parts, list):
+                                text = "\n\n".join(t for t in text_parts if t)
+                            else:
+                                text = text_parts or ""
+                            url = media.get("original_url") or media.get("url") or ""
+
                     docs.append({
                         "ori_id": src.get("@id") or hit.get("_id"),
-                        "name": src.get("name") or "",
-                        "url": "",
+                        "name": name,
+                        "url": url,
                         "last_discussed_at": src.get("start_date"),
-                        "text": src.get("description") or "",
+                        "text": text,
                         "content_type": "application/pdf",
                         "was_generated_by": src.get("was_generated_by"),
                         "attachment_ids": src.get("attachment") or [],
