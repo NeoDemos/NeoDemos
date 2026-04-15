@@ -14,7 +14,7 @@ from markupsafe import Markup
 
 from services.auth_dependencies import auth_service, require_login, get_current_user
 from services.avatars import AVATARS, is_valid_slug, user_avatar_url
-from services.subscriptions import VALID_SLUGS as VALID_TIERS, set_tier, tier_for
+from services.subscriptions import TIERS, VALID_SLUGS as VALID_TIERS, set_tier, tier_for
 
 from app_state import (
     templates,
@@ -251,15 +251,37 @@ async def settings_set_tier(
     user: dict = Depends(require_login),
     slug: str = Form(...),
 ):
-    """Self-service tier switch. Gratis ↔ Pro (free during beta)."""
+    """Self-service tier switch. Only `selectable` tiers are accepted."""
     if slug not in VALID_TIERS:
         raise HTTPException(status_code=400, detail="onbekende tier")
+    if not TIERS[slug].get("selectable", True):
+        raise HTTPException(status_code=400, detail="tier is niet selecteerbaar")
     try:
         set_tier(user["id"], slug)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         logger.exception("tier switch failed for user=%s slug=%s: %s", user.get("id"), slug, e)
         raise HTTPException(status_code=500, detail="opslaan_mislukt")
     return RedirectResponse(url=f"/settings?tier={slug}#abonnement", status_code=303)
+
+
+@router.post("/settings/topics")
+async def settings_set_topics(
+    request: Request,
+    user: dict = Depends(require_login),
+    topic_description: str = Form(default=""),
+):
+    """Persist the user's topic-focus free-text (max 500 chars)."""
+    topics = (topic_description or "").strip()
+    if len(topics) > 500:
+        raise HTTPException(status_code=400, detail="max 500 tekens")
+    try:
+        auth_service.update_user(user["id"], topic_description=topics or None)
+    except Exception as e:
+        logger.exception("topics update failed for user=%s: %s", user.get("id"), e)
+        raise HTTPException(status_code=500, detail="opslaan_mislukt")
+    return RedirectResponse(url="/settings?saved=topics#onderwerpen", status_code=303)
 
 
 @router.get("/meeting/{meeting_id}")

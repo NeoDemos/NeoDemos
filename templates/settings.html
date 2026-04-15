@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+<style>
+    .topics-textarea { width: 100%; font-family: inherit; }
+</style>
 <div class="settings-container">
     <header class="profile-header">
         <img class="profile-avatar" src="{{ user_avatar_url(user) }}" alt="" width="96" height="96">
@@ -35,9 +38,10 @@
                 </span>
                 <span class="avatar-picker-error" id="avatar-picker-error" role="alert" hidden></span>
             </div>
+            <button type="button" id="avatar-picker-toggle" class="btn btn-ghost btn-sm">Portret wijzigen</button>
         </div>
 
-        <div class="avatar-picker-grid" role="radiogroup" aria-label="Portret kiezen">
+        <div class="avatar-picker-grid" id="avatar-picker-grid" role="radiogroup" aria-label="Portret kiezen" style="display:none">
             {% for a in avatar_gallery() %}
             <button type="button"
                     class="avatar-picker-tile{% if a.slug == current_avatar_slug %} is-selected{% endif %}"
@@ -60,7 +64,12 @@
 
         {% if tier_change_notice %}
         <p class="tier-saved-notice" role="status">
-            Abonnement bijgewerkt naar <strong>{{ 'Pro' if tier_change_notice == 'pro' else 'Gratis' }}</strong>.
+            Abonnement bijgewerkt naar
+            <strong>
+                {% if tier_change_notice == 'pro' %}Kritische burger
+                {% elif tier_change_notice == 'gratis' %}Nieuwsgierige burger
+                {% else %}{{ tier_change_notice }}{% endif %}
+            </strong>.
         </p>
         {% endif %}
 
@@ -80,7 +89,7 @@
                 <input type="radio" name="slug" value="gratis"
                     {% if current_tier.slug == 'gratis' %}checked disabled{% endif %}>
                 <span class="tier-option-body">
-                    <span class="tier-option-title">Gratis</span>
+                    <span class="tier-option-title">Nieuwsgierige burger</span>
                     <span class="tier-option-meta">3 zoekopdrachten per maand. Geen AI-koppeling.</span>
                 </span>
             </label>
@@ -90,19 +99,31 @@
                     {% if current_tier.slug == 'pro' %}checked disabled{% endif %}>
                 <span class="tier-option-body">
                     <span class="tier-option-title">
-                        Pro <span class="tier-option-price">&euro;49/mnd &middot; tijdens beta gratis</span>
+                        Kritische burger <span class="tier-option-price">&euro;29/mnd &middot; tijdens beta gratis</span>
                     </span>
                     <span class="tier-option-meta">
-                        20× meer zoekopdrachten via de website dan Gratis. Onbeperkt via AI-koppeling.
+                        50 zoekopdrachten per maand. Onbeperkt via AI-koppeling.
                     </span>
                     <span class="tier-option-subnote">
-                        Pro wordt automatisch gratis tijdens de beta. Je wordt niet gefactureerd.
+                        Kritische burger wordt automatisch gratis tijdens de beta. Je wordt niet gefactureerd.
                     </span>
                     {% if current_tier.slug == 'pro' and current_tier.pro_expires_at %}
                     <span class="tier-option-subnote tier-option-subnote--strong">
                         Betaling wordt actief vanaf {{ current_tier.pro_expires_at[:10] }}.
                     </span>
                     {% endif %}
+                </span>
+            </label>
+
+            <label class="tier-option tier-option--disabled">
+                <input type="radio" name="slug" value="ontembare_democraat" disabled>
+                <span class="tier-option-body">
+                    <span class="tier-option-title">
+                        Ontembare democraat <span class="tier-option-price">Binnenkort beschikbaar</span>
+                    </span>
+                    <span class="tier-option-meta">
+                        Onbeperkte zoekopdrachten. Wekelijkse briefing. 2.000 pagina's persoonlijk corpus.
+                    </span>
                 </span>
             </label>
 
@@ -115,58 +136,28 @@
         </form>
     </section>
 
-    <div class="settings-group">
-        <h3>Politieke Partij</h3>
-        <div class="form-control">
-            <label for="party-select">Selecteer je partij</label>
-            <select id="party-select">
-                <option value="GroenLinks-PvdA">GroenLinks-PvdA</option>
-                <option value="VVD" disabled>VVD (Binnenkort)</option>
-                <option value="D66" disabled>D66 (Binnenkort)</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="settings-group">
-        <h3>Commissies</h3>
-        <p class="text-text-secondary text-sm mb-4">Selecteer de commissies die je volgt.</p>
-        <div class="checkbox-group">
-            <label class="checkbox-label">
-                <input type="checkbox" class="committee-cb"
-                    value="Commissie Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)">
-                <span>Bestuur, Organisatie, Financiën en Veiligheid (2022 - 2026)</span>
-            </label>
-            <label class="checkbox-label">
-                <input type="checkbox" class="committee-cb"
-                    value="Commissie Mobiliteit, Haven, Economie en Klimaat (2022-2026)">
-                <span>Mobiliteit, Haven, Economie en Klimaat (2022-2026)</span>
-            </label>
-            <label class="checkbox-label">
-                <input type="checkbox" class="committee-cb" value="Commissie Bouwen, Wonen en Buitenruimte (2022-2026)">
-                <span>Bouwen, Wonen en Buitenruimte (2022-2026)</span>
-            </label>
-            <label class="checkbox-label">
-                <input type="checkbox" class="committee-cb"
-                    value="Commissie Zorg, Welzijn, Cultuur en Sport (2022 - 2026)">
-                <span>Zorg, Welzijn, Cultuur en Sport (2022 - 2026)</span>
-            </label>
-            <label class="checkbox-label">
-                <input type="checkbox" class="committee-cb"
-                    value="Commissie Werk & Inkomen, Onderwijs, Samenleven, Schuldhulpverlening & Armoedebestrijding, NPRZ">
-                <span>Werk & Inkomen, Onderwijs, NPRZ</span>
-            </label>
-            <label class="checkbox-label">
-                <input type="checkbox" class="committee-cb" value="Actualiteitenraad">
-                <span>Actualiteitenraad</span>
-            </label>
-            <label class="checkbox-label">
-                <input type="checkbox" class="committee-cb" value="Commissie Welzijn, Wijken en Democratie (2022-2026)">
-                <span>Welzijn, Wijken en Democratie (2022-2026)</span>
-            </label>
-        </div>
-    </div>
-
-    <button class="save-btn" onclick="saveSettings()">Wijzigingen Opslaan</button>
+    {# ── Task 3: Jouw onderwerpen ─────────────────────────────────── #}
+    <section class="settings-group" id="onderwerpen">
+        <h3>Jouw onderwerpen</h3>
+        <p class="text-text-secondary text-sm mb-4">
+            Welke thema's volg jij in de raad? NeoDemos gebruikt deze tekst als context
+            bij alle antwoorden — zowel op de website als via de AI-koppeling (MCP).
+            Beschrijf kort, in je eigen woorden. Max 500 tekens.
+        </p>
+        {% if request.query_params.get('saved') == 'topics' %}
+        <p class="tier-saved-notice" role="status">Onderwerpen opgeslagen.</p>
+        {% endif %}
+        <form method="POST" action="/settings/topics" class="topics-form">
+            <textarea name="topic_description"
+                      maxlength="500"
+                      rows="5"
+                      placeholder="Bijv. wonen en volkshuisvesting in Zuid, mobiliteit en openbaar vervoer, schuldhulpverlening, sociale veiligheid..."
+                      class="topics-textarea">{{ user.topic_description or '' }}</textarea>
+            <div class="tier-form-actions">
+                <button type="submit" class="save-btn">Onderwerpen opslaan</button>
+            </div>
+        </form>
+    </section>
 
     <div class="tokens-section">
         <h3>API Tokens</h3>
@@ -222,48 +213,9 @@
 {% block extra_scripts %}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const savedParty = localStorage.getItem('neodemos_party');
-        if (savedParty) {
-            const partySelect = document.getElementById('party-select');
-            for (let i = 0; i < partySelect.options.length; i++) {
-                if (partySelect.options[i].value === savedParty) {
-                    partySelect.selectedIndex = i;
-                    break;
-                }
-            }
-        }
-
-        const savedCommitteesJson = localStorage.getItem('neodemos_committees');
-        if (savedCommitteesJson) {
-            try {
-                const savedCommittees = JSON.parse(savedCommitteesJson);
-                document.querySelectorAll('.committee-cb').forEach(cb => {
-                    if (savedCommittees.includes(cb.value)) {
-                        cb.checked = true;
-                    }
-                });
-            } catch (e) {
-                console.error("Error parsing saved committees", e);
-            }
-        }
-
         initAvatarPicker();
+        initAvatarToggle();
     });
-
-    function saveSettings() {
-        const party = document.getElementById('party-select').value;
-        localStorage.setItem('neodemos_party', party);
-
-        const committees = ['Gemeenteraad'];
-        document.querySelectorAll('.committee-cb:checked').forEach(cb => {
-            committees.push(cb.value);
-        });
-        localStorage.setItem('neodemos_committees', JSON.stringify(committees));
-
-        const toast = document.getElementById('toast');
-        toast.className = 'toast show';
-        setTimeout(function () { toast.className = 'toast'; }, 3000);
-    }
 
     async function generateToken() {
         const name = document.getElementById('token-name').value || 'Default';
@@ -301,9 +253,19 @@
         }
     }
 
+    // ── Avatar toggle (collapse/expand grid) ────────────────────────
+    function initAvatarToggle() {
+        const btn = document.getElementById('avatar-picker-toggle');
+        const grid = document.getElementById('avatar-picker-grid');
+        if (!btn || !grid) return;
+        btn.addEventListener('click', function () {
+            grid.style.display = (grid.style.display === 'none' || !grid.style.display) ? 'grid' : 'none';
+        });
+    }
+
     // ── Avatar picker ───────────────────────────────────────────────
     function initAvatarPicker() {
-        const grid = document.querySelector('.avatar-picker-grid');
+        const grid = document.getElementById('avatar-picker-grid');
         if (!grid) return;
         const currentImg = document.getElementById('avatar-picker-current-img');
         const currentLabel = document.getElementById('avatar-picker-current-label');
@@ -340,6 +302,8 @@
                 const navAvatar = document.querySelector('.nav-user-avatar--img');
                 if (navAvatar && data.url) navAvatar.src = data.url;
                 showAvatarToast('Portret opgeslagen: ' + label);
+                // Auto-collapse the grid after a successful save
+                grid.style.display = 'none';
             } catch (err) {
                 if (errEl) {
                     errEl.textContent = 'Kon portret niet opslaan — probeer het opnieuw.';

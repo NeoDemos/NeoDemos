@@ -33,11 +33,15 @@ _USER_SUB_COLS = "subscription_tier, beta_expires_at, stripe_customer_id"
 # Profiel upgrade (migration 0013). Optional like the 0009 sub cols so a DB
 # that hasn't run 0013 yet keeps working.
 _USER_PROFILE_COLS = "avatar_slug, subscription_tier_override, pro_expires_at"
+# Tier-model (migration 0016). Optional — DBs without 0016 applied still work.
+_USER_TOPIC_COLS = "topic_description"
 
 _subscription_cols_checked = False
 _subscription_cols_present = False
 _profile_cols_checked = False
 _profile_cols_present = False
+_topic_cols_checked = False
+_topic_cols_present = False
 
 
 def _has_subscription_cols() -> bool:
@@ -78,20 +82,43 @@ def _has_profile_cols() -> bool:
     return _profile_cols_present
 
 
+def _has_topic_cols() -> bool:
+    """Cached check: does the users table have the 0016 topic_description column?"""
+    global _topic_cols_checked, _topic_cols_present
+    if _topic_cols_checked:
+        return _topic_cols_present
+    try:
+        with get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "SELECT 1 FROM information_schema.columns "
+                    "WHERE table_name = 'users' AND column_name = 'topic_description'"
+                )
+                _topic_cols_present = cur.fetchone() is not None
+        _topic_cols_checked = True
+    except Exception:
+        _topic_cols_present = False
+    return _topic_cols_present
+
+
 def _user_cols(prefix: str = "") -> str:
     """Return the SELECT column list for users, with optional table alias prefix."""
     core = _USER_CORE_COLS
     sub = _USER_SUB_COLS
     prof = _USER_PROFILE_COLS
+    topic = _USER_TOPIC_COLS
     if prefix:
         core = ", ".join(f"{prefix}{c.strip()}" for c in core.split(","))
         sub = ", ".join(f"{prefix}{c.strip()}" for c in sub.split(","))
         prof = ", ".join(f"{prefix}{c.strip()}" for c in prof.split(","))
+        topic = ", ".join(f"{prefix}{c.strip()}" for c in topic.split(","))
     out = core
     if _has_subscription_cols():
         out += ", " + sub
     if _has_profile_cols():
         out += ", " + prof
+    if _has_topic_cols():
+        out += ", " + topic
     return out
 
 
@@ -177,6 +204,8 @@ class AuthService:
             allowed.add("subscription_tier")
         if _has_profile_cols():
             allowed |= {"avatar_slug", "subscription_tier_override", "pro_expires_at"}
+        if _has_topic_cols():
+            allowed.add("topic_description")
         updates = {k: v for k, v in fields.items() if k in allowed}
         if not updates:
             return self.get_user_by_id(user_id)
@@ -442,4 +471,9 @@ class AuthService:
             d["avatar_slug"] = None
             d["subscription_tier_override"] = None
             d["pro_expires_at"] = None
+        # Topic description only present after migration 0016 applied.
+        if len(row) >= 16:
+            d["topic_description"] = row[15]
+        else:
+            d["topic_description"] = None
         return d

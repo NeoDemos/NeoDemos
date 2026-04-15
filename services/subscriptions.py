@@ -32,21 +32,42 @@ logger = logging.getLogger(__name__)
 TIERS = {
     "gratis": {
         "slug": "gratis",
-        "label": "Gratis",
+        "label": "Nieuwsgierige burger",
         "price_eur_month": 0,
+        "price_strike": None,
         "quota_month": 3,
         "quota_copy": "3 zoekopdrachten per maand",
+        "pages_limit": 50,
         "mcp_unlimited": False,
+        "mcp_access": False,
         "mcp_copy": "Geen AI-koppeling",
+        "selectable": True,
     },
     "pro": {
         "slug": "pro",
-        "label": "Pro",
-        "price_eur_month": 49,
-        "quota_month": 60,  # 20× gratis
-        "quota_copy": "20× meer zoekopdrachten per maand dan Gratis",
+        "label": "Kritische burger",
+        "price_eur_month": 29,
+        "price_strike": 29,
+        "quota_month": 50,
+        "quota_copy": "50 zoekopdrachten per maand",
+        "pages_limit": 500,
         "mcp_unlimited": True,
+        "mcp_access": True,
         "mcp_copy": "Onbeperkt via AI-koppeling",
+        "selectable": True,
+    },
+    "ontembare_democraat": {
+        "slug": "ontembare_democraat",
+        "label": "Ontembare democraat",
+        "price_eur_month": 49,
+        "price_strike": None,
+        "quota_month": None,
+        "quota_copy": "Onbeperkt zoekopdrachten per maand",
+        "pages_limit": 2000,
+        "mcp_unlimited": True,
+        "mcp_access": True,
+        "mcp_copy": "Onbeperkt via AI-koppeling",
+        "selectable": False,
     },
 }
 
@@ -105,6 +126,8 @@ def set_tier(user_id: int, slug: str) -> None:
     """
     if slug not in VALID_SLUGS:
         raise ValueError(f"Unknown tier slug: {slug}")
+    if not TIERS[slug].get("selectable", True):
+        raise ValueError("tier is niet selecteerbaar")
 
     beta_end = _beta_end_date()
     pro_expires = beta_end if slug == "pro" else None

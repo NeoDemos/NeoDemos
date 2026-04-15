@@ -340,6 +340,7 @@ async def api_search_stream(
     user = await get_current_user(request)
     is_authenticated = user and user.get("is_active")
     partij = None
+    topic_description = None
 
     if not is_authenticated:
         ip = _get_client_ip(request)
@@ -353,7 +354,11 @@ async def api_search_stream(
             }, status_code=429)
     else:
         ip = None
-        partij = user.get("party")
+        # Dennis: profile partij turned off for now (deferred to WS19). The
+        # `party` column stays in the DB for future re-introduction. Per-turn
+        # partij still flows via the `partij_ctx` sidebar chip below.
+        partij = None
+        topic_description = user.get("topic_description")
 
     # Chip `partij_ctx` from sidebar overrides saved partij for this turn only
     effective_partij = partij_ctx or partij
@@ -385,6 +390,7 @@ async def api_search_stream(
             partij=effective_partij,
             prior_messages=prior_messages,
             attached_context=attached_context or None,
+            topic_description=topic_description,
         ):
             if await request.is_disconnected():
                 status = "disconnected"

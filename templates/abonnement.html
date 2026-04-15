@@ -11,19 +11,22 @@
         <p class="pricing-lede">
             NeoDemos is een burgerproject. De basis is altijd gratis —
             elke Rotterdammer kan raadsdocumenten doorzoeken zonder account.
-            Pro is bedoeld voor raadsleden, journalisten en onderzoekers die er
-            elke dag mee werken. Tijdens de beta is Pro gratis.
+            Daarnaast zijn er twee betaalde tiers voor raadsleden, journalisten
+            en onderzoekers die er elke dag mee werken. Tijdens de beta is
+            Kritische burger gratis.
         </p>
     </header>
 
-    <div class="pricing-grid pricing-grid--two">
+    <div class="pricing-grid pricing-grid--three">
+        {# ── Tier 1: Nieuwsgierige burger (gratis) ─────────────────── #}
         <article class="pricing-card">
-            <h2 class="pricing-card-name">Gratis</h2>
+            <h2 class="pricing-card-name">Nieuwsgierige burger</h2>
             <p class="pricing-card-price"><span>&euro;0</span><small>&nbsp;altijd</small></p>
             <p class="pricing-card-audience">Voor elke Rotterdammer die wil weten wat er in de raad gebeurt.</p>
             <ul class="pricing-card-list">
                 <li>3 zoekopdrachten per maand</li>
-                <li>100.000+ documenten doorzoekbaar (2002-heden)</li>
+                <li>50 pagina's persoonlijk corpus (eigen documenten)</li>
+                <li>100.000+ raadsdocumenten doorzoekbaar (2002-heden)</li>
                 <li>Volledige bronverwijzing bij elk antwoord</li>
                 <li><strong>Geen AI-koppeling</strong> (Claude, ChatGPT, Cursor)</li>
             </ul>
@@ -32,49 +35,70 @@
             {% elif user %}
             <form method="POST" action="/settings/tier" class="pricing-cta-form">
                 <input type="hidden" name="slug" value="gratis">
-                <button type="submit" class="btn btn-ghost pricing-cta">Overstappen naar Gratis</button>
+                <button type="submit" class="btn btn-ghost pricing-cta">Overstappen naar Nieuwsgierige burger</button>
             </form>
             {% else %}
             <a href="/register" class="btn btn-ghost pricing-cta">Gratis starten</a>
             {% endif %}
         </article>
 
+        {# ── Tier 2: Kritische burger (pro, highlight) ──────────────── #}
         <article class="pricing-card pricing-card--highlight">
             <span class="pricing-card-badge">Gratis tijdens beta</span>
-            <h2 class="pricing-card-name">Pro</h2>
+            <h2 class="pricing-card-name">Kritische burger</h2>
             <p class="pricing-card-price">
-                <span class="pricing-card-price-strike">&euro;49</span>
+                <span class="pricing-card-price-strike">&euro;29</span>
                 <span>&euro;0</span>
                 <small>&nbsp;/maand tijdens beta</small>
             </p>
             <p class="pricing-card-audience">Voor raadsleden, fracties, journalisten en onderzoekers.</p>
             <ul class="pricing-card-list">
-                <li><strong>20× meer zoekopdrachten</strong> per maand via de website</li>
-                <li><strong>Onbeperkt</strong> zoekopdrachten via AI-koppeling</li>
+                <li><strong>50 zoekopdrachten</strong> per maand via de website</li>
+                <li><strong>Onbeperkt</strong> via AI-koppeling (MCP)</li>
+                <li>500 pagina's persoonlijk corpus</li>
                 <li>Claude, ChatGPT of Cursor direct op je raadsdata</li>
                 <li>Account met gespreksgeschiedenis + opslag</li>
                 <li>E-mail support binnen 1 werkdag</li>
             </ul>
             <p class="pricing-card-note">
-                Normaal &euro;49/maand. Tijdens de beta betaal je niets en word je niet gefactureerd.
+                Normaal &euro;29/maand. Tijdens de beta betaal je niets en word je niet gefactureerd.
             </p>
             {% if current_tier and current_tier.slug == 'pro' and user %}
             <span class="btn btn-primary pricing-cta is-current" aria-disabled="true">Je huidige abonnement</span>
             {% elif user %}
             <form method="POST" action="/settings/tier" class="pricing-cta-form">
                 <input type="hidden" name="slug" value="pro">
-                <button type="submit" class="btn btn-primary pricing-cta">Pro activeren (gratis)</button>
+                <button type="submit" class="btn btn-primary pricing-cta">Kritische burger activeren (gratis)</button>
             </form>
             {% else %}
-            <a href="/register?tier=pro" class="btn btn-primary pricing-cta">Pro-account aanmaken</a>
+            <a href="/register?tier=pro" class="btn btn-primary pricing-cta">Kritische burger activeren</a>
             {% endif %}
+        </article>
+
+        {# ── Tier 3: Ontembare democraat (binnenkort) ──────────────── #}
+        <article class="pricing-card pricing-card--soon">
+            <span class="pricing-card-badge pricing-card-badge--soon">Binnenkort</span>
+            <h2 class="pricing-card-name">Ontembare democraat</h2>
+            <p class="pricing-card-price"><span>&euro;49</span><small>&nbsp;/maand</small></p>
+            <p class="pricing-card-audience">Voor raadsleden en fracties die NeoDemos dagelijks diep gebruiken.</p>
+            <ul class="pricing-card-list">
+                <li><strong>Onbeperkte zoekopdrachten</strong> — website en AI-koppeling</li>
+                <li>2.000 pagina's persoonlijk corpus</li>
+                <li><strong>Wekelijkse briefing</strong>: elke vrijdagochtend automatisch geanalyseerde update over jouw onderwerpen</li>
+                <li><strong>Watchlist-alerts</strong> op nieuwe raadsstukken binnen je onderwerp</li>
+                <li>Alles uit Kritische burger</li>
+            </ul>
+            <p class="pricing-card-note">
+                Binnenkort beschikbaar — meld je interesse later via e-mail.
+            </p>
+            <span class="btn btn-ghost pricing-cta is-disabled" aria-disabled="true">Binnenkort beschikbaar</span>
         </article>
     </div>
 
     <footer class="pricing-note">
-        Beide tiers zijn tijdens de beta beschikbaar. Betaling voor Pro start pas ná de beta —
-        je wordt vooraf geïnformeerd en kan dan terug naar Gratis zonder kosten.
-        De publieke laag (Gratis) blijft altijd bestaan — NeoDemos is een burgerproject, geen walled garden.
+        Alle tiers zijn tijdens de beta beschikbaar. Betaling voor Kritische burger start pas ná de beta —
+        je wordt vooraf geïnformeerd en kan dan terug naar Nieuwsgierige burger zonder kosten.
+        De publieke laag blijft altijd bestaan — NeoDemos is een burgerproject, geen walled garden.
     </footer>
 
     {# ── FAQ ───────────────────────────────────────────────────────── #}
@@ -87,9 +111,10 @@
                 <div class="nd-faq__answer">
                     <p>
                         Je krijgt minstens 14 dagen van tevoren bericht. Je kan dan kiezen:
-                        Pro voortzetten voor &euro;49/maand, of terug naar Gratis zonder kosten.
-                        Pro-gebruikers zonder betaalmethode gaan automatisch terug naar Gratis
-                        — we incasseren nooit zonder expliciete actie van jou.
+                        Kritische burger voortzetten voor &euro;29/maand, of terug naar
+                        Nieuwsgierige burger zonder kosten. Gebruikers zonder betaalmethode
+                        gaan automatisch terug naar Nieuwsgierige burger — we incasseren
+                        nooit zonder expliciete actie van jou.
                     </p>
                 </div>
             </details>
@@ -124,7 +149,8 @@
                         raadsdatabase aansluit. Je vraagt je eigen AI dan bijvoorbeeld:
                         <em>"Vat de laatste begroting samen in drie punten"</em>, en de AI gebruikt
                         NeoDemos-tools om feitelijke, bronverwijzende antwoorden op te halen.
-                        In Gratis is deze koppeling uit. In Pro is het gebruik onbeperkt.
+                        AI-koppeling zit alleen in Kritische burger en Ontembare democraat —
+                        in Nieuwsgierige burger is deze koppeling uit.
                     </p>
                 </div>
             </details>
@@ -133,10 +159,26 @@
                 <summary class="nd-faq__question">Hoe wordt mijn gebruik gemeten?</summary>
                 <div class="nd-faq__answer">
                     <p>
-                        Per zoekopdracht — één vraag = één telling. Gratis gebruikers zien
-                        hun resterend maandquotum in het menu. Pro-gebruikers via de website
-                        krijgen 20× dat quotum; via de AI-koppeling is er geen limiet.
+                        Per zoekopdracht — één vraag = één telling. Nieuwsgierige burgers zien
+                        hun resterend maandquotum in het menu (3 per maand). Kritische burgers
+                        krijgen 50 per maand via de website; via de AI-koppeling is er geen limiet.
+                        Ontembare democraten hebben onbeperkte zoekopdrachten op beide kanalen.
                         We meten per maand, zonder minuten of snelheidsbegrenzing.
+                    </p>
+                </div>
+            </details>
+
+            <details class="nd-faq__item">
+                <summary class="nd-faq__question">Wat is een persoonlijk corpus?</summary>
+                <div class="nd-faq__answer">
+                    <p>
+                        Je eigen documenten — bijvoorbeeld je verkiezingsprogramma, coalitieakkoord,
+                        fractievisie of beleidsnotities — die je uploadt en die bij elk antwoord
+                        worden meegewogen. Zo krijg je analyses die ook je eigen standpunten en
+                        afspraken meenemen, niet alleen de officiële raadsstukken. De limiet is
+                        50 pagina's (Nieuwsgierige burger), 500 pagina's (Kritische burger) of
+                        2.000 pagina's (Ontembare democraat). Je persoonlijke corpus is niet
+                        zichtbaar voor andere gebruikers.
                     </p>
                 </div>
             </details>
@@ -145,9 +187,9 @@
                 <summary class="nd-faq__question">Is dit echt gratis?</summary>
                 <div class="nd-faq__answer">
                     <p>
-                        Ja. Gratis blijft Gratis — dat is geen lokmiddel voor een paywall.
-                        Pro is tijdens de beta kosteloos en je hoeft geen betaalmethode in te vullen.
-                        Als de beta voorbij is en je niets doet, ga je automatisch terug naar Gratis.
+                        Ja. Nieuwsgierige burger blijft gratis — dat is geen lokmiddel voor een paywall.
+                        Kritische burger is tijdens de beta kosteloos en je hoeft geen betaalmethode in te vullen.
+                        Als de beta voorbij is en je niets doet, ga je automatisch terug naar Nieuwsgierige burger.
                         NeoDemos bestaat om raadsinformatie toegankelijk te maken — niet om te incasseren.
                     </p>
                 </div>

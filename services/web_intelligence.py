@@ -130,13 +130,17 @@ class WebIntelligenceService:
                 self._context_primer = ""
         return self._context_primer
 
-    def _build_system_blocks(self, partij: Optional[str] = None) -> list:
+    def _build_system_blocks(
+        self,
+        partij: Optional[str] = None,
+        topic_description: Optional[str] = None,
+    ) -> list:
         """
         Build system prompt as a list of content blocks with prompt caching.
 
         The stable base (SYSTEM_PROMPT + context_primer + today) is marked
         with cache_control so Anthropic caches it across requests on the same day.
-        The partij block (per-user, dynamic) is appended uncached.
+        The partij + topic blocks (per-user, dynamic) are appended uncached.
         """
         base_text = SYSTEM_PROMPT.format(
             today=date.today().isoformat(),
@@ -153,6 +157,15 @@ class WebIntelligenceService:
             blocks.append({
                 "type": "text",
                 "text": f"De gebruiker is lid van {partij}. Gebruik dit als standaard partij-context waar relevant.",
+            })
+        if topic_description:
+            blocks.append({
+                "type": "text",
+                "text": (
+                    f"De gebruiker richt zich op de volgende onderwerpen/aandachtsgebieden: "
+                    f"{topic_description}. Weeg deze mee bij scope-bepaling en relevantie "
+                    f"— zonder de expliciete vraag van de gebruiker te negeren."
+                ),
             })
         return blocks
 
@@ -248,19 +261,25 @@ class WebIntelligenceService:
             logger.error(f"Gemini fallback failed: {e}", exc_info=True)
             yield {"type": "error", "message": "AI-zoekservice tijdelijk niet beschikbaar. De zoekresultaten hieronder zijn nog beschikbaar."}
 
-    async def query(self, user_query: str, partij: Optional[str] = None) -> dict:
+    async def query(
+        self,
+        user_query: str,
+        partij: Optional[str] = None,
+        topic_description: Optional[str] = None,
+    ) -> dict:
         """
         Non-streaming: run full tool loop, return final answer.
 
         Args:
             user_query: The user's search query in Dutch.
             partij: Optional party name from user session (injected into context).
+            topic_description: Optional user-profile topic focus string.
         """
         if not self.available:
             return {"answer": None, "error": "AI-zoekservice niet beschikbaar"}
 
         messages = [{"role": "user", "content": user_query}]
-        system_blocks = self._build_system_blocks(partij)
+        system_blocks = self._build_system_blocks(partij, topic_description)
         tools = self._get_tools_with_cache()
 
         total_input_tokens = 0
@@ -344,6 +363,7 @@ class WebIntelligenceService:
         partij: Optional[str] = None,
         prior_messages: Optional[List[Dict]] = None,
         attached_context: Optional[Dict[str, str]] = None,
+        topic_description: Optional[str] = None,
     ) -> AsyncIterator[dict]:
         """
         Streaming: yield SSE events as Sonnet works.
@@ -384,7 +404,7 @@ class WebIntelligenceService:
         if prior_messages:
             messages.extend(prior_messages)
         messages.append({"role": "user", "content": user_query + ctx_hint})
-        system_blocks = self._build_system_blocks(partij)
+        system_blocks = self._build_system_blocks(partij, topic_description)
         tools = self._get_tools_with_cache()
 
         tools_called = []

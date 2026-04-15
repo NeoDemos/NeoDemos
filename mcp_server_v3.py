@@ -2425,6 +2425,15 @@ def get_neodemos_context() -> str:
     uit de `raadslid_rollen` tabel gegenereerd — nooit hardcoded. Vertrouw op
     deze data voor rol/tenure-vragen in plaats van training-data te gokken.
     """
+    # WS-pricing TODO: inject authenticated user's `topic_description` into the
+    # returned primer (appended as a "Gebruikersfocus" section). Blocked on a
+    # per-request user-context mechanism — FastMCP tools don't currently receive
+    # the caller's user dict. Options: (a) ContextVar set in an ASGI middleware
+    # that reads the OAuth access token, (b) FastMCP Context parameter with
+    # oauth_access_token lookup via NeodemosOAuthProvider.load_access_token
+    # then SELECT topic_description FROM users WHERE id=token.user_id.
+    # Left as stub — web path already injects topic_description via
+    # WebIntelligenceService._build_system_blocks().
     wethouders = _compute_rotterdam_wethouders()
     coalition = _compute_rotterdam_current_coalition()
     coalition_history = _compute_rotterdam_coalition_history()
