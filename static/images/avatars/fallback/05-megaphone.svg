@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" role="img" aria-label="Megaphone">
+  <circle cx="20" cy="20" r="19" fill="#042825"/>
+  <circle cx="18" cy="20" r="7" fill="#ff751f"/>
+  <circle cx="16" cy="19" r="0.9" fill="#042825"/>
+  <circle cx="20" cy="19" r="0.9" fill="#042825"/>
+  <path d="M15 23 Q18 25 21 23" stroke="#042825" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+  <path d="M27 15 L31 12 L31 28 L27 25 Z" fill="#f4efe5"/>
+  <path d="M31 18 L33 17 M31 22 L33 23" stroke="#f4efe5" stroke-width="1.2" stroke-linecap="round"/>
+</svg>

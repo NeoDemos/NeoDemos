@@ -911,7 +911,7 @@ def resolve_target_entity(
 
 # ── Prompt construction ───────────────────────────────────────────────
 
-def build_chunk_payload(rows: list[dict]) -> str:
+def build_chunk_payload(rows: list[dict], sibling_context: bool = False) -> str:
     """
     Serialise a batch of chunk rows into the JSON blob the prompt embeds.
 
@@ -922,10 +922,14 @@ def build_chunk_payload(rows: list[dict]) -> str:
     oversized chunks in the first place, so raw content is passed through.
     P90 chunk length across all doc types is <= 2,545 chars, so batches
     of 20 full-content chunks stay under 15K input tokens per call.
+
+    sibling_context=True (--sibling-context flag): includes prev_chunk_title
+    and next_chunk_title hints when available, for cross-chunk coreference
+    calibration (Phase 0.5b). Default off.
     """
     items = []
     for r in rows:
-        items.append({
+        item = {
             "id": int(r["id"]),
             "title": (r.get("title") or "")[:200],
             "doc_name": (r.get("doc_name") or "")[:200],
@@ -933,7 +937,15 @@ def build_chunk_payload(rows: list[dict]) -> str:
             "existing_topic": r.get("section_topic") or "",
             "speaker_hint": r.get("speaker_hint") or "",
             "content": r.get("content") or "",
-        })
+        }
+        if sibling_context:
+            prev_t = (r.get("prev_chunk_title") or "")[:200]
+            next_t = (r.get("next_chunk_title") or "")[:200]
+            if prev_t:
+                item["prev_chunk_title"] = prev_t
+            if next_t:
+                item["next_chunk_title"] = next_t
+        items.append(item)
     return json.dumps({"chunks": items}, ensure_ascii=False)
 
 
@@ -941,7 +953,7 @@ def build_chunk_payload(rows: list[dict]) -> str:
 # (<5% of corpus) and usually represent whole sections or table dumps that
 # need a doc-level pass (WS10), not a per-chunk enrichment. Filter them out
 # in the SELECT rather than truncating.
-MAX_CHUNK_LENGTH_FOR_GEMINI = int(os.getenv("GEMINI_MAX_CHUNK_CHARS", "15000"))
+MAX_CHUNK_LENGTH_FOR_GEMINI = int(os.getenv("GEMINI_MAX_CHUNK_CHARS", "50000"))
 MIN_CHUNK_LENGTH_FOR_GEMINI = int(os.getenv("GEMINI_MIN_CHUNK_CHARS", "200"))
 
 
@@ -1011,10 +1023,10 @@ def build_chunk_selection_clause(
     return " AND ".join(filters), params
 
 
-def build_user_prompt(rows: list[dict]) -> str:
+def build_user_prompt(rows: list[dict], sibling_context: bool = False) -> str:
     return PROMPT_USER_TEMPLATE.format(
         n=len(rows),
-        payload=build_chunk_payload(rows),
+        payload=build_chunk_payload(rows, sibling_context=sibling_context),
     )
 
 
@@ -1255,16 +1267,18 @@ def run(
     dry_run: bool,
     scope: str = "p1_p2",
     year_from: int | None = None,
+    sibling_context: bool = False,
 ) -> int:
     log.info("=" * 64)
     log.info("  GEMINI SEMANTIC ENRICHMENT")
-    log.info(f"  model         = {model_name}")
-    log.info(f"  batch_size    = {batch_size}")
-    log.info(f"  limit         = {limit or 'unlimited'}")
-    log.info(f"  resume        = {resume}")
-    log.info(f"  cost_cap      = ${cost_cap:.2f}")
-    log.info(f"  skip_enriched = {skip_enriched}")
-    log.info(f"  dry_run       = {dry_run}")
+    log.info(f"  model           = {model_name}")
+    log.info(f"  batch_size      = {batch_size}")
+    log.info(f"  limit           = {limit or 'unlimited'}")
+    log.info(f"  resume          = {resume}")
+    log.info(f"  cost_cap        = ${cost_cap:.2f}")
+    log.info(f"  skip_enriched   = {skip_enriched}")
+    log.info(f"  dry_run         = {dry_run}")
+    log.info(f"  sibling_context = {sibling_context}")
     log.info(f"  cost rates    = ${COST_INPUT_PER_M}/M in, ${COST_OUTPUT_PER_M}/M out")
     log.info("=" * 64)
 
@@ -1358,6 +1372,11 @@ def run(
         "gemini_reader", cursor_factory=RealDictCursor,
     )
     read_cur.itersize = max(batch_size * 4, 200)
+    _sibling_cols = (
+        """,\n               LAG(dc.title) OVER (PARTITION BY dc.document_id ORDER BY dc.id) AS prev_chunk_title,
+               LEAD(dc.title) OVER (PARTITION BY dc.document_id ORDER BY dc.id) AS next_chunk_title"""
+        if sibling_context else ""
+    )
     read_cur.execute(
         f"""
         SELECT dc.id, dc.document_id, dc.title, dc.content, dc.section_topic,
@@ -1365,7 +1384,7 @@ def run(
                d.is_virtual_notulen AS is_virtual_notulen,
                d.meeting_id AS source_meeting_id,
                m.name AS meeting_name,
-               sm.quality_score AS vn_quality_score
+               sm.quality_score AS vn_quality_score{_sibling_cols}
         FROM document_chunks dc
         JOIN documents d ON dc.document_id = d.id
         LEFT JOIN meetings m ON d.meeting_id = m.id
@@ -1410,7 +1429,7 @@ def run(
                 halted_for_cost = True
                 break
 
-            user_prompt = build_user_prompt(batch)
+            user_prompt = build_user_prompt(batch, sibling_context=sibling_context)
 
             if dry_run:
                 # Rough estimate: 1 token ~= 4 chars. Assume ~500 output
@@ -1599,6 +1618,14 @@ def main() -> int:
         help="Optional year floor (e.g. 2018). Chunks from meetings before "
              "this year are skipped. Applied on top of --scope.",
     )
+    parser.add_argument(
+        "--sibling-context", dest="sibling_context",
+        action="store_true", default=False,
+        help="[Phase 0.5b calibration] Pass prev/next chunk titles to Gemini "
+             "for cross-chunk coreference. Default off. Compare edge counts "
+             "and rejection rates vs baseline (without flag) on same 50 chunks "
+             "before deciding whether to use for the full run.",
+    )
     args = parser.parse_args()
 
     logging.getLogger().setLevel(args.log_level)
@@ -1635,6 +1662,7 @@ def main() -> int:
         dry_run=args.dry_run,
         scope=args.scope,
         year_from=args.year_from,
+        sibling_context=args.sibling_context,
     )
 
 

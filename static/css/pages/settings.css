@@ -4,12 +4,47 @@
 
 @layer components {
   .settings-container {
-    max-width: 600px;
+    max-width: 720px;
     margin: var(--space-8) auto;
     background: var(--color-surface-raised);
-    padding: var(--space-8);
-    border-radius: var(--radius-md);
+    padding: var(--space-10);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-subtle);
     box-shadow: var(--shadow-sm);
+  }
+
+  /* Profiel header: large civic avatar + name + email (Oatmeal rhythm) */
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    padding-bottom: var(--space-6);
+    margin-bottom: var(--space-6);
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .profile-avatar {
+    width: 6rem;
+    height: 6rem;
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+    flex-shrink: 0;
+    display: block;
+  }
+
+  .profile-name {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-3xl);
+    letter-spacing: var(--letter-spacing-display);
+    line-height: var(--line-height-snug);
+    margin: 0;
+    color: var(--color-text);
+  }
+
+  .profile-email {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin: var(--space-1) 0 0;
   }
 
   .settings-group {
@@ -159,5 +194,267 @@
     font-size: 0.9rem;
     margin-right: var(--space-2);
     width: 200px;
+  }
+
+  /* ── Avatar picker (Task 1) ─────────────────────────────────────── */
+  .profile-avatar-picker .avatar-picker-current {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+
+  .avatar-picker-current-img {
+    width: 6rem;
+    height: 6rem;
+    border-radius: var(--radius-full);
+    border: 2px solid var(--color-accent);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-accent) 15%, transparent);
+    display: block;
+  }
+
+  .avatar-picker-current-meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .avatar-picker-current-label {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-xl);
+    color: var(--color-text);
+    letter-spacing: var(--letter-spacing-display);
+  }
+
+  .avatar-picker-error {
+    font-size: var(--font-size-sm);
+    color: var(--color-error);
+  }
+
+  .avatar-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-3);
+    margin: var(--space-4) 0 var(--space-3);
+  }
+
+  @media (max-width: 720px) {
+    .avatar-picker-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  @media (max-width: 480px) {
+    .avatar-picker-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .avatar-picker-tile {
+    width: 4rem;
+    height: 4rem;
+    padding: 0;
+    border-radius: var(--radius-full);
+    border: 2px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+    justify-self: center;
+  }
+
+  .avatar-picker-tile img {
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-full);
+    display: block;
+    object-fit: cover;
+    /* Gemini outputs vary in headroom — crop from the top so shoulders touch
+       the circle edge consistently across all portraits. Scale 1.05 tightens
+       around the face; translate pushes the image up inside the circle. */
+    object-position: center 18%;
+    transform: scale(1.05);
+  }
+  .avatar-picker-current-img,
+  .profile-avatar,
+  .nav-user-avatar--img,
+  .testimonial-avatar {
+    object-fit: cover;
+    object-position: center 18%;
+  }
+
+  .avatar-picker-tile:hover {
+    border-color: var(--color-border-subtle);
+    transform: translateY(-1px);
+  }
+
+  .avatar-picker-tile.is-selected {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-accent) 25%, transparent);
+  }
+
+  .avatar-picker-tile:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .avatar-picker-credit {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+    margin: var(--space-2) 0 0;
+  }
+
+  /* ── Tier picker (Task 2) ───────────────────────────────────────── */
+  .tier-picker .tier-current {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+    flex-wrap: wrap;
+  }
+
+  .tier-current-badge {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-3xl);
+    letter-spacing: var(--letter-spacing-display);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-subtle);
+    color: var(--color-text);
+  }
+
+  .tier-current-badge.tier-pro {
+    background: var(--color-primary);
+    color: var(--color-text-on-dark);
+    border-color: var(--color-primary);
+  }
+
+  .tier-current-summary {
+    margin: 0;
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-body);
+  }
+
+  .tier-saved-notice {
+    background: var(--color-success-light);
+    border: 1px solid var(--color-success);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    margin: 0 0 var(--space-4);
+    font-size: var(--font-size-sm);
+  }
+
+  .tier-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .tier-option {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+    background: var(--color-surface);
+  }
+
+  .tier-option:hover {
+    border-color: var(--color-accent);
+  }
+
+  .tier-option input[type="radio"] {
+    margin-top: 0.25rem;
+    accent-color: var(--color-accent);
+  }
+
+  .tier-option input[type="radio"]:disabled + .tier-option-body {
+    opacity: 0.75;
+  }
+
+  .tier-option input[type="radio"]:checked ~ .tier-option-body .tier-option-title {
+    color: var(--color-primary);
+  }
+
+  .tier-option--highlight {
+    border-color: var(--color-accent);
+    background: color-mix(in oklab, var(--color-accent) 4%, var(--color-surface));
+  }
+
+  .tier-option-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .tier-option-title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-xl);
+    letter-spacing: var(--letter-spacing-display);
+    color: var(--color-text);
+  }
+
+  .tier-option-price {
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    margin-left: var(--space-2);
+  }
+
+  .tier-option-meta {
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    line-height: var(--line-height-body);
+  }
+
+  .tier-option-subnote {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+    line-height: var(--line-height-body);
+  }
+
+  .tier-option-subnote--strong {
+    color: var(--color-text-secondary);
+    font-weight: 500;
+  }
+
+  .tier-form-actions {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: var(--space-2);
+  }
+
+  .tier-form-actions .save-btn {
+    width: auto;
+  }
+
+  /* Avatar-save toast (inline JS creates #avatar-toast on demand) */
+  .avatar-toast {
+    position: fixed;
+    top: 5.5rem;
+    right: var(--space-6);
+    z-index: var(--z-toast);
+    padding: var(--space-3) var(--space-5);
+    background: var(--color-primary);
+    color: var(--color-text-on-dark);
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-lg);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    opacity: 0;
+    transform: translateY(-0.5rem);
+    transition: opacity 180ms ease, transform 180ms ease;
+    pointer-events: none;
+    max-width: 20rem;
+  }
+  .avatar-toast.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .avatar-toast.is-error {
+    background: var(--color-error);
   }
 }

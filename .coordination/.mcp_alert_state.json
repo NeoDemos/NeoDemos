@@ -1,8 +1,8 @@
 {
   "last_fired": {
     "error_rate": null,
-    "latency": "2026-04-14T20:09:06Z",
-    "silent": "2026-04-14T20:44:22Z",
-    "traffic_spike": "2026-04-14T20:14:08Z"
+    "latency": "2026-04-15T10:00:15Z",
+    "silent": "2026-04-15T11:46:06Z",
+    "traffic_spike": "2026-04-15T11:15:51Z"
   }
 }

@@ -6,6 +6,25 @@
   blokken. Gepubliceerde pagina's vervangen de standaard sjabloon op de publieke
   route. Niet-gepubliceerde wijzigingen blijven concept totdat je publiceert.
 </p>
+
+<section class="admin-new-page-form">
+  <h2 class="admin-panel-title">Nieuwe pagina</h2>
+  {% if request.query_params.get('error') %}
+  <div class="auth-error">
+    {% if request.query_params.get('error') == 'invalid_slug' %}Ongeldige slug. Gebruik alleen a-z, 0-9 en hyphens (2-60 tekens, begint en eindigt met letter/cijfer).
+    {% elif request.query_params.get('error') == 'reserved_slug' %}Deze slug is gereserveerd.
+    {% elif request.query_params.get('error') == 'exists' %}Een pagina met deze slug bestaat al.
+    {% endif %}
+  </div>
+  {% endif %}
+  <form method="POST" action="/admin/pages/new" class="admin-form-inline">
+    <input type="text" name="title" placeholder="Paginatitel" required>
+    <input type="text" name="slug" placeholder="url-slug (a-z, 0-9, -)" pattern="[a-z0-9][a-z0-9-]{1,58}[a-z0-9]" required>
+    <button type="submit" class="btn btn-primary">Aanmaken</button>
+  </form>
+  <p class="admin-help-text">De pagina verschijnt op <code>/p/{slug}</code> zodra je publiceert.</p>
+</section>
+
 <table class="data-table">
   <thead>
     <tr>
@@ -19,7 +38,10 @@
   <tbody>
     {% for p in pages %}
     <tr>
-      <td><code>{{ p.slug }}</code></td>
+      <td>
+        <code>{{ p.slug }}</code>
+        {% if p.is_custom %}<span class="badge badge-muted">custom</span>{% endif %}
+      </td>
       <td>{{ p.title }}</td>
       <td>
         {% if p.is_published %}
@@ -33,6 +55,9 @@
       <td>{{ p.updated_at[:16] if p.updated_at else '—' }}</td>
       <td>
         <a href="/admin/editor/{{ p.slug }}" class="btn btn-sm btn-primary">Bewerken</a>
+        {% if p.is_custom and p.is_published %}
+        <a href="/p/{{ p.slug }}" class="btn btn-sm btn-ghost" target="_blank" rel="noopener">Bekijk</a>
+        {% endif %}
       </td>
     </tr>
     {% endfor %}

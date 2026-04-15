@@ -7,7 +7,65 @@
 {% if page_html %}
 <div class="grapejs-content">{{ page_html | safe }}</div>
 {% else %}
-<div class="search-container">
+<div class="chat-workbench" data-state="initial">
+
+<!-- ── Chat sidebar (reference pickers) — hidden by default, opened via [+] in chat composer ── -->
+<aside class="chat-sidebar" id="chat-sidebar" aria-label="Referentie kiezers">
+  <div class="chat-sidebar-head">
+    <h2 class="chat-sidebar-title">Referenties</h2>
+    <button type="button" class="chat-sidebar-close" id="chat-sidebar-close" aria-label="Sluiten">&times;</button>
+  </div>
+
+  <section class="sidebar-picker" data-picker="meeting">
+    <h3>Specifieke vergadering</h3>
+    <input type="search" id="sidebar-meeting-filter" placeholder="Zoek vergadering..." aria-label="Vergaderingen filteren">
+    <ul id="sidebar-meeting-list" class="sidebar-list"><li class="sidebar-empty">Laden...</li></ul>
+  </section>
+
+  <section class="sidebar-picker" data-picker="committee">
+    <h3>Commissie</h3>
+    <ul class="sidebar-list sidebar-list-static">
+      <li><button type="button" data-committee="Gemeenteraad">Gemeenteraad</button></li>
+      <li><button type="button" data-committee="Commissie Bouwen, Wonen en Buitenruimte">Bouwen, Wonen &amp; Buitenruimte</button></li>
+      <li><button type="button" data-committee="Commissie Bestuur, Organisatie, Financiën en Veiligheid">Bestuur, Organisatie, Financiën &amp; Veiligheid</button></li>
+      <li><button type="button" data-committee="Commissie Mobiliteit, Haven, Economie en Klimaat">Mobiliteit, Haven, Economie &amp; Klimaat</button></li>
+      <li><button type="button" data-committee="Commissie Werk, Inkomen, Onderwijs, Samenleven">Werk, Inkomen, Onderwijs &amp; Samenleven</button></li>
+      <li><button type="button" data-committee="Commissie Zorg, Welzijn, Cultuur en Sport">Zorg, Welzijn, Cultuur &amp; Sport</button></li>
+    </ul>
+  </section>
+
+  <section class="sidebar-picker" data-picker="doctype">
+    <h3>Documenttype</h3>
+    <ul class="sidebar-list sidebar-list-static">
+      <li><button type="button" data-doctype="notulen">Notulen</button></li>
+      <li><button type="button" data-doctype="moties">Moties</button></li>
+      <li><button type="button" data-doctype="amendementen">Amendementen</button></li>
+      <li><button type="button" data-doctype="begrotingsregels">Begrotingsregels</button></li>
+      <li><button type="button" data-doctype="schriftelijke-vragen">Schriftelijke vragen</button></li>
+      <li><button type="button" data-doctype="beantwoording">Beantwoording</button></li>
+      <li><button type="button" data-doctype="collegebrieven">Collegebrieven</button></li>
+    </ul>
+  </section>
+
+  <section class="sidebar-picker" data-picker="partij">
+    <h3>Partij</h3>
+    <ul class="sidebar-list sidebar-list-static">
+      <li><button type="button" data-partij="50PLUS">50PLUS</button></li>
+      <li><button type="button" data-partij="CDA">CDA</button></li>
+      <li><button type="button" data-partij="ChristenUnie">ChristenUnie</button></li>
+      <li><button type="button" data-partij="D66">D66</button></li>
+      <li><button type="button" data-partij="DENK">DENK</button></li>
+      <li><button type="button" data-partij="GroenLinks-PvdA">GroenLinks-PvdA</button></li>
+      <li><button type="button" data-partij="Leefbaar Rotterdam">Leefbaar Rotterdam</button></li>
+      <li><button type="button" data-partij="Partij voor de Dieren">Partij voor de Dieren</button></li>
+      <li><button type="button" data-partij="SP">SP</button></li>
+      <li><button type="button" data-partij="Volt">Volt</button></li>
+      <li><button type="button" data-partij="VVD">VVD</button></li>
+    </ul>
+  </section>
+</aside>
+
+<div class="search-container chat-workbench-main">
 
     <!-- ── Full-viewport hero: image + headline + search + examples ── -->
     <div class="landing-hero-image" style="background-image: -webkit-image-set(url('/static/images/skyline.jpg') 1x, url('/static/images/skyline@2x.jpg') 2x); background-image: image-set(url('/static/images/skyline.jpg') 1x, url('/static/images/skyline@2x.jpg') 2x);">
@@ -15,37 +73,35 @@
             <div class="landing-hero-content">
                 <h1 class="landing-hero-heading" id="rotating-headline"></h1>
 
-                <!-- Search bar ON the hero -->
-                <div class="search-box-wrapper">
-                    <textarea id="search-input" class="search-input" placeholder="{{ content('landing.hero_placeholder', 'Stel uw eigen vraag...') }}"
-                        rows="1"></textarea>
-                    <button type="button" onclick="performSearch()" class="search-btn">Zoek</button>
+                <!-- Claude-style composer ON the hero -->
+                <form class="claude-composer claude-composer--hero" onsubmit="event.preventDefault(); performSearch();">
+                    <textarea id="search-input" class="claude-composer__input" placeholder="{{ content('landing.hero_placeholder', 'Wat wilt u weten over de raad?') }}"
+                        rows="3" aria-label="Vraag stellen"></textarea>
+                    <div class="claude-composer__footer">
+                        <button type="button" class="claude-composer__attach" id="hero-attach" aria-label="Referenties toevoegen">+</button>
+                        <button type="submit" class="claude-composer__send" aria-label="Zoeken">
+                            <span aria-hidden="true">↑</span>
+                        </button>
+                    </div>
+                    <!-- Mention menu: unchanged behavior (@autocomplete preserved) -->
                     <div id="mention-menu" class="mention-menu">
                         <div class="mention-menu-header">DIRECTE KOPPELING</div>
                         <div id="mention-items"></div>
                     </div>
-                </div>
+                </form>
 
                 <div id="search-hint" class="search-hint" aria-live="polite"></div>
 
-                <!-- Example queries ON the hero -->
-                <div class="example-queries">
-                    <span class="example-queries-label">{{ content('landing.example_queries_label', 'Of probeer:') }}</span>
-                    <button type="button" class="example-query" onclick="runExample(this)">{{ content('landing.example_query_1', 'Heeft het college haar beloftes waargemaakt?') }}</button>
-                    <button type="button" class="example-query" onclick="runExample(this)">{{ content('landing.example_query_2', 'Hoe stemden partijen over woningbouw?') }}</button>
-                    <button type="button" class="example-query" onclick="runExample(this)">{{ content('landing.example_query_3', 'Welke moties over klimaat zijn aangenomen sinds 2020?') }}</button>
+                <!-- Example topics (tags) — click prefills composer; keeps hero uncluttered -->
+                <div class="example-queries example-topics">
+                    <button type="button" class="example-topic" data-seed="Heeft het college haar beloftes waargemaakt?">Beloftes</button>
+                    <button type="button" class="example-topic" data-seed="Hoe stemden partijen over woningbouw?">Stemgedrag</button>
+                    <button type="button" class="example-topic" data-seed="Welke klimaatmoties zijn aangenomen sinds 2020?">Klimaat</button>
+                    <button type="button" class="example-topic" data-seed="Wat is het beleid rondom parkeren?">Parkeren</button>
+                    <button type="button" class="example-topic" data-seed="Waar gaat de gemeentebegroting naartoe?">Begroting</button>
                 </div>
 
-                <!-- Credibility + trust ON the hero -->
-                <div class="hero-stats">
-                    <span>{{ content('landing.stat_documents', '90.000+ documenten') }}</span>
-                    <span class="hero-stats-sep">&middot;</span>
-                    <span>{{ content('landing.stat_years', '24 jaar') }}</span>
-                    <span class="hero-stats-sep">&middot;</span>
-                    <span>{{ content('landing.stat_city', 'Rotterdam') }}</span>
-                    <span class="hero-stats-sep">&middot;</span>
-                    <span>{{ content('landing.stat_open', 'Open brondata') }}</span>
-                </div>
+                {# Hero-stats pill removed 2026-04-15 — duplicate of the trust strip below the hero. #}
 
                 <!-- Loading state + AI result live inside the hero so skyline shows behind them -->
                 <div id="search-loading-state" class="search-loading-state" hidden>
@@ -58,7 +114,7 @@
                     </ul>
                 </div>
 
-                <!-- AI Deep Research Result -->
+                <!-- AI Deep Research Result (kept as legacy one-shot card — used in initial state only) -->
                 <div id="ai-deep-research" hidden>
                     <div class="card ai-result-card">
                         <div class="ai-result-header">
@@ -70,22 +126,20 @@
                                 &#128196; Kopieer voor Word
                             </button>
                         </div>
-
-                        <!-- Teaser: first paragraph only, always visible -->
                         <div id="ai-answer-teaser" class="ai-content ai-answer-teaser"></div>
-
-                        <!-- Full answer: hidden until expanded -->
                         <div id="ai-answer-content" class="ai-content ai-answer-full" hidden></div>
-
-                        <!-- Expand/collapse toggle -->
                         <button id="ai-expand-btn" class="ai-expand-btn" onclick="toggleAIExpand()" hidden>
                             Bekijk volledige analyse &darr;
                         </button>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
+
+    <!-- Chat thread (lives OUTSIDE hero; visible when data-state="chat") -->
+    <div id="chat-thread" class="chat-thread" aria-live="polite" hidden></div>
 
     <!-- Demo answer (below hero, proof of capability) -->
     {% if not user %}
@@ -181,6 +235,169 @@
     <div id="document-results"></div>
 
 
+    <!-- Subscription teaser — visible only in initial state, tucked just above the nudges -->
+    {% if not user %}
+    <aside class="subscription-teaser" aria-label="Abonnement preview">
+        <div class="subscription-teaser-inner">
+            <p class="subscription-teaser-kicker">Tijdens beta gratis</p>
+            <h3 class="subscription-teaser-title">NeoDemos Pro — onbeperkt AI-analyses, MCP-koppeling, opgeslagen gesprekken.</h3>
+            <p class="subscription-teaser-lede">Na launch <strong>&euro;19/mnd</strong>. Nu nog gratis voor wie zich aanmeldt.</p>
+            <div class="subscription-teaser-actions">
+                <a href="/abonnement" class="btn btn-primary btn-sm">Bekijk tiers</a>
+                <a href="/register" class="btn btn-ghost btn-sm">Gratis starten</a>
+            </div>
+        </div>
+    </aside>
+    {% endif %}
+
+    <!-- ── Testimonial strip — anon only, helps conversion ── -->
+    {% if not user %}
+    <section class="landing-testimonials" aria-label="Wat gebruikers zeggen">
+        <div class="landing-section-inner">
+            <p class="landing-section-kicker">Stemmen uit de stad</p>
+            <div class="testimonial-grid">
+                <figure class="testimonial-card">
+                    <blockquote class="testimonial-quote">&ldquo;Als raadslid is dit de eerste tool die me echt tijd bespaart bij het voorbereiden van commissies.&rdquo;</blockquote>
+                    <figcaption class="testimonial-byline">
+                        <img class="testimonial-avatar" src="{{ avatar_url_for('testimonial-raadslid-groenlinks-pvda') }}" alt="" width="48" height="48">
+                        <span class="testimonial-meta">
+                            <span class="testimonial-name">Raadslid</span>
+                            <span class="testimonial-role">GroenLinks-PvdA</span>
+                        </span>
+                    </figcaption>
+                </figure>
+                <figure class="testimonial-card">
+                    <blockquote class="testimonial-quote">&ldquo;Eindelijk een manier om raadsinformatie te doorzoeken zonder drie uur in Ibabs te wroeten.&rdquo;</blockquote>
+                    <figcaption class="testimonial-byline">
+                        <img class="testimonial-avatar" src="{{ avatar_url_for('testimonial-journalist-rijnmond') }}" alt="" width="48" height="48">
+                        <span class="testimonial-meta">
+                            <span class="testimonial-name">Journalist</span>
+                            <span class="testimonial-role">Rijnmond</span>
+                        </span>
+                    </figcaption>
+                </figure>
+                <figure class="testimonial-card">
+                    <blockquote class="testimonial-quote">&ldquo;Ik kan eindelijk meekomen in politieke gesprekken in mijn buurt.&rdquo;</blockquote>
+                    <figcaption class="testimonial-byline">
+                        <img class="testimonial-avatar" src="{{ avatar_url_for('testimonial-inwoner-rotterdam-zuid') }}" alt="" width="48" height="48">
+                        <span class="testimonial-meta">
+                            <span class="testimonial-name">Inwoner</span>
+                            <span class="testimonial-role">Rotterdam-Zuid</span>
+                        </span>
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- ── Trust / credibility strip — everyone ── -->
+    <section class="landing-trust" aria-label="Feiten over NeoDemos">
+        <div class="landing-section-inner">
+            <div class="trust-grid">
+                <div class="trust-stat">
+                    <p class="trust-stat-number">100.000+</p>
+                    <p class="trust-stat-label">Documenten doorzoekbaar</p>
+                </div>
+                <div class="trust-stat">
+                    <p class="trust-stat-number">24</p>
+                    <p class="trust-stat-label">Jaar aan raadsbesluiten</p>
+                </div>
+                <div class="trust-stat">
+                    <a href="/methodologie#eval" class="trust-stat-link" aria-label="Bekijk onze eigen eval">
+                        <p class="trust-stat-number">99%</p>
+                        <p class="trust-stat-label">Precisie in onze eigen eval</p>
+                    </a>
+                </div>
+                <div class="trust-stat">
+                    <a href="/technologie" class="trust-stat-link" aria-label="Bekijk technologie pagina">
+                        <p class="trust-stat-number">100%</p>
+                        <p class="trust-stat-label">EU-gehost &amp; onafhankelijk</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Explainer — hoe werkt het ── -->
+    <section class="landing-howto" aria-label="Hoe werkt het">
+        <div class="landing-section-inner">
+            <p class="landing-section-kicker">Hoe werkt het</p>
+            <h2 class="landing-section-title">Van vraag naar onderbouwing in drie stappen.</h2>
+            <ol class="howto-grid">
+                <li class="howto-step">
+                    <span class="howto-step-badge" aria-hidden="true">1</span>
+                    <h3 class="howto-step-title">Stel uw vraag in gewone taal</h3>
+                    <p class="howto-step-body">Geen zoektermen of filters nodig. Schrijf zoals u het aan een collega zou vragen, in het Nederlands.</p>
+                </li>
+                <li class="howto-step">
+                    <span class="howto-step-badge" aria-hidden="true">2</span>
+                    <h3 class="howto-step-title">We doorzoeken 24 jaar aan raadsbesluiten</h3>
+                    <p class="howto-step-body">Notulen, moties, begrotingen en collegebrieven uit heel Rotterdam. Alles traceerbaar tot de bron.</p>
+                </li>
+                <li class="howto-step">
+                    <span class="howto-step-badge" aria-hidden="true">3</span>
+                    <h3 class="howto-step-title">U krijgt een onderbouwd antwoord met bronnen</h3>
+                    <p class="howto-step-body">Elk feit komt met een directe verwijzing naar het originele document. Controleer, kopieer, deel.</p>
+                </li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- ── Subscription tier preview — mirrors /abonnement markup ── -->
+    <section class="landing-tiers" aria-label="Abonnementen in een oogopslag">
+        <div class="landing-section-inner">
+            <p class="landing-section-kicker">Abonnementen</p>
+            <h2 class="landing-section-title">Gratis voor iedereen. Meer voor wie dieper graaft.</h2>
+            <div class="pricing-grid landing-tiers-grid">
+                <article class="pricing-card">
+                    <h3 class="pricing-card-name">Publiek</h3>
+                    <p class="pricing-card-price"><span>&euro;0</span><small>&nbsp;altijd</small></p>
+                    <p class="pricing-card-audience">Voor elke Rotterdammer, journalist, student.</p>
+                    <ul class="pricing-card-list">
+                        <li>Onbeperkt zoeken</li>
+                        <li>Bronverwijzingen bij elk antwoord</li>
+                        <li>Geen account nodig</li>
+                    </ul>
+                    <a href="/register" class="btn btn-ghost pricing-cta">Gratis starten</a>
+                </article>
+                <article class="pricing-card pricing-card--highlight">
+                    <span class="pricing-card-badge">Gratis tijdens beta</span>
+                    <h3 class="pricing-card-name">Pro</h3>
+                    <p class="pricing-card-price"><span>&euro;19</span><small>&nbsp;/maand</small></p>
+                    <p class="pricing-card-audience">Voor intensieve onderzoekers en journalisten.</p>
+                    <ul class="pricing-card-list">
+                        <li>Onbeperkte AI-analyses</li>
+                        <li>MCP-koppeling (Claude, ChatGPT, Cursor)</li>
+                        <li>Opgeslagen gesprekken en export</li>
+                    </ul>
+                    <a href="/register" class="btn btn-primary pricing-cta">Gratis tijdens beta</a>
+                </article>
+                <article class="pricing-card">
+                    <h3 class="pricing-card-name">Raadslid</h3>
+                    <p class="pricing-card-price"><span>&euro;49</span><small>&nbsp;/maand</small></p>
+                    <p class="pricing-card-audience">Voor raadsleden, fracties, beleidsmedewerkers.</p>
+                    <ul class="pricing-card-list">
+                        <li>Alles in Pro</li>
+                        <li>Fractie-samenwerking en gedeelde notities</li>
+                        <li>Prioriteitsupport en adviesgesprek</li>
+                    </ul>
+                    <a href="mailto:contact@neodemos.nl?subject=Raadslid-abonnement" class="btn btn-ghost pricing-cta">Neem contact op</a>
+                </article>
+            </div>
+            <p class="landing-tiers-more"><a href="/abonnement">Bekijk alle details &rarr;</a></p>
+        </div>
+    </section>
+
+    <!-- ── Final CTA band — full-bleed, warm-tinted ── -->
+    <section class="landing-final-cta" aria-label="Aan de slag">
+        <div class="landing-section-inner landing-final-cta-inner">
+            <h2 class="landing-final-cta-title">Klaar om te beginnen?</h2>
+            <p class="landing-final-cta-lede">Stel uw eerste vraag over de Rotterdamse raad. Geen account, geen cookies, geen drempel.</p>
+            <a href="/register" class="btn btn-accent landing-final-cta-btn">Gratis starten</a>
+        </div>
+    </section>
+
     <!-- Account nudge (hidden, shown after 3rd search for anonymous users) -->
     <div id="account-nudge" class="nudge-banner" hidden>
         <div class="nudge-content">
@@ -205,11 +422,331 @@
     </div>
 
 </div>
+<!-- pinned composer for chat state (hidden in initial state) -->
+<div class="chat-composer" id="chat-composer" hidden>
+    <form class="claude-composer claude-composer--pinned" onsubmit="event.preventDefault(); submitChatTurn();">
+        <textarea id="chat-input" class="claude-composer__input" placeholder="Vervolgvraag..." rows="2" aria-label="Vervolgvraag stellen"></textarea>
+        <div class="claude-composer__footer">
+            <button type="button" class="claude-composer__attach" id="composer-attach" aria-label="Referenties toevoegen">+</button>
+            <div class="claude-composer__right">
+                <button type="button" class="claude-composer__reset" onclick="resetChat()" title="Nieuw gesprek">↺ Nieuw</button>
+                <button type="submit" class="claude-composer__send" aria-label="Verstuur">
+                    <span aria-hidden="true">↑</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+</div><!-- /.chat-workbench -->
 
 <script>
-    // ── Example query click handler ──
+    // ════════════════════════════════════════════════════════════════
+    //   Chat workbench state (Phase 7+)
+    //   Two states: "initial" (hero + centered input) and "chat" (thread + sidebar)
+    //   Preserves existing @mention autocomplete (see bottom of script).
+    // ════════════════════════════════════════════════════════════════
+    const workbench = document.querySelector('.chat-workbench');
+    const chatSidebar = document.getElementById('chat-sidebar');
+    const chatThread = document.getElementById('chat-thread');
+    const chatComposer = document.getElementById('chat-composer');
+    const chatInput = document.getElementById('chat-input');
+
+    // session_id — stable per browser tab
+    function getSessionId() {
+        let sid = sessionStorage.getItem('neodemos_chat_session');
+        if (!sid) {
+            sid = 'anon-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+            sessionStorage.setItem('neodemos_chat_session', sid);
+        }
+        return sid;
+    }
+
+    // Query params for SSE (session only — pickers insert @mentions, not chips)
+    function buildAttachedQueryParams() {
+        const p = new URLSearchParams();
+        p.set('session_id', getSessionId());
+        return p;
+    }
+
+    // Active input = chat composer in chat state, hero search-input in initial state
+    function activeInput() {
+        return workbench && workbench.dataset.state === 'chat'
+            ? chatInput
+            : document.getElementById('search-input');
+    }
+
+    function insertMentionIntoInput(mentionText) {
+        const el = activeInput();
+        if (!el) return;
+        const start = typeof el.selectionStart === 'number' ? el.selectionStart : el.value.length;
+        const end = typeof el.selectionEnd === 'number' ? el.selectionEnd : el.value.length;
+        const before = el.value.substring(0, start);
+        const after = el.value.substring(end);
+        const separator = (before && !/\s$/.test(before)) ? ' ' : '';
+        const inserted = separator + mentionText + ' ';
+        el.value = before + inserted + after;
+        el.focus();
+        const pos = (before + inserted).length;
+        try { el.setSelectionRange(pos, pos); } catch (_) {}
+        el.dispatchEvent(new Event('input'));
+    }
+
+    // Sidebar open/close — toggled via .is-open class (CSS hides by default)
+    function openSidebar(picker) {
+        if (!chatSidebar) return;
+        chatSidebar.classList.add('is-open');
+        document.body.classList.add('sidebar-open');
+        if (picker) {
+            const target = chatSidebar.querySelector('[data-picker="' + picker + '"]');
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        loadSidebarMeetings();
+    }
+    function closeSidebar() {
+        if (!chatSidebar) return;
+        chatSidebar.classList.remove('is-open');
+        document.body.classList.remove('sidebar-open');
+    }
+
+    // [+] buttons on hero + pinned composer open the sidebar
+    ['hero-attach', 'composer-attach'].forEach(function(id) {
+        const b = document.getElementById(id);
+        if (b) b.addEventListener('click', function(e) { e.preventDefault(); openSidebar('meeting'); });
+    });
+    const sidebarClose = document.getElementById('chat-sidebar-close');
+    if (sidebarClose) sidebarClose.addEventListener('click', closeSidebar);
+
+    // Sidebar picker clicks INSERT @mention into the active input.
+    //  - doctype + committee + partij insert the full name (type-level scoping)
+    //  - specific meeting inserts "@<label> <date_short>" (pinpoint scoping)
+    chatSidebar && chatSidebar.querySelectorAll('[data-doctype]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            insertMentionIntoInput('@' + btn.textContent.trim());
+            closeSidebar();
+        });
+    });
+    chatSidebar && chatSidebar.querySelectorAll('[data-committee]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            insertMentionIntoInput('@' + btn.dataset.committee);
+            closeSidebar();
+        });
+    });
+    chatSidebar && chatSidebar.querySelectorAll('[data-partij]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            insertMentionIntoInput('@' + btn.dataset.partij);
+            closeSidebar();
+        });
+    });
+
+    // Meeting picker — fetches from API once, then filters client-side
+    let sidebarMeetingsCache = null;
+    async function loadSidebarMeetings() {
+        const list = document.getElementById('sidebar-meeting-list');
+        if (!list) return;
+        if (sidebarMeetingsCache) { renderSidebarMeetings(sidebarMeetingsCache); return; }
+        try {
+            const resp = await fetch('/api/calendar/upcoming?limit=40');
+            if (!resp.ok) throw new Error('fetch failed');
+            const data = await resp.json();
+            sidebarMeetingsCache = data.meetings || [];
+            renderSidebarMeetings(sidebarMeetingsCache);
+        } catch (e) {
+            list.innerHTML = '<li class="sidebar-empty">Kon vergaderingen niet laden.</li>';
+        }
+    }
+    function renderSidebarMeetings(meetings, filter) {
+        const list = document.getElementById('sidebar-meeting-list');
+        if (!list) return;
+        const f = (filter || '').toLowerCase();
+        const filtered = f
+            ? meetings.filter(function(m) { return (m.label || '').toLowerCase().includes(f); })
+            : meetings;
+        if (!filtered.length) {
+            list.innerHTML = '<li class="sidebar-empty">Geen resultaten.</li>';
+            return;
+        }
+        list.innerHTML = '';
+        filtered.slice(0, 30).forEach(function(m) {
+            const li = document.createElement('li');
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            if (m.is_past) btn.classList.add('is-past');
+            const dateEl = '<span class="meeting-date-pill">' + (m.date_short || '') + '</span>';
+            const labelEl = '<span class="meeting-label">' + (m.label || 'Vergadering') + '</span>';
+            btn.innerHTML = dateEl + labelEl;
+            btn.addEventListener('click', function() {
+                // Specific meeting: use Dutch full date so the @mention is
+                // unambiguous and reads naturally in civic-context prose.
+                // Format: "@Commissie X - 13 april 2026"
+                const parts = ['@' + (m.label || 'Vergadering')];
+                if (m.date_nl) parts.push('-', m.date_nl);
+                else if (m.date_short) parts.push('-', m.date_short);
+                insertMentionIntoInput(parts.join(' '));
+                closeSidebar();
+            });
+            li.appendChild(btn);
+            list.appendChild(li);
+        });
+    }
+    const meetingFilterEl = document.getElementById('sidebar-meeting-filter');
+    if (meetingFilterEl) {
+        meetingFilterEl.addEventListener('input', function(e) {
+            if (sidebarMeetingsCache) renderSidebarMeetings(sidebarMeetingsCache, e.target.value);
+        });
+    }
+
+    // State transition: initial → chat
+    function transitionToChatState() {
+        if (!workbench || workbench.dataset.state === 'chat') return;
+        workbench.dataset.state = 'chat';
+        document.body.classList.add('chat-active');
+        if (chatComposer) chatComposer.hidden = false;
+        if (chatThread) chatThread.hidden = false;
+        // Hide the one-shot AI card (we render into thread bubbles now)
+        const aiDR = document.getElementById('ai-deep-research');
+        if (aiDR) aiDR.hidden = true;
+    }
+
+    function resetChat() {
+        sessionStorage.removeItem('neodemos_chat_session');
+        if (chatThread) chatThread.innerHTML = '';
+        if (workbench) workbench.dataset.state = 'initial';
+        document.body.classList.remove('chat-active');
+        if (chatComposer) chatComposer.hidden = true;
+    }
+
+    function appendUserBubble(text) {
+        if (!chatThread) return null;
+        const wrap = document.createElement('article');
+        wrap.className = 'chat-turn chat-turn-user';
+        wrap.innerHTML =
+            '<div class="chat-bubble chat-bubble-user">' +
+            '<div class="chat-bubble-text"></div></div>';
+        wrap.querySelector('.chat-bubble-text').textContent = text;
+        chatThread.appendChild(wrap);
+        wrap.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        return wrap;
+    }
+
+    function appendAssistantBubble() {
+        if (!chatThread) return null;
+        const wrap = document.createElement('article');
+        wrap.className = 'chat-turn chat-turn-assistant';
+        wrap.innerHTML =
+            '<div class="chat-bubble chat-bubble-assistant">' +
+            '<ul class="ai-loading-steps chat-steps"></ul>' +
+            '<div class="ai-content chat-bubble-content"></div>' +
+            '</div>';
+        chatThread.appendChild(wrap);
+        wrap.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        return wrap;
+    }
+
+    async function submitChatTurn() {
+        const ta = chatInput;
+        if (!ta) return;
+        const query = ta.value.trim();
+        if (query.length < 3) return;
+        ta.value = '';
+        ta.style.height = 'auto';
+        // Snapshot attachedContext for user bubble (chips travel with turn)
+        appendUserBubble(query);
+        const assistantWrap = appendAssistantBubble();
+        await streamIntoBubble(query, assistantWrap);
+    }
+
+    // Core streaming: renders into a given target (.chat-bubble-content + .chat-steps)
+    async function streamIntoBubble(query, bubbleWrap) {
+        const stepsEl = bubbleWrap.querySelector('.chat-steps');
+        const contentEl = bubbleWrap.querySelector('.chat-bubble-content');
+        let answerBuffer = '';
+
+        const params = buildAttachedQueryParams();
+        params.set('q', query);
+        const eventSource = new EventSource('/api/search/stream?' + params.toString());
+        activeEventSource = eventSource;
+
+        eventSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            switch (data.type) {
+                case 'session':
+                    if (data.session_id) sessionStorage.setItem('neodemos_chat_session', data.session_id);
+                    break;
+                case 'status':
+                    if (stepsEl) {
+                        const li = document.createElement('li');
+                        li.textContent = data.message;
+                        li.classList.add('ai-step-active');
+                        stepsEl.querySelectorAll('.ai-step-active').forEach(function(el){ el.classList.remove('ai-step-active'); el.classList.add('ai-step-done'); });
+                        li.classList.add('ai-step-active');
+                        stepsEl.appendChild(li);
+                    }
+                    break;
+                case 'chunk':
+                    if (!answerBuffer && stepsEl) stepsEl.hidden = true;
+                    answerBuffer += data.text;
+                    if (typeof marked !== 'undefined') {
+                        marked.setOptions({ gfm: true, breaks: true });
+                        contentEl.innerHTML = marked.parse(answerBuffer);
+                    } else {
+                        contentEl.textContent = answerBuffer;
+                    }
+                    bubbleWrap.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                    break;
+                case 'done':
+                    eventSource.close();
+                    activeEventSource = null;
+                    if (stepsEl) {
+                        stepsEl.querySelectorAll('.ai-step-active').forEach(function(el){
+                            el.classList.remove('ai-step-active');
+                            el.classList.add('ai-step-done');
+                        });
+                        stepsEl.hidden = true;
+                    }
+                    if (data.error) contentEl.innerHTML = '<p class="ai-error">' + data.error + '</p>';
+                    break;
+                case 'error':
+                    eventSource.close();
+                    activeEventSource = null;
+                    if (stepsEl) stepsEl.hidden = true;
+                    contentEl.innerHTML = '<p class="ai-error">' + (data.message || 'Fout') + '</p>';
+                    break;
+            }
+        };
+        eventSource.onerror = function() {
+            eventSource.close();
+            activeEventSource = null;
+            if (stepsEl) stepsEl.hidden = true;
+            if (!answerBuffer) contentEl.innerHTML = '<p class="ai-error">Verbinding verloren.</p>';
+        };
+    }
+
+    // Enter submits for chat input
+    if (chatInput) {
+        chatInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+        chatInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitChatTurn(); }
+        });
+    }
+
+    // ── Example topic handler: prefill composer with the seed (doesn't auto-submit) ──
+    document.querySelectorAll('.example-topic[data-seed]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const input = document.getElementById('search-input');
+            if (!input) return;
+            input.value = btn.dataset.seed;
+            input.focus();
+            input.dispatchEvent(new Event('input'));
+        });
+    });
+    // Legacy shim — kept for demo-answer handlers that still reference runExample
     function runExample(el) {
         const input = document.getElementById('search-input');
+        if (!input) return;
         input.value = el.textContent;
         input.dispatchEvent(new Event('input'));
         performSearch();
@@ -441,56 +978,19 @@
 
         loadingText.innerText = "Documenten doorzoeken...";
 
-        // Determine if AI search should run in parallel
+        // Phase 7+ chat flow: transition + stream. Legacy keyword path is
+        // intentionally skipped — the chat answer surfaces sources inline.
         const triggerAI = shouldTriggerAI(query);
-
-        // Fire AI search in parallel (non-blocking) if detected
         if (triggerAI) {
-            performAISearch(query);
-        }
-
-        // Run keyword search
-        try {
-            const savedParty = localStorage.getItem('neodemos_party') || 'GroenLinks-PvdA';
-            const url = `/api/search?q=${encodeURIComponent(query)}&party=${encodeURIComponent(savedParty)}`;
-
-            const response = await fetch(url);
-            const data = await response.json();
-
             loadingState.hidden = true;
-
-            // Increment search counter and check nudges
-            var searchCount = incrementSearchCount();
-            checkNudges(searchCount);
-
-            if (data.results.length === 0 && !triggerAI) {
-                resultsDiv.innerHTML = '<div class="card"><p>Geen resultaten gevonden voor "' + query + '".</p></div>';
-                return;
-            }
-
-            let html = '';
-            if (data.results.length > 0) {
-                html += '<h3 class="search-section-header">Gevonden Documenten</h3>';
-                data.results.forEach(result => {
-                    html += `
-                    <div class="card search-result-item" onclick="location.href='/meeting/${result.meeting_id}'">
-                        <div class="search-result-item-header">
-                            <h4 class="search-result-item-title">${result.name}</h4>
-                            <span class="search-result-item-date">${result.meeting_date}</span>
-                        </div>
-                        <p class="search-result-item-snippet">${result.snippet || 'Geen samenvatting beschikbaar'}</p>
-                        <div class="search-result-item-committee">
-                            &#127963;&#65039; ${result.committee || 'Algemeen'}
-                        </div>
-                    </div>`;
-                });
-            }
-
-            resultsDiv.innerHTML = html;
-        } catch (error) {
+            transitionToChatState();
+            appendUserBubble(query);
+            const assistantWrap = appendAssistantBubble();
+            incrementSearchCount();
+            streamIntoBubble(query, assistantWrap);
+        } else {
             loadingState.hidden = true;
-            console.error("Search error:", error);
-            resultsDiv.innerHTML = '<p class="search-error">Er is een fout opgetreden bij het zoeken.</p>';
+            if (hint) hint.textContent = 'Voer minimaal 5 tekens in voor een AI-antwoord.';
         }
     }
 
@@ -636,7 +1136,7 @@
     if (headlineEl) {
         const headlines = [
             'Wat deed de gemeente\nmet uw belastinggeld?',
-            'Eén vraag. 90.000 documenten.\nDirect antwoord.',
+            'Eén vraag. 100.000 documenten.\nDirect antwoord.',
             'Uw gemeenteraad vergaderde 1.200 keer.\nWat besloten ze?',
             'De raad besloot.\nWist u ervan?',
             '24 jaar raadsbesluiten.\nDoorzoekbaar in seconden.'

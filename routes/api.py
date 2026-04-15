@@ -15,6 +15,7 @@ import json
 import asyncio
 import logging
 from datetime import date
+from typing import Optional
 
 from fastapi import APIRouter, Request, Depends
 from fastapi.responses import StreamingResponse, JSONResponse
@@ -310,11 +311,25 @@ async def api_search_limit(request: Request):
 
 
 @router.get("/api/search/stream")
-async def api_search_stream(request: Request, q: str):
+async def api_search_stream(
+    request: Request,
+    q: str,
+    session_id: Optional[str] = None,
+    meeting_id: Optional[str] = None,
+    doc_type: Optional[str] = None,
+    partij_ctx: Optional[str] = None,
+):
     """
     SSE endpoint for AI-powered search with Sonnet + MCP tool_use.
     Anonymous: rate-limited to 3/month. Logged-in: unlimited.
+
+    Chat-workbench params (Phase 7+):
+      - session_id: stable id from sessionStorage; enables multi-turn context
+      - meeting_id / doc_type / partij_ctx: attached-context chips from the
+        sidebar reference-pickers. Passed to Sonnet as [context: ...] hints.
     """
+    from services.conversation_store import conversation_store
+
     if not q or len(q) < 3:
         return JSONResponse({"error": "Zoekvraag te kort (minimaal 3 tekens)"}, status_code=400)
 
@@ -338,18 +353,80 @@ async def api_search_stream(request: Request, q: str):
             }, status_code=429)
     else:
         ip = None
-        # If user has a party preference, pass it to Sonnet
         partij = user.get("party")
 
+    # Chip `partij_ctx` from sidebar overrides saved partij for this turn only
+    effective_partij = partij_ctx or partij
+
+    # Session / prior-turn lookup
+    session = conversation_store.get_or_create(session_id)
+    prior_messages = session.prior_messages()
+
+    attached_context = {}
+    if meeting_id:
+        attached_context["meeting_id"] = meeting_id
+    if doc_type:
+        attached_context["doc_type"] = doc_type
+    if partij_ctx:
+        attached_context["partij"] = partij_ctx
+
     async def event_generator():
-        # Increment rate limit for anonymous users at start
         if not is_authenticated and ip:
             _increment_ai_rate_limit(ip)
 
-        async for event in web_intel.stream(q, partij=partij):
+        # Emit session_id upfront so client can persist it in sessionStorage
+        yield f"data: {json.dumps({'type': 'session', 'session_id': session.session_id}, ensure_ascii=False)}\n\n"
+
+        answer_buf: list[str] = []
+        done_event: dict | None = None
+        status = "ok"
+        async for event in web_intel.stream(
+            q,
+            partij=effective_partij,
+            prior_messages=prior_messages,
+            attached_context=attached_context or None,
+        ):
             if await request.is_disconnected():
+                status = "disconnected"
                 break
+            etype = event.get("type")
+            if etype == "chunk" and event.get("text"):
+                answer_buf.append(event["text"])
+            elif etype == "done":
+                done_event = event
+            elif etype == "error":
+                status = "error"
             yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
+
+        # Persist both turns for follow-up context
+        full_answer = "".join(answer_buf).strip()
+        session.append("user", q, attached_context=attached_context)
+        if full_answer:
+            session.append("assistant", full_answer)
+
+        # Cost-tracking row (fire-and-forget — never fails the request)
+        try:
+            from services.usage_tracker import record_ai_usage
+            meta = done_event or {}
+            record_ai_usage(
+                user_id=(user or {}).get("id") if is_authenticated else None,
+                session_id=session.session_id,
+                ip=ip,
+                endpoint="/api/search/stream",
+                model=getattr(web_intel, "model", None),
+                query=q,
+                tools_called=meta.get("tools_called"),
+                rounds=meta.get("rounds"),
+                capped=bool(meta.get("capped")),
+                input_tokens=meta.get("input_tokens"),
+                output_tokens=meta.get("output_tokens"),
+                cost_usd=meta.get("cost_usd"),
+                latency_ms=meta.get("latency_ms"),
+                status=status if done_event else ("incomplete" if status == "ok" else status),
+                attached_context=attached_context or None,
+            )
+        except Exception as _e:
+            logger.warning(f"usage tracking skipped: {_e}")
 
     return StreamingResponse(
         event_generator(),
@@ -685,3 +762,33 @@ async def revoke_token(request: Request, token_id: int, user: dict = Depends(req
         return JSONResponse({"error": "Token niet gevonden"}, status_code=404)
     auth_service.revoke_api_token(token_id)
     return JSONResponse({"ok": True})
+
+
+@router.get("/api/calendar/upcoming")
+async def upcoming_meetings(limit: int = 5):
+    """Next N upcoming meetings for the nd-calendar-mini widget.
+
+    Reuses storage.get_meetings_filtered() (same source as the /calendar page)
+    and filters for start_date >= today in Python. limit is capped at 50.
+
+    Label normalization + (date, label) dedup lives in `services.calendar_labels`
+    (WS14 Phase C6). The API keeps ordering + limit clamping only.
+    """
+    from datetime import datetime as _dt
+    from services.calendar_labels import normalize_and_dedupe
+
+    try:
+        limit = max(1, min(50, int(limit)))
+    except (TypeError, ValueError):
+        limit = 5
+    today = _dt.utcnow().date()
+    try:
+        rows = storage.get_meetings_filtered(year=today.year, limit=500)
+    except Exception as exc:  # pragma: no cover — defensive
+        logger.warning("upcoming_meetings storage error: %s", exc)
+        return JSONResponse({"meetings": []})
+
+    meetings = normalize_and_dedupe(rows, today=today)
+    # Most recent first — past + future both included, newest at top.
+    meetings.sort(key=lambda m: m["date_iso"], reverse=True)
+    return JSONResponse({"meetings": meetings[:limit]})

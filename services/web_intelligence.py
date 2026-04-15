@@ -25,7 +25,7 @@ import logging
 import os
 import time
 from datetime import date
-from typing import AsyncIterator, Optional
+from typing import AsyncIterator, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -101,7 +101,9 @@ class WebIntelligenceService:
         self.client = None
         self.available = False
         self.model = os.getenv("WS9_MODEL", "claude-sonnet-4-6")
-        self.max_tool_rounds = 5
+        # Soft ceiling on tool-use rounds. When hit we do NOT error — we force
+        # Sonnet to synthesize an answer from whatever context it has so far.
+        self.max_tool_rounds = 8
         self.max_tool_result_chars = 8000  # truncate large tool outputs
         self.ai_service = ai_service  # optional Gemini fallback
 
@@ -336,7 +338,13 @@ class WebIntelligenceService:
             "output_tokens": total_output_tokens,
         }
 
-    async def stream(self, user_query: str, partij: Optional[str] = None) -> AsyncIterator[dict]:
+    async def stream(
+        self,
+        user_query: str,
+        partij: Optional[str] = None,
+        prior_messages: Optional[List[Dict]] = None,
+        attached_context: Optional[Dict[str, str]] = None,
+    ) -> AsyncIterator[dict]:
         """
         Streaming: yield SSE events as Sonnet works.
 
@@ -351,13 +359,31 @@ class WebIntelligenceService:
         Args:
             user_query: The user's search query.
             partij: Optional party from user session.
+            prior_messages: Optional prior chat turns in Anthropic messages[] shape.
+            attached_context: Optional chips like {"meeting_id": "...", "doc_type": "moties"}.
         """
         if not self.available:
             async for event in self._gemini_fallback_stream(user_query):
                 yield event
             return
 
-        messages = [{"role": "user", "content": user_query}]
+        # Augment query with attached-context hints (lightweight — Sonnet reads them)
+        ctx_hint = ""
+        if attached_context:
+            hints = []
+            if attached_context.get("meeting_id"):
+                hints.append(f"[context: vergadering_id={attached_context['meeting_id']}]")
+            if attached_context.get("doc_type"):
+                hints.append(f"[context: documenttype={attached_context['doc_type']}]")
+            if attached_context.get("partij"):
+                hints.append(f"[context: partij={attached_context['partij']}]")
+            if hints:
+                ctx_hint = " " + " ".join(hints)
+
+        messages: List[Dict] = []
+        if prior_messages:
+            messages.extend(prior_messages)
+        messages.append({"role": "user", "content": user_query + ctx_hint})
         system_blocks = self._build_system_blocks(partij)
         tools = self._get_tools_with_cache()
 
@@ -455,9 +481,59 @@ class WebIntelligenceService:
             else:
                 break
 
+        # Soft cap hit — instead of returning an error, force one final
+        # Sonnet call without tools so it MUST synthesize an answer from the
+        # context it has gathered so far. Dennis: "always provide output
+        # based on the information you have then."
+        yield {"type": "status", "message": "Antwoord samenstellen uit verzamelde bronnen..."}
+
+        messages.append({
+            "role": "user",
+            "content": (
+                "Het maximum aantal onderzoeksstappen is bereikt. Geef nu "
+                "het beste onderbouwde antwoord op mijn oorspronkelijke vraag, "
+                "gebaseerd op de informatie die je tot nu toe hebt verzameld. "
+                "Wees transparant als bepaalde aspecten nog onzeker zijn, maar "
+                "geef wel een bruikbaar antwoord — geen foutmelding."
+            ),
+        })
+
+        try:
+            final_response = await asyncio.to_thread(
+                self.client.messages.create,
+                model=self.model,
+                max_tokens=4096,
+                temperature=0,
+                system=system_blocks,
+                messages=messages,  # no tools = forced synthesis
+            )
+            total_input_tokens += final_response.usage.input_tokens
+            total_output_tokens += final_response.usage.output_tokens
+            answer = "".join(
+                block.text for block in final_response.content
+                if hasattr(block, "text")
+            )
+        except Exception as e:
+            logger.error(f"Fallback synthesis failed: {e}", exc_info=True)
+            answer = ""
+
+        if answer.strip():
+            chunk_size = 80
+            for i in range(0, len(answer), chunk_size):
+                yield {"type": "chunk", "text": answer[i:i + chunk_size]}
+
+        latency_ms = int((time.monotonic() - t0) * 1000)
+        cost_usd = (total_input_tokens * 3 + total_output_tokens * 15) / 1_000_000
+        logger.info(
+            f"WS9 stream synthesized-after-cap: {len(tools_called)} tools, "
+            f"{self.max_tool_rounds} rounds, {latency_ms}ms, ${cost_usd:.4f}"
+        )
+
         yield {
             "type": "done",
-            "error": "Maximaal aantal stappen bereikt.",
             "tools_called": tools_called,
             "rounds": self.max_tool_rounds,
+            "latency_ms": latency_ms,
+            "cost_usd": cost_usd,
+            "capped": True,
         }

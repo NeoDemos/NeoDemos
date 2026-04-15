@@ -24,7 +24,7 @@
     position: sticky;
     top: var(--space-6);
     background: var(--color-surface-raised);
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-md);
     padding: var(--space-5) var(--space-4);
   }
@@ -34,11 +34,11 @@
     padding: 0 var(--space-2) var(--space-2) var(--space-2);
     font-family: var(--font-body);
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: var(--font-size-xs);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: var(--letter-spacing-widest);
     color: var(--color-text-tertiary);
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border-subtle);
   }
 
   .admin-nav {
@@ -53,7 +53,8 @@
     border-radius: var(--radius-sm);
     color: var(--color-text);
     text-decoration: none;
-    font-size: 0.95rem;
+    font-size: var(--font-size-sm);
+    letter-spacing: -0.005em;
     transition: background 0.15s ease, color 0.15s ease;
   }
 
@@ -76,14 +77,18 @@
     margin: 0 0 var(--space-6) 0;
     font-family: var(--font-heading);
     font-weight: 400;
+    font-size: var(--font-size-4xl);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-display);
     color: var(--color-primary);
   }
 
   .admin-help {
     color: var(--color-text-secondary);
-    font-size: 0.95rem;
+    font-size: var(--font-size-base);
     margin-bottom: var(--space-6);
-    line-height: 1.5;
+    line-height: var(--line-height-body);
+    max-width: 60ch;
   }
 
   .admin-help p {
@@ -110,29 +115,40 @@
   /* ── Stats cards ── */
   .admin-stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: var(--space-4);
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-8);
   }
 
-  .stat-card {
-    background: var(--color-surface-raised);
-    border: 1px solid var(--color-border);
-    padding: var(--space-4) var(--space-6);
-    border-radius: var(--radius-md);
-    text-align: center;
+  /* Admin-scoped stat-card treatment — editorial serif numbers + micro
+     uppercase labels. Base .stat-card lives in components.css; these rules
+     only apply inside the admin dashboard so public pages are untouched. */
+  .admin-stats .stat-card {
+    text-align: left;
+    padding: var(--space-5) var(--space-6);
+    border-color: var(--color-border-subtle);
+    box-shadow: var(--shadow-xs);
   }
 
-  .stat-card .stat-number {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--color-primary);
+  .admin-stats .stat-card .stat-number {
+    display: block;
     font-family: var(--font-heading);
+    font-weight: 400;
+    font-size: var(--font-size-5xl);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-display);
+    color: var(--color-primary);
+    margin-bottom: var(--space-2);
   }
 
-  .stat-card .stat-label {
-    font-size: 0.85rem;
-    color: var(--color-text-secondary);
+  .admin-stats .stat-card .stat-label {
+    display: block;
+    font-family: var(--font-body);
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--letter-spacing-widest);
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    font-weight: 500;
   }
 
   /* ── Toggle / select controls (users table) ── */
@@ -241,7 +257,8 @@
   .admin-section-summary .section-name {
     flex: 1;
     font-family: var(--font-heading);
-    font-size: 1.25rem;
+    font-size: var(--font-size-2xl);
+    line-height: var(--line-height-snug);
     font-weight: 400;
   }
 
@@ -411,39 +428,107 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem 1.5rem;
+    padding: var(--space-3) var(--space-6);
     background: var(--color-surface-raised);
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border-subtle);
     height: 60px;
   }
 
   .editor-topbar-left {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: var(--space-4);
   }
 
   .editor-page-title {
-    font-size: 1rem;
-    font-weight: 600;
+    font-family: var(--font-heading);
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-snug);
+    font-weight: 400;
+    color: var(--color-primary);
     margin: 0;
   }
 
   .editor-status {
-    font-size: 0.85rem;
+    font-size: var(--font-size-sm);
     color: var(--color-text-secondary);
   }
 
-  .editor-status.success { color: #0a7a3a; }
-  .editor-status.error { color: #c53030; }
+  .editor-status.success { color: var(--color-success); }
+  .editor-status.error { color: var(--color-error); }
   .editor-status.muted { color: var(--color-text-secondary); }
 
   .editor-topbar-right {
     display: flex;
-    gap: 0.5rem;
+    gap: var(--space-2);
+    align-items: center;
+    flex-wrap: wrap;
   }
 
   #gjs {
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  /* ── WS8f Phase 7+: "Nieuwe pagina" form on /admin/pages ── */
+  .admin-new-page-form {
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--space-5) var(--space-6);
+    margin: var(--space-5) 0 var(--space-6);
+  }
+
+  .admin-new-page-form .admin-panel-title {
+    margin: 0 0 var(--space-4) 0;
+    font-family: var(--font-heading);
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-snug);
+    font-weight: 400;
+    color: var(--color-primary);
+  }
+
+  .admin-form-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+  }
+
+  .admin-form-inline input[type="text"] {
+    flex: 1 1 180px;
+    min-width: 160px;
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    font-family: inherit;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .admin-form-inline input[type="text"]:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-border-subtle);
+  }
+
+  .admin-help-text {
+    margin: var(--space-3) 0 0 0;
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--letter-spacing-wide);
+    color: var(--color-text-tertiary);
+  }
+
+  .badge-muted {
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border-subtle);
+    padding: 0.15rem 0.4rem;
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--letter-spacing-wide);
+    text-transform: uppercase;
+    margin-left: 0.4rem;
+    border-radius: var(--radius-sm);
   }
 }

@@ -6,10 +6,13 @@ calendar, settings, meeting detail, and MCP installer.
 import os
 import logging
 
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Depends, Form, HTTPException, Request
+from fastapi.responses import JSONResponse, RedirectResponse
 from markupsafe import Markup
 
 from services.auth_dependencies import auth_service, require_login, get_current_user
+from services.avatars import AVATARS, is_valid_slug, user_avatar_url
+from services.subscriptions import VALID_SLUGS as VALID_TIERS, set_tier, tier_for
 
 from app_state import (
     templates,
@@ -19,6 +22,7 @@ from app_state import (
     get_demo_entry,
     page_service,
 )
+from routes.admin import RESERVED_SLUGS
 
 logger = logging.getLogger(__name__)
 
@@ -59,6 +63,22 @@ async def over_page(request: Request):
     return templates.TemplateResponse(name="over.html", request=request, context={
         "title": "Over",
         "user": user,
+        "page_html": page["html_content"] if page else None,
+    })
+
+
+@router.get("/abonnement")
+async def abonnement_page(request: Request):
+    """Subscription / pricing page. Editor-editable via page_service (admin can
+    override the default template content). Falls back to abonnement.html when
+    no published override exists."""
+    user = await get_current_user(request)
+    current_tier = tier_for(user) if user else tier_for(None)
+    page = page_service.get_published("abonnement")
+    return templates.TemplateResponse(name="abonnement.html", request=request, context={
+        "title": "Abonnement",
+        "user": user,
+        "current_tier": current_tier,
         "page_html": page["html_content"] if page else None,
     })
 
@@ -162,13 +182,58 @@ async def read_calendar(
 
 
 @router.get("/settings")
-async def read_settings(request: Request, user: dict = Depends(require_login)):
+async def read_settings(
+    request: Request,
+    user: dict = Depends(require_login),
+    tier: str = None,
+):
     tokens = auth_service.list_user_tokens(user["id"])
+    current_tier = tier_for(user)
     return templates.TemplateResponse(name="settings.html", request=request, context={
         "title": "Instellingen",
         "user": user,
         "tokens": tokens,
+        "avatars": AVATARS,  # slug + label list, for the picker
+        "current_avatar_slug": user.get("avatar_slug"),
+        "current_avatar_url": user_avatar_url(user),
+        "current_tier": current_tier,
+        "tier_change_notice": tier if tier in VALID_TIERS else None,
     })
+
+
+@router.post("/settings/avatar")
+async def settings_set_avatar(
+    request: Request,
+    user: dict = Depends(require_login),
+    slug: str = Form(...),
+):
+    """Persist the user's picked portrait slug. Whitelist-only (AVATARS)."""
+    if not is_valid_slug(slug):
+        return JSONResponse({"ok": False, "error": "onbekende_slug"}, status_code=400)
+    try:
+        auth_service.update_user(user["id"], avatar_slug=slug)
+    except Exception as e:
+        logger.exception("avatar update failed for user=%s slug=%s: %s", user.get("id"), slug, e)
+        return JSONResponse({"ok": False, "error": "opslaan_mislukt"}, status_code=500)
+    refreshed = auth_service.get_user_by_id(user["id"]) or user
+    return JSONResponse({"ok": True, "slug": slug, "url": user_avatar_url(refreshed)})
+
+
+@router.post("/settings/tier")
+async def settings_set_tier(
+    request: Request,
+    user: dict = Depends(require_login),
+    slug: str = Form(...),
+):
+    """Self-service tier switch. Gratis ↔ Pro (free during beta)."""
+    if slug not in VALID_TIERS:
+        raise HTTPException(status_code=400, detail="onbekende tier")
+    try:
+        set_tier(user["id"], slug)
+    except Exception as e:
+        logger.exception("tier switch failed for user=%s slug=%s: %s", user.get("id"), slug, e)
+        raise HTTPException(status_code=500, detail="opslaan_mislukt")
+    return RedirectResponse(url=f"/settings?tier={slug}#abonnement", status_code=303)
 
 
 @router.get("/meeting/{meeting_id}")
@@ -206,4 +271,29 @@ async def read_meeting(request: Request, meeting_id: str, user: dict = Depends(r
         "title": meeting.get("name", "Meeting"),
         "meeting": meeting,
         "user": user,
+    })
+
+
+# ── Dynamic user-created pages (WS8f Phase 7+) ──
+
+@router.get("/p/{slug}")
+async def render_custom_page(slug: str, request: Request):
+    """Render a user-created published site_pages row at /p/{slug}.
+
+    Returns 404 for reserved slugs and unpublished/missing pages. Reserved slugs
+    must never be routable here — they already have dedicated handlers elsewhere.
+    """
+    slug_lower = slug.strip().lower()
+    if slug_lower in RESERVED_SLUGS:
+        raise HTTPException(status_code=404)
+    page = page_service.get_published(slug_lower)
+    if not page:
+        raise HTTPException(status_code=404)
+    user = await get_current_user(request)
+    return templates.TemplateResponse(name="custom_page.html", request=request, context={
+        "title": page.get("title") or slug_lower,
+        "user": user,
+        "page_title": page.get("title") or slug_lower,
+        "page_html": page.get("html_content") or "",
+        "page_css": page.get("css_content") or "",
     })

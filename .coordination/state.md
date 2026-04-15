@@ -1,16 +1,16 @@
 # NeoDemos Project State
 
 > Auto-generated from `.coordination/events.jsonl` — do not edit manually.
-> Last rebuilt: 2026-04-15T07:04:25Z
+> Last rebuilt: 2026-04-15T11:59:06Z
 
 ## Active Now
 
-| WS   | Title                              | Claimed by | Since      | Detail                                                       |
-|------|------------------------------------|------------|------------|--------------------------------------------------------------|
-| WS16 | MCP monitoring & observability     | Dennis     | 2026-04-14 | Initial seed: Phase 1 shipped 2026-04-14                     |
-| WS8f | Admin panel + CMS + GrapeJS editor | dennistak  | 2026-04-14 | Phase 7+ shipped 2026-04-15: Oatmeal-aligned tokens + CSS hy |
-| WS5a | 100% reliable nightly ingest       | dennistak  | 2026-04-14 | claimed via /ws-claim                                        |
-| WS6  | Source-spans-only summarization    | seed       | 2026-04-14 | Phase 3 DB write running; mode='structured' needs WS1        |
+| WS   | Title                              | Claimed by | Since      | Detail                                                |
+|------|------------------------------------|------------|------------|-------------------------------------------------------|
+| WS16 | MCP monitoring & observability     | Dennis     | 2026-04-14 | Initial seed: Phase 1 shipped 2026-04-14              |
+| WS8f | Admin panel + CMS + GrapeJS editor | dennistak  | 2026-04-15 | claimed via /ws-claim                                 |
+| WS5a | 100% reliable nightly ingest       | dennistak  | 2026-04-14 | claimed via /ws-claim                                 |
+| WS6  | Source-spans-only summarization    | seed       | 2026-04-14 | Phase 3 DB write running; mode='structured' needs WS1 |
 
 ## Blocked
 
@@ -57,19 +57,19 @@
 ## Recent events (last 15)
 
 ```jsonl
-{"agent": "Dennis", "event": "qa_rejected", "reason": "Visual editor lacks page-creation affordance; overall editing feels thin. Considering full CMS migration for v0.2.0 — proper templates + visual editor with our tailor-made components as CMS-managed elements. Needs thorough research first (Payload/Strapi/Directus/etc.). WS8f stays in_progress pending that direction decision.", "ts": "2026-04-14T19:49:33Z", "ws": "WS8f"}
-{"agent": "mcp_alert", "detail": "0 calls in 15min (was averaging 46/hr)", "event": "alert", "metrics": {"calls_15m": 0, "prior_60m_calls": 46}, "rule": "silent", "ts": "2026-04-14T20:04:04Z"}
-{"agent": "mcp_alert", "detail": "p95 16.9s last 5min", "event": "alert", "metrics": {"p95_latency_ms": 16854.7}, "rule": "latency", "ts": "2026-04-14T20:09:06Z"}
-{"agent": "Dennis", "detail": "Deferred to v0.3/v0.4: Erik Verweij (only user so far) confirmed virtual notulen is a nice-to-have. Phase 1+4 (2025+2026) are done and live. Phase 2+3 (server infra + 2018-2024 backfill) moved to backlog. WS1 dependency on WS12 removed — VN provenance will be 2025+2026-only until resumed.", "event": "paused", "ts": "2026-04-14T20:09:13Z", "ws": "WS12"}
-{"agent": "mcp_alert", "detail": "10 calls (4.4x baseline)", "event": "alert", "metrics": {"baseline_5m": 2.25, "calls_5m": 10, "ratio": 4.44}, "rule": "traffic_spike", "ts": "2026-04-14T20:14:08Z"}
-{"agent": "mcp_alert", "detail": "0 calls in 15min (was averaging 53/hr)", "event": "alert", "metrics": {"calls_15m": 0, "prior_60m_calls": 53}, "rule": "silent", "ts": "2026-04-14T20:44:22Z"}
-{"agent": "dennistak", "detail": "claimed via /ws-claim", "event": "claimed", "ts": "2026-04-14T20:48:56Z", "ws": "WS5a"}
-{"agent": "mcp_alert", "detail": "0 calls in 15min (was averaging 36/hr)", "event": "alert", "metrics": {"calls_15m": 0, "prior_60m_calls": 36}, "rule": "silent", "ts": "2026-04-14T21:14:35Z"}
-{"agent": "dennistak", "detail": "Phase 7 — rejection follow-up: page creation + asset uploads + deeper editor traits + axe-core", "event": "claimed", "ts": "2026-04-14T21:14:58Z", "ws": "WS8f"}
-{"agent": "mcp_alert", "detail": "p95 65.1s last 5min", "event": "alert", "metrics": {"p95_latency_ms": 65092.0}, "rule": "latency", "ts": "2026-04-14T21:19:37Z"}
-{"agent": "mcp_alert", "detail": "p95 59.3s last 5min", "event": "alert", "metrics": {"p95_latency_ms": 59339.1}, "rule": "latency", "ts": "2026-04-15T05:48:20Z"}
-{"agent": "dennistak", "detail": "Phase 7+ shipped 2026-04-15: Oatmeal-aligned tokens + CSS hygiene, chat-workbench landing (two-state, session, sidebar pickers, preserved @mention), admin editor parity (page creation, asset uploads, autosave, undo/redo UI, device toggle, start-from-template), 5 new GrapesJS blocks + padding traits, docs/architecture/EDITOR_AND_WIDGETS.md. Phase 8 deferred: nd-answer + nd-analyse as Web Components. Pending: mig 0009 + Dennis QA.", "event": "note", "ts": "2026-04-15T06:41:06Z", "ws": "WS8f"}
-{"agent": "mcp_alert", "detail": "p95 80.3s last 5min", "event": "alert", "metrics": {"p95_latency_ms": 80318.1}, "rule": "latency", "ts": "2026-04-15T06:53:50Z"}
-{"agent": "mcp_alert", "detail": "10 calls (40.0x baseline)", "event": "alert", "metrics": {"baseline_5m": 0.25, "calls_5m": 10, "ratio": 40.0}, "rule": "traffic_spike", "ts": "2026-04-15T06:53:50Z"}
-{"agent": "Dennis", "commit": "167dad6", "detail": "we are done", "event": "completed", "ts": "2026-04-15T07:03:54Z", "ws": "WS11"}
+{"agent": "mcp_alert", "detail": "0 calls in 15min (was averaging 21/hr)", "event": "alert", "metrics": {"calls_15m": 0, "prior_60m_calls": 21}, "rule": "silent", "ts": "2026-04-15T08:04:22Z"}
+{"agent": "mcp_alert", "detail": "p95 38.9s last 5min", "event": "alert", "metrics": {"p95_latency_ms": 38893.7}, "rule": "latency", "ts": "2026-04-15T08:39:38Z"}
+{"agent": "mcp_alert", "detail": "8 calls (12.0x baseline)", "event": "alert", "metrics": {"baseline_5m": 0.67, "calls_5m": 8, "ratio": 12.0}, "rule": "traffic_spike", "ts": "2026-04-15T08:39:38Z"}
+{"agent": "dennistak", "detail": "Post-Phase 7+ feedback cycle done 2026-04-15: nav triptych + account dropdown + Claude composer + chat-state fixes + Oatmeal typography across ai-content + subpage+admin+meeting polish + civic avatars (8 SVG + Gemini script for 20) + Profiel page. WS8g handoff shipped. Carry-overs: mig 0009, avatar picker UI, Phase 8 Web Components, Gemini script run.", "event": "note", "ts": "2026-04-15T08:51:11Z", "ws": "WS8f"}
+{"agent": "dennistak", "detail": "Plan only — handoff seeded 2026-04-15; execution blocked on WS8f QA + WS14 Phase D/F", "event": "claimed", "ts": "2026-04-15T08:51:11Z", "ws": "WS8g"}
+{"agent": "mcp_alert", "detail": "p95 37.8s last 5min", "event": "alert", "metrics": {"p95_latency_ms": 37809.0}, "rule": "latency", "ts": "2026-04-15T09:14:55Z"}
+{"agent": "mcp_alert", "detail": "0 calls in 15min (was averaging 36/hr)", "event": "alert", "metrics": {"calls_15m": 0, "prior_60m_calls": 36}, "rule": "silent", "ts": "2026-04-15T09:35:04Z"}
+{"agent": "dennistak", "detail": "Round 5 feedback shipped 2026-04-15: instellingen !important fix, logo bumped 3xl, Gemini favicon (6 sizes + ICO), /abonnement editor-editable, landing long-scroll (5 Oatmeal-inspired sections), Profiel avatar picker + tier switch (mig 0013 pending), /abonnement 2-tier rewrite + FAQ, tool_rounds 5->8 with synthesis fallback, cost tracking (mig 0012 pending), WS14 Phase A audit doc + C1 DISTINCT + C6 calendar_labels.py.", "event": "note", "ts": "2026-04-15T09:56:24Z", "ws": "WS8f"}
+{"agent": "mcp_alert", "detail": "p95 52.2s last 5min", "event": "alert", "metrics": {"p95_latency_ms": 52169.4}, "rule": "latency", "ts": "2026-04-15T10:00:16Z"}
+{"agent": "mcp_alert", "detail": "9 calls (15.4x baseline)", "event": "alert", "metrics": {"baseline_5m": 0.58, "calls_5m": 9, "ratio": 15.43}, "rule": "traffic_spike", "ts": "2026-04-15T10:00:16Z"}
+{"agent": "dennistak", "detail": "claimed via /ws-claim", "event": "claimed", "ts": "2026-04-15T10:18:55Z", "ws": "WS8f"}
+{"agent": "mcp_alert", "detail": "0 calls in 15min (was averaging 33/hr)", "event": "alert", "metrics": {"calls_15m": 0, "prior_60m_calls": 33}, "rule": "silent", "ts": "2026-04-15T10:35:33Z"}
+{"agent": "mcp_alert", "detail": "0 calls in 15min (was averaging 36/hr)", "event": "alert", "metrics": {"calls_15m": 0, "prior_60m_calls": 36}, "rule": "silent", "ts": "2026-04-15T11:05:47Z"}
+{"agent": "mcp_alert", "detail": "7 calls (14.0x baseline)", "event": "alert", "metrics": {"baseline_5m": 0.5, "calls_5m": 7, "ratio": 14.0}, "rule": "traffic_spike", "ts": "2026-04-15T11:15:52Z"}
+{"agent": "mcp_alert", "detail": "0 calls in 15min (was averaging 13/hr)", "event": "alert", "metrics": {"calls_15m": 0, "prior_60m_calls": 13}, "rule": "silent", "ts": "2026-04-15T11:46:06Z"}
 ```

@@ -48,7 +48,7 @@ When a workstream finishes:
 | WS15 | [`WS15_MOTIE_STEMMEN.md`](WS15_MOTIE_STEMMEN.md) | Per-party voting data (motie_stemmen + zoek_stemgedrag) | 1.5 | **available** — Initial seed: not_started | — |
 | WS2 | [`done/WS2_FINANCIAL.md`](done/WS2_FINANCIAL.md) | Trustworthy financial analysis | 2 | **done** — shipped 2026-04-12 | — |
 | WS2b | [`WS2b_IV3_TAAKVELD.md`](WS2b_IV3_TAAKVELD.md) | IV3 taakveld FK backfill | 2 | **available** | WS2 |
-| WS8f | [`WS8f_ADMIN_CMS.md`](WS8f_ADMIN_CMS.md) | Admin panel + CMS + GrapeJS editor | 2 | **in progress** — Phase 7+ shipped 2026-04-15: Oatmeal-aligned tokens + CSS h… | WS8 |
+| WS8f | [`WS8f_ADMIN_CMS.md`](WS8f_ADMIN_CMS.md) | Admin panel + CMS + GrapeJS editor | 2 | **in progress** — claimed via /ws-claim | WS8 |
 | WS16 | [`WS16_MCP_MONITORING.md`](WS16_MCP_MONITORING.md) | MCP monitoring & observability | 2 | **in progress** — Initial seed: Phase 1 shipped 2026-04-14 | WS4 |
 | WS7 | [`done/WS7_OCR_RECOVERY.md`](done/WS7_OCR_RECOVERY.md) | OCR recovery for moties/amendementen | 2.5 | **done** — shipped 2026-04-14 | — |
 | WS3 | [`WS3_JOURNEY.md`](WS3_JOURNEY.md) | Document journey timelines | 3 | **blocked** — waiting on WS1 | WS1 |

@@ -1,10 +1,132 @@
 # WS8f — Admin Panel, Content Management & Architecture Hardening
 
-> **Status:** `in_progress` — QA rejected 2026-04-14 pending full-CMS direction call
+> **Status:** `in_progress` — Phase 7+ shipped 2026-04-15, pending QA
 > **Owner:** `dennis + claude`
 > **Priority:** 2 (launch enhancer — improves admin self-service, does not block press moment)
 > **Parallelizable:** yes (independent of WS1-WS7, WS9; builds on WS8a-e)
-> **Last updated:** 2026-04-14 (QA rejected — see § Rejection & forward direction)
+> **Last updated:** 2026-04-15 (Phase 7+ — chat workbench + Oatmeal polish + editor parity + drop-in widgets)
+
+---
+
+## Phase 7+ — Oatmeal polish + chat workbench + editor parity (2026-04-15)
+
+After the 2026-04-14 rejection, Dennis requested a sanity-check pass with deeper goals: cleaner appearance (same aesthetic), formatting issues fixed, core tools (zoeken / answer / calendar / analyse) as drop-in blocks for the visual editor, editor closer to a full visual editor, QoL improvements, docs updated. Oatmeal (`olive-instrument` Tailwind Plus template) adopted as visual north-star for structural discipline only (typography scale, 4-px spacing base, 1280px container, pill buttons, `color-mix` borders). Palette and fonts stay locked from WS8a. Proposal-as-research saved at [docs/architecture/PROPOSAL_PLAY_TAILWIND.md](../architecture/PROPOSAL_PLAY_TAILWIND.md); evaluation outcome lives in this section.
+
+**Shipped today (2026-04-15):**
+
+- **Design tokens expanded** — font-size/line-height/letter-spacing/z-index scales in `static/css/tokens.css`; filled spacing gaps (space-7/9/11/14/24/32); `--color-text-on-dark`, `--color-border-subtle` (via `color-mix`), `--container-2xl: 80rem`.
+- **CSS hygiene pass** — 14 inline styles stripped from templates and moved to classed CSS; `#fff` hardcodes → `var(--color-text-on-dark)`; duplicate `.stat-card` rules consolidated into `components.css` with a `--large` variant; pill-ified `.btn-primary` + `.btn-accent`; `main` max-width standardized to 1280px; `login.html` + `register.html` fixed to use `<h1>`.
+- **Chat-workbench UX on `/`** — two-state landing: state 1 (centered input + hero + quick-action chips), state 2 (chat thread + pinned composer + left reference-picker sidebar). Multi-turn, session-scoped, MCP-powered.
+  - New backend module [services/conversation_store.py](../../services/conversation_store.py) — in-memory `ConversationStore` singleton with 1h TTL, MAX_TURNS_PER_SESSION=6, 5-min sweep task started from `main.py` lifespan.
+  - [services/web_intelligence.py](../../services/web_intelligence.py) `stream()` now accepts `prior_messages` (list of Anthropic messages) and `attached_context` dict (`meeting_id`, `doc_type`, `partij`). Attached context rendered as `[context: ...]` hints appended to the user turn.
+  - [routes/api.py](../../routes/api.py) `GET /api/search/stream` accepts `session_id`, `meeting_id`, `doc_type`, `partij_ctx` query params. Emits a `session` event upfront so client can persist `session_id` in `sessionStorage`. Persists both user + assistant turns at end of stream.
+  - [routes/api.py](../../routes/api.py) new `GET /api/calendar/upcoming?limit=N` — reuses `storage.get_meetings_filtered()`; powers sidebar meeting picker + `nd-calendar-mini` block.
+  - [templates/search.html](../../templates/search.html) — restructured inside a `<div class="chat-workbench" data-state="initial">` shell with sidebar (`<aside class="chat-sidebar">`), chip rail, quick-action chips, chat-thread container, pinned composer. `@mention` autocomplete fully preserved at the bottom of the script block.
+  - [static/css/pages/search.css](../../static/css/pages/search.css) — ~300 lines of chat/sidebar/composer/bubble styles appended (new `@layer components` block).
+- **Admin editor parity** — page creation, asset uploads, autosave, undo/redo UI, responsive preview toggle, "Start from template" modal. See [routes/admin.py](../../routes/admin.py), [routes/pages.py](../../routes/pages.py), [templates/admin/pages.html](../../templates/admin/pages.html), [templates/admin/editor.html](../../templates/admin/editor.html), [templates/custom_page.html](../../templates/custom_page.html) (new).
+  - `POST /admin/pages/new` — slug validation + RESERVED_SLUGS guard + upsert empty `site_pages` row + redirect to editor.
+  - `POST /admin/api/uploads` — 5MB cap, PNG/JPG/WebP/SVG, bleach-like SVG `<script>` rejection, files at `static/uploads/{yyyy}/{mm}/`.
+  - `GET /admin/api/uploads` — lists recent uploads for asset picker.
+  - `GET /p/{slug}` — dynamic public route rendering any published custom page via `templates/custom_page.html`.
+  - Editor: autosave (2s debounce), ↶/↷ undo/redo buttons, 🖥/📱/📱 device toggle (1440/768/375), "Sjabloon kiezen" modal loading from `GET /admin/api/page/{slug}/template`.
+- **Drop-in GrapesJS blocks** ([static/admin-editor/components.js](../../static/admin-editor/components.js)):
+  - `nd-image` — img with traits (src, alt) + `open-asset-picker` command (falls back to `prompt()` when asset list empty).
+  - `nd-two-column` — CSS grid with ratio (equal/60-40/40-60/30-70/70-30) and gap (sm/md/lg) traits; mobile collapse.
+  - `nd-faq-accordion` + `nd-faq-item` — `<details>`/`<summary>` pattern, no JS required.
+  - `nd-search-widget` — link-out mini search box (form action="/" method="get"), NOT an SSE widget inside the canvas.
+  - `nd-calendar-mini` — stub markup on canvas, populated client-side by new [static/js/calendar-mini-enhancer.js](../../static/js/calendar-mini-enhancer.js) on public pages via `GET /api/calendar/upcoming`.
+  - `padding` trait added to `nd-section` + `nd-cta-section`; CSS scale `--padding-sm/md/lg/xl` in `components.css`.
+
+**Deferred to Phase 8 (deliberate):**
+
+- `nd-answer` (streaming MCP answer) and `nd-analyse` (MCP meeting analysis) as **Web Components with Shadow DOM + SSE auto-reconnect**. These widgets need real style isolation (canvas CSS can clobber `.ai-content h1/h2/p` selectors) and connection-recovery engineering (SSE dies on editor preview/publish). Rushing today would ship fragile UX. Queued for next session.
+- `grapesjs-tui-image-editor` plugin — only adopt after asset-upload + picker UI proven in production.
+- HyperUI data-table + status-badge patterns — add when WS14 needs them.
+
+**Proposal evaluation outcome:** The Play Tailwind + GrapesJS proposal at [docs/architecture/PROPOSAL_PLAY_TAILWIND.md](../architecture/PROPOSAL_PLAY_TAILWIND.md) was evaluated phase-by-phase. ~6 small items adopted (axe-core candidate, "start from template" UI, 3 new GrapesJS blocks, traits on existing components). Bulk rejected because it conflicts with WS8a–e (palette/fonts/Tailwind v4) and duplicates ~25 already-shipped ND components + `site_pages` storage + `/admin/api/page/{slug}` endpoints.
+
+**Known limitations (acceptable for v0.2.0):**
+
+- `conversation_store` is single-process (in-memory dict). Multi-worker gunicorn would split sessions. Redis-backed upgrade is a v0.2.1 task — documented in the sweeper module docstring.
+- Rate limiting on `/api/search/stream` is IP+month-based (anon). Not per-conversation. If a follow-up question hits the limit mid-chat, user sees a generic 429 — acceptable.
+- Anon users get fresh `session_id` per browser tab (sessionStorage). Logged-in users share the same anon-style session (DB-backed auth'd sessions deferred).
+- Editor asset-picker UI is not wired into GrapesJS AssetManager yet — traits show `prompt()` fallback. Works, but not the ideal UX. Wire in Phase 8 once we have more assets to justify the UX investment.
+- Migration 0009 (`subscription_tier` on users) still blocked by long embedding pipeline. Deploy code without it; apply in next quiescent window. Auth degrades gracefully.
+
+**Verification runbook:**
+
+1. **Chat two-state + session**: Visit `/` logged out. Type "Hoe stemden partijen over woningbouw?" → submit. UI transitions to chat state with sidebar available; thread shows user bubble + streaming assistant bubble. Type follow-up "en GroenLinks specifiek?" — answer demonstrably uses prior turn (orchestrator receives `prior_messages`). Reload → `sessionStorage.neodemos_chat_session` persists session id.
+2. **Sidebar pickers**: Click 📅 Uit kalender → sidebar opens with meeting list. Pick one → chip appears. Submit question → server logs show `meeting_id` forwarded. Dismiss chip → next turn omits it.
+3. **`@mention` preserved**: Type `@motie` → autocomplete opens exactly as before. Works in hero input AND chat composer.
+4. **Page creation**: `/admin/pages` → "Nieuwe pagina" → slug `test-page`. Redirected to editor. Drop `nd-section` + `nd-image` (`prompt()` for URL) + `nd-search-widget`. Autosave kicks in after 2s. Publish. Visit `/p/test-page` logged out → page renders.
+5. **Reserved-slug guard**: Try slug `over` → rejected via query param error banner.
+6. **Editor UX**: Drop block → undo/redo toolbar buttons work. Device toggle → canvas resizes.
+7. **Existing 6-step QA gate** from this handoff's earlier section.
+8. **Oatmeal feel check**: Compare `/` with `https://cdn.tailwindplus.com/kit-previews/oatmeal/olive-instrument/home-01.html`. Typography hierarchy consistent (H1 48px, body 16px). Primary CTA pill-rounded. Warm borders via `color-mix`, not hard grey.
+
+**Post-ship:** Apply migration 0009 in next quiescent embedding window; post `ws_unblocked` event for WS14.
+
+---
+
+## Phase 7+ post-ship feedback cycles (2026-04-15)
+
+After first Phase 7+ ship Dennis tested live on `localhost:8000` and sent multiple screenshot-driven feedback rounds. All landed; no re-rejection.
+
+**Visual architecture shifts:**
+
+- **Nav restructured to Oatmeal triptych** — `grid-template-columns: 1fr auto 1fr`. Left (primary surfaces: Zoeken · Kalender · AI-koppeling), centered serif `NeoDemos.` wordmark with accent dot, right CTAs (Inloggen + "Aan de slag" pill when logged-out; avatar-pill dropdown trigger when logged-in). `color-mix` border-bottom + backdrop-blur. Over hero: transparent nav, white text; in chat state: solid cream surface + dark text (override `body.chat-active.has-hero` to fix readability).
+- **Account dropdown (logged-in)** — single `.nav-user-trigger` pill showing the user's civic avatar + chevron. Opens panel (`.nav-user-panel`) with email header + admin-gated items (`Overzicht` · `Beheer`) + divider + `Profiel` + `Uitloggen` (red). Click outside / Escape / item-click closes. `aria-haspopup="menu"` + `aria-expanded` toggled.
+- **Claude-style composer** — replaces the old pill `.search-box-wrapper` + "Zoek" text button. Tall wide textarea (`font-size: var(--font-size-lg)`, 3.25rem min height), `[+]` attach button on left, round accent `↑` send button on right. Two variants: `.claude-composer--hero` (frosted glass over skyline, white text, backdrop-blur 18px) and `.claude-composer--pinned` (in-flow below chat thread, smaller base font).
+- **Chat-workbench state transition repaired** — previously `#chat-thread` was nested inside `.landing-hero-image` which gets `display:none` in chat state, hiding the thread too. Thread relocated to be a sibling of `.search-container`. Composer also moved to be `position: static` (no longer `fixed` to viewport bottom). Result: footer shows on every page, no dead zone below composer, thread grows naturally.
+- **Reference pickers use `@mention` insertion, not chip state** — sidebar has 4 sections (Specifieke vergadering / Commissie / Documenttype / Partij). Click inserts `@<label>` (type-level) or `@<label> <date_short>` (pinpoint meeting) into the active input (hero `#search-input` in initial state, `#chat-input` in chat state). Existing `@mention` autocomplete menu preserved verbatim — pickers ARE a visual @mention UI. No separate `attachedContext` state. Eliminates a `ReferenceError` that silently killed bubble rendering pre-fix.
+- **Scrollable list fade + separator** — `.sidebar-picker[data-picker="meeting"] .sidebar-list` uses `mask-image: linear-gradient(to bottom, black 85%, transparent 100%)` + `border-bottom: 1px solid var(--color-border-subtle)`. Oatmeal-aligned pattern WS14 + WS8g will reuse.
+
+**Functional fixes:**
+
+- **`/api/calendar/upcoming`** — single `label` field (committee name OR `"Raadsvergadering"` when raw name is a Dutch weekday string), deduped by `(date_iso, label)`. Used by chat sidebar meeting picker + `nd-calendar-mini` block on public pages. To be extracted to `services/calendar_labels.py` (WS14 Phase C6).
+- **SSE `done` step handling** — final active step now marked `ai-step-done` + step list hidden, so "Antwoord genereren…" no longer hangs indefinitely.
+- **Page-title persistence** — `page_service.save()` accepts `Optional[str]` title; UPDATE uses `COALESCE` so editor saves with `title=None` no longer overwrite the title created at `POST /admin/pages/new`.
+- **Device toggle** — `DeviceManager` now seeded (`desktop` / `tablet` / `mobile` with widths 100% / 768px / 375px); click handler calls `editor.setDevice(id)` so media queries inside the iframe actually fire; `getDevice()` returns the correct id.
+- **Instellingen invisible bug** — `has-hero` nav rule (`color: rgba(255,255,255,.88)`) bled into the dropdown panel; items rendered white on cream. Added explicit override: `body.has-hero .nav-user-panel a { color: var(--color-text) }` + active/logout variants.
+
+**Civic avatar system:**
+
+- 8 SVG archetype avatars shipped in locked palette (`laurel` · `mic` · `scales` · `book` · `megaphone` · `magnifier` · `column` · `ballot`) at `static/images/avatars/01-...08-...svg`.
+- `services/avatars.py` — `avatar_slug_for(seed)` hashes email (or user id fallback) via MD5 % N. Stable forever; same user always gets the same avatar. Exposed as Jinja globals `avatar_url_for` + `avatar_gallery`.
+- Rendered at 32×32 in the nav dropdown trigger; at 96×96 in the new Profiel page header (`/settings`) alongside serif display name + muted email + `color-mix` divider. Container widened from 600px → 720px for Oatmeal rhythm. Menu label renamed **"Instellingen" → "Profiel"**.
+- **Gemini upgrade (in flight 2026-04-15):** `scripts/generate_avatars.py` (to be shipped) will call `gemini-2.5-flash-image` to produce 20 diverse face-only editorial portraits in the locked palette; SVGs get archived to `static/images/avatars/fallback/`. Script-agent execution result documented inline after the handoff lands.
+
+**Typography scale enforcement across `.ai-content`:**
+
+Every markdown-rendered answer (chat bubble, demo answer, meeting analyse panel, summary panels) now uses the Oatmeal scale: H1 `3rem` serif display with `letter-spacing: -0.025em`, H2 `1.875rem` serif + subtle `color-mix` divider, H3 `1.5rem`, body `1rem` line-height 1.6 capped at `75ch` (uncapped in chat bubble), blockquote promoted to serif italic with accent left-bar, tables use uppercase xs micro-labels on headers + subtle borders. Previously H1/H2/H3 all rendered at `1.1rem`; size contrast with body was ~zero.
+
+**SaaS-style topic chips:**
+
+Hero example queries reduced from 3 verbose questions to 5 short topic tags: **Beloftes · Stemgedrag · Klimaat · Parkeren · Begroting**. Click prefills the composer with a seed query (does NOT auto-submit — user adds context first). Tags use frosted-glass over the hero, subtle accent hover.
+
+**Subpage polish (agent-executed):**
+
+Full token sweep on `static/css/pages/auth.css` subpage block — H1 hero `--font-size-6xl` serif, body prose capped at 65ch, blockquote serif italic display, eval scores at `--font-size-4xl`, `color-mix` card borders. Templates untouched (heading hierarchy already correct). Added `.prose` / `.prose-wide` helpers to `components.css` for future use.
+
+**Admin polish (agent-executed):**
+
+Full tokenisation of `pages/admin.css` + inline chrome in `templates/admin/editor.html` — sidebar h3 → uppercase xs micro-labels, stat numbers at serif `--font-size-5xl`, panel titles serif display, all `rgba(0,0,0,x)` borders/shadows replaced with `--color-border-subtle` + `--shadow-xs/lg`, device toggle pill-rounded, template modal + block tiles migrated to tokens.
+
+**Meeting page polish (agent-executed 2026-04-15):**
+
+`templates/meeting.html` minimal semantic tweak (`.meeting-title` / `.meeting-meta-item` / `.meeting-meta-icon` / `<time datetime=…>`). `static/css/pages/meeting.css` full token sweep — title scales `4xl → 5xl` above 1024px, analyse card orange ring softened to `1px --color-border-subtle` + single `2px` accent `border-top`, agenda rows get `--color-border-subtle` + hover `translateX(2px)` + `.is-active` class ready for JS wiring. Sticky analyse panel + scroll preserved.
+
+**Accumulated carry-overs at close of Phase 7+ feedback cycles (for v0.2.0 QA gate):**
+
+- Apply **migration 0009** in the next quiescent embedding window. Not blocking — auth degrades gracefully.
+- **Avatar picker UI on Profiel** — DB column (`users.avatar_slug NULL` TEXT) + gallery form on `/settings`. Infrastructure is ready (`avatar_gallery()` Jinja global); UI deferred.
+- **Gemini avatar generation** — pending script run via Agent A this session; if successful, SVG fallback stays at `static/images/avatars/fallback/`.
+- **Subpage 48rem container flag** — WS8f subpage agent flagged 3-up grids on `/technologie` may feel cramped inside `--container-md`. Eyeball + bump to `--container-lg` if needed.
+- **Phase 8: `nd-answer` + `nd-analyse` as Web Components** with Shadow DOM + SSE auto-reconnect. Needed for meeting page + future GrapesJS widget-embedding. ~1 session of focused engineering.
+- **Font Awesome CDN CSP warning in editor** — cosmetic; pre-existing.
+- **HTML `pattern` attribute `v`-flag regex warning** on `/admin/pages` — cosmetic; server validates.
+
+**WS8g (new, handoff doc shipped 2026-04-15):** Meeting chat pivot — `/meeting/{id}` becomes a chat-workbench surface: agenda items move to a sidebar, Claude composer sits in the middle, clicking an agenda item spawns a chat turn with item context injected, user can browse between items without losing the thread, Profiel page gets `analysis_sections` + `custom_prompts` preferences. See [docs/handoffs/WS8g_MEETING_CHAT_PIVOT.md](WS8g_MEETING_CHAT_PIVOT.md). Blocks on WS8f QA; parallelisable with WS14.
 
 ---
 

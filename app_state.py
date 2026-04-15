@@ -143,3 +143,16 @@ templates.env.globals["stage"] = STAGE
 
 # Content CMS: make content() available in all templates
 templates.env.globals["content"] = content_service.get
+
+# Civic avatars: deterministic hash → SVG (WS8f Phase 7+)
+# user_avatar_url prefers the user's saved avatar_slug over the hash fallback.
+from services.avatars import avatar_url_for, avatar_gallery, user_avatar_url
+templates.env.globals["avatar_url_for"] = avatar_url_for
+templates.env.globals["avatar_gallery"] = avatar_gallery
+templates.env.globals["user_avatar_url"] = user_avatar_url
+
+# ── Subscription / beta ──
+# Dennis sets BETA_END_DATE when the beta is scheduled to close. All
+# beta-pro users whose pro_expires_at <= BETA_END_DATE auto-revert to Gratis
+# unless they've configured payment (future column). Format: YYYY-MM-DD.
+BETA_END_DATE = os.getenv("BETA_END_DATE", "2026-12-31")

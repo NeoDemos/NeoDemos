@@ -156,4 +156,27 @@
     background: var(--color-accent);
     color: white;
   }
+
+  .cal-grid-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-3);
+  }
+
+  .cal-grid-nav-left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .btn-compact {
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--font-size-sm);
+  }
+
+  .cal-empty-body {
+    margin: 0;
+    color: var(--color-text-tertiary);
+  }
 }

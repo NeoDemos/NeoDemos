@@ -638,3 +638,849 @@
     }
   }
 }
+
+/* ================================================================
+   Chat Workbench (Phase 7+) — two-state landing (initial ↔ chat)
+   Oatmeal-aligned typography + warm civic palette (WS8a locked).
+   ================================================================ */
+@layer components {
+
+  /* Shell */
+  .chat-workbench {
+    position: relative;
+  }
+
+  /* Sidebar — hidden by default; opened by .is-open class (toggled via JS).
+     Tight Oatmeal-style column. Uses class-based visibility (reliable) rather
+     than [hidden] attribute. */
+  .chat-sidebar {
+    position: fixed;
+    /* Sit BELOW the sticky site-header, not over it. Nav height ~ 4.5rem at
+       desktop padding. Reduced on mobile where padding is tighter. */
+    top: 4.5rem;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    max-width: 85vw;
+    background: var(--color-surface-raised);
+    border-right: 1px solid var(--color-border-subtle);
+    border-top: 1px solid var(--color-border-subtle);
+    z-index: var(--z-nav);
+    overflow-y: auto;
+    padding: var(--space-5) var(--space-5) var(--space-6);
+    box-shadow: var(--shadow-lg);
+    flex-direction: column;
+    gap: var(--space-4);
+    transform: translateX(-100%);
+    transition: transform 200ms cubic-bezier(.4,0,.2,1);
+    display: none;
+    font-size: var(--font-size-sm);
+  }
+  @media (max-width: 768px) {
+    .chat-sidebar { top: 4rem; }
+  }
+
+  .chat-sidebar.is-open {
+    display: flex;
+    transform: translateX(0);
+  }
+
+  .chat-sidebar-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .chat-sidebar-title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-lg);
+    margin: 0;
+  }
+
+  .chat-sidebar-close {
+    background: none;
+    border: none;
+    font-size: var(--font-size-xl);
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    padding: 0 var(--space-1);
+    line-height: 1;
+  }
+
+  .chat-sidebar-close:hover { color: var(--color-text); }
+
+  .sidebar-picker h3 {
+    font-family: var(--font-body);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    letter-spacing: var(--letter-spacing-widest);
+    text-transform: uppercase;
+    margin: 0 0 var(--space-2) 0;
+    color: var(--color-text-secondary);
+  }
+
+  .sidebar-picker input[type="search"] {
+    width: 100%;
+    padding: var(--space-1) var(--space-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-1);
+    font-family: var(--font-body);
+    font-size: var(--font-size-xs);
+    background: var(--color-surface);
+  }
+
+  .sidebar-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 260px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  /* Soft fade + divider at the bottom of scrollable lists so users know the
+     list scrolls and where it ends inside the sidebar column. */
+  .sidebar-picker[data-picker="meeting"] .sidebar-list {
+    border-bottom: 1px solid var(--color-border-subtle);
+    padding-bottom: var(--space-2);
+    mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+  }
+
+  .sidebar-list-static { max-height: none; }
+
+  .sidebar-list li { margin: 0; padding: 0; }
+
+  .sidebar-list button {
+    width: 100%;
+    text-align: left;
+    padding: var(--space-1) var(--space-2);
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-snug);
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    transition: background 120ms;
+  }
+
+  .sidebar-list button:hover {
+    background: var(--color-surface-sunken);
+  }
+
+  .meeting-date-pill {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    min-width: 38px;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+  }
+
+  .meeting-label {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sidebar-empty {
+    padding: var(--space-3);
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-xs);
+    text-align: center;
+  }
+
+  body.sidebar-open {
+    overflow: hidden;
+  }
+
+  body.sidebar-open::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: color-mix(in oklab, var(--color-primary) 40%, transparent);
+    z-index: calc(var(--z-nav) - 1);
+    pointer-events: none;
+  }
+
+  /* Chip rail (attached context) */
+  .chip-rail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    font-family: var(--font-body);
+    color: var(--color-text);
+    transition: background 120ms;
+  }
+
+  .chip:hover {
+    background: var(--color-surface-sunken);
+  }
+
+  .chip-close {
+    font-size: var(--font-size-base);
+    line-height: 1;
+    color: var(--color-text-secondary);
+  }
+
+  /* Quick-action chips (below search box in initial state, below composer in chat state) */
+  .quick-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    justify-content: center;
+    margin-top: var(--space-4);
+  }
+
+  .quick-action {
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    background: var(--color-surface-raised);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: all 120ms;
+  }
+
+  .quick-action:hover {
+    background: var(--color-surface-sunken);
+    border-color: var(--color-border-strong);
+  }
+
+  /* On hero (dark background), make quick-actions legible */
+  .landing-hero-content .quick-action {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: var(--color-text-on-dark);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .landing-hero-content .quick-action:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: var(--color-accent);
+  }
+
+  .landing-hero-content .chip {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: var(--color-text-on-dark);
+  }
+
+  /* Chat thread (state = chat) */
+  .chat-thread {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-5) var(--space-32);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .chat-turn {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chat-turn-user { align-items: flex-end; }
+  .chat-turn-assistant { align-items: flex-start; }
+
+  .chat-bubble {
+    max-width: 85%;
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-xl);
+    line-height: var(--line-height-body);
+    font-size: var(--font-size-base);
+  }
+
+  .chat-bubble-user {
+    background: var(--color-primary);
+    color: var(--color-text-on-dark);
+    border-bottom-right-radius: var(--radius-sm);
+  }
+
+  .chat-bubble-assistant {
+    background: var(--color-surface-raised);
+    color: var(--color-text);
+    border: 1px solid var(--color-border-subtle);
+    border-bottom-left-radius: var(--radius-sm);
+    max-width: 100%;
+  }
+
+  .chat-bubble-text {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .chat-turn-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    margin-bottom: var(--space-2);
+    font-size: var(--font-size-xs);
+    opacity: 0.9;
+  }
+
+  .chat-turn-chips span {
+    padding: 2px 8px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-full);
+  }
+
+  .chat-bubble-content {
+    max-width: 75ch;
+  }
+
+  .chat-steps {
+    margin: 0 0 var(--space-3) 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+  }
+
+  /* Inherit the 1.2em left-padding from .ai-loading-steps li so the animated
+     ::before dot has room and doesn't overlap the label text. */
+  .chat-steps li {
+    padding: var(--space-1) 0 var(--space-1) 1.2em;
+    opacity: 0.6;
+  }
+
+  .chat-steps .ai-step-active { opacity: 1; }
+  .chat-steps .ai-step-done { opacity: 0.45; text-decoration: none; }
+
+  /* Composer (follow-up input in chat state) — in-flow, NOT fixed.
+     Fixed-bottom caused three problems: hid the footer, overlapped content
+     short-answer state, and made the page feel dead-empty below the chat.
+     Now the composer sits naturally after the last bubble; footer follows. */
+  .chat-composer {
+    padding: var(--space-6) var(--space-5) var(--space-4);
+    margin: 0 auto;
+    max-width: 48rem;
+    width: 100%;
+  }
+
+  .chat-composer[hidden] { display: none; }
+
+  .chat-composer-inner {
+    max-width: 48rem;
+    margin: 0 auto;
+  }
+
+  .chat-composer .chip-rail-chat { margin-bottom: var(--space-2); }
+
+  .chat-input-wrapper {
+    margin-bottom: var(--space-2);
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border);
+  }
+
+  .chat-input { color: var(--color-text); }
+  .chat-input::placeholder { color: var(--color-text-tertiary); }
+
+  .chat-quick-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .chat-quick-actions .quick-action {
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--font-size-xs);
+  }
+
+  .chat-reset {
+    margin-left: auto;
+  }
+
+  /* In chat state, hide hero + demo + nudges + legacy document-results */
+  .chat-workbench[data-state="chat"] .landing-hero-image,
+  .chat-workbench[data-state="chat"] .demo-answer-card,
+  .chat-workbench[data-state="chat"] #account-nudge,
+  .chat-workbench[data-state="chat"] #mcp-nudge,
+  .chat-workbench[data-state="chat"] #document-results,
+  .chat-workbench[data-state="chat"] #search-hint {
+    display: none;
+  }
+
+  /* Chat thread padding-bottom now modest — composer sits below in-flow */
+  .chat-workbench[data-state="chat"] .chat-thread {
+    padding-bottom: var(--space-6);
+  }
+
+  /* Chat state layout: body becomes a flex column spanning the viewport so
+     the composer + footer always sit at the bottom edge regardless of how
+     short the thread is. Long threads scroll naturally. */
+  body.chat-active {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+  body.chat-active main {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    padding-top: var(--space-4);
+    padding-bottom: 0;
+  }
+  body.chat-active .chat-workbench,
+  body.chat-active .chat-workbench-main {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+    padding-top: 0;
+  }
+  body.chat-active .chat-thread {
+    flex: 1 0 auto;
+  }
+  body.chat-active .chat-composer {
+    margin-top: auto; /* pushes composer toward the viewport bottom when thread short */
+    padding-bottom: var(--space-2);
+  }
+  body.chat-active .site-footer {
+    flex-shrink: 0;
+    margin-top: 0;
+    padding-block: var(--space-6);
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .chat-sidebar {
+      width: 100%;
+      max-width: 100%;
+    }
+    .chat-bubble {
+      max-width: 92%;
+    }
+    .chat-composer {
+      padding: var(--space-3);
+    }
+  }
+
+  /* ────────────────────────────────────────────────────────────────
+     Claude-style composer (Oatmeal-scale typography + warm borders)
+     Used in two places: hero (initial state) + pinned (chat state)
+     ──────────────────────────────────────────────────────────────── */
+  .claude-composer {
+    position: relative;
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4) var(--space-5) var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 200ms, border-color 200ms;
+  }
+
+  .claude-composer:focus-within {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-accent) 20%, transparent);
+  }
+
+  .claude-composer__input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    resize: none;
+    font-family: var(--font-body);
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-body);
+    color: var(--color-text);
+    padding: 0;
+    min-height: 3.25rem;
+    max-height: 16rem;
+    overflow-y: auto;
+  }
+
+  .claude-composer__input::placeholder {
+    color: var(--color-text-tertiary);
+  }
+
+  .claude-composer__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+
+  .claude-composer__right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .claude-composer__attach,
+  .claude-composer__send,
+  .claude-composer__reset {
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: background 150ms, transform 150ms, color 150ms;
+  }
+
+  .claude-composer__attach {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-full);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xl);
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .claude-composer__attach:hover {
+    background: var(--color-surface-sunken);
+    color: var(--color-text);
+  }
+
+  .claude-composer__reset {
+    background: transparent;
+    border: none;
+    padding: var(--space-1) var(--space-3);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    border-radius: var(--radius-full);
+  }
+
+  .claude-composer__reset:hover {
+    background: var(--color-surface-sunken);
+    color: var(--color-text);
+  }
+
+  .claude-composer__send {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-full);
+    background: var(--color-accent);
+    color: var(--color-text-on-dark);
+    border: none;
+    font-size: var(--font-size-xl);
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+  }
+
+  .claude-composer__send:hover {
+    background: var(--color-accent-hover);
+    transform: translateY(-1px);
+  }
+
+  .claude-composer__send:active {
+    transform: translateY(0);
+  }
+
+  /* Hero variant: big, centered, frosted-glass on skyline */
+  .claude-composer--hero {
+    max-width: 640px;
+    width: 100%;
+    margin: 0 auto;
+    background: color-mix(in oklab, white 18%, transparent);
+    border-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  }
+
+  .claude-composer--hero .claude-composer__input {
+    color: var(--color-text-on-dark);
+  }
+
+  .claude-composer--hero .claude-composer__input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .claude-composer--hero .claude-composer__attach {
+    border-color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .claude-composer--hero .claude-composer__attach:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--color-text-on-dark);
+  }
+
+  /* Pinned variant: compact, near the page edge */
+  .claude-composer--pinned {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: var(--space-3) var(--space-4) var(--space-2);
+  }
+
+  .claude-composer--pinned .claude-composer__input {
+    font-size: var(--font-size-base);
+    min-height: 2.75rem;
+  }
+
+  /* Mention menu anchoring inside Claude composer — pop up above the textarea
+     so it works in both hero and pinned-composer positions. */
+  .claude-composer .mention-menu {
+    left: var(--space-4);
+    right: var(--space-4);
+    width: auto;
+    bottom: calc(100% + var(--space-2));
+    max-width: none;
+  }
+
+  /* Past meetings in sidebar: slightly muted so upcoming jumps out first
+     (list itself is sorted desc so today/recent-past are on top anyway). */
+  .sidebar-list button.is-past .meeting-label {
+    color: var(--color-text-secondary);
+  }
+  .sidebar-list button.is-past .meeting-date-pill {
+    opacity: 0.7;
+  }
+
+  /* ──── Subscription teaser on landing ──── */
+  .subscription-teaser {
+    max-width: 40rem;
+    margin: var(--space-10) auto var(--space-6);
+    padding: var(--space-6) var(--space-8);
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border-subtle);
+    border-left: 3px solid var(--color-accent);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+  .subscription-teaser-kicker {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    letter-spacing: var(--letter-spacing-widest);
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin: 0 0 var(--space-2);
+  }
+  .subscription-teaser-title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-snug);
+    letter-spacing: var(--letter-spacing-display);
+    color: var(--color-text);
+    margin: 0 0 var(--space-2);
+  }
+  .subscription-teaser-lede {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-4);
+    line-height: var(--line-height-body);
+  }
+  .subscription-teaser-actions {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .chat-workbench[data-state="chat"] .subscription-teaser { display: none; }
+
+  /* ──── /abonnement pricing page ──── */
+  .pricing-page {
+    max-width: var(--container-2xl);
+    margin: 0 auto;
+    padding: var(--space-10) var(--space-6) var(--space-16);
+  }
+  .pricing-intro {
+    text-align: center;
+    max-width: 40rem;
+    margin: 0 auto var(--space-12);
+  }
+  .pricing-kicker {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    letter-spacing: var(--letter-spacing-widest);
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin: 0 0 var(--space-3);
+  }
+  .pricing-title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-5xl);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-display);
+    color: var(--color-text);
+    margin: 0 0 var(--space-4);
+  }
+  .pricing-lede {
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-body);
+    color: var(--color-text-secondary);
+    max-width: 40ch;
+    margin: 0 auto;
+  }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+  }
+  @media (max-width: 900px) {
+    .pricing-grid { grid-template-columns: 1fr; }
+  }
+  .pricing-card {
+    position: relative;
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .pricing-card--highlight {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-accent) 18%, transparent);
+  }
+  .pricing-card-badge {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--letter-spacing-widest);
+    text-transform: uppercase;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    background: var(--color-accent);
+    color: var(--color-text-on-dark);
+  }
+  .pricing-card-name {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-3xl);
+    letter-spacing: var(--letter-spacing-display);
+    margin: 0;
+    color: var(--color-primary);
+  }
+  .pricing-card-price {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-5xl);
+    line-height: 1;
+    margin: 0;
+    color: var(--color-text);
+  }
+  .pricing-card-price small {
+    font-family: var(--font-body);
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+    font-weight: 500;
+  }
+  .pricing-card-audience {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-2);
+  }
+  .pricing-card-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .pricing-card-list li {
+    position: relative;
+    padding-left: var(--space-5);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-body);
+    color: var(--color-text);
+  }
+  .pricing-card-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+  .pricing-cta {
+    margin-top: auto;
+    align-self: flex-start;
+  }
+  .pricing-note {
+    max-width: 40rem;
+    margin: var(--space-12) auto 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+    text-align: center;
+    line-height: var(--line-height-body);
+  }
+
+  /* Two-tier variant (WS8f Profiel upgrade) */
+  .pricing-grid--two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 60rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  @media (max-width: 900px) {
+    .pricing-grid--two { grid-template-columns: 1fr; }
+  }
+
+  .pricing-card-price-strike {
+    font-family: var(--font-heading);
+    color: var(--color-text-tertiary);
+    text-decoration: line-through;
+    margin-right: var(--space-2);
+    font-size: 0.65em;
+  }
+
+  .pricing-card-note {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-body);
+    margin: 0 0 var(--space-2);
+  }
+
+  .pricing-cta-form {
+    margin-top: auto;
+  }
+
+  .pricing-cta.is-current {
+    opacity: 0.75;
+    pointer-events: none;
+  }
+
+  .pricing-faq {
+    max-width: 48rem;
+    margin: var(--space-16) auto 0;
+  }
+  .pricing-faq-title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-3xl);
+    letter-spacing: var(--letter-spacing-display);
+    text-align: center;
+    color: var(--color-text);
+    margin: 0 0 var(--space-6);
+  }
+}
+
+

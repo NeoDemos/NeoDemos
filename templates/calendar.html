@@ -40,8 +40,8 @@
 
 <!-- ======= GRID VIEW (toggle) ======= -->
 <div id="cal-grid-view" style="{{ '' if view == 'grid' else 'display:none' }}">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
-        <div style="display:flex;align-items:center;gap:0.5rem;">
+    <div class="cal-grid-nav">
+        <div class="cal-grid-nav-left">
             <select id="select-month-grid" aria-label="Maand">
                 <option value="0">Januari</option>
                 <option value="1">Februari</option>
@@ -56,11 +56,11 @@
                 <option value="10">November</option>
                 <option value="11">December</option>
             </select>
-            <button id="btn-today" class="btn-secondary btn" style="padding:0.2rem 0.6rem;font-size:0.8rem;border-radius:4px;">Vandaag</button>
+            <button id="btn-today" class="btn-secondary btn">Vandaag</button>
         </div>
         <div>
-            <button id="btn-prev" class="btn-secondary btn" style="padding:0.3rem 0.8rem;font-size:0.85rem;">&larr;</button>
-            <button id="btn-next" class="btn-secondary btn" style="padding:0.3rem 0.8rem;font-size:0.85rem;">&rarr;</button>
+            <button id="btn-prev" class="btn-secondary btn btn-compact">&larr;</button>
+            <button id="btn-next" class="btn-secondary btn btn-compact">&rarr;</button>
         </div>
     </div>
     <div id="calendar-grid-container" class="cal-grid-container"></div>
@@ -208,8 +208,7 @@
                 }
             } else {
                 const p = document.createElement('p');
-                p.style.margin = '0';
-                p.style.color = '#999';
+                p.className = 'cal-empty-body';
                 p.textContent = 'Geen agendapunten beschikbaar.';
                 body.appendChild(p);
             }

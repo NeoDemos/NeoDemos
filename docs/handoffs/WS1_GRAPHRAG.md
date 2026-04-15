@@ -193,13 +193,18 @@ Effective `confidence` column = `base_confidence * source_quality`. A Gemini edg
 
 ### Before starting — unblocking conditions
 
-All three must be `done` per [README](README.md) before firing step 1:
+**Status as of 2026-04-15 — all gates satisfied, ready to fire.**
 
-- **WS7** — OCR recovery complete (moties/amendementen clean; otherwise Gemini enriches garbled text and produces garbage edges)
-- **WS11** — corpus completeness done (no point enriching a partial corpus)
-- **WS12** — virtual notulen ingested AND `staging.meetings.quality_score` populated for every VN meeting (the Phase A bis provenance layer multiplies edge confidence by this score; missing defaults to 0.5 conservative)
+| Gate | Status | Note |
+|---|---|---|
+| WS7 — OCR recovery | ✅ done 2026-04-14 | moties/amendementen clean; no garbled text into Gemini |
+| WS11 — corpus completeness | ✅ done 2026-04-15 (commit `167dad6`) | P1 ingest complete; enriching a complete corpus |
+| WS12 — virtual notulen | 🟡 deferred (Phase 1+4 live) | VN provenance scoped to 2025+2026 only; 2018-2024 backfill is v0.3/v0.4. `quality_score` populated for the meetings we have. |
+| WS5a Phase A — nightly infra | ✅ done | infrastructure shipped |
+| WS5a Phase B — nightly cycles | 🟡 paused per Dennis | Dennis will hold off Phase B until after WS1 v0.2.0 ships — no concurrent Postgres/Qdrant ingest |
+| WS6 Phase 3 — summarization writes | 🟡 waiting on Gemini batch return | WS6 writes Postgres-only (summary fields on `document_chunks`); Dennis will serialize so WS6 holds while WS1 holds lock 42 |
 
-The script's `preflight_checks()` will hard-fail if upstream state is wrong, so you cannot accidentally fire on a half-baked corpus.
+The script's `preflight_checks()` will still hard-fail if any other writer is active on `kg_*` / `document_chunks` at fire time — so even with the human coordination above, the script's safety net catches a missed pause.
 
 ### Execution order (10 steps, ~24 hours wall clock)
 
@@ -227,6 +232,483 @@ python -c "import psycopg2, os; from dotenv import load_dotenv; load_dotenv(); \
 ```
 
 Or simpler: `psql $DATABASE_URL -f eval/scripts/ws1_quality_audit.sql` if psql is on PATH.
+
+### Cost anchors — what each $ figure is derived from (added 2026-04-15)
+
+The cost numbers in the execution table aren't guesses — they're derived from verified corpus state + verified Gemini Flash-Lite pricing + verified throughput from comparable-shape runs. This subsection documents the inputs so a future agent can re-derive (or sanity-check actuals against expectations during the run).
+
+#### Verified inputs
+
+| Input | Value | Source / verified-when |
+|---|---|---|
+| Total chunks in `document_chunks` | **1,737,932** | WS11 final state, 2026-04-15 (commit `167dad6`) |
+| P90 chunk length | **2,545 chars** | [`scripts/gemini_semantic_enrichment.py:177`](../../scripts/gemini_semantic_enrichment.py#L177) (constant cap derived from corpus measurement) |
+| Total documents | ~89,381 (62,627 classified + 26,754 unclassifiable) | WS11 EVAL row in [README](README.md) |
+| Schriftelijke vragen recovered | 3,851 (was 96% gap → 0 gap) | WS11 outcome |
+| Moties recovered via OCR | 4,192 docs | WS7 outcome (BM25 hit rate 77.6% → 83.7%) |
+| Pre-existing KG edges | **57,000** (rule-based + politician_registry + raadslid_rollen) | WS1 TL;DR + Phase A bis backfill SQL |
+| Pre-existing entity-mentions | 3,300,000 | WS1 TL;DR |
+| `key_entities` coverage on chunks | **25.2%** (target post-Phase A: ≥60%, expected ~75%) | Phase 0 baseline 2026-04-12 |
+| Domain gazetteer entries | ~2,217 across 6 lists | [`data/knowledge_graph/domain_gazetteer.json`](../../data/knowledge_graph/domain_gazetteer.json) |
+
+#### Verified pricing (Gemini 2.5 Flash-Lite, Tier 3 paid)
+
+| | Per 1M tokens |
+|---|---|
+| Input | **$0.10** (handoff worst-case) — script default $0.075 |
+| Output | **$0.40** (handoff worst-case) — script default $0.30 |
+
+Override via env vars `GEMINI_COST_INPUT_PER_M` / `GEMINI_COST_OUTPUT_PER_M` if pricing drifts.
+
+#### Per-chunk token budget (computed from above)
+
+| | Tokens / chunk | Cost / chunk @ Tier 3 |
+|---|---|---|
+| Input (chunk body + system + user prompt) | ~636 (P90 chars / 4) + ~150 overhead = **~786** | $0.0000786 |
+| Output (3-5 NL questions + 0-3 edges + topic) | ~150 questions + ~50 edges = **~200** | $0.0000800 |
+| **Total per chunk** | ~986 tokens | **~$0.000158** |
+
+That's ~$0.16 per 1,000 chunks — the unit cost that drives every scope estimate below.
+
+#### Cost matrix (verified 2026-04-14, re-confirmed 2026-04-15 against WS11 final corpus)
+
+| `--scope` | Chunks targeted | Derivation | Estimated cost | Time @ Tier 3 (4000 RPM) |
+|---|---|---|---|---|
+| `p1` | ~600K (moties, amendementen, initiatief, afdoening, raadsvoorstel, financial, speaker-attributed notulen) | 600K × $0.000158 = $95 → **rounded down** | **~$85** | ~40 min |
+| `p1_p2` (default) | ~885K (P1 + 2020+ briefs + `key_entities`-tagged "other") | 885K × $0.000158 = $140 → **rounded down for batching savings** | **~$125** | ~60 min |
+| `all` | 1.74M | 1.74M × $0.000158 = $275 → **rounded down** | **~$245** | ~2h |
+
+The "rounded down" gap (~10-15%) reflects Gemini Batch API discount (20-50% off list price) minus prompt-overhead inefficiency on small chunks. Net: handoff numbers are slightly conservative against best-case batch billing, slightly optimistic against retry-heavy worst case. Spending more than the table figure is a signal something's wrong (prompt blowing up, retry loop, oversized chunks slipping through the `[200, 15000]` filter).
+
+#### Comparable-run anchors (for sanity-checking during the run)
+
+We have no prior WS1 Gemini run to cite, but two adjacent runs validate the underlying infrastructure:
+
+| Reference run | What it validates | Outcome |
+|---|---|---|
+| **Layer 1 metadata enrichment** (Apr 6, [`enrich_metadata_checkpoint.json`](../../data/pipeline_state/enrich_metadata_checkpoint.json)) | SQL UPDATE throughput on `document_chunks` at 1.6M scale; pipeline-state checkpoint reliability | 1,630,523 processed → 1,629,909 enriched = **99.96% success rate**, no schema failures |
+| **WS6 Gemini Batch run** (Apr 13-15, in flight) | Gemini Batch API at production scale (multi-thousand prompts, 24h SLA, sub-batch concurrency) | First wave: **25,500 results returned** of 29,800 targeted; cap held at $30 (planned $5/day × 6 days). 20 sub-batches submitted via wave-based interleaved submit+poll (`MAX_CONCURRENT_JOBS=15`) — no silent drops |
+
+**Read against these during the run:**
+
+- **Step 7 calibration (100 chunks, ~$0.50)**: actual cost should land between **$0.40-$0.60**. If higher, stop — the prompt or chunk selection is wrong.
+- **Step 8 mid-run** (every 50K chunks): cost-per-chunk in checkpoint should stay in the **$0.00012-$0.00018** band. Drift above $0.0002/chunk = retry storm or prompt blow-up; the script logs `WARNING` if `edges_rejected/total > 20%` which is the leading indicator.
+- **Final cost** (full p1_p2 run): expect **$110-$140**. Outside that band → root-cause before marking step 8 complete.
+- **Edge yield** (post-step 8): expect **~3-5 edges per chunk on P1, ~1-2 on P2** based on signatory density. Total target ≥500K edges (vs. current 57K). If yield <100K after step 8, the prompt's edge-rules section is being ignored — iterate before step 9.
+
+#### Non-cost anchors (count-validation gates during the run)
+
+| After step | SQL check | Expected |
+|---|---|---|
+| Step 2 (gazetteer) | `SELECT ROUND(100.0 * COUNT(*) FILTER (WHERE array_length(key_entities,1) > 0) / COUNT(*), 1) FROM document_chunks` | ≥35% (from 25.2% baseline; quick-win adds ~10pp) |
+| Step 3 (BAG) | `SELECT COUNT(*) FROM kg_entities WHERE type='Location' AND metadata->>'gemeente'='rotterdam'` | ≥4,500 (full state ~5,135) |
+| Step 4 (Flair) | Same coverage check as step 2 | ≥60% (handoff acceptance criterion) |
+| Step 8 (Gemini) | `SELECT COUNT(*) FROM kg_relationships WHERE metadata->>'source'='gemini_flash_lite'` | ≥300K (drives the ≥500K total target) |
+| Step 9 (motie linker) | `SELECT COUNT(*) FROM kg_relationships WHERE relation_type IN ('DISCUSSED_IN','VOTED_IN')` | ≥10K (depends on motie↔notulen overlap density) |
+| Step 10 (Qdrant) | `client.count('notulen_chunks', count_filter=Filter(must=[FieldCondition(key='entity_ids', match=MatchAny(any=[1,2,3]))]))` | ≥1.0M points have `entity_ids` populated (≥60% of 1.74M) |
+
+If any expected number is off by >20%, **pause the next step** and root-cause — the script's pre-flight check only catches structural problems, not semantic drift.
+
+---
+
+### Chunk filter rationale (added 2026-04-15)
+
+The SELECT query in `gemini_semantic_enrichment.py` applies `[200, 50000]` char bounds. The upper bound was raised from 15,000 → 50,000 on 2026-04-15 (commit pending, see [§Filter change](#filter-change)).
+
+**Why the filter exists — data provenance, not architectural choice.**
+
+The target architecture is correct: enrich grandchildren only, target 2,500 chars, no chunk should exceed that. The filter is needed because two eras of chunks coexist in the DB:
+
+| Era | When created | max_chunk_chars enforced? | Oversized (>15K) | Max seen |
+|---|---|---|---|---|
+| v1 (pre-April-5) | before 2026-04-05 | **No** | 1,924 chunks (0.131%) | 1,609,723 chars |
+| v2 (post-April-5) | after 2026-04-05 | **Yes** (2,500 limit added commit 1673562) | 78 chunks (0.029%) | 30,704 chars |
+
+The v1 chunker had no size cap; a hard-cut fallback in `_find_best_break()` at [pipeline/ingestion.py:436](../../pipeline/ingestion.py#L436) could emit one oversized grandchild for the entire document.
+
+**"If we only focus on the smallest chunks, why would we still have very large chunks?"** (validated against live DB 2026-04-15)
+
+You're right — we effectively do already. The `[200, 50000]` filter is exactly the "pick the smallest usable unit per document" strategy, implemented at query time instead of at storage time. Validation numbers:
+
+| Category | Count (>50K catastrophic) | Count (>15K wider band) |
+|---|---|---|
+| Doc has ONLY the oversized grandchild (no smaller siblings) | 1 | 20 |
+| Doc has siblings but all are out of band | 0 | 9 |
+| **Doc has usable smaller siblings alongside the oversized one** | **82 (98.8%)** | **1,973 (98.6%)** |
+
+For 98.8% of the "catastrophic" cases, the same document already has smaller grandchildren that the filter keeps and sends to Gemini — we just skip the giant sibling. A 1.6M-char blob is **never** fed to the LLM.
+
+The oversized chunks still sit in storage (legacy v1 chunker output, pre-April-5 2026) — they're filtered OUT at Gemini time, not removed from the DB. Physical cleanup via `scripts/resplit_oversized_chunks.py` (not yet written) is post-v0.2.0 — see Future work.
+
+For the 1 truly unrecoverable doc (>50K) / 20 unrecoverable docs (>15K band) where the document has ONLY an oversized grandchild and nothing else: those lose Gemini enrichment entirely until resplit runs. That's ≤0.005% of the scoped corpus — acceptable.
+
+**On the parent/child relationship** (earlier assertions corrected 2026-04-15 against live data):
+
+- `document_children` is NOT always 1:1 with documents. Of 92,295 documents: 66,615 have exactly 1 child, **22,869 have >1 child** (max 393 children/doc).
+- Children do NOT always store the same full text as the parent. For some documents (e.g., doc_id 2374427: parent=230,898 chars, single child=7,153 chars), the child is a summary or excerpt.
+- For documents with oversized grandchildren: sum(grandchildren content) can be 3-5× the parent length (duplication/overlap in the chunker's output).
+
+None of this changes the filter decision — the filter operates on `document_chunks` alone and is correct. But the earlier "children mirror parents" narrative was an oversimplification, removed.
+
+**Impact of the 15K → 50K change** (audit 2026-04-15):
+- Additional chunks included: +1,919 (15K-50K band, legitimate long annexes)
+- Remaining exclusions (>50K): 83 catastrophic failures — whole docs, skip correct
+- Speaker-attributed notulen exclusion: 0.16% → 0.005%
+- Cost delta: +$0.36
+
+---
+
+### Phase 0.5a — Motie pre-enrichment pass (added 2026-04-15)
+
+**Script:** `scripts/enrich_motie_relationships.py`
+**Run BEFORE:** `gemini_semantic_enrichment.py`
+**Run AFTER:** `populate_kg_relationships.py` (so DIENT_IN baseline exists)
+
+#### Why this pass exists
+
+The rule-based `DIENT_IN` edges (57K baseline) come from `document_chunks.indieners` TEXT[] arrays extracted by regex in `enrich_and_extract.py`. That regex achieves ~75-80% precision. More critically: **there is no Party→Motie proposer edge at all.** Today `traceer_motie` must infer via `Person → LID_VAN → Party` (two hops, lossy). This pass closes both gaps.
+
+#### What it adds
+
+| New edge type | Direction | Description |
+|---|---|---|
+| `PROPOSED_BY` | Party → Motie | Proposing party — **new, 0 today** |
+| `SIGNED_BY` | Person → Motie | Gemini-reconciled signatory (confidence ≥ 0.85) — coexists with DIENT_IN |
+
+DIENT_IN is **not deleted** — SIGNED_BY is additive. Graph traversal can use whichever confidence band suits the query.
+
+#### Scope & cost
+
+- Targets: `LOWER(d.name) LIKE '%motie%' OR LIKE '%amendement%'` — same filter as the main script
+- Estimated chunks: ~80K (130,562 motie/amend total, filtering <200 and >50K chars)
+- Cost: **~$2-10** (moties are shorter avg than notulen; cost-cap default 30.00)
+- Runtime: ~1-2 hours
+
+#### Run command
+
+```bash
+# Dry run (no API calls, no writes)
+python scripts/enrich_motie_relationships.py --dry-run --limit 500
+
+# Full run
+python scripts/enrich_motie_relationships.py --cost-cap 30
+
+# Acceptance gate (run after completion)
+psql $DATABASE_URL -c "SELECT COUNT(*) FROM kg_relationships WHERE relation_type = 'PROPOSED_BY';"
+# expect >= 3,000
+psql $DATABASE_URL -c "SELECT COUNT(*) FROM kg_relationships WHERE relation_type = 'SIGNED_BY';"
+# expect >= 10,000
+
+# Rollback if needed
+psql $DATABASE_URL -c "DELETE FROM kg_relationships WHERE metadata->>'source' = 'gemini_motie_pass';"
+```
+
+---
+
+### Phase 0.5b — Sibling-context calibration experiment (added 2026-04-15)
+
+**Folded into the existing calibration gate** (step 7 of the runbook, ~$0.50 total, 100 chunks).
+
+The `--sibling-context` flag was added to `gemini_semantic_enrichment.py`. When set, each chunk payload includes `prev_chunk_title` and `next_chunk_title` (via `LAG`/`LEAD` window functions on `dc.id PARTITION BY dc.document_id`).
+
+**A/B procedure within the calibration gate:**
+
+```bash
+# Baseline: 50 chunks, no sibling context
+python scripts/gemini_semantic_enrichment.py --limit 50 --no-skip-enriched --dry-run
+# → record edge_count, rejection_rate
+
+# Variant: same 50 chunks + sibling context
+python scripts/gemini_semantic_enrichment.py --limit 50 --no-skip-enriched --sibling-context --dry-run
+# → record edge_count, rejection_rate
+```
+
+**Gate rule:** if sibling-context produces ≥10% more valid edges with no increase in rejection rate → add `--sibling-context` to the full-run command. Otherwise, proceed without it (defer to post-v0.2.0).
+
+---
+
+### End-to-end design walkthrough (7 questions, added 2026-04-15)
+
+#### 1. How we send chunks to the LLM
+
+**Source:** `SELECT` from `document_chunks` with scope filter + length filter `[200, 50000]` — see [`build_chunk_selection_clause`, gemini_semantic_enrichment.py:948-1013](../../scripts/gemini_semantic_enrichment.py#L948-L1013).
+
+**Batching:** 20 chunks per Gemini call (script default). At ~986 tokens/chunk avg, that's ~19.7K input tokens/batch — safely under the 30K output budget.
+
+**Per-chunk context passed** (via [`build_chunk_payload`, gemini_semantic_enrichment.py:914-937](../../scripts/gemini_semantic_enrichment.py#L914-L937)):
+
+| Field | Source | Why |
+|---|---|---|
+| `id` | `document_chunks.id` | Gemini echoes back — required for write-back join |
+| `title` | `document_chunks.title` (200 char trunc) | Section label (notulen agendapunt titles) |
+| `doc_name` | `documents.name` (200 char trunc) | Disambiguates "Motie 2024-05" vs "Voortgangsrapportage parkeren 2024" |
+| `meeting_name` | `staging.meetings.name` | Temporal + committee context ("Commissie BFO 15-mei-2024") |
+| `existing_topic` | `document_chunks.section_topic` | Rule-based value; Gemini overwrites only if strictly more specific |
+| `speaker_hint` | chunk content prefix | Pre-extracted speaker tag for SPREEKT_OVER edges |
+| `content` | `document_chunks.content` | Full chunk body — **never truncated mid-content** (4,000-char bug fixed 2026-04-14) |
+
+**Hierarchical guarantee:** we read only from `document_chunks`. `document_children.content` is never passed to Gemini. No duplication possible at any corpus size.
+
+#### 2. With what instruction
+
+System prompt is closed-vocabulary + evidence-required. Full text at [gemini_semantic_enrichment.py:265-295](../../scripts/gemini_semantic_enrichment.py#L265-L295):
+
+> *"Je bent een annotator voor Nederlandse gemeenteraadsdocumenten… Je verzint niets: alleen feiten die letterlijk in de chunk staan. Elke edge MOET onderbouwd worden met een quote van maximaal 200 karakters uit het chunk zelf."*
+
+Per chunk, the LLM must return:
+- `answerable_questions` — 3-5 natural Dutch questions using concrete entities (names, amounts, wijken, years)
+- `section_topic` — ≤80 chars, or empty if rule-based is already more specific
+- `edges` — 0 or more relations, **strictly from closed vocabulary**
+
+**Closed relation vocabulary** (only 3 types — Gemini cannot invent new ones):
+
+| Relation | Source → Target | When to emit |
+|---|---|---|
+| `HEEFT_BUDGET` | Budget → Topic/Document | Explicit EUR amounts (e.g., "EUR 4.5 miljoen jeugdzorg") |
+| `BETREFT_WIJK` | Location → Topic/Document | Specific Rotterdam wijk/buurt name (NOT country/province/city) |
+| `SPREEKT_OVER` | Person → Topic | Speaker attribution present in chunk or `speaker_hint` |
+
+Response schema is enforced at the API layer ([RESPONSE_SCHEMA, gemini_semantic_enrichment.py:222-262](../../scripts/gemini_semantic_enrichment.py#L222-L262)) — Gemini returns typed JSON only; prose responses fail parse and are retried once, then the batch is dropped.
+
+#### 3. How we deal with cross-chunk relationships
+
+Per-chunk extraction is deliberately independent — no sibling context is passed by default (see Phase 0.5b for the calibration experiment). Cross-chunk linking happens in two separate layers:
+
+**Layer A — rule-based pre-existing edges** (already shipped, 57K edges):
+- `populate_kg_relationships.py`: `LID_VAN`, `IS_WETHOUDER_VAN`, `STEMT_VOOR`/`STEMT_TEGEN`, `DIENT_IN`, `AANGENOMEN`/`VERWORPEN`
+- Derived from structured fields (politician_registry, raadslid_rollen, motie signatory block regex) — no LLM, no hallucination
+
+**Layer B — cross-document motie↔notulen linker** ([`scripts/link_motie_to_notulen.py`](../../scripts/link_motie_to_notulen.py), Phase 0 ✅):
+- Connects motie documents to notulen chunks where the motie is discussed/voted
+- Writes `DISCUSSED_IN` / `VOTED_IN` edges with `chunk_id` and `document_id` provenance
+- How WS3 journey timelines will stitch motie→debate→vote
+
+**Layer C — query-time graph walk** ([`services/graph_retrieval.py`](../../services/graph_retrieval.py)):
+- `walk()` does recursive CTE traversal up to 2 hops
+- Hop penalty 0.7×, intent boosts per query type, VN penalty 0.7× per VN edge in path
+
+#### 4. How we prevent hallucination
+
+Five layers (all currently implemented):
+
+1. **Schema-typed output** — `response_schema` passed to the SDK. Gemini cannot return prose; only typed JSON. Malformed → retry once → drop batch.
+2. **Closed vocabulary enforcement** — only 3 relation types accepted. Enforced at write time ([gemini_semantic_enrichment.py:1156-1175](../../scripts/gemini_semantic_enrichment.py#L1156-L1175)): off-vocabulary rejected, counted in `stats.edges_rejected`.
+3. **Quote requirement** — every edge must include a ≤200-char verbatim quote from the chunk. Enforced in system prompt.
+4. **BAG resolution for locations** — `BETREFT_WIJK` source names joined against PDOK BAG skeleton via `resolve_source_entity`. Invented wijk names become `metadata.level='generic'` rows flagged in audits.
+5. **Rejection-rate alarm + calibration gate** — `edges_rejected/total > 20%` triggers WARNING. Plus: $0.50 calibration run on 100 chunks before the full run (step 7 of runbook).
+
+**What this catches:** fabricated edges, off-vocabulary relations, invented wijken.
+
+**What this does not catch:** *interpretive* hallucinations — quote-supported but misinterpreted inference. This is what the **Layer 2 MCP chat replay** (6 RED sessions) is designed to surface. Chunk-level LLM-judge scores miss it; real queries catch it.
+
+#### 5. How we establish KG relations across information pieces
+
+Three-stage aggregation, each writing to `kg_entities` + `kg_relationships`:
+
+**Stage 1 — Motie pre-enrichment** (`enrich_motie_relationships.py`, Phase 0.5a):
+- PROPOSED_BY (Party → Motie) + SIGNED_BY (Person → Motie, confidence-scored)
+- Runs on ~80K motie/amend chunks
+
+**Stage 2 — Chunk-level semantic extraction** (`gemini_semantic_enrichment.py`, main pass):
+- Emits HEEFT_BUDGET, BETREFT_WIJK, SPREEKT_OVER edges with chunk_id + quote
+- Entities upserted via `UNIQUE(type, name)` in kg_entities
+
+**Stage 3 — Cross-document linking** (rule-based scripts post-Gemini):
+- `link_motie_to_notulen.py` — DISCUSSED_IN / VOTED_IN edges
+- `populate_kg_relationships.py` — already shipped 57K baseline (LID_VAN, IS_WETHOUDER_VAN, STEMT_*, DIENT_IN, AANGENOMEN/VERWORPEN)
+- BAG import — LOCATED_IN hierarchy (Heemraadssingel → Middelland → Delfshaven → Rotterdam)
+
+**Stage 4 — Query-time graph traversal** (`graph_retrieval.py`):
+- Recursive CTE over `kg_relationships` with hop cap 2
+- Path scoring: `total_confidence × hop_penalty^(hops-1) × intent_boost × vn_factor`
+- Hydration via `kg_mentions` (chunk↔entity link table)
+- Results returned as 5th retrieval stream alongside dense/BM25/fact/vision
+
+**Entity deduplication:** `UNIQUE(type, name)` on kg_entities prevents duplicate nodes. Same-name collisions across types are separated by `metadata.gemeente` — locked here for v0.2.1 multi-portal.
+
+#### 6. How we leverage metadata
+
+**Input metadata** (passed to Gemini at extraction time):
+
+| Layer | Fields | Purpose |
+|---|---|---|
+| Document | `d.name`, `d.doc_classification`, `d.municipality`, `d.ocr_quality`, `d.category` | Disambiguation + quality signal |
+| Meeting | `meetings.name`, `meetings.start_date`, `meetings.committee`, `meetings.quality_score` | Temporal + political context + VN provenance |
+| Chunk | `dc.title`, `dc.chunk_type`, `dc.section_topic` (rule-based), `dc.key_entities`, speaker prefix in content | Section grounding + pre-tagged entities |
+
+**Output metadata** (written to `kg_relationships.metadata` per Phase A bis contract):
+
+```json
+{
+  "source": "gemini_flash_lite",
+  "source_quality": 0.0-1.0,
+  "source_meeting_id": "<staging.meetings.id or null>",
+  "source_doc_id": "<documents.id>",
+  "extractor": "gemini_flash_lite",
+  "extracted_at": "<ISO-8601 UTC>",
+  "gemini_model": "gemini-2.5-flash-lite-001",
+  "gemini_ts": "<same as extracted_at>",
+  "rule_section_topic": "<preserved rule-based value>"
+}
+```
+
+**Retrieval-time metadata use:**
+- `exclude_sources=['virtual_notulen']` — `walk()` filters VN edges via CTE
+- `min_source_quality=0.7` — filters low-trust edges
+- `INCLUDE_VIRTUAL_NOTULEN=false` env killswitch
+- `vn_penalty=0.7` — applied per VN edge in path score
+
+#### 7. What the actual output is
+
+**Per chunk, Gemini returns:**
+
+```json
+{
+  "id": 1247833,
+  "answerable_questions": [
+    "Welk bedrag wordt uitgetrokken voor jeugdzorg in 2024?",
+    "Welke wijken profiteren van het warmtenet-budget?",
+    "Wie sprak er in de commissie over de begroting?"
+  ],
+  "section_topic": "Begroting 2024 jeugdzorg EUR 4.5 miljoen",
+  "edges": [
+    {
+      "source_name": "EUR 4.5 miljoen",
+      "source_type": "Budget",
+      "target_name": "jeugdzorg 2024",
+      "target_type": "Topic",
+      "relation_type": "HEEFT_BUDGET",
+      "confidence": 0.92,
+      "quote": "Het college stelt EUR 4.5 miljoen beschikbaar voor jeugdzorg in 2024."
+    }
+  ]
+}
+```
+
+**Persisted to database:**
+
+| Target | What gets written |
+|---|---|
+| `document_chunks.answerable_questions` | `text[]` of 3-5 NL questions |
+| `document_chunks.section_topic` | Refined ≤80 char topic (only if strictly more specific than rule-based) |
+| `kg_entities` | Budget/Location/Person/Topic nodes upserted |
+| `kg_relationships` | Edge row with confidence, quote, full provenance metadata |
+| `kg_mentions` | **Not populated here** — Flair NER handles this separately |
+
+**Aggregate WS1 Phase 1 deliverables** (end-state after all steps):
+
+| Deliverable | Target | Acceptance SQL |
+|---|---|---|
+| KG edges (total) | 57K → **≥500K** | `SELECT COUNT(*) FROM kg_relationships` |
+| PROPOSED_BY edges (motie pass) | 0 → **≥3,000** | `WHERE relation_type='PROPOSED_BY'` |
+| SIGNED_BY edges (motie pass) | 0 → **≥10,000** | `WHERE relation_type='SIGNED_BY'` |
+| `key_entities` chunk coverage | 25.2% → **≥60%** | `COUNT(*) FILTER (WHERE array_length(key_entities,1)>0) / COUNT(*)` |
+| Qdrant entity_ids backfill | 0% → **≥60%** | Qdrant payload sample |
+| MCP `traceer_motie` | 10/10 hand-validated correct vote + proposing party | Manual test post-deploy |
+| MCP `vergelijk_partijen` | Differentiated per-party fragments on "warmtenetten" | Manual test post-deploy |
+| MCP chat replay | 6/6 RED sessions pass, composite ≥3.0/5 | A/B with VN on/off |
+| Edges with `metadata.source` populated | 100% | `COUNT WHERE metadata->>'source' IS NULL = 0` |
+
+---
+
+### Concurrency strategy & agent fanout (added 2026-04-15)
+
+WS1 Phase 1 is fundamentally **lock-serialized** — every script that mutates `kg_*` or `document_chunks` must hold `pg_advisory_lock(42)`. You cannot speed up the critical path by throwing more agents at the lock-holding scripts (they'd block or — if they bypass the lock — corrupt segments per [project_embedding_process.md](../../.claude/projects/-Users-dennistak-Documents-Final-Frontier-NeoDemos/memory/project_embedding_process.md)).
+
+**But** ~10h of the 24h wall-clock window is **idle waiting on overnight jobs** (Flair NER + Qdrant backfill). Fan out parallel agents onto independent files during those windows.
+
+#### Three-lane execution model
+
+```
+═══════════════════════════════════════════════════════════════════════════════
+  LANE 1: lock-holder (single agent, holds pg_advisory_lock(42) end-to-end)
+═══════════════════════════════════════════════════════════════════════════════
+  ┌─────────┬─────────┬──────────────────┬──────┬─────────┬──────┬───────────┐
+  │ gazettr │ BAG     │   Flair NER      │ STOP │ Gemini  │ link │  Qdrant   │
+  │ ~30 min │ ~30 min │   6–12h overnite │ $.50 │ ~60 min │ ~1h  │  3–4h     │
+  └─────────┴─────────┴──────────────────┴──────┴─────────┴──────┴───────────┘
+   step 2     step 3       step 4         step 7   step 8   step 9   step 10
+                                            ↑
+                                  Dennis approval gate
+                                  (manual inspect 100 chunks)
+
+═══════════════════════════════════════════════════════════════════════════════
+  LANE 2: parallel prep agents (no lock contention; touch independent files)
+═══════════════════════════════════════════════════════════════════════════════
+            ┌──[A4]──────┐
+            │ stage      │   ← git add -p mcp_server_v3.py VN-awareness edits
+            │ MCP commit │     (do NOT push — interleaved with WS4/WS6/WS8f WIP)
+            └────────────┘
+                          ┌──[A5]────────────────┐
+                          │ write 4 VN unit      │   ← tests/test_graph_retrieval.py
+                          │ tests (FakeCursor)   │     (no live DB needed)
+                          └──────────────────────┘
+                                                 ┌──[A6]──────────────────┐
+                                                 │ build 10-motie smoke   │   ← prep for §C2
+                                                 │ test harness (Python)  │
+                                                 └────────────────────────┘
+                                                 ┌──[A7]──────────────────┐
+                                                 │ prep 6 MCP replay      │   ← R1–R6 from
+                                                 │ session scripts (.md)  │     Eval gate Layer 2
+                                                 └────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+  LANE 3: post-promotion agents (after lock 42 releases — fully parallel)
+═══════════════════════════════════════════════════════════════════════════════
+  ┌─[C1]──┐  ┌─[C2]──────┐  ┌─[C3]──────┐  ┌─[C4]──────────────┐  ┌─[C5]───┐
+  │ kamal │  │ traceer_  │  │ vergelijk │  │ 6 MCP replay      │  │ audit  │
+  │ deploy│→ │ motie ×10 │  │ partijen  │  │ sessions A/B      │  │ SQL +  │
+  │ +flag │  │ smoke     │  │ smoke     │  │ (VN on/off)       │  │ Outcome│
+  └───────┘  └───────────┘  └───────────┘  └───────────────────┘  └────────┘
+   serial      independent    independent    independent           independent
+   (1 owner)   (read-only)    (read-only)    (read-only)           (read-only)
+
+═══════════════════════════════════════════════════════════════════════════════
+  PAUSED FOR THE DURATION (Dennis-managed; not agent-managed)
+═══════════════════════════════════════════════════════════════════════════════
+  • WS5a Phase B nightly cycles → resume after WS1 v0.2.0 ships
+  • WS6 Phase 3 Postgres writes → drained before lane 1 starts; held until done
+═══════════════════════════════════════════════════════════════════════════════
+```
+
+#### Pre-flight fanout (parallel, ~30 min, 3 agents before Lane 1 starts)
+
+| Agent | Task | Lock-safe? |
+|---|---|---|
+| **P1** | Verify WS5a Phase B cron paused; verify WS6 Phase 3 has no in-flight writes (`pg_stat_activity` filter on `UPDATE document_chunks`) | Read-only |
+| **P2** | `python scripts/gemini_semantic_enrichment.py --dry-run --limit 1000` (validates SELECT + prompt builder, no writes, no API spend) | Read-only |
+| **P3** | `python scripts/enrich_chunks_gazetteer.py --dry-run --limit 1000` + sanity-check BAG state via `eval/scripts/ws1_quality_audit.sql` | Read-only |
+
+#### Lane 1 step → Lane 2 parallel work map
+
+| Lane 1 active step | Wall time | Lane 2 agents that can work in parallel |
+|---|---|---|
+| Step 2 (gazetteer) | 30 min | A4 stages MCP commit |
+| Step 3 (BAG import) | 30 min | A5 writes VN unit tests |
+| Step 4 (**Flair NER**) | **6–12h overnight** | A6 builds 10-motie smoke harness; A7 preps R1–R6 replay scripts; orthogonal WS work (WS15 / WS2b / WS17) can also run since they don't touch `kg_*` |
+| Step 7 (Gemini calibration) | 1 min | **STOP — Dennis approval gate.** No agent fires step 8 without explicit go. |
+| Step 8 (Gemini full) | 60 min | A8 monitors cost trajectory (`tail -f` checkpoint file) |
+| Step 9 (motie linker) | 1 hour | — (small, fast) |
+| Step 10 (**Qdrant backfill**) | **3–4h overnight** | A9 dry-runs the §C2 traceer_motie smoke harness against staging |
+
+#### Safety rails (apply to every agent in the fanout)
+
+1. **One lock-holder.** Only one agent runs lock-holding scripts at a time. Others must `SELECT pg_try_advisory_lock(42)` and back off if held — never use `--force` or bypass the lock.
+2. **No `mcp_server_v3.py` pushes during the run.** A4 stages the VN-awareness edit; promotion happens in Lane 3 (step C1) after lock 42 releases. Pushing mid-run risks shipping the VN edits without the corresponding KG state.
+3. **Step 7 is the human-in-the-loop gate.** $0.50 buys the first 100 enriched chunks. Dennis must inspect output JSON quality + cost-per-chunk before any agent fires step 8 ($125).
+4. **Read-only agents stay read-only.** Lane 2 + Lane 3 agents must NOT issue writes against `kg_*` / `document_chunks` / Qdrant. Lane 2 file edits are local (tests + scripts + staged commits); Lane 3 reads only via MCP tools.
+5. **`preflight_checks()` is the last line of defense.** If a human coordination step is missed (WS6 didn't drain, WS5a Phase B didn't pause), the script aborts with exit code 5 and a clear "fix this" message. Don't override.
+
+#### Wall-clock summary
+
+| Phase | Critical path | With fanout |
+|---|---|---|
+| Phase 0 (pre-flight) | 30 min serial | **10 min** with 3 parallel agents |
+| Phase 1 (lock-held) | ~24h serial (Flair + Qdrant dominate) | **~24h** — no shrink possible; but Lane 2 productive during Flair/Qdrant idle ~10h |
+| Phase 2 (promote + eval) | ~6h serial | **~2h** with 5 parallel agents |
+| **Total wall clock** | ~30h | **~26h** with productive fanout |
+
+Real win from fan-out is not raw speed — it's that **all the eval scaffolding is ready the moment Lane 1 finishes**, so Lane 3 can hit the ground running instead of starting from scratch at hour 24.
 
 ### Known-good gates between steps
 
@@ -358,6 +840,9 @@ Replay these 6 sessions through the live MCP tools **after Phase 1 enrichment**.
 | `staging.meetings.quality_score` not populated for some VN meetings | Default to 0.5 if NULL — conservative middle ground. Log the count of edges written with a defaulted quality_score; if > 5%, root-cause in WS12. |
 
 ## Future work (do NOT do in this workstream)
+- **Chunker bug fix:** `_find_best_break` silent hard-cut fallback at [pipeline/ingestion.py:436](../../pipeline/ingestion.py#L436). Re-chunk the 1,204 legacy docs with ≥1 oversized grandchild via `scripts/resplit_oversized_chunks.py` (not yet written): re-split → re-embed in Qdrant → update kg_relationships / kg_mentions FK references. Defer to post-v0.2.0.
+- **Motion number normalization:** M2023-042 vs 2023/42 format divergence causes ~30% cross-doc linking failures in `link_motie_to_notulen.py`. Needs a canonical format table. Defer post-v0.2.0.
+- **Sibling-context enrichment full incorporation:** if Phase 0.5b A/B calibration shows ≥10% more valid edges → incorporate `--sibling-context` into full run. If it fails the gate → defer to post-v0.2.0.
 - Per-municipality KG isolation (out of v0.2 scope; multi-portal deferred to v0.2.1)
 - 3+ hop graph walks (capped at 2 in v0.2)
 - Active learning loop for entity disambiguation (v0.4+)

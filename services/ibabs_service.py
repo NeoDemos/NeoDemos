@@ -15,6 +15,11 @@ class IBabsService:
     LIST_MEETINGS_URL = f"{BASE_URL}/Agenda/RetrieveAgendasForYear"
     AGENDA_INDEX_URL = f"{BASE_URL}/Agenda/Index"
     DOCUMENT_LOAD_URL = f"{BASE_URL}/Document/LoadAgendaItemDocument"
+    # /Calendar aggregates upcoming meetings across every `agendatypeId`
+    # (raadsvergadering + commissies + stadsberaad + werkbezoek). Used by
+    # `get_upcoming_meetings` for the 15-min refresh so new agendatypes in
+    # raadsperiode 2026-2030 are picked up without a hardcoded type list.
+    CALENDAR_URL = f"{BASE_URL}/Calendar"
 
     def __init__(self):
         self.headers = {
@@ -38,20 +43,108 @@ class IBabsService:
                 logger.error(f"Error fetching meetings for year {year}: {e}")
                 return []
 
+    async def get_upcoming_meetings(self) -> List[Dict[str, Any]]:
+        """Scrape /Calendar — returns every upcoming meeting across all agendatypes.
+
+        The legacy `get_meetings_for_year(agendatype_id="100002367")` only
+        polls one type and therefore misses stadsberaad / BWB-startberaad
+        (agendatypeId=100199686) plus any new type raadsperiode 2026-2030
+        introduces. This method is agendatype-agnostic: it parses the same
+        cards the portal's public calendar renders, so new types are picked
+        up the moment they appear.
+
+        Returns the same shape as `get_meetings_for_year` so callers can
+        swap implementations without further changes.
+        """
+        async with httpx.AsyncClient(timeout=30.0, headers=self.headers) as client:
+            try:
+                response = await client.get(self.CALENDAR_URL, follow_redirects=True)
+                response.raise_for_status()
+                return self._parse_calendar_page(response.text)
+            except Exception as e:
+                logger.error(f"Error fetching /Calendar: {e}")
+                return []
+
+    def _parse_calendar_page(self, html: str) -> List[Dict[str, Any]]:
+        """Parse the /Calendar HTML into meeting dicts.
+
+        Each meeting card surfaces committee, location, subtitle, date and
+        time. The meeting UUID lives in the `/Agenda/Index/{id}` link; all
+        other fields are derived from the card text.
+        """
+        soup = BeautifulSoup(html, 'html.parser')
+        meetings: List[Dict[str, Any]] = []
+        seen_ids: set = set()
+
+        for link in soup.find_all('a', href=re.compile(r'/Agenda/Index/')):
+            href = link['href']
+            meeting_id = href.rsplit('/', 1)[-1]
+            if not meeting_id or meeting_id in seen_ids:
+                continue
+            seen_ids.add(meeting_id)
+
+            card = link.find_parent(['li', 'div', 'article']) or link
+            card_text = card.get_text(separator=' | ', strip=True)
+            parts = [p.strip() for p in card_text.split('|') if p.strip()]
+
+            committee = parts[0] if parts else None
+            location = None
+            subtitle = None
+            date_str = None
+            time_str = None
+            for part in parts[1:]:
+                if part.startswith('(') and part.endswith(')') and not location:
+                    location = part.strip('()')
+                elif re.search(r'\b(maandag|dinsdag|woensdag|donderdag|vrijdag|zaterdag|zondag)\b', part, re.IGNORECASE) and not date_str:
+                    date_str = part
+                elif re.match(r'^\d{1,2}:\d{2}\s*-\s*\d{1,2}:\d{2}$', part) and not time_str:
+                    time_str = part
+                elif not subtitle and len(part) > 3 and '@' not in part:
+                    subtitle = part
+
+            start_date = None
+            if date_str:
+                start_dt = self._parse_ibabs_date(
+                    f"{date_str}, {time_str.split('-')[0].strip()}" if time_str else date_str,
+                    datetime.now().year,
+                )
+                if start_dt:
+                    start_date = start_dt.isoformat()
+
+            meetings.append({
+                "id": meeting_id,
+                "name": f"{committee} — {subtitle}" if subtitle and committee else (committee or subtitle or "Meeting"),
+                "committee": committee,
+                "location": location,
+                "subtitle": subtitle,
+                "start_date": start_date,
+                "url": f"{self.BASE_URL}{href}",
+            })
+
+        return meetings
+
     async def get_meeting_agenda(self, meeting_id: str, resolve_references: bool = False) -> Dict[str, Any]:
-        """Fetch agenda items and document links for a specific meeting"""
+        """Fetch agenda items and document links for a specific meeting.
+
+        Every returned agenda item carries ``meeting_id`` and every document
+        carries both ``meeting_id`` and ``agenda_item_id`` so downstream
+        `storage.insert_agenda_item` / `storage.insert_document` can write
+        without losing the parent reference. Missing either field caused the
+        2026-04-15 Erik regression where UUID-meeting agenda items/documents
+        were silently dropped by the `scheduled_refresh` Phase 2 sweep.
+        """
         url = f"{self.AGENDA_INDEX_URL}/{meeting_id}"
-        
+
         async with httpx.AsyncClient(timeout=30.0, headers={**self.headers, "X-Requested-With": ""}) as client:
             try:
                 response = await client.get(url, follow_redirects=True)
-                
+
                 # Fallback: if numeric ID fails with 500/404, it might be an ORI ID that doesn't match iBabs GUID
                 if (response.status_code >= 400) and meeting_id.isdigit():
                     logger.warning(f"Meeting ID {meeting_id} failed with {response.status_code}. This might be a numeric ID mismatch.")
                     # In a real scenario, we might want to search by date/committee here.
                     # For now, we'll just raise the error to be handled by the caller.
-                
+
                 response.raise_for_status()
                 agenda_data = self._parse_agenda_page(response.text, meeting_id)
                 
@@ -349,11 +442,25 @@ class IBabsService:
                     "resolved": False
                 })
 
+        agenda_list = list(items_dict.values())
+        # Stamp parent references so downstream inserts don't drop the link.
+        # insert_agenda_item requires `meeting_id`; insert_document writes
+        # `meeting_id` + `agenda_item_id` into `document_assignments` (see
+        # services/storage.py:411). Without these fields, Phase 2 calendar
+        # sweep silently dropped every agenda item and document for UUID-
+        # format raadsperiode 2026-2030 meetings (Erik — 2026-04-15).
+        for item in agenda_list:
+            item["meeting_id"] = meeting_id
+            for doc in item.get("documents", []):
+                doc.setdefault("meeting_id", meeting_id)
+                if item["id"] != "general":
+                    doc.setdefault("agenda_item_id", item["id"])
+
         return {
             "id": meeting_id,
             "name": meeting_name,
             "date_str": meeting_date_str,
-            "agenda": list(items_dict.values())
+            "agenda": agenda_list,
         }
 
     def _create_item_entry(self, element, item_id: str) -> Dict[str, Any]:

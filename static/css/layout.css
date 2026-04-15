@@ -7,23 +7,225 @@
 
   main {
     padding: var(--space-12) 5%;
-    max-width: 1200px;
+    max-width: var(--container-2xl);
     margin: 0 auto;
   }
 
-  /* ── Header / Navigation ── */
+  /* ── Header / Navigation (Oatmeal three-part: left menu / center logo / right CTAs) ── */
 
   .site-header {
-    padding: var(--space-4) 5%;
-    display: flex;
-    justify-content: space-between;
+    padding: var(--space-5) var(--space-10);
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    border-bottom: 1px solid var(--color-border);
-    background: rgba(255, 255, 255, 0.85);
+    gap: var(--space-6);
+    border-bottom: 1px solid var(--color-border-subtle);
+    background: color-mix(in oklab, var(--color-surface) 85%, transparent);
     backdrop-filter: blur(12px);
     position: sticky;
     top: 0;
     z-index: 1000;
+  }
+
+  .site-header .nav-left,
+  .site-header .nav-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+  }
+
+  .site-header .nav-right { justify-content: flex-end; }
+
+  .site-header .nav-left a,
+  .site-header .nav-right a,
+  .site-header .nav-right .nav-link {
+    color: var(--color-text);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 150ms;
+  }
+
+  .site-header .nav-left a:hover,
+  .site-header .nav-right a:hover,
+  .site-header .nav-right .nav-link:hover {
+    color: var(--color-primary);
+  }
+
+  .site-header .nav-left a.active,
+  .site-header .nav-right a.active {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  /* Pill CTA in nav-right */
+  .site-header .nav-cta,
+  .site-header .nav-right form .btn {
+    padding: var(--space-2) var(--space-5);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    line-height: 1.2;
+  }
+
+  /* ── Account dropdown (logged-in, right nav) ── */
+  .nav-user {
+    position: relative;
+  }
+
+  .nav-user-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-2);
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    transition: background 150ms;
+  }
+
+  .nav-user-trigger:hover {
+    background: var(--color-surface-sunken);
+  }
+
+  .nav-user.is-open .nav-user-trigger {
+    background: var(--color-surface-sunken);
+  }
+
+  .nav-user-avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+    color: var(--color-text-on-dark);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-size: var(--font-size-base);
+    line-height: 1;
+    overflow: hidden;
+  }
+
+  .nav-user-avatar--img {
+    background: transparent;
+    object-fit: cover;
+    display: block;
+  }
+
+  .nav-user-chevron {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    transition: transform 150ms;
+  }
+
+  .nav-user.is-open .nav-user-chevron { transform: rotate(180deg); }
+
+  .nav-user-panel {
+    position: absolute;
+    top: calc(100% + var(--space-2));
+    right: 0;
+    min-width: 14rem;
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: var(--space-2);
+    display: none;
+    flex-direction: column;
+    z-index: var(--z-dropdown);
+  }
+
+  .nav-user.is-open .nav-user-panel {
+    display: flex;
+  }
+
+  .nav-user-email {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+    letter-spacing: var(--letter-spacing-wide);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .nav-user-panel a,
+  .nav-user-panel .nav-user-logout button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    text-decoration: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background 120ms;
+  }
+
+  .nav-user-panel a:hover,
+  .nav-user-panel .nav-user-logout button:hover {
+    background: var(--color-surface-sunken);
+  }
+
+  .nav-user-panel a.active {
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .nav-user-divider {
+    border: none;
+    border-top: 1px solid var(--color-border-subtle);
+    margin: var(--space-2) 0;
+  }
+
+  .nav-user-logout {
+    margin: 0;
+  }
+
+  .nav-user-logout button {
+    color: var(--color-error);
+  }
+
+  /* On hero overlay (logged-in landing): avatar stays branded, chevron lightens */
+  .has-hero .nav-user-trigger {
+    color: var(--color-text-on-dark);
+  }
+
+  .has-hero .nav-user-trigger:hover,
+  .has-hero .nav-user.is-open .nav-user-trigger {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .has-hero .nav-user-chevron {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* Dropdown panel sits on a cream surface — override the has-hero white-link
+     rule so menu items stay dark + readable. !important needed because
+     .has-hero .nav-right a has equal specificity and the override is defensive. */
+  .has-hero .nav-user-panel a,
+  .has-hero .nav-user-panel .nav-user-logout button {
+    color: var(--color-text) !important;
+  }
+  .has-hero .nav-user-panel a.active {
+    color: var(--color-primary) !important;
+  }
+  .has-hero .nav-user-panel .nav-user-logout button {
+    color: var(--color-error) !important;
+  }
+
+  body.chat-active .nav-user-trigger {
+    color: var(--color-text);
   }
 
   /* Transparent nav overlaying hero images — no chrome, blends into image */
@@ -35,54 +237,101 @@
     background: transparent;
     backdrop-filter: none;
     border-bottom: none;
-    padding: var(--space-6) 5%;
   }
 
-  .has-hero .logo {
-    color: #fff;
+  /* When the chat workbench takes over (hero hidden), revert nav to the solid
+     default even though body still carries .has-hero. Keeps links readable on
+     the now-light page background. */
+  body.chat-active.has-hero .site-header {
+    position: sticky;
+    background: color-mix(in oklab, var(--color-surface) 85%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border-subtle);
   }
 
-  .has-hero .logo span {
+  body.chat-active .logo,
+  body.chat-active .logo.logo--center {
+    color: var(--color-primary);
+  }
+
+  body.chat-active .logo-dot { color: var(--color-accent); }
+
+  body.chat-active .site-header .nav-left a,
+  body.chat-active .site-header .nav-right a,
+  body.chat-active .site-header .nav-right .nav-link {
+    color: var(--color-text);
+  }
+
+  body.chat-active .site-header .nav-left a:hover,
+  body.chat-active .site-header .nav-right a:hover {
+    color: var(--color-primary);
+  }
+
+  body.chat-active .nav-hamburger span {
+    background: var(--color-text);
+  }
+
+  .has-hero .logo,
+  .has-hero .logo.logo--center {
+    color: var(--color-text-on-dark);
+  }
+
+  .has-hero .logo-dot {
     color: var(--color-accent);
   }
 
-  .has-hero .nav-desktop a {
-    color: rgba(255, 255, 255, 0.85);
+  .has-hero .nav-left a,
+  .has-hero .nav-right a,
+  .has-hero .nav-right .nav-link {
+    color: rgba(255, 255, 255, 0.88);
   }
 
-  .has-hero .nav-desktop a:hover,
-  .has-hero .nav-desktop a.active {
-    color: #fff;
+  .has-hero .nav-left a:hover,
+  .has-hero .nav-right a:hover,
+  .has-hero .nav-left a.active,
+  .has-hero .nav-right a.active {
+    color: var(--color-text-on-dark);
   }
 
-  .has-hero .nav-link-button {
-    color: rgba(255, 255, 255, 0.85);
+  .has-hero .nav-right form .btn-ghost {
+    color: var(--color-text-on-dark);
+    border-color: rgba(255, 255, 255, 0.3);
   }
 
-  .has-hero .nav-link-button:hover {
-    color: #fff;
+  .has-hero .nav-right form .btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.1);
   }
 
   .has-hero .nav-hamburger span {
-    background: #fff;
+    background: var(--color-text-on-dark);
   }
 
   .logo {
     font-family: var(--font-heading);
-    font-size: 1.6rem;
+    font-size: var(--font-size-3xl);
     font-weight: 400;
     color: var(--color-primary);
     text-decoration: none;
-    letter-spacing: -0.3px;
+    letter-spacing: var(--letter-spacing-display);
+    line-height: 1;
   }
 
-  .logo:hover {
-    opacity: 0.85;
+  @media (max-width: 768px) {
+    .logo {
+      font-size: var(--font-size-2xl);
+    }
   }
 
-  .logo span {
-    color: var(--color-accent);
+  .logo.logo--center {
+    grid-column: 2;
+    justify-self: center;
   }
+
+  .logo-dot { color: var(--color-accent); }
+
+  .logo:hover { opacity: 0.85; }
+
+  .logo span { color: var(--color-accent); }
 
   .nav-desktop {
     display: flex;
@@ -190,17 +439,21 @@
 
   .site-footer {
     text-align: center;
-    padding: var(--space-8) 5%;
-    border-top: 1px solid var(--color-border);
-    margin-top: var(--space-12);
+    padding: var(--space-12) var(--space-10);
+    border-top: 1px solid var(--color-border-subtle);
+    margin-top: var(--space-16);
     color: var(--color-text-tertiary);
-    font-size: 0.85rem;
-    line-height: 2;
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-body);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
   }
 
   .site-footer a {
     color: var(--color-text-secondary);
     text-decoration: none;
+    transition: color 150ms;
   }
 
   .site-footer a:hover {
@@ -208,27 +461,40 @@
   }
 
   .footer-links {
-    margin-bottom: var(--space-2);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-4);
   }
 
   .footer-links a {
-    font-weight: 600;
-    font-size: 0.9rem;
+    font-weight: 500;
+    font-size: var(--font-size-sm);
   }
 
   .footer-meta {
-    font-size: 0.8rem;
-    margin-bottom: var(--space-1);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3);
   }
 
   .footer-version {
-    font-size: 0.75rem;
-    color: var(--color-border-strong);
-    margin-top: var(--space-2);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+    opacity: 0.6;
+    letter-spacing: var(--letter-spacing-wide);
   }
 
   .footer-separator {
-    margin: 0 0.5rem;
     color: var(--color-border);
+  }
+
+  /* Hide inline separators when flexbox gap handles spacing */
+  .footer-links .footer-separator,
+  .footer-meta .footer-separator {
+    display: none;
   }
 }

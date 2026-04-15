@@ -1,25 +1,45 @@
-<header class="site-header">
-    <a href="/" class="logo" aria-label="NeoDemos home">Neo<span>Demos</span></a>
-    <nav class="nav-desktop">
+<header class="site-header site-header--triptych">
+    <nav class="nav-left">
         {% if user %}
+        <a href="/" {% if request.url.path == '/' %}class="active"{% endif %}>Zoeken</a>
         <a href="/calendar" {% if request.url.path == '/calendar' %}class="active"{% endif %}>Kalender</a>
-        <a href="/overview" {% if request.url.path == '/overview' %}class="active"{% endif %}>Overzicht</a>
         <a href="/mcp-installer" {% if request.url.path == '/mcp-installer' %}class="active"{% endif %}>AI-koppeling</a>
-        <a href="/settings" {% if request.url.path == '/settings' %}class="active"{% endif %}>Instellingen</a>
-        {% if user.role == 'admin' %}
-        <a href="/admin" {% if request.url.path == '/admin' %}class="active"{% endif %}>Beheer</a>
-        {% endif %}
-        <a href="/over" {% if request.url.path == '/over' %}class="active"{% endif %}>Over</a>
-        <form method="POST" action="/logout" class="inline">
-            <button type="submit" class="nav-link-button">Uitloggen</button>
-        </form>
         {% else %}
         <a href="/calendar" {% if request.url.path == '/calendar' %}class="active"{% endif %}>Kalender</a>
-        <a href="/mcp-installer" {% if request.url.path == '/mcp-installer' %}class="active"{% endif %}>AI-koppeling</a>
         <a href="/over" {% if request.url.path == '/over' %}class="active"{% endif %}>Over</a>
-        <a href="/login">Inloggen</a>
+        <a href="/abonnement" {% if request.url.path == '/abonnement' %}class="active"{% endif %}>Abonnement</a>
+        <a href="/mcp-installer" {% if request.url.path == '/mcp-installer' %}class="active"{% endif %}>AI-koppeling</a>
         {% endif %}
     </nav>
+
+    <a href="/" class="logo logo--center" aria-label="NeoDemos home">NeoDemos<span class="logo-dot">.</span></a>
+
+    <nav class="nav-right">
+        {% if user %}
+        <div class="nav-user" data-user-menu>
+            <button type="button" class="nav-user-trigger" aria-haspopup="menu" aria-expanded="false" aria-label="Account menu">
+                <img class="nav-user-avatar nav-user-avatar--img" src="{{ user_avatar_url(user) }}" alt="" width="32" height="32">
+                <span class="nav-user-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="nav-user-panel" role="menu">
+                <div class="nav-user-email" aria-hidden="true">{{ user.email }}</div>
+                {% if user.role == 'admin' %}
+                <a href="/overview" role="menuitem" {% if request.url.path == '/overview' %}class="active"{% endif %}>Overzicht</a>
+                <a href="/admin" role="menuitem" {% if request.url.path.startswith('/admin') %}class="active"{% endif %}>Beheer</a>
+                <hr class="nav-user-divider">
+                {% endif %}
+                <a href="/settings" role="menuitem" {% if request.url.path == '/settings' %}class="active"{% endif %}>Profiel</a>
+                <form method="POST" action="/logout" class="nav-user-logout">
+                    <button type="submit" role="menuitem">Uitloggen</button>
+                </form>
+            </div>
+        </div>
+        {% else %}
+        <a href="/login" class="nav-link">Inloggen</a>
+        <a href="/register" class="btn btn-primary btn-sm nav-cta">Aan de slag</a>
+        {% endif %}
+    </nav>
+
     <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu openen">
         <span></span>
         <span></span>
@@ -30,14 +50,15 @@
 <div class="nav-overlay" id="nav-overlay"></div>
 <nav class="nav-mobile" id="nav-mobile">
     {% if user %}
+    <a href="/">Zoeken</a>
     <a href="/calendar">Kalender</a>
-    <a href="/overview">Overzicht</a>
     <a href="/mcp-installer">AI-koppeling</a>
-    <a href="/settings">Instellingen</a>
+    <hr>
     {% if user.role == 'admin' %}
+    <a href="/overview">Overzicht</a>
     <a href="/admin">Beheer</a>
     {% endif %}
-    <a href="/over">Over</a>
+    <a href="/settings">Profiel</a>
     <form method="POST" action="/logout">
         <button type="submit" class="nav-link-button">Uitloggen</button>
     </form>
@@ -46,5 +67,39 @@
     <a href="/mcp-installer">AI-koppeling</a>
     <a href="/over">Over</a>
     <a href="/login">Inloggen</a>
+    <a href="/register" class="btn btn-primary btn-sm">Aan de slag</a>
     {% endif %}
 </nav>
+
+<script>
+    (function () {
+        // Account dropdown: toggle on click, close on outside click or Escape
+        const menuRoot = document.querySelector('[data-user-menu]');
+        if (!menuRoot) return;
+        const trigger = menuRoot.querySelector('.nav-user-trigger');
+        const panel = menuRoot.querySelector('.nav-user-panel');
+        if (!trigger || !panel) return;
+        function close() {
+            menuRoot.classList.remove('is-open');
+            trigger.setAttribute('aria-expanded', 'false');
+        }
+        function open() {
+            menuRoot.classList.add('is-open');
+            trigger.setAttribute('aria-expanded', 'true');
+        }
+        trigger.addEventListener('click', function (e) {
+            e.stopPropagation();
+            menuRoot.classList.contains('is-open') ? close() : open();
+        });
+        document.addEventListener('click', function (e) {
+            if (!menuRoot.contains(e.target)) close();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') close();
+        });
+        // Clicking any menu item closes the dropdown (form submit too).
+        panel.addEventListener('click', function (e) {
+            if (e.target.closest('a, button')) close();
+        });
+    })();
+</script>

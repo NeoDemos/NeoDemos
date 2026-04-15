@@ -15,30 +15,35 @@
     .editor-sidebar {
       width: 260px; min-width: 260px; max-width: 260px;
       background: var(--color-surface-raised);
-      border-right: 1px solid var(--color-border);
+      border-right: 1px solid var(--color-border-subtle);
       overflow-y: auto;
-      padding: 0.75rem;
+      padding: var(--space-3);
     }
     .editor-sidebar h3 {
-      font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase;
-      color: var(--color-text-secondary);
-      margin: 0 0 0.5rem 0; padding: 0.25rem 0.5rem;
+      font-size: var(--font-size-xs);
+      letter-spacing: var(--letter-spacing-widest);
+      text-transform: uppercase;
+      color: var(--color-text-tertiary);
+      font-weight: 500;
+      margin: 0 0 var(--space-2) 0; padding: var(--space-1) var(--space-2);
     }
     .editor-canvas-wrap { flex: 1; min-width: 0; position: relative; }
     #gjs { height: 100%; border: 0; }
     .editor-right {
       width: 300px; min-width: 300px; max-width: 300px;
       background: var(--color-surface-raised);
-      border-left: 1px solid var(--color-border);
+      border-left: 1px solid var(--color-border-subtle);
       overflow-y: auto;
     }
     .editor-right-tabs {
-      display: flex; border-bottom: 1px solid var(--color-border);
+      display: flex; border-bottom: 1px solid var(--color-border-subtle);
       background: var(--color-surface);
     }
     .editor-right-tab {
-      flex: 1; padding: 0.6rem 0.5rem; background: none; border: 0;
-      font-size: 0.8rem; font-weight: 500; cursor: pointer;
+      flex: 1; padding: var(--space-3) var(--space-2); background: none; border: 0;
+      font-size: var(--font-size-xs); font-weight: 500; cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: var(--letter-spacing-wide);
       color: var(--color-text-secondary);
       border-bottom: 2px solid transparent;
     }
@@ -55,24 +60,107 @@
       width: calc(50% - 0.4rem);
       min-height: 70px;
       margin: 0.2rem;
-      font-size: 0.75rem;
-      padding: 0.5rem 0.35rem;
+      font-size: var(--font-size-xs);
+      padding: var(--space-2) var(--space-2);
       background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: 4px;
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-sm);
       color: var(--color-text);
       box-shadow: none;
     }
     .editor-sidebar .gjs-block:hover {
       border-color: var(--color-primary);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      box-shadow: var(--shadow-xs);
     }
     .editor-sidebar .gjs-block-category .gjs-title {
       font-weight: 600;
       color: var(--color-text);
-      padding: 0.5rem 0.25rem 0.25rem;
-      font-size: 0.85rem;
+      padding: var(--space-2) var(--space-1) var(--space-1);
+      font-size: var(--font-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--letter-spacing-wide);
     }
+
+    /* Autosave status, device toggle, template modal (Phase 7+) */
+    .autosave-status {
+      font-size: var(--font-size-xs);
+      letter-spacing: var(--letter-spacing-wide);
+      color: var(--color-text-tertiary);
+      margin-left: var(--space-2);
+      min-width: 9rem;
+      display: inline-block;
+    }
+    .editor-device-toggle {
+      display: inline-flex;
+      gap: var(--space-1);
+      margin: 0 var(--space-2);
+      padding: 0.15rem;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-full);
+    }
+    .editor-device-toggle button {
+      background: transparent;
+      border: 0;
+      padding: var(--space-1) var(--space-3);
+      font-size: var(--font-size-sm);
+      cursor: pointer;
+      border-radius: var(--radius-full);
+      color: var(--color-text-secondary);
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .editor-device-toggle button:hover {
+      color: var(--color-primary);
+    }
+    .editor-device-toggle button.active {
+      background: var(--color-primary);
+      color: var(--color-text-on-dark);
+    }
+    .editor-dialog {
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6) var(--space-7);
+      max-width: 420px;
+      width: 90vw;
+      background: var(--color-surface-raised);
+      color: var(--color-text);
+      box-shadow: var(--shadow-lg);
+    }
+    .editor-dialog::backdrop { background: color-mix(in oklab, var(--color-primary) 35%, transparent); }
+    .editor-dialog h3 {
+      margin: 0 0 var(--space-2) 0;
+      font-family: var(--font-heading);
+      font-weight: 400;
+      font-size: var(--font-size-2xl);
+      line-height: var(--line-height-snug);
+      color: var(--color-primary);
+    }
+    .editor-dialog p { margin: 0 0 var(--space-4) 0; color: var(--color-text-secondary); font-size: var(--font-size-sm); }
+    .tpl-list {
+      list-style: none;
+      margin: 0 0 var(--space-4) 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+    .tpl-list button {
+      width: 100%;
+      text-align: left;
+      padding: var(--space-3) var(--space-4);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-size: var(--font-size-sm);
+      color: var(--color-text);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .tpl-list button:hover {
+      border-color: var(--color-primary);
+      background: var(--color-surface-raised);
+    }
+    .tpl-modal-actions { display: flex; justify-content: flex-end; }
   </style>
 </head>
 <body class="admin-editor-body">
@@ -84,7 +172,16 @@
         <span class="editor-status" id="editor-status"></span>
       </div>
       <div class="editor-topbar-right">
+        <button id="btn-undo" type="button" class="btn btn-ghost btn-sm" title="Ongedaan maken (⌘Z)">↶</button>
+        <button id="btn-redo" type="button" class="btn btn-ghost btn-sm" title="Opnieuw (⌘⇧Z)">↷</button>
+        <div class="editor-device-toggle" role="group" aria-label="Preview apparaat">
+          <button type="button" data-device="desktop" class="active" title="Desktop (1440px)">🖥</button>
+          <button type="button" data-device="tablet" title="Tablet (768px)">📱</button>
+          <button type="button" data-device="mobile" title="Mobiel (375px)">📲</button>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="btn-tpl" type="button">Sjabloon kiezen</button>
         <button class="btn btn-ghost btn-sm" id="btn-load-template" type="button" title="Laadt de huidige sjabloon-inhoud in de editor (éénrichting migratie)">Laad sjabloon</button>
+        <span id="autosave-status" class="autosave-status"></span>
         <button class="btn btn-ghost btn-sm" id="btn-save" type="button">Opslaan</button>
         <button class="btn btn-primary btn-sm" id="btn-publish" type="button">Publiceren</button>
         <button class="btn btn-ghost btn-sm" id="btn-unpublish" type="button">Depubliceren</button>
@@ -110,6 +207,20 @@
       </aside>
     </div>
   </div>
+
+  <dialog id="tpl-modal" class="editor-dialog">
+    <h3>Start vanaf een sjabloon</h3>
+    <p>Hiermee vervang je de huidige inhoud van de editor.</p>
+    <ul class="tpl-list">
+      <li><button type="button" data-tpl="home">Landingspagina</button></li>
+      <li><button type="button" data-tpl="over">Over NeoDemos</button></li>
+      <li><button type="button" data-tpl="technologie">Technologie</button></li>
+      <li><button type="button" data-tpl="methodologie">Methodologie</button></li>
+    </ul>
+    <div class="tpl-modal-actions">
+      <button type="button" id="tpl-close" class="btn btn-ghost btn-sm">Sluiten</button>
+    </div>
+  </dialog>
 
   <script src="https://unpkg.com/grapesjs@0.22.15/dist/grapes.min.js"></script>
   <script src="/static/admin-editor/components.js"></script>
@@ -155,6 +266,13 @@
       { id: 'nd-btn-accent', label: 'Knop accent', category: 'Knoppen', content: { type: 'nd-btn', variant: 'accent' } },
       { id: 'nd-btn-primary', label: 'Knop primair', category: 'Knoppen', content: { type: 'nd-btn', variant: 'primary' } },
       { id: 'nd-btn-secondary', label: 'Knop secundair', category: 'Knoppen', content: { type: 'nd-btn', variant: 'secondary' } },
+
+      // Phase 7+ Block 5 additions
+      { id: 'nd-image', label: 'Afbeelding', category: 'Inhoud', content: { type: 'nd-image' } },
+      { id: 'nd-two-column', label: '2-Kolom layout', category: 'Secties', content: { type: 'nd-two-column' } },
+      { id: 'nd-faq-accordion', label: 'FAQ', category: 'Inhoud', content: { type: 'nd-faq-accordion' } },
+      { id: 'nd-search-widget', label: 'Zoekwidget', category: 'Widgets', content: { type: 'nd-search-widget' } },
+      { id: 'nd-calendar-mini', label: 'Mini kalender', category: 'Widgets', content: { type: 'nd-calendar-mini' } },
     ];
 
     const editor = grapesjs.init({
@@ -179,6 +297,16 @@
       traitManager: { appendTo: '#panel-traits' },
       layerManager: { appendTo: '#panel-layers' },
       styleManager: { appendTo: '#panel-styles' },
+      // Register three devices so editor.setDevice() can drive the canvas +
+      // fire matching media queries inside the iframe. Widths align with the
+      // toolbar labels (🖥/📱/📲 = 1440/768/375).
+      deviceManager: {
+        devices: [
+          { id: 'desktop', name: 'Desktop', width: '' },
+          { id: 'tablet',  name: 'Tablet',  width: '768px', widthMedia: '768px' },
+          { id: 'mobile',  name: 'Mobile',  width: '375px', widthMedia: '375px' },
+        ],
+      },
       panels: {
         // Empty panels list — we don't use GrapeJS default panels; our topbar has everything.
         defaults: [],
@@ -244,7 +372,9 @@
       }
     })();
 
-    async function savePage() {
+    async function savePage(silent) {
+      // `silent` is used by the autosave path — it means don't flip the main
+      // status badge, the autosave indicator handles its own UI.
       const grapes_json = JSON.stringify(editor.getProjectData());
       const html = editor.getHtml();
       const css = editor.getCss();
@@ -303,6 +433,86 @@
       if (res.ok) setStatus('Gedepubliceerd', 'muted');
       else setStatus('Depubliceren mislukt', 'error');
     });
+
+    // ── Autosave (2s debounce) ──────────────────────────────────────────
+    // Fires on any canvas mutation. We intentionally do NOT touch the main
+    // status badge from here — that's reserved for explicit user actions.
+    let autosaveTimer = null;
+    const autosaveStatus = document.getElementById('autosave-status');
+    function scheduleAutosave() {
+      clearTimeout(autosaveTimer);
+      if (autosaveStatus) autosaveStatus.textContent = 'Opslaan...';
+      autosaveTimer = setTimeout(async function () {
+        const ok = await savePage(true);
+        if (autosaveStatus) {
+          autosaveStatus.textContent = ok
+            ? 'Opgeslagen zojuist'
+            : 'Autosave mislukt';
+        }
+      }, 2000);
+    }
+    // GrapeJS emits 'update' for most edits; 'component:add'/'component:remove'
+    // cover structural changes. Listen broadly — debounce handles burst events.
+    editor.on('update', scheduleAutosave);
+    editor.on('component:add component:remove component:update', scheduleAutosave);
+
+    // ── Undo / Redo ─────────────────────────────────────────────────────
+    document.getElementById('btn-undo').addEventListener('click', function () {
+      editor.UndoManager.undo();
+    });
+    document.getElementById('btn-redo').addEventListener('click', function () {
+      editor.UndoManager.redo();
+    });
+
+    // ── Responsive preview toggle ───────────────────────────────────────
+    // Drive the canvas via GrapeJS's DeviceManager (devices registered in
+    // grapesjs.init above). setDevice resizes the iframe AND activates
+    // widthMedia so @media queries fire correctly. Previously we only mutated
+    // iframe.style.maxWidth manually, which left editor.getDevice() out of
+    // sync and broke the tablet breakpoint (Bug B).
+    document.querySelectorAll('.editor-device-toggle button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        document.querySelectorAll('.editor-device-toggle button').forEach(function (x) {
+          x.classList.remove('active');
+        });
+        b.classList.add('active');
+        const id = b.dataset.device;
+        try {
+          editor.setDevice(id);
+        } catch (err) {
+          console.warn('setDevice failed for', id, err);
+        }
+      });
+    });
+
+    // ── "Start from template" modal ─────────────────────────────────────
+    const tplModal = document.getElementById('tpl-modal');
+    const btnTpl = document.getElementById('btn-tpl');
+    const tplClose = document.getElementById('tpl-close');
+    if (btnTpl && tplModal && typeof tplModal.showModal === 'function') {
+      btnTpl.addEventListener('click', function () { tplModal.showModal(); });
+      tplClose.addEventListener('click', function () { tplModal.close(); });
+      tplModal.querySelectorAll('[data-tpl]').forEach(function (b) {
+        b.addEventListener('click', async function () {
+          if (!confirm('Huidige inhoud vervangen door sjabloon?')) return;
+          try {
+            const resp = await fetch('/admin/api/page/' + encodeURIComponent(b.dataset.tpl) + '/template');
+            if (!resp.ok) throw new Error('HTTP ' + resp.status);
+            const data = await resp.json();
+            editor.setComponents(data.html || '');
+            if (data.css) editor.setStyle(data.css);
+            tplModal.close();
+            setStatus('Sjabloon geladen', 'success');
+          } catch (err) {
+            console.error('Template load failed', err);
+            alert('Sjabloon kon niet worden geladen: ' + err.message);
+          }
+        });
+      });
+    } else if (btnTpl) {
+      // <dialog> not supported — hide the trigger to avoid confusion.
+      btnTpl.style.display = 'none';
+    }
   })();
   </script>
 </body>

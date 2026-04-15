@@ -3,7 +3,9 @@
    ================================================================ */
 
 @layer components {
-  /* Landing hero — full viewport, image dominant, all content overlaid */
+  /* Landing hero — full viewport, image dominant, all content overlaid.
+     NOTE: do NOT set display:flex here — it collapses the overlay child to
+     content width, which breaks the full-bleed gradient + centering. */
   .landing-hero-image {
     width: 100vw;
     margin-left: calc(-50vw + 50%);
@@ -11,9 +13,12 @@
     background-position: center 30%;
     margin-top: calc(-1 * var(--space-12) - 60px);
     margin-bottom: var(--space-8);
+    min-height: 100vh;
+    min-height: 100svh;
   }
 
   .landing-hero-overlay {
+    width: 100%;
     min-height: 100vh;
     min-height: 100svh;
     background: linear-gradient(
@@ -43,7 +48,7 @@
     font-family: var(--font-heading);
     font-size: 3rem;
     font-weight: 400;
-    color: #fff;
+    color: var(--color-text-on-dark);
     text-align: center;
     line-height: 1.25;
     text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
@@ -59,7 +64,7 @@
   }
 
   .landing-hero-content .search-input {
-    color: #fff;
+    color: var(--color-text-on-dark);
   }
 
   .landing-hero-content .search-input::placeholder {
@@ -351,6 +356,41 @@
     background: var(--color-accent-light);
   }
 
+  /* Short-topic tag chips (SaaS-style) — sit on the hero as quick-starters */
+  .example-topics {
+    gap: var(--space-2);
+    margin-top: var(--space-5);
+    margin-bottom: var(--space-6);
+  }
+
+  .example-topic {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: rgba(255, 255, 255, 0.9);
+    border-radius: var(--radius-full);
+    padding: var(--space-1) var(--space-4);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: background 150ms, border-color 150ms, color 150ms;
+    font-family: var(--font-body);
+  }
+
+  .example-topic:hover {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: var(--color-accent);
+    color: var(--color-text-on-dark);
+  }
+
+  /* On non-hero surfaces (unlikely but defensive) */
+  body:not(.has-hero) .example-topic {
+    background: var(--color-surface);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
   /* Credibility line */
   .credibility-line {
     text-align: center;
@@ -483,6 +523,341 @@
     .method-tab.active {
       border-left-color: var(--color-primary);
       border-bottom-color: transparent;
+    }
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     Landing long-scroll sections (Oatmeal-inspired, WS8f addendum)
+     Testimonials / Trust / How-to / Tier preview / Final CTA.
+     All full-bleed inside .search-container via 100vw escape hatch.
+     ════════════════════════════════════════════════════════════════ */
+
+  .landing-testimonials,
+  .landing-trust,
+  .landing-howto,
+  .landing-tiers,
+  .landing-final-cta {
+    width: 100vw;
+    margin-inline: calc(-50vw + 50%);
+    padding-block: var(--space-20);
+    padding-inline: var(--space-6);
+  }
+
+  /* No gap between the hero image and the trust strip that follows it —
+     the trust section IS the evidence that the hero claims. */
+  .landing-hero-image + .landing-trust,
+  .landing-hero-image ~ .landing-trust {
+    margin-top: 0;
+  }
+  .has-hero main > .search-container > .landing-hero-image {
+    margin-bottom: 0 !important;
+  }
+  /* Trust strip sits flush under the hero — its own generous vertical padding
+     is the rhythm. */
+  .landing-trust:first-of-type,
+  .chat-workbench-main > .landing-trust {
+    padding-top: var(--space-16);
+  }
+
+  /* Trust-stat link (cards are now clickable to /methodologie + /technologie) */
+  .trust-stat-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 150ms;
+  }
+  .trust-stat-link:hover {
+    transform: translateY(-2px);
+  }
+  .trust-stat-link:hover .trust-stat-number {
+    color: var(--color-accent);
+  }
+
+  .landing-section-inner {
+    max-width: var(--container-2xl);
+    margin: 0 auto;
+  }
+
+  .landing-section-kicker {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    letter-spacing: var(--letter-spacing-widest);
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin: 0 0 var(--space-4);
+    text-align: center;
+  }
+
+  .landing-section-title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-4xl);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-display);
+    color: var(--color-text);
+    margin: 0 auto var(--space-12);
+    max-width: 36ch;
+    text-align: center;
+  }
+
+  /* ──── Testimonials ──── */
+  .landing-testimonials {
+    background: var(--color-surface);
+  }
+
+  .testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-8);
+    margin-top: var(--space-8);
+  }
+
+  .testimonial-card {
+    margin: 0;
+    padding: var(--space-8);
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .testimonial-quote {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-snug);
+    color: var(--color-text);
+    letter-spacing: var(--letter-spacing-display);
+  }
+
+  .testimonial-byline {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: auto;
+  }
+
+  .testimonial-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-full);
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--color-surface-sunken);
+  }
+
+  .testimonial-meta {
+    display: flex;
+    flex-direction: column;
+    line-height: var(--line-height-snug);
+  }
+
+  .testimonial-name {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .testimonial-role {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    letter-spacing: var(--letter-spacing-wide);
+    text-transform: uppercase;
+  }
+
+  /* ──── Trust / credibility ──── */
+  .landing-trust {
+    background: var(--color-surface-sunken);
+  }
+
+  .trust-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-6);
+  }
+
+  .trust-stat {
+    text-align: center;
+    padding: var(--space-4);
+  }
+
+  .trust-stat-number {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-5xl);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-display);
+    color: var(--color-primary);
+    margin: 0 0 var(--space-3);
+  }
+
+  .trust-stat-label {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    letter-spacing: var(--letter-spacing-widest);
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* ──── How-to ──── */
+  .landing-howto {
+    background: var(--color-surface);
+  }
+
+  .howto-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-10);
+  }
+
+  .howto-step {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    text-align: left;
+  }
+
+  .howto-step-badge {
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--radius-full);
+    background: color-mix(in oklab, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+    font-family: var(--font-heading);
+    font-size: var(--font-size-2xl);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  .howto-step-title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-2xl);
+    line-height: var(--line-height-snug);
+    letter-spacing: var(--letter-spacing-display);
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .howto-step-body {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-body);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* ──── Tier preview (re-uses .pricing-card rules from search.css) ──── */
+  .landing-tiers {
+    background: var(--color-surface-sunken);
+  }
+
+  .landing-tiers-grid {
+    margin-top: var(--space-4);
+  }
+
+  .landing-tiers-more {
+    text-align: center;
+    margin: var(--space-10) 0 0;
+    font-size: var(--font-size-sm);
+  }
+
+  .landing-tiers-more a {
+    color: var(--color-accent);
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: var(--letter-spacing-wide);
+  }
+
+  .landing-tiers-more a:hover {
+    text-decoration: underline;
+  }
+
+  /* ──── Final CTA band ──── */
+  .landing-final-cta {
+    background: color-mix(in oklab, var(--color-primary) 8%, transparent);
+    text-align: center;
+  }
+
+  .landing-final-cta-inner {
+    max-width: 40rem;
+  }
+
+  .landing-final-cta-title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-5xl);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-display);
+    color: var(--color-primary);
+    margin: 0 0 var(--space-4);
+  }
+
+  .landing-final-cta-lede {
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-body);
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-8);
+  }
+
+  .landing-final-cta-btn {
+    display: inline-block;
+    border-radius: var(--radius-full);
+    padding: var(--space-3) var(--space-8);
+    font-size: var(--font-size-base);
+  }
+
+  /* ──── Hide all new sections in chat state ──── */
+  .chat-workbench[data-state="chat"] .landing-testimonials,
+  .chat-workbench[data-state="chat"] .landing-trust,
+  .chat-workbench[data-state="chat"] .landing-howto,
+  .chat-workbench[data-state="chat"] .landing-tiers,
+  .chat-workbench[data-state="chat"] .landing-final-cta {
+    display: none;
+  }
+
+  /* ──── Mobile (<=900px tablet / <=600px phone) ──── */
+  @media (max-width: 900px) {
+    .testimonial-grid,
+    .howto-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+    .trust-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-8);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .landing-testimonials,
+    .landing-trust,
+    .landing-howto,
+    .landing-tiers,
+    .landing-final-cta {
+      padding-block: var(--space-12);
+      padding-inline: var(--space-4);
+    }
+    .landing-section-title {
+      font-size: var(--font-size-3xl);
+      margin-bottom: var(--space-8);
+    }
+    .trust-stat-number {
+      font-size: var(--font-size-4xl);
+    }
+    .landing-final-cta-title {
+      font-size: var(--font-size-4xl);
+    }
+    .testimonial-card {
+      padding: var(--space-6);
+    }
+    .testimonial-quote {
+      font-size: var(--font-size-lg);
     }
   }
 }

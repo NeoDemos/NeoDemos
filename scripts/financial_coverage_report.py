@@ -500,6 +500,73 @@ def collect_report(gemeente: str, year: int | None) -> dict:
     }
 
 
+def run_audit(limit: int | None = None, db_conn=None, gemeente: str = "rotterdam") -> dict:
+    """
+    Callable API for the WS5a QA digest.
+
+    Computes the single headline metric: what percentage of promoted financial
+    documents have at least one ``financial_lines`` row. Any lower value is a
+    red flag for the financial ingestion path.
+
+    ``limit`` is accepted for API symmetry; the underlying query is already a
+    grouped aggregate and is not row-bounded.
+
+    Returns::
+
+        {
+            "coverage_pct": float,     # 0.0 - 100.0
+            "docs_promoted": int,
+            "docs_with_lines": int,
+            "gap_doc_types": [{"doc_type","gap_years"}],
+            "gemeente": str,
+        }
+    """
+    own_conn = db_conn is None
+    conn = db_conn or _get_conn()
+    try:
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        rows = query_document_coverage(cur, gemeente, year=None)
+        total_promoted = sum(int(r.get("docs_promoted") or 0) for r in rows)
+        total_with_lines = sum(int(r.get("docs_with_lines") or 0) for r in rows)
+
+        gaps = []
+        for r in rows:
+            promoted = int(r.get("docs_promoted") or 0)
+            with_lines = int(r.get("docs_with_lines") or 0)
+            if promoted > with_lines:
+                try:
+                    gap_years = _find_gaps(
+                        r.get("years_available") or [],
+                        promoted, with_lines, cur,
+                        r["doc_type"], gemeente,
+                    )
+                except Exception:
+                    gap_years = []
+                gaps.append({
+                    "doc_type": r["doc_type"],
+                    "gap_years": gap_years,
+                    "docs_promoted": promoted,
+                    "docs_with_lines": with_lines,
+                })
+        cur.close()
+    finally:
+        if own_conn:
+            conn.close()
+
+    if total_promoted <= 0:
+        coverage_pct = 0.0
+    else:
+        coverage_pct = round(100.0 * total_with_lines / total_promoted, 2)
+
+    return {
+        "coverage_pct": coverage_pct,
+        "docs_promoted": total_promoted,
+        "docs_with_lines": total_with_lines,
+        "gap_doc_types": gaps,
+        "gemeente": gemeente,
+    }
+
+
 def _json_serializer(obj):
     """Handle types that json.dumps cannot serialize by default."""
     from decimal import Decimal

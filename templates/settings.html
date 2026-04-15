@@ -2,8 +2,118 @@
 
 {% block content %}
 <div class="settings-container">
-    <h2>Uw Profiel</h2>
+    <header class="profile-header">
+        <img class="profile-avatar" src="{{ user_avatar_url(user) }}" alt="" width="96" height="96">
+        <div>
+            <h1 class="profile-name">{{ user.display_name or user.email.split('@')[0] }}</h1>
+            <p class="profile-email">{{ user.email }}</p>
+        </div>
+    </header>
+
     <p class="text-text-secondary mb-8">Persoonlijke instellingen.</p>
+
+    {# ── Task 1: Avatar picker ─────────────────────────────────────── #}
+    <section class="settings-group profile-avatar-picker" id="avatar-picker">
+        <h3>Kies je portret</h3>
+        <p class="text-text-secondary text-sm mb-4">
+            Kies een van onze civic portretten. Je keuze is meteen zichtbaar in het menu.
+        </p>
+
+        <div class="avatar-picker-current">
+            <img id="avatar-picker-current-img"
+                 class="avatar-picker-current-img"
+                 src="{{ current_avatar_url }}"
+                 alt="Huidig portret"
+                 width="96" height="96">
+            <div class="avatar-picker-current-meta">
+                <span class="avatar-picker-current-label" id="avatar-picker-current-label">
+                    {% if current_avatar_slug %}
+                        {% for a in avatars %}{% if a.slug == current_avatar_slug %}{{ a.label }}{% endif %}{% endfor %}
+                    {% else %}
+                        Automatisch toegewezen
+                    {% endif %}
+                </span>
+                <span class="avatar-picker-error" id="avatar-picker-error" role="alert" hidden></span>
+            </div>
+        </div>
+
+        <div class="avatar-picker-grid" role="radiogroup" aria-label="Portret kiezen">
+            {% for a in avatar_gallery() %}
+            <button type="button"
+                    class="avatar-picker-tile{% if a.slug == current_avatar_slug %} is-selected{% endif %}"
+                    data-avatar="{{ a.slug }}"
+                    data-url="{{ a.url }}"
+                    data-label="{{ a.label }}"
+                    aria-label="{{ a.label }}"
+                    aria-pressed="{% if a.slug == current_avatar_slug %}true{% else %}false{% endif %}">
+                <img src="{{ a.url }}" alt="{{ a.label }}" width="64" height="64" loading="lazy">
+            </button>
+            {% endfor %}
+        </div>
+
+        <p class="avatar-picker-credit">Gegenereerd door Gemini — fictieve personages.</p>
+    </section>
+
+    {# ── Task 2: Tier display + switch ─────────────────────────────── #}
+    <section class="settings-group tier-picker" id="abonnement">
+        <h3>Je abonnement</h3>
+
+        {% if tier_change_notice %}
+        <p class="tier-saved-notice" role="status">
+            Abonnement bijgewerkt naar <strong>{{ 'Pro' if tier_change_notice == 'pro' else 'Gratis' }}</strong>.
+        </p>
+        {% endif %}
+
+        <div class="tier-current">
+            <span class="tier-current-badge tier-{{ current_tier.slug }}">{{ current_tier.label }}</span>
+            <p class="tier-current-summary">
+                {% if current_tier.slug == 'pro' %}
+                    {{ current_tier.quota_copy }} &middot; {{ current_tier.mcp_copy }}.
+                {% else %}
+                    {{ current_tier.quota_copy }} &middot; geen AI-koppeling.
+                {% endif %}
+            </p>
+        </div>
+
+        <form method="POST" action="/settings/tier" class="tier-form">
+            <label class="tier-option">
+                <input type="radio" name="slug" value="gratis"
+                    {% if current_tier.slug == 'gratis' %}checked disabled{% endif %}>
+                <span class="tier-option-body">
+                    <span class="tier-option-title">Gratis</span>
+                    <span class="tier-option-meta">3 zoekopdrachten per maand. Geen AI-koppeling.</span>
+                </span>
+            </label>
+
+            <label class="tier-option tier-option--highlight">
+                <input type="radio" name="slug" value="pro"
+                    {% if current_tier.slug == 'pro' %}checked disabled{% endif %}>
+                <span class="tier-option-body">
+                    <span class="tier-option-title">
+                        Pro <span class="tier-option-price">&euro;49/mnd &middot; tijdens beta gratis</span>
+                    </span>
+                    <span class="tier-option-meta">
+                        20× meer zoekopdrachten via de website dan Gratis. Onbeperkt via AI-koppeling.
+                    </span>
+                    <span class="tier-option-subnote">
+                        Pro wordt automatisch gratis tijdens de beta. Je wordt niet gefactureerd.
+                    </span>
+                    {% if current_tier.slug == 'pro' and current_tier.pro_expires_at %}
+                    <span class="tier-option-subnote tier-option-subnote--strong">
+                        Betaling wordt actief vanaf {{ current_tier.pro_expires_at[:10] }}.
+                    </span>
+                    {% endif %}
+                </span>
+            </label>
+
+            <div class="tier-form-actions">
+                <button type="submit" class="save-btn">Abonnement bijwerken</button>
+                <button type="button" class="btn btn-ghost btn-sm" disabled title="Nog niet beschikbaar tijdens beta">
+                    Betaling instellen (binnenkort)
+                </button>
+            </div>
+        </form>
+    </section>
 
     <div class="settings-group">
         <h3>Politieke Partij</h3>
@@ -53,18 +163,6 @@
                 <input type="checkbox" class="committee-cb" value="Commissie Welzijn, Wijken en Democratie (2022-2026)">
                 <span>Welzijn, Wijken en Democratie (2022-2026)</span>
             </label>
-        </div>
-    </div>
-
-    <div class="settings-group">
-        <h3>Abonnement</h3>
-        <div class="subscription-info">
-            <span class="subscription-tier-badge tier-{{ user.subscription_tier }}">
-                {% if user.subscription_tier == 'free_beta' %}Gratis (beta){% else %}{{ user.subscription_tier }}{% endif %}
-            </span>
-            <p class="subscription-note">
-                Alle functies zijn gratis beschikbaar tijdens de beta-periode.
-            </p>
         </div>
     </div>
 
@@ -148,6 +246,8 @@
                 console.error("Error parsing saved committees", e);
             }
         }
+
+        initAvatarPicker();
     });
 
     function saveSettings() {
@@ -199,6 +299,77 @@
         } else {
             alert('Fout bij intrekken token');
         }
+    }
+
+    // ── Avatar picker ───────────────────────────────────────────────
+    function initAvatarPicker() {
+        const grid = document.querySelector('.avatar-picker-grid');
+        if (!grid) return;
+        const currentImg = document.getElementById('avatar-picker-current-img');
+        const currentLabel = document.getElementById('avatar-picker-current-label');
+        const errEl = document.getElementById('avatar-picker-error');
+
+        grid.addEventListener('click', async function (e) {
+            const tile = e.target.closest('.avatar-picker-tile');
+            if (!tile) return;
+            const slug = tile.dataset.avatar;
+            const url = tile.dataset.url;
+            const label = tile.dataset.label || '';
+            if (errEl) { errEl.hidden = true; errEl.textContent = ''; }
+
+            // Optimistic UI
+            grid.querySelectorAll('.avatar-picker-tile').forEach(t => {
+                t.classList.remove('is-selected');
+                t.setAttribute('aria-pressed', 'false');
+            });
+            tile.classList.add('is-selected');
+            tile.setAttribute('aria-pressed', 'true');
+            if (currentImg) currentImg.src = url;
+            if (currentLabel) currentLabel.textContent = label;
+
+            try {
+                const fd = new FormData();
+                fd.append('slug', slug);
+                const res = await fetch('/settings/avatar', {method: 'POST', body: fd});
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok || !data.ok) {
+                    throw new Error(data.error || 'opslaan mislukt');
+                }
+                // Use server-confirmed URL (defends against CDN/resize drift)
+                if (data.url && currentImg) currentImg.src = data.url;
+                const navAvatar = document.querySelector('.nav-user-avatar--img');
+                if (navAvatar && data.url) navAvatar.src = data.url;
+                showAvatarToast('Portret opgeslagen: ' + label);
+            } catch (err) {
+                if (errEl) {
+                    errEl.textContent = 'Kon portret niet opslaan — probeer het opnieuw.';
+                    errEl.hidden = false;
+                }
+                showAvatarToast('Kon portret niet opslaan', true);
+                console.error('avatar save failed', err);
+            }
+        });
+    }
+
+    // Lightweight toast — stacks below the nav on the top-right.
+    let _avatarToastTimer;
+    function showAvatarToast(msg, isError) {
+        let t = document.getElementById('avatar-toast');
+        if (!t) {
+            t = document.createElement('div');
+            t.id = 'avatar-toast';
+            t.className = 'avatar-toast';
+            t.setAttribute('role', 'status');
+            t.setAttribute('aria-live', 'polite');
+            document.body.appendChild(t);
+        }
+        t.textContent = msg;
+        t.classList.toggle('is-error', !!isError);
+        t.classList.add('is-visible');
+        clearTimeout(_avatarToastTimer);
+        _avatarToastTimer = setTimeout(function () {
+            t.classList.remove('is-visible');
+        }, 3000);
     }
 </script>
 {% endblock %}

@@ -6,7 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% block meta %}{% endblock %}
     <title>{% block title %}{{ title }}{% endblock %} | NeoDemos</title>
-    <link rel="icon" type="image/svg+xml" href="/static/images/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico?v={{ version_label }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon-16.png?v={{ version_label }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon-32.png?v={{ version_label }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/images/apple-touch-icon.png?v={{ version_label }}">
+    <meta name="theme-color" content="#042825">
     <link rel="stylesheet" href="/static/dist/main.css?v={{ version_label }}">
     {% block styles %}{% endblock %}
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -21,6 +25,7 @@
     </main>
     {% include 'partials/_footer.html' %}
     <script type="module" src="/static/dist/app.js?v={{ version_label }}"></script>
+    <script src="/static/js/calendar-mini-enhancer.js?v={{ version_label }}" defer></script>
     {% block extra_scripts %}
     {% endblock %}
 </body>

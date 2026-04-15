@@ -7,9 +7,14 @@
     {% else %}
     <a href="/" class="back-link">← Terug naar overzicht</a>
     {% endif %}
-    <h1>{{ meeting.name }}</h1>
-    <p class="meeting-meta">📅 {{ meeting.start_date.split('T')[0] }} | 📍 {{
-        meeting.location or "Rotterdam" }} | 🏛️ {{ meeting.committee or "Algemeen" }}</p>
+    <h1 class="meeting-title">{{ meeting.name }}</h1>
+    <p class="meeting-meta">
+        <span class="meeting-meta-item"><span class="meeting-meta-icon" aria-hidden="true">📅</span><time datetime="{{ meeting.start_date.split('T')[0] }}">{{ meeting.start_date.split('T')[0] }}</time></span>
+        <span class="meeting-meta-sep" aria-hidden="true">·</span>
+        <span class="meeting-meta-item"><span class="meeting-meta-icon" aria-hidden="true">📍</span>{{ meeting.location or "Rotterdam" }}</span>
+        <span class="meeting-meta-sep" aria-hidden="true">·</span>
+        <span class="meeting-meta-item"><span class="meeting-meta-icon" aria-hidden="true">🏛️</span>{{ meeting.committee or "Algemeen" }}</span>
+    </p>
 </div>
 
 <div class="meeting-layout">

@@ -15,6 +15,7 @@
     box-shadow: var(--shadow-sm);
   }
 
+  .auth-container h1,
   .auth-container h2 {
     margin-bottom: var(--space-2);
     color: var(--color-primary);
@@ -271,166 +272,203 @@
     display: block;
   }
 
-  /* ── Subpage hero image ── */
+  /* ── Subpage hero image (Oatmeal-aligned: generous overlay, serif display) ── */
 
   .subpage-hero-image {
       width: 100vw;
       margin-left: calc(-50vw + 50%);
-      height: 400px;
+      height: 460px;
       background-size: cover;
       background-position: center 40%;
       position: relative;
       margin-top: calc(-1 * var(--space-12) - 60px);
-      margin-bottom: var(--space-8);
+      margin-bottom: var(--space-16);
   }
 
   .subpage-hero-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(4, 40, 37, 0.85) 0%, rgba(4, 40, 37, 0.4) 100%);
+      background: linear-gradient(to top, rgba(4, 40, 37, 0.85) 0%, rgba(4, 40, 37, 0.35) 100%);
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding: var(--space-12) 5%;
+      padding: var(--space-16) max(5%, calc((100% - var(--container-2xl)) / 2 + var(--space-10)));
   }
 
   .subpage-hero-title {
       font-family: var(--font-heading);
-      font-size: 2.8rem;
+      font-size: var(--font-size-6xl);
       font-weight: 400;
-      color: #fff;
-      margin: 0 0 var(--space-2);
+      line-height: var(--line-height-tight);
+      letter-spacing: var(--letter-spacing-display);
+      color: var(--color-text-on-dark);
+      margin: 0 0 var(--space-3);
+      text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
   }
 
   .subpage-hero-subtitle {
-      font-size: 1.15rem;
-      color: rgba(255, 255, 255, 0.8);
+      font-family: var(--font-body);
+      font-size: var(--font-size-lg);
+      line-height: var(--line-height-snug);
+      color: rgba(255, 255, 255, 0.82);
       margin: 0;
+      max-width: 42rem;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
   }
 
   @media (max-width: 768px) {
       .subpage-hero-image {
-          height: 240px;
+          height: 280px;
           margin-top: calc(-1 * var(--space-12));
+          margin-bottom: var(--space-10);
       }
       .subpage-hero-title {
-          font-size: 2rem;
+          font-size: var(--font-size-4xl);
+      }
+      .subpage-hero-subtitle {
+          font-size: var(--font-size-base);
       }
       .subpage-hero-overlay {
-          padding: var(--space-8) 5%;
+          padding: var(--space-10) 5%;
       }
   }
 
-  /* ── Subpage layout ── */
+  /* ── Subpage layout (Oatmeal rhythm: 48rem prose, generous padding) ── */
 
   .subpage {
-      max-width: 800px;
+      max-width: var(--container-lg); /* 64rem — room for 3-up grids (sovereignty-grid, audience-grid) */
       margin: 0 auto;
   }
 
   .subpage-title {
-      font-size: 2.5rem;
-      font-weight: 800;
+      font-family: var(--font-heading);
+      font-size: var(--font-size-5xl);
+      font-weight: 400;
       color: var(--color-primary);
-      margin-bottom: 0.5rem;
-      line-height: 1.2;
+      margin-bottom: var(--space-2);
+      line-height: var(--line-height-tight);
+      letter-spacing: var(--letter-spacing-display);
   }
 
   .subpage-subtitle {
-      font-size: 1.15rem;
+      font-size: var(--font-size-lg);
       color: var(--color-text-secondary);
-      margin-bottom: 2rem;
+      margin-bottom: var(--space-8);
+      line-height: var(--line-height-snug);
   }
 
   .subpage-hero {
-      margin-bottom: 2.5rem;
+      margin-bottom: var(--space-10);
   }
 
   .subpage-section {
-      margin-bottom: 3rem;
+      padding-block: var(--space-10);
+  }
+
+  .subpage-section:first-of-type {
+      padding-top: var(--space-4);
   }
 
   .subpage-section h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
+      font-family: var(--font-heading);
+      font-size: var(--font-size-3xl);
+      font-weight: 400;
       color: var(--color-primary);
-      margin-bottom: 1rem;
+      margin-bottom: var(--space-5);
+      line-height: var(--line-height-snug);
+      letter-spacing: var(--letter-spacing-display);
   }
 
   .subpage-section h3 {
-      font-size: 1.1rem;
+      font-family: var(--font-body);
+      font-size: var(--font-size-xl);
       font-weight: 600;
       color: var(--color-primary);
-      margin-bottom: 0.5rem;
-      margin-top: 1.5rem;
+      margin-bottom: var(--space-2);
+      margin-top: var(--space-8);
+      line-height: var(--line-height-snug);
   }
 
   .subpage-section p {
       color: var(--color-text);
-      line-height: 1.7;
-      margin-bottom: 1rem;
+      font-size: var(--font-size-base);
+      line-height: var(--line-height-body);
+      margin-bottom: var(--space-4);
+      max-width: 65ch;
   }
 
   /* Highlight section (tinted background) */
   .subpage-section--highlight {
       background: var(--color-surface-sunken);
-      border-radius: 12px;
-      padding: 2rem;
+      border-radius: var(--radius-lg);
+      padding: var(--space-10);
       border-left: 4px solid var(--color-accent);
   }
 
   /* ── Founder quote ── */
 
   .founder-section {
-      margin-bottom: 3rem;
+      margin-bottom: var(--space-12);
   }
 
   .founder-quote blockquote {
       margin: 0;
-      padding: 2rem;
+      padding: var(--space-10);
       background: var(--color-surface-sunken);
       border-left: 4px solid var(--color-accent);
-      border-radius: 8px;
+      border-radius: var(--radius-md);
   }
 
   .founder-quote blockquote p {
-      font-size: 1.25rem;
+      font-family: var(--font-heading);
+      font-size: var(--font-size-2xl);
       font-style: italic;
-      line-height: 1.6;
+      line-height: var(--line-height-snug);
+      letter-spacing: var(--letter-spacing-display);
       color: var(--color-primary);
-      margin-bottom: 0.75rem;
+      margin-bottom: var(--space-3);
+      max-width: none;
   }
 
   .founder-quote cite {
+      font-family: var(--font-body);
       font-style: normal;
-      font-size: 0.95rem;
+      font-size: var(--font-size-sm);
       color: var(--color-text-secondary);
       font-weight: 500;
+      letter-spacing: var(--letter-spacing-wide);
+      text-transform: uppercase;
   }
 
   /* ── Testimonial ── */
 
   .subpage-section--testimonial {
       text-align: center;
-      padding: 2.5rem 1rem;
+      padding: var(--space-12) var(--space-4);
   }
 
   .testimonial {
       margin: 0 auto;
-      max-width: 500px;
+      max-width: 32rem;
   }
 
   .testimonial p {
-      font-size: 1.3rem;
+      font-family: var(--font-heading);
+      font-size: var(--font-size-2xl);
       font-style: italic;
+      line-height: var(--line-height-snug);
+      letter-spacing: var(--letter-spacing-display);
       color: var(--color-primary);
-      margin-bottom: 0.5rem;
+      margin-bottom: var(--space-2);
+      max-width: none;
   }
 
   .testimonial cite {
       font-style: normal;
-      font-size: 0.95rem;
+      font-size: var(--font-size-sm);
       color: var(--color-text-secondary);
+      letter-spacing: var(--letter-spacing-wide);
+      text-transform: uppercase;
   }
 
   /* ── Audience / sovereignty / card grids ── */
@@ -439,38 +477,42 @@
   .sovereignty-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.25rem;
-      margin-top: 1rem;
+      gap: var(--space-5);
+      margin-top: var(--space-6);
   }
 
   .audience-card,
   .sovereignty-card {
       background: var(--color-surface-raised);
-      border: 1px solid var(--color-border);
-      border-radius: 10px;
-      padding: 1.25rem;
-      transition: box-shadow 0.2s ease;
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      transition: box-shadow 0.2s ease, border-color 0.2s ease;
   }
 
   .audience-card:hover,
   .sovereignty-card:hover {
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      box-shadow: var(--shadow-sm);
+      border-color: var(--color-border-strong-mix);
   }
 
   .audience-card h3,
   .sovereignty-card h3 {
-      font-size: 1rem;
+      font-family: var(--font-body);
+      font-size: var(--font-size-base);
       font-weight: 600;
       color: var(--color-primary);
-      margin: 0 0 0.5rem 0;
+      margin: 0 0 var(--space-2) 0;
+      line-height: var(--line-height-snug);
   }
 
   .audience-card p,
   .sovereignty-card p {
-      font-size: 0.9rem;
+      font-size: var(--font-size-sm);
       color: var(--color-text-secondary);
       margin: 0;
-      line-height: 1.5;
+      line-height: var(--line-height-body);
+      max-width: none;
   }
 
   /* ── Security checklist ── */
@@ -478,15 +520,18 @@
   .security-checklist {
       list-style: none;
       padding: 0;
-      margin: 0;
+      margin: var(--space-6) 0 0;
+      max-width: 65ch;
   }
 
   .security-checklist li {
-      padding: 0.75rem 0;
-      padding-left: 2rem;
+      padding: var(--space-3) 0;
+      padding-left: var(--space-8);
       position: relative;
-      border-bottom: 1px solid var(--color-border);
-      line-height: 1.5;
+      border-bottom: 1px solid var(--color-border-subtle);
+      line-height: var(--line-height-body);
+      font-size: var(--font-size-base);
+      color: var(--color-text);
   }
 
   .security-checklist li:last-child {
@@ -497,9 +542,10 @@
       content: "\2713";
       position: absolute;
       left: 0;
+      top: var(--space-3);
       color: var(--color-success);
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: var(--font-size-lg);
   }
 
   /* ── Compatibility badges ── */
@@ -507,17 +553,17 @@
   .compatibility-list {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.75rem;
-      margin: 1rem 0;
+      gap: var(--space-3);
+      margin: var(--space-5) 0;
   }
 
   .compatibility-badge {
       display: inline-block;
-      padding: 0.4rem 1rem;
+      padding: var(--space-2) var(--space-4);
       background: var(--color-surface-sunken);
-      border: 1px solid var(--color-border);
-      border-radius: 20px;
-      font-size: 0.9rem;
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-full);
+      font-size: var(--font-size-sm);
       font-weight: 500;
       color: var(--color-primary);
   }
@@ -528,14 +574,14 @@
   .methodology-steps {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
-      margin-top: 1rem;
+      gap: var(--space-8);
+      margin-top: var(--space-6);
   }
 
   .architecture-step,
   .methodology-step {
       display: flex;
-      gap: 1.25rem;
+      gap: var(--space-5);
       align-items: flex-start;
   }
 
@@ -547,26 +593,31 @@
       width: 2.5rem;
       height: 2.5rem;
       background: var(--color-primary);
-      color: white;
-      font-weight: 700;
-      font-size: 1.1rem;
-      border-radius: 50%;
+      color: var(--color-text-on-dark);
+      font-family: var(--font-heading);
+      font-weight: 400;
+      font-size: var(--font-size-lg);
+      border-radius: var(--radius-full);
+      line-height: 1;
   }
 
   .architecture-step h3,
   .methodology-step h3 {
-      margin: 0 0 0.25rem 0;
-      font-size: 1.05rem;
+      margin: 0 0 var(--space-1) 0;
+      font-family: var(--font-body);
+      font-size: var(--font-size-lg);
       font-weight: 600;
       color: var(--color-primary);
+      line-height: var(--line-height-snug);
   }
 
   .architecture-step p,
   .methodology-step p {
       margin: 0;
-      font-size: 0.95rem;
+      font-size: var(--font-size-base);
       color: var(--color-text-secondary);
-      line-height: 1.5;
+      line-height: var(--line-height-body);
+      max-width: 60ch;
   }
 
   /* ── Source stats ── */
@@ -574,85 +625,73 @@
   .source-stats {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 1.25rem;
-      margin: 1.5rem 0;
+      gap: var(--space-5);
+      margin: var(--space-8) 0;
   }
 
-  .stat-card {
-      text-align: center;
-      padding: 1.5rem 1rem;
-      background: var(--color-surface-sunken);
-      border-radius: 10px;
-      border: 1px solid var(--color-border);
-  }
-
-  .stat-number {
-      display: block;
-      font-size: 1.75rem;
-      font-weight: 800;
-      color: var(--color-primary);
-      margin-bottom: 0.25rem;
-  }
-
-  .stat-label {
-      font-size: 0.85rem;
-      color: var(--color-text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-  }
+  /* .stat-card + .stat-number + .stat-label moved to components.css (unified).
+     Use .stat-card--large on subpage usage (methodologie) for larger variant. */
 
   /* ── Eval grid ── */
 
   .eval-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.25rem;
-      margin: 1.5rem 0;
+      gap: var(--space-5);
+      margin: var(--space-8) 0;
   }
 
   .eval-card {
       text-align: center;
-      padding: 1.5rem 1rem;
+      padding: var(--space-8) var(--space-4);
       background: var(--color-surface-raised);
-      border: 1px solid var(--color-border);
-      border-radius: 10px;
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
   }
 
   .eval-score {
       display: block;
-      font-size: 1.75rem;
-      font-weight: 800;
+      font-family: var(--font-heading);
+      font-size: var(--font-size-4xl);
+      font-weight: 400;
       color: var(--color-accent);
-      margin-bottom: 0.25rem;
+      margin-bottom: var(--space-1);
+      line-height: var(--line-height-tight);
+      letter-spacing: var(--letter-spacing-display);
   }
 
   .eval-label {
       display: block;
-      font-size: 0.9rem;
+      font-size: var(--font-size-sm);
       font-weight: 600;
       color: var(--color-primary);
-      margin-bottom: 0.5rem;
+      margin-bottom: var(--space-2);
+      text-transform: uppercase;
+      letter-spacing: var(--letter-spacing-wide);
   }
 
   .eval-card p {
-      font-size: 0.85rem;
+      font-size: var(--font-size-sm);
       color: var(--color-text-secondary);
       margin: 0;
-      line-height: 1.4;
+      line-height: var(--line-height-body);
+      max-width: none;
   }
 
   /* ── Transparency / limitations lists ── */
 
   .transparency-list,
   .limitations-list {
-      padding-left: 1.25rem;
-      margin: 0.75rem 0 1.5rem;
+      padding-left: var(--space-5);
+      margin: var(--space-4) 0 var(--space-6);
+      max-width: 65ch;
   }
 
   .transparency-list li,
   .limitations-list li {
-      margin-bottom: 0.6rem;
-      line-height: 1.6;
+      margin-bottom: var(--space-3);
+      line-height: var(--line-height-body);
+      font-size: var(--font-size-base);
       color: var(--color-text);
   }
 
@@ -660,19 +699,31 @@
 
   @media (max-width: 768px) {
       .subpage-title {
-          font-size: 1.75rem;
+          font-size: var(--font-size-4xl);
+      }
+
+      .subpage-section {
+          padding-block: var(--space-8);
+      }
+
+      .subpage-section h2 {
+          font-size: var(--font-size-2xl);
       }
 
       .subpage-section--highlight {
-          padding: 1.25rem;
+          padding: var(--space-6);
       }
 
       .founder-quote blockquote {
-          padding: 1.25rem;
+          padding: var(--space-6);
       }
 
       .founder-quote blockquote p {
-          font-size: 1.1rem;
+          font-size: var(--font-size-xl);
+      }
+
+      .testimonial p {
+          font-size: var(--font-size-xl);
       }
 
       .audience-grid,
@@ -684,13 +735,13 @@
 
       .architecture-step,
       .methodology-step {
-          gap: 1rem;
+          gap: var(--space-4);
       }
 
       .step-number {
           width: 2rem;
           height: 2rem;
-          font-size: 0.95rem;
+          font-size: var(--font-size-base);
       }
   }
 

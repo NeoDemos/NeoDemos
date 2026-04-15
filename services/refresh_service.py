@@ -217,14 +217,16 @@ class RefreshService:
         # 1. Try ORI (Standard index)
         meetings = await self.raad_service.get_meetings_by_date(start_date, end_date)
         
-        # 2. If ORI returns nothing and we're looking at 2026+, try iBabs direct
+        # 2. If ORI returns nothing and we're looking at 2026+, try iBabs direct.
+        # Use /Calendar (agendatype-agnostic) so stadsberaad + new raadsperiode
+        # 2026-2030 agendatypes are picked up without a hardcoded type list.
+        # Falls back to the per-year type-scoped scrape if /Calendar fails.
         if not meetings and (start_date.year >= 2026 or end_date.year >= 2026):
-            logger.info("ORI returned 0 meetings for 2026+. Falling back to direct iBabs scrape...")
-            ibabs_meetings = await self.ibabs_service.get_meetings_for_year(start_date.year)
-            
-            # Filter ibabs_meetings by date range manually since iBabs API is by year
-            # Note: _parse_meeting_list would need to parse dates for precise filtering
-            # For now, we'll return the ones for that year, storage.insert_meeting handles deduplication
+            logger.info("ORI returned 0 meetings for 2026+. Falling back to iBabs /Calendar scrape...")
+            ibabs_meetings = await self.ibabs_service.get_upcoming_meetings()
+            if not ibabs_meetings:
+                logger.warning("iBabs /Calendar empty, falling back to per-year type-scoped scrape")
+                ibabs_meetings = await self.ibabs_service.get_meetings_for_year(start_date.year)
             meetings = ibabs_meetings
 
         return meetings or []

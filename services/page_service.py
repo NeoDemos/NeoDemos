@@ -49,22 +49,36 @@ class PageService:
             logger.debug("site_pages table missing; returning None (migration 0008 not applied)")
             return None
 
-    def save(self, slug: str, title: str, grapes_json: str,
+    def save(self, slug: str, title: Optional[str], grapes_json: str,
              html: str, css: str, user_id: int) -> dict:
-        """Upsert page."""
+        """Upsert page.
+
+        If ``title`` is None, the existing title is preserved on UPDATE and the
+        slug is used as a fallback on INSERT. Callers should pass a real title
+        when creating a new page; editor autosave/save paths pass None so the
+        user's chosen title survives subsequent saves (fixes Bug A: saving
+        with an empty title used to overwrite the user-provided title with the
+        slug on every subsequent save).
+        """
         with get_connection() as conn:
             with conn.cursor() as cur:
+                # We pass the raw NULL title into VALUES AND into a second
+                # placeholder used by UPDATE. The UPDATE branch takes the raw
+                # NULL (not EXCLUDED, which would be COALESCE'd) so an existing
+                # title is preserved when the caller sends None.
+                # For INSERT-only, COALESCE(title, slug) guarantees NOT NULL.
                 cur.execute(
                     "INSERT INTO site_pages (slug, title, grapes_json, html_content, "
                     "css_content, updated_by) "
-                    "VALUES (%s, %s, %s, %s, %s, %s) "
+                    "VALUES (%s, COALESCE(%s, %s), %s, %s, %s, %s) "
                     "ON CONFLICT (slug) DO UPDATE SET "
-                    "title = EXCLUDED.title, grapes_json = EXCLUDED.grapes_json, "
+                    "title = COALESCE(%s, site_pages.title), "
+                    "grapes_json = EXCLUDED.grapes_json, "
                     "html_content = EXCLUDED.html_content, css_content = EXCLUDED.css_content, "
                     "updated_at = CURRENT_TIMESTAMP, updated_by = EXCLUDED.updated_by "
                     "RETURNING id, slug, title, grapes_json, html_content, css_content, "
                     "is_published, updated_at, updated_by",
-                    (slug, title, grapes_json, html, css, user_id),
+                    (slug, title, slug, grapes_json, html, css, user_id, title),
                 )
                 row = cur.fetchone()
         return self._row_to_dict(row)

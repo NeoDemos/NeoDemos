@@ -16,6 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse, PlainTextResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 from apscheduler.triggers.interval import IntervalTrigger
+from apscheduler.triggers.cron import CronTrigger
 
 # Load environment variables from .env file before importing anything that reads them
 load_dotenv()
@@ -156,6 +157,83 @@ def scheduled_summarization():
         logger.error(f"Summarization job failed: {e}")
 
 
+def scheduled_smoke_test():
+    """WS5a Phase A — hourly full-ingest canary.
+
+    Runs `scripts/nightly/00_smoke_test.py` against a rotating fixture from
+    `data/smoke_tests/`. Exercises the full ingest path:
+        chunker -> embedder -> Qdrant -> retrieve -> source-span verify -> audit
+
+    Isolated namespaces (never touches user-visible data):
+      - Qdrant collection : ``smoke_test_notulen_chunks`` (dedicated)
+      - documents.id       : ``SMOKE_TEST_*`` prefix
+      - documents.category : ``smoke_test``
+      - Qdrant payload     : ``is_smoke_test=True``
+
+    Always records result in ``pipeline_runs`` (job_name='00_smoke_test',
+    triggered_by='smoke_test'). Per-failure rows go to ``pipeline_failures``.
+    Full-pass events go to ``document_events``.
+
+    Never raises — a flaky smoke must never take down the scheduler.
+    """
+    try:
+        # Import as a module so we can call main() in-process (fast, shares pool).
+        # The file starts with a digit so we use importlib. The module MUST be
+        # registered in sys.modules BEFORE exec_module because the script's
+        # @dataclass decorators look themselves up in sys.modules.
+        import importlib.util
+        import pathlib
+        import sys as _sys
+        _MOD_NAME = "_smoke_test_mod"
+        if _MOD_NAME in _sys.modules:
+            mod = _sys.modules[_MOD_NAME]
+        else:
+            script_path = pathlib.Path(__file__).parent / "scripts" / "nightly" / "00_smoke_test.py"
+            spec = importlib.util.spec_from_file_location(_MOD_NAME, script_path)
+            mod = importlib.util.module_from_spec(spec)
+            _sys.modules[_MOD_NAME] = mod
+            spec.loader.exec_module(mod)
+        exit_code = mod.main([])
+        if exit_code == 0:
+            logger.info("Smoke test: all steps passed")
+        elif exit_code == 1:
+            logger.warning("Smoke test: one or more steps FAILED (see pipeline_runs)")
+        else:
+            logger.error("Smoke test: operational error (exit_code=2)")
+    except Exception as e:
+        logger.error(f"Smoke test job failed to launch: {e}")
+
+
+def scheduled_qa_digest():
+    """WS5a Phase A — run the unified QA digest once per day at 07:00 CET.
+
+    Computes every audit check (chunk attribution, vector gaps, raadslid
+    roles, financial coverage, queue depth, smoke test, active writers,
+    lock contention), writes ``reports/qa_digest/YYYY-MM-DD.json``, appends
+    a row to ``pipeline_runs``, and emails Dennis the go/no-go summary.
+
+    Never raises — a broken digest must never take down the scheduler.
+    """
+    try:
+        from scripts.nightly.qa_digest import run_full_digest
+        from services.pipeline_health_email import send_daily_digest
+
+        digest_result = run_full_digest(triggered_by="cron")
+        recipient = os.getenv("PIPELINE_ALERT_EMAIL", "dennis@neodemos.nl")
+        try:
+            send_daily_digest(recipient)
+        except Exception as email_err:
+            logger.error(f"QA digest email failed: {email_err}")
+
+        logger.info(
+            "QA digest: %s (%s)",
+            digest_result.get("overall_status"),
+            digest_result.get("summary"),
+        )
+    except Exception as e:
+        logger.error(f"QA digest job failed: {e}")
+
+
 # Register scheduler jobs (session cleanup is registered in lifespan below).
 _JOB_DEFAULTS = dict(max_instances=1, coalesce=True)
 scheduler.add_job(scheduled_refresh, IntervalTrigger(minutes=15),
@@ -170,6 +248,21 @@ scheduler.add_job(scheduled_financial_sweep, IntervalTrigger(hours=1),
 scheduler.add_job(scheduled_summarization, IntervalTrigger(hours=12),
                   id='summarization', name='WS6 — compute summary_short for new documents',
                   misfire_grace_time=1800, **_JOB_DEFAULTS)
+# WS5a Phase A — hourly full-ingest canary. Isolated to a dedicated Qdrant
+# collection + SMOKE_TEST_* document_id namespace, so it coexists with WS6
+# Phase 3 (Gemini lock 7_640_601) and WS11 Phase 6 (autovacuum on
+# document_chunks). Records result in pipeline_runs(job_name='00_smoke_test').
+scheduler.add_job(scheduled_smoke_test, IntervalTrigger(hours=1),
+                  id='smoke_test', name='Hourly full-ingest canary',
+                  misfire_grace_time=600, **_JOB_DEFAULTS)
+# WS5a Phase A — daily QA digest at 07:00 Europe/Amsterdam (CET/CEST). CronTrigger
+# so it fires at a fixed wall-clock time; misfire_grace_time=3600 lets it run up
+# to an hour late if the app was restarting at 07:00 exactly.
+scheduler.add_job(scheduled_qa_digest,
+                  CronTrigger(hour=7, minute=0, timezone='Europe/Amsterdam'),
+                  id='qa_digest_daily',
+                  name='Daily 07:00 CET QA digest + health email',
+                  misfire_grace_time=3600, **_JOB_DEFAULTS)
 
 
 @asynccontextmanager
@@ -228,6 +321,14 @@ async def lifespan(app: FastAPI):
         coalesce=True,
         replace_existing=True,
     )
+
+    # Phase 7+ chat-workbench: sweep stale conversations
+    try:
+        from services.conversation_store import conversation_store
+        await conversation_store.start_sweeper()
+        logger.info("Chat conversation store sweeper started (5-min interval)")
+    except Exception as e:
+        logger.error(f"Failed to start conversation sweeper: {e}")
 
     yield
 

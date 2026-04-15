@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" role="img" aria-label="Raadhuis">
+  <circle cx="20" cy="20" r="19" fill="#0a3d38"/>
+  <circle cx="20" cy="18" r="6.5" fill="#f4efe5"/>
+  <circle cx="17.5" cy="17" r="0.8" fill="#0a3d38"/>
+  <circle cx="22.5" cy="17" r="0.8" fill="#0a3d38"/>
+  <path d="M17 20 Q20 22 23 20" stroke="#0a3d38" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+  <path d="M10 31 L30 31" stroke="#ff751f" stroke-width="1.4" stroke-linecap="round"/>
+  <rect x="12" y="26" width="2" height="5" fill="#f4efe5"/>
+  <rect x="19" y="26" width="2" height="5" fill="#f4efe5"/>
+  <rect x="26" y="26" width="2" height="5" fill="#f4efe5"/>
+  <path d="M10 26 L20 22 L30 26" stroke="#f4efe5" stroke-width="1.2" fill="none" stroke-linejoin="round"/>
+</svg>

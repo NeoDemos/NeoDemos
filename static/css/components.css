@@ -25,6 +25,48 @@
     box-shadow: none;
   }
 
+  /* ── Stat card (unified) ── */
+
+  .stat-card {
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border);
+    padding: var(--space-4) var(--space-6);
+    border-radius: var(--radius-md);
+    text-align: center;
+  }
+
+  .stat-card .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    font-family: var(--font-heading);
+  }
+
+  .stat-card .stat-label {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+  }
+
+  /* Larger variant — used on subpages like methodologie */
+  .stat-card--large {
+    background: var(--color-surface-sunken);
+    padding: var(--space-6) var(--space-4);
+    border-radius: var(--radius-lg);
+  }
+
+  .stat-card--large .stat-number {
+    display: block;
+    font-size: 1.75rem;
+    font-weight: 800;
+    font-family: var(--font-body);
+    margin-bottom: var(--space-1);
+  }
+
+  .stat-card--large .stat-label {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
   /* ── Buttons ── */
 
   .btn {
@@ -47,6 +89,7 @@
   .btn-primary {
     background: var(--color-primary);
     color: white;
+    border-radius: var(--radius-full);
   }
 
   .btn-primary:hover {
@@ -57,6 +100,7 @@
   .btn-accent {
     background: var(--color-accent);
     color: white;
+    border-radius: var(--radius-full);
   }
 
   .btn-accent:hover {
@@ -433,6 +477,23 @@
     gap: var(--space-8);
   }
 
+  /* ── Prose helper (Oatmeal-aligned readable column) ── */
+
+  .prose {
+    max-width: 65ch;
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-body);
+    color: var(--color-text);
+  }
+
+  .prose p {
+    margin-bottom: var(--space-4);
+  }
+
+  .prose-wide {
+    max-width: var(--container-md);
+  }
+
   /* ── Hero ── */
 
   .hero {
@@ -488,48 +549,263 @@
     line-height: 1.3;
   }
 
-  /* ── AI Content Rendering ── */
+  /* ── AI Content Rendering (Oatmeal scale: H1 48 / H2 30 / H3 24 / body 16) ── */
+
+  .ai-content {
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-body);
+    color: var(--color-text);
+  }
 
   .ai-content h1,
   .ai-content h2,
-  .ai-content h3 {
+  .ai-content h3,
+  .ai-content h4 {
+    font-family: var(--font-heading);
+    font-weight: 400;
     color: var(--color-primary);
+    letter-spacing: var(--letter-spacing-display);
+    line-height: var(--line-height-tight);
+    border: none;
+    padding-bottom: 0;
+  }
+
+  .ai-content h1 {
+    font-size: var(--font-size-5xl);
+    margin-top: var(--space-10);
+    margin-bottom: var(--space-5);
+  }
+
+  .ai-content h2 {
+    font-size: var(--font-size-3xl);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-4);
+  }
+
+  .ai-content h3 {
+    font-size: var(--font-size-2xl);
     margin-top: var(--space-6);
-    font-size: 1.1rem;
-    border-bottom: 1px solid var(--color-border);
-    padding-bottom: var(--space-1);
+    margin-bottom: var(--space-3);
+    line-height: var(--line-height-snug);
+  }
+
+  .ai-content h4 {
+    font-size: var(--font-size-xl);
+    margin-top: var(--space-5);
+    margin-bottom: var(--space-2);
+    line-height: var(--line-height-snug);
+  }
+
+  /* First heading sits flush to the bubble top */
+  .ai-content > h1:first-child,
+  .ai-content > h2:first-child,
+  .ai-content > h3:first-child { margin-top: 0; }
+
+  /* Subtle divider only on primary section heads */
+  .ai-content h2 {
+    border-bottom: 1px solid var(--color-border-subtle);
+    padding-bottom: var(--space-3);
   }
 
   .ai-content p {
     margin-bottom: var(--space-4);
+    max-width: 75ch;
+  }
+
+  .ai-content strong { color: var(--color-text); font-weight: 600; }
+
+  .ai-content a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+  }
+
+  .ai-content a:hover {
+    color: var(--color-accent-hover);
   }
 
   .ai-content ul,
   .ai-content ol {
-    padding-left: 1.2rem;
+    padding-left: 1.5rem;
     margin-bottom: var(--space-4);
   }
 
   .ai-content li {
-    margin-bottom: var(--space-1);
+    margin-bottom: var(--space-2);
+    line-height: var(--line-height-body);
+  }
+
+  .ai-content blockquote {
+    border-left: 3px solid var(--color-accent);
+    padding: var(--space-2) var(--space-5);
+    margin: var(--space-5) 0;
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary);
   }
 
   .ai-content table {
     border-collapse: collapse;
     width: 100%;
-    margin: var(--space-4) 0;
-    font-size: 0.8rem;
+    margin: var(--space-5) 0;
+    font-size: var(--font-size-sm);
   }
 
   .ai-content th,
   .ai-content td {
-    border: 1px solid var(--color-border);
-    padding: var(--space-2);
+    border: 1px solid var(--color-border-subtle);
+    padding: var(--space-3);
     text-align: left;
+    vertical-align: top;
   }
 
   .ai-content th {
     background: var(--color-surface-sunken);
-    font-weight: bold;
+    font-weight: 600;
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--letter-spacing-wide);
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
   }
+
+  /* Chat bubble content inherits the scale but caps the width modestly
+     so long answers remain readable inside the 48rem thread column. */
+  .chat-bubble-content.ai-content p,
+  .chat-bubble-content.ai-content li {
+    max-width: none;
+  }
+
+  /* ── WS8f Phase 7+ Block 5: new editor components ── */
+
+  /* nd-image */
+  .nd-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* nd-two-column */
+  .nd-two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
+  }
+  .nd-two-column--ratio-wide-left { grid-template-columns: 3fr 2fr; }
+  .nd-two-column--ratio-wide-right { grid-template-columns: 2fr 3fr; }
+  .nd-two-column--ratio-sidebar-left { grid-template-columns: 3fr 7fr; }
+  .nd-two-column--ratio-sidebar-right { grid-template-columns: 7fr 3fr; }
+  .nd-two-column--gap-sm { gap: var(--space-3); }
+  .nd-two-column--gap-lg { gap: var(--space-10); }
+  @media (max-width: 768px) {
+    .nd-two-column,
+    .nd-two-column[class*="--ratio-"] {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* nd-faq */
+  .nd-faq {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .nd-faq__item {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    background: var(--color-surface-raised);
+  }
+  .nd-faq__question {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+    list-style: none;
+  }
+  .nd-faq__question::-webkit-details-marker { display: none; }
+  .nd-faq__question::after {
+    content: '+';
+    float: right;
+    transition: transform 0.2s;
+  }
+  .nd-faq__item[open] .nd-faq__question::after { content: '−'; }
+  .nd-faq__answer {
+    padding-top: var(--space-3);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  /* nd-search-widget */
+  .nd-search-widget {
+    padding: var(--space-8);
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    text-align: center;
+  }
+  .nd-search-widget__heading {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-4);
+  }
+  .nd-search-widget__form {
+    display: flex;
+    gap: var(--space-2);
+    max-width: 32rem;
+    margin: 0 auto;
+  }
+  .nd-search-widget__input {
+    flex: 1;
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    background: var(--color-surface-raised);
+  }
+
+  /* nd-calendar-mini */
+  .nd-calendar-mini {
+    padding: var(--space-6);
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+  .nd-calendar-mini__heading {
+    font-size: 1.15rem;
+    margin-bottom: var(--space-3);
+  }
+  .nd-calendar-mini__list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-3) 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .nd-calendar-mini__list a {
+    display: flex;
+    gap: var(--space-3);
+    align-items: baseline;
+    text-decoration: none;
+    color: var(--color-text);
+  }
+  .nd-calendar-mini__list .cal-mini-date {
+    font-weight: 600;
+    color: var(--color-primary);
+    font-variant-numeric: tabular-nums;
+    min-width: 4rem;
+  }
+  .nd-calendar-mini__more {
+    color: var(--color-primary);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  /* nd-section / nd-cta-section padding variants (Phase 7+ Block 5 trait) */
+  .nd-section--padding-sm { padding-block: var(--space-6); }
+  .nd-section--padding-md { padding-block: var(--space-10); }
+  .nd-section--padding-lg { padding-block: var(--space-16); }
+  .nd-section--padding-xl { padding-block: var(--space-24); }
+  .nd-cta-section--padding-sm { padding-block: var(--space-8); }
+  .nd-cta-section--padding-md { padding-block: var(--space-12); }
+  .nd-cta-section--padding-lg { padding-block: var(--space-20); }
+  .nd-cta-section--padding-xl { padding-block: var(--space-32); }
 }

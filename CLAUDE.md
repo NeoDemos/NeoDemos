@@ -14,6 +14,7 @@
 6. [.coordination/FEEDBACK_LOG.md](.coordination/FEEDBACK_LOG.md) — live triage inbox
 7. [.agent/rules/](.agent/rules/) — communication + behavioral rules
 8. [.claude/commands/](.claude/commands/) — skill references (rag, mcp, deploy, backup, ingest, secure, naming) and coordination commands (ws-claim, ws-complete, ws-status)
+9. [pipeline/README.md](pipeline/README.md) — canonical writer contract (advisory locks, 8 rules, QA gate thresholds, SOP) for any code that writes to Postgres or Qdrant
 
 ## Do NOT read
 

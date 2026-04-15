@@ -804,6 +804,80 @@ def generate_report(all_findings: list[Finding], rollen: list, output_dir: str):
 # CLI
 # ---------------------------------------------------------------------------
 
+def run_audit(limit: int | None = None, db_conn=None) -> dict:
+    """
+    Callable API for the QA digest (WS5a Phase A).
+
+    Runs the consistency layer (Layer 4) plus a bounded burgemeester check —
+    these are the fast, SQL-only parts that are safe to run in the nightly
+    digest. The heavier wethouder/raadslid notulen scans are skipped here
+    because they process tens of thousands of documents; operators can still
+    invoke the CLI directly for the full audit.
+
+    Returns::
+
+        {
+            "anomaly_count": int,
+            "errors": int,
+            "warnings": int,
+            "infos": int,
+            "sample_findings": [{"id","finding_type","severity","description"}],
+            "by_layer": {"burgemeester": N, "consistency": N, ...},
+        }
+    """
+    own_conn = db_conn is None
+    conn = db_conn or get_connection()
+    try:
+        cur = conn.cursor()
+        rollen = get_all_rollen(cur)
+        findings: list[Finding] = []
+        # Always run consistency layer (pure SQL, no notulen scan)
+        findings.extend(audit_consistency(cur, rollen, verbose=False))
+        # Burgemeester layer — bounded by voorzitter regex over first 500 chars
+        try:
+            findings.extend(audit_burgemeesters(cur, rollen, verbose=False))
+        except Exception:
+            # Never let a layer failure break the digest
+            pass
+        cur.close()
+    finally:
+        if own_conn:
+            conn.close()
+
+    if limit is not None:
+        # Deterministic ordering so "first N" is stable between runs.
+        findings_sorted = sorted(findings, key=lambda f: (f.severity != 'error',
+                                                          f.severity != 'warning',
+                                                          f.id))
+        findings = findings_sorted[:limit]
+
+    by_layer: dict[str, int] = defaultdict(int)
+    by_sev: dict[str, int] = defaultdict(int)
+    for f in findings:
+        by_layer[f.layer] += 1
+        by_sev[f.severity] += 1
+
+    sample = [
+        {
+            "id": f.id,
+            "finding_type": f.finding_type,
+            "severity": f.severity,
+            "description": f.description[:200],
+        }
+        for f in findings
+        if f.severity in ("error", "warning")
+    ][:10]
+
+    return {
+        "anomaly_count": len(findings),
+        "errors": by_sev.get("error", 0),
+        "warnings": by_sev.get("warning", 0),
+        "infos": by_sev.get("info", 0),
+        "sample_findings": sample,
+        "by_layer": dict(by_layer),
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description="Audit raadslid_rollen against notulen")
     parser.add_argument("--layer", choices=["1", "2", "3", "4", "all"], default="all")

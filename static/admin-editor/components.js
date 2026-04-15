@@ -5,6 +5,11 @@
 // Loaded directly via <script src="/static/admin-editor/components.js"> — plain browser JS,
 // no modules, no bundling. Exposes window.registerNDComponents(editor) to be called after
 // grapesjs.init() in templates/admin/editor.html.
+//
+// NOTE: the `nd-image` type uses a trait button with command `open-asset-picker`.
+// That command is registered here; it tries GET /admin/api/uploads and falls back
+// to window.prompt() if the endpoint is unavailable. The command is registered on
+// the editor passed into registerNDComponents(editor).
 
 (function (window) {
   'use strict';
@@ -182,8 +187,20 @@
                 { value: 'testimonial', name: 'Testimonial' },
               ],
             },
+            {
+              type: 'select',
+              name: 'padding',
+              label: 'Padding',
+              options: [
+                { value: 'sm', name: 'Compact' },
+                { value: 'md', name: 'Normaal' },
+                { value: 'lg', name: 'Ruim' },
+                { value: 'xl', name: 'Zeer ruim' },
+              ],
+            },
           ],
           variant: 'default',
+          padding: 'md',
           draggable: true,
           droppable: true,
           removable: true,
@@ -196,12 +213,20 @@
         },
         init() {
           this.on('change:variant', this.onVariantChange);
+          this.on('change:padding', this.onPaddingChange);
         },
         onVariantChange() {
           const prev = this.previous('variant');
           const next = this.get('variant') || 'default';
           const prevCls = SECTION_VARIANT_CLASS[prev] || '';
           const nextCls = SECTION_VARIANT_CLASS[next] || '';
+          swapClass(this, prevCls, nextCls);
+        },
+        onPaddingChange() {
+          const prev = this.previous('padding');
+          const next = this.get('padding') || 'md';
+          const prevCls = prev ? 'nd-section--padding-' + prev : '';
+          const nextCls = 'nd-section--padding-' + next;
           swapClass(this, prevCls, nextCls);
         },
       },
@@ -878,12 +903,24 @@
                 { value: 'ghost', name: 'Ghost' },
               ],
             },
+            {
+              type: 'select',
+              name: 'padding',
+              label: 'Padding',
+              options: [
+                { value: 'sm', name: 'Compact' },
+                { value: 'md', name: 'Normaal' },
+                { value: 'lg', name: 'Ruim' },
+                { value: 'xl', name: 'Zeer ruim' },
+              ],
+            },
           ],
           title: 'Klaar om te beginnen?',
           text: 'Korte uitleg van de waardepropositie.',
           cta_label: 'Gratis account',
           cta_href: '/register',
           cta_variant: 'accent',
+          padding: 'md',
           draggable: true,
           removable: true,
           copyable: true,
@@ -900,6 +937,7 @@
           this.on('change:cta_label', this.onCtaLabelChange);
           this.on('change:cta_href', this.onCtaHrefChange);
           this.on('change:cta_variant', this.onCtaVariantChange);
+          this.on('change:padding', this.onPaddingChange);
           const self = this;
           setTimeout(function () {
             self.onTitleChange();
@@ -908,6 +946,13 @@
             self.onCtaHrefChange();
             self.onCtaVariantChange();
           }, 0);
+        },
+        onPaddingChange() {
+          const prev = this.previous('padding');
+          const next = this.get('padding') || 'md';
+          const prevCls = prev ? 'nd-cta-section--padding-' + prev : '';
+          const nextCls = 'nd-cta-section--padding-' + next;
+          swapClass(this, prevCls, nextCls);
         },
         _btn() {
           // Find nested nd-btn by type attribute
@@ -1050,6 +1095,318 @@
           editable: true,
           stylable: false,
           components: 'Koptekst niveau 3',
+        },
+      },
+    });
+
+    // =========================================================================
+    // Pattern 12: Image with asset picker
+    // =========================================================================
+
+    dc.addType('nd-image', {
+      isComponent: function (el) {
+        return !!(el.tagName === 'IMG' && el.classList && el.classList.contains('nd-image'));
+      },
+      model: {
+        defaults: {
+          tagName: 'img',
+          classes: ['nd-image'],
+          attributes: { src: '/static/images/erasmusbrug.jpg', alt: '' },
+          traits: [
+            { type: 'text', name: 'src', label: 'Afbeelding URL' },
+            { type: 'button', name: 'pick', label: 'Kies uit uploads', text: 'Kies...', full: true, command: 'open-asset-picker' },
+            { type: 'text', name: 'alt', label: 'Alt-tekst' },
+          ],
+          droppable: false,
+          draggable: true,
+          removable: true,
+          copyable: true,
+          stylable: false,
+        },
+      },
+    });
+
+    // Register asset-picker command. Prefers GET /admin/api/uploads and renders a
+    // simple overlay of thumbnails; falls back to window.prompt() on failure.
+    editor.Commands.add('open-asset-picker', {
+      run(ed) {
+        const selected = ed.getSelected();
+        if (!selected) return;
+        const applyUrl = function (url) {
+          if (!url) return;
+          const attrs = Object.assign({}, selected.getAttributes() || {}, { src: url });
+          selected.setAttributes(attrs);
+        };
+        fetch('/admin/api/uploads').then(function (r) {
+          if (!r.ok) throw new Error('no uploads endpoint');
+          return r.json();
+        }).then(function (data) {
+          const items = (data && data.uploads) || data || [];
+          if (!items.length) {
+            const url = window.prompt('Geen uploads gevonden. Plak een afbeeldings-URL:');
+            applyUrl(url);
+            return;
+          }
+          // Build a lightweight picker overlay
+          const overlay = document.createElement('div');
+          overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99999;display:flex;align-items:center;justify-content:center;';
+          const modal = document.createElement('div');
+          modal.style.cssText = 'background:#fff;max-width:720px;max-height:80vh;overflow:auto;padding:1rem;border-radius:8px;display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:0.5rem;';
+          items.forEach(function (it) {
+            const url = it.url || it.path || it;
+            const img = document.createElement('img');
+            img.src = url;
+            img.style.cssText = 'width:100%;height:100px;object-fit:cover;cursor:pointer;border:2px solid transparent;border-radius:4px;';
+            img.addEventListener('click', function () {
+              applyUrl(url);
+              document.body.removeChild(overlay);
+            });
+            modal.appendChild(img);
+          });
+          overlay.appendChild(modal);
+          overlay.addEventListener('click', function (e) { if (e.target === overlay) document.body.removeChild(overlay); });
+          document.body.appendChild(overlay);
+        }).catch(function () {
+          const url = window.prompt('Plak een afbeeldings-URL:');
+          applyUrl(url);
+        });
+      },
+    });
+
+    // =========================================================================
+    // Pattern 13: Two-column layout
+    // =========================================================================
+
+    dc.addType('nd-two-column', {
+      isComponent: function (el) {
+        return !!(el.classList && el.classList.contains('nd-two-column'));
+      },
+      model: {
+        defaults: {
+          tagName: 'div',
+          classes: ['nd-two-column'],
+          traits: [
+            {
+              type: 'select',
+              name: 'ratio',
+              label: 'Verhouding',
+              options: [
+                { value: 'equal', name: '50 / 50' },
+                { value: 'wide-left', name: '60 / 40' },
+                { value: 'wide-right', name: '40 / 60' },
+                { value: 'sidebar-left', name: '30 / 70' },
+                { value: 'sidebar-right', name: '70 / 30' },
+              ],
+            },
+            {
+              type: 'select',
+              name: 'gap',
+              label: 'Ruimte',
+              options: [
+                { value: 'sm', name: 'Compact' },
+                { value: 'md', name: 'Normaal' },
+                { value: 'lg', name: 'Ruim' },
+              ],
+            },
+          ],
+          ratio: 'equal',
+          gap: 'md',
+          droppable: true,
+          draggable: true,
+          removable: true,
+          copyable: true,
+          stylable: false,
+          components: [
+            { tagName: 'div', classes: ['nd-two-column__col'], droppable: true, components: 'Kolom 1' },
+            { tagName: 'div', classes: ['nd-two-column__col'], droppable: true, components: 'Kolom 2' },
+          ],
+        },
+        init() {
+          this.on('change:ratio', this.onRatioChange);
+          this.on('change:gap', this.onGapChange);
+        },
+        onRatioChange() {
+          const prev = this.previous('ratio');
+          const next = this.get('ratio') || 'equal';
+          const prevCls = prev ? 'nd-two-column--ratio-' + prev : '';
+          const nextCls = 'nd-two-column--ratio-' + next;
+          swapClass(this, prevCls, nextCls);
+        },
+        onGapChange() {
+          const prev = this.previous('gap');
+          const next = this.get('gap') || 'md';
+          const prevCls = prev ? 'nd-two-column--gap-' + prev : '';
+          const nextCls = 'nd-two-column--gap-' + next;
+          swapClass(this, prevCls, nextCls);
+        },
+      },
+    });
+
+    // =========================================================================
+    // Pattern 14: FAQ accordion (<details>/<summary>)
+    // =========================================================================
+
+    dc.addType('nd-faq-accordion', {
+      isComponent: function (el) {
+        return !!(el.classList && el.classList.contains('nd-faq'));
+      },
+      model: {
+        defaults: {
+          tagName: 'div',
+          classes: ['nd-faq'],
+          droppable: '[data-gjs-type=nd-faq-item]',
+          draggable: true,
+          removable: true,
+          copyable: true,
+          stylable: false,
+          components: [
+            { type: 'nd-faq-item' },
+            { type: 'nd-faq-item' },
+          ],
+        },
+      },
+    });
+
+    dc.addType('nd-faq-item', {
+      isComponent: function (el) {
+        return !!(el.tagName === 'DETAILS' && el.classList && el.classList.contains('nd-faq__item'));
+      },
+      model: {
+        defaults: {
+          tagName: 'details',
+          classes: ['nd-faq__item'],
+          traits: [
+            { type: 'text', name: 'question', label: 'Vraag' },
+          ],
+          question: 'Vraag?',
+          draggable: '[data-gjs-type=nd-faq-accordion]',
+          removable: true,
+          copyable: true,
+          stylable: false,
+          components: [
+            { tagName: 'summary', classes: ['nd-faq__question'], type: 'text', editable: false, removable: false, draggable: false, selectable: false, stylable: false, components: 'Vraag?' },
+            { tagName: 'div', classes: ['nd-faq__answer'], droppable: true, components: 'Antwoord...' },
+          ],
+        },
+        init() {
+          this.on('change:question', this.onQuestionChange);
+          const self = this;
+          setTimeout(function () { self.onQuestionChange(); }, 0);
+        },
+        onQuestionChange() {
+          const q = this.get('question') || '';
+          const summary = (this.find('summary') || [])[0];
+          if (summary) setText(summary, q);
+        },
+      },
+    });
+
+    // =========================================================================
+    // Pattern 15: Search widget (link-out to /)
+    // =========================================================================
+
+    dc.addType('nd-search-widget', {
+      isComponent: function (el) {
+        return !!(el.classList && el.classList.contains('nd-search-widget'));
+      },
+      model: {
+        defaults: {
+          tagName: 'div',
+          classes: ['nd-search-widget'],
+          traits: [
+            { type: 'text', name: 'placeholder', label: 'Placeholder' },
+            { type: 'text', name: 'heading', label: 'Koptekst' },
+          ],
+          placeholder: 'Wat wilt u weten?',
+          heading: 'Zoek in raadsdocumenten',
+          droppable: false,
+          draggable: true,
+          removable: true,
+          copyable: true,
+          stylable: false,
+          components: [
+            { tagName: 'h3', classes: ['nd-search-widget__heading'], type: 'text', editable: false, removable: false, draggable: false, selectable: false, stylable: false, components: 'Zoek in raadsdocumenten' },
+            {
+              tagName: 'form',
+              classes: ['nd-search-widget__form'],
+              attributes: { action: '/', method: 'get' },
+              draggable: false,
+              removable: false,
+              selectable: false,
+              stylable: false,
+              components: [
+                { tagName: 'input', classes: ['nd-search-widget__input'], attributes: { type: 'text', name: 'q', placeholder: 'Wat wilt u weten?' }, draggable: false, removable: false, selectable: false, stylable: false },
+                { tagName: 'button', classes: ['btn', 'btn-accent'], attributes: { type: 'submit' }, type: 'text', editable: false, removable: false, draggable: false, selectable: false, stylable: false, components: 'Zoek' },
+              ],
+            },
+          ],
+        },
+        init() {
+          this.on('change:placeholder', this.onPlaceholderChange);
+          this.on('change:heading', this.onHeadingChange);
+          const self = this;
+          setTimeout(function () { self.onPlaceholderChange(); self.onHeadingChange(); }, 0);
+        },
+        onPlaceholderChange() {
+          const input = (this.find('input') || [])[0];
+          if (input) {
+            const attrs = Object.assign({}, input.getAttributes() || {}, { placeholder: this.get('placeholder') || '' });
+            input.setAttributes(attrs);
+          }
+        },
+        onHeadingChange() {
+          const h = (this.find('h3') || [])[0];
+          if (h) setText(h, this.get('heading') || '');
+        },
+      },
+    });
+
+    // =========================================================================
+    // Pattern 16: Calendar mini (next meetings teaser — hydrated on public page)
+    // =========================================================================
+
+    dc.addType('nd-calendar-mini', {
+      isComponent: function (el) {
+        return !!(el.classList && el.classList.contains('nd-calendar-mini'));
+      },
+      model: {
+        defaults: {
+          tagName: 'div',
+          classes: ['nd-calendar-mini'],
+          attributes: { 'data-limit': '5' },
+          traits: [
+            { type: 'number', name: 'limit', label: 'Aantal vergaderingen', min: 1, max: 10 },
+            { type: 'text', name: 'heading', label: 'Koptekst' },
+          ],
+          limit: 5,
+          heading: 'Aankomende raadsvergaderingen',
+          droppable: false,
+          draggable: true,
+          removable: true,
+          copyable: true,
+          stylable: false,
+          components: [
+            { tagName: 'h3', classes: ['nd-calendar-mini__heading'], type: 'text', editable: false, removable: false, draggable: false, selectable: false, stylable: false, components: 'Aankomende raadsvergaderingen' },
+            { tagName: 'ul', classes: ['nd-calendar-mini__list'], removable: false, draggable: false, selectable: false, stylable: false, components: [
+              { tagName: 'li', type: 'text', editable: false, removable: false, draggable: false, selectable: false, stylable: false, components: '— laadt op publieke pagina —' },
+            ]},
+            { tagName: 'a', classes: ['nd-calendar-mini__more'], attributes: { href: '/calendar' }, type: 'text', editable: false, removable: false, draggable: false, selectable: false, stylable: false, components: 'Volledige agenda →' },
+          ],
+        },
+        init() {
+          this.on('change:limit', this.onLimitChange);
+          this.on('change:heading', this.onHeadingChange);
+          const self = this;
+          setTimeout(function () { self.onLimitChange(); self.onHeadingChange(); }, 0);
+        },
+        onLimitChange() {
+          const v = this.get('limit') || 5;
+          const attrs = Object.assign({}, this.getAttributes() || {}, { 'data-limit': String(v) });
+          this.setAttributes(attrs);
+        },
+        onHeadingChange() {
+          const h = (this.find('h3') || [])[0];
+          if (h) setText(h, this.get('heading') || '');
         },
       },
     });

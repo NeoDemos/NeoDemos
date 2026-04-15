@@ -38,6 +38,29 @@ See [`TODOS.md`](../TODOS.md) header for the full scope rules on where items liv
 
 <!-- Add entries below, newest at top -->
 
+### 2026-04-15 lijst_vergaderingen + /calendar — raadsperiode 2026-2030 UUID meetings show as empty shells
+
+**Query / params:**
+Erik prepping for 16 april 2026 raadsvergadering. Via MCP + Claude: "welke vergaderingen de komende 14 dagen via NeoDemos?"
+
+**What came back:**
+- 15 april: commissie Bouwen & Wonen (ID `7789869`, numeric) — in DB but empty agenda (separate issue)
+- 16 april: vergadering zonder commissielabel (ID `f9b8b1c0-0073-4528-96cb-c78e3f9aafd8`, UUID) — meeting row exists but **0 agenda_items, 0 documents, 0 Qdrant chunks**
+- 15 april BWB stadsberaad (ID `ae86588c-da48-47e1-ac6a-fc0d183f5273`, UUID) — **not in Postgres at all**
+- Between 17 april and 21 mei: no meetings at all (vs. dense weekly cadence in old period)
+
+**What was wrong / missing:**
+Two parser gaps in the 15-min `scheduled_refresh` / iBabs service:
+
+1. `ibabs_service.get_meetings_for_year` hard-codes `agendatype_id="100002367"` → only raadsvergaderingen + some commissies, misses stadsberaad and other new-period agendatypes
+2. `ibabs_service.get_meeting_agenda(UUID)` returns empty for new raadsperiode 2026-2030 portal layout — Phase 2 calendar sweep inserts the meeting row but fails to populate agenda_items/documents
+
+Public agenda confirmed present on iBabs for both UUIDs (manual browser check). Fix belongs to 15-min cadence, not nightly 02:00 — agenda PDFs land mid-day and users prep the day before.
+
+**Severity:** high — breaks press-sensitive demo (Erik's 16 april raadsvergadering prep) and silently produces "de raad vergadert niet de komende maand" false negatives.
+
+**Triaged:** 2026-04-15 → [docs/handoffs/WS5a_NIGHTLY_PIPELINE.md](../docs/handoffs/WS5a_NIGHTLY_PIPELINE.md) Phase B.7
+
 ### 2026-04-14 Systematic MCP testing — onderwijs / sociale huur + nachtleven / stemgedrag (two sessions)
 
 **Query / params:**
