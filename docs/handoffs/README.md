@@ -38,17 +38,17 @@ When a workstream finishes:
 <!-- STATE-AUTO-START -->
 | # | File | Title | Priority | Status | Depends on |
 |---|---|---|---|---|---|
-| WS1 | [`WS1_GRAPHRAG.md`](WS1_GRAPHRAG.md) | GraphRAG retrieval (Flair NER + Gemini enrichment + VN provenance) | 1 | **blocked** — waiting on WS11 | WS7, WS11 |
+| WS1 | [`WS1_GRAPHRAG.md`](WS1_GRAPHRAG.md) | GraphRAG retrieval (Flair NER + Gemini enrichment + VN provenance) | 1 | **available** — WS12 dep removed 2026-04-14 — VN provenance covers 2025+202… | WS7, WS11 |
 | WS8 | [`done/WS8_FRONTEND_REDESIGN.md`](done/WS8_FRONTEND_REDESIGN.md) | Frontend redesign: design system, landing, calendar | 1 | **done** — shipped 2026-04-12 | — |
 | WS9 | [`done/WS9_WEB_INTELLIGENCE.md`](done/WS9_WEB_INTELLIGENCE.md) | Web intelligence: MCP-as-backend, Sonnet tool_use, SSE | 1 | **done** — shipped 2026-04-13 | — |
-| WS11 | [`WS11_CORPUS_COMPLETENESS.md`](WS11_CORPUS_COMPLETENESS.md) | Corpus completeness 2018-2026 (ORI gap + metadata) | 1 | **in progress** — claimed via /ws-claim — resuming phase 6 (where we left off) | — |
+| WS11 | [`done/WS11_CORPUS_COMPLETENESS.md`](done/WS11_CORPUS_COMPLETENESS.md) | Corpus completeness 2018-2026 (ORI gap + metadata) | 1 | **done** — shipped 2026-04-15 | — |
 | WS12 | [`WS12_VIRTUAL_NOTULEN_BACKFILL.md`](WS12_VIRTUAL_NOTULEN_BACKFILL.md) | Virtual notulen backfill & production hardening | 1 | **paused** — Deferred to v0.3/v0.4: Erik Verweij (only user so far) conf… | — |
 | WS13 | [`WS13_MULTI_GEMEENTE_PIPELINE.md`](WS13_MULTI_GEMEENTE_PIPELINE.md) | Multi-gemeente pipeline: tenant-aware ingestion | 1 | **blocked** — waiting on WS5a | WS5a |
 | WS14 | [`WS14_CALENDAR_QUALITY.md`](WS14_CALENDAR_QUALITY.md) | Calendar quality & bijlage reconciliation | 1 | **blocked** — waiting on WS8f | WS8f |
 | WS15 | [`WS15_MOTIE_STEMMEN.md`](WS15_MOTIE_STEMMEN.md) | Per-party voting data (motie_stemmen + zoek_stemgedrag) | 1.5 | **available** — Initial seed: not_started | — |
 | WS2 | [`done/WS2_FINANCIAL.md`](done/WS2_FINANCIAL.md) | Trustworthy financial analysis | 2 | **done** — shipped 2026-04-12 | — |
 | WS2b | [`WS2b_IV3_TAAKVELD.md`](WS2b_IV3_TAAKVELD.md) | IV3 taakveld FK backfill | 2 | **available** | WS2 |
-| WS8f | [`WS8f_ADMIN_CMS.md`](WS8f_ADMIN_CMS.md) | Admin panel + CMS + GrapeJS editor | 2 | **in progress** — Phase 7 — rejection follow-up: page creation + asset upload… | WS8 |
+| WS8f | [`WS8f_ADMIN_CMS.md`](WS8f_ADMIN_CMS.md) | Admin panel + CMS + GrapeJS editor | 2 | **in progress** — Phase 7+ shipped 2026-04-15: Oatmeal-aligned tokens + CSS h… | WS8 |
 | WS16 | [`WS16_MCP_MONITORING.md`](WS16_MCP_MONITORING.md) | MCP monitoring & observability | 2 | **in progress** — Initial seed: Phase 1 shipped 2026-04-14 | WS4 |
 | WS7 | [`done/WS7_OCR_RECOVERY.md`](done/WS7_OCR_RECOVERY.md) | OCR recovery for moties/amendementen | 2.5 | **done** — shipped 2026-04-14 | — |
 | WS3 | [`WS3_JOURNEY.md`](WS3_JOURNEY.md) | Document journey timelines | 3 | **blocked** — waiting on WS1 | WS1 |
@@ -209,9 +209,10 @@ flowchart TD
   classDef deferred  fill:#656d76,color:#fff,stroke:#656d76
   classDef notstarted fill:#f6f8fa,color:#333,stroke:#d0d7de
 
-  class WS1A,WS1B,WS3,WS14 blocked
-  class WS7,WS2,WS4,WS8ae,WS9 done
-  class WS11,WS6,WS5a,WS8f running
+  class WS1A,WS1B available
+  class WS3,WS14 blocked
+  class WS7,WS11,WS2,WS4,WS8ae,WS9 done
+  class WS6,WS5a,WS8f running
 ```
 <!-- PARALLELISM-AUTO-END -->
 

@@ -42,7 +42,7 @@ Read these files first:
 - templates/calendar.html (list view — DO NOT redesign)
 - templates/meeting.html (meeting detail — bijlage/annotatie split goes here)
 - routes/pages.py (calendar route L183-207)
-- docs/handoffs/WS11_CORPUS_COMPLETENESS.md (doc_classification context)
+- docs/handoffs/done/WS11_CORPUS_COMPLETENESS.md (doc_classification context)
 - docs/handoffs/WS8f_ADMIN_CMS.md (ContentService + router split context)
 
 Before coding: confirm WS8f is marked `done` in docs/handoffs/README.md. If not,

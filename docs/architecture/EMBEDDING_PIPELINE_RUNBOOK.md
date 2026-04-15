@@ -114,7 +114,7 @@ def compute_point_id(document_id: str, db_id: int) -> int:
 
 **Phase 2 kill-switch:** set `DOCUMENT_PROCESSOR_PHASE2_ENABLED=false` in `config/deploy.yml` env.clear to pause scheduled embedding during bulk operations. Set back to `true` + redeploy when done.
 
-**WS11c cleanup (2026-04-14):** one-shot standardization ran scripts `repair_scheme_b_points.py`, `rekey_vn_points.py`, `cleanup_safe_orphans.py` + manual Phase 9b restore. 274,596 orphan points removed. See `docs/handoffs/WS11_CORPUS_COMPLETENESS.md` section "WS11c" for the full audit trail and the "Resume Phase 6" runbook if embedded_at backfill needs picking up.
+**WS11c cleanup (2026-04-14):** one-shot standardization ran scripts `repair_scheme_b_points.py`, `rekey_vn_points.py`, `cleanup_safe_orphans.py` + manual Phase 9b restore. 274,596 orphan points removed. See `docs/handoffs/done/WS11_CORPUS_COMPLETENESS.md` section "WS11c" for the full audit trail and the "Resume Phase 6" runbook if embedded_at backfill needs picking up.
 
 ## Metadata vs Vector Embedding for Dates
 
