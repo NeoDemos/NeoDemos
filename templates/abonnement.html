@@ -35,10 +35,10 @@
             {% elif user %}
             <form method="POST" action="/settings/tier" class="pricing-cta-form">
                 <input type="hidden" name="slug" value="gratis">
-                <button type="submit" class="btn btn-ghost pricing-cta">Overstappen naar Gratis</button>
+                <button type="submit" class="btn btn-ghost pricing-cta">Activeren</button>
             </form>
             {% else %}
-            <a href="/register" class="btn btn-ghost pricing-cta">Gratis starten</a>
+            <a href="/register" class="btn btn-ghost pricing-cta">Activeren</a>
             {% endif %}
         </article>
 
@@ -49,7 +49,7 @@
             <p class="pricing-card-price">
                 <span class="pricing-card-price-strike">&euro;29</span>
                 <span>&euro;0</span>
-                <small>&nbsp;/maand tijdens beta</small>
+                <small>&nbsp;/maand</small>
             </p>
             <p class="pricing-card-audience">Voor raadsleden, fracties, journalisten en onderzoekers.</p>
             <ul class="pricing-card-list">
@@ -68,10 +68,10 @@
             {% elif user %}
             <form method="POST" action="/settings/tier" class="pricing-cta-form">
                 <input type="hidden" name="slug" value="pro">
-                <button type="submit" class="btn btn-primary pricing-cta">Pro activeren (gratis)</button>
+                <button type="submit" class="btn btn-primary pricing-cta">Activeren</button>
             </form>
             {% else %}
-            <a href="/register?tier=pro" class="btn btn-primary pricing-cta">Pro activeren</a>
+            <a href="/register?tier=pro" class="btn btn-primary pricing-cta">Activeren</a>
             {% endif %}
         </article>
 
