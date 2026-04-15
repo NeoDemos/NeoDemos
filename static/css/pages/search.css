@@ -1079,6 +1079,12 @@
     flex: 1 0 auto;
     padding-top: 0;
   }
+  /* Release the 800px .search-container cap in chat state so chat-thread +
+     composer can fill up to their own 64rem (1024px) cap. Without this,
+     the parent bottlenecks children to 800px regardless of child rules. */
+  body.chat-active .search-container {
+    max-width: 100%;
+  }
   body.chat-active .chat-thread {
     flex: 1 0 auto;
   }
