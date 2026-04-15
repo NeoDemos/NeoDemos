@@ -66,8 +66,9 @@
         <p class="tier-saved-notice" role="status">
             Abonnement bijgewerkt naar
             <strong>
-                {% if tier_change_notice == 'pro' %}Kritische burger
-                {% elif tier_change_notice == 'gratis' %}Nieuwsgierige burger
+                {% if tier_change_notice == 'pro' %}Pro
+                {% elif tier_change_notice == 'gratis' %}Gratis
+                {% elif tier_change_notice == 'premium' %}Premium
                 {% else %}{{ tier_change_notice }}{% endif %}
             </strong>.
         </p>
@@ -89,7 +90,7 @@
                 <input type="radio" name="slug" value="gratis"
                     {% if current_tier.slug == 'gratis' %}checked disabled{% endif %}>
                 <span class="tier-option-body">
-                    <span class="tier-option-title">Nieuwsgierige burger</span>
+                    <span class="tier-option-title">Gratis</span>
                     <span class="tier-option-meta">3 zoekopdrachten per maand. Geen AI-koppeling.</span>
                 </span>
             </label>
@@ -99,13 +100,13 @@
                     {% if current_tier.slug == 'pro' %}checked disabled{% endif %}>
                 <span class="tier-option-body">
                     <span class="tier-option-title">
-                        Kritische burger <span class="tier-option-price">&euro;29/mnd &middot; tijdens beta gratis</span>
+                        Pro <span class="tier-option-price">&euro;29/mnd &middot; tijdens beta gratis</span>
                     </span>
                     <span class="tier-option-meta">
                         50 zoekopdrachten per maand. Onbeperkt via AI-koppeling.
                     </span>
                     <span class="tier-option-subnote">
-                        Kritische burger wordt automatisch gratis tijdens de beta. Je wordt niet gefactureerd.
+                        Pro wordt automatisch gratis tijdens de beta. Je wordt niet gefactureerd.
                     </span>
                     {% if current_tier.slug == 'pro' and current_tier.pro_expires_at %}
                     <span class="tier-option-subnote tier-option-subnote--strong">
@@ -116,10 +117,10 @@
             </label>
 
             <label class="tier-option tier-option--disabled">
-                <input type="radio" name="slug" value="ontembare_democraat" disabled>
+                <input type="radio" name="slug" value="premium" disabled>
                 <span class="tier-option-body">
                     <span class="tier-option-title">
-                        Ontembare democraat <span class="tier-option-price">Binnenkort beschikbaar</span>
+                        Premium <span class="tier-option-price">Binnenkort beschikbaar</span>
                     </span>
                     <span class="tier-option-meta">
                         Onbeperkte zoekopdrachten. Wekelijkse briefing. 2.000 pagina's persoonlijk corpus.

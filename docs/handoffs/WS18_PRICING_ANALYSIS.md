@@ -2,7 +2,7 @@
 
 ## TL;DR
 
-v0.2.0-alpha.2 shipped a 3-tier pricing surface (Nieuwsgierige burger gratis / Kritische burger €29 / Ontembare democraat €49). Only the first two are selectable; the third is "binnenkort". Pricing, quota, corpus limits, and MCP gating were set by gut from one conversation on 2026-04-15. This workstream replaces gut with data: collect beta usage + cost, validate or revise each number, then lock.
+v0.2.0-alpha.2 shipped a 3-tier pricing surface (Gratis / Pro €29 / Premium €49). Only the first two are selectable; the third is "binnenkort". Pricing, quota, corpus limits, and MCP gating were set by gut from one conversation on 2026-04-15. This workstream replaces gut with data: collect beta usage + cost, validate or revise each number, then lock.
 
 ## Status
 
@@ -17,7 +17,7 @@ unassigned
 - WS8f (admin CMS) — to surface the tier spec on landing pages dynamically
 - MCP auth (shipped via WS4) — for per-user usage attribution
 - WS16 (MCP monitoring) — for tool-call cost instrumentation
-- Data: min. 20 beta users using Kritische burger for ≥30 days
+- Data: min. 20 beta users using Pro for ≥30 days
 
 ## Cold-start prompt
 
@@ -42,8 +42,8 @@ to services/subscriptions.py. Do NOT change quotas until Dennis signs off.
 
 | # | Parameter | Current value | Data needed |
 |---|---|---|---|
-| 1 | Kritische burger price | €29/mo | Conversion rate at €19/€29/€39 beta survey |
-| 2 | Ontembare democraat price | €49/mo | WTP interview data from 3+ power users (target: raadsleden with full-fractie budget) |
+| 1 | Pro price | €29/mo | Conversion rate at €19/€29/€39 beta survey |
+| 2 | Premium price | €49/mo | WTP interview data from 3+ power users (target: raadsleden with full-fractie budget) |
 | 3 | NB questions/month | 3 | Drop-off analysis — % of anon visitors who hit limit and convert vs bounce |
 | 4 | KB questions/month | 50 | P50/P90 actual monthly usage on beta. If P90 > 50, raise; if P50 < 10, lower |
 | 5 | Corpus pages limit (50/500/2000) | gut | Observed upload distribution from first 20 users |
@@ -70,7 +70,7 @@ to services/subscriptions.py. Do NOT change quotas until Dennis signs off.
 
 ### Phase 3 — WTP survey + interviews (1 week)
 
-6. In-app survey on /settings for every active Kritische burger user: "Wat zou je maandelijks willen betalen voor deze tier? €19 / €29 / €39 / Gratis ok". Store in `subscription_survey_responses`.
+6. In-app survey on /settings for every active Pro user: "Wat zou je maandelijks willen betalen voor deze tier? €19 / €29 / €39 / Gratis ok". Store in `subscription_survey_responses`.
 7. 1:1 interviews (min. 3) with power users (>80% of KB monthly quota used): "Wat zou je de volgende tier laten activeren voor €49/mo? Briefing? Meer docs? API? Team-sharing?"
 
 ### Phase 4 — Analysis + recommendation (1 day)
@@ -117,7 +117,7 @@ to services/subscriptions.py. Do NOT change quotas until Dennis signs off.
 
 - Multi-seat / team pricing for fracties (shared corpus + shared quota)
 - Annual pricing (20% discount)
-- Student/non-profit tier (€0 but Nieuwsgierige-quota)
+- Student/non-profit tier (€0 but Gratis-quota)
 - Usage-based overages (pay €0.50 per extra search above KB quota instead of upgrading)
 
 ## Related

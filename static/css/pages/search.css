@@ -1384,6 +1384,10 @@
     border-color: var(--color-accent);
     box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-accent) 18%, transparent);
   }
+  .pricing-card--soon {
+    opacity: 0.72;
+    border-style: dashed;
+  }
   .pricing-card-badge {
     position: absolute;
     top: var(--space-3);
@@ -1395,6 +1399,23 @@
     border-radius: var(--radius-full);
     background: var(--color-accent);
     color: var(--color-text-on-dark);
+  }
+  .pricing-card-badge--soon {
+    background: var(--color-text-secondary);
+  }
+  .pricing-grid--three {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  }
+  .pricing-cta.is-disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .tier-option--disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
   }
   .pricing-card-name {
     font-family: var(--font-heading);

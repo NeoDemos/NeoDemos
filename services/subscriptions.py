@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 TIERS = {
     "gratis": {
         "slug": "gratis",
-        "label": "Nieuwsgierige burger",
+        "label": "Gratis",
         "price_eur_month": 0,
         "price_strike": None,
         "quota_month": 3,
@@ -45,7 +45,7 @@ TIERS = {
     },
     "pro": {
         "slug": "pro",
-        "label": "Kritische burger",
+        "label": "Pro",
         "price_eur_month": 29,
         "price_strike": 29,
         "quota_month": 50,
@@ -56,9 +56,9 @@ TIERS = {
         "mcp_copy": "Onbeperkt via AI-koppeling",
         "selectable": True,
     },
-    "ontembare_democraat": {
-        "slug": "ontembare_democraat",
-        "label": "Ontembare democraat",
+    "premium": {
+        "slug": "premium",
+        "label": "Premium",
         "price_eur_month": 49,
         "price_strike": None,
         "quota_month": None,
