@@ -186,14 +186,9 @@
     .hero-stats {
       font-size: 0.8rem;
     }
-    /* Show only first 3 topic chips on mobile */
-    .example-topics .example-topic:nth-child(n+4) {
-      display: none;
-    }
+    /* Hide all topic chips on mobile — hero composer fills the viewport */
     .example-topics {
-      margin-top: var(--space-2);
-      margin-bottom: var(--space-3);
-      justify-content: flex-start;
+      display: none;
     }
   }
 
@@ -613,8 +608,16 @@
   }
 
   /* ──── Testimonials ──── */
+  /* Testimonials — desktop-only; commented out in template until real quotes ready */
   .landing-testimonials {
     background: var(--color-surface);
+    display: none;
+  }
+
+  @media (min-width: 900px) {
+    .landing-testimonials {
+      display: block;
+    }
   }
 
   .testimonial-grid {

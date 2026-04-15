@@ -254,8 +254,10 @@
     </aside>
     {% endif %}
 
-    <!-- ── Testimonial strip — anon only, helps conversion ── -->
-    {% if not user %}
+    {# ── Testimonial strip — deactivated; re-enable when we have real quotes.
+       CSS (.landing-testimonials) is already desktop-only (hidden <900px).
+       To re-enable: remove the {# comment wrapper #} ── #}
+    {# {% if not user %}
     <section class="landing-testimonials" aria-label="Wat gebruikers zeggen">
         <div class="landing-section-inner">
             <p class="landing-section-kicker">Stemmen uit de stad</p>
@@ -293,7 +295,7 @@
             </div>
         </div>
     </section>
-    {% endif %}
+    {% endif %} #}
 
     <!-- ── Trust / credibility strip — everyone ── -->
     <section class="landing-trust" aria-label="Feiten over NeoDemos">
