@@ -145,8 +145,8 @@
     <!-- Chat thread (lives OUTSIDE hero; visible when data-state="chat") -->
     <div id="chat-thread" class="chat-thread" aria-live="polite" hidden></div>
 
-    <!-- Demo answer (below hero, proof of capability) -->
-    {% if not user %}
+    {# Demo answer — deactivated; re-enable by changing false to (not user). #}
+    {% if false %}
     <div class="demo-answer-card" id="demo-answer">
         {% if demo_label %}
         <div class="demo-answer-label">{{ demo_label }}</div>
@@ -239,8 +239,8 @@
     <div id="document-results"></div>
 
 
-    <!-- Subscription teaser — visible only in initial state, tucked just above the nudges -->
-    {% if not user %}
+    {# Subscription teaser — deactivated; re-enable by changing false to (not user). #}
+    {% if false %}
     <aside class="subscription-teaser" aria-label="Abonnement preview">
         <div class="subscription-teaser-inner">
             <p class="subscription-teaser-kicker">Tijdens beta gratis</p>
