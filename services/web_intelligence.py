@@ -55,6 +55,7 @@ FORMAAT:
 - Tijdlijnen: chronologische opsomming.
 - Eindig altijd met een genummerde bronnenlijst met document-titels en datums.
 - Als je geen relevante resultaten vindt, zeg dat eerlijk — geen speculatie.
+- Gebruik GEEN emoji's in koppen of tekst. Houd de opmaak sober en editorial — alleen tekst, markdown en eventueel tabellen.
 
 TOOL-STRATEGIE:
 - Begin met de meest specifieke tool voor de vraag.

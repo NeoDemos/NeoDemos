@@ -874,36 +874,36 @@ Gebruik de 'Extracted Facts' en 'Debate Map' om een gestructureerd rapport te ma
 
 ### DE 10 VERPLICHTE SECTIES (Gebruik exact deze headers):
 
-1. # 📅 Context & Vorige bespreking
+1. # Context & Vorige bespreking
 Schrijf een feitelijke inleiding over de voorgeschiedenis van dit dossier.
 
-2. # 📌 Argumenten & Hoofdpunten
+2. # Argumenten & Hoofdpunten
 Lijst van de belangrijkste inhoudelijke punten en argumenten uit de stukken.
 
-3. # 🚩 Wat vindt {party} van dit onderwerp?
+3. # Wat vindt {party} van dit onderwerp?
 Analyseer hoe dit onderwerp aansluit bij de waarden en standpunten van {party}. 
 **EIS**: Inclusief letterlijke citaten (verbatim) van raadsleden, commissieleden of eerdere voorstellen van {party} over dit specifieke onderwerp indien deze in de bronnen voorkomen.
 
-4. # 📄 Wat houdt het voorstel precies in?
+4. # Wat houdt het voorstel precies in?
 Feitelijke, technische samenvatting van het voorliggende besluit of rapport.
 
-5. # 🚀 Vervolg
+5. # Vervolg
 Wat zijn de procedurele volgende stappen? Wordt het besproken als debat, hamerstuk, of ter kennisname?
 
-6. # 📈 Sterke punten
+6. # Sterke punten
 Positieve elementen en kansen die worden genoemd of passen bij {party}.
 
-7. # 📉 Kritische punten
+7. # Kritische punten
 Diepere duik in kritieke details, risico's, technische mitsen en maren of elementen waar {party} kritisch op is.
 
-8. # ❓ Vragen voor de Wethouder / Commissie
+8. # Vragen voor de Wethouder / Commissie
 Lijst met scherpe, concrete vragen die gesteld moeten worden tijdens het debat.
 
-9. # 🎤 Bijdrage / Spreektekst
+9. # Bijdrage / Spreektekst
 Voorzitter,
 Schrijf een tekstueel concept voor de inbreng in de raad/commissie over dit onderwerp. Begin direct na 'Voorzitter,'.
 
-10. # 💰 Bijlage: Financieel Overzicht & Tijdlijn
+10. # Bijlage: Financieel Overzicht & Tijdlijn
 PLAATS HIER DE TABEL. Gebruik kolommen: | Datum | Gebeurtenis | Bedrag | Bron |
 
 ### STRIKTE REGELS VOOR OUTPUT:
@@ -1306,36 +1306,36 @@ Gebruik de 'Extracted Facts' en 'Debate Map' om een gestructureerd rapport te ma
 
 ### DE 10 VERPLICHTE SECTIES (Gebruik exact deze headers):
 
-1. # 📅 Context & Vorige bespreking
+1. # Context & Vorige bespreking
 Schrijf een feitelijke inleiding over de voorgeschiedenis van dit dossier.
 
-2. # 📌 Argumenten & Hoofdpunten
+2. # Argumenten & Hoofdpunten
 Lijst van de belangrijkste inhoudelijke punten en argumenten uit de stukken.
 
-3. # 🚩 Wat vindt {party} van dit onderwerp?
+3. # Wat vindt {party} van dit onderwerp?
 Analyseer hoe dit onderwerp aansluit bij de waarden en standpunten van {party}.
 **EIS**: Inclusief letterlijke citaten (verbatim) van raadsleden, commissieleden of eerdere voorstellen van {party} over dit specifieke onderwerp indien deze in de bronnen voorkomen.
 
-4. # 📄 Wat houdt het voorstel precies in?
+4. # Wat houdt het voorstel precies in?
 Feitelijke, technische samenvatting van het voorliggende besluit of rapport.
 
-5. # 🚀 Vervolg
+5. # Vervolg
 Wat zijn de procedurele volgende stappen? Wordt het besproken als debat, hamerstuk, of ter kennisname?
 
-6. # 📈 Sterke punten
+6. # Sterke punten
 Positieve elementen en kansen die worden genoemd of passen bij {party}.
 
-7. # 📉 Kritische punten
+7. # Kritische punten
 Diepere duik in kritieke details, risico's, technische mitsen en maren of elementen waar {party} kritisch op is.
 
-8. # ❓ Vragen voor de Wethouder / Commissie
+8. # Vragen voor de Wethouder / Commissie
 Lijst met scherpe, concrete vragen die gesteld moeten worden tijdens het debat.
 
-9. # 🎤 Bijdrage / Spreektekst
+9. # Bijdrage / Spreektekst
 Voorzitter,
 Schrijf een tekstueel concept voor de inbreng in de raad/commissie over dit onderwerp. Begin direct na 'Voorzitter,'.
 
-10. # 💰 Bijlage: Financieel Overzicht & Tijdlijn
+10. # Bijlage: Financieel Overzicht & Tijdlijn
 PLAATS HIER DE TABEL. Gebruik kolommen: | Datum | Gebeurtenis | Bedrag | Bron |
 
 ### STRIKTE REGELS VOOR OUTPUT:
