@@ -288,9 +288,10 @@ REGISTRY: dict[str, ToolSpec] = {
         summary="Eén specifieke vergadering ophalen met volledige agenda + documenten (per id of exacte datum).",
         ai_description=(
             "Geeft de VOLLEDIGE AGENDA van exact ÉÉN raads- of commissievergadering: alle "
-            "agendapunten (met geneste sub-items), de commissie-naam, en tot 10 bijbehorende "
-            "documenten (moties, raadsvoorstellen, brieven). Input is een `vergadering_id` "
-            "OF een exacte datum `JJJJ-MM-DD`.\n"
+            "agendapunten (met geneste sub-items), de commissie-naam, en ALLE bijbehorende "
+            "documenten (moties, raadsvoorstellen, brieven) inline onder elk agendapunt plus "
+            "een totaallijst onderaan. Input is een `vergadering_id` OF een exacte datum "
+            "`JJJJ-MM-DD`.\n"
             "\n"
             "Gebruik deze tool wanneer:\n"
             "- De gebruiker de agenda of bijlagen van een BEKENDE vergaderdatum wil inzien.\n"

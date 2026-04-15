@@ -992,6 +992,25 @@ def haal_vergadering_op(
     if not meeting:
         return "Vergadering niet gevonden."
 
+    # Collect documents: they live under meeting['agenda'][i]['documents']
+    # and ['sub_items'][j]['documents'], NOT at meeting['documents'].
+    # Prior bug: reading meeting.get("documents", []) always returned [] →
+    # LLM concluded "vergadering staat nog niet in de database".
+    all_docs: list[dict] = []
+    seen_ids: set = set()
+
+    def _collect(item: dict) -> list[dict]:
+        out = []
+        for d in item.get("documents", []) or []:
+            did = d.get("id")
+            if did and did in seen_ids:
+                continue
+            if did:
+                seen_ids.add(did)
+            out.append(d)
+            all_docs.append(d)
+        return out
+
     lines = [
         f"## {meeting.get('name', 'Vergadering')}",
         f"**Datum:** {(meeting.get('start_date') or '')[:10]}",
@@ -1004,14 +1023,21 @@ def haal_vergadering_op(
         num = item.get("number") or ""
         name = item.get("name") or ""
         lines.append(f"- **{num}** {name}")
+        for d in _collect(item):
+            lines.append(f"    - 📄 {d.get('name', 'Document')} `id={d.get('id')}`")
         for sub in item.get("sub_items", []):
             lines.append(f"  - {sub.get('name') or ''}")
+            for d in _collect(sub):
+                lines.append(f"      - 📄 {d.get('name', 'Document')} `id={d.get('id')}`")
 
-    docs = meeting.get("documents", [])
-    if docs:
-        lines.append(f"\n### Documenten ({len(docs)})")
-        for d in docs[:10]:
-            lines.append(f"- [{d.get('name', 'Document')}] id={d.get('id')}")
+    if all_docs:
+        lines.append(f"\n### Alle documenten ({len(all_docs)})")
+        for d in all_docs[:50]:
+            lines.append(f"- {d.get('name', 'Document')} `id={d.get('id')}`")
+        if len(all_docs) > 50:
+            lines.append(f"- … en nog {len(all_docs) - 50} verder — gebruik `lees_fragment` per id.")
+    else:
+        lines.append("\n_(Geen documenten gekoppeld aan deze vergadering.)_")
 
     return "\n".join(lines)
 
