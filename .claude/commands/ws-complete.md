@@ -29,6 +29,9 @@ python scripts/coord/append_event.py \
 # 2. Archive the handoff file + rewrite all inbound refs
 python scripts/coord/archive_ws.py --ws $1
 
+# 2b. Regenerate README index table + parallelism map + eval gate
+python scripts/coord/update_readme_index.py
+
 # 3. Rebuild the dashboard
 python scripts/coord/rebuild_state.py
 

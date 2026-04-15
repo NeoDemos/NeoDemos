@@ -1,7 +1,7 @@
 # WS1 — GraphRAG Retrieval
 
 > **Priority:** 1 (highest impact, MAAT cannot match)
-> **Status (2026-04-14):** Phase 0 `done` · Phase A bis (VN provenance) `done` · Phase 1 prep `done` (scripts hardened, commits `d6e1d58` + `44c87d5`) · Phase 1 execution `blocked` — waiting on WS7 (OCR), WS11 (corpus gaps), WS12 (virtual notulen + `staging.meetings.quality_score`). WS10 (table-rich) is no longer a blocker.
+> **Status (2026-04-14):** Phase 0 `done` · Phase A bis (VN provenance) `done` · Phase 1 prep `done` (scripts hardened, commits `d6e1d58` + `44c87d5`) · Phase 1 execution `blocked` — waiting on WS11 (corpus gaps). WS7 (OCR) done; WS12 deferred (VN 2025+2026 only); WS10 (table-rich) no longer a blocker.
 > **Owner:** `unassigned`
 > **Target release:** v0.2.0
 > **Master plan section:** [V0_2_BEAT_MAAT_PLAN.md §3](../architecture/V0_2_BEAT_MAAT_PLAN.md)
@@ -12,9 +12,9 @@
 Today we have 57K KG edges, a politician registry, a domain gazetteer, and 3.3M entity-mentions — and we never query any of it at retrieval time. This workstream lights up the graph: enriches it to ~500K edges via Flair NER + Gemini, exposes it via [`services/graph_retrieval.py`](../../services/graph_retrieval.py) (built in Phase 0, 2026-04-12), wires graph traversal as the 5th retrieval stream, and ships two flagship MCP tools (`traceer_motie`, `vergelijk_partijen`) that no Dutch competitor can match. Phase A bis (added 2026-04-14) tags every edge with provenance metadata so virtual notulen (WS12) can be included in the KG without compromising production-grade output quality.
 
 ## Dependencies
-- **WS7 (OCR recovery)** must complete first — enrichment must operate on clean source text, not garbled OCR
+- **WS7 (OCR recovery)** ✅ done (2026-04-14) — source text is clean
 - **WS11 (corpus completeness)** must complete first — no point enriching an incomplete corpus
-- **WS12 (virtual notulen)** must complete first AND `staging.meetings.quality_score` must be populated for every VN meeting — WS1's provenance layer depends on it (see Phase A section "VN Provenance Layer" below)
+- **WS12 (virtual notulen)** ~~must complete first~~ — **deferred to v0.3/v0.4** (2026-04-14). VN provenance will cover 2025+2026 only. The KG enrichment can proceed without waiting for the full 2018–2024 backfill.
 - **Phase B (graph service + MCP tools) depends on phase A finishing**
 - **WS3 (Journey) depends on this workstream's cross-document motie↔notulen linking**
 - Memory to read first:

@@ -38,19 +38,19 @@ When a workstream finishes:
 <!-- STATE-AUTO-START -->
 | # | File | Title | Priority | Status | Depends on |
 |---|---|---|---|---|---|
-| WS1 | [`WS1_GRAPHRAG.md`](WS1_GRAPHRAG.md) | GraphRAG retrieval (Flair NER + Gemini enrichment + VN provenance) | 1 | **blocked** — waiting on WS7, WS11, WS12 | WS7, WS11, WS12 |
+| WS1 | [`WS1_GRAPHRAG.md`](WS1_GRAPHRAG.md) | GraphRAG retrieval (Flair NER + Gemini enrichment + VN provenance) | 1 | **blocked** — waiting on WS11 | WS7, WS11 |
 | WS8 | [`done/WS8_FRONTEND_REDESIGN.md`](done/WS8_FRONTEND_REDESIGN.md) | Frontend redesign: design system, landing, calendar | 1 | **done** — shipped 2026-04-12 | — |
 | WS9 | [`done/WS9_WEB_INTELLIGENCE.md`](done/WS9_WEB_INTELLIGENCE.md) | Web intelligence: MCP-as-backend, Sonnet tool_use, SSE | 1 | **done** — shipped 2026-04-13 | — |
-| WS11 | [`WS11_CORPUS_COMPLETENESS.md`](WS11_CORPUS_COMPLETENESS.md) | Corpus completeness 2018-2026 (ORI gap + metadata) | 1 | **in progress** | — |
-| WS12 | [`WS12_VIRTUAL_NOTULEN_BACKFILL.md`](WS12_VIRTUAL_NOTULEN_BACKFILL.md) | Virtual notulen backfill & production hardening | 1 | **in progress** | — |
+| WS11 | [`WS11_CORPUS_COMPLETENESS.md`](WS11_CORPUS_COMPLETENESS.md) | Corpus completeness 2018-2026 (ORI gap + metadata) | 1 | **in progress** — claimed via /ws-claim — resuming phase 6 (where we left off) | — |
+| WS12 | [`WS12_VIRTUAL_NOTULEN_BACKFILL.md`](WS12_VIRTUAL_NOTULEN_BACKFILL.md) | Virtual notulen backfill & production hardening | 1 | **paused** — Deferred to v0.3/v0.4: Erik Verweij (only user so far) conf… | — |
 | WS13 | [`WS13_MULTI_GEMEENTE_PIPELINE.md`](WS13_MULTI_GEMEENTE_PIPELINE.md) | Multi-gemeente pipeline: tenant-aware ingestion | 1 | **blocked** — waiting on WS5a | WS5a |
 | WS14 | [`WS14_CALENDAR_QUALITY.md`](WS14_CALENDAR_QUALITY.md) | Calendar quality & bijlage reconciliation | 1 | **blocked** — waiting on WS8f | WS8f |
 | WS15 | [`WS15_MOTIE_STEMMEN.md`](WS15_MOTIE_STEMMEN.md) | Per-party voting data (motie_stemmen + zoek_stemgedrag) | 1.5 | **available** — Initial seed: not_started | — |
 | WS2 | [`done/WS2_FINANCIAL.md`](done/WS2_FINANCIAL.md) | Trustworthy financial analysis | 2 | **done** — shipped 2026-04-12 | — |
 | WS2b | [`WS2b_IV3_TAAKVELD.md`](WS2b_IV3_TAAKVELD.md) | IV3 taakveld FK backfill | 2 | **available** | WS2 |
-| WS8f | [`WS8f_ADMIN_CMS.md`](WS8f_ADMIN_CMS.md) | Admin panel + CMS + GrapeJS editor | 2 | **in progress** — Shipped 2026-04-13, pending Dennis QA via /ws-complete | WS8 |
+| WS8f | [`WS8f_ADMIN_CMS.md`](WS8f_ADMIN_CMS.md) | Admin panel + CMS + GrapeJS editor | 2 | **in progress** — Phase 7 — rejection follow-up: page creation + asset upload… | WS8 |
 | WS16 | [`WS16_MCP_MONITORING.md`](WS16_MCP_MONITORING.md) | MCP monitoring & observability | 2 | **in progress** — Initial seed: Phase 1 shipped 2026-04-14 | WS4 |
-| WS7 | [`done/WS7_OCR_RECOVERY.md`](done/WS7_OCR_RECOVERY.md) | OCR recovery for moties/amendementen | 2.5 | **in progress** | — |
+| WS7 | [`done/WS7_OCR_RECOVERY.md`](done/WS7_OCR_RECOVERY.md) | OCR recovery for moties/amendementen | 2.5 | **done** — shipped 2026-04-14 | — |
 | WS3 | [`WS3_JOURNEY.md`](WS3_JOURNEY.md) | Document journey timelines | 3 | **blocked** — waiting on WS1 | WS1 |
 | WS4 | [`done/WS4_MCP_DISCIPLINE.md`](done/WS4_MCP_DISCIPLINE.md) | Best-in-class MCP surface | 4 | **done** — shipped 2026-04-13 | — |
 | WS17 | [`WS17_FEEDBACK_LOOP.md`](WS17_FEEDBACK_LOOP.md) | Production feedback loop (detect → digest → close-the-loop) | 4 | **available** — Initial seed: not_started, v0.2.1 scope | WS4 |
@@ -68,9 +68,9 @@ When a workstream finishes:
 
 **WS4 reliability follow-ups opened 2026-04-14** after two same-day MCP outages (routing double-mount bug + `ALTER TABLE users` holding an exclusive lock that stalled every `validate_api_token` call). Two items now queued in [WS4 §Post-ship reliability follow-ups](done/WS4_MCP_DISCIPLINE.md#post-ship-reliability-follow-ups-opened-2026-04-14): (1) 3 s `statement_timeout` on the auth path so blocked queries fail fast, (2) promote MCP from Kamal accessory to service role so every MCP deploy is blue-green zero-downtime (config already staged in `config/deploy.yml`). Rules distilled into [`feedback_mcp_uptime.md`](../../.claude/projects/-Users-dennistak-Documents-Final-Frontier-NeoDemos/memory/feedback_mcp_uptime.md).
 
-**WS7 + WS11 + WS12 are the current active track.** All three must complete before WS1 Phase A (enrichment) starts — enriching garbled text or an incomplete corpus wastes Gemini spend and produces lower-quality KG edges. **WS12 specifically:** `staging.meetings.quality_score` must be populated for every VN meeting (WS1's new provenance layer multiplies edge confidence by `source_quality`; missing scores default to 0.5 conservative).
+**WS11 is the remaining Track A blocker.** WS7 ✅ done. WS12 deferred to v0.3/v0.4 (VN phases 1+4 live; 2018-2024 backfill is a nice-to-have, not a WS1 prerequisite). WS1 cannot start until WS11 finishes — enriching incomplete corpus wastes Gemini spend ($90-130) and requires re-run.
 
-**WS1 Phase 1 execution is ready to fire the moment WS7/WS11/WS12 finish.** All code is shipped and hardened (Phase 0 + Phase A bis + Phase 1 prep, commits `ce64706` → `cf43441` → `d6e1d58` → `44c87d5`). See [`WS1_GRAPHRAG.md` § Phase 1 Execution Runbook](WS1_GRAPHRAG.md#phase-1-execution-runbook-agent-pickup-point) for the 10-step command sequence a fresh agent can run cold. Script pre-flight checks auto-fail on incomplete upstream state so execution can't misfire.
+**WS1 Phase 1 execution is ready to fire the moment WS11 finishes.** All code is shipped and hardened (Phase 0 + Phase A bis + Phase 1 prep, commits `ce64706` → `cf43441` → `d6e1d58` → `44c87d5`). See [`WS1_GRAPHRAG.md` § Phase 1 Execution Runbook](WS1_GRAPHRAG.md#phase-1-execution-runbook-agent-pickup-point) for the 10-step command sequence a fresh agent can run cold. Script pre-flight checks auto-fail on incomplete upstream state so execution can't misfire.
 
 **WS1 VN provenance addendum (2026-04-14):** Dennis surfaced the dilemma that VN data quality is uncertain but committee coverage requires VN inclusion. Resolution: standard provenance-aware KG pattern (Facebook KG / NELL). Every `kg_relationships` row gets `metadata.source` + `source_quality`; effective confidence = `base * source_quality`; query-time killswitch via existing `INCLUDE_VIRTUAL_NOTULEN` env var, now extended to graph_walk. Detailed in [`WS1_GRAPHRAG.md` § Phase A bis](WS1_GRAPHRAG.md#phase-a-bis--vn-provenance-layer-added-2026-04-14). No new workstream — folded into WS1 because it's a write-time + query-time hook on existing scripts.
 
@@ -84,34 +84,32 @@ When a workstream finishes:
 
 ## Parallelism map
 
-> **Updated 2026-04-13** — reflects WS2 shipped, WS8a-e shipped, WS7/10/11/12 active.
-
 ```
 v0.2.0 — three parallel tracks
 
-  TRACK A (ACTIVE NOW): Corpus quality — WS7, WS11, WS12
+  TRACK A (ACTIVE NOW): Corpus quality — WS11
   ┌─────────────────────────────────────────────────────────────────┐
-  │  All three run in parallel NOW. All must finish before WS1.      │
-  │  WS10 is paused (targeted 20-doc run only, not a blocker).       │
+  │  WS11 running NOW. Must finish before WS1 can start.             │
+  │  WS10 paused (targeted 20-doc run only, not a blocker).          │
   │                                                                  │
-  │  ┌──────────────┐  ┌──────────────┐  ┌───────────────────────┐  │
-  │  │  WS7  (run)  │  │ WS11  (run)  │  │     WS12  (run)       │  │
-  │  │ OCR recovery │  │ Corpus gaps  │  │   Virtual Notulen     │  │
-  │  │ 2,700 docs   │  │ ORI backfill │  │   backfill + harden   │  │
-  │  └──────┬───────┘  └──────┬───────┘  └──────────┬────────────┘  │
-  │         │                 │                      │               │
-  │         └─────────────────┴──────────────────────┘               │
-  │                          │                                       │
-  │                          ▼                                       │
+  │  ┌──────────────┐  ┌──────────────┐                             │
+  │  │ WS7 ✅ DONE  │  │ WS11  (run)  │                             │
+  │  │ OCR recovery │  │ Corpus gaps  │                             │
+  │  │ 2026-04-14   │  │ ORI backfill │                             │
+  │  └──────┬───────┘  └──────┬───────┘                             │
+  │         │                 │                                      │
+  │         └────────────────┘                                       │
+  │                  │                                               │
+  │                  ▼                                               │
   │  ┌──────────────────────────────────────────────────────────┐    │
   │  │  WS1 Phase A — Flair NER + Gemini enrichment             │    │
   │  │  ~500K KG edges, motie↔notulen linking                   │    │
-  │  │  (blocked until Track A corpus work completes)            │    │
+  │  │  (blocked until WS11 completes)                          │    │
   │  └──────────┬───────────────────────────────────────────────┘    │
   │             │                                                    │
   │             ▼                                                    │
   │  ┌──────────────────────────────────────────────────────────┐    │
-  │  │  WS1 Phase B — graph_retrieval.py + MCP tools             │    │
+  │  │  WS1 Phase B — graph_retrieval.py + MCP tools            │    │
   │  │  traceer_motie, vergelijk_partijen                        │    │
   │  └──────────┬───────────────────────────────────────────────┘    │
   │             │                                                    │
@@ -130,9 +128,9 @@ v0.2.0 — three parallel tracks
   │  No dependencies on Track A. Start when capacity allows.         │
   │                                                                  │
   │  ┌──────────────┐  ┌────────────┐  ┌────────┐  ┌────────────┐  │
-  │  │ WS2 ✅ DONE  │  │    WS4     │  │  WS6   │  │    WS5a    │  │
+  │  │ WS2 ✅ DONE  │  │ WS4 ✅DONE │  │  WS6   │  │    WS5a    │  │
   │  │  Financial   │  │  MCP disc. │  │ Summary│  │  Nightly   │  │
-  │  │ (2026-04-12) │  │            │  │        │  │  pipeline  │  │
+  │  │ (2026-04-12) │  │(2026-04-14)│  │        │  │  pipeline  │  │
   │  └──────────────┘  └────────────┘  └────────┘  └────────────┘  │
   └─────────────────────────────────────────────────────────────────┘
 
@@ -145,17 +143,16 @@ v0.2.0 — three parallel tracks
   │  └──────────────────────────────────────────────────────────┘    │
   │                                                                  │
   │  ┌──────────────────────┐   ┌──────────────────────────────┐    │
-  │  │  WS9 ✅ DONE         │   │  WS8f ✅ SHIPPED (review)    │    │
-  │  │  Sonnet+tool_use     │   │  Admin CMS + GrapeJS +       │    │
-  │  │  deployed 2026-04-13 │   │  router/CSS refactor (4/13)  │    │
+  │  │  WS9 ✅ DONE         │   │  WS8f ⚠️ QA REJECTED         │    │
+  │  │  Sonnet+tool_use     │   │  Admin CMS — direction TBD   │    │
+  │  │  deployed 2026-04-13 │   │  (GrapeJS UX insufficient)   │    │
   │  └──────────────────────┘   └──────────────┬───────────────┘    │
-  │                                            │                     │
-  │                                            ▼                     │
+  │                                            │                    │
+  │                                            ▼                    │
   │                              ┌──────────────────────────────┐    │
   │                              │  WS14 — Calendar quality     │    │
   │                              │  bijlage reconciliation +    │    │
-  │                              │  dedup (planned 2026-04-14)  │    │
-  │                              │  blocks on WS8f QA for D     │    │
+  │                              │  dedup                       │    │
   │                              └──────────────┬───────────────┘    │
   │                                             │                    │
   │                                             ▼                    │
@@ -169,11 +166,60 @@ v0.2.1 — search-only beyond Rotterdam
   └──────────────┘  └──────────────┘  └──────────────┘
 ```
 
-**Critical path (Track A):** WS7 + WS11 + WS12 (parallel, NOW) → WS1 Phase A (enrichment) → WS1 Phase B (graph svc + MCP) → WS3.
-**Critical path (Track C):** WS9 ✅ done, WS8f in review. **Track C now gated on WS14** (calendar quality / bijlage reconciliation) — press outreach waits until /calendar shows complete, non-duplicated document data for 2023-2026.
-**Active blockers:** WS1 is explicitly held until WS7/11/12 finish — enriching on garbled or incomplete text wastes Gemini spend ($90-130) and requires costly re-run.
+> Node colours below are auto-generated by `scripts/coord/update_readme_index.py` — do not edit between the markers.
+
+<!-- PARALLELISM-AUTO-START -->
+```mermaid
+flowchart TD
+
+  subgraph A["TRACK A — Corpus quality (critical path)"]
+    WS7["WS7 · OCR recovery"]
+    WS11["WS11 · Corpus gaps"]
+    WS1A["WS1 Phase A · Flair NER + Gemini"]
+    WS1B["WS1 Phase B · graph svc + MCP tools"]
+    WS3["WS3 · Journey timelines"]
+    WS7  --> WS1A
+    WS11 --> WS1A
+    WS1A --> WS1B
+    WS1B --> WS3
+  end
+
+  subgraph B["TRACK B — Independent workstreams"]
+    WS2["WS2 · Financial analysis"]
+    WS4["WS4 · MCP discipline"]
+    WS6["WS6 · Summarization"]
+    WS5a["WS5a · Nightly pipeline"]
+  end
+
+  subgraph C["TRACK C — Public launch"]
+    WS8ae["WS8a-e · Design system"]
+    WS9["WS9 · Web intelligence"]
+    WS8f["WS8f · Admin CMS"]
+    WS14["WS14 · Calendar quality"]
+    WS8ae --> WS8f
+    WS8f  --> WS14
+  end
+
+  classDef done      fill:#2da44e,color:#fff,stroke:#2da44e
+  classDef running   fill:#d29922,color:#fff,stroke:#d29922
+  classDef blocked   fill:#6e7781,color:#fff,stroke:#6e7781
+  classDef available fill:#0969da,color:#fff,stroke:#0969da
+  classDef rejected  fill:#cf222e,color:#fff,stroke:#cf222e
+  classDef paused    fill:#8250df,color:#fff,stroke:#8250df
+  classDef deferred  fill:#656d76,color:#fff,stroke:#656d76
+  classDef notstarted fill:#f6f8fa,color:#333,stroke:#d0d7de
+
+  class WS1A,WS1B,WS3,WS14 blocked
+  class WS7,WS2,WS4,WS8ae,WS9 done
+  class WS11,WS6,WS5a,WS8f running
+```
+<!-- PARALLELISM-AUTO-END -->
+
+**Critical path (Track A):** WS7 ✅ done → WS11 (running, NOW) → WS1 Phase A (enrichment) → WS1 Phase B (graph svc + MCP) → WS3. *(WS12 deferred; not a WS1 blocker.)*
+**Critical path (Track C):** WS9 ✅ done, WS8f ⚠️ QA rejected (CMS direction TBD). **Track C gated on WS14** (calendar quality / bijlage reconciliation) — press outreach waits until /calendar shows complete, non-duplicated document data for 2023-2026.
+**Active blockers:** WS1 held until WS11 finishes — enriching garbled/incomplete text wastes Gemini spend ($90-130) and requires re-run.
 **WS10 removed from critical path** — infrastructure done, targeted run only, not a WS1 dependency.
-**No blockers for:** WS4, WS5a — these can start independently when agent capacity allows. **WS6 is in progress** (Phase 3 backfill running; 25,500 short summaries queued for DB write, ~95% `verified=True` on sample).
+**No blockers for:** WS5a (WS4 ✅ done 2026-04-14). **WS6 is in progress** (Phase 3 backfill running; ~95% `verified=True` on sample).
 
 ---
 
@@ -183,41 +229,41 @@ v0.2.1 — search-only beyond Rotterdam
 
 | Metric | Source | Target | Status |
 |---|---|---|---|
-| OCR recovery | WS7 BM25 re-test | BM25 hit rate ≥ 95% (from 77.5%) | ⏳ running |
+| OCR recovery | WS7 BM25 re-test | BM25 hit rate ≥ 95% (from 77.5%) | ✅ done 2026-04-14 — BM25 83.7% (up from 77.6%); 4,192 docs recovered; embed backfill in WS11 <!-- EVAL:WS7 --> |
 | Table-rich extraction | WS10 targeted run | ~20 high-ROI docs re-processed, quality gate passed | ⏳ paused — targeted run pending |
-| Corpus completeness | WS11 ORI audit | schriftelijke_vragen gap < 5% (from 96%) | ✅ 0 gap (3,851 in DB); P1 types ingest running |
-| Virtual notulen | WS12 promotion | 2025 promoted, 2018-2024 backfill complete | ⏳ running |
-| Metadata backfill | WS11a | All 30 named types labelled; NULL = unidentifiable only | ✅ 62,627 classified; ~26,754 NULL (genuinely unidentifiable) |
+| Corpus completeness | WS11 ORI audit | schriftelijke_vragen gap < 5% (from 96%) | ✅ 0 gap (3,851 in DB); P1 types ingest running <!-- EVAL:WS11 --> |
+| Virtual notulen | WS12 promotion | 2025 promoted, 2018-2024 backfill complete | ⏳ in progress <!-- EVAL:WS12 --> |
+| Metadata backfill | WS11a | All 30 named types labelled; NULL = unidentifiable only | ✅ 62,627 classified; ~26,754 NULL (genuinely unidentifiable) <!-- EVAL:WS11 --> |
 
 ### Track A — Data quality (must pass before tag)
 
 | Metric | Source | Target | Status |
 |---|---|---|---|
-| Completeness | [rag_evaluator/](../../rag_evaluator/) | ≥ 3.5 (from 2.75) | ❌ blocked on WS1 |
-| Faithfulness | [rag_evaluator/](../../rag_evaluator/) | ≥ 4.5 (no regression) | ❌ blocked on WS1 |
-| Numeric accuracy | WS2 financial benchmark | **100%** on 30 questions | ✅ shipped |
-| IV3 taakveld coverage | WS2b backfill | ≥ 80% of financial_lines | ❌ not started |
-| MCP bug backlog cleared | WS4 blockers B1–B8 | All 8 bugs fixed before eval run | ❌ not started |
-| Nightly reliability | WS5a smoke test logs | 14 consecutive clean days | ❌ not started |
-| Source-spans strip test | WS6 verifier | Pass on 50 random docs | ⏳ Phase 3 running — sample shows ~4.4% `verified=False` (reranker 429'd, content still saved) |
-| Tool-description uniqueness | WS4 startup check | No pair > 0.85 cosine | ❌ not started |
-| KG Layer 2 size | WS1 quality audit | ≥ 500K relationship edges | ❌ blocked on WS1 |
+| Completeness | [rag_evaluator/](../../rag_evaluator/) | ≥ 3.5 (from 2.75) | ❌ blocked on WS1 <!-- EVAL:WS1 --> |
+| Faithfulness | [rag_evaluator/](../../rag_evaluator/) | ≥ 4.5 (no regression) | ❌ blocked on WS1 <!-- EVAL:WS1 --> |
+| Numeric accuracy | WS2 financial benchmark | **100%** on 30 questions | ✅ shipped <!-- EVAL:WS2 --> |
+| IV3 taakveld coverage | WS2b backfill | ≥ 80% of financial_lines | ❌ not started <!-- EVAL:WS2b --> |
+| MCP bug backlog cleared | WS4 blockers B1–B8 | All 8 bugs fixed before eval run | ✅ shipped 2026-04-14 <!-- EVAL:WS4 --> |
+| Nightly reliability | WS5a smoke test logs | 14 consecutive clean days | ❌ not started <!-- EVAL:WS5a --> |
+| Source-spans strip test | WS6 verifier | Pass on 50 random docs | ⏳ Phase 3 running — sample shows ~4.4% `verified=False` (reranker 429'd, content still saved) <!-- EVAL:WS6 --> |
+| Tool-description uniqueness | WS4 startup check | No pair > 0.85 cosine | ✅ shipped 2026-04-14 <!-- EVAL:WS4 --> |
+| KG Layer 2 size | WS1 quality audit | ≥ 500K relationship edges | ❌ blocked on WS1 <!-- EVAL:WS1 --> |
 
 ### Track C — Public launch (must pass before press outreach)
 
 | Metric | Source | Target | Status |
 |---|---|---|---|
-| Demo answer quality | Manual review by Dennis | Impressive enough to be first thing a journalist sees | ⏳ WS9 live — needs Dennis review |
-| Lighthouse Performance | `lighthouse https://neodemos.nl` | ≥ 90 | ✅ WS8 shipped |
-| Lighthouse Accessibility | `lighthouse https://neodemos.nl` | ≥ 95 (WCAG AA) | ✅ WS8 shipped |
-| WS9 MCP quality parity | Side-by-side comparison (web vs MCP) | ≥ 90% answer quality vs direct MCP | ⏳ WS9 live — 20-query eval pending |
-| Mobile search above fold | Playwright screenshot at 375px | Search bar + CTA visible without scroll | ✅ WS8 shipped |
-| Demo answer cached | `GET /` response time | < 200ms (pre-rendered, no API call) | ⏳ demo cache wired — verify in prod |
-| Landing headline rotation | Config check | `LANDING_HEADLINE` env var wired, weekly swap documented | ✅ WS8 shipped |
-| Calendar bijlage visibility | WS14 A1 re-run | % of 2023-2026 meetings (with ≥1 agenda_item, excl. procedural-only) showing ≥1 bijlage ≥ **95%** | ❌ blocked on WS14 |
-| Calendar duplicate meetings | WS14 A7 re-run | 0 logical-duplicate meetings on /calendar | ❌ blocked on WS14 |
-| Calendar duplicate docs | WS14 walk of 2023-2026 meetings | 0 documents duplicated within a single agenda item | ❌ blocked on WS14 (C1 hotfix removes most) |
-| Calendar annotatie/bijlage split | Manual UI smoke on 20 meetings | Bijlagen rendered in prominent section; annotaties de-emphasized | ❌ blocked on WS14 Phase D |
+| Demo answer quality | Manual review by Dennis | Impressive enough to be first thing a journalist sees | ✅ done 2026-04-14 <!-- EVAL:WS9 --> |
+| Lighthouse Performance | `lighthouse https://neodemos.nl` | ≥ 90 | ✅ WS8 shipped <!-- EVAL:WS8 --> |
+| Lighthouse Accessibility | `lighthouse https://neodemos.nl` | ≥ 95 (WCAG AA) | ✅ WS8 shipped <!-- EVAL:WS8 --> |
+| WS9 MCP quality parity | Side-by-side comparison (web vs MCP) | ≥ 90% answer quality vs direct MCP | ✅ done 2026-04-14 <!-- EVAL:WS9 --> |
+| Mobile search above fold | Playwright screenshot at 375px | Search bar + CTA visible without scroll | ✅ WS8 shipped <!-- EVAL:WS8 --> |
+| Demo answer cached | `GET /` response time | < 200ms (pre-rendered, no API call) | ✅ done 2026-04-14 <!-- EVAL:WS9 --> |
+| Landing headline rotation | Config check | `LANDING_HEADLINE` env var wired, weekly swap documented | ✅ WS8 shipped <!-- EVAL:WS8 --> |
+| Calendar bijlage visibility | WS14 A1 re-run | % of 2023-2026 meetings (with ≥1 agenda_item, excl. procedural-only) showing ≥1 bijlage ≥ **95%** | ❌ blocked on WS14 <!-- EVAL:WS14 --> |
+| Calendar duplicate meetings | WS14 A7 re-run | 0 logical-duplicate meetings on /calendar | ❌ blocked on WS14 <!-- EVAL:WS14 --> |
+| Calendar duplicate docs | WS14 walk of 2023-2026 meetings | 0 documents duplicated within a single agenda item | ❌ blocked on WS14 (C1 hotfix removes most) <!-- EVAL:WS14 --> |
+| Calendar annotatie/bijlage split | Manual UI smoke on 20 meetings | Bijlagen rendered in prominent section; annotaties de-emphasized | ❌ blocked on WS14 Phase D <!-- EVAL:WS14 --> |
 
 ---
 

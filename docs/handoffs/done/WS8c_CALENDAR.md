@@ -20,7 +20,7 @@ Replace the calendar grid with a filterable meeting list as the default view. Ad
 You are picking up WS8c_CALENDAR for the NeoDemos project.
 
 Read these files first:
-- docs/handoffs/WS8c_CALENDAR.md (this file)
+- docs/handoffs/done/WS8c_CALENDAR.md (this file)
 - docs/handoffs/done/WS8_FRONTEND_REDESIGN.md §Phase 3 (full calendar spec)
 - templates/calendar.html (current 227-line calendar grid)
 - services/storage.py (meeting queries — need to add filtered query with counts)

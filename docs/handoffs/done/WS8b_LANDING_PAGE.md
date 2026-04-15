@@ -20,7 +20,7 @@ Strip `search.html` from 865 lines to ~200 lines. The landing page becomes 4 ele
 You are picking up WS8b_LANDING_PAGE for the NeoDemos project.
 
 Read these files first:
-- docs/handoffs/WS8b_LANDING_PAGE.md (this file)
+- docs/handoffs/done/WS8b_LANDING_PAGE.md (this file)
 - docs/handoffs/done/WS8_FRONTEND_REDESIGN.md §Phase 2 (full landing page spec)
 - templates/search.html (current 865-line template — your main target)
 - templates/base.html (should already have WS8a changes: Tailwind, new structure)

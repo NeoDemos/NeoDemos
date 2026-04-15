@@ -206,6 +206,164 @@ def summary_line(path: Path, counts: Counter) -> str:
     return f"Wrote {rel}: {total} WSs in index ({', '.join(parts)})."
 
 
+# ──────────────────────────────────────────────────────────────────────────────
+# Fix 3 — Parallelism map (Mermaid, auto-rendered between PARALLELISM-AUTO markers)
+# ──────────────────────────────────────────────────────────────────────────────
+
+PARALLELISM_SENTINEL_START = "<!-- PARALLELISM-AUTO-START -->"
+PARALLELISM_SENTINEL_END   = "<!-- PARALLELISM-AUTO-END -->"
+
+# Maps Mermaid node_id → WS ID for status lookup.
+# WS1 appears as two phase nodes but shares one status in events.jsonl.
+MERMAID_NODE_WS: list[tuple[str, str]] = [
+    ("WS7",   "WS7"),
+    ("WS11",  "WS11"),
+    ("WS1A",  "WS1"),
+    ("WS1B",  "WS1"),
+    ("WS3",   "WS3"),
+    ("WS2",   "WS2"),
+    ("WS4",   "WS4"),
+    ("WS6",   "WS6"),
+    ("WS5a",  "WS5a"),
+    ("WS8ae", "WS8"),
+    ("WS9",   "WS9"),
+    ("WS8f",  "WS8f"),
+    ("WS14",  "WS14"),
+]
+
+STATUS_TO_MERMAID_CLASS: dict[str, str] = {
+    "done":        "done",
+    "in_progress": "running",
+    "blocked":     "blocked",
+    "available":   "available",
+    "paused":      "paused",
+    "escalated":   "escalated",
+    "deferred":    "deferred",
+    "not_started": "notstarted",
+}
+
+
+def get_last_event_type(ws_id: str, events: list[dict]) -> str | None:
+    """Return the event type of the most recent event for a given WS."""
+    ws_events = [e for e in events if e.get("ws") == ws_id]
+    return ws_events[-1].get("event") if ws_events else None
+
+
+def render_mermaid_map(states: dict, events: list[dict]) -> str:
+    """Generate a Mermaid flowchart block with node styles from current WS statuses."""
+    class_groups: dict[str, list[str]] = {}
+    for node_id, ws_id in MERMAID_NODE_WS:
+        last_event = get_last_event_type(ws_id, events)
+        if last_event in ("qa_rejected", "rejected"):
+            cls = "rejected"
+        else:
+            status = states.get(ws_id, {}).get("status", "not_started")
+            cls = STATUS_TO_MERMAID_CLASS.get(status, "notstarted")
+        class_groups.setdefault(cls, []).append(node_id)
+
+    class_lines = "\n".join(
+        f"  class {','.join(nodes)} {cls}"
+        for cls, nodes in sorted(class_groups.items())
+    )
+
+    return (
+        "```mermaid\n"
+        "flowchart TD\n"
+        "\n"
+        '  subgraph A["TRACK A — Corpus quality (critical path)"]\n'
+        '    WS7["WS7 · OCR recovery"]\n'
+        '    WS11["WS11 · Corpus gaps"]\n'
+        '    WS1A["WS1 Phase A · Flair NER + Gemini"]\n'
+        '    WS1B["WS1 Phase B · graph svc + MCP tools"]\n'
+        '    WS3["WS3 · Journey timelines"]\n'
+        "    WS7  --> WS1A\n"
+        "    WS11 --> WS1A\n"
+        "    WS1A --> WS1B\n"
+        "    WS1B --> WS3\n"
+        "  end\n"
+        "\n"
+        '  subgraph B["TRACK B — Independent workstreams"]\n'
+        '    WS2["WS2 · Financial analysis"]\n'
+        '    WS4["WS4 · MCP discipline"]\n'
+        '    WS6["WS6 · Summarization"]\n'
+        '    WS5a["WS5a · Nightly pipeline"]\n'
+        "  end\n"
+        "\n"
+        '  subgraph C["TRACK C — Public launch"]\n'
+        '    WS8ae["WS8a-e · Design system"]\n'
+        '    WS9["WS9 · Web intelligence"]\n'
+        '    WS8f["WS8f · Admin CMS"]\n'
+        '    WS14["WS14 · Calendar quality"]\n'
+        "    WS8ae --> WS8f\n"
+        "    WS8f  --> WS14\n"
+        "  end\n"
+        "\n"
+        "  classDef done      fill:#2da44e,color:#fff,stroke:#2da44e\n"
+        "  classDef running   fill:#d29922,color:#fff,stroke:#d29922\n"
+        "  classDef blocked   fill:#6e7781,color:#fff,stroke:#6e7781\n"
+        "  classDef available fill:#0969da,color:#fff,stroke:#0969da\n"
+        "  classDef rejected  fill:#cf222e,color:#fff,stroke:#cf222e\n"
+        "  classDef paused    fill:#8250df,color:#fff,stroke:#8250df\n"
+        "  classDef deferred  fill:#656d76,color:#fff,stroke:#656d76\n"
+        "  classDef notstarted fill:#f6f8fa,color:#333,stroke:#d0d7de\n"
+        "\n"
+        + class_lines + "\n"
+        "```\n"
+    )
+
+
+def update_parallelism_map(text: str, states: dict, events: list[dict]) -> str:
+    """Replace the PARALLELISM-AUTO block with a freshly rendered Mermaid diagram."""
+    if PARALLELISM_SENTINEL_START not in text or PARALLELISM_SENTINEL_END not in text:
+        return text  # Markers absent — skip silently.
+    new_block = render_mermaid_map(states, events)
+    pattern = re.compile(
+        re.escape(PARALLELISM_SENTINEL_START) + r".*?" + re.escape(PARALLELISM_SENTINEL_END),
+        re.DOTALL,
+    )
+    wrapped = f"{PARALLELISM_SENTINEL_START}\n{new_block}{PARALLELISM_SENTINEL_END}"
+    return pattern.sub(wrapped, text, count=1)
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Fix 4 — Eval gate (WS-derived status cells, auto-updated via <!-- EVAL:WS_ID -->)
+# ──────────────────────────────────────────────────────────────────────────────
+
+_EVAL_MARKER_RE = re.compile(r"<!-- EVAL:(\w+) -->")
+
+
+def update_eval_gate(text: str, states: dict) -> str:
+    """Auto-tick eval gate cells marked with <!-- EVAL:WS_ID -->.
+
+    Rule: if the WS is done and the cell content does NOT already start with
+    '✅', replace the content with '✅ done YYYY-MM-DD'. Cells that already
+    start with '✅' are left untouched (preserves manually added measurement
+    detail). Rows whose WS is not done are never modified.
+    """
+    lines = text.split("\n")
+    result = []
+    for line in lines:
+        m = _EVAL_MARKER_RE.search(line)
+        if m:
+            ws_id = m.group(1)
+            state = states.get(ws_id, {})
+            if state.get("status") == "done":
+                completed_ts = (state.get("completed_ts") or "")[:10] or "done"
+                cell_pat = re.compile(
+                    r"(\|\s*)([^|]*?)(<!-- EVAL:" + re.escape(ws_id) + r" -->)(\s*\|)"
+                )
+
+                def _replace(cm: re.Match, _ts: str = completed_ts) -> str:
+                    content = cm.group(2).strip()
+                    if content.startswith("\u2705"):  # ✅
+                        return cm.group(0)  # Already ticked — preserve detail.
+                    return f"{cm.group(1)}\u2705 done {_ts} {cm.group(3)}{cm.group(4)}"
+
+                line = cell_pat.sub(_replace, line)
+        result.append(line)
+    return "\n".join(result)
+
+
 def main() -> int:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--dry-run", action="store_true", help="Print generated table + diff, don't write.")
@@ -224,7 +382,8 @@ def main() -> int:
         deps = yaml.safe_load(f) or {}
 
     states = {ws: initial_state(ws, spec) for ws, spec in deps.items()}
-    for ev in load_events():
+    events = load_events()
+    for ev in events:
         replay(states, ev)
     recompute_deps(states)
 
@@ -235,6 +394,8 @@ def main() -> int:
     table_md = render_table(rows)
     original = args.readme.read_text()
     new_text, action = splice_sentinels(original, table_md)
+    new_text = update_parallelism_map(new_text, states, events)
+    new_text = update_eval_gate(new_text, states)
 
     if args.dry_run:
         sys.stdout.write("--- generated table ---\n")

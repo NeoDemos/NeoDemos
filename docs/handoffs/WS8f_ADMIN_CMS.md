@@ -1,10 +1,33 @@
 # WS8f — Admin Panel, Content Management & Architecture Hardening
 
-> **Status:** `review` (done pending Dennis final sign-off)
+> **Status:** `in_progress` — QA rejected 2026-04-14 pending full-CMS direction call
 > **Owner:** `dennis + claude`
 > **Priority:** 2 (launch enhancer — improves admin self-service, does not block press moment)
 > **Parallelizable:** yes (independent of WS1-WS7, WS9; builds on WS8a-e)
-> **Last updated:** 2026-04-13 (all 6 phases complete)
+> **Last updated:** 2026-04-14 (QA rejected — see § Rejection & forward direction)
+
+---
+
+## Rejection & forward direction (2026-04-14)
+
+Dennis QA-rejected this workstream after reviewing the shipped implementation. Event logged as `qa_rejected` in `.coordination/events.jsonl`.
+
+**Reasons:**
+- The GrapeJS visual editor feels thin — editing affordances are limited relative to what a content editor actually needs.
+- No visible path to **create a new page** from the admin UI. Only existing pages are editable. Adding a page still requires code.
+- Overall, the FastAPI + Jinja2 + GrapeJS-on-top approach is proving to be a half-step rather than the real thing.
+
+**Forward direction (under active consideration for v0.2.0, not v0.3):**
+
+Dennis is considering moving to a **proper headless/visual CMS** as part of v0.2.0 rather than layering more on top of WS8f. The target shape:
+
+- Real CMS templates + visual editor (drag, drop, reorder, create pages)
+- Our tailor-made UI elements (answer card, journey timeline, calendar filter chips, etc.) exposed to the CMS as **first-class components/blocks** the editor can drop into any page
+- Clean separation: CMS owns marketing/static surfaces; FastAPI owns the search + MCP + auth backend
+
+**Before any code:** this requires thorough research — Payload, Strapi, Directus, Sanity, Decap/Netlify CMS, Builder.io, etc. — scored against (1) the Next.js rewrite cost the current WS8f plan explicitly rejected, (2) how cleanly our Jinja2 components can be re-expressed as CMS blocks, (3) self-host vs SaaS given EU data residency, (4) auth integration with our existing users/sessions table.
+
+**Until that direction is decided:** WS8f stays `in_progress`. Do not ship more phases on top of the current GrapeJS stack. A new workstream (tentatively WS18) should be seeded for the CMS evaluation — creating it is Dennis's call, not the next agent's.
 
 ---
 

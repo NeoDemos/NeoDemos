@@ -21,7 +21,7 @@ You are picking up WS8d_SUBPAGES for the NeoDemos project — a civic intelligen
 platform for the Rotterdam municipal council.
 
 Read these files first:
-- docs/handoffs/WS8d_SUBPAGES.md (this file)
+- docs/handoffs/done/WS8d_SUBPAGES.md (this file)
 - docs/handoffs/done/WS8_FRONTEND_REDESIGN.md §2D (subpage content spec)
 - templates/base.html (updated structure from WS8a)
 - static/css/main.css (Tailwind tokens from WS8a)

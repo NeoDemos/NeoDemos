@@ -11,9 +11,10 @@
 
 WS1:
   title: "GraphRAG retrieval (Flair NER + Gemini enrichment + VN provenance)"
-  depends_on: [WS7, WS11, WS12]
+  depends_on: [WS7, WS11]
   priority: 1
   initial_status: blocked
+  notes: "WS12 dep removed 2026-04-14 — VN provenance covers 2025+2026 only; 2018-2024 deferred to WS12 v0.3/v0.4"
 
 WS2:
   title: "Trustworthy financial analysis"
@@ -106,7 +107,8 @@ WS12:
   title: "Virtual notulen backfill & production hardening"
   depends_on: []
   priority: 1
-  initial_status: in_progress
+  initial_status: deferred
+  notes: "Phase 1+4 (2025+2026) done and live. Phase 2+3 (server infra + 2018-2024 backfill) deferred to v0.3/v0.4. User feedback: nice-to-have (Erik Verweij, 2026-04-14)."
 
 WS13:
   title: "Multi-gemeente pipeline: tenant-aware ingestion"

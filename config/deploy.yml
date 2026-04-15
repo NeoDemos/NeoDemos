@@ -97,10 +97,9 @@ env:
     LOG_LEVEL: INFO
     DOMAIN: neodemos.nl
     ALLOWED_HOSTS: neodemos.nl,www.neodemos.nl,neodemos.eu,www.neodemos.eu,mcp.neodemos.nl,mcp.neodemos.eu
-    # WS11 hash-scheme migration (2026-04-14): disable Phase 2 embedding while
-    # we re-key legacy Scheme B points to canonical Scheme A. Flip back to
-    # "true" after Phase 6 (backfill_embedded_at.py --exact) completes.
-    DOCUMENT_PROCESSOR_PHASE2_ENABLED: "false"
+    # WS11 Phase 6 complete (2026-04-15): embedded_at backfill committed (1,641,224 rows).
+    # Phase 2 re-enabled; scheduler will embed new docs + 2 NaN/Inf residuals (IDs 574026, 574283).
+    DOCUMENT_PROCESSOR_PHASE2_ENABLED: "true"
   secret:
     - DB_PASSWORD
     - GEMINI_API_KEY

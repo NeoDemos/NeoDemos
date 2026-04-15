@@ -21,7 +21,7 @@ You are picking up WS8e_POLISH for the NeoDemos project — the convergence work
 for the frontend redesign.
 
 Read these files first:
-- docs/handoffs/WS8e_POLISH.md (this file)
+- docs/handoffs/done/WS8e_POLISH.md (this file)
 - docs/handoffs/done/WS8_FRONTEND_REDESIGN.md §Phase 4 (full polish spec)
 - templates/base.html (current state after WS8a-d)
 - templates/partials/_nav.html (from WS8a)

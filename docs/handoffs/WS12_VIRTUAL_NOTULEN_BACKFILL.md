@@ -1,11 +1,30 @@
 # WS12 — Virtual Notulen Backfill & Production Hardening
 
-> **Status:** `in progress` — 2025 + 2026 promoted to production; 2018–2024 backfill pending
+> **Status:** `deferred` — Phase 1+4 (2025+2026) done and live in production; Phase 2+3 (server infra + 2018–2024 backfill) deferred to v0.3/v0.4
 > **Owner:** `dennis`
-> **Priority:** 1 (blocks press moment — corpus needs full committee coverage)
-> **Dependencies:** WS11 (corpus completeness) runs in parallel
+> **Priority:** backlog (was 1; downgraded 2026-04-14)
+> **Dependencies:** none (WS12 removed from WS1 blockers 2026-04-14)
 > **Created:** 2026-04-13
 > **Last updated:** 2026-04-14
+
+---
+
+## Deferral Decision (2026-04-14)
+
+After a conversation with **Erik Verweij** (first NeoDemos user), virtual notulen confirmed as a **nice-to-have**, not a v0.2.0 requirement. Scope is frozen to keep the roadmap stable for the press moment. The 2025+2026 corpus is live and searchable — that is sufficient for the current user need.
+
+**What's done and live:**
+- 2025: 213 meetings promoted to production
+- 2026: 34 meetings promoted (1,079 chunks in Qdrant + PostgreSQL)
+- iBabs URL sync cron hardened (UUID format, dynamic container lookup)
+- Killswitch (`INCLUDE_VIRTUAL_NOTULEN=false`) available if needed
+
+**What's deferred to v0.3/v0.4:**
+- Phase 2: Server-side pipeline (Docker integration, Whisper API, auto-retry)
+- Phase 3: 2018–2024 backfill (661 meetings)
+- Known bug fixes (orphan `meeting_id`, `--approve-batch` status filter, Qdrant commit ordering)
+
+**Impact on WS1:** VN provenance (Phase A bis) already shipped in WS1. The KG will only reference 2025+2026 VN until WS12 resumes. WS12 is no longer a WS1 blocker.
 
 ---
 
