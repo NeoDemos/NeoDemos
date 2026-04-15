@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block content %}
+{# Per-page CSS is scoped inside a dedicated wrapper so stray selectors cannot
+   leak into global site chrome. The CSS is bleach-passthrough (admin-authored);
+   the HTML is bleach-sanitized on save (see admin_save_page in routes/admin.py). #}
+{% if page_css %}<style>{{ page_css | safe }}</style>{% endif %}
+<div class="custom-page-content grapejs-content">{{ page_html | safe }}</div>
+{% endblock %}

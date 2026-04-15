@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if page_html %}
+<div class="grapejs-content">{{ page_html | safe }}</div>
+{% else %}
+<section class="pricing-page">
+    <header class="pricing-intro">
+        <p class="pricing-kicker">Abonnement</p>
+        <h1 class="pricing-title">Gratis voor iedereen.<br>Pro voor wie er dagelijks mee werkt.</h1>
+        <p class="pricing-lede">
+            NeoDemos is een burgerproject. De basis is altijd gratis —
+            elke Rotterdammer kan raadsdocumenten doorzoeken zonder account.
+            Pro is bedoeld voor raadsleden, journalisten en onderzoekers die er
+            elke dag mee werken. Tijdens de beta is Pro gratis.
+        </p>
+    </header>
+
+    <div class="pricing-grid pricing-grid--two">
+        <article class="pricing-card">
+            <h2 class="pricing-card-name">Gratis</h2>
+            <p class="pricing-card-price"><span>&euro;0</span><small>&nbsp;altijd</small></p>
+            <p class="pricing-card-audience">Voor elke Rotterdammer die wil weten wat er in de raad gebeurt.</p>
+            <ul class="pricing-card-list">
+                <li>3 zoekopdrachten per maand</li>
+                <li>100.000+ documenten doorzoekbaar (2002-heden)</li>
+                <li>Volledige bronverwijzing bij elk antwoord</li>
+                <li><strong>Geen AI-koppeling</strong> (Claude, ChatGPT, Cursor)</li>
+            </ul>
+            {% if current_tier and current_tier.slug == 'gratis' and user %}
+            <span class="btn btn-ghost pricing-cta is-current" aria-disabled="true">Je huidige abonnement</span>
+            {% elif user %}
+            <form method="POST" action="/settings/tier" class="pricing-cta-form">
+                <input type="hidden" name="slug" value="gratis">
+                <button type="submit" class="btn btn-ghost pricing-cta">Overstappen naar Gratis</button>
+            </form>
+            {% else %}
+            <a href="/register" class="btn btn-ghost pricing-cta">Gratis starten</a>
+            {% endif %}
+        </article>
+
+        <article class="pricing-card pricing-card--highlight">
+            <span class="pricing-card-badge">Gratis tijdens beta</span>
+            <h2 class="pricing-card-name">Pro</h2>
+            <p class="pricing-card-price">
+                <span class="pricing-card-price-strike">&euro;49</span>
+                <span>&euro;0</span>
+                <small>&nbsp;/maand tijdens beta</small>
+            </p>
+            <p class="pricing-card-audience">Voor raadsleden, fracties, journalisten en onderzoekers.</p>
+            <ul class="pricing-card-list">
+                <li><strong>20× meer zoekopdrachten</strong> per maand via de website</li>
+                <li><strong>Onbeperkt</strong> zoekopdrachten via AI-koppeling</li>
+                <li>Claude, ChatGPT of Cursor direct op je raadsdata</li>
+                <li>Account met gespreksgeschiedenis + opslag</li>
+                <li>E-mail support binnen 1 werkdag</li>
+            </ul>
+            <p class="pricing-card-note">
+                Normaal &euro;49/maand. Tijdens de beta betaal je niets en word je niet gefactureerd.
+            </p>
+            {% if current_tier and current_tier.slug == 'pro' and user %}
+            <span class="btn btn-primary pricing-cta is-current" aria-disabled="true">Je huidige abonnement</span>
+            {% elif user %}
+            <form method="POST" action="/settings/tier" class="pricing-cta-form">
+                <input type="hidden" name="slug" value="pro">
+                <button type="submit" class="btn btn-primary pricing-cta">Pro activeren (gratis)</button>
+            </form>
+            {% else %}
+            <a href="/register?tier=pro" class="btn btn-primary pricing-cta">Pro-account aanmaken</a>
+            {% endif %}
+        </article>
+    </div>
+
+    <footer class="pricing-note">
+        Beide tiers zijn tijdens de beta beschikbaar. Betaling voor Pro start pas ná de beta —
+        je wordt vooraf geïnformeerd en kan dan terug naar Gratis zonder kosten.
+        De publieke laag (Gratis) blijft altijd bestaan — NeoDemos is een burgerproject, geen walled garden.
+    </footer>
+
+    {# ── FAQ ───────────────────────────────────────────────────────── #}
+    <section class="pricing-faq" aria-labelledby="pricing-faq-title">
+        <h2 class="pricing-faq-title" id="pricing-faq-title">Veelgestelde vragen</h2>
+
+        <div class="nd-faq">
+            <details class="nd-faq__item">
+                <summary class="nd-faq__question">Wat gebeurt er na de beta?</summary>
+                <div class="nd-faq__answer">
+                    <p>
+                        Je krijgt minstens 14 dagen van tevoren bericht. Je kan dan kiezen:
+                        Pro voortzetten voor &euro;49/maand, of terug naar Gratis zonder kosten.
+                        Pro-gebruikers zonder betaalmethode gaan automatisch terug naar Gratis
+                        — we incasseren nooit zonder expliciete actie van jou.
+                    </p>
+                </div>
+            </details>
+
+            <details class="nd-faq__item">
+                <summary class="nd-faq__question">Wanneer stopt de beta?</summary>
+                <div class="nd-faq__answer">
+                    <p>
+                        We communiceren een harde einddatum zodra de platform-kwaliteit stabiel is.
+                        Reken op ergens in 2026. De beta stopt niet voordat NeoDemos in staat is om
+                        grootschalig accuraat antwoord te geven — we leveren geen halfbakken product.
+                    </p>
+                </div>
+            </details>
+
+            <details class="nd-faq__item">
+                <summary class="nd-faq__question">Kan ik mijn data exporteren?</summary>
+                <div class="nd-faq__answer">
+                    <p>
+                        Ja. Je gespreksgeschiedenis en opgeslagen analyses kan je op elk moment
+                        exporteren als Word, PDF of JSON. Je bent nooit vastgeketend aan NeoDemos —
+                        dat is het hele punt van een burgerproject.
+                    </p>
+                </div>
+            </details>
+
+            <details class="nd-faq__item">
+                <summary class="nd-faq__question">Wat betekent "AI-koppeling" precies?</summary>
+                <div class="nd-faq__answer">
+                    <p>
+                        Dat je Claude, ChatGPT, Cursor of een andere MCP-client direct op de
+                        raadsdatabase aansluit. Je vraagt je eigen AI dan bijvoorbeeld:
+                        <em>"Vat de laatste begroting samen in drie punten"</em>, en de AI gebruikt
+                        NeoDemos-tools om feitelijke, bronverwijzende antwoorden op te halen.
+                        In Gratis is deze koppeling uit. In Pro is het gebruik onbeperkt.
+                    </p>
+                </div>
+            </details>
+
+            <details class="nd-faq__item">
+                <summary class="nd-faq__question">Hoe wordt mijn gebruik gemeten?</summary>
+                <div class="nd-faq__answer">
+                    <p>
+                        Per zoekopdracht — één vraag = één telling. Gratis gebruikers zien
+                        hun resterend maandquotum in het menu. Pro-gebruikers via de website
+                        krijgen 20× dat quotum; via de AI-koppeling is er geen limiet.
+                        We meten per maand, zonder minuten of snelheidsbegrenzing.
+                    </p>
+                </div>
+            </details>
+
+            <details class="nd-faq__item">
+                <summary class="nd-faq__question">Is dit echt gratis?</summary>
+                <div class="nd-faq__answer">
+                    <p>
+                        Ja. Gratis blijft Gratis — dat is geen lokmiddel voor een paywall.
+                        Pro is tijdens de beta kosteloos en je hoeft geen betaalmethode in te vullen.
+                        Als de beta voorbij is en je niets doet, ga je automatisch terug naar Gratis.
+                        NeoDemos bestaat om raadsinformatie toegankelijk te maken — niet om te incasseren.
+                    </p>
+                </div>
+            </details>
+        </div>
+    </section>
+</section>
+{% endif %}
+{% endblock %}

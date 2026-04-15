@@ -1,0 +1,443 @@
+{% extends "admin/_layout.html" %}
+{% set active = 'pipeline' %}
+{% block admin_body %}
+
+<div class="pipeline-phase-banner" role="note">
+  <strong>Fase A — alleen-lezen.</strong>
+  Deze pagina toont de status van de ingestie-pipeline op basis van
+  <code>pipeline_runs</code>, <code>pipeline_failures</code> en
+  <code>document_events</code>. Een <em>&ldquo;Nu uitvoeren&rdquo;</em>-knop volgt in
+  Fase B zodra de WS6/WS11-backfills schoon zijn afgerond.
+</div>
+
+<p class="admin-help">
+  Laatste run per job, activiteit van de laatste 24 uur en 7 dagen, en een
+  live-ticker met documentgebeurtenissen. Alle cijfers zijn uit de
+  productie-database; deze pagina schrijft niets terug.
+</p>
+
+<div class="admin-stats">
+  <div class="stat-card">
+    <div class="stat-number">{{ aggregates.runs_24h }}</div>
+    <div class="stat-label">Runs (24u)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">{{ aggregates.runs_7d }}</div>
+    <div class="stat-label">Runs (7d)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">{{ aggregates.failures_24h }}</div>
+    <div class="stat-label">Mislukt (24u)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">{{ aggregates.skipped_24h }}</div>
+    <div class="stat-label">Overgeslagen (24u)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">{{ aggregates.failures_queue }}</div>
+    <div class="stat-label">Failure queue (7d)</div>
+  </div>
+</div>
+
+<h3 class="pipeline-section-title">Jobs</h3>
+<div class="pipeline-jobs-grid">
+  {% for job in jobs %}
+  <div class="pipeline-job-card">
+    <div class="pipeline-job-header">
+      <span class="pipeline-dot pipeline-dot-{{ job.status_color }}" aria-hidden="true"></span>
+      <div class="pipeline-job-title">
+        <div class="pipeline-job-label">{{ job.label }}</div>
+        <div class="pipeline-job-name"><code>{{ job.job_name }}</code> &middot; {{ job.category }}</div>
+      </div>
+    </div>
+    {% if job.run %}
+    <dl class="pipeline-job-meta">
+      <dt>Status</dt>
+      <dd>{{ job.run.status }}</dd>
+      <dt>Laatste start</dt>
+      <dd>{{ job.run.started_at.strftime('%Y-%m-%d %H:%M') if job.run.started_at else '—' }}</dd>
+      <dt>Afgerond</dt>
+      <dd>
+        {% if job.run.finished_at %}
+          {{ job.run.finished_at.strftime('%Y-%m-%d %H:%M') }}
+          {% if job.run.started_at %}
+          <span class="text-muted">
+            ({{ ((job.run.finished_at - job.run.started_at).total_seconds() | round(1)) }}s)
+          </span>
+          {% endif %}
+        {% else %}
+          <span class="text-muted">nog niet</span>
+        {% endif %}
+      </dd>
+      <dt>Verwerkt</dt>
+      <dd>{{ job.run.items_processed or 0 }} / {{ job.run.items_discovered or 0 }}</dd>
+      <dt>Mislukt</dt>
+      <dd>{{ job.run.items_failed or 0 }}</dd>
+      <dt>Getriggerd</dt>
+      <dd>{{ job.run.triggered_by or '—' }}</dd>
+      {% if job.run.error_message %}
+      <dt>Foutmelding</dt>
+      <dd class="pipeline-error-text">{{ job.run.error_message[:240] }}{% if job.run.error_message|length > 240 %}&hellip;{% endif %}</dd>
+      {% endif %}
+    </dl>
+    {% else %}
+    <p class="text-muted pipeline-no-runs">Nog geen runs geregistreerd.</p>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+
+<h3 class="pipeline-section-title">Kwaliteitsbewaking (qa_digest)</h3>
+{% if qa_digest %}
+  <div class="qa-header">
+    <span class="qa-overall-badge qa-badge-{{ qa_digest.overall_status }}">
+      Overall: {{ qa_digest.overall_status | upper }}
+    </span>
+    <span class="qa-meta">
+      {% if qa_digest.generated_at %}
+        Gegenereerd: <code>{{ qa_digest.generated_at }}</code>
+      {% endif %}
+      {% if qa_digest_run and qa_digest_run.finished_at %}
+        &middot; laatste run: {{ qa_digest_run.finished_at.strftime('%Y-%m-%d %H:%M') }}
+      {% endif %}
+      {% if qa_digest_json_filename %}
+        &middot; bron: <code>reports/qa_digest/{{ qa_digest_json_filename }}</code>
+      {% endif %}
+    </span>
+  </div>
+
+  {% if qa_digest.checks %}
+  <div class="admin-stats qa-checks-grid">
+    {% for c in qa_digest.checks %}
+    <div class="stat-card qa-check-card">
+      <div class="qa-check-header">
+        <span class="pipeline-dot pipeline-dot-{{ (c.status or 'gray') | lower }}" aria-hidden="true"></span>
+        <span class="qa-check-name">{{ c.name }}</span>
+      </div>
+      <div class="stat-number qa-check-value">{{ c.value if c.value is not none else '—' }}</div>
+      <div class="stat-label qa-check-threshold">
+        Drempel: {{ c.threshold if c.threshold is not none else '—' }}
+      </div>
+      {% if c.details %}
+      <div class="qa-check-details">{{ c.details }}</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-muted">Digest geladen, maar bevat geen checks — controleer <code>qa_digest.py</code> output.</p>
+  {% endif %}
+{% else %}
+  <p class="qa-waiting text-muted">
+    Wachten op de eerste <code>qa_digest</code>-run &mdash; nachtelijk om 07:00 CET.
+  </p>
+{% endif %}
+
+<h3 class="pipeline-section-title">Smoke test (laatste 24 uur)</h3>
+{% if smoke_test_runs %}
+  <div class="smoke-strip-wrap">
+    <div class="smoke-strip" role="img"
+         aria-label="Smoke-teststrook: {% if smoke_summary %}{{ smoke_summary.passed }} van {{ smoke_summary.total }} geslaagd{% endif %}">
+      {# Render oldest-first so the strip reads left → right as time advances. #}
+      {% for r in smoke_test_runs | reverse %}
+        {% set color = 'green' if (r.status or '') | lower == 'success' else ('yellow' if (r.status or '') | lower in ['running', 'skipped'] else 'red') %}
+        <span class="smoke-dot smoke-dot-{{ color }}"
+              title="{{ r.started_at.strftime('%Y-%m-%d %H:%M') if r.started_at else '—' }} &middot; {{ r.status or '—' }}{% if r.error_message %} &middot; {{ r.error_message[:80] }}{% endif %}"></span>
+      {% endfor %}
+    </div>
+    <div class="smoke-summary">
+      {% if smoke_summary %}
+        {% if smoke_summary.all_green %}
+          <strong class="qa-badge-green">ALL GREEN</strong> &middot; {{ smoke_summary.total }}/{{ smoke_summary.total }}
+        {% else %}
+          <strong>{{ smoke_summary.passed }}/{{ smoke_summary.total }}</strong> geslaagd
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+{% else %}
+  <p class="text-muted">
+    Geen <code>00_smoke_test</code>-runs geregistreerd in de laatste 24 uur &mdash; het uurlijks script is nog niet live of nog niet begonnen te schrijven.
+  </p>
+{% endif %}
+
+<h3 class="pipeline-section-title">Recente storingen</h3>
+{% if recent_failures %}
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Moment</th>
+      <th>Job</th>
+      <th>Item</th>
+      <th>Fout</th>
+      <th>Pogingen</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for f in recent_failures %}
+    <tr>
+      <td>{{ f.failed_at.strftime('%Y-%m-%d %H:%M') if f.failed_at else '—' }}</td>
+      <td><code>{{ f.job_name }}</code></td>
+      <td>
+        <code>{{ (f.item_id or '—')[:32] }}</code>
+        {% if f.item_type %}<span class="text-muted">&middot; {{ f.item_type }}</span>{% endif %}
+      </td>
+      <td>
+        <strong>{{ f.error_class or 'Error' }}</strong>
+        {% if f.error_message %}
+        <div class="pipeline-error-text">{{ f.error_message[:200] }}{% if f.error_message|length > 200 %}&hellip;{% endif %}</div>
+        {% endif %}
+      </td>
+      <td>{{ f.retry_count or 0 }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="text-muted">Geen storingen in de laatste 7 dagen.</p>
+{% endif %}
+
+<h3 class="pipeline-section-title">Documentactiviteit</h3>
+{% if recent_events %}
+<table class="data-table pipeline-events-table">
+  <thead>
+    <tr>
+      <th>Moment</th>
+      <th>Document</th>
+      <th>Gebeurtenis</th>
+      <th>Bron</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for e in recent_events %}
+    <tr>
+      <td>{{ e.event_at.strftime('%Y-%m-%d %H:%M') if e.event_at else '—' }}</td>
+      <td><code>{{ (e.document_id or '—')[:40] }}</code></td>
+      <td><span class="pipeline-event-type">{{ e.event_type }}</span></td>
+      <td>{{ e.triggered_by or '—' }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="text-muted">Nog geen documentgebeurtenissen geregistreerd.</p>
+{% endif %}
+
+<style>
+  /* Scoped to this page; reuses CSS variables from the design system.
+     Kept inline because the dashboard's CSS footprint is small and avoids
+     touching admin.css until WS5a Phase B introduces the "Run now" surface. */
+  .pipeline-phase-banner {
+    background: var(--color-surface-sunken);
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+    padding: var(--space-3) var(--space-4);
+    margin-bottom: var(--space-5);
+    font-size: 0.9rem;
+    color: var(--color-text);
+    line-height: 1.5;
+  }
+  .pipeline-phase-banner code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: var(--color-surface-raised);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+  .pipeline-section-title {
+    margin: var(--space-8) 0 var(--space-3) 0;
+    font-family: var(--font-heading);
+    font-weight: 400;
+    color: var(--color-primary);
+    font-size: 1.25rem;
+  }
+  .pipeline-jobs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-4);
+  }
+  .pipeline-job-card {
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-4) var(--space-5);
+  }
+  .pipeline-job-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+  .pipeline-job-title { flex: 1; min-width: 0; }
+  .pipeline-job-label {
+    font-weight: 600;
+    color: var(--color-text);
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+  .pipeline-job-name {
+    font-size: 0.8rem;
+    color: var(--color-text-tertiary);
+    margin-top: 2px;
+  }
+  .pipeline-job-name code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+  }
+  .pipeline-dot {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  .pipeline-dot-green  { background: var(--color-success, #2e7d32); }
+  .pipeline-dot-yellow { background: #e3a008; }
+  .pipeline-dot-red    { background: var(--color-error, #c62828); }
+  .pipeline-dot-gray   { background: var(--color-border); }
+
+  .pipeline-job-meta {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: var(--space-1) var(--space-3);
+    margin: 0;
+    font-size: 0.88rem;
+  }
+  .pipeline-job-meta dt {
+    color: var(--color-text-tertiary);
+    font-weight: 500;
+  }
+  .pipeline-job-meta dd {
+    margin: 0;
+    color: var(--color-text);
+    word-break: break-word;
+  }
+  .pipeline-no-runs {
+    margin: 0;
+    font-size: 0.88rem;
+  }
+  .pipeline-error-text {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-error, #c62828);
+    margin-top: 2px;
+    word-break: break-word;
+    line-height: 1.4;
+  }
+  .pipeline-events-table code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+  }
+  .pipeline-event-type {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    background: var(--color-surface-sunken);
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+
+  /* ── QA panel ── */
+  .qa-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+  .qa-overall-badge {
+    display: inline-block;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    color: #fff;
+  }
+  .qa-badge-green  { background: var(--color-success, #2e7d32); color: #fff; }
+  .qa-badge-yellow { background: #e3a008; color: #fff; }
+  .qa-badge-red    { background: var(--color-error, #c62828); color: #fff; }
+  .qa-badge-gray,
+  .qa-badge-unknown { background: var(--color-border); color: var(--color-text); }
+  .qa-meta {
+    font-size: 0.85rem;
+    color: var(--color-text-tertiary);
+  }
+  .qa-meta code {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+  }
+  .qa-checks-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+  .qa-check-card {
+    text-align: left;
+  }
+  .qa-check-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-2);
+  }
+  .qa-check-name {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--color-text);
+    word-break: break-word;
+  }
+  .qa-check-value {
+    font-size: 1.5rem;
+    line-height: 1.1;
+  }
+  .qa-check-threshold {
+    font-size: 0.78rem;
+    color: var(--color-text-tertiary);
+  }
+  .qa-check-details {
+    margin-top: var(--space-2);
+    font-size: 0.78rem;
+    color: var(--color-text-tertiary);
+    word-break: break-word;
+  }
+  .qa-waiting {
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-surface-sunken);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-sm);
+  }
+
+  /* ── Smoke test strip ── */
+  .smoke-strip-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+  .smoke-strip {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .smoke-dot {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+  }
+  .smoke-dot-green  { background: var(--color-success, #2e7d32); }
+  .smoke-dot-yellow { background: #e3a008; }
+  .smoke-dot-red    { background: var(--color-error, #c62828); }
+  .smoke-dot-gray   { background: var(--color-border); }
+  .smoke-summary {
+    font-size: 0.9rem;
+    color: var(--color-text);
+  }
+</style>
+{% endblock %}
