@@ -637,4 +637,22 @@
       font-size: 1.5rem;
     }
   }
+
+  /* F3 — "Bekijk volledige kalender" link in mention-menu / future sidebar-picker[meeting] */
+  .sidebar-calendar-link {
+    display: block;
+    text-align: center;
+    padding-top: var(--space-3);
+    padding-bottom: var(--space-2);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    border-top: 1px solid var(--color-border-subtle);
+    margin-top: var(--space-2);
+    transition: color 0.15s;
+  }
+
+  .sidebar-calendar-link:hover {
+    color: var(--color-accent);
+  }
 }
