@@ -911,7 +911,8 @@
     color: var(--color-text-on-dark);
   }
 
-  /* Chat thread (state = chat) */
+  /* Chat thread (state = chat) — widens on larger viewports for desktop comfort.
+     48rem = mobile/small-tablet default; bumps to 56rem at md and 64rem at xl. */
   .chat-thread {
     max-width: 48rem;
     margin: 0 auto;
@@ -919,6 +920,13 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-6);
+  }
+
+  @media (min-width: 768px) {
+    .chat-thread { max-width: 56rem; }
+  }
+  @media (min-width: 1280px) {
+    .chat-thread { max-width: 64rem; }
   }
 
   .chat-turn {
@@ -1252,11 +1260,19 @@
     color: var(--color-text-on-dark);
   }
 
-  /* Pinned variant: compact, near the page edge */
+  /* Pinned variant: compact, near the page edge. Width tracks .chat-thread
+     so the composer visually belongs to the thread above it. */
   .claude-composer--pinned {
     max-width: 48rem;
     margin: 0 auto;
     padding: var(--space-3) var(--space-4) var(--space-2);
+  }
+
+  @media (min-width: 768px) {
+    .claude-composer--pinned { max-width: 56rem; }
+  }
+  @media (min-width: 1280px) {
+    .claude-composer--pinned { max-width: 64rem; }
   }
 
   .claude-composer--pinned .claude-composer__input {
