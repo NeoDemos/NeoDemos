@@ -177,15 +177,44 @@
                 summary.appendChild(commSpan);
             }
 
+            // D2 — stat line: agendapunten · bijlagen · annotaties
+            // TODO(Phase-C): add bijlage_count + annotatie_count to get_meetings_filtered query
             const metaParts = [];
             if (m.agenda_item_count) metaParts.push(m.agenda_item_count + ' agendapunten');
-            if (m.doc_count) metaParts.push(m.doc_count + ' documenten');
+            if (typeof m.bijlage_count !== 'undefined') {
+                metaParts.push(m.bijlage_count + ' bijlagen');
+                metaParts.push((m.annotatie_count || 0) + ' annotaties');
+            } else if (m.doc_count) {
+                metaParts.push(m.doc_count + ' documenten');
+            }
             if (metaParts.length) {
                 const metaSpan = document.createElement('span');
                 metaSpan.className = 'cal-meeting-meta';
+                metaSpan.setAttribute('aria-label', metaParts.join(', '));
                 metaSpan.textContent = metaParts.join(' \u00B7 ');
                 summary.appendChild(metaSpan);
             }
+
+            // D3 — empty-state badge when all counts are zero
+            const hasAnyDocs = (m.doc_count > 0) || (m.bijlage_count > 0) || (m.annotatie_count > 0);
+            const hasAgenda = (m.agenda_item_count > 0);
+            if (!hasAnyDocs && !hasAgenda) {
+                const emptyBadge = document.createElement('span');
+                emptyBadge.className = 'cal-no-docs-badge';
+                emptyBadge.textContent = 'Geen documenten beschikbaar';
+                summary.appendChild(emptyBadge);
+            }
+
+            // D5 — "Vraag erover →" deeplink
+            const vraagLink = document.createElement('a');
+            vraagLink.className = 'cal-vraag-link';
+            const meetingLabel = encodeURIComponent('@' + (m.name || 'vergadering'));
+            const dateShort = m.start_date ? m.start_date.split('T')[0] : '';
+            vraagLink.href = '/?q=' + meetingLabel + (dateShort ? '%20' + encodeURIComponent(dateShort) : '');
+            vraagLink.textContent = 'Vraag erover \u2192';
+            vraagLink.title = 'Open zoekopdracht over deze vergadering';
+            vraagLink.onclick = function(e) { e.stopPropagation(); };
+            summary.appendChild(vraagLink);
 
             details.appendChild(summary);
 
@@ -208,8 +237,7 @@
                 }
             } else {
                 const p = document.createElement('p');
-                p.style.margin = '0';
-                p.style.color = '#999';
+                p.className = 'cal-meeting-empty-msg';
                 p.textContent = 'Geen agendapunten beschikbaar.';
                 body.appendChild(p);
             }
