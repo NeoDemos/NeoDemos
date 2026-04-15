@@ -78,8 +78,20 @@ class StorageService:
                 return [row[0] for row in cur.fetchall()]
 
     
-    def get_meeting_details(self, meeting_id: str) -> Optional[Dict[str, Any]]:
-        """Get meeting with all agenda items and documents"""
+    def get_meeting_details(
+        self,
+        meeting_id: str,
+        municipality: str = 'rotterdam',
+    ) -> Optional[Dict[str, Any]]:
+        """Get meeting with all agenda items and documents.
+
+        Args:
+            meeting_id: primary key of the meeting row.
+            municipality: gemeente slug for forward-compat (WS13 will add
+                          WHERE m.municipality = municipality once the column exists).
+                          TODO(WS13): enforce municipality scope here.
+        """
+        del municipality  # forward-compat param; meetings table has no municipality column yet (WS13)
         with self._get_connection() as conn:
             with conn.cursor(cursor_factory=RealDictCursor) as cur:
                 # Get meeting
@@ -546,19 +558,32 @@ class StorageService:
         search: Optional[str] = None,
         has_docs: Optional[bool] = None,
         limit: int = 500,
+        municipality: str = 'rotterdam',
     ) -> List[Dict[str, Any]]:
         """Get meetings with agenda_item_count and doc_count, with optional filters.
 
         Returns meetings ordered by start_date DESC.  Each row includes:
         - agenda_item_count  (int)
-        - doc_count          (int)
+        - doc_count          (int)   -- total docs (bijlage + annotatie + other)
+        - bijlage_count      (int)   -- docs where doc_classification = 'bijlage'
+        - annotatie_count    (int)   -- docs where doc_classification = 'annotatie'
+        - other_count        (int)   -- remaining / unclassified docs
         - first 5 agenda-item names as ``agenda_preview`` (list[str])
 
         Args:
             has_docs: if True, only return meetings that have at least one document.
                       if None (default), return all meetings.
             search: matches against meeting name, committee AND agenda item names.
+            municipality: gemeente slug to scope results (default 'rotterdam').
+                          NOTE: meetings table has no municipality column yet (WS13).
+                          This parameter is accepted for forward-compat but the WHERE
+                          clause is not applied until the column exists.
+                          TODO(WS13): add WHERE m.municipality = municipality
+                          once migration adds the column.
         """
+        del municipality  # forward-compat param; meetings table has no municipality column yet (WS13)
+        from services.calendar_labels import normalize_and_dedupe
+
         with self._get_connection() as conn:
             with conn.cursor(cursor_factory=RealDictCursor) as cur:
                 conditions: list[str] = []
@@ -587,7 +612,18 @@ class StorageService:
 
                 where = ("WHERE " + " AND ".join(conditions)) if conditions else ""
 
-                # has_docs filter applied as HAVING clause after aggregation
+                # C3: split doc_count into bijlage/annotatie/other.
+                # C2: the document_assignments join now catches rows linked at
+                # agenda-item level only (no meeting_id set) via a correlated
+                # subquery. This is belt-and-braces: the B1 backfill script will
+                # ensure meeting_id is always populated, but the OR guard means
+                # any agenda-item-only junction rows are still counted correctly.
+                #
+                # We JOIN documents (d) to get doc_classification for the FILTER
+                # expressions in C3. The DISTINCT on da.document_id is preserved
+                # inside each FILTER by using COUNT(DISTINCT ...).
+                #
+                # has_docs filter applied as HAVING clause after aggregation.
                 having = "HAVING COUNT(DISTINCT da.document_id) > 0" if has_docs else ""
 
                 params.append(limit)
@@ -599,11 +635,27 @@ class StorageService:
                         m.start_date,
                         m.committee,
                         m.location,
-                        COUNT(DISTINCT ai.id)  AS agenda_item_count,
-                        COUNT(DISTINCT da.document_id) AS doc_count
+                        COUNT(DISTINCT ai.id) AS agenda_item_count,
+                        COUNT(DISTINCT da.document_id) AS doc_count,
+                        COUNT(DISTINCT da.document_id)
+                            FILTER (WHERE d.doc_classification = 'bijlage')
+                            AS bijlage_count,
+                        COUNT(DISTINCT da.document_id)
+                            FILTER (WHERE d.doc_classification = 'annotatie')
+                            AS annotatie_count,
+                        COUNT(DISTINCT da.document_id)
+                            FILTER (WHERE d.doc_classification NOT IN ('bijlage', 'annotatie')
+                                      OR d.doc_classification IS NULL)
+                            AS other_count
                     FROM meetings m
                     LEFT JOIN agenda_items ai ON ai.meeting_id = m.id
-                    LEFT JOIN document_assignments da ON da.meeting_id = m.id
+                    -- C2: match junction rows linked directly OR via agenda item
+                    LEFT JOIN document_assignments da
+                        ON da.meeting_id = m.id
+                        OR da.agenda_item_id IN (
+                            SELECT id FROM agenda_items WHERE meeting_id = m.id
+                        )
+                    LEFT JOIN documents d ON d.id = da.document_id
                     {where}
                     GROUP BY m.id, m.name, m.start_date, m.committee, m.location
                     {having}
@@ -619,6 +671,9 @@ class StorageService:
                     meeting['committee'] = self._clean_name(meeting.get('committee'))
                     if meeting.get('start_date') and hasattr(meeting['start_date'], 'isoformat'):
                         meeting['start_date'] = meeting['start_date'].isoformat()
+                    # Ensure int types (psycopg2 may return Decimal for COUNT)
+                    for count_col in ('doc_count', 'bijlage_count', 'annotatie_count', 'other_count', 'agenda_item_count'):
+                        meeting[count_col] = int(meeting.get(count_col) or 0)
                     meeting['agenda_preview'] = []
                     meetings.append(meeting)
                     meeting_ids.append(meeting['id'])
@@ -643,7 +698,8 @@ class StorageService:
                     for meeting in meetings:
                         meeting['agenda_preview'] = previews.get(meeting['id'], [])
 
-                return meetings
+                # C6: normalize weekday-prefixed names and soft-dedup display duplicates
+                return normalize_and_dedupe(meetings)
 
     def get_distinct_committees(self) -> List[str]:
         """Return all distinct committee names, sorted alphabetically."""
