@@ -8,6 +8,28 @@
 
 ---
 
+## Outcome
+
+**Completed 2026-04-15.** All WS11a/b/c phases done and deployed.
+
+| Item | Result |
+|---|---|
+| Migration 0006 | `municipality` + `source` columns live |
+| WS11a classification | 62,437 docs across 30 named types; NULL = genuinely unidentifiable only |
+| WS11b ORI ingest | 1,928 docs ingested (SVs, raadsvoorstellen, toezeggingen, brieven college, afdoeningsvoorstellen) |
+| WS11c hash standardization | Scheme A canonical helper in `services/embedding.py`; 7,026 VN points re-keyed; 2,000 Scheme-B chunks repaired |
+| Orphan cleanup | 274,596 orphan Qdrant points removed; 8 docs restored from WS7 backup (+104K chars) |
+| Phase 4 re-embed | 84,890 gap chunks upserted |
+| Phase 6 backfill | `embedded_at` set on 1,641,224 rows (committed after ~3.5h); partial index rebuilt in 52s |
+| Phase 7 | `DOCUMENT_PROCESSOR_PHASE2_ENABLED=true` re-enabled + Kamal blue-green deploy |
+| Phase 8 CI guard | `tests/test_md5_point_id_guard.py` — fails CI on any rogue `[:15]` MD5 slice outside allowed files |
+| Dockerfile | Node.js 18→22 (NodeSource) to satisfy Vite >=20.19 requirement |
+| 2 NaN/Inf residuals | IDs 574026 + 574283 reset to `embedded_at=NULL`; Phase 2 scheduler will retry |
+
+**Deferred to v0.2.1:** `doc_type` filter param on `zoek_raadshistorie` (WS4 coord); iBabs fallback for 2025-2026 recents; dedicated `zoek_schriftelijke_vragen` MCP tool.
+
+---
+
 ## TL;DR
 
 WS11 started as a coverage + metadata fix triggered by Erik Verweij (2026-04-13) not finding schriftelijke vragen or initiatiefnotities via MCP. It expanded into a full corpus classification effort:
