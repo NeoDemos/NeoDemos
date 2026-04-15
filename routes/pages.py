@@ -3,10 +3,12 @@
 Landing page, static subpages (over/technologie/methodologie), overview,
 calendar, settings, meeting detail, and MCP installer.
 """
+import json
 import os
 import logging
+from pathlib import Path
 
-from fastapi import APIRouter, Depends, Form, HTTPException, Request
+from fastapi import APIRouter, Depends, Form, HTTPException, Query, Request
 from fastapi.responses import JSONResponse, RedirectResponse
 from markupsafe import Markup
 
@@ -142,6 +144,17 @@ async def overview_page(request: Request, user: dict = Depends(require_login)):
     })
 
 
+_MUNICIPALITIES_INDEX_PATH = Path(__file__).parent.parent / "data" / "municipalities_index.json"
+
+def _load_municipalities_index() -> dict:
+    """Load the municipalities registry, returning an empty dict on any error."""
+    try:
+        with open(_MUNICIPALITIES_INDEX_PATH, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+
 @router.get("/calendar")
 async def read_calendar(
     request: Request,
@@ -151,12 +164,23 @@ async def read_calendar(
     search: str = None,
     view: str = "list",
     show_empty: bool = False,
+    gemeente: str = Query(default="rotterdam"),
 ):
     """Public calendar page -- no login required.
 
     By default (show_empty=False), future meetings without documents are hidden.
     The template exposes a toggle so users can reveal them.
+
+    Args:
+        gemeente: municipality slug validated against data/municipalities_index.json.
+                  Falls back to 'rotterdam' if unknown. Passed through to storage
+                  layer for forward-compat with WS13 multi-gemeente support.
     """
+    # C5: validate gemeente against the index; fall back to 'rotterdam' if unknown
+    municipalities = _load_municipalities_index()
+    if gemeente not in municipalities:
+        gemeente = "rotterdam"
+
     user = await get_current_user(request)
     available_years = storage.get_meeting_years()
     # Filter out numeric-only committee IDs before rendering chips
@@ -165,6 +189,7 @@ async def read_calendar(
         year = available_years[0]
     meetings = storage.get_meetings_filtered(
         year=year, committee=committee, search=search, limit=2000,
+        municipality=gemeente,
     )
     return templates.TemplateResponse(name="calendar.html", request=request, context={
         "title": "Raadskalender",
@@ -177,6 +202,7 @@ async def read_calendar(
         "search_query": search or "",
         "view": view,
         "show_empty": show_empty,
+        "gemeente": gemeente,
         "user": user,
     })
 
