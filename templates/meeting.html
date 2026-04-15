@@ -33,7 +33,7 @@
         <div class="agenda-item-card">
             <div class="agenda-item-header" onclick="toggleAgendaItem('{{ item.id }}')">
                 <div class="flex-1">
-                    <span class="agenda-item-number">{{ item.number }}</span>
+                    <span class="agenda-item-number">{{ item.number or loop.index }}</span>
                     <span class="agenda-item-name">{{ item.name }}</span>
                 </div>
                 <span class="agenda-item-toggle" id="toggle-{{ item.id }}">▶</span>
@@ -47,7 +47,7 @@
                     {# --- Bijlagen (prominent) --- #}
                     {% set bijlagen = item.documents | selectattr("doc_classification", "equalto", "bijlage") | list %}
                     {% if bijlagen %}
-                    <div class="agenda-docs-label">📎 Bijlagen</div>
+                    <div class="agenda-docs-label">Bijlagen</div>
                     <ul class="agenda-doc-list">
                         {% for doc in bijlagen %}
                         <li class="agenda-doc-item agenda-doc-item--bijlage">
@@ -59,7 +59,7 @@
                     {# --- Annotaties (muted) --- #}
                     {% set annotaties = item.documents | selectattr("doc_classification", "equalto", "annotatie") | list %}
                     {% if annotaties %}
-                    <div class="agenda-docs-label agenda-docs-label--muted">📝 Annotaties</div>
+                    <div class="agenda-docs-label agenda-docs-label--muted">Annotaties</div>
                     <ul class="agenda-doc-list">
                         {% for doc in annotaties %}
                         <li class="agenda-doc-item agenda-doc-item--annotatie">
@@ -71,7 +71,7 @@
                     {# --- Overige documenten (motie, raadsvoorstel, NULL, etc.) (muted) --- #}
                     {% set overige = item.documents | rejectattr("doc_classification", "equalto", "bijlage") | rejectattr("doc_classification", "equalto", "annotatie") | list %}
                     {% if overige %}
-                    <div class="agenda-docs-label agenda-docs-label--muted">📄 Overige documenten</div>
+                    <div class="agenda-docs-label agenda-docs-label--muted">Overige documenten</div>
                     <ul class="agenda-doc-list">
                         {% for doc in overige %}
                         <li class="agenda-doc-item agenda-doc-item--overig">
@@ -84,7 +84,7 @@
 
                     {% if item.is_substantive %}
                     <button onclick="analyseAgendaItem('{{ item.id }}'); event.stopPropagation();" class="btn-analyse">
-                        🤖 NeoDemos analyse (volledig)
+                        NeoDemos analyse
                     </button>
                     {% endif %}
                 </div>
@@ -101,7 +101,7 @@
                         {% if sub.documents %}
                         {% set sub_bijlagen = sub.documents | selectattr("doc_classification", "equalto", "bijlage") | list %}
                         {% if sub_bijlagen %}
-                        <div class="agenda-docs-label">📎 Bijlagen</div>
+                        <div class="agenda-docs-label">Bijlagen</div>
                         <ul class="agenda-doc-list">
                             {% for sdoc in sub_bijlagen %}
                             <li class="agenda-doc-item agenda-doc-item--bijlage">
@@ -112,7 +112,7 @@
                         {% endif %}
                         {% set sub_annotaties = sub.documents | selectattr("doc_classification", "equalto", "annotatie") | list %}
                         {% if sub_annotaties %}
-                        <div class="agenda-docs-label agenda-docs-label--muted">📝 Annotaties</div>
+                        <div class="agenda-docs-label agenda-docs-label--muted">Annotaties</div>
                         <ul class="agenda-doc-list">
                             {% for sdoc in sub_annotaties %}
                             <li class="agenda-doc-item agenda-doc-item--annotatie">
@@ -123,7 +123,7 @@
                         {% endif %}
                         {% set sub_overige = sub.documents | rejectattr("doc_classification", "equalto", "bijlage") | rejectattr("doc_classification", "equalto", "annotatie") | list %}
                         {% if sub_overige %}
-                        <div class="agenda-docs-label agenda-docs-label--muted">📄 Overige</div>
+                        <div class="agenda-docs-label agenda-docs-label--muted">Overige</div>
                         <ul class="agenda-doc-list">
                             {% for sdoc in sub_overige %}
                             <li class="agenda-doc-item agenda-doc-item--overig">
@@ -136,7 +136,7 @@
 
                         {% if sub.is_substantive %}
                         <button onclick="analyseAgendaItem('{{ sub.id }}'); event.stopPropagation();" class="btn-analyse btn-analyse--sub">
-                            🤖 NeoDemos analyse (onderdeel)
+                            NeoDemos analyse
                         </button>
                         {% endif %}
                     </div>
@@ -161,9 +161,7 @@
             <h3 class="analysis-title">Analyse</h3>
             <button id="copy-word-btn" onclick="copyToWord()" class="btn-copy-word hidden">📄 Kopieer voor Word</button>
             <div id="ai-content" class="ai-content">
-                <p class="ai-content-placeholder">Klik op <strong>'🤖 NeoDemos
-                        analyse'</strong> bij een agendapunt voor een integrale analyse vanuit zowel het document als
-                    jouw politieke profiel.</p>
+                <p class="ai-content-placeholder">Klik op <strong>'NeoDemos analyse'</strong> bij een agendapunt voor een integrale analyse vanuit zowel het document als jouw politieke profiel.</p>
             </div>
         </div>
     </div>
