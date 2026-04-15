@@ -629,7 +629,7 @@ class StorageService:
                           once migration adds the column.
         """
         del municipality  # forward-compat param; meetings table has no municipality column yet (WS13)
-        from services.calendar_labels import normalize_and_dedupe
+        from services.calendar_labels import normalize_label
 
         with self._get_connection() as conn:
             with conn.cursor(cursor_factory=RealDictCursor) as cur:
@@ -745,8 +745,19 @@ class StorageService:
                     for meeting in meetings:
                         meeting['agenda_preview'] = previews.get(meeting['id'], [])
 
-                # C6: normalize weekday-prefixed names and soft-dedup display duplicates
-                return normalize_and_dedupe(meetings)
+                # C6: in-place weekday-prefix normalization + soft dedup on
+                # (start_date, committee, name), keeping the row with the most
+                # documents. Preserves every other field on the rich row
+                # (name, committee, counts, agenda_preview, location, etc.)
+                # so the calendar template still has what it needs.
+                seen: Dict[tuple, dict] = {}
+                for m in meetings:
+                    m['name'] = normalize_label(m.get('committee') or '', m.get('name') or '')
+                    key = (m.get('start_date'), m.get('committee') or '', m['name'])
+                    existing = seen.get(key)
+                    if existing is None or (m.get('doc_count') or 0) > (existing.get('doc_count') or 0):
+                        seen[key] = m
+                return list(seen.values())
 
     def get_distinct_committees(self) -> List[str]:
         """Return all distinct committee names, sorted alphabetically."""
