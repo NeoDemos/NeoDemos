@@ -23,6 +23,19 @@
     </div>
 </div>
 
+{#
+  D6 — Committee filter chips.
+  Source: storage.get_distinct_committees() (dynamic, from meetings.committee column).
+  Canonical 6 Rotterdam commissies (aligned with @mention list in search.html):
+    - Commissie Bestuur, Organisatie, Financiën en Veiligheid
+    - Commissie Bouwen, Wonen en Buitenruimte
+    - Commissie Mobiliteit, Haven, Economie en Klimaat
+    - Commissie Werk, Inkomen, Onderwijs, Samenleven
+    - Commissie Zorg, Welzijn, Cultuur en Sport
+    - Gemeenteraad
+  If the DB returns these names verbatim the chips and @mention list are already aligned.
+  TODO(Phase-C): if committees come back with alternate spellings, normalise in get_distinct_committees().
+#}
 <!-- Committee filter chips — only meaningful names (no numeric IDs) -->
 <div class="cal-chips" id="cal-chips">
     <button class="cal-chip {{ 'active' if not selected_committee }}" data-committee="">Alle vergaderingen</button>
