@@ -1,16 +1,16 @@
 # NeoDemos Project State
 
 > Auto-generated from `.coordination/events.jsonl` — do not edit manually.
-> Last rebuilt: 2026-04-15T11:59:06Z
+> Last rebuilt: 2026-04-15T12:09:33Z
 
 ## Active Now
 
-| WS   | Title                              | Claimed by | Since      | Detail                                                |
-|------|------------------------------------|------------|------------|-------------------------------------------------------|
-| WS16 | MCP monitoring & observability     | Dennis     | 2026-04-14 | Initial seed: Phase 1 shipped 2026-04-14              |
-| WS8f | Admin panel + CMS + GrapeJS editor | dennistak  | 2026-04-15 | claimed via /ws-claim                                 |
-| WS5a | 100% reliable nightly ingest       | dennistak  | 2026-04-14 | claimed via /ws-claim                                 |
-| WS6  | Source-spans-only summarization    | seed       | 2026-04-14 | Phase 3 DB write running; mode='structured' needs WS1 |
+| WS   | Title                              | Claimed by | Since      | Detail                                                       |
+|------|------------------------------------|------------|------------|--------------------------------------------------------------|
+| WS16 | MCP monitoring & observability     | Dennis     | 2026-04-14 | Initial seed: Phase 1 shipped 2026-04-14                     |
+| WS8f | Admin panel + CMS + GrapeJS editor | dennistak  | 2026-04-15 | Phase 8 shipped 2026-04-15: nd-answer + nd-analyse as Shadow |
+| WS5a | 100% reliable nightly ingest       | dennistak  | 2026-04-14 | claimed via /ws-claim                                        |
+| WS6  | Source-spans-only summarization    | seed       | 2026-04-14 | Phase 3 DB write running; mode='structured' needs WS1        |
 
 ## Blocked
 
@@ -57,8 +57,6 @@
 ## Recent events (last 15)
 
 ```jsonl
-{"agent": "mcp_alert", "detail": "0 calls in 15min (was averaging 21/hr)", "event": "alert", "metrics": {"calls_15m": 0, "prior_60m_calls": 21}, "rule": "silent", "ts": "2026-04-15T08:04:22Z"}
-{"agent": "mcp_alert", "detail": "p95 38.9s last 5min", "event": "alert", "metrics": {"p95_latency_ms": 38893.7}, "rule": "latency", "ts": "2026-04-15T08:39:38Z"}
 {"agent": "mcp_alert", "detail": "8 calls (12.0x baseline)", "event": "alert", "metrics": {"baseline_5m": 0.67, "calls_5m": 8, "ratio": 12.0}, "rule": "traffic_spike", "ts": "2026-04-15T08:39:38Z"}
 {"agent": "dennistak", "detail": "Post-Phase 7+ feedback cycle done 2026-04-15: nav triptych + account dropdown + Claude composer + chat-state fixes + Oatmeal typography across ai-content + subpage+admin+meeting polish + civic avatars (8 SVG + Gemini script for 20) + Profiel page. WS8g handoff shipped. Carry-overs: mig 0009, avatar picker UI, Phase 8 Web Components, Gemini script run.", "event": "note", "ts": "2026-04-15T08:51:11Z", "ws": "WS8f"}
 {"agent": "dennistak", "detail": "Plan only — handoff seeded 2026-04-15; execution blocked on WS8f QA + WS14 Phase D/F", "event": "claimed", "ts": "2026-04-15T08:51:11Z", "ws": "WS8g"}
@@ -72,4 +70,6 @@
 {"agent": "mcp_alert", "detail": "0 calls in 15min (was averaging 36/hr)", "event": "alert", "metrics": {"calls_15m": 0, "prior_60m_calls": 36}, "rule": "silent", "ts": "2026-04-15T11:05:47Z"}
 {"agent": "mcp_alert", "detail": "7 calls (14.0x baseline)", "event": "alert", "metrics": {"baseline_5m": 0.5, "calls_5m": 7, "ratio": 14.0}, "rule": "traffic_spike", "ts": "2026-04-15T11:15:52Z"}
 {"agent": "mcp_alert", "detail": "0 calls in 15min (was averaging 13/hr)", "event": "alert", "metrics": {"calls_15m": 0, "prior_60m_calls": 13}, "rule": "silent", "ts": "2026-04-15T11:46:06Z"}
+{"agent": "dennistak", "detail": "WS14 Phase A (audit baseline with real numbers), Phase B scripts (B1/B2 dry-run verified, B4/B7 migrations created), Phase C (C2-C5 + C6 wired), Phase D (D1-D8), Phase F (F1-F3) all shipped 2026-04-15. Awaiting Dennis approval to run B1/B2 live + apply migrations 0014/0015.", "event": "note", "ts": "2026-04-15T12:09:25Z", "ws": "WS14"}
+{"agent": "dennistak", "detail": "Phase 8 shipped 2026-04-15: nd-answer + nd-analyse as Shadow DOM Web Components, GrapesJS blocks registered. WS8f carry-overs complete: subpage 48rem→64rem, Phase 8 Web Components. Pending: migration 0009 + 0013 apply, Dennis sign-off on WS8g + pricing.", "event": "note", "ts": "2026-04-15T12:09:28Z", "ws": "WS8f"}
 ```
