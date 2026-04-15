@@ -6,6 +6,10 @@ snapshots/
 downloads/
 storage/
 
+# Vite build output — always rebuilt inside Docker, never ship stale local copy
+static/dist/
+node_modules/
+
 # Python
 .venv/
 __pycache__/

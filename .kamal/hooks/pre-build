@@ -1,0 +1,9 @@
+#!/bin/sh
+# pre-build: bump patch version before Docker build so the shipped image
+# carries the new VERSION + package.json.
+#
+# Scheme (2026-04-15): every deploy = patch+1. Minor bumps manual via
+# `./scripts/bump_version.sh --minor`. See docs/VERSIONING.md.
+set -e
+cd "$(dirname "$0")/../.."
+./scripts/bump_version.sh

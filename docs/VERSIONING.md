@@ -17,7 +17,9 @@
 - Docker image tags (future)
 - API response headers (future)
 
-**To bump version:** Edit `VERSION` file and `STAGE` in `neodemos_version.py`. That's it.
+**To bump version:** Use `./scripts/bump_version.sh` (patch by default, `--minor` for minor release). The Kamal `pre-build` hook runs it automatically before every `kamal deploy`, so the patch increments on every ship without manual intervention.
+
+**Scheme (2026-04-15 onwards):** every Kamal deploy → patch+1 (v0.1.10 → v0.1.11 → v0.1.12 …). When we hit a milestone ("ready to call this v0.2.0"), run `./scripts/bump_version.sh --minor` which bumps to v0.2.0 and resets the patch. The pre-build hook picks up from there.
 
 ---
 
