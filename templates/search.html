@@ -87,6 +87,10 @@
                     <div id="mention-menu" class="mention-menu">
                         <div class="mention-menu-header">DIRECTE KOPPELING</div>
                         <div id="mention-items"></div>
+                        {# F3 — "Bekijk volledige kalender" link.
+                           Will move into <section data-picker="meeting"> sidebar when that UI is built.
+                           Placed here for now as it appears at the bottom of the meeting-picker panel. #}
+                        <a href="/calendar" class="sidebar-calendar-link">Bekijk volledige kalender →</a>
                     </div>
                 </form>
 
@@ -1031,6 +1035,17 @@
             alert('Fout bij kopie\u00EBren. Probeer de tekst handmatig te selecteren.');
         }
     }
+
+    // ── F1: Pre-fill composer from ?q= URL param (used by "Vraag erover →" links) ──
+    (function() {
+        const urlQ = new URLSearchParams(location.search).get('q');
+        if (urlQ) {
+            const heroInput = document.getElementById('search-input');
+            const chatInput = document.getElementById('chat-input');
+            if (heroInput) { heroInput.value = urlQ; heroInput.focus(); }
+            if (chatInput) { chatInput.value = urlQ; }
+        }
+    })();
 
     // ── @mention autocomplete ──
     const searchInput = document.getElementById('search-input');

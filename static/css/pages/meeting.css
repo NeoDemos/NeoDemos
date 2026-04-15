@@ -12,12 +12,9 @@
   }
 
   .meeting-header .back-link {
-    display: inline-block;
-    color: var(--color-text-secondary);
-    font-weight: 500;
+    color: var(--color-accent);
+    font-weight: 600;
     font-size: var(--font-size-sm);
-    margin-bottom: var(--space-4);
-    transition: color 0.15s ease;
   }
 
   .meeting-header .back-link:hover {
@@ -41,15 +38,38 @@
   }
 
   .meeting-meta {
-    margin: 0;
+    margin: var(--space-1) 0;
     font-size: var(--font-size-sm);
     color: var(--color-text-secondary);
-    font-variant-numeric: tabular-nums;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-2);
-    line-height: var(--line-height-snug);
+    line-height: var(--line-height-relaxed);
+  }
+
+  /* D4 — municipality badge (only shown for non-Rotterdam) */
+  .meeting-municipality-badge {
+    display: inline-block;
+    background: var(--color-surface-sunken);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+    border-radius: var(--radius-full);
+    padding: 2px var(--space-3);
+    margin-left: var(--space-2);
+    vertical-align: middle;
+    font-weight: 500;
+    text-transform: capitalize;
+  }
+
+  /* D5 — "Vraag erover" deeplink */
+  .meeting-vraag-link {
+    display: inline-block;
+    margin-top: var(--space-2);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .meeting-vraag-link:hover {
+    color: var(--color-accent);
   }
 
   .meeting-meta-item {
@@ -147,22 +167,20 @@
     font-family: var(--font-heading);
     font-size: var(--font-size-sm);
     color: var(--color-accent);
-    margin-right: var(--space-3);
-    letter-spacing: var(--letter-spacing-display);
+    font-size: var(--font-size-sm);
+    margin-right: var(--space-2);
   }
 
   .agenda-item-name {
-    font-size: var(--font-size-base);
-    font-weight: 500;
-    color: var(--color-text);
+    font-size: var(--font-size-sm);
     line-height: var(--line-height-snug);
+    max-width: 65ch;
   }
 
   .agenda-item-toggle {
-    color: var(--color-text-secondary);
-    opacity: 0.5;
-    font-size: var(--font-size-xs);
-    margin-left: var(--space-3);
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-base);
+    margin-left: var(--space-2);
     flex-shrink: 0;
     transition: opacity 0.15s ease;
   }
@@ -173,21 +191,24 @@
 
   .agenda-item-details {
     display: none;
-    padding: var(--space-4);
-    background: transparent;
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-surface-raised);
     font-size: var(--font-size-sm);
-    line-height: var(--line-height-body);
-    color: var(--color-text-secondary);
   }
 
+  /* D1 — doc section labels: normal vs muted */
   .agenda-docs-label {
     font-family: var(--font-body);
     font-weight: 600;
-    color: var(--color-text-tertiary);
+    color: var(--color-text-secondary);
     font-size: var(--font-size-xs);
     text-transform: uppercase;
     letter-spacing: var(--letter-spacing-widest);
     margin-bottom: var(--space-2);
+  }
+
+  .agenda-docs-label--muted {
+    color: var(--color-text-tertiary);
   }
 
   .agenda-doc-list {
@@ -199,6 +220,27 @@
     gap: var(--space-1);
   }
 
+  /* D1 — Bijlage card: prominent border */
+  .agenda-doc-item--bijlage {
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--space-1) var(--space-2);
+    background: var(--color-surface-raised);
+  }
+
+  .agenda-doc-item--bijlage a {
+    font-size: var(--font-size-base);
+    color: var(--color-primary);
+  }
+
+  /* D1 — Annotatie: muted style */
+  .agenda-doc-item--annotatie a,
+  .agenda-doc-item--overig a {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+  }
+
+  /* Default doc item link */
   .agenda-doc-item {
     display: flex;
     align-items: flex-start;
@@ -222,9 +264,8 @@
   }
 
   .sub-items-label {
-    font-family: var(--font-body);
-    font-weight: 600;
-    color: var(--color-text-tertiary);
+    font-weight: 700;
+    color: var(--color-accent);
     font-size: var(--font-size-xs);
     text-transform: uppercase;
     margin-bottom: var(--space-3);
@@ -241,15 +282,15 @@
   }
 
   .sub-item-name {
-    font-weight: 500;
+    font-weight: 600;
     font-size: var(--font-size-sm);
-    margin-bottom: var(--space-2);
+    margin-bottom: var(--space-1);
     color: var(--color-text);
-    line-height: var(--line-height-snug);
+    line-height: var(--line-height-relaxed);
+    max-width: 65ch;
   }
 
-  /* ── Analyse panel: quiet, single accent touch ── */
-
+  /* D8 — AI sidebar scroll fade pattern */
   .ai-sidebar .card {
     position: sticky;
     top: 120px;
@@ -261,12 +302,10 @@
     padding: var(--space-6);
     max-height: 85vh;
     overflow-y: auto;
-    transition: box-shadow 0.2s ease;
-  }
-
-  .ai-sidebar .card:hover {
-    transform: none;
-    box-shadow: var(--shadow-sm);
+    /* fade mask at bottom when scrollable */
+    mask-image: linear-gradient(to bottom, black calc(100% - 3rem), transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 3rem), transparent 100%);
+    padding-bottom: var(--space-8);
   }
 
   .ai-sidebar-header {
@@ -337,12 +376,11 @@
     color: var(--color-text-tertiary);
     font-style: italic;
     font-size: var(--font-size-sm);
-    line-height: var(--line-height-body);
   }
 
   .btn-analyse {
     font-size: var(--font-size-xs);
-    padding: var(--space-2) var(--space-3);
+    padding: var(--space-1) var(--space-3);
     background: var(--color-primary);
     width: 100%;
     text-align: center;
