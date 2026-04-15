@@ -1,9 +1,27 @@
 #!/bin/sh
-# pre-build: bump patch version before Docker build so the shipped image
-# carries the new VERSION + package.json.
+# pre-build: bump patch version and commit it BEFORE docker build, so the
+# image baked from the git commit carries the new VERSION.
+#
+# Kamal's docker build context follows the git commit, not the working
+# directory. An un-committed bump (as happened with 0.1.12/0.1.13) never
+# makes it into the shipped image. Committing here guarantees the image
+# ships the bumped VERSION + package.json.
 #
 # Scheme (2026-04-15): every deploy = patch+1. Minor bumps manual via
 # `./scripts/bump_version.sh --minor`. See docs/VERSIONING.md.
 set -e
 cd "$(dirname "$0")/../.."
+
 ./scripts/bump_version.sh
+NEW_VERSION=$(cat VERSION)
+
+# Commit the bump so the image built from HEAD carries the new VERSION.
+# --no-verify avoids coord hooks; --allow-empty protects against edge
+# cases where bump_version.sh left nothing to stage.
+git add VERSION package.json
+if ! git diff --cached --quiet; then
+    git commit --no-verify -m "chore: bump version to ${NEW_VERSION} (auto, pre-build)"
+    echo "pre-build: committed version bump to ${NEW_VERSION}"
+else
+    echo "pre-build: VERSION already at ${NEW_VERSION} (no commit needed)"
+fi
