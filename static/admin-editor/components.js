@@ -1410,6 +1410,149 @@
         },
       },
     });
+
+    // =========================================================================
+    // Pattern 17: nd-answer — AI streaming answer widget (Web Component, Shadow DOM)
+    // Canvas shows a static placeholder; live SSE fires only on public pages.
+    // =========================================================================
+
+    dc.addType('nd-answer-widget', {
+      isComponent: function (el) {
+        return !!(el.tagName && el.tagName.toLowerCase() === 'nd-answer');
+      },
+      model: {
+        defaults: {
+          tagName: 'nd-answer',
+          attributes: { q: 'Uw vraag hier...', gemeente: 'rotterdam' },
+          traits: [
+            { type: 'text', name: 'q', label: 'Vraag' },
+            {
+              type: 'select',
+              name: 'gemeente',
+              label: 'Gemeente',
+              options: [
+                { value: 'rotterdam', name: 'Rotterdam' },
+              ],
+            },
+          ],
+          draggable: true,
+          removable: true,
+          copyable: true,
+          stylable: false,
+          droppable: false,
+          // Canvas preview: static placeholder div rendered instead of live SSE
+          components: [],
+        },
+        init() {
+          this.on('change:q', this.onQChange);
+          this.on('change:gemeente', this.onGemeenteChange);
+          const self = this;
+          setTimeout(function () { self.onQChange(); self.onGemeenteChange(); }, 0);
+        },
+        onQChange() {
+          const q = this.get('q') || '';
+          const attrs = Object.assign({}, this.getAttributes() || {}, { q: q });
+          this.setAttributes(attrs);
+        },
+        onGemeenteChange() {
+          const g = this.get('gemeente') || 'rotterdam';
+          const attrs = Object.assign({}, this.getAttributes() || {}, { gemeente: g });
+          this.setAttributes(attrs);
+        },
+      },
+      view: {
+        onRender() {
+          // In GrapesJS canvas context replace the custom element with a static preview
+          // so the editor never fires live SSE calls.
+          const q = this.model.get('q') || 'Uw vraag hier...';
+          this.el.innerHTML =
+            '<div style="background:#fff;border:1px solid #ddd5ca;border-radius:12px;padding:1.25rem 1.5rem;font-family:Inter,sans-serif;font-size:0.875rem;color:#5a6664;">' +
+            '<div style="font-size:0.75rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:0.5rem;color:#8b9492;">nd-answer — voorbeeld</div>' +
+            '<div style="margin-bottom:0.5rem;color:#1a1f1e;">\u201c' + q.replace(/</g, '&lt;') + '\u201d</div>' +
+            '<div style="color:#5a6664;font-style:italic;">Antwoord verschijnt hier op de publieke pagina.</div>' +
+            '</div>';
+        },
+      },
+    });
+
+    // Block registration for nd-answer
+    editor.BlockManager.add('nd-answer-widget', {
+      label: 'AI Antwoord',
+      category: 'NeoDemos',
+      content: { type: 'nd-answer-widget' },
+      media: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm1 14H7v-2h6v2zm3-4H7v-2h9v2zm0-4H7V6h9v2z"/></svg>',
+    });
+
+    // =========================================================================
+    // Pattern 18: nd-analyse — meeting analysis widget (Web Component, Shadow DOM)
+    // Canvas shows a static placeholder; live SSE fires only on public pages.
+    // =========================================================================
+
+    dc.addType('nd-analyse-widget', {
+      isComponent: function (el) {
+        return !!(el.tagName && el.tagName.toLowerCase() === 'nd-analyse');
+      },
+      model: {
+        defaults: {
+          tagName: 'nd-analyse',
+          attributes: { 'meeting-id': '', label: 'Raadsvergadering' },
+          traits: [
+            { type: 'text', name: 'meeting-id', label: 'Vergadering ID' },
+            { type: 'text', name: 'label', label: 'Label' },
+            { type: 'text', name: 'q', label: 'Analysequery (optioneel)' },
+          ],
+          draggable: true,
+          removable: true,
+          copyable: true,
+          stylable: false,
+          droppable: false,
+          components: [],
+        },
+        init() {
+          this.on('change:meeting-id', this.onMeetingIdChange);
+          this.on('change:label', this.onLabelChange);
+          this.on('change:q', this.onQChange);
+          const self = this;
+          setTimeout(function () { self.onMeetingIdChange(); self.onLabelChange(); self.onQChange(); }, 0);
+        },
+        onMeetingIdChange() {
+          const v = this.get('meeting-id') || '';
+          const attrs = Object.assign({}, this.getAttributes() || {}, { 'meeting-id': v });
+          this.setAttributes(attrs);
+        },
+        onLabelChange() {
+          const v = this.get('label') || '';
+          const attrs = Object.assign({}, this.getAttributes() || {}, { label: v });
+          this.setAttributes(attrs);
+        },
+        onQChange() {
+          const v = this.get('q') || '';
+          const attrs = Object.assign({}, this.getAttributes() || {}, { q: v });
+          this.setAttributes(attrs);
+        },
+      },
+      view: {
+        onRender() {
+          const label = this.model.get('label') || 'Raadsvergadering';
+          const meetingId = this.model.get('meeting-id') || '(geen ID)';
+          this.el.innerHTML =
+            '<div style="background:#f7f4ef;border:1px solid #ddd5ca;border-radius:12px;padding:1.25rem 1.5rem;font-family:Inter,sans-serif;font-size:0.875rem;color:#5a6664;">' +
+            '<div style="font-size:0.75rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:0.5rem;color:#8b9492;">nd-analyse — voorbeeld</div>' +
+            '<div style="margin-bottom:0.75rem;color:#1a1f1e;font-weight:500;">' + label.replace(/</g, '&lt;') + '</div>' +
+            '<div style="background:#042825;color:#f7f4ef;border-radius:8px;padding:0.4rem 0.85rem;display:inline-block;font-size:0.8rem;">&#x1F9E0; Analyseer dit agendapunt</div>' +
+            '<div style="margin-top:0.5rem;color:#8b9492;font-size:0.75rem;">ID: ' + meetingId.replace(/</g, '&lt;') + '</div>' +
+            '</div>';
+        },
+      },
+    });
+
+    // Block registration for nd-analyse
+    editor.BlockManager.add('nd-analyse-widget', {
+      label: 'Vergaderanalyse',
+      category: 'NeoDemos',
+      content: { type: 'nd-analyse-widget' },
+      media: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>',
+    });
   }
 
   // Export to window so editor.html can call it after grapesjs.init().
