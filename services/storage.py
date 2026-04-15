@@ -435,6 +435,53 @@ class StorageService:
             print(f"Error inserting document: {e}")
             return False
     
+    def ensure_document_assignment(self, document_id: str, meeting_id: Optional[str],
+                                   agenda_item_id: Optional[str]) -> bool:
+        """Ensure a (document, meeting, agenda_item) link exists.
+
+        The upsert path in `insert_document` only writes `document_assignments`
+        when a NEW row is inserted; when the same `document_id` is re-asserted
+        for a different meeting (overzichtsitem reused across agendas, or any
+        doc that was first ingested under another meeting_id), the assignment
+        row is never written and the calendar UI shows zero bijlagen for the
+        new meeting — exactly the 2026-04-15 Erik regression for the
+        `f9b8b1c0` raadsvergadering where 13 of 17 docs were present in
+        `documents` but absent from `document_assignments`.
+        """
+        if not (meeting_id or agenda_item_id):
+            return False
+        try:
+            with self._get_connection() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("""
+                        INSERT INTO document_assignments (document_id, meeting_id, agenda_item_id)
+                        VALUES (%s, %s, %s)
+                        ON CONFLICT (document_id, meeting_id, agenda_item_id) DO NOTHING
+                    """, (document_id, meeting_id, agenda_item_id))
+                    return True
+        except Exception as e:
+            print(f"Error ensuring document assignment: {e}")
+            return False
+
+    def get_document_content_length(self, doc_id: str) -> int:
+        """Return LENGTH(content) for a document, or 0 if row missing.
+
+        Used by the refresh service to decide whether to retry OCR on a
+        stub (document row exists with empty/short content).
+        """
+        try:
+            with self._get_connection() as conn:
+                with conn.cursor() as cur:
+                    cur.execute(
+                        "SELECT LENGTH(COALESCE(content, '')) FROM documents WHERE id = %s",
+                        (doc_id,),
+                    )
+                    row = cur.fetchone()
+                    return int(row[0]) if row else 0
+        except Exception as e:
+            print(f"Error reading document content length for {doc_id}: {e}")
+            return 0
+
     def document_exists(self, doc_id: str) -> bool:
         """Check if a document already exists"""
         try:

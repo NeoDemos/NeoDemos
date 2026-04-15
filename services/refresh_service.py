@@ -76,7 +76,7 @@ class RefreshService:
                             self.storage.insert_agenda_item(agenda_item)
                             if agenda_item.get('documents'):
                                 for doc in agenda_item['documents']:
-                                    if not self.storage.document_exists(doc['id']):
+                                    if self._should_fetch_content(doc):
                                         await self._insert_doc_with_content(doc)
                                         documents_downloaded += 1
                                         self._log_document_event(doc)
@@ -86,6 +86,14 @@ class RefreshService:
                                                 await self._analyze_item(agenda_item, [doc])
                                             except Exception as e:
                                                 logger.warning(f"Failed to analyze item {agenda_item['id']}: {e}")
+                                    # Always link — overzichtsitems are routinely reused across
+                                    # meetings, so the assignment row must be written even when
+                                    # the doc row already exists.
+                                    self.storage.ensure_document_assignment(
+                                        doc['id'],
+                                        doc.get('meeting_id') or meeting['id'],
+                                        doc.get('agenda_item_id') or agenda_item.get('id'),
+                                    )
                 except Exception as e:
                     errors.append(f"Error in history meeting {meeting.get('id')}: {e}")
 
@@ -105,17 +113,39 @@ class RefreshService:
                     # Document Watchdog: For upcoming meetings, check if documents are available
                     # Especially if ORI is falling behind
                     if meeting.get('id'):
-                        ibabs_details = await self.ibabs_service.get_meeting_agenda(meeting['id'])
+                        # resolve_references=True asks IBabsService to follow
+                        # overzichtsitem BB-numbers into their concrete PDFs so
+                        # the document_processor has URLs to OCR — otherwise
+                        # those rows stay as stubs (metadata-only) forever and
+                        # the meeting shows fewer bijlagen than iBabs does.
+                        ibabs_details = await self.ibabs_service.get_meeting_agenda(
+                            meeting['id'], resolve_references=True,
+                        )
                         if ibabs_details and ibabs_details.get('agenda'):
                             for item in ibabs_details['agenda']:
                                 self.storage.insert_agenda_item(item)
                                 if item.get('documents'):
                                     for doc in item['documents']:
-                                        if not self.storage.document_exists(doc['id']):
+                                        # `document_exists` is true for any row with an id,
+                                        # including stubs (empty content). If we short-
+                                        # circuit on existence we never retry OCR on a
+                                        # stub. Check content as well so stubs auto-heal
+                                        # on every 15-min cycle.
+                                        if self._should_fetch_content(doc):
                                             await self._insert_doc_with_content(doc)
                                             documents_downloaded += 1
                                             self._log_document_event(doc)
-                                            logger.info(f"Watchdog found new document: {doc['name']} for meeting {meeting['id']}")
+                                            logger.info(f"Refresh fetched content for {doc['id']} ({doc['name']!r:.50})")
+                                        # Always ensure the (document, meeting, agenda_item) link
+                                        # exists — even when the doc row pre-exists (shared over-
+                                        # zichtsitem reused across meetings, or doc first ingested
+                                        # under a different meeting_id). Without this the calendar
+                                        # UI shows zero bijlagen for the new meeting.
+                                        self.storage.ensure_document_assignment(
+                                            doc['id'],
+                                            doc.get('meeting_id') or meeting['id'],
+                                            doc.get('agenda_item_id') or (item['id'] if item['id'] != 'general' else None),
+                                        )
                 except Exception as e:
                     errors.append(f"Error in future meeting {meeting.get('id')}: {e}")
 
@@ -189,6 +219,30 @@ class RefreshService:
         return ""
 
     IBABS_DOC_URL = "https://rotterdamraad.bestuurlijkeinformatie.nl/Document/View/"
+
+    def _should_fetch_content(self, doc: dict) -> bool:
+        """True when we need to (re)fetch content for this document.
+
+        Returns True if the row does not exist yet, OR if it exists as a
+        stub (content empty/NULL) and we have a URL to try. This lets the
+        15-min refresh heal stubs on its own — previously the pipeline
+        skipped any row whose `id` was already present, so stubs from a
+        prior OCR failure never recovered. Rows that already have content
+        are left alone (ON CONFLICT in insert_document preserves them
+        anyway; skipping saves an OCR call).
+        """
+        doc_id = doc.get('id')
+        if not doc_id:
+            return False
+        if not self.storage.document_exists(doc_id):
+            return True
+        # Stub recovery — only bother if we have a URL to fetch from.
+        if not doc.get('url'):
+            return False
+        try:
+            return self.storage.get_document_content_length(doc_id) < MIN_CONTENT_CHARS
+        except Exception:
+            return False
 
     async def _insert_doc_with_content(self, doc: dict) -> bool:
         """

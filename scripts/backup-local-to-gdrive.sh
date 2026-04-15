@@ -95,6 +95,11 @@ sync_dir() {
 
     log "  syncing $label: $local_path → $remote_path"
 
+    # Extra per-dir args passed as $4+. Using ${a[@]+"${a[@]}"} so empty
+    # arrays don't trip set -u (bash 3.2 on macOS errors on "${a[@]}" when
+    # the array is empty).
+    shift 3
+
     set +e
     rclone sync "$local_path" "$remote_path" \
         $RCLONE_DRY \
@@ -103,6 +108,7 @@ sync_dir() {
         --exclude "__pycache__/**" \
         --exclude "*.pyc" \
         --exclude "*.tmp" \
+        "$@" \
         --retries 3 --retries-sleep 30s \
         --log-file "$LOG" --log-level INFO 2>> "$LOG"
     rc=$?
@@ -180,7 +186,9 @@ fi
 # 1. Directory syncs (the bulk of the work)
 # ---------------------------------------------------------------------------
 log "[1/3] Directory syncs"
-sync_dir "$PROJECT/output/transcripts"               "$REMOTE_BASE/transcripts"        "transcripts"
+# transcripts: exclude staging_cache/ because it's synced separately below to
+# its own top-level folder, avoiding duplicate storage on Drive.
+sync_dir "$PROJECT/output/transcripts"               "$REMOTE_BASE/transcripts"        "transcripts" --exclude "staging_cache/**"
 sync_dir "$PROJECT/output/transcripts/staging_cache" "$REMOTE_BASE/staging_cache"      "staging_cache"
 sync_dir "$PROJECT/data/knowledge_graph"             "$REMOTE_BASE/knowledge_graph"    "knowledge_graph"
 sync_dir "$PROJECT/data/financial"                   "$REMOTE_BASE/financial_configs"  "financial_configs"

@@ -83,9 +83,20 @@ class IBabsService:
                 continue
             seen_ids.add(meeting_id)
 
-            card = link.find_parent(['li', 'div', 'article']) or link
+            # Portal wraps several meetings inside the same <li class="day">,
+            # so `find_parent(['li'])` captures too much. Instead start at the
+            # link's immediate textual parent and walk only until the FIRST
+            # date/time pair — everything beyond that belongs to the next
+            # meeting or is contact boilerplate.
+            card = link.find_parent(['article', 'div']) or link
             card_text = card.get_text(separator=' | ', strip=True)
             parts = [p.strip() for p in card_text.split('|') if p.strip()]
+
+            _DAY_RE = re.compile(
+                r'\b(maandag|dinsdag|woensdag|donderdag|vrijdag|zaterdag|zondag)\b',
+                re.IGNORECASE,
+            )
+            _TIME_RE = re.compile(r'^\d{1,2}:\d{2}\s*-\s*\d{1,2}:\d{2}$')
 
             committee = parts[0] if parts else None
             location = None
@@ -93,13 +104,18 @@ class IBabsService:
             date_str = None
             time_str = None
             for part in parts[1:]:
+                if _DAY_RE.search(part):
+                    date_str = part
+                    continue
+                if _TIME_RE.match(part):
+                    time_str = part
+                    # Date + time pair seen — stop before downstream noise
+                    # ("Neem voor meer informatie...", next meeting's card,
+                    # the live-stream blurb, etc.).
+                    break
                 if part.startswith('(') and part.endswith(')') and not location:
                     location = part.strip('()')
-                elif re.search(r'\b(maandag|dinsdag|woensdag|donderdag|vrijdag|zaterdag|zondag)\b', part, re.IGNORECASE) and not date_str:
-                    date_str = part
-                elif re.match(r'^\d{1,2}:\d{2}\s*-\s*\d{1,2}:\d{2}$', part) and not time_str:
-                    time_str = part
-                elif not subtitle and len(part) > 3 and '@' not in part:
+                elif not subtitle and 3 < len(part) < 120 and '@' not in part:
                     subtitle = part
 
             start_date = None
@@ -111,9 +127,13 @@ class IBabsService:
                 if start_dt:
                     start_date = start_dt.isoformat()
 
+            # Name: committee + subtitle if we have a meaningful subtitle;
+            # otherwise just committee. Keeps "Commissie Bouwen & Wonen —
+            # Startberaad (geen pers en geen publiek)" readable while avoiding
+            # the contact-sentence leak for plain raadsvergaderingen.
             meetings.append({
                 "id": meeting_id,
-                "name": f"{committee} — {subtitle}" if subtitle and committee else (committee or subtitle or "Meeting"),
+                "name": f"{committee} — {subtitle}" if subtitle and committee else (committee or "Vergadering"),
                 "committee": committee,
                 "location": location,
                 "subtitle": subtitle,
