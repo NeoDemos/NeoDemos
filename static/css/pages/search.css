@@ -1019,6 +1019,15 @@
     margin: 0 auto;
   }
 
+  @media (min-width: 768px) {
+    .chat-composer,
+    .chat-composer-inner { max-width: 56rem; }
+  }
+  @media (min-width: 1280px) {
+    .chat-composer,
+    .chat-composer-inner { max-width: 64rem; }
+  }
+
   .chat-composer .chip-rail-chat { margin-bottom: var(--space-2); }
 
   .chat-input-wrapper {
