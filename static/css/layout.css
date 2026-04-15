@@ -437,8 +437,25 @@
     .nav-desktop {
       display: none;
     }
+    /* Hide inline nav links — hamburger takes over */
+    .site-header .nav-left {
+      display: none;
+    }
+    /* Place hamburger in first grid column so logo stays centered */
     .nav-hamburger {
       display: block;
+      grid-column: 1;
+      grid-row: 1;
+      justify-self: start;
+    }
+    /* Tighter header chrome on small screens */
+    .site-header {
+      padding: var(--space-3) var(--space-4);
+      gap: var(--space-2);
+    }
+    /* Hide CTA pill — keep only the text login link */
+    .site-header .nav-cta {
+      display: none;
     }
   }
 

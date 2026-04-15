@@ -169,18 +169,31 @@
       min-height: 100vh;
       min-height: 100svh;
       align-items: flex-start;
-      padding-top: calc(var(--space-16) + 60px);
-      padding-bottom: var(--space-10);
+      /* Reduced from var(--space-16)+60px (~124px) → var(--space-10)+56px (~96px) */
+      padding-top: calc(var(--space-10) + 56px);
+      padding-bottom: var(--space-8);
+      padding-left: var(--space-5);
+      padding-right: var(--space-5);
     }
     .landing-hero-content {
       padding-top: 0;
-      gap: var(--space-4);
+      gap: var(--space-3);
     }
     .landing-hero-heading {
-      font-size: 2rem;
+      font-size: 1.75rem;
+      text-align: left;
     }
     .hero-stats {
       font-size: 0.8rem;
+    }
+    /* Show only first 3 topic chips on mobile */
+    .example-topics .example-topic:nth-child(n+4) {
+      display: none;
+    }
+    .example-topics {
+      margin-top: var(--space-2);
+      margin-bottom: var(--space-3);
+      justify-content: flex-start;
     }
   }
 
