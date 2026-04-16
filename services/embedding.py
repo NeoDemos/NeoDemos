@@ -150,6 +150,19 @@ class LocalEmbedder:
     def embed(self, text: str) -> Optional[List[float]]:
         return self._ai.generate_embedding(text)
 
+    def embed_batch(self, texts: List[str], batch_size: int = 32) -> List[Optional[List[float]]]:
+        """Batch embed via the local MLX path. Size-bounded to avoid GPU OOM."""
+        if not texts:
+            return []
+        out: List[Optional[List[float]]] = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i + batch_size]
+            batch_embs = self._ai.generate_embeddings_batch(batch)
+            if not batch_embs:
+                batch_embs = [None] * len(batch)
+            out.extend(batch_embs)
+        return out
+
     def is_available(self) -> bool:
         return self._ai.is_available()
 

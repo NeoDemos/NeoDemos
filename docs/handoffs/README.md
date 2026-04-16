@@ -48,19 +48,21 @@ When a workstream finishes:
 | WS15 | [`WS15_MOTIE_STEMMEN.md`](WS15_MOTIE_STEMMEN.md) | Per-party voting data (motie_stemmen + zoek_stemgedrag) | 1.5 | **available** — Initial seed: not_started | — |
 | WS2 | [`done/WS2_FINANCIAL.md`](done/WS2_FINANCIAL.md) | Trustworthy financial analysis | 2 | **done** — shipped 2026-04-12 | — |
 | WS2b | [`WS2b_IV3_TAAKVELD.md`](WS2b_IV3_TAAKVELD.md) | IV3 taakveld FK backfill | 2 | **available** | WS2 |
-| WS8f | [`WS8f_ADMIN_CMS.md`](WS8f_ADMIN_CMS.md) | Admin panel + CMS + GrapeJS editor | 2 | **in progress** — claimed via /ws-claim | WS8 |
+| WS8f | [`WS8f_ADMIN_CMS.md`](WS8f_ADMIN_CMS.md) | Admin panel + CMS + GrapeJS editor | 2 | **in progress** — DEPLOYED 586b72e: Phase 8 Web Components (nd-answer, nd-ana… | WS8 |
 | WS16 | [`WS16_MCP_MONITORING.md`](WS16_MCP_MONITORING.md) | MCP monitoring & observability | 2 | **in progress** — Initial seed: Phase 1 shipped 2026-04-14 | WS4 |
 | WS7 | [`done/WS7_OCR_RECOVERY.md`](done/WS7_OCR_RECOVERY.md) | OCR recovery for moties/amendementen | 2.5 | **done** — shipped 2026-04-14 | — |
 | WS3 | [`WS3_JOURNEY.md`](WS3_JOURNEY.md) | Document journey timelines | 3 | **blocked** — waiting on WS1 | WS1 |
 | WS4 | [`done/WS4_MCP_DISCIPLINE.md`](done/WS4_MCP_DISCIPLINE.md) | Best-in-class MCP surface | 4 | **done** — shipped 2026-04-13 | — |
 | WS17 | [`WS17_FEEDBACK_LOOP.md`](WS17_FEEDBACK_LOOP.md) | Production feedback loop (detect → digest → close-the-loop) | 4 | **available** — Initial seed: not_started, v0.2.1 scope | WS4 |
-| WS5a | [`WS5a_NIGHTLY_PIPELINE.md`](WS5a_NIGHTLY_PIPELINE.md) | 100% reliable nightly ingest | 5 | **in progress** — claimed via /ws-claim | — |
+| WS5a | [`WS5a_NIGHTLY_PIPELINE.md`](WS5a_NIGHTLY_PIPELINE.md) | 100% reliable nightly ingest | 5 | **in progress** — DEPLOYED 586b72e: combined deploy WS5a B.7 (ibabs parser fi… | — |
 | WS5b | [`WS5b_MULTI_PORTAL.md`](WS5b_MULTI_PORTAL.md) | Multi-portal connectors (search-only) | 6 | **blocked** — waiting on WS5a | WS5a |
 | WS10 | [`WS10_TABLE_RICH_EXTRACTION.md`](WS10_TABLE_RICH_EXTRACTION.md) | Table-rich document extraction (Docling layout) | 6 | **paused** — Infrastructure done; targeted 20-doc run only | — |
-| WS6 | [`WS6_SUMMARIZATION.md`](WS6_SUMMARIZATION.md) | Source-spans-only summarization | 8 | **in progress** — Phase 3 DB write running; mode='structured' needs WS1 | — |
+| WS6 | [`WS6_SUMMARIZATION.md`](WS6_SUMMARIZATION.md) | Source-spans-only summarization | 8 | **in progress** — Backfill done (28,223 verified + 853 partial, 2026-04-16); MCP tool + UI badges + strip test pending | — |
 <!-- STATE-AUTO-END -->
 
-**Webcast timestamp linking** (priority 7) is split across WS5a (schema + backfill) and WS5b (HLS player UI).
+**WS22 opened 2026-04-15** — end-to-end document retrieval pipeline hardening. Scoped after the 21K-doc resplit run surfaced compound reliability debt (non-atomic ingest, Qdrant orphans, out-of-band metadata enrichment, Gemini 503 fallback silence, iBabs parser bug trio, MLX/Nebius path confusion). **Supersedes WS5a Phase B** — all Phase B prereqs (PR-0 lock-42 retrofit, PR-1 Whisper path spike, PR-2 DAG columns, PR-3 attribution_status), B.1-B.6 items, and the 14-day stabilization gate moved into WS22. WS5a retains Phase A (shipped/in-flight) + B.7 history. **WS22 is now the v0.2.0 ship blocker**: no v0.2.0 tag until WS22 green-streaks 14 days. WS13 dependency re-pointed WS5a → WS22. Full spec: [WS22_PIPELINE_HARDENING.md](WS22_PIPELINE_HARDENING.md).
+
+**Webcast timestamp linking** (priority 7) is split across WS22 (schema + backfill, was WS5a) and WS5b (HLS player UI).
 
 **WS8a-e shipped 2026-04-12. WS8f shipped 2026-04-13** — admin CMS with form editor + GrapeJS visual editor (v2: 27 component types with traits and structural locking on GrapeJS 0.22.15, site-CSS-aware editor canvas, template auto-loader), router split (main.py 1,508→250 lines), CSS modularized (4,037-line monolith → 12 files with @layer), subscription scaffolding. Pending Dennis QA.
 

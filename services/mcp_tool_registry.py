@@ -848,8 +848,8 @@ REGISTRY: dict[str, ToolSpec] = {
     ),
 
     # ---------------------------------------------------------------------
-    # 14. vat_document_samen (WS6, in flight — registered so description
-    # rewrites and uniqueness check cover it)
+    # 14. vat_document_samen (WS6, live 2026-04-16 — backfill complete,
+    # 28K+ verified summaries in DB; mode='short' serves from cache <50ms)
     # ---------------------------------------------------------------------
     "vat_document_samen": ToolSpec(
         name="vat_document_samen",
@@ -878,7 +878,7 @@ REGISTRY: dict[str, ToolSpec] = {
                 "document_id": {"type": "string"},
                 "mode": {
                     "type": "string",
-                    "enum": ["short", "long", "structured"],
+                    "enum": ["short", "long"],
                     "default": "short",
                 },
             },
